@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 import CCHMapClusterController
@@ -18,12 +17,22 @@ extension FaeMapViewController: MKMapViewDelegate {
         
     }
     
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        for anView in views {
-            if anView.annotation is MKUserLocation {
-                anView.superview?.bringSubview(toFront: anView)
-            } else {
-                anView.superview?.sendSubview(toBack: anView)
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view is PlacePinAnnotationView {
+            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+            dismissMainBtns()
+            boolCanOpenPin = false
+            openPlacePin(annotation: firstAnn, animated: true)
+            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.delegate = self
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.present(vcPinDetail, animated: false, completion: {
+                    self.boolCanOpenPin = true
+                })
             }
         }
     }
@@ -40,6 +49,7 @@ extension FaeMapViewController: MKMapViewDelegate {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
+            
             return anView
         }
         
@@ -59,8 +69,7 @@ extension FaeMapViewController: MKMapViewDelegate {
             } else {
                 anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.assignImage(firstAnn.image)
-            
+            anView.assignImage(firstAnn.icon)
             anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
             let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
@@ -76,10 +85,29 @@ extension FaeMapViewController: MKMapViewDelegate {
             } else {
                 anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
+            anView.imageView.alpha = 0
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.alpha = 1
+            }, completion: nil)
             anView.assignImage(firstAnn.avatar)
             return anView
+        } else {
+            let identifier = "social"
+            var anView: SocialPinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SocialPinAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SocialPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(firstAnn.icon)
+            anView.imageView.frame = CGRect(x: 30, y: 61, width: 0, height: 0)
+            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
+            }, completion: nil)
+            return anView
         }
-        return nil
     }
     
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
@@ -97,30 +125,29 @@ extension FaeMapViewController: MKMapViewDelegate {
         let points = mapView.convert(curLoc2D, toPointTo: nil)
         self.uiviewDistanceRadius.center = points
         
-        if !boolIsFirstLoad && self.subviewSelfMarker != nil {
+//        if !boolIsFirstLoad && self.subviewSelfMarker != nil {
 //            self.subviewSelfMarker.center = points
-        }
+//        }
     }
     
-    func openMapPin(marker: GMSMarker, mapPin: MapPin, animated: Bool) {
+    func openMapPin(coordinate: CLLocationCoordinate2D, mapPin: MapPin, animated: Bool) {
         
-        self.animateToCoordinate(type: 0, marker: marker, animated: animated)
+//        self.animateToCoordinate(type: 0, marker: marker, animated: animated)
         
-        PinDetailViewController.selectedMarkerPosition = marker.position
-        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.selectedMarkerPosition = coordinate
+//        PinDetailViewController.pinMarker = marker
         PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
         PinDetailViewController.pinStatus = mapPin.status
         PinDetailViewController.pinStateEnum = self.selectPinState(pinState: mapPin.status)
         PinDetailViewController.pinUserId = mapPin.userId
     }
     
-    func openPlacePin(marker: GMSMarker, placePin: PlacePin, animated: Bool) {
+    func openPlacePin(annotation: FaePinAnnotation, animated: Bool) {
         
-        self.animateToCoordinate(type: 2, marker: marker, animated: animated)
+        guard let placePin = annotation.pinInfo as? PlacePin else { return }
         
-        PinDetailViewController.selectedMarkerPosition = CLLocationCoordinate2D(latitude: marker.position.latitude,
-                                                                                longitude: marker.position.longitude)
-        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.selectedMarkerPosition = annotation.coordinate
+//        PinDetailViewController.pinMarker = marker
         PinDetailViewController.pinTypeEnum = .place
         PinDetailViewController.placeType = placePin.primaryCate
         PinDetailViewController.strPlaceTitle = placePin.name
@@ -131,7 +158,7 @@ extension FaeMapViewController: MKMapViewDelegate {
         let opPlace = OpenedPlace(title: placePin.name, category: placePin.primaryCate,
                                   street: placePin.address1, city: placePin.address2,
                                   imageURL: placePin.imageURL,
-                                  position: marker.position)
+                                  position: annotation.coordinate)
         if !OpenedPlaces.openedPlaces.contains(opPlace) {
             OpenedPlaces.openedPlaces.append(opPlace)
         }
@@ -163,23 +190,27 @@ extension FaeMapViewController: MKMapViewDelegate {
         }, completion: nil)
     }
     
-    fileprivate func animateToCoordinate(type: Int, marker: GMSMarker, animated: Bool) {
+    fileprivate func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
         
         // Default is for user pin
-        var offset = 500*screenHeightFactor - screenHeight/2
+        var offset = 500*screenHeightFactor - screenHeight/2 // 458
         
         if type == 0 { // Map pin
-            offset = 530*screenHeightFactor - screenHeight/2
+            offset = 530*screenHeightFactor - screenHeight/2 // 488
         } else if type == 2 { // Place pin
-            offset = 534*screenHeightFactor - screenHeight/2
+            offset = 492*screenHeightFactor - screenHeight/2 // offset: 42
         }
         
-        var curPoint = faeMapView.convert(marker.position, toPointTo: nil)
+        var curPoint = faeMapView.convert(coordinate, toPointTo: nil)
         curPoint.y -= offset
-        let newCoor = faeMapView.convert(curPoint, toCoordinateFrom: nil)
-        let camera = faeMapView.camera
-        camera.centerCoordinate = newCoor
-        faeMapView.setCamera(camera, animated: animated)
+        let newCoordinate = faeMapView.convert(curPoint, toCoordinateFrom: nil)
+        let point: MKMapPoint = MKMapPointForCoordinate(newCoordinate)
+        var rect: MKMapRect = faeMapView.visibleMapRect
+        rect.origin.x = point.x - rect.size.width * 0.5
+        rect.origin.y = point.y - rect.size.height * 0.5
+        
+        faeMapView.setVisibleMapRect(rect, animated: true)
+        
     }
     /*
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -207,6 +238,7 @@ extension FaeMapViewController: MKMapViewDelegate {
             boolCanOpenPin = false
             invalidateAllTimer()
             openMapPin(marker: marker, mapPin: mapPin, animated: true)
+            openMapPin(coordinate: CLLocationCoordinate2D, mapPin: MapPin, animated: Bool)
             
             let vcPinDetail = PinDetailViewController()
             vcPinDetail.delegate = self
@@ -226,7 +258,6 @@ extension FaeMapViewController: MKMapViewDelegate {
                 return false
             }
             pauseAllUserPinTimers()
-            selectedUserMarker = marker
             boolCanUpdateUserPin = false
             animateToCoordinate(type: type, marker: marker, animated: true)
             updateNameCard(withUserId: userPin.userId)

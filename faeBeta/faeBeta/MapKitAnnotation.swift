@@ -13,56 +13,69 @@ import MapKit
 
 class FaePinAnnotation: MKPointAnnotation {
     
-    var image: UIImage!
-    var avatar: UIImage!
+    // general
     var type: String!
+    var id: Int = -1
+    var mapViewCluster: CCHMapClusterController?
+    
+    // place pin & social pin
+    var icon: UIImage!
+    var pinInfo: AnyObject!
+    
+    init(type: String) {
+        super.init()
+        self.type = type
+    }
+    
+    // user pin only
+    var avatar: UIImage!
     var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
-    var userId: Int = -1
     var count = 0
-    var mapViewCluster: CCHMapClusterController?
     
     init(type: String, json: JSON) {
         super.init()
-//        self.type = json["type"].stringValue
-        self.userId = json["user_id"].intValue
-        self.miniAvatar = json["mini_avatar"].intValue
-        
         self.type = type
-        
-        if type == "user" {
-            guard let posArr = json["geolocation"].array else { return }
-            for pos in posArr {
-                let pos_i = CLLocationCoordinate2DMake(pos["latitude"].doubleValue, pos["longitude"].doubleValue)
-                self.positions.append(pos_i)
-            }
-            self.coordinate = self.positions[self.count]
-            self.count += 1
-            guard Mood.avatars[miniAvatar] != nil else {
-                print("[init] map avatar image is nil")
-                return
-            }
-            self.avatar = Mood.avatars[miniAvatar]
-            self.changePosition()
+        guard type == "user" else { return }
+        self.id = json["user_id"].intValue
+        self.miniAvatar = json["mini_avatar"].intValue
+        guard let posArr = json["geolocation"].array else { return }
+        for pos in posArr {
+            let pos_i = CLLocationCoordinate2DMake(pos["latitude"].doubleValue, pos["longitude"].doubleValue)
+            self.positions.append(pos_i)
         }
+        self.coordinate = self.positions[self.count]
+        self.count += 1
+        guard Mood.avatars[miniAvatar] != nil else {
+            print("[init] map avatar image is nil")
+            return
+        }
+        self.avatar = Mood.avatars[miniAvatar]
+        self.changePosition()
     }
     
+    // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
         let time = Double.random(min: 5, max: 20)
-        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + time) {
             if self.count == 5 {
                 self.count = 0
             }
-            UIView.animate(withDuration: 0.3, animations: {
-                self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: nil)
-            }, completion: { _ in
-                self.coordinate = self.positions[self.count]
-                self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
-                self.count += 1
-                self.changePosition()
-            })
+            DispatchQueue.main.async { [index = self.count] in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: nil)
+                }, completion: { _ in
+                    self.coordinate = self.positions[index]
+                    self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
+                    self.count += 1
+                    self.changePosition()
+                })
+            }
         }
     }
+    
+    // social pin only
+    
 }
 
 class SelfAnnotationView: MKAnnotationView {
@@ -77,7 +90,7 @@ class SelfAnnotationView: MKAnnotationView {
         frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         self.clipsToBounds = false
         loadSelfMarkerSubview()
-        reloadSelfMarker()
+//        reloadSelfMarker()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -180,6 +193,29 @@ class PlacePinAnnotationView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 60, height: 64)
         imageView = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
+        addSubview(imageView)
+        imageView.contentMode = .scaleAspectFit
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func assignImage(_ image: UIImage) {
+        // when an image is set for the annotation view,
+        // it actually adds the image to the image view
+        imageView.image = image
+    }
+}
+
+class SocialPinAnnotationView: MKAnnotationView {
+    
+    var imageView: UIImageView!
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        frame = CGRect(x: 0, y: 0, width: 60, height: 61)
+        imageView = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
     }

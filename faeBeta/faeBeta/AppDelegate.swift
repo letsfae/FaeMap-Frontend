@@ -180,26 +180,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    var time: Double = 0
+    
     func runSync() {
-        if is_Login == 0 {
-            print("not log in, sync fail")
-        } else {
-            let push = FaePush()
-            push.getSync({ (status: Int!, _: Any?) in
-                //                print("[runSync] status", status)
-                if status / 100 == 2 {
-                    self.reachaVCPresented = false
-                    // success
-                } else if status == 401 {
-                    self.reachaVCPresented = false
-                    is_Login = 0
-                    self.popUpWelcomeView()
-                } else if !self.reachaVCPresented {
-                    self.reachaVCPresented = true
-                    self.window?.makeKeyAndVisible()
-                    self.navMain.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
-                }
-            })
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + time) {
+            self.time = 10
+            if is_Login == 0 {
+                print("not log in, sync fail")
+                self.runSync()
+            } else {
+                let push = FaePush()
+                push.getSync({ (status: Int!, _: Any?) in
+                    //                print("[runSync] status", status)
+                    if status / 100 == 2 {
+                        self.reachaVCPresented = false
+                        // success
+                    } else if status == 401 {
+                        self.reachaVCPresented = false
+                        is_Login = 0
+                        DispatchQueue.main.async {
+                            self.popUpWelcomeView()
+                        }
+                    } else if !self.reachaVCPresented {
+                        DispatchQueue.main.async {
+                            self.reachaVCPresented = true
+                            self.window?.makeKeyAndVisible()
+                            self.navMain.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
+                        }
+                    }
+                    self.runSync()
+                })
+            }
         }
     }
     func applicationDidBecomeActive(_ application: UIApplication) {

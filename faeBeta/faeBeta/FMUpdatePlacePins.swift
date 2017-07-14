@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 
@@ -36,12 +35,17 @@ extension FaeMapViewController {
     
     fileprivate func pinPlacesOnMap(results: [PlacePin]) {
         for result in results {
-            let categoryList = result.category
-            let iconImage = self.placesPinIconImage(categoryList: categoryList)
-            let pinMap = FaePinAnnotation(type: "place", json: JSON())
-            pinMap.coordinate = result.position
-            pinMap.image = iconImage
-            self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
+            DispatchQueue.global(qos: .default).async {
+                let categoryList = result.category
+                let iconImage = self.placesPinIconImage(categoryList: categoryList)
+                let pinMap = FaePinAnnotation(type: "place")
+                pinMap.coordinate = result.position
+                pinMap.icon = iconImage
+                pinMap.pinInfo = result as AnyObject
+                DispatchQueue.main.async {
+                    self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
+                }
+            }
         }
     }
     
@@ -93,8 +97,9 @@ extension FaeMapViewController {
                     let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                     self.placeNames.append(latPlusLon)
                     self.placePins.append(result)
-//                    self.pinPlacesOnMap(results: [result])
                 }
+                self.pinPlacesOnMap(results: self.placePins)
+                self.placePins.removeAll(keepingCapacity: true)
                 
                 self.yelpQuery.setResultLimit(count: count_1)
                 self.yelpQuery.setCatagoryToDessert()
@@ -106,8 +111,10 @@ extension FaeMapViewController {
                         let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                         self.placeNames.append(latPlusLon)
                         self.placePins.append(result)
-//                        self.pinPlacesOnMap(results: [result])
                     }
+                    self.pinPlacesOnMap(results: self.placePins)
+                    self.placePins.removeAll(keepingCapacity: true)
+                    
                     self.yelpQuery.setCatagoryToCafe()
                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                         for result in results {
@@ -117,8 +124,10 @@ extension FaeMapViewController {
                             let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                             self.placeNames.append(latPlusLon)
                             self.placePins.append(result)
-//                            self.pinPlacesOnMap(results: [result])
                         }
+                        self.pinPlacesOnMap(results: self.placePins)
+                        self.placePins.removeAll(keepingCapacity: true)
+                        
                         self.yelpQuery.setCatagoryToCinema()
                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                             for result in results {
@@ -128,8 +137,10 @@ extension FaeMapViewController {
                                 let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                 self.placeNames.append(latPlusLon)
                                 self.placePins.append(result)
-//                                self.pinPlacesOnMap(results: [result])
                             }
+                            self.pinPlacesOnMap(results: self.placePins)
+                            self.placePins.removeAll(keepingCapacity: true)
+                            
                             self.yelpQuery.setCatagoryToSport()
                             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                 for result in results {
@@ -139,8 +150,10 @@ extension FaeMapViewController {
                                     let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                     self.placeNames.append(latPlusLon)
                                     self.placePins.append(result)
-//                                    self.pinPlacesOnMap(results: [result])
                                 }
+                                self.pinPlacesOnMap(results: self.placePins)
+                                self.placePins.removeAll(keepingCapacity: true)
+                                
                                 self.yelpQuery.setCatagoryToBeauty()
                                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                     for result in results {
@@ -150,8 +163,10 @@ extension FaeMapViewController {
                                         let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                         self.placeNames.append(latPlusLon)
                                         self.placePins.append(result)
-//                                        self.pinPlacesOnMap(results: [result])
                                     }
+                                    self.pinPlacesOnMap(results: self.placePins)
+                                    self.placePins.removeAll(keepingCapacity: true)
+                                    
                                     self.yelpQuery.setCatagoryToArt()
                                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                         for result in results {
@@ -161,8 +176,10 @@ extension FaeMapViewController {
                                             let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                             self.placeNames.append(latPlusLon)
                                             self.placePins.append(result)
-//                                            self.pinPlacesOnMap(results: [result])
                                         }
+                                        self.pinPlacesOnMap(results: self.placePins)
+                                        self.placePins.removeAll(keepingCapacity: true)
+                                        
                                         self.yelpQuery.setCatagoryToJuice()
                                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
                                             for result in results {
@@ -172,9 +189,10 @@ extension FaeMapViewController {
                                                 let latPlusLon = Double(result.position.latitude) + Double(result.position.longitude)
                                                 self.placeNames.append(latPlusLon)
                                                 self.placePins.append(result)
-                                                self.pinPlacesOnMap(results: [result])
                                             }
                                             self.pinPlacesOnMap(results: self.placePins)
+                                            self.placePins.removeAll(keepingCapacity: true)
+                                            
                                         })
                                     })
                                 })
@@ -187,22 +205,7 @@ extension FaeMapViewController {
     }
     
     fileprivate func calculateZoomLevel(results: [PlacePin]) {
-        var latArr = [Double]()
-        var lonArr = [Double]()
-        for result in results {
-            latArr.append(result.position.latitude)
-            lonArr.append(result.position.longitude)
-        }
-        
-        let minLat = latArr.min()!
-        let maxLat = latArr.max()!
-        let minLon = lonArr.min()!
-        let maxLon = lonArr.max()!
-        let northWestCor = CLLocationCoordinate2DMake(maxLat, minLon)
-        let southEastCor = CLLocationCoordinate2DMake(minLat, maxLon)
-        let geoBounds = GMSCoordinateBounds(coordinate: northWestCor, coordinate: southEastCor)
-        let cameraUpdate = GMSCameraUpdate.fit(geoBounds, withPadding: 25.0)
-//        faeMapView.animate(with: cameraUpdate)
+
     }
     
     fileprivate func allTypePlacesPin() -> Bool {

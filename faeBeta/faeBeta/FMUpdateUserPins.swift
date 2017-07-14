@@ -65,7 +65,7 @@ extension FaeMapViewController {
                 self.boolCanUpdateUserPin = true
                 return
             }
-            var count = 0
+//            var count = 0
             self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.boolCanUpdateUserPin = true
         }

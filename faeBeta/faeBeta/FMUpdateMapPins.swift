@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 
@@ -51,7 +50,6 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
-        self.mapPinsMarkers.removeAll()
         self.mapPins.removeAll()
         
         // Get screen center's coordinate
@@ -102,34 +100,26 @@ extension FaeMapViewController {
     }
     
     fileprivate func pinMapPinsOnMap(results: [MapPin]) {
-        for mapPin in results {
-            // init an empty marker
-            let pinMap = GMSMarker()
-            // assign an empty image
-            var iconImage = UIImage()
-            // create empty UIView and UIImageView to do the animation
+        for result in results {
+            DispatchQueue.global(qos: .default).async {
+                let pinMap = FaePinAnnotation(type: result.type)
+                pinMap.id = result.pinId
+                pinMap.coordinate = result.position
+                pinMap.icon = self.pinIconSelector(type: result.type, status: result.status)
+                pinMap.pinInfo = result as AnyObject
+                DispatchQueue.main.async {
+                    self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
+                }
+            }
+            /*
             let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
             let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
-            iconSub.addSubview(icon)
-            icon.contentMode = .scaleAspectFit
-            // select an image from Selector based on the pin type and pin status
-            iconImage = self.pinIconSelector(type: mapPin.type, status: mapPin.status)
-            icon.image = iconImage
             icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
-            pinMap.position = mapPin.position
-            pinMap.iconView = iconSub
-            pinMap.userData = [0: mapPin]
             pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            pinMap.zIndex = 1
-//            pinMap.map = self.faeMapView
-            self.mapPinsMarkers.append(pinMap)
-            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                 icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-            }, completion: { _ in
-                pinMap.iconView = nil
-                pinMap.icon = iconImage
-            })
+            }, completion: nil)
+             */
         }
     }
     
@@ -182,15 +172,11 @@ extension FaeMapViewController {
             mapPin.position.latitude = mapPinJson["geolocation"]["latitude"].doubleValue
             mapPin.position.longitude = mapPinJson["geolocation"]["longitude"].doubleValue
             self.mapPins.append(mapPin)
-            let pinMap = GMSMarker()
+            let pinMap = FaePinAnnotation(type: mapPin.type)
             pinMap.icon = self.pinIconSelector(type: type, status: mapPin.status)
-            pinMap.position = mapPin.position
-            pinMap.userData = [0: mapPin]
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            pinMap.zIndex = 1
-            pinMap.appearAnimation = GMSMarkerAnimation.none
-//            pinMap.map = self.faeMapView
-            self.mapPinsMarkers.append(pinMap)
+            pinMap.coordinate = mapPin.position
+            pinMap.pinInfo = mapPin as AnyObject
+            self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                 self.tempMarker.removeFromSuperview()
             })

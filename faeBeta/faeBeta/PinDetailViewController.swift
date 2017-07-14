@@ -17,14 +17,16 @@ import GoogleMaps
  */
 class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, OpenedPinListViewControllerDelegate, PinTalkTalkCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
-    // MARK: - Override Functions
+    static let shared = PinDetailViewController()
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
         
         // modalPresentationStyle defines that this view controller is over the FaeMapViewController,
         // so that user can see the main map via half pin detail view
-        modalPresentationStyle = .overCurrentContext
+//        modalPresentationStyle = .overCurrentContext
         
         loadPinDetailWindow()
         initPinBasicInfo()
@@ -137,6 +139,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         loadToolBar()
         loadInputToolBar()
         loadChatView()
+        loadPlaceDetail()
         
         tblMain.tableHeaderView = PinDetailViewController.pinTypeEnum == .chat_room ? uiviewChatRoom : uiviewTblHeader
         

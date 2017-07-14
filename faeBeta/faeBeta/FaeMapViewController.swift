@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import CoreLocation
 import SwiftyJSON
 import MapKit
@@ -112,8 +111,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var lblFilterDist: UILabel! // Filter Slider
     var mapFilterArrow: UIImageView! // Filter Button
     var mapPins = [MapPin]()
-    var mapPinsMarkers = [GMSMarker]() // Map Pin Array
-    var mapUserPinsDic = [GMSMarker]() // Map User Pin
     var markerMask: UIView! // mask to prevent UI action
     var myPositionCircle_1: UIImageView! // Self Position Marker
     var myPositionCircle_2: UIImageView! // Self Position Marker
@@ -139,7 +136,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var refreshPlaces = true
     var refreshUsers = true
     var reportNameCard: UIButton! // Map Namecard
-    var selectedUserMarker = GMSMarker()
     var selfMarkerIcon: UIButton! // Self Position Marker
     var shareNameCard: UIButton! // Map Namecard
     var sizeFrom: CGFloat = 0 // Pan gesture var
@@ -147,7 +143,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
-    var subviewSelfMarker: UIView! // Self Position Marker
+//    var subviewSelfMarker: UIView! // Self Position Marker
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
@@ -167,12 +163,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         getUserStatus()
         loadMapView()
         loadTransparentNavBarItems()
-        loadSelfMarkerSubview()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        reloadSelfMarker()
         loadMFilterSlider()
         loadMapFilter()
         loadButton()
@@ -319,11 +313,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5 {
-            subviewSelfMarker.isHidden = false
-            reloadSelfMarker()
+//            subviewSelfMarker.isHidden = false
+//            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
-            subviewSelfMarker.isHidden = true
+//            subviewSelfMarker.isHidden = true
             faeMapView.showsUserLocation = true
         }
     }
@@ -371,28 +365,32 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if boolIsFirstLoad {
-            boolIsFirstLoad = false
-            curLoc = locManager.location
-            curLat = curLoc.coordinate.latitude
-            curLon = curLoc.coordinate.longitude
-            curLoc2D = CLLocationCoordinate2DMake(curLat, curLon)
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(curLoc2D, 3000, 3000)
-            faeMapView.setRegion(coordinateRegion, animated: false)
-            reloadSelfPosAnimation()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.0, execute: {
-                self.refreshMap(pins: true, users: true, places: true)
-            })
-        }
-        
-        if let location = locations.last {
-            let points = faeMapView.convert(location.coordinate, toPointTo: nil)
-            subviewSelfMarker.center = points
-            uiviewDistanceRadius.center = points
-            curLoc = location
-            curLoc2D = location.coordinate
-            curLat = location.coordinate.latitude
-            curLon = location.coordinate.longitude
+        DispatchQueue.global(qos: .default).async {
+            if self.boolIsFirstLoad {
+                self.boolIsFirstLoad = false
+                self.curLoc = manager.location
+                self.curLat = self.curLoc.coordinate.latitude
+                self.curLon = self.curLoc.coordinate.longitude
+                self.curLoc2D = CLLocationCoordinate2DMake(self.curLat, self.curLon)
+                let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
+                DispatchQueue.main.async(execute: {
+                    self.faeMapView.setRegion(coordinateRegion, animated: false)
+                    self.reloadSelfPosAnimation()
+                    self.refreshMap(pins: true, users: true, places: true)
+                })
+            }
+            
+            if let location = locations.last {
+                let points = self.faeMapView.convert(location.coordinate, toPointTo: nil)
+                self.curLoc = location
+                self.curLoc2D = location.coordinate
+                self.curLat = location.coordinate.latitude
+                self.curLon = location.coordinate.longitude
+                DispatchQueue.main.async(execute: {
+//                    self.subviewSelfMarker.center = points
+                    self.uiviewDistanceRadius.center = points
+                })
+            }
         }
     }
 }

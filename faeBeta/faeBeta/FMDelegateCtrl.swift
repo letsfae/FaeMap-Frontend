@@ -33,8 +33,11 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
-        self.reloadMainScreenButtons()
+        reloadMainScreenButtons()
         resumeAllUserPinTimers()
+        for annotation in faeMapView.selectedAnnotations {
+            faeMapView.deselectAnnotation(annotation, animated: false)
+        }
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
 //        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
@@ -136,13 +139,13 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.faeMapView.showsUserLocation = false
             self.renewSelfLocation()
             reloadSelfPosAnimation()
-            self.subviewSelfMarker.isHidden = false
+//            self.subviewSelfMarker.isHidden = false
             return
         }
         if userStatus == 5 {
             self.invisibleMode()
             self.faeMapView.showsUserLocation = true
-            self.subviewSelfMarker.isHidden = true
+//            self.subviewSelfMarker.isHidden = true
         }
     }
     func jumpToMoodAvatar() {
