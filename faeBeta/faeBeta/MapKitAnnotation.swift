@@ -56,19 +56,21 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
-        let time = Double.random(min: 5, max: 20)
-        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + time) {
+//        let time = Double.random(min: 5, max: 20)
+        DispatchQueue.global(qos: .default).asyncAfter(deadline: .now() + 3) {
             if self.count == 5 {
                 self.count = 0
             }
             DispatchQueue.main.async { [index = self.count] in
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: nil)
+                    self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
+                        self.coordinate = self.positions[index]
+                        self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
+                        self.count += 1
+                        self.changePosition()
+                    })
                 }, completion: { _ in
-                    self.coordinate = self.positions[index]
-                    self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
-                    self.count += 1
-                    self.changePosition()
+                    
                 })
             }
         }
@@ -90,7 +92,7 @@ class SelfAnnotationView: MKAnnotationView {
         frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         self.clipsToBounds = false
         loadSelfMarkerSubview()
-//        reloadSelfMarker()
+        reloadSelfMarker()
     }
     
     required init?(coder aDecoder: NSCoder) {

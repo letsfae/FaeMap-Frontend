@@ -156,6 +156,32 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     var mapClusterManager: CCHMapClusterController!
     
+    // MARK: - For Compass Rotation
+    var rotationGesture: UIRotationGestureRecognizer!
+    var panGesture: UIPanGestureRecognizer!
+    var pinchGesture: UIPinchGestureRecognizer!
+    var displayLink: CADisplayLink!
+    var mapChangedFromUserInteraction = false
+    // The moment the user let go of the map.
+    var startRotateOut = TimeInterval(0)
+    
+    // After that, if there is still momentum left, the velocity is > 0.
+    // The velocity of the rotation gesture in radians per second.
+    var remainingVelocityAfterUserInteractionEnded = CGFloat(0)
+    
+    // We need some values from the last frame
+    var prevHeading = CLLocationDirection()
+    var prevRotationInRadian = CGFloat(0)
+    var prevTime = TimeInterval(0)
+    
+    // The momentum gets slower ower time
+    var currentlyRemainingVelocity = CGFloat(0)
+    
+    // As soon as this optional is set the initial mode is determined.
+    // If it's true than the map is in rotation mode,
+    // if false, the map is in 3D position adjust mode.
+    var initialMapGestureModeIsRotation: Bool?
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -171,6 +197,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapFilter()
         loadButton()
         filterAndYelpSetup()
+        loadGestures()
         boolIsFirstLoad = true
     }
     
@@ -205,10 +232,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
-    // UIGestureRecognizerDelegate
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
+    // disable for compass rotation
+//    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+//        if gestureRecognizer == rotationGesture || gestureRecognizer == panGesture || gestureRecognizer == pinchGesture {
+//            return true
+//        }
+//        return false
+//    }
     
     func checkDisplayNameExisitency() {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in

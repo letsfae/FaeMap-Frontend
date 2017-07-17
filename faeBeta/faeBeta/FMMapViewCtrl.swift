@@ -110,26 +110,6 @@ extension FaeMapViewController: MKMapViewDelegate {
         }
     }
     
-    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
-        print("[didChange]")
-        // Change ToNorth button direction according to the bearing of map
-        //        let directionMap = position.bearing
-        //        if directionMap != prevBearing {
-        //            let direction: CGFloat = CGFloat(directionMap)
-        //            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
-        //            btnToNorth.transform = CGAffineTransform(rotationAngle: angle)
-        //            prevBearing = position.bearing
-        //        }
-        
-        // Map Filter Distance Change
-        let points = mapView.convert(curLoc2D, toPointTo: nil)
-        self.uiviewDistanceRadius.center = points
-        
-//        if !boolIsFirstLoad && self.subviewSelfMarker != nil {
-//            self.subviewSelfMarker.center = points
-//        }
-    }
-    
     func openMapPin(coordinate: CLLocationCoordinate2D, mapPin: MapPin, animated: Bool) {
         
 //        self.animateToCoordinate(type: 0, marker: marker, animated: animated)

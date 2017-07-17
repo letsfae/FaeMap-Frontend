@@ -19,15 +19,22 @@ extension FaeMapViewController {
         faeMapView.delegate = self
         view.addSubview(faeMapView)
         faeMapView.showsPointsOfInterest = false
-        faeMapView.showsCompass = false
+//        faeMapView.showsCompass = false
         faeMapView.delegate = self
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         //        mapClusterManager.isDebuggingEnabled = true
         mapClusterManager.cellSize = 80
-
+        
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
+        
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "heading" {
+            print("[observeValue] find!")
+        }
     }
     
     // MARK: -- Load Map Main Screen Buttons
