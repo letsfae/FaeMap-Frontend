@@ -27,6 +27,7 @@ class EnableNotificationViewController: UIViewController {
     }
     
     fileprivate func setup() {
+        self.view.backgroundColor = .white
         imageView = UIImageView(frame: CGRect(x: 68 * screenWidthFactor, y: 159 * screenHeightFactor, width: 291 * screenWidthFactor, height: 255 * screenHeightFactor))
         imageView.image = UIImage(named: "EnableNotificationImage")
         self.view.addSubview(imageView)
