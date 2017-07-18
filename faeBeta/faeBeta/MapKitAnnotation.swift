@@ -57,7 +57,7 @@ class FaePinAnnotation: MKPointAnnotation {
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
         let time = Double.random(min: 5, max: 20)
-        print("[changePosition]", time)
+        joshPrint("[changePosition]", time)
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [index = self.count] in
             if self.count == 5 {
                 self.count = 0

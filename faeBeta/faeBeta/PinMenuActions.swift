@@ -13,7 +13,7 @@ extension PinMenuViewController {
         let createCommentPinVC = CreateCommentPinViewController()
         createCommentPinVC.modalPresentationStyle = .overCurrentContext
         createCommentPinVC.currentLocation2D = self.currentLocation
-        createCommentPinVC.zoomLevel = self.zoomLevel
+        createCommentPinVC.zoomLevel = self.floatAltitude
         createCommentPinVC.delegate = self
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
@@ -27,7 +27,7 @@ extension PinMenuViewController {
         let createMediaPinVC = CreateMomentPinViewController()
         createMediaPinVC.modalPresentationStyle = .overCurrentContext
         createMediaPinVC.currentLocation2D = self.currentLocation
-        createMediaPinVC.zoomLevel = zoomLevel
+        createMediaPinVC.zoomLevel = floatAltitude
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
@@ -41,7 +41,7 @@ extension PinMenuViewController {
         createChatPinVC.modalPresentationStyle = .overCurrentContext
         createChatPinVC.delegate = self
         createChatPinVC.currentLocation2D = self.currentLocation
-        createChatPinVC.zoomLevel = zoomLevel
+        createChatPinVC.zoomLevel = floatAltitude
         createChatPinVC.modalTransitionStyle = .crossDissolve
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0

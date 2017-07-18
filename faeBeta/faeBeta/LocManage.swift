@@ -34,9 +34,9 @@ class LocManage: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         curtLoc = locManager.location
-        print("curtLoc \(curtLoc)")
-        print("curtLat \(curtLat)")
-        print("curtLon \(curtLong)")
+//        print("curtLoc \(curtLoc)")
+//        print("curtLat \(curtLat)")
+//        print("curtLon \(curtLong)")
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

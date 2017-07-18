@@ -17,11 +17,10 @@ extension FaeMapViewController {
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(self.curLat)")
             selfLocation.whereKey("geo_longitude", value: "\(self.curLon)")
-            selfLocation.renewCoordinate {(status: Int, message: Any?) in
+            selfLocation.renewCoordinate { (status: Int, _: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
-                }
-                else {
+                } else {
                     print("[renewSelfLocation] fail")
                 }
             }
@@ -39,7 +38,7 @@ extension FaeMapViewController {
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton) {
         hideNameCard(btnCardClose)
-        let mapCenter_point = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
@@ -47,7 +46,7 @@ extension FaeMapViewController {
         pinMenuVC.currentLatitude = self.curLat
         pinMenuVC.currentLongitude = self.curLon
         pinMenuVC.currentLocation = mapCenter_coor
-        pinMenuVC.zoomLevel = faeMapView.camera.altitude
+        pinMenuVC.floatAltitude = faeMapView.camera.altitude
         pinMenuVC.delegate = self
         self.present(pinMenuVC, animated: false, completion: nil)
     }
@@ -80,7 +79,7 @@ extension FaeMapViewController {
         hideNameCard(btnCardClose)
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
-        self.present (UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true,completion: nil )
+        self.present(UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
     }
     
     func actionReportThisPin(_ sender: UIButton) {

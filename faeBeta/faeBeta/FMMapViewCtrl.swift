@@ -20,14 +20,17 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
         if firstAnn.type == "place" {
-            let anView = faeMapView.view(for: mapClusterAnnotation) as! PlacePinAnnotationView
-            anView.assignImage(firstAnn.icon)
+            if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
+                anView.assignImage(firstAnn.icon)
+            }
         } else if firstAnn.type == "user" {
-            let anView = faeMapView.view(for: mapClusterAnnotation) as! UserPinAnnotationView
-            anView.assignImage(firstAnn.avatar)
+            if let anView = faeMapView.view(for: mapClusterAnnotation) as? UserPinAnnotationView {
+                anView.assignImage(firstAnn.avatar)
+            }
         } else {
-            let anView = faeMapView.view(for: mapClusterAnnotation) as! SocialPinAnnotationView
-            anView.assignImage(firstAnn.icon)
+            if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
+                anView.assignImage(firstAnn.icon)
+            }
         }
     }
     

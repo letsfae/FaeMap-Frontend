@@ -156,6 +156,7 @@
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManage.swift */; };
+		B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B4A01F1EC074008CB624 /* PrintFunctions.swift */; };
 		B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */; };
 		B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */; };
 		B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */; };
@@ -472,6 +473,7 @@
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
 		B808B49E1F1E9A85008CB624 /* LocManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocManage.swift; sourceTree = "<group>"; };
+		B808B4A01F1EC074008CB624 /* PrintFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintFunctions.swift; sourceTree = "<group>"; };
 		B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshOption.swift; sourceTree = "<group>"; };
 		B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
 		B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
@@ -1340,6 +1342,7 @@
 			children = (
 				B88905711E36094B00E68D58 /* Reachability.swift */,
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
+				B808B4A01F1EC074008CB624 /* PrintFunctions.swift */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
@@ -1775,6 +1778,7 @@
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
+				B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */,
 				B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				853F27791E231E1300DD80DF /* EOHandleDelegate.swift in Sources */,

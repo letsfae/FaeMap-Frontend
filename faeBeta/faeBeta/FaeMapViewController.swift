@@ -251,9 +251,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             if status / 100 == 2 {
                 let rsltJSON = JSON(result!)
                 if let withNickName = rsltJSON["nick_name"].string {
-                    print("[checkDisplayNameExisitency] display name: \(withNickName)")
+                    joshPrint("[checkDisplayNameExisitency] display name: \(withNickName)")
                 } else {
-                    print("[checkDisplayNameExisitency] display name did not setup")
+                    joshPrint("[checkDisplayNameExisitency] display name did not setup")
                     self.loadFirstLoginVC()
                 }
             }
