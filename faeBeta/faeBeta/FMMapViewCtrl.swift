@@ -11,13 +11,30 @@ import SwiftyJSON
 import RealmSwift
 import CCHMapClusterController
 
-extension FaeMapViewController: MKMapViewDelegate {
+extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate {
     
     func clearMap(type: String, animated: Bool) {
         
     }
     
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
+        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+        if firstAnn.type == "place" {
+            let anView = faeMapView.view(for: mapClusterAnnotation) as! PlacePinAnnotationView
+            anView.assignImage(firstAnn.icon)
+        } else if firstAnn.type == "user" {
+            let anView = faeMapView.view(for: mapClusterAnnotation) as! UserPinAnnotationView
+            anView.assignImage(firstAnn.avatar)
+        } else {
+            let anView = faeMapView.view(for: mapClusterAnnotation) as! SocialPinAnnotationView
+            anView.assignImage(firstAnn.icon)
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        
+        guard boolCanOpenPin else { return }
+        
         if view is PlacePinAnnotationView {
             guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
@@ -34,6 +51,28 @@ extension FaeMapViewController: MKMapViewDelegate {
                     self.boolCanOpenPin = true
                 })
             }
+        } else if view is SocialPinAnnotationView {
+            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+            
+            dismissMainBtns()
+            boolCanOpenPin = false
+            
+            let mapPin = firstAnn.pinInfo as! MapPin
+            
+            openMapPin(annotation: firstAnn, mapPin: mapPin, animated: true)
+            
+            let vcPinDetail = PinDetailViewController()
+            vcPinDetail.delegate = self
+            vcPinDetail.modalPresentationStyle = .overCurrentContext
+            vcPinDetail.strPinId = "\(mapPin.pinId)"
+            
+            clearMap(type: "user", animated: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                self.present(vcPinDetail, animated: false, completion: {
+                    self.boolCanOpenPin = true
+                })
+            })
         }
     }
     
@@ -110,15 +149,13 @@ extension FaeMapViewController: MKMapViewDelegate {
         }
     }
     
-    func openMapPin(coordinate: CLLocationCoordinate2D, mapPin: MapPin, animated: Bool) {
+    func openMapPin(annotation: FaePinAnnotation, mapPin: MapPin, animated: Bool) {
         
-//        self.animateToCoordinate(type: 0, marker: marker, animated: animated)
-        
-        PinDetailViewController.selectedMarkerPosition = coordinate
-//        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.selectedMarkerPosition = annotation.coordinate
+        PinDetailViewController.pinAnnotation = annotation
         PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
         PinDetailViewController.pinStatus = mapPin.status
-        PinDetailViewController.pinStateEnum = self.selectPinState(pinState: mapPin.status)
+        PinDetailViewController.pinStateEnum = PinDetailViewController.PinState(rawValue: "\(mapPin.status)")!
         PinDetailViewController.pinUserId = mapPin.userId
     }
     
@@ -127,7 +164,7 @@ extension FaeMapViewController: MKMapViewDelegate {
         guard let placePin = annotation.pinInfo as? PlacePin else { return }
         
         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
-//        PinDetailViewController.pinMarker = marker
+        PinDetailViewController.pinAnnotation = annotation
         PinDetailViewController.pinTypeEnum = .place
         PinDetailViewController.placeType = placePin.primaryCate
         PinDetailViewController.strPlaceTitle = placePin.name
@@ -170,7 +207,7 @@ extension FaeMapViewController: MKMapViewDelegate {
         }, completion: nil)
     }
     
-    fileprivate func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
+    func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
         
         // Default is for user pin
         var offset = 500*screenHeightFactor - screenHeight/2 // 458
@@ -189,7 +226,7 @@ extension FaeMapViewController: MKMapViewDelegate {
         rect.origin.x = point.x - rect.size.width * 0.5
         rect.origin.y = point.y - rect.size.height * 0.5
         
-        faeMapView.setVisibleMapRect(rect, animated: true)
+        faeMapView.setVisibleMapRect(rect, animated: animated)
         
     }
     /*
@@ -206,33 +243,7 @@ extension FaeMapViewController: MKMapViewDelegate {
         }
 
         if type == 0 { // fae social pin
-            guard let mapPin = userData.values.first as? MapPin else {
-                return false
-            }
-            if !boolCanOpenPin {
-                return true
-            }
-
-            pauseAllUserPinTimers()
-            dismissMainBtns()
-            boolCanOpenPin = false
-            invalidateAllTimer()
-            openMapPin(marker: marker, mapPin: mapPin, animated: true)
-            openMapPin(coordinate: CLLocationCoordinate2D, mapPin: MapPin, animated: Bool)
-            
-            let vcPinDetail = PinDetailViewController()
-            vcPinDetail.delegate = self
-            vcPinDetail.modalPresentationStyle = .overCurrentContext
-            vcPinDetail.strPinId = "\(mapPin.pinId)"
-            
-            clearMap(type: "user", animated: false)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                self.present(vcPinDetail, animated: false, completion: {
-                    self.boolCanOpenPin = true
-                })
-            })
-            
-            return true
+     
         } else if type == 1 { // user pin
             guard let userPin = userData.values.first as? FaeUserPin else {
                 return false
@@ -248,57 +259,10 @@ extension FaeMapViewController: MKMapViewDelegate {
             })
             return true
         } else if type == 2 { // place pin
-            guard let placePin = userData.values.first as? PlacePin else {
-                return false
-            }
-            if !boolCanOpenPin {
-                return true
-            }
-            
-            pauseAllUserPinTimers()
-            dismissMainBtns()
-            boolCanOpenPin = false
-            invalidateAllTimer()
-            openPlacePin(marker: marker, placePin: placePin, animated: true)
-            
-            let vcPinDetail = PinDetailViewController()
-            vcPinDetail.modalPresentationStyle = .overCurrentContext
-            vcPinDetail.delegate = self
-            
-            clearMap(type: "user", animated: false)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                self.present(vcPinDetail, animated: false, completion: {
-                    self.boolCanOpenPin = true
-                })
-            })
+     
             return true
         }
         return true
     }
     */
-    
-    func pauseAllUserPinTimers() {
-//        for user in faeUserPins {
-//            user?.pause = true
-//        }
-    }
-    
-    func resumeAllUserPinTimers() {
-//        for user in faeUserPins {
-//            user?.pause = false
-//        }
-    }
-    
-    fileprivate func selectPinState(pinState: String) -> PinDetailViewController.PinState {
-        switch pinState {
-        case "hot":
-            return .hot
-        case "read":
-            return .read
-        case "hot and read":
-            return .hotRead
-        default:
-            return .normal
-        }
-    }
 }

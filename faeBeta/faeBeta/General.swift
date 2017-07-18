@@ -16,7 +16,8 @@ class General: NSObject {
     func avatar(userid: Int, completion:@escaping (UIImage) -> Void) {
         
         if userid <= 0 {
-            completion(UIImage())
+            guard let defaultImage = Key.shared.imageDefaultMale else { return }
+            completion(defaultImage)
         }
         
         if let imageFromCache = faeImageCache.object(forKey: userid as AnyObject) as? UIImage {

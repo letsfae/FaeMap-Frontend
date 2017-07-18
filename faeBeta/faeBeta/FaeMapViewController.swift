@@ -182,6 +182,18 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // if false, the map is in 3D position adjust mode.
     var initialMapGestureModeIsRotation: Bool?
     
+    // MARK: - For Place Pin
+    var uiviewPlaceDetail: UIView!
+    var uiviewPlacePinBottomLine: UIView!
+    var imgPlaceQuickView: UIImageView!
+    var imgPlaceType: UIImageView!
+    var lblPlaceTitle: UILabel!
+    var lblPlaceStreet: UILabel!
+    var lblPlaceCity: UILabel!
+    var btnGoToPinList: UIButton!
+    var btnMoreOptions: UIButton!
+    var imgPinIcon: UIImageView!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -197,7 +209,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapFilter()
         loadButton()
         filterAndYelpSetup()
-        loadGestures()
+//        loadGestures()
+        
+        loadPlaceDetail()
+        
         boolIsFirstLoad = true
     }
     
@@ -209,7 +224,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadMapChat()
         btnCardClose.alpha = 0
         reloadSelfPosAnimation()
-        // print("[FaeMapViewController - viewWillAppear]")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -231,14 +245,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-    
-    // disable for compass rotation
-//    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        if gestureRecognizer == rotationGesture || gestureRecognizer == panGesture || gestureRecognizer == pinchGesture {
-//            return true
-//        }
-//        return false
-//    }
     
     func checkDisplayNameExisitency() {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in

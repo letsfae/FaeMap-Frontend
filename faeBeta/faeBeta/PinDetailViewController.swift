@@ -84,6 +84,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // add pull down refresh feature for tblMain (tableView type)
     fileprivate func addPullDownToRefresh() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+
         tblMain.addPullRefresh { [unowned self] in
             self.getSeveralInfo()
             
@@ -141,10 +143,14 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         loadChatView()
         loadPlaceDetail()
         
-        tblMain.tableHeaderView = PinDetailViewController.pinTypeEnum == .chat_room ? uiviewChatRoom : uiviewTblHeader
+        if PinDetailViewController.pinTypeEnum != .place {
+            tblMain.tableHeaderView = PinDetailViewController.pinTypeEnum == .chat_room ? uiviewChatRoom : uiviewTblHeader
+        }
         
         loadFromCollections()
-        addPullDownToRefresh()
+        
+        // disabled for testing
+//        addPullDownToRefresh()
     }
     
     // setup all components to full pin view mode
@@ -213,6 +219,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadNavigationBar() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         uiviewMain.addSubview(uiviewNavBar)
         
@@ -295,7 +303,6 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnPrevPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         btnPrevPin.layer.shadowOpacity = 0.6
         btnPrevPin.layer.shadowRadius = 3.0
-        btnPrevPin.alpha = 0
         btnPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnPrevPin)
         
@@ -306,12 +313,13 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
         btnNextPin.layer.shadowOpacity = 0.6
         btnNextPin.layer.shadowRadius = 3.0
-        btnNextPin.alpha = 0
         btnNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnNextPin)
     }
     
     fileprivate func loadingOtherParts() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+        
         uiviewTableSub = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         uiviewTableSub.backgroundColor = UIColor.white
         uiviewMain.addSubview(uiviewTableSub)
@@ -356,6 +364,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadTableHeader() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
         
         uiviewTblHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 232))
         uiviewTblHeader.backgroundColor = UIColor.white
@@ -514,6 +523,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadToolBar() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+        
         // View to hold three buttons
         uiviewTblCtrlBtnSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 42))
         
@@ -579,6 +590,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadInputToolBar() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
+        
         uiviewInputToolBarSub = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 51))
         uiviewInputToolBarSub.backgroundColor = UIColor.white
         uiviewInputToolBarSub.layer.zPosition = 200
@@ -637,6 +650,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     fileprivate func loadAnonymous() {
+        
         uiviewAnonymous = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 51))
         uiviewAnonymous.backgroundColor = UIColor.white
         uiviewAnonymous.layer.zPosition = 200
@@ -1193,6 +1207,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func endEdit() {
+        guard PinDetailViewController.pinTypeEnum != .place else { return }
         textViewInput.endEditing(true)
         textViewInput.resignFirstResponder()
         boolKeyboardShowed = false
@@ -1879,8 +1894,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             
             if likesCount >= 15 || commentsCount >= 10 {
                 self.imgHotPin.isHidden = false
-                if PinDetailViewController.pinStatus == "read" || PinDetailViewController.pinStatus == "hot and read" {
-                    PinDetailViewController.pinStatus = "hot and read"
+                if PinDetailViewController.pinStatus == "read" || PinDetailViewController.pinStatus == "hotRead" {
+                    PinDetailViewController.pinStatus = "hotRead"
                     PinDetailViewController.pinStateEnum = .hotRead
                 } else {
                     PinDetailViewController.pinStatus = "hot"
@@ -2146,8 +2161,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         readThisPin.haveReadThisPin("\(PinDetailViewController.pinTypeEnum)", pinID: self.strPinId) { (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully read this pin!")
-                if PinDetailViewController.pinStatus == "hot" || PinDetailViewController.pinStatus == "hot and read" {
-                    PinDetailViewController.pinStatus = "hot and read"
+                if PinDetailViewController.pinStatus == "hot" || PinDetailViewController.pinStatus == "hotRead" {
+                    PinDetailViewController.pinStatus = "hotRead"
                     PinDetailViewController.pinStateEnum = .hotRead
                 } else {
                     PinDetailViewController.pinStatus = "read"
@@ -2412,7 +2427,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
         zoomLevel = Double(zoom)
-        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.strPinId, marker: PinDetailViewController.pinMarker)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.strPinId, annotation: PinDetailViewController.pinAnnotation)
     }
     
     // OpenedPinListViewControllerDelegate
@@ -2437,7 +2452,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         self.initPlaceBasicInfo()
         self.manageYelpData()
         
-        self.delegate?.animateToCamera(coordinate, pinID: "ddd")
+        self.delegate?.animateToCamera(coordinate)
         UIApplication.shared.statusBarStyle = .lightContent
     }
     func directlyReturnToMap() {
@@ -2804,15 +2819,12 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     func animatePinCtrlBtnsAndFeeling() {
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            
             self.btnGrayBackToMap.alpha = 1
-            self.btnNextPin.alpha = 1
-            self.btnPrevPin.alpha = 1
             self.imgPinIcon.alpha = 1
-            
             self.uiviewMain.frame.origin.y = 0
-            
-            self.uiviewInputToolBarSub.frame.origin.x = 0
+            if PinDetailViewController.pinTypeEnum != .place {
+                self.uiviewInputToolBarSub.frame.origin.x = 0
+            }
         }, completion: { _ in
             if PinDetailViewController.pinTypeEnum != .place {
                 self.delegate?.changeIconImage()

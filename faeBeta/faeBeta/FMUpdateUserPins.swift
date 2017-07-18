@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import SwiftyJSON
 import RealmSwift
 
@@ -21,6 +20,7 @@ extension FaeMapViewController {
     }
 
     func updateSelfLocation() {
+        return
         if boolIsFirstLoad || !boolCanUpdateUserPin {
             return
         }

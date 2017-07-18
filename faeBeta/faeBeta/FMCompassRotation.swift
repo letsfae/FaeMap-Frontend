@@ -114,13 +114,14 @@ extension FaeMapViewController {
             })
             
             // You may want this here to work on a better rotate out equation. :)
-            
+            /*
             let stoptime = Date.timeIntervalSinceReferenceDate
+            
             print("Needed time to rotate out:", stoptime - startRotateOut, "with velocity",
                   remainingVelocityAfterUserInteractionEnded, ".")
             print("Velocity decrease per sec:", (Double(remainingVelocityAfterUserInteractionEnded)
                 / (stoptime - startRotateOut)))
-            
+            */
             // Clean up for the next rotation.
             
             remainingVelocityAfterUserInteractionEnded = 0

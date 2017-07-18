@@ -8,7 +8,9 @@
 
 import UIKit
 
-class Key: NSObject {//  singleton class
+class Key: NSObject { //  singleton class
+    
+    static let shared = Key()
     
     private enum SERVERTYPE {
         case development
@@ -75,12 +77,4 @@ class Key: NSObject {//  singleton class
     let imageDefaultCover = UIImage(named: "defaultCover")
     let imageDefaultMale = UIImage(named: "defaultMen")
     let imageDefaultFemale = UIImage(named: "defaultWomen")
-
-    class var sharedInstance: Key {
-        struct Static {
-            static let instance = Key()
-        }
-        return Static.instance
-    }
-
 }

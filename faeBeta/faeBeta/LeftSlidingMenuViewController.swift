@@ -62,7 +62,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         loadLeftWindow()
-        readRealmData()
+        loadUserInfo()
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
         view.addGestureRecognizer(draggingGesture)
     }
@@ -256,21 +256,17 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func readRealmData() {
-        
-        if user_id != -1 {
-            let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
-            imageAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { _, _, _, _ in
-                
-            })
-        }
-        
-        let updateNickName = FaeUser()
-        updateNickName.getSelfNamecard { (status: Int, message: Any?) in
-            if status / 100 == 2 {
+    func loadUserInfo() {
+        General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+            self.imageAvatar.image = avatarImage
+        })
+        DispatchQueue.global(qos: .utility).async {
+            let updateNickName = FaeUser()
+            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
+                guard status / 100 == 2 else { return }
                 let nickNameInfo = JSON(message!)
-                if let str = nickNameInfo["nick_name"].string {
-                    self.label.text = str
+                DispatchQueue.main.async {
+                    self.label.text = nickNameInfo["nick_name"].stringValue
                 }
             }
         }

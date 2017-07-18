@@ -237,11 +237,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     func actionLeftWindowShow(_ sender: UIButton) {
         let leftMenuVC = LeftSlidingMenuViewController()
-        if let displayName = nickname {
-            leftMenuVC.displayName = displayName
-        } else {
-            leftMenuVC.displayName = "someone"
-        }
+        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         present(leftMenuVC, animated: false, completion: nil)

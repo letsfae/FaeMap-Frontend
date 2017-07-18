@@ -27,32 +27,15 @@ extension FaeMapViewController {
     }
     
     func updateSelfInfo() {
-        let updateNickName = FaeUser()
-        updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
-            if status / 100 == 2 {
-                let nickNameInfo = JSON(message!)
-                if let str = nickNameInfo["nick_name"].string {
-                    nickname = str
-                }
-            }
-        }
-        
-        if user_id != -1 {
-            let realm = try! Realm()
-            let selfInfoRealm = realm.objects(SelfInformation.self).filter("currentUserID == \(user_id) AND avatar != nil")
-            if selfInfoRealm.count == 0 {
-                let imageViewAvatarMore = UIImageView()
-                let urlStringHeader = "\(baseURL)/files/users/\(user_id)/avatar"
-                imageViewAvatarMore.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: [.retryFailed, .refreshCached], completed: { (image, error, SDImageCacheType, imageURL) in
-                    if image != nil {
-                        let selfInfoRealm = SelfInformation()
-                        selfInfoRealm.currentUserID = Int(user_id)
-                        selfInfoRealm.avatar = UIImageJPEGRepresentation(image!, 1.0) as NSData?
-                        try! realm.write {
-                            realm.add(selfInfoRealm)
-                        }
+        DispatchQueue.global(qos: .utility).async {
+            let updateNickName = FaeUser()
+            updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
+                if status / 100 == 2 {
+                    let nickNameInfo = JSON(message!)
+                    if let str = nickNameInfo["nick_name"].string {
+                        Key.shared.nickname = str
                     }
-                })
+                }
             }
         }
     }

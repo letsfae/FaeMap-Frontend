@@ -28,10 +28,6 @@ extension FaeMapViewController {
                 return
             }
             userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue
-//            self.myPositionCircle_1.image = UIImage(named: "myPosition_outside")
-//            self.myPositionCircle_2.image = UIImage(named: "myPosition_outside")
-//            self.myPositionCircle_3.image = UIImage(named: "myPosition_outside")
-//            self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_\(userMiniAvatar+1)"), for: .normal)
         })
     }
 }

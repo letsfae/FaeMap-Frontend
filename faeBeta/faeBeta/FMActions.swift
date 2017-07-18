@@ -11,10 +11,12 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        if curLoc != nil {
+        guard curLoc != nil else { return }
+        
+        DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(curLat)")
-            selfLocation.whereKey("geo_longitude", value: "\(curLon)")
+            selfLocation.whereKey("geo_latitude", value: "\(self.curLat)")
+            selfLocation.whereKey("geo_longitude", value: "\(self.curLon)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
@@ -31,6 +33,7 @@ extension FaeMapViewController {
         let camera = faeMapView.camera
         camera.heading = 0
         faeMapView.setCamera(camera, animated: true)
+        btnToNorth.transform = CGAffineTransform.identity
     }
     
     // Jump to pin menu view controller
@@ -53,7 +56,6 @@ extension FaeMapViewController {
         hideNameCard(btnCardClose)
         let camera = faeMapView.camera
         camera.centerCoordinate = curLoc2D
-//        let camera = GMSCameraPosition.camera(withLatitude: curLat, longitude: curLon, zoom: faeMapView.camera.zoom)
         faeMapView.setCamera(camera, animated: true)
     }
     
@@ -68,12 +70,7 @@ extension FaeMapViewController {
     func actionLeftWindowShow(_ sender: UIButton) {
         hideNameCard(btnCardClose)
         let leftMenuVC = LeftSlidingMenuViewController()
-        if let displayName = nickname {
-            leftMenuVC.displayName = displayName
-        }
-        else {
-            leftMenuVC.displayName = "someone"
-        }
+        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         self.present(leftMenuVC, animated: false, completion: nil)

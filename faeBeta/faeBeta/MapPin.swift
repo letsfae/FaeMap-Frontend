@@ -47,14 +47,14 @@ struct MapPin {
         }
         let likeCount = json["pin_object"]["liked_count"].intValue
         let commentCount = json["pin_object"]["comment_count"].intValue
-        let readInfo = json["pin_object"]["user_pin_operations"]["is_read"].boolValue
+        let read = json["pin_object"]["user_pin_operations"]["is_read"].boolValue
         if commentCount >= 10 || likeCount >= 15 {
-            if readInfo {
-                self.status = "hot and read"
+            if read {
+                self.status = "hotRead"
             } else {
                 self.status = "hot"
             }
-        } else if readInfo {
+        } else if read {
             self.status = "read"
         }
     }

@@ -15,26 +15,19 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
-        self.faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
         view.addSubview(faeMapView)
         faeMapView.showsPointsOfInterest = false
-//        faeMapView.showsCompass = false
+        faeMapView.showsCompass = false
         faeMapView.delegate = self
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
-        //        mapClusterManager.isDebuggingEnabled = true
         mapClusterManager.cellSize = 80
+        mapClusterManager.delegate = self
         
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
-        
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath == "heading" {
-            print("[observeValue] find!")
-        }
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -42,30 +35,29 @@ extension FaeMapViewController {
         // Left window on main map to open account system
         btnLeftWindow = UIButton()
         btnLeftWindow.setImage(UIImage(named: "mainScreenMore"), for: .normal)
-        self.view.addSubview(btnLeftWindow)
+        view.addSubview(btnLeftWindow)
         btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: btnLeftWindow)
-        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnLeftWindow)
+        view.addConstraintsWithFormat("H:|-15-[v0(30)]", options: [], views: btnLeftWindow)
+        view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnLeftWindow)
         btnLeftWindow.layer.zPosition = 500
         btnLeftWindow.adjustsImageWhenDisabled = false
         
         // Open main map search
         btnMainMapSearch = UIButton()
+        btnMainMapSearch.frame = CGRect(x: 0, y: 22, width: 33, height: 36)
+        btnMainMapSearch.center.x = screenWidth / 2
         btnMainMapSearch.setImage(UIImage(named: "mainScreenFaeLogo"), for: .normal)
-        self.view.addSubview(btnMainMapSearch)
+        view.addSubview(btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(33)]", options: [], views: btnMainMapSearch)
-        self.view.addConstraintsWithFormat("V:|-22-[v0(36)]", options: [], views: btnMainMapSearch)
-        NSLayoutConstraint(item: btnMainMapSearch, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         btnMainMapSearch.layer.zPosition = 500
         btnMainMapSearch.adjustsImageWhenDisabled = false
         
         // Wind bell
         btnWindBell = UIButton()
         btnWindBell.setImage(UIImage(named: "mainScreenWindBell"), for: .normal)
-        self.view.addSubview(btnWindBell)
-        self.view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: btnWindBell)
-        self.view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnWindBell)
+        view.addSubview(btnWindBell)
+        view.addConstraintsWithFormat("H:[v0(26)]-16-|", options: [], views: btnWindBell)
+        view.addConstraintsWithFormat("V:|-26-[v0(30)]", options: [], views: btnWindBell)
         btnWindBell.adjustsImageWhenDisabled = false
         
         // Click to back to north
@@ -73,8 +65,6 @@ extension FaeMapViewController {
         view.addSubview(btnToNorth)
         btnToNorth.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
         btnToNorth.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
-//        view.addConstraintsWithFormat("H:|-22-[v0(59)]", options: [], views: btnToNorth)
-//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnToNorth)
         btnToNorth.layer.zPosition = 500
         
         // Click to locate the current location
@@ -82,8 +72,6 @@ extension FaeMapViewController {
         view.addSubview(btnSelfLocation)
         btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: .normal)
         btnSelfLocation.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
-//        view.addConstraintsWithFormat("H:[v0(59)]-22-|", options: [], views: btnSelfLocation)
-//        view.addConstraintsWithFormat("V:[v0(59)]-95-|", options: [], views: btnSelfLocation)
         btnSelfLocation.layer.zPosition = 500
         
         // Open chat view
@@ -91,8 +79,6 @@ extension FaeMapViewController {
         btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
         btnChatOnMap.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
         view.addSubview(btnChatOnMap)
-//        view.addConstraintsWithFormat("H:|-12-[v0(79)]", options: [], views: btnChatOnMap)
-//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnChatOnMap)
         btnChatOnMap.layer.zPosition = 500
         
         // Show the number of unread messages on main map
@@ -112,8 +98,6 @@ extension FaeMapViewController {
         btnPinOnMap.setImage(UIImage(named: "mainScreenPinMap"), for: .normal)
         view.addSubview(btnPinOnMap)
         btnPinOnMap.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
-//        view.addConstraintsWithFormat("H:[v0(79)]-12-|", options: [], views: btnPinOnMap)
-//        view.addConstraintsWithFormat("V:[v0(79)]-11-|", options: [], views: btnPinOnMap)
         btnPinOnMap.layer.zPosition = 500
     }
 }

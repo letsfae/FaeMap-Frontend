@@ -15,11 +15,11 @@ protocol PinDetailDelegate: class {
     // false -> delete this pin from map
     func backToMainMap()
     // Pass location data to fae map view
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String)
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D)
     // Change marker icon based on status
     func changeIconImage()
     // Reload map pins because of location changed
-    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker)
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, annotation: FaePinAnnotation)
     // Go to prev or next pin
     func goTo(nextPin: Bool)
 }
@@ -53,7 +53,7 @@ class PinDetailBaseViewController: UIViewController {
         case normal
         case read
         case hot
-        case hotRead = "hot and read"
+        case hotRead
     }
     enum TableMode: Int {
         case talktalk = 0
@@ -89,7 +89,7 @@ class PinDetailBaseViewController: UIViewController {
     weak var delegate: PinDetailDelegate? // Delegate of this class
     weak var colDelegate: PinDetailCollectionsDelegate? // For collections
     
-    static var pinMarker = GMSMarker()
+    static var pinAnnotation: FaePinAnnotation!
     static var pinStateEnum: PinState = .normal
     static var pinStatus = ""
     static var pinTypeEnum: PinType = .media

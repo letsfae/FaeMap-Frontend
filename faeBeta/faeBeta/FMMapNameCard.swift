@@ -97,7 +97,6 @@ extension FaeMapViewController {
                 self.boolCanUpdateUserPin = true
                 self.uiviewCardPrivacy.isHidden = true
                 self.lblNickName.alpha = 0
-                self.resumeAllUserPinTimers()
             }
         })
     }

@@ -74,7 +74,7 @@ class NameCardViewController: UIViewController, UIImagePickerControllerDelegate,
                     showAge = ageInfo
                 }
                 if let str = genderAgeInfo["nick_name"].string {
-                    nickname = str
+                    Key.shared.nickname = str
                 }
                 if let str = genderAgeInfo["short_intro"].string {
                     shortIntro = str
@@ -89,7 +89,7 @@ class NameCardViewController: UIViewController, UIImagePickerControllerDelegate,
     }
     
     func updateName() {
-        self.labelNickname.text = nickname
+        self.labelNickname.text = Key.shared.nickname
         self.labelIntro.text = shortIntro
         self.tableViewNameCard.reloadData()
     }
@@ -128,7 +128,7 @@ extension NameCardViewController: UITableViewDelegate, UITableViewDataSource {
             cell.selectionStyle = .none
             if indexPath.row == 0 {
                 cell.labelDes.text = "Display Name"
-                cell.labelUserSet.text = nickname
+                cell.labelUserSet.text = Key.shared.nickname
             } else if indexPath.row == 1 {
                 cell.labelDes.text = "Short Intro"
                 cell.labelUserSet.text = shortIntro
@@ -223,7 +223,7 @@ extension NameCardViewController {
         imageViewCover.contentMode = .scaleAspectFill
         if user_id != -1 {
             let urlStringHeader = "\(baseURL)/files/users/\(user_id)/name_card_cover"
-            imageViewCover.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultCover, options: .refreshCached)
+            imageViewCover.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.shared.imageDefaultCover, options: .refreshCached)
         }
         viewNameCardTitle.addSubview(imageViewCover)
         
@@ -245,11 +245,7 @@ extension NameCardViewController {
         viewNameCardTitle.addSubview(imageViewTitleProfile)
         
         labelNickname = UILabel(frame: CGRect(x: 0, y: 138 * screenHeightFactor, width: 268 * screenWidthFactor, height: 27 * screenHeightFactor))
-        if nickname == nil || nickname == "" {
-            labelNickname.text = "Anonymous"
-        } else {
-            labelNickname.text = nickname
-        }
+        labelNickname.text = Key.shared.nickname ?? "Anonymous"
         labelNickname.font = UIFont(name: "AvenirNext-DemiBold", size: 20.0)
         labelNickname.textAlignment = .center
         labelNickname.textColor = UIColor(colorLiteralRed: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0)
@@ -281,7 +277,7 @@ extension NameCardViewController {
         if user_id != -1 {
             let urlStringHeader = baseURL + "/files/users/\(user_id)/avatar"
             print(user_id)
-            imageViewTitleProfile.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
+            imageViewTitleProfile.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.shared.imageDefaultMale, options: .refreshCached)
         }
         viewGender = UIView(frame: CGRect(x: 90 - 73, y: 139 - 119, width: 50, height: 18))
         viewGender.backgroundColor = getColor(149, green: 207, blue: 246)

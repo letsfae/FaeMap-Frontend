@@ -83,11 +83,9 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = UIViewContentMode.scaleAspectFill
         
-        if user_id != -1 {
-            let urlStringHeader = baseURL + "/files/users/" + "\(user_id)" + "/avatar"
-            print(urlStringHeader)
-            imgAvatar.sd_setImage(with: URL(string: urlStringHeader), placeholderImage: Key.sharedInstance.imageDefaultMale, options: .refreshCached)
-        }
+        General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
         
         scroll.addSubview(imgAvatar)
         
@@ -98,11 +96,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     func loadName() {
         lblNickname = UILabel(frame: CGRect(x: (screenWidth - 280) / 2, y: 154, width: 280, height: 38))
-        if nickname != nil {
-            lblNickname.text = nickname
-        } else {
-            lblNickname.text = "someone"
-        }
+        lblNickname.text = Key.shared.nickname ?? "someone"
         lblNickname.textAlignment = .center
         lblNickname.font = UIFont(name: "AvenirNext-Medium", size: 23)
         lblNickname.textColor = UIColor.faeAppInputTextGrayColor()

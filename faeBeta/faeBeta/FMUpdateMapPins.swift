@@ -199,7 +199,7 @@ extension FaeMapViewController {
                 return #imageLiteral(resourceName: "markerCommentHot")
             } else if status == "new" {
                 return #imageLiteral(resourceName: "markerCommentNew")
-            } else if status == "hot and read" {
+            } else if status == "hotRead" {
                 return #imageLiteral(resourceName: "markerCommentHotRead")
             } else if status == "read" {
                 return #imageLiteral(resourceName: "markerCommentRead")
@@ -211,7 +211,7 @@ extension FaeMapViewController {
                 return #imageLiteral(resourceName: "markerChatHot")
             } else if status == "new" {
                 return #imageLiteral(resourceName: "markerChatNew")
-            } else if status == "hot and read" {
+            } else if status == "hotRead" {
                 return #imageLiteral(resourceName: "markerChatHotRead")
             } else if status == "read" {
                 return #imageLiteral(resourceName: "markerChatRead")
@@ -223,7 +223,7 @@ extension FaeMapViewController {
                 return #imageLiteral(resourceName: "markerMomentHot")
             } else if status == "new" {
                 return #imageLiteral(resourceName: "markerMomentNew")
-            } else if status == "hot and read" {
+            } else if status == "hotRead" {
                 return #imageLiteral(resourceName: "markerMomentHotRead")
             } else if status == "read" {
                 return #imageLiteral(resourceName: "markerMomentRead")

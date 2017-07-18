@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 import CoreLocation
 import RealmSwift
 import SwiftyJSON
@@ -34,37 +33,29 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         filterCircleAnimation()
         reloadSelfPosAnimation()
         reloadMainScreenButtons()
-        resumeAllUserPinTimers()
         for annotation in faeMapView.selectedAnnotations {
             faeMapView.deselectAnnotation(annotation, animated: false)
         }
+        boolCanOpenPin = true
     }
-    func animateToCamera(_ coordinate: CLLocationCoordinate2D, pinID: String) {
-//        let offset = 0.00148 * pow(2, Double(17 - faeMapView.camera.zoom)) // 0.00148 Los Angeles, 0.00117 Canada
-//        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude + offset,
-//                                              longitude: coordinate.longitude, zoom: faeMapView.camera.zoom)
-//        faeMapView.camera = camera
+    func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
+        // animate to place pin coordinate
+        animateToCoordinate(type: 2, coordinate: coordinate, animated: false)
     }
     func changeIconImage() {
-        let marker = PinDetailViewController.pinMarker
-        let type = "\(PinDetailViewController.pinTypeEnum)"
+        let annotation = PinDetailViewController.pinAnnotation
+        _ = "\(PinDetailViewController.pinTypeEnum)"
         let status = PinDetailViewController.pinStatus
-        guard let userData = marker.userData as? [Int: AnyObject] else {
-            return
-        }
-        guard let mapPin = userData.values.first as? MapPin else {
-            return
-        }
+        let mapPin = annotation?.pinInfo as! MapPin
         var mapPin_new = mapPin
         mapPin_new.status = status
-        marker.userData = [0: mapPin_new]
-        marker.icon = pinIconSelector(type: type, status: status)
+        annotation?.pinInfo = mapPin_new as AnyObject
     }
-    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, marker: GMSMarker) {
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, annotation: FaePinAnnotation) {
         
-        marker.map = nil
-        marker.position = coordinate
-//        marker.map = faeMapView
+        mapClusterManager.removeAnnotations([annotation]) {
+            self.mapClusterManager.addAnnotations([annotation], withCompletionHandler: nil)
+        }
         
         let offset = 530 * screenHeightFactor - screenHeight / 2
         var curPoint = faeMapView.convert(coordinate, toPointTo: nil)
@@ -82,7 +73,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
                 tmpMarkers.append(marker)
             }
         }
-        if let index = tmpMarkers.index(of: PinDetailViewController.pinMarker) {
+        if let index = tmpMarkers.index(of: PinDetailViewController.pinAnnotation) {
             var i = index
             if nextPin {
                 if index == tmpMarkers.count - 1 {
@@ -97,7 +88,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
                     i -= 1
                 }
             }
-            PinDetailViewController.pinMarker = tmpMarkers[i]
+            PinDetailViewController.pinAnnotation = tmpMarkers[i]
             if tmpMarkers[i].userData == nil {
                 return
             }
