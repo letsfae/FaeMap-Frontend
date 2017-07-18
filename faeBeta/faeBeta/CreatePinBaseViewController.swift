@@ -34,7 +34,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var strTags: String!
     
     var textviewDescrip: CreatePinTextView!
-    var textviewAddTags: CreatePinAddTagsTextView!
     
     var btnDoAnony: UIButton!
     var switchAnony: UISwitch!
@@ -79,7 +78,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     enum CreatePinSpecificViewOptions {
         case description
         case moreOptionsTable
-        case addTags
     }
     
     // What specific content the user is current looking at. Such as the description textView or the more options table
@@ -256,9 +254,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
             case .moreOptionsTable:
                 leaveMoreOptions()
                 break
-            case .addTags:
-                leaveAddTags()
-                break
             }
         }
             // create a pin
@@ -302,15 +297,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     
     func leaveMoreOptions() {
         self.optionViewMode = .pin
-    }
-    
-    func switchToAddTags() {
-        self.optionViewMode = .more
-        self.currentViewingContent = .addTags
-    }
-    
-    func leaveAddTags() {
-        self.currentViewingContent = .moreOptionsTable
     }
     
     // MARK: - CreatePinInputToolbarDelegate

@@ -45,7 +45,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     }
     
     func loadNavBar() {
-        let uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        let uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.loadBtnConstraints()
         

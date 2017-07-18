@@ -8,92 +8,111 @@
 
 import UIKit
 import SwiftyJSON
-import GoogleMaps
-import GooglePlaces
+//import GoogleMaps
+//import GooglePlaces
 
 extension MapBoardViewController {
     
-    func getMBSocialInfo(socialType: String) {
-        let mbSocialList = FaeMap()
-        mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
-        mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
-        mbSocialList.whereKey("radius", value: "9999999")
-        mbSocialList.whereKey("type", value: "\(socialType)")
-        mbSocialList.whereKey("in_duration", value: "false")
-        mbSocialList.whereKey("max_count", value: "100")
-        mbSocialList.getMapInformation { (status: Int, message: Any?) in
-            
-            if status / 100 != 2 || message == nil {
-                print("[loadMBSocialInfo] status/100 != 2")
-                
-                return
-            }
-            let socialInfoJSON = JSON(message!)
-            guard let socialInfoJsonArray = socialInfoJSON.array else {
-                print("[loadMBSocialInfo] fail to parse mapboard social info")
-                
-                return
-            }
-            if socialInfoJsonArray.count <= 0 {
-                
-                print("[loadMBSocialInfo] array is nil")
-                return
-            }
-            
-            self.processMBInfo(results: socialInfoJsonArray, socialType: socialType)
-            
-            self.mbComments.sort { $0.pinId > $1.pinId }
-            self.mbStories.sort { $0.pinId > $1.pinId }
+//    func getMBSocialInfo(socialType: String) {
+//        let mbSocialList = FaeMap()
+//        mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
+//        mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
+//        mbSocialList.whereKey("radius", value: "9999999")
+//        mbSocialList.whereKey("type", value: "\(socialType)")
+//        mbSocialList.whereKey("in_duration", value: "false")
+//        mbSocialList.whereKey("max_count", value: "100")
+//        mbSocialList.getMapInformation { (status: Int, message: Any?) in
+//            
+//            if status / 100 != 2 || message == nil {
+//                print("[loadMBSocialInfo] status/100 != 2")
+//                
+//                return
+//            }
+//            let socialInfoJSON = JSON(message!)
+//            guard let socialInfoJsonArray = socialInfoJSON.array else {
+//                print("[loadMBSocialInfo] fail to parse mapboard social info")
+//                
+//                return
+//            }
+//            if socialInfoJsonArray.count <= 0 {
+//                
+//                print("[loadMBSocialInfo] array is nil")
+//                return
+//            }
+//            
+//            self.processMBInfo(results: socialInfoJsonArray, socialType: socialType)
+    
+//            self.mbComments.sort { $0.pinId > $1.pinId }
+//            self.mbStories.sort { $0.pinId > $1.pinId }
             
             // if mbComments > 0  =>  恒成立？
-            for i in 0..<self.mbComments.count {
-                let pos = self.mbComments[i].position
-                self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
-            }
-            
-            for i in 0..<self.mbStories.count {
-                let pos = self.mbStories[i].position
-                self.getSocialPinAddress(position: pos, socialType: "media", index: i)
-            }
+//            for i in 0..<self.mbComments.count {
+//                let pos = self.mbComments[i].position
+//                self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
+//            }
+//            
+//            for i in 0..<self.mbStories.count {
+//                let pos = self.mbStories[i].position
+//                self.getSocialPinAddress(position: pos, socialType: "media", index: i)
+//            }
             
             //            self.tableMapBoard.reloadData()
-        }
-    }
+//        }
+//    }
     
     fileprivate func processMBInfo(results: [JSON], socialType: String) {
         for result in results {
             switch socialType {
-            case "comment":
-                let mbCommentData = MBSocialStruct(json: result)
-                if self.mbComments.contains(mbCommentData) {
-                    continue
-                } else {
-                    self.mbComments.append(mbCommentData)
-                }
-                break
-            case "media":
-                let mbStoryData = MBSocialStruct(json: result)
-                if self.mbStories.contains(mbStoryData) {
-                    continue
-                } else {
-                    self.mbStories.append(mbStoryData)
-                }
-                break
+//            case "comment":
+//                let mbCommentData = MBSocialStruct(json: result)
+//                if self.mbComments.contains(mbCommentData) {
+//                    continue
+//                } else {
+//                    self.mbComments.append(mbCommentData)
+//                }
+//                break
+//            case "media":
+//                let mbStoryData = MBSocialStruct(json: result)
+//                if self.mbStories.contains(mbStoryData) {
+//                    continue
+//                } else {
+//                    self.mbStories.append(mbStoryData)
+//                }
+//                break
             case "place":
                 let mbPlaceData = MBPlacesStruct(json: result)
-                if self.mbPlaces.contains(mbPlaceData) {
-                    continue
-                } else {
+//                if self.mbPlaces.contains(mbPlaceData) {
+//                    if let idx = self.mbPlaces.index(of: mbPlaceData) {
+//                        if mbPlaces[idx].distance != mbPlaceData.distance {
+//                            mbPlaces[idx].distance = mbPlaceData.distance
+//                        }
+//                    }
+//                    continue
+//                } else {
                     self.mbPlaces.append(mbPlaceData)
-                }
+//                }
                 break
-            case "Peple":
+            case "people":
+                
                 let mbPeopleData = MBPeopleStruct(json: result)
-                if self.mbPeople.contains(mbPeopleData) {
+                if mbPeopleData.userId == user_id {
                     continue
-                } else {
-                    self.mbPeople.append(mbPeopleData)
                 }
+                
+                if selectedGender == "" || mbPeopleData.age == "" {
+                    continue
+                }
+                
+                if (mbPeopleData.dis > Double(disVal)!) || (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") || (Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) {
+//                    if self.mbPeople.contains(mbPeopleData) {
+//                        if let idx = mbPeople.index(of: mbPeopleData) {
+//                            mbPeople.remove(at: idx)
+//                        }
+//                    }
+                    continue
+                }
+                
+                self.mbPeople.append(mbPeopleData)
                 break
             default:
                 break
@@ -102,31 +121,31 @@ extension MapBoardViewController {
     }
     
 
-    fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
-        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
-            (response, _) -> Void in
-            
-            if let fullAddress = response?.firstResult()?.lines {
-                var address: String = ""
-                for line in fullAddress {
-                    if line == "" {
-                        continue
-                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
-                        address += line + ""
-                    } else {
-                        address += line + ", "
-                    }
-                }
-                
-                if socialType == "comment" {
-                    self.mbComments[index].address = address
-                } else if socialType == "media" {
-                    self.mbStories[index].address = address
-                    
-                    //                    print("\(index) \(position) \(address)")
-                }
-            }
-        })
+//    fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
+//        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
+//            (response, _) -> Void in
+//            
+//            if let fullAddress = response?.firstResult()?.lines {
+//                var address: String = ""
+//                for line in fullAddress {
+//                    if line == "" {
+//                        continue
+//                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
+//                        address += line + ""
+//                    } else {
+//                        address += line + ", "
+//                    }
+//                }
+//                
+//                if socialType == "comment" {
+//                    self.mbComments[index].address = address
+//                } else if socialType == "media" {
+//                    self.mbStories[index].address = address
+//                    
+//                    //                    print("\(index) \(position) \(address)")
+//                }
+//            }
+//        })
     
         /*
         CLGeocoder().reverseGeocodeLocation(position, completionHandler: {
@@ -165,13 +184,13 @@ extension MapBoardViewController {
             }
         })
         */
-    }
+//    }
  
     
     func getMBPlaceInfo() {
         let mbPlacesList = FaeMap()
-        mbPlacesList.whereKey("geo_latitude", value: "\(currentLatitude)")
-        mbPlacesList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        mbPlacesList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+        mbPlacesList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
         mbPlacesList.whereKey("radius", value: "9999999")
         mbPlacesList.whereKey("type", value: "place")
         mbPlacesList.whereKey("in_duration", value: "false")
@@ -182,7 +201,7 @@ extension MapBoardViewController {
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
-                print("[loadMBPlaceInfo] fail to parse mapboard social info")
+                print("[loadMBPlaceInfo] fail to parse mapboard place info")
                 return
             }
             if placeInfoJsonArray.count <= 0 {
@@ -190,17 +209,24 @@ extension MapBoardViewController {
                 return
             }
             
+            self.mbPlaces.removeAll()
             self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
             
+//            if let curtPos = LocManage.shared.curtLoc {
+//                self.mbPlaces.sort { $0.position.distance(from: curtPos) < $1.position.distance(from: curtPos) }
+//            }
+            
             self.mbPlaces.sort { $0.dis < $1.dis }
-            //            self.mbPlaces = self.mbPlaces.sorted(by: { $0.dis < $1.dis })
+            
+            self.tblMapBoard.reloadData()
         }
     }
     
-    func getMBPeopleInfo() {
+    func getMBPeopleInfo(_ completion: ((Int) -> ())?) {
         let mbPeopleList = FaeMap()
-        mbPeopleList.whereKey("geo_latitude", value: "\(currentLatitude)")
-        mbPeopleList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        
+        mbPeopleList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+        mbPeopleList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
         mbPeopleList.whereKey("radius", value: "9999999")
         mbPeopleList.whereKey("type", value: "user")
         mbPeopleList.whereKey("in_duration", value: "false")
@@ -211,7 +237,7 @@ extension MapBoardViewController {
             }
             let peopleInfoJSON = JSON(message!)
             guard let peopleInfoJsonArray = peopleInfoJSON.array else {
-                print("[loadMBPeopleInfo] fail to parse mapboard social info")
+                print("[loadMBPeopleInfo] fail to parse mapboard people info")
                 return
             }
             if peopleInfoJsonArray.count <= 0 {
@@ -219,9 +245,18 @@ extension MapBoardViewController {
                 return
             }
             
-            print(peopleInfoJsonArray)
+            self.mbPeople.removeAll()
             self.processMBInfo(results: peopleInfoJsonArray, socialType: "people")
-            //            self.mbPeople.sort{ $0.dis < $1.dis }
+            
+//            if let curtPos = LocManage.shared.curtLoc {
+//                print("[getMBPeopleInfo] curtPos: \(curtPos)")
+//                self.mbPeople.sort { $0.position.distance(from: curtPos) < $1.position.distance(from: curtPos) }
+//            }
+            
+            self.mbPeople.sort{ $0.dis < $1.dis }
+//            print(self.mbPeople)
+//            self.tblMapBoard.reloadData()
+            completion?(self.mbPeople.count)
         }
     }
 }

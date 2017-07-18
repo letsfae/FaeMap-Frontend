@@ -47,22 +47,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         alertController.addAction(cancelAction)
         self.present(alertController, animated: true, completion: nil)
     }
-    
-//    fileprivate func alertPromptToAllowCameraAccessViaSetting() {
-//        let title = "Cannot access camera"
-//        let message = "Open System Settings -> Fae Map to turn on the camera access"
-//        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-//        alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel) { _ in
-//            if AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo).count > 0 {
-//                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { _ in
-//                    DispatchQueue.main.async() {
-//                        self.checkCamera()
-//                    }
-//                }
-//            }
-//        })
-//        self.present(alertController, animated: true, completion: nil)
-//    }
 
     // Vicky 06/23/17 End
     
@@ -114,23 +98,6 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func actionTakePhoto(_ sender: UIButton) {
-        //        let imagePicker = UIImagePickerController()
-        //        imagePicker.sourceType = .camera
-        //        imagePicker.delegate = self
-        //        var photoStatus = PHPhotoLibrary.authorizationStatus()
-        //        if photoStatus != .authorized {
-        //            PHPhotoLibrary.requestAuthorization({ (status) in
-        //                photoStatus = status
-        //                if photoStatus != .authorized {
-        //                    self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
-        //                    return
-        //                }
-        //                self.present(imagePicker, animated: true, completion: nil)
-        //            })
-        //        } else {
-        //            self.present(imagePicker, animated: true, completion: nil)
-        //        }
-        
         // Vicky 06/23/17
         self.checkCamera()
         // Vicky 06/23/17

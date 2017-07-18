@@ -83,6 +83,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navMain
         self.window?.makeKeyAndVisible()
         
+        // update user current location
+        LocManage.shared.updateCurtLoc()
+        
         return true
     }
     

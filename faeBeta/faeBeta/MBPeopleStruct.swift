@@ -18,21 +18,42 @@ extension MBPeopleStruct: Equatable {
 
 struct MBPeopleStruct {
     let userId: Int
-    let usrName: String
+    let displayName: String
     let shortIntro: String
     let gender: String
-    let age: Int
-    let position: CLLocationCoordinate2D
-    let distance: String
+    let age: String
+    let position: CLLocation
+    var distance: String
+//    var curtLatitude: CLLocationDegrees = 34.0205378
+//    var curtLongitude: CLLocationDegrees = -118.2854081
+    let dis: Double
     
     init(json: JSON) {
         userId = json["user_id"].intValue
-        usrName = json["name"].stringValue
+        displayName = json["user_nick_name"].stringValue
         shortIntro = json["short_intro"].stringValue
-        gender = json["gender"].stringValue
-        age = json["age"].intValue
-        position = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue,
-                                          longitude: json["geolocation"]["longitude"].doubleValue)
-        distance = ""
+        gender = json["user_gender"].stringValue
+        age = json["user_age"].stringValue
+        
+        position = CLLocation(latitude: json["geolocation"][0]["latitude"].doubleValue,
+                              longitude: json["geolocation"][0]["longitude"].doubleValue)
+        
+//        let mbVC = MapBoardViewController()
+//        mbVC.updateCurtLoc()
+//        curtLatitude = mbVC.currentLatitude
+//        curtLongitude = mbVC.currentLongitude
+//        
+//        position = CLLocation(latitude: json["geolocation"][0]["latitude"].doubleValue,
+//                                          longitude: json["geolocation"][0]["longitude"].doubleValue)
+        let curtPos = CLLocation(latitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong)
+        
+        dis = curtPos.distance(from: position) / 1000
+        if dis < 0.1 {
+            distance = "< 0.1 km"
+        } else if dis > 999 {
+            distance = "> 999 km"
+        } else {
+            distance = String(format: "%.1f", dis) + " km"
+        }
     }
 }

@@ -9,21 +9,11 @@
 import UIKit
 
 class CreatePinOptionsTableViewCell: UITableViewCell {
-//    @IBOutlet weak var titleLabel: UILabel!
-//    @IBOutlet weak var leadingIconImageView: UIImageView!
-//    
-//    @IBOutlet weak var trailingLabel: UILabel!
-//    @IBOutlet weak var trailingIconImageView: UIImageView!
     
     var lblTitle: UILabel!
     var imgLeadingIcon: UIImageView!
     var lblTrailing: UILabel!
     var imgTrailingIcon: UIImageView!
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        self.backgroundColor = UIColor.clear
-//        self.selectionStyle = .none
-//    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -38,7 +38,7 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
         case .social:
             return 3
         case .people:
-            return lblUsrNameTxt.count
+            return mbPeople.count
         case .places:
             return mbPlaces.count
         case .talk:
@@ -67,39 +67,17 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         } else if tableMode == .people {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbPeopleCell", for: indexPath) as! MBPeopleCell
-            cell.imgAvatar.image = imgAvatarArr[indexPath.row]
-            cell.lblUsrName.text = lblUsrNameTxt[indexPath.row]
-            cell.lblIntro.text = lblIntroTxt[indexPath.row]
-            if age[indexPath.row] == "" {
-                cell.imgGenderWithAge.isHidden = true
-                if gender[indexPath.row] == "F" {
-                    cell.imgGender.image = #imageLiteral(resourceName: "mb_female")
-                } else {
-                    cell.imgGender.image = #imageLiteral(resourceName: "mb_male")
-                }
-            } else {
-                cell.imgGender.isHidden = true
-                if gender[indexPath.row] == "F" {
-                    cell.imgGenderWithAge.image = #imageLiteral(resourceName: "mb_femaleWithAge")
-                } else {
-                    cell.imgGenderWithAge.image = #imageLiteral(resourceName: "mb_maleWithAge")
-                }
-                cell.lblAge.text = age[indexPath.row]
-            }
             
-            cell.lblDistance.text = peopleDis[indexPath.row]
+            let people = mbPeople[indexPath.row]
+            cell.setValueForCell(people: people, curtLoc: LocManage.shared.curtLoc)
+            
             return cell
         } else if tableMode == .places {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbPlacesCell", for: indexPath) as! MBPlacesCell
+            
             let place = mbPlaces[indexPath.row]
-            cell.imgPlaceIcon.image = #imageLiteral(resourceName: "mb_defaultPlace")
-            cell.lblPlaceName.text = place.name
-            cell.lblPlaceAddr.text = place.address
-            cell.lblDistance.text = place.distance
-
-//            cell.lblPlaceName.text = placeName[indexPath.row]
-//            cell.lblPlaceAddr.text = placeAddr[indexPath.row]
-//            cell.lblDistance.text = distance[indexPath.row]
+            cell.setValueForCell(place: place, curtLoc: LocManage.shared.curtLoc)
+            
             return cell
         } else if tableMode == .talk {
             if talkTableMode == .feed {

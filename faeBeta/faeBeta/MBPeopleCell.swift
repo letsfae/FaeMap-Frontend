@@ -10,13 +10,14 @@ import UIKit
 
 class MBPeopleCell: UITableViewCell {
 
-    var imgAvatar: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var lblUsrName: UILabel!
     var lblIntro: UILabel!
     var lblDistance: UILabel!
     var imgGender: UIImageView!
     var imgGenderWithAge: UIImageView!
     var lblAge: UILabel!
+    var distance: String!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -33,9 +34,9 @@ class MBPeopleCell: UITableViewCell {
     
     fileprivate func loadCellContent() {
         
-        imgAvatar = UIImageView(frame: CGRect(x: 15, y: 15, width: 66, height: 66))
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 15, y: 15, width: 66, height: 66))
         addSubview(imgAvatar)
-        imgAvatar.layer.cornerRadius = 19.5
+        imgAvatar.layer.cornerRadius = 33
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = .scaleAspectFill
         
@@ -80,5 +81,49 @@ class MBPeopleCell: UITableViewCell {
         lblDistance.textAlignment = .right
         addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:[v0(18)]-12-|", options: [], views: lblDistance)
+    }
+    
+    func setValueForCell(people: MBPeopleStruct, curtLoc: CLLocation) {
+        if people.displayName == "" {
+            lblUsrName.text = "Someone"
+            imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
+        } else {
+            lblUsrName.text = people.displayName
+            imgAvatar.userID = people.userId
+            imgAvatar.loadAvatar(id: people.userId)
+        }
+        lblIntro.text = people.shortIntro
+        
+        if people.age == "" {
+            imgGenderWithAge.isHidden = true
+            imgGender.isHidden = false
+            if people.gender == "female" {
+                imgGender.image = #imageLiteral(resourceName: "mb_female")
+            } else {
+                imgGender.image = #imageLiteral(resourceName: "mb_male")
+            }
+        } else {
+            imgGender.isHidden = true
+            imgGenderWithAge.isHidden = false
+            if people.gender == "female" {
+                imgGenderWithAge.image = #imageLiteral(resourceName: "mb_femaleWithAge")
+            } else {
+                imgGenderWithAge.image = #imageLiteral(resourceName: "mb_maleWithAge")
+            }
+            lblAge.text = people.age
+        }
+        
+        let curtPos = curtLoc
+        
+        let dis = curtPos.distance(from: people.position) / 1000
+        if dis < 0.1 {
+            distance = "< 0.1 km"
+        } else if dis > 999 {
+            distance = "> 999 km"
+        } else {
+            distance = String(format: "%.1f", dis) + " km"
+        }
+        
+        lblDistance.text = distance
     }
 }

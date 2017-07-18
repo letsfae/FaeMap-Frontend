@@ -25,7 +25,6 @@ struct MBSocialStruct {
     var likeCount: Int
     var commentCount: Int
     let position: CLLocationCoordinate2D
-    var address: String
     let anonymous: Bool
     var status: String
     var fileIdArray = [Int]()
@@ -33,6 +32,8 @@ struct MBSocialStruct {
     var feelingArray = [Int]()
     var chatTitle: String
     var chatLastMesg: String
+    var chatDesp: String
+    var chatAttributedDesp: NSAttributedString?
     
     init(json: JSON) {
         self.pinId = json["pin_id"].intValue
@@ -73,14 +74,16 @@ struct MBSocialStruct {
         self.commentCount = json["pin_object"]["comment_count"].intValue
         self.position = CLLocationCoordinate2D(latitude: json["pin_object"]["geolocation"]["latitude"].doubleValue,
                                                longitude: json["pin_object"]["geolocation"]["longitude"].doubleValue)
-        self.address = ""
-        
+
         self.chatTitle = ""
         self.chatLastMesg = ""
+        self.chatDesp = ""
         if self.type == "chat_room" {
             self.chatTitle = json["pin_object"]["title"].stringValue
             self.chatLastMesg = json["pin_object"]["last_message"].stringValue
+            self.chatDesp = json["pin_object"]["description"].stringValue
         }
+        self.chatAttributedDesp = self.chatDesp.formatPinCommentsContent()
         
         self.isLiked = json["pin_object"]["user_pin_operations"]["is_liked"].boolValue
         self.status = "normal"

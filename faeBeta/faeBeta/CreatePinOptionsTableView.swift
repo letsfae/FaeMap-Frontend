@@ -28,6 +28,5 @@ class CreatePinOptionsTableView: UITableView {
         self.separatorStyle = .none
         self.isScrollEnabled = false
         register(CreatePinOptionsTableViewCell.self, forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
-//        register(UINib(nibName: "CreatePinOptionsTableViewCell", bundle: nil ), forCellReuseIdentifier: CreatePinOptionsTableView.cellReuseIdentifier)
     }
 }

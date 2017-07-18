@@ -13,7 +13,6 @@ protocol MBComtsStoriesCellDelegate: class {
     
     func replyToThisPin(indexPath: IndexPath, boolReply: Bool)
     func likeThisPin(indexPath: IndexPath, strPinId: String)
-    // func actionHoldingLikeButton(indexPath: IndexPath, strPinId: strPinId)
 }
 
 class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
@@ -53,12 +52,6 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setAddressForCell(position: CLLocationCoordinate2D, id: Int, type: String) {
-        lblLoc.pinId = id
-        lblLoc.pinType = type
-        lblLoc.loadAddress(position: position, id: id, type: type)
     }
     
     func loadCellContent() {
@@ -184,6 +177,12 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         addConstraintsWithFormat("V:|-15-[v0(20)]", options: [], views: imgHotPin)
     }
 
+    func setAddressForCell(position: CLLocationCoordinate2D, id: Int, type: String) {
+        lblLoc.pinId = id
+        lblLoc.pinType = type
+        lblLoc.loadAddress(position: position, id: id, type: type)
+    }
+    
     func setValueForCell(social: MBSocialStruct) {
         self.strPinId = String(social.pinId)
         
@@ -199,7 +198,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         lblContent.attributedText = social.attributedText
         
         setAddressForCell(position: social.position, id: social.pinId, type: social.type)
-        lblLoc.text = social.address
+
         imgHotPin.isHidden = social.status != "hot"
         lblFavCount.text = String(social.likeCount)
         btnFav.setImage(social.isLiked ? #imageLiteral(resourceName: "pinDetailLikeHeartFull") : #imageLiteral(resourceName: "pinDetailLikeHeartHollow"), for: .normal)

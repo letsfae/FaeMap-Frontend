@@ -30,7 +30,9 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         super.setupBaseUI()
         imgTitle.image = #imageLiteral(resourceName: "chatPinTitleImage")
         btnSubmit.backgroundColor = UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 0.65)
-        switchAnony.onTintColor = UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1)
+//        switchAnony.onTintColor = UIColor(red: 194/255.0, green: 229/255.0, blue: 159/255.0, alpha: 1)
+        switchAnony.isHidden = true
+        btnDoAnony.isHidden = true
         
 //        self.lblTitle.text = ""
         textviewDescrip.placeHolder = "Add Description..."
@@ -76,7 +78,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         
         func createInputTextField() {
             textChatPinName = UITextField(frame: CGRect(x: (screenWidth - 300) / 2, y: 180, width: 300, height: 27))
-            textChatPinName.attributedPlaceholder = NSAttributedString(string:            "Chat Pin Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
+            textChatPinName.attributedPlaceholder = NSAttributedString(string:            "Chat Group Name", attributes: [NSForegroundColorAttributeName: UIColor.faeAppTextViewPlaceHolderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 20)!])
 
             textChatPinName.backgroundColor = .clear
             textChatPinName.textColor = .white
@@ -158,7 +160,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
     override func switchToDescription() {
         super.switchToDescription()
         
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.4, animations: {
             Void in
             self.uiviewMain.alpha = 0
             self.tblPinOptions.alpha = 0
@@ -177,7 +179,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
             self.textviewDescrip.resignFirstResponder()
         }
         
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.4, animations: {
             Void in
             self.uiviewMain.alpha = 1
             self.tblPinOptions.alpha = 1
@@ -186,7 +188,7 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
                 self.textviewDescrip.alpha = 0
             }
             self.lblTitle.text = ""
-            self.setSubmitButton(withTitle: "Submit!", isEnabled: self.boolBtnSubmitEnabled)
+            self.updateSubmitButton()
         }, completion:{
             Complete in
             self.textviewDescrip.resignFirstResponder()
@@ -220,53 +222,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         })
     }
     
-    override func switchToAddTags() {
-        super.switchToAddTags()
-        if (textviewAddTags == nil) {
-            textviewAddTags = CreatePinAddTagsTextView(frame: CGRect(x: (screenWidth - 290) / 2, y: 195, width: 290, height: 35), textContainer: nil)
-            textviewAddTags.placeHolder = "Add Tags to promote your pin in searches..."
-            textviewAddTags.observerDelegate = self
-            self.view.addSubview(textviewAddTags)
-        }
-        textviewAddTags.alpha = 0
-        inputToolbar.mode = .tag
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.tblMoreOptions.alpha = 0
-            self.lblTitle.text = "Add Tags"
-            self.textviewAddTags.alpha = 1
-        }, completion:{
-            Complete in
-        })
-    }
-    
-    override func leaveAddTags() {
-        super.leaveAddTags()
-        strTags = "Add Tags"
-        if(textviewAddTags != nil && textviewAddTags.tagNames.count != 0){
-            strTags = ""
-            for tag in textviewAddTags.tagNames{
-                strTags.append("\(tag), ")
-            }
-            strTags = strTags.substring(to: strTags.characters.index(strTags.endIndex, offsetBy: -2))
-            
-            textviewAddTags.resignFirstResponder()
-        }
-//        if textviewAddTags != nil {
-//            textviewAddTags.resignFirstResponder()
-//        }
-        self.tblMoreOptions.reloadData()
-        UIView.animate(withDuration: 0.3, animations: {
-            Void in
-            self.tblMoreOptions.alpha = 1
-            self.lblTitle.text = "More Options"
-            self.textviewAddTags.alpha = 0
-        }, completion:{
-            Complete in
-            self.inputToolbar.mode = .emoji
-        })
-    }
-    
     /// This is a method to set the image for imgCreateChatPinImage
     ///
     /// - Parameter image: the image for imgCreateChatPinImage, if nil, then use default image(the placeholder)
@@ -282,11 +237,11 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
             imgCreateChatPinImage.layer.borderWidth = 0
             imgCreateChatPinImage.layer.masksToBounds = false
         }
-        updateSubmitButton()
     }
     
     fileprivate func updateSubmitButton() {
-        boolBtnSubmitEnabled = imgCreateChatPinImage.image != #imageLiteral(resourceName: "createChatPinImagePlaceHolder") && (textChatPinName.text?.characters.count)! > 0
+        // Chat Group Name & Chat Description must have value
+        boolBtnSubmitEnabled = ((textChatPinName.text?.characters.count)! > 0) && ((textviewDescrip.text?.characters.count)! > 0)
         setSubmitButton(withTitle: "Submit!", isEnabled : boolBtnSubmitEnabled)
     }
     
@@ -314,43 +269,33 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         postSingleChatPin.whereKey("duration", value: "1440")
         postSingleChatPin.whereKey("title", value: textChatPinName.text!)
         
-        TagCreator.uploadTags(textviewAddTags != nil ? textviewAddTags.tagNames : [], completion: { (tagNames) in
-            var tagIdString = ""
-            for tag in tagNames{
-                tagIdString = tagIdString == "" ? tag.stringValue : "\(tagIdString);\(tag.stringValue)"
-            }
-            if tagIdString != ""{
-                postSingleChatPin.whereKey("tag_ids", value: tagIdString)
-            }
-            
-            postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
-                if let getMessage = message as? NSDictionary{
-                    if let getMessageID = getMessage["chat_room_id"] {
-                        let getJustPostedChatPin = FaeMap()
-                        getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
-                            
-                            //upload cover image
-                            self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
-                            
-                            let latDouble = Double(submitLatitude!)
-                            let longDouble = Double(submitLongitude!)
-                            let lat = CLLocationDegrees(latDouble!)
-                            let long = CLLocationDegrees(longDouble!)
-                            UIScreenService.hideActivityIndicator()
-                            self.dismiss(animated: false, completion: {
-                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
-                            })
-                        }
-                    }
-                    else {
-                        print("Cannot get comment_id of this posted comment")
+        postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
+            if let getMessage = message as? NSDictionary{
+                if let getMessageID = getMessage["chat_room_id"] {
+                    let getJustPostedChatPin = FaeMap()
+                    getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
+                        
+                        //upload cover image
+                        self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
+                        
+                        let latDouble = Double(submitLatitude!)
+                        let longDouble = Double(submitLongitude!)
+                        let lat = CLLocationDegrees(latDouble!)
+                        let long = CLLocationDegrees(longDouble!)
+                        UIScreenService.hideActivityIndicator()
+                        self.dismiss(animated: false, completion: {
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: self.zoomLevelCallBack)
+                        })
                     }
                 }
                 else {
-                    print("Post Comment Fail")
+                    print("Cannot get comment_id of this posted comment")
                 }
             }
-        })
+            else {
+                print("Post Comment Fail")
+            }
+        }
     }
     
     func uploadChatRoomCoverImage(chatRoomId: NSNumber, image: UIImage){
@@ -390,16 +335,6 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
             updateSubmitButton()
         }
     }
-    
-    //MARK: - add tags related
-    override func inputToolbarEmojiButtonTapped(inputToolbar: CreatePinInputToolbar) {
-        if !(prevFirstResponder is CreatePinAddTagsTextView){
-            super.inputToolbarEmojiButtonTapped(inputToolbar: inputToolbar)
-        }else{
-            textviewAddTags.addLastInputTag()
-        }
-    }
-    
     
     // MARK: - select photos from camera / library as image
     fileprivate func checkLibraryAccessStatus() {
