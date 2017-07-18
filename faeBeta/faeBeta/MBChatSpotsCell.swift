@@ -11,9 +11,9 @@ import UIKit
 class MBChatSpotsCell: UITableViewCell {
 
     var uiviewCell: UIButton!
-    var imgAvatar: UIImageView!
+    var imgChatRoom: FaeImageView!
     var lblChatTitle: UILabel!
-    var lblChatCont: UILabel!
+    var lblChatDesp: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,12 +29,11 @@ class MBChatSpotsCell: UITableViewCell {
     }
     
     fileprivate func loadCellContent() {
-        
-        imgAvatar = UIImageView(frame: CGRect(x: 15, y: 15, width: 66, height:66))
-        addSubview(imgAvatar)
-        imgAvatar.layer.cornerRadius = 33
-        imgAvatar.clipsToBounds = true
-        imgAvatar.contentMode = .scaleAspectFill
+        imgChatRoom = FaeImageView(frame: CGRect(x: 15, y: 15, width: 66, height:66))
+        addSubview(imgChatRoom)
+        imgChatRoom.layer.cornerRadius = 33
+        imgChatRoom.clipsToBounds = true
+        imgChatRoom.contentMode = .scaleAspectFill
         
         lblChatTitle = UILabel()
         addSubview(lblChatTitle)
@@ -42,14 +41,27 @@ class MBChatSpotsCell: UITableViewCell {
         lblChatTitle.textColor = UIColor.faeAppInputTextGrayColor()
         addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatTitle)
         
-        lblChatCont = UILabel()
-        addSubview(lblChatCont)
-        lblChatCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblChatCont.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblChatCont.lineBreakMode = .byTruncatingTail
-        addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatCont)
-        addConstraintsWithFormat("V:|-26-[v0(25)]-1-[v1(18)]", options: [], views: lblChatTitle, lblChatCont)
+        lblChatDesp = UILabel()
+        addSubview(lblChatDesp)
+        lblChatDesp.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblChatDesp.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblChatDesp.lineBreakMode = .byTruncatingTail
+        addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatDesp)
+        addConstraintsWithFormat("V:|-26-[v0(25)]-1-[v1(18)]", options: [], views: lblChatTitle, lblChatDesp)
         
+//        lblChatTitle.backgroundColor = .yellow
+//        lblChatDesp.backgroundColor = .blue
+    }
+    
+    func setValueForCell(chat: MBSocialStruct) {
+        if chat.pinId != -1 {
+            imgChatRoom.loadImage(id: chat.pinId, isChatRoom: true)
+        } else {
+            imgChatRoom.image = #imageLiteral(resourceName: "default_chatImage")
+        }
+        lblChatTitle?.text = chat.chatTitle
+//        lblChatDesp?.attributedText = chat.chatAttributedDesp
+        lblChatDesp.text = chat.chatDesp
     }
 
 }

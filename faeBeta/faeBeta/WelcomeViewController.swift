@@ -20,6 +20,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     var btnLogin: UIButton!
     var btnCreateAccount: UIButton!
     var lblRight: UILabel!
+    
     // MARK: - View did/will
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,10 +54,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     fileprivate func setupImageContainerPageViewController() {
         pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56, width: 66, height: 10))
         pageControl.center.x = screenWidth / 2
-        pageControl.numberOfPages = 4 //  hide trade was 5
+        pageControl.numberOfPages = 5 //  hide trade was 5
         view.insertSubview(pageControl, at: 0)
         
-        uipageImgContainer = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey: NSNumber(value: 4 as Float)]) //  hide trade was 5
+        uipageImgContainer = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionSpineLocationKey: NSNumber(value: 5 as Float)]) //  hide trade was 5
         
         uipageImgContainer.delegate = self
         uipageImgContainer.dataSource = self
@@ -142,7 +143,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let vcCurrent = viewController as! WelcomeImageContainerViewController
-        if vcCurrent.index == 3 { // was 4, hide trade -- Yue Shen
+        if vcCurrent.index == 4 { // was 4, hide trade -- Yue Shen
             return nil
         } else {
             return viewControllerAtIndex(vcCurrent.index + 1)

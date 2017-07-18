@@ -107,26 +107,15 @@ extension CreatePinBaseViewController: UITableViewDelegate, UITableViewDataSourc
             if pinType == .chat {
                 switch indexPath.row {
                 case 0:
-                    strTags = "Add Tags"
-                    if(textviewAddTags != nil && textviewAddTags.tagNames.count != 0){
-                        strTags = ""
-                        for tag in textviewAddTags.tagNames{
-                            strTags.append("\(tag), ")
-                        }
-                        strTags = strTags.substring(to: strTags.characters.index(strTags.endIndex, offsetBy: -2))
-                    }
-                    cell.setupCell(withTitle: strTags, leadingIcon: #imageLiteral(resourceName: "addTagsIcon"), trailingText: nil, trailingIcon: #imageLiteral(resourceName: "plusIcon"))
-                    break
-                case 1:
                     cell.setupCell(withTitle: "Room Capacity", leadingIcon: #imageLiteral(resourceName: "RoomCapacityIcon"), trailingText: "50", trailingIcon: nil)
                     break
-                case 2:
+                case 1:
                     cell.setupCell(withTitle: "Duration on Map", leadingIcon: #imageLiteral(resourceName: "durationIcon"), trailingText: "1D", trailingIcon: nil)
                     break
-                case 3:
+                case 2:
                     cell.setupCell(withTitle: "Interaction Radius", leadingIcon: #imageLiteral(resourceName: "radiusIcon"), trailingText: "C.S", trailingIcon: nil)
                     break
-                case 4:
+                case 3:
                     cell.setupCell(withTitle: "Pin Promotions", leadingIcon: #imageLiteral(resourceName: "promotionIcon"), trailingText: "C.S", trailingIcon: nil)
                     break
                 default:
@@ -199,15 +188,12 @@ extension CreatePinBaseViewController: UITableViewDelegate, UITableViewDataSourc
             if pinType == .chat {
                 switch indexPath.row {
                 case 0:
-                    switchToAddTags()
                     break
                 case 1:
                     break
                 case 2:
                     break
                 case 3:
-                    break
-                case 4:
                     break
                 default:
                     break

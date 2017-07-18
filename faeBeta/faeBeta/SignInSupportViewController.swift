@@ -33,6 +33,8 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     //MARK: - View did/will ...
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = .white
+        
         setupNavigationBar()
         setupInterface()
         addObservers()
@@ -57,14 +59,16 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     }
     
     fileprivate func setupNavigationBar() {
-        self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(SignInSupportViewController.navBarLeftButtonTapped))
-        self.navigationController?.isNavigationBarHidden = false
+        let uiviewNavBar = FaeNavBar(frame: .zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "NavigationBackNew"), for: .normal)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.navBarLeftButtonTapped), for: .touchUpInside)
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.bottomLine.isHidden = true
     }
     
     fileprivate func setupInterface() {
-        
         // set up the title label
         lblTitle = UILabel(frame: CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60))
         lblTitle.numberOfLines = 2

@@ -27,12 +27,12 @@ class MBAddressLabel: UILabel {
     func loadAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
         
         self.text = nil
-        
-        if let addressFromCache = mbAddressCache.object(forKey: id as AnyObject) as? String {
+
+        if let addressFromCache = mbAddressCache.object(forKey: "\(id)" + type as AnyObject) as? String {
             self.text = addressFromCache
             return
         }
-        
+
         self.getSocialPinAddress(position: position, id: id, type: type)
     }
     
@@ -57,7 +57,7 @@ class MBAddressLabel: UILabel {
                         addressToCache += line + ", "
                     }
                 }
-                
+
                 if "\(self.pinId)" + self.pinType == "\(id)" + type {
                     self.text = addressToCache
                 }

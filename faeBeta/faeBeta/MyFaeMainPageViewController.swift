@@ -131,22 +131,22 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll.addSubview(uiviewContent)
         
         let wid = screenWidth - 44 - 24
-        uiviewRedCircle1 = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 12))
+        uiviewRedCircle1 = UIView(frame: CGRect(x: 0, y: 12, width: 12, height: 12))
         uiviewRedCircle1.layer.cornerRadius = 6
         uiviewRedCircle1.backgroundColor = UIColor.faeAppRedColor()
         uiviewContent.addSubview(uiviewRedCircle1)
         
-        uiviewRedCircle2 = UIView(frame: CGRect(x: 0, y: 50, width: 12, height: 12))
+        uiviewRedCircle2 = UIView(frame: CGRect(x: 0, y: 62, width: 12, height: 12))
         uiviewRedCircle2.layer.cornerRadius = 6
         uiviewRedCircle2.backgroundColor = UIColor.faeAppRedColor()
         uiviewContent.addSubview(uiviewRedCircle2)
         
-        uiviewRedCircle3 = UIView(frame: CGRect(x: 0, y: 100, width: 12, height: 12))
+        uiviewRedCircle3 = UIView(frame: CGRect(x: 0, y: 112, width: 12, height: 12))
         uiviewRedCircle3.layer.cornerRadius = 6
         uiviewRedCircle3.backgroundColor = UIColor.faeAppRedColor()
         uiviewContent.addSubview(uiviewRedCircle3)
         
-        lblDesp1 = UILabel(frame: CGRect(x: 24, y: 0 - 2, width: wid, height: 36))
+        lblDesp1 = UILabel(frame: CGRect(x: 24, y: 0, width: wid, height: 36))
         lblDesp1.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp1.text = "Congrats! You’re among the first to use Fae Map"
         lblDesp1.textColor = UIColor.faeAppInputPlaceholderGrayColor()
@@ -154,7 +154,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblDesp1.lineBreakMode = .byWordWrapping
         uiviewContent.addSubview(lblDesp1)
 
-        lblDesp2 = UILabel(frame: CGRect(x: 24, y: 50 - 2, width: wid, height: 36))
+        lblDesp2 = UILabel(frame: CGRect(x: 24, y: 50, width: wid, height: 36))
         lblDesp2.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp2.text = "No Levels for Early Birds; Full access to everything"
         lblDesp2.textColor = UIColor.faeAppInputPlaceholderGrayColor()
@@ -162,7 +162,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblDesp2.lineBreakMode = .byWordWrapping
         uiviewContent.addSubview(lblDesp2)
         
-        lblDesp3 = UILabel(frame: CGRect(x: 24, y: 100 - 2, width: wid, height: 54))
+        lblDesp3 = UILabel(frame: CGRect(x: 24, y: 100, width: wid, height: 54))
         lblDesp3.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp3.text = "We value your opinion, chat with us for feedbacks and let’s make Fae Map better together!"
         lblDesp3.textColor = UIColor.faeAppInputPlaceholderGrayColor()

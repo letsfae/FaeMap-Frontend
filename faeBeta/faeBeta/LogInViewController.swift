@@ -62,15 +62,13 @@ class LogInViewController: UIViewController {
     }
     
     fileprivate func setupNavigationBar() {
-        navigationController?.navigationBar.barTintColor = UIColor.white
-        navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(self.navBarLeftButtonTapped))
-        navigationController?.isNavigationBarHidden = false
-        navigationController?.navigationBar.isHidden = true
-        let btnBackToPrevious = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
-        view.addSubview(btnBackToPrevious)
-        btnBackToPrevious.setImage(UIImage(named: "NavigationBackNew"), for: .normal)
-        btnBackToPrevious.addTarget(self, action: #selector(self.navBarLeftButtonTapped), for: .touchUpInside)
+        let uiviewNavBar = FaeNavBar(frame: .zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "NavigationBackNew"), for: .normal)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.navBarLeftButtonTapped), for: .touchUpInside)
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.bottomLine.isHidden = true
     }
     
     fileprivate func setupInterface() {
@@ -170,17 +168,25 @@ class LogInViewController: UIViewController {
                     }
                 }
             } else {
+                // Vicky 07/12/2017  - 把使用error message的判断改为使用error code判断
+                print("[LOGIN STATUS]: \(status!), [LOGIN ERROR MESSAGE]: \(message!)")
+                
+                if status! == 500 {
+                    self.setLoginResult("Internet Error!")
+                }
+                
                 let loginJSONInfo = JSON(message!)
-                if let info = loginJSONInfo["message"].string {
-                    if info.contains("such") || info.contains("non") {
+                if let errorCode = loginJSONInfo["error_code"].string {
+                    if errorCode == "404-3" {
                         self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
-                    } else if info.contains("incorrect") {
+                    } else if errorCode == "401-1" {
                         self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
                     } else {
                         self.setLoginResult("Internet Error!")
                     }
                 }
                 self.indicatorActivity.stopAnimating()
+                // Vicky 07/12/2017 End
             }
         }
     }

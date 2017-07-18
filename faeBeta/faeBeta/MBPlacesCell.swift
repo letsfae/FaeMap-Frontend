@@ -14,6 +14,7 @@ class MBPlacesCell: UITableViewCell {
     var lblPlaceName: UILabel!
     var lblPlaceAddr: UILabel!
     var lblDistance: UILabel!
+    var distance: String!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,5 +56,24 @@ class MBPlacesCell: UITableViewCell {
         lblDistance.textAlignment = .right
         addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)
+    }
+    
+    func setValueForCell(place: MBPlacesStruct, curtLoc: CLLocation) {
+        imgPlaceIcon.image = #imageLiteral(resourceName: "mb_defaultPlace")
+        lblPlaceName.text = place.name
+        lblPlaceAddr.text = place.address
+
+//        let curtPos = curtLoc
+//        
+//        let dis = curtPos.distance(from: place.position) / 1000
+//        if dis < 0.1 {
+//            distance = "< 0.1 km"
+//        } else if dis > 999 {
+//            distance = "> 999 km"
+//        } else {
+//            distance = String(format: "%.1f", dis) + " km"
+//        }
+        
+        lblDistance.text = place.distance
     }
 }

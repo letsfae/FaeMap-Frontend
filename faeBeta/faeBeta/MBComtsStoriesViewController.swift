@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import GoogleMaps
+import GooglePlaces
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate, UIScrollViewDelegate {
     
@@ -18,9 +20,6 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     var scrollViewMedia: UIScrollView!
     var strPinId: String!
     var type: String!
-    
-    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
-    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
     
     enum EnterMode {
         case comment
@@ -87,7 +86,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
             break
         }
         
-        let uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        let uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMapBoard(_:)), for: .touchUpInside)
@@ -125,7 +124,6 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return mbSocial.count
     }
     
@@ -161,8 +159,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     
     func getMBSocialInfo(socialType: String, time: DispatchTime, completion: ((Double) -> ())?) {
         let mbSocialList = FaeMap()
-        mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
-        mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        mbSocialList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+        mbSocialList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
         mbSocialList.whereKey("radius", value: "9999999")
         mbSocialList.whereKey("type", value: "\(socialType)")
         mbSocialList.whereKey("in_duration", value: "false")

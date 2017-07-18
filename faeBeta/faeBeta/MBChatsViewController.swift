@@ -173,9 +173,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         if tableMode == .chatSpots {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbChatSpotsCell", for: indexPath) as! MBChatSpotsCell
             let chat = mbChat[indexPath.row]
-            cell.imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
-            cell.lblChatTitle?.text = chat.chatTitle
-            cell.lblChatCont?.text = chat.chatLastMesg
+            cell.setValueForCell(chat: chat)
             return cell
         } else if tableMode == .bubbles {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbChatBubblesCell", for: indexPath) as! MBChatBubblesCell

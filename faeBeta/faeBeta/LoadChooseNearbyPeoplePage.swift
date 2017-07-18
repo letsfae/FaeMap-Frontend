@@ -10,6 +10,7 @@ import TTRangeSlider
 extension MapBoardViewController: TTRangeSliderDelegate {
     // function for button on upper right of People table mode
     func chooseNearbyPeopleInfo(_ sender: UIButton) {
+        self.uiviewPeopleLocDetail.isHidden = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.uiviewPeopleLocDetail.frame.origin.y = 65
         }, completion: nil)
@@ -24,29 +25,45 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     
     func rollUpPeopleLocPage(_ sender: AnyObject) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.uiviewPeopleLocDetail.frame.origin.y = -301
-        }, completion: nil)
+            self.uiviewPeopleLocDetail.frame.origin.y = -299
+        }, completion: { _ in
+            self.uiviewPeopleLocDetail.isHidden = true
+        })
         btnNavBarMenu.isUserInteractionEnabled = true
         
-        if boolNoMatch {   // self.mbPeople.count == 0
-            self.tblMapBoard.isHidden = true
-            self.uiviewBubbleHint.isHidden = false
-            strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
-            lblBubbleHint.text = strBubbleHint
-        }
+        updateNearbyPeople()
+    }
+    
+    func updateNearbyPeople() {
+        getMBPeopleInfo ({ (count: Int) in
+            
+//            print(self.mbPeople)
+            
+            if count == 0 {   // self.mbPeople.count == 0
+                self.tblMapBoard.isHidden = true
+                self.uiviewBubbleHint.isHidden = false
+                self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
+                self.lblBubbleHint.text = self.strBubbleHint
+            } else {
+                self.tblMapBoard.isHidden = false
+                self.uiviewBubbleHint.isHidden = true
+                self.tblMapBoard.reloadData()
+            }
+        })
     }
     
     func loadChooseNearbyPeopleView() {
         uiviewPeopleLocDetail = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 364))
         self.view.addSubview(uiviewPeopleLocDetail)
         uiviewPeopleLocDetail.backgroundColor = .white
-        uiviewPeopleLocDetail.frame.origin.y = -301   // 65 - 364
-
+        uiviewPeopleLocDetail.frame.origin.y = -299   // 65 - 364 - 2(line)
+        self.uiviewPeopleLocDetail.isHidden = true
+        
         let uiviewLowerLine = UIView(frame: CGRect(x: 0, y: 363, width: screenWidth, height: 1))
         uiviewLowerLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
         uiviewPeopleLocDetail.addSubview(uiviewLowerLine)
         
-        // draw three line
+        // draw three lines
         let uiviewFirstLine = UIView(frame: CGRect(x: 14, y: 48, width: screenWidth - 28, height: 1))
         uiviewFirstLine.backgroundColor = UIColor(red: 206/255, green: 203/255, blue: 203/255, alpha: 1)
         
@@ -189,25 +206,25 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     
     func selectGender(_ sender: UIButton) {
         if sender.tag == 0 {
-            seletedGender = "Both"
+            selectedGender = "Both"
         } else if sender.tag == 1 {
-            seletedGender = "Female"
+            selectedGender = "Female"
         } else if sender.tag == 2 {
-            seletedGender = "Male"
+            selectedGender = "Male"
         }
         highlightGenderBtn()
     }
     
     fileprivate func highlightGenderBtn() {
-        if seletedGender == "Both" {
+        if selectedGender == "Both" {
             btnGenderBoth.setImage(#imageLiteral(resourceName: "mb_btnOvalSelected"), for: .normal)
             btnGenderFemale.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
             btnGenderMale.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
-        } else if seletedGender == "Female" {
+        } else if selectedGender == "Female" {
             btnGenderBoth.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
             btnGenderFemale.setImage(#imageLiteral(resourceName: "mb_btnOvalSelected"), for: .normal)
             btnGenderMale.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
-        } else if seletedGender == "Male" {
+        } else if selectedGender == "Male" {
             btnGenderBoth.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
             btnGenderFemale.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
             btnGenderMale.setImage(#imageLiteral(resourceName: "mb_btnOvalSelected"), for: .normal)
@@ -216,7 +233,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
 
     func changeDisRange(_ sender: UISlider) {
         disVal = String(format: "%.1f", sender.value)
-        lblDisVal.text = disVal + " km"
+        lblDisVal.text = "\(disVal) km"
     }
     
     func rangeSlider(_ sender: TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum: Float, andMaximumValue selectedMaximum: Float) {

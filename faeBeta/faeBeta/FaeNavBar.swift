@@ -14,6 +14,7 @@ class FaeNavBar: UIView {
     var leftBtn = UIButton()
     var rightBtn = UIButton()
     var lblTitle = UILabel()
+    var bottomLine = UIView()
     
     override init(frame: CGRect) {
         let newFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: screenWidth, height: 65))
@@ -22,7 +23,7 @@ class FaeNavBar: UIView {
         backgroundColor = .white
         
         // Line at y = 64
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
         bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
         addSubview(bottomLine)
