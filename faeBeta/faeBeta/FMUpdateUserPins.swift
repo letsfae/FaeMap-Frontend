@@ -20,7 +20,6 @@ extension FaeMapViewController {
     }
 
     func updateSelfLocation() {
-        return
         if boolIsFirstLoad || !boolCanUpdateUserPin {
             return
         }

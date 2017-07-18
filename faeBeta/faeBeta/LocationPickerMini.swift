@@ -94,7 +94,7 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
     }
     
     func jumpToLocationEnable() {
-        let vc = LocationEnableViewController()
+        let vc = EnableLocationViewController()
         UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     

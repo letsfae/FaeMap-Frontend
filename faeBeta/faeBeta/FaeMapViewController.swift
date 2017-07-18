@@ -219,7 +219,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
-        checkLocationEnablibity()
+//        checkLocationEnablibity()
         loadTransparentNavBarItems()
         loadMapChat()
         btnCardClose.alpha = 0
@@ -339,7 +339,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // Testing back from background
     func appBackFromBackground() {
-        checkLocationEnablibity()
+//        checkLocationEnablibity()
         if faeMapView != nil {
             updateTimerForAllPins()
             renewSelfLocation()
@@ -358,9 +358,13 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
+//    func jumpToLocationEnable() {
+//        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+//        present(locEnableVC, animated: true, completion: nil)
+//    }
     func jumpToLocationEnable() {
-        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        present(locEnableVC, animated: true, completion: nil)
+        let vc = EnableLocationViewController()
+        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func jumpToWelcomeView(animated: Bool) {

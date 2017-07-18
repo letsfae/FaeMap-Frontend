@@ -109,7 +109,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func popUpEnableLocationViewController() {
-        let vc: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+        let vc = EnableLocationViewController()
+            //UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
         self.window?.makeKeyAndVisible()
         self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
@@ -177,7 +178,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
         print("[applicationWillEnterForeground]")
         let authstate = CLLocationManager.authorizationStatus()
-        if authstate != .authorizedAlways {
+        if authstate != .authorizedAlways || authstate != .authorizedWhenInUse {
             print("[applicationWillEnterForeground]")
             self.popUpEnableLocationViewController()
         }
