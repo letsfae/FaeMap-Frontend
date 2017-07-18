@@ -269,36 +269,23 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         postSingleChatPin.whereKey("duration", value: "1440")
         postSingleChatPin.whereKey("title", value: textChatPinName.text!)
         
-        TagCreator.uploadTags(textviewAddTags != nil ? textviewAddTags.tagNames : [], completion: { (tagNames) in
-            var tagIdString = ""
-            for tag in tagNames{
-                tagIdString = tagIdString == "" ? tag.stringValue : "\(tagIdString);\(tag.stringValue)"
-            }
-            if tagIdString != ""{
-                postSingleChatPin.whereKey("tag_ids", value: tagIdString)
-            }
-            
-            postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
-                if let getMessage = message as? NSDictionary{
-                    if let getMessageID = getMessage["chat_room_id"] {
-                        let getJustPostedChatPin = FaeMap()
-                        getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
-                            
-                            //upload cover image
-                            self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
-                            
-                            let latDouble = Double(submitLatitude!)
-                            let longDouble = Double(submitLongitude!)
-                            let lat = CLLocationDegrees(latDouble!)
-                            let long = CLLocationDegrees(longDouble!)
-                            UIScreenService.hideActivityIndicator()
-                            self.dismiss(animated: false, completion: {
-                                self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: Float(self.zoomLevelCallBack))
-                            })
-                        }
-                    }
-                    else {
-                        print("Cannot get comment_id of this posted comment")
+        postSingleChatPin.postPin(type: "chat_room") {(status: Int, message: Any?) in
+            if let getMessage = message as? NSDictionary{
+                if let getMessageID = getMessage["chat_room_id"] {
+                    let getJustPostedChatPin = FaeMap()
+                    getJustPostedChatPin.getPin(type: "chat_room", pinId: "\(getMessageID)"){(status: Int, message: Any?) in
+                        
+                        //upload cover image
+                        self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
+                        
+                        let latDouble = Double(submitLatitude!)
+                        let longDouble = Double(submitLongitude!)
+                        let lat = CLLocationDegrees(latDouble!)
+                        let long = CLLocationDegrees(longDouble!)
+                        UIScreenService.hideActivityIndicator()
+                        self.dismiss(animated: false, completion: {
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: Float(self.zoomLevelCallBack))
+                        })
                     }
                 }
                 else {

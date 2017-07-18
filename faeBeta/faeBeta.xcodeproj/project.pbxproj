@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
-		18DE42511F1D7879006F5E50 /* LocManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DE42501F1D7878006F5E50 /* LocManage.swift */; };
 		18FCF3061F05907500467423 /* CreatePinBaseTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */; };
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
@@ -156,6 +155,7 @@
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
+		B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManage.swift */; };
 		B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */; };
 		B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */; };
 		B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */; };
@@ -471,6 +471,7 @@
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
+		B808B49E1F1E9A85008CB624 /* LocManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocManage.swift; sourceTree = "<group>"; };
 		B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshOption.swift; sourceTree = "<group>"; };
 		B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
 		B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
@@ -941,6 +942,7 @@
 				B0A2AC961CE3A3C6002E0C9D /* Products */,
 				2467B7FA7A9B4FD0265C0924 /* Pods */,
 				8673DEF63225844B903B80F8 /* Frameworks */,
+				B808B49B1F1E929A008CB624 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1117,6 +1119,14 @@
 				B88A3E331DC9465200351A2A /* OpenedPinList */,
 			);
 			name = Map;
+			sourceTree = "<group>";
+		};
+		B808B49B1F1E929A008CB624 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				18DE42501F1D7878006F5E50 /* LocManage.swift */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		B81563851DDB987600BF85A1 /* CreateCommentPin */ = {
@@ -1357,6 +1367,7 @@
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
 				B89A17781F16996200BD7AA5 /* PlacePin.swift */,
+				B808B49E1F1E9A85008CB624 /* LocManage.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1796,6 +1807,7 @@
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B867B0DA1F1C9C3D005C43BA /* FMCompassRotation.swift in Sources */,
+				B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
 				B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,
@@ -1896,7 +1908,6 @@
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
-				18DE42511F1D7879006F5E50 /* LocManage.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,

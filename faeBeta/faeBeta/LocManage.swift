@@ -2,11 +2,11 @@
 //  LocManage.swift
 //  faeBeta
 //
-//  Created by vicky on 2017/7/17.
-//  Copyright © 2017年 fae. All rights reserved.
+//  Created by Yue on 7/18/17.
+//  Copyright © 2017 fae. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class LocManage: NSObject, CLLocationManagerDelegate {
     
