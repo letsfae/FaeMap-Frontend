@@ -29,6 +29,7 @@ class EnableLocationViewController: UIViewController {
     }
     
     fileprivate func setup() {
+        self.view.backgroundColor = .white
         imageView = UIImageView(frame: CGRect(x: 68 * screenWidthFactor, y: 159 * screenHeightFactor, width: 291 * screenWidthFactor, height: 255 * screenHeightFactor))
         imageView.image = UIImage(named: "EnableLocationImage")
         self.view.addSubview(imageView)
@@ -55,7 +56,7 @@ class EnableLocationViewController: UIViewController {
         enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for: UIControlState())
         enableLocationButton.layer.cornerRadius = 25 * screenHeightFactor
         enableLocationButton.backgroundColor = UIColor.faeAppRedColor()
-        enableLocationButton.addTarget(self, action: #selector(EnableLocationViewController.enableLocationButtonTapped), for: .touchUpInside)
+        enableLocationButton.addTarget(self, action: #selector(self.enableLocationButtonTapped), for: .touchUpInside)
         self.view.addSubview(enableLocationButton)
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.checkLocationEnabled), userInfo: nil, repeats: true)
@@ -75,7 +76,10 @@ class EnableLocationViewController: UIViewController {
         if authstate == CLAuthorizationStatus.authorizedAlways {
             timer.invalidate()
             if notificationType?.types == UIUserNotificationType() && self.navigationController != nil {
-                self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController"), animated: true)
+                print("enter twice")
+                let vc = EnableNotificationViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+//                self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController"), animated: true)
             } else {
                  self.dismiss(animated: true, completion: nil)
             }

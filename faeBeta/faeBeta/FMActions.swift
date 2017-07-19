@@ -11,7 +11,7 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        guard curLoc != nil else { return }
+        guard LocManage.shared.curtLoc != nil else { return }
         
         DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
@@ -43,8 +43,8 @@ extension FaeMapViewController {
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
-        pinMenuVC.currentLatitude = self.curLat
-        pinMenuVC.currentLongitude = self.curLon
+        pinMenuVC.currentLatitude = LocManage.shared.curtLat
+        pinMenuVC.currentLongitude = LocManage.shared.curtLong
         pinMenuVC.currentLocation = mapCenter_coor
         pinMenuVC.floatAltitude = faeMapView.camera.altitude
         pinMenuVC.delegate = self

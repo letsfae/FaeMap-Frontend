@@ -22,20 +22,12 @@ struct MBPlacesStruct {
     let address: String
     let position: CLLocation
     var distance: String
-//    var curtLatitude: CLLocationDegrees = MapBoardViewController().currentLatitude  //34.0205378
-//    var curtLongitude: CLLocationDegrees = MapBoardViewController().currentLongitude  //-118.2854081
     let dis: Double
     
     init(json: JSON) {
         placeId = json["place_id"].intValue
         name = json["name"].stringValue
         address = json["address"].stringValue
-        
-//        let mbVC = MapBoardViewController()
-//        mbVC.updateCurtLoc()
-//        curtLatitude = mbVC.currentLatitude
-//        curtLongitude = mbVC.currentLongitude
-//        print("PlaceStruct curtLat \(curtLatitude) curtLon \(curtLongitude)")
         
         position = CLLocation(latitude: json["geolocation"]["latitude"].doubleValue,
                              longitude: json["geolocation"]["longitude"].doubleValue)

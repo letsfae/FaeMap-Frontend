@@ -18,8 +18,8 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var uiviewRedUnderLine: UIView!
     var mbChat = [MBSocialStruct]()
     
-    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
-    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
+//    var currentLatitude: CLLocationDegrees = 34.0205378 // location manage
+//    var currentLongitude: CLLocationDegrees = -118.2854081 // location manage
     
     enum TableMode: Int {
         case chatSpots = 0
@@ -187,8 +187,8 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func getMBSocialInfo(time: DispatchTime, completion: ((Double) -> ())?) {
         let mbChatList = FaeMap()
-        mbChatList.whereKey("geo_latitude", value: "\(currentLatitude)")
-        mbChatList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        mbChatList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+        mbChatList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
         mbChatList.whereKey("radius", value: "9999999")
         mbChatList.whereKey("type", value: "chat_room")
         mbChatList.whereKey("in_duration", value: "false")

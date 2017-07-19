@@ -15,18 +15,30 @@ class LocManage: NSObject, CLLocationManagerDelegate {
     var locManager: CLLocationManager!
     
     var curtLat: CLLocationDegrees {
-        return curtLoc.coordinate.latitude
+        if curtLoc != nil {
+            return curtLoc.coordinate.latitude
+        }
+        return 34.0205378
     }
     
     var curtLong: CLLocationDegrees {
-        return curtLoc.coordinate.longitude
+        if curtLoc != nil {
+            return curtLoc.coordinate.longitude
+        }
+        return -118.2854081
+    }
+    
+    func jumpToLocationEnable() {
+        print("[LocManager] jumpToLocationEnable")
+        let vc = EnableLocationViewController()
+        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
     }
     
     func updateCurtLoc() {
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.requestAlwaysAuthorization()
+        
         if CLLocationManager.locationServicesEnabled() {
             locManager.startUpdatingLocation()
         }
@@ -37,6 +49,27 @@ class LocManage: NSObject, CLLocationManagerDelegate {
 //        print("curtLoc \(curtLoc)")
 //        print("curtLat \(curtLat)")
 //        print("curtLon \(curtLong)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        switch status {
+        case .notDetermined:
+//            print("didChangeAuthorizationStatus .notDetermined")
+            locManager.requestAlwaysAuthorization()
+            break
+        case .denied:
+//            print("didChangeAuthorizationStatus .denied")
+            self.jumpToLocationEnable()
+            break
+        case .restricted:
+//            print("didChangeAuthorizationStatus .restricted")
+            break
+        case .authorizedAlways:
+//            print("didChangeAuthorizationStatus .authorizedAlways")
+            break
+        case .authorizedWhenInUse:
+            break
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

@@ -82,10 +82,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var curLat: CLLocationDegrees = 34.0205378 // location manage
+//    var curLat: CLLocationDegrees = 34.0205378 // location manage
     var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-    var curLoc: CLLocation! // location manage
-    var curLon: CLLocationDegrees = -118.2854081 // location manage
+//    var curLoc: CLLocation! // location manage
+//    var curLon: CLLocationDegrees = -118.2854081 // location manage
     var boolIsFirstLoad = false // location manage
     var btnEditNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
@@ -222,7 +222,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
-        checkLocationEnablibity()
+//        checkLocationEnablibity()
         loadTransparentNavBarItems()
         loadMapChat()
         btnCardClose.alpha = 0
@@ -327,14 +327,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     // Check if location is enabled
-    fileprivate func checkLocationEnablibity() {
-        if CLLocationManager.authorizationStatus() == .notDetermined {
-            print("Not Authorised")
-            locManager.requestAlwaysAuthorization()
-        } else if CLLocationManager.authorizationStatus() == .denied {
-            jumpToLocationEnable()
-        }
-    }
+//    fileprivate func checkLocationEnablibity() {
+//        if CLLocationManager.authorizationStatus() == .notDetermined {
+//            print("Not Authorized")
+//            locManager.requestAlwaysAuthorization()
+//        } else if CLLocationManager.authorizationStatus() == .denied {
+//            jumpToLocationEnable()
+//        }
+//    }
     
     func updateTimerForAllPins() {
         updateTimerForLoadRegionPin()
@@ -344,7 +344,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // Testing back from background
     func appBackFromBackground() {
-        checkLocationEnablibity()
+//        checkLocationEnablibity()
         if faeMapView != nil {
             updateTimerForAllPins()
             renewSelfLocation()
@@ -363,10 +363,14 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
-    func jumpToLocationEnable() {
-        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        present(locEnableVC, animated: true, completion: nil)
-    }
+//    func jumpToLocationEnable() {
+//        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+//        present(locEnableVC, animated: true, completion: nil)
+//    }
+//    func jumpToLocationEnable() {
+//        let vc = EnableLocationViewController()
+//        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
+//    }
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
@@ -409,10 +413,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         DispatchQueue.global(qos: .default).async {
             if self.boolIsFirstLoad {
                 self.boolIsFirstLoad = false
-                self.curLoc = manager.location
-                self.curLat = self.curLoc.coordinate.latitude
-                self.curLon = self.curLoc.coordinate.longitude
-                self.curLoc2D = CLLocationCoordinate2DMake(self.curLat, self.curLon)
+//                self.curLoc = manager.location
+//                self.curLat = self.curLoc.coordinate.latitude
+//                self.curLon = self.curLoc.coordinate.longitude
+                self.curLoc2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)
                 let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
                 DispatchQueue.main.async(execute: {
                     self.faeMapView.setRegion(coordinateRegion, animated: false)
@@ -423,10 +427,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
             
             if let location = locations.last {
                 let points = self.faeMapView.convert(location.coordinate, toPointTo: nil)
-                self.curLoc = location
-                self.curLoc2D = location.coordinate
-                self.curLat = location.coordinate.latitude
-                self.curLon = location.coordinate.longitude
+//                self.curLoc = location
+//                self.curLoc2D = location.coordinate
+//                self.curLat = location.coordinate.latitude
+//                self.curLon = location.coordinate.longitude
                 DispatchQueue.main.async(execute: {
                     if self.FILTER_ENABLE {
                         self.uiviewDistanceRadius.center = points

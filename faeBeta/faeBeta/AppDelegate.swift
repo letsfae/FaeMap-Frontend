@@ -74,8 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
         let vcEmptyRoot = InitialPageController()
-//        let vcEmptyRoot = MBComtsStoriesViewController()
-//        vcEmptyRoot.enterMode = .comment
+//        let vcEmptyRoot = EnableNotificationViewController()
+
         navMain.viewControllers = [vcEmptyRoot]
         navMain.navigationBar.isHidden = true
         
@@ -108,11 +108,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     
-    func popUpEnableLocationViewController() {
-        let vc: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-        self.window?.makeKeyAndVisible()
-        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
-    }
+//    func popUpEnableLocationViewController() {
+//        print("[AppDelegate] popUpEnableLocationVC")
+//        let vc = EnableLocationViewController()
+//            //UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
+//        self.window?.makeKeyAndVisible()
+//        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
+//    }
     
     func popUpWelcomeView() {
         let vc = WelcomeViewController()
@@ -176,11 +178,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
         print("[applicationWillEnterForeground]")
-        let authstate = CLLocationManager.authorizationStatus()
-        if authstate != .authorizedAlways {
-            print("[applicationWillEnterForeground]")
-            self.popUpEnableLocationViewController()
-        }
+//        let authstate = CLLocationManager.authorizationStatus()
+//        if authstate != .authorizedAlways || authstate != .authorizedWhenInUse {
+//            print("[applicationWillEnterForeground]")
+//            self.popUpEnableLocationViewController()
+//        }
     }
     
     var time: Double = 0
@@ -235,16 +237,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
              print(notificationType?.types)
              } */
-            let seconds = 30.0
-            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
-            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
-            
-            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                let authstate = CLLocationManager.authorizationStatus()
-                if authstate != .authorizedAlways {
-                    self.popUpEnableLocationViewController()
-                }
-            })
+//            let seconds = 30.0
+//            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
+//            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
+//            
+//            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
+//                let authstate = CLLocationManager.authorizationStatus()
+//                if authstate != .authorizedAlways {
+//                    self.popUpEnableLocationViewController()
+//                }
+//            })
             /*
              let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
              print(notificationType?.types)
