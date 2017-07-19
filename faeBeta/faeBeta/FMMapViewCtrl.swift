@@ -49,7 +49,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             vcPinDetail.modalPresentationStyle = .overCurrentContext
             vcPinDetail.delegate = self
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            let time: Double = 0
+            DispatchQueue.main.asyncAfter(deadline: .now() + time) {
                 self.present(vcPinDetail, animated: false, completion: {
                     self.boolCanOpenPin = true
                 })
@@ -70,8 +71,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             vcPinDetail.modalPresentationStyle = .overCurrentContext
             vcPinDetail.strPinId = "\(mapPin.pinId)"
             
-            clearMap(type: "user", animated: false)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+            let time: Double = 0
+            DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
                 self.present(vcPinDetail, animated: false, completion: {
                     self.boolCanOpenPin = true
                 })
@@ -91,64 +92,64 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
+            anView.layer.zPosition = 2
+            return anView
+        } else if annotation is CCHMapClusterAnnotation {
             
-            return anView
-        }
-        
-        guard annotation is CCHMapClusterAnnotation else {
-            return nil
-        }
-        
-        let clusterAnn = annotation as! CCHMapClusterAnnotation
-        let firstAnn = clusterAnn.annotations.first as! FaePinAnnotation
-        
-        if firstAnn.type == "place" {
-            let identifier = "place"
-            var anView: PlacePinAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
-                dequeuedView.annotation = annotation
-                anView = dequeuedView
+            let clusterAnn = annotation as! CCHMapClusterAnnotation
+            let firstAnn = clusterAnn.annotations.first as! FaePinAnnotation
+            
+            if firstAnn.type == "place" {
+                let identifier = "place"
+                var anView: PlacePinAnnotationView
+                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+                    dequeuedView.annotation = annotation
+                    anView = dequeuedView
+                } else {
+                    anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                }
+                anView.assignImage(firstAnn.icon)
+                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+                DispatchQueue.main.async {
+                    anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
+                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                        anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+                        anView.alpha = 1
+                    }, completion: nil)
+                }
+                return anView
+            } else if firstAnn.type == "user" {
+                let identifier = "user"
+                var anView: UserPinAnnotationView
+                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
+                    dequeuedView.annotation = annotation
+                    anView = dequeuedView
+                } else {
+                    anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                }
+                anView.assignImage(firstAnn.avatar)
+                return anView
             } else {
-                anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                let identifier = "social"
+                var anView: SocialPinAnnotationView
+                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SocialPinAnnotationView {
+                    dequeuedView.annotation = annotation
+                    anView = dequeuedView
+                } else {
+                    anView = SocialPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                }
+                anView.assignImage(firstAnn.icon)
+                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+                DispatchQueue.main.async {
+                    anView.imageView.frame = CGRect(x: 30, y: 61, width: 0, height: 0)
+                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                        anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
+                    }, completion: nil)
+                }
+                return anView
             }
-            anView.assignImage(firstAnn.icon)
-            anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
-            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
-            }, completion: nil)
-            return anView
-        } else if firstAnn.type == "user" {
-            let identifier = "user"
-            var anView: UserPinAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
-                dequeuedView.annotation = annotation
-                anView = dequeuedView
-            } else {
-                anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            }
-            anView.imageView.alpha = 0
-            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imageView.alpha = 1
-            }, completion: nil)
-            anView.assignImage(firstAnn.avatar)
-            return anView
         } else {
-            let identifier = "social"
-            var anView: SocialPinAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SocialPinAnnotationView {
-                dequeuedView.annotation = annotation
-                anView = dequeuedView
-            } else {
-                anView = SocialPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            }
-            anView.assignImage(firstAnn.icon)
-            anView.imageView.frame = CGRect(x: 30, y: 61, width: 0, height: 0)
-            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-            }, completion: nil)
-            return anView
+            return nil
         }
     }
     
@@ -201,7 +202,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             filterCircle_4.removeFromSuperview()
         }
         UIView.animate(withDuration: 0.2, animations: {
-            self.btnMapFilter.frame = CGRect(x: screenWidth/2, y: screenHeight-25, width: 0, height: 0)
+            if self.FILTER_ENABLE {
+                self.btnMapFilter.frame = CGRect(x: screenWidth/2, y: screenHeight-25, width: 0, height: 0)
+            }
             self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5*screenWidthFactor, width: 0, height: 0)
             self.btnSelfLocation.frame = CGRect(x: 362.5*screenWidthFactor, y: 611.5*screenWidthFactor, width: 0, height: 0)
             self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5*screenWidthFactor, width: 0, height: 0)
@@ -229,7 +232,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         rect.origin.x = point.x - rect.size.width * 0.5
         rect.origin.y = point.y - rect.size.height * 0.5
         
-        faeMapView.setVisibleMapRect(rect, animated: animated)
+        faeMapView.setVisibleMapRect(rect, animated: false)
         
     }
     /*

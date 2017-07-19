@@ -127,7 +127,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
-            self.faeMapView.showsUserLocation = false
+//            self.faeMapView.showsUserLocation = false
             self.renewSelfLocation()
             reloadSelfPosAnimation()
 //            self.subviewSelfMarker.isHidden = false
@@ -135,7 +135,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         }
         if userStatus == 5 {
             self.invisibleMode()
-            self.faeMapView.showsUserLocation = true
+//            self.faeMapView.showsUserLocation = true
 //            self.subviewSelfMarker.isHidden = true
         }
     }
@@ -178,7 +178,9 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         btnToNorth.transform = CGAffineTransform.identity
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+            if self.FILTER_ENABLE {
+                self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+            }
             self.btnToNorth.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
             self.btnSelfLocation.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
             self.btnChatOnMap.frame = CGRect(x: 12, y: 646 * screenWidthFactor, width: 79, height: 79)

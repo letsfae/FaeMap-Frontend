@@ -12,6 +12,8 @@ import GoogleMaps
 extension FaeMapViewController {
     
     func loadMFilterSlider() {
+        guard FILTER_ENABLE else { return }
+        
         loadDistanceRadiusCircle()
         loadDistanceLabel()
         filterSlider = UISlider(frame: CGRect(x: 100, y: screenWidth, width: 448*screenWidthFactor, height: 28))

@@ -11,6 +11,9 @@ import UIKit
 extension FaeMapViewController {
     
     func filterCircleAnimation() {
+        
+        guard FILTER_ENABLE else { return }
+        
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = 22
             let yAxis: CGFloat = 22
@@ -122,6 +125,8 @@ extension FaeMapViewController {
     }
     
     func animateMapFilterArrow() {
+        guard FILTER_ENABLE else { return }
+        
         if mapFilterArrow != nil {
             mapFilterArrow.removeFromSuperview()
         }
@@ -186,12 +191,13 @@ extension FaeMapViewController {
     }
     
     func stopMapFilterSpin() {
+        guard FILTER_ENABLE else { return }
         btnMapFilter.layer.removeAllAnimations()
         if polygonInside != nil {
             polygonInside.layer.removeAllAnimations()
         }
         if !boolIsFirstLoad {
-            self.filterCircleAnimation()
+            filterCircleAnimation()
         }
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             if self.polygonInside != nil {

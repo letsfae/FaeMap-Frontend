@@ -17,7 +17,7 @@ extension FaeMapViewController {
         if timerLoadRegionPlacePins != nil {
             timerLoadRegionPlacePins.invalidate()
         }
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 750, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+//        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 750, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func loadCurrentRegionPlacePins() {
@@ -34,17 +34,19 @@ extension FaeMapViewController {
     }
     
     fileprivate func pinPlacesOnMap(results: [PlacePin]) {
-        for result in results {
-            DispatchQueue.global(qos: .default).async {
+        var pins = [FaePinAnnotation]()
+        DispatchQueue.global(qos: .default).async {
+            for result in results {
                 let categoryList = result.category
                 let iconImage = self.placesPinIconImage(categoryList: categoryList)
                 let pinMap = FaePinAnnotation(type: "place")
                 pinMap.coordinate = result.position
                 pinMap.icon = iconImage
                 pinMap.pinInfo = result as AnyObject
-                DispatchQueue.main.async {
-                    self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
-                }
+                pins.append(pinMap)
+            }
+            DispatchQueue.main.async {
+                self.mapClusterManager.addAnnotations(pins, withCompletionHandler: nil)
             }
         }
     }
@@ -98,8 +100,8 @@ extension FaeMapViewController {
                     self.placeNames.append(latPlusLon)
                     self.placePins.append(result)
                 }
-                self.pinPlacesOnMap(results: self.placePins)
-                self.placePins.removeAll(keepingCapacity: true)
+//                self.pinPlacesOnMap(results: self.placePins)
+//                self.placePins.removeAll(keepingCapacity: true)
                 
                 self.yelpQuery.setResultLimit(count: count_1)
                 self.yelpQuery.setCatagoryToDessert()
@@ -112,8 +114,8 @@ extension FaeMapViewController {
                         self.placeNames.append(latPlusLon)
                         self.placePins.append(result)
                     }
-                    self.pinPlacesOnMap(results: self.placePins)
-                    self.placePins.removeAll(keepingCapacity: true)
+//                    self.pinPlacesOnMap(results: self.placePins)
+//                    self.placePins.removeAll(keepingCapacity: true)
                     
                     self.yelpQuery.setCatagoryToCafe()
                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -125,8 +127,8 @@ extension FaeMapViewController {
                             self.placeNames.append(latPlusLon)
                             self.placePins.append(result)
                         }
-                        self.pinPlacesOnMap(results: self.placePins)
-                        self.placePins.removeAll(keepingCapacity: true)
+//                        self.pinPlacesOnMap(results: self.placePins)
+//                        self.placePins.removeAll(keepingCapacity: true)
                         
                         self.yelpQuery.setCatagoryToCinema()
                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -138,8 +140,8 @@ extension FaeMapViewController {
                                 self.placeNames.append(latPlusLon)
                                 self.placePins.append(result)
                             }
-                            self.pinPlacesOnMap(results: self.placePins)
-                            self.placePins.removeAll(keepingCapacity: true)
+//                            self.pinPlacesOnMap(results: self.placePins)
+//                            self.placePins.removeAll(keepingCapacity: true)
                             
                             self.yelpQuery.setCatagoryToSport()
                             self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -151,8 +153,8 @@ extension FaeMapViewController {
                                     self.placeNames.append(latPlusLon)
                                     self.placePins.append(result)
                                 }
-                                self.pinPlacesOnMap(results: self.placePins)
-                                self.placePins.removeAll(keepingCapacity: true)
+//                                self.pinPlacesOnMap(results: self.placePins)
+//                                self.placePins.removeAll(keepingCapacity: true)
                                 
                                 self.yelpQuery.setCatagoryToBeauty()
                                 self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -164,8 +166,8 @@ extension FaeMapViewController {
                                         self.placeNames.append(latPlusLon)
                                         self.placePins.append(result)
                                     }
-                                    self.pinPlacesOnMap(results: self.placePins)
-                                    self.placePins.removeAll(keepingCapacity: true)
+//                                    self.pinPlacesOnMap(results: self.placePins)
+//                                    self.placePins.removeAll(keepingCapacity: true)
                                     
                                     self.yelpQuery.setCatagoryToArt()
                                     self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -177,8 +179,8 @@ extension FaeMapViewController {
                                             self.placeNames.append(latPlusLon)
                                             self.placePins.append(result)
                                         }
-                                        self.pinPlacesOnMap(results: self.placePins)
-                                        self.placePins.removeAll(keepingCapacity: true)
+//                                        self.pinPlacesOnMap(results: self.placePins)
+//                                        self.placePins.removeAll(keepingCapacity: true)
                                         
                                         self.yelpQuery.setCatagoryToJuice()
                                         self.yelpManager.query(request: self.yelpQuery, completion: { (results) in
@@ -209,6 +211,7 @@ extension FaeMapViewController {
     }
     
     fileprivate func allTypePlacesPin() -> Bool {
+        guard FILTER_ENABLE else { return true }
         if btnMFilterPlacesAll.tag == 1 || btnMFilterShowAll.tag == 1 {
             return true
         } else {

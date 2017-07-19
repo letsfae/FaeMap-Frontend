@@ -11,6 +11,7 @@ import UIKit
 extension FaeMapViewController {
     
     func loadGestures() {
+        guard COMPASS_ROTATION_ENABLE else { return }
         rotationGesture = UIRotationGestureRecognizer()
         rotationGesture.delaysTouchesEnded = false
         rotationGesture.cancelsTouchesInView = true
@@ -40,6 +41,7 @@ extension FaeMapViewController {
     // Helper: Detect when the MapView changes                                                  *
     
     func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+        guard COMPASS_ROTATION_ENABLE else { return false }
         let view = faeMapView.subviews[0]
         // Look through gesture recognizers to determine whether this region
         // change is from user interaction
@@ -61,7 +63,7 @@ extension FaeMapViewController {
     // Helper: Needed to be allowed to recognize gestures simultaneously to the MapView ones.   *
     // UIGestureRecognizerDelegate
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        return COMPASS_ROTATION_ENABLE
     }
     
     //                                                                                          *
@@ -73,6 +75,7 @@ extension FaeMapViewController {
     // frame of MapKit's animation
     
     func setUpDisplayLink() {
+        guard COMPASS_ROTATION_ENABLE else { return }
         displayLink = CADisplayLink(target: self, selector: #selector(self.refreshCompassHeading(_:)))
         displayLink.add(to: RunLoop.current, forMode: RunLoopMode.commonModes)
     }
@@ -99,6 +102,14 @@ extension FaeMapViewController {
     // ... and when he stops.                                                                   *
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        if !COMPASS_ROTATION_ENABLE {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.btnToNorth.transform =
+                    CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
+            })
+        }
+        
+        guard COMPASS_ROTATION_ENABLE else { return }
         
         if mapChangedFromUserInteraction {
             
@@ -139,7 +150,7 @@ extension FaeMapViewController {
     // This is our main function. The display link calls it once every display frame.           *
     
     @objc func refreshCompassHeading(_ sender: AnyObject) {
-        
+        guard COMPASS_ROTATION_ENABLE else { return }
         // If the gesture mode is not determinated or user is adjusting pitch
         // we do obviously nothing here. :)
         if initialMapGestureModeIsRotation == nil || !initialMapGestureModeIsRotation! {
@@ -207,7 +218,7 @@ extension FaeMapViewController {
     // UIRotationGestureRecognizer                                                              *
     
     @objc func handleRotation(_ sender: UIRotationGestureRecognizer) {
-        
+        guard COMPASS_ROTATION_ENABLE else { return }
         if initialMapGestureModeIsRotation == nil {
             initialMapGestureModeIsRotation = true
         } else if !initialMapGestureModeIsRotation! {
@@ -236,7 +247,7 @@ extension FaeMapViewController {
     // yields better results.
     
     @objc func handleSwipe(_ sender: UIPanGestureRecognizer) {
-        
+        guard COMPASS_ROTATION_ENABLE else { return }
         // After a certain altitude is reached, there is no pitch possible.
         // In this case the 3D perspective change does not work and the rotation is initialized.
         // Play with this one.
@@ -270,7 +281,7 @@ extension FaeMapViewController {
     //                                                                                          *
     
     @objc func pinchGestureRecognizer(_ sender: UIPinchGestureRecognizer) {
-        
+        guard COMPASS_ROTATION_ENABLE else { return }
         // pinch is zoom. this always enables rotation mode.
         if initialMapGestureModeIsRotation == nil {
             initialMapGestureModeIsRotation = true

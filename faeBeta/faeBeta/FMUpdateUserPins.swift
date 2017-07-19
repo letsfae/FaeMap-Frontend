@@ -24,14 +24,6 @@ extension FaeMapViewController {
             return
         }
         let coorDistance = cameraDiagonalDistance()
-        for _ in 0..<faeUserPins.count {
-//            faeUserPins[i]?.valid = false
-//            faeUserPins[i] = nil
-        }
-        if faeUserPins.count > 0 {
-            mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
-        }
-        faeUserPins.removeAll(keepingCapacity: false)
         boolCanUpdateUserPin = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
@@ -41,7 +33,7 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getMapUserInfo.whereKey("radius", value: "\(coorDistance)")
         getMapUserInfo.whereKey("type", value: "user")
-        getMapUserInfo.whereKey("max_count ", value: "5")
+        getMapUserInfo.whereKey("max_count ", value: "100")
         //        getMapUserInfo.whereKey("user_updated_in", value: "30")
         getMapUserInfo.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
@@ -59,13 +51,11 @@ extension FaeMapViewController {
                 self.boolCanUpdateUserPin = true
                 return
             }
-            self.faeUserPins = mapUserJsonArray.map { FaePinAnnotation(type: "user", json: $0) }
-            if mapUserJSON.count <= 0 {
-                self.boolCanUpdateUserPin = true
-                return
-            }
-//            var count = 0
-            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
+//            for userJson in mapUserJsonArray {
+//                
+//            }
+            self.faeUserPins = mapUserJsonArray.map { FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: $0) }
+//            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.boolCanUpdateUserPin = true
         }
     }

@@ -10,6 +10,8 @@ import UIKit
 
 extension FaeMapViewController {
     func loadMapFilter() {
+        guard FILTER_ENABLE else { return }
+        
         btnMapFilter = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         btnMapFilter.center.x = screenWidth / 2
         btnMapFilter.center.y = screenHeight - 25

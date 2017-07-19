@@ -194,6 +194,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMoreOptions: UIButton!
     var imgPinIcon: UIImageView!
     
+    var FILTER_ENABLE = false
+    var COMPASS_ROTATION_ENABLE = false
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -292,7 +295,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     }
     
     fileprivate func filterAndYelpSetup() {
-        checkFilterShowAll(btnMFilterShowAll)
+        if FILTER_ENABLE {
+            checkFilterShowAll(btnMFilterShowAll)
+        }
         yelpQuery.setCatagoryToAll()
     }
     
@@ -300,7 +305,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         invalidateAllTimer()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPins), userInfo: nil, repeats: true)
-        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+//        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
@@ -423,8 +428,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
                 self.curLat = location.coordinate.latitude
                 self.curLon = location.coordinate.longitude
                 DispatchQueue.main.async(execute: {
-//                    self.subviewSelfMarker.center = points
-                    self.uiviewDistanceRadius.center = points
+                    if self.FILTER_ENABLE {
+                        self.uiviewDistanceRadius.center = points
+                    }
                 })
             }
         }

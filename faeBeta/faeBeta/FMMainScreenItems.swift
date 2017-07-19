@@ -21,10 +21,11 @@ extension FaeMapViewController {
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = false
         faeMapView.delegate = self
+        faeMapView.showsUserLocation = true
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 80
         mapClusterManager.delegate = self
-        
+
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()

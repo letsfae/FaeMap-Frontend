@@ -33,8 +33,9 @@ class FaePinAnnotation: MKPointAnnotation {
     var positions = [CLLocationCoordinate2D]()
     var count = 0
     
-    init(type: String, json: JSON) {
+    init(type: String, cluster: CCHMapClusterController, json: JSON) {
         super.init()
+        self.mapViewCluster = cluster
         self.type = type
         guard type == "user" else { return }
         self.id = json["user_id"].intValue
@@ -58,20 +59,18 @@ class FaePinAnnotation: MKPointAnnotation {
     func changePosition() {
         let time = Double.random(min: 5, max: 20)
         joshPrint("[changePosition]", time)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [index = self.count] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
             if self.count == 5 {
                 self.count = 0
             }
             UIView.animate(withDuration: 0.3, animations: {
                 self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
-                    self.coordinate = self.positions[index]
+                    self.coordinate = self.positions[self.count]
                     self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
                     self.count += 1
                     self.changePosition()
                 })
-            }, completion: { _ in
-                
-            })
+            }, completion: nil)
         }
     }
     
@@ -89,9 +88,10 @@ class SelfAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        self.clipsToBounds = false
+        clipsToBounds = false
         loadSelfMarkerSubview()
         reloadSelfMarker()
+        layer.zPosition = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -175,6 +175,7 @@ class UserPinAnnotationView: MKAnnotationView {
         imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
+        layer.zPosition = 1
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -196,6 +197,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         imageView = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
+        layer.zPosition = 1
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -219,6 +221,7 @@ class SocialPinAnnotationView: MKAnnotationView {
         imageView = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
+        layer.zPosition = 1
     }
     
     required init?(coder aDecoder: NSCoder) {

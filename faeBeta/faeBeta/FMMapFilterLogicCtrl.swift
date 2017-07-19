@@ -152,6 +152,7 @@ extension FaeMapViewController {
     
     // Filter show all
     func checkFilterShowAll(_ sender: MFilterButton) {
+        guard FILTER_ENABLE else { return }
         makeFilterBtnRed(sender)
         clearTypeStatusPlaces()
         uncheckFilterPeople()
