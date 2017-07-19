@@ -33,10 +33,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         filterCircleAnimation()
         reloadSelfPosAnimation()
         reloadMainScreenButtons()
-        for annotation in faeMapView.selectedAnnotations {
-            faeMapView.deselectAnnotation(annotation, animated: false)
-        }
-        boolCanOpenPin = true
+        deselectAllAnnotations()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
         // animate to place pin coordinate
@@ -127,16 +124,12 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
-//            self.faeMapView.showsUserLocation = false
             self.renewSelfLocation()
             reloadSelfPosAnimation()
-//            self.subviewSelfMarker.isHidden = false
             return
         }
         if userStatus == 5 {
             self.invisibleMode()
-//            self.faeMapView.showsUserLocation = true
-//            self.subviewSelfMarker.isHidden = true
         }
     }
     func jumpToMoodAvatar() {

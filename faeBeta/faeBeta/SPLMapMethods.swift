@@ -12,13 +12,6 @@ import GoogleMaps
 
 extension SelectLocationViewController: MKMapViewDelegate {
     
-    func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
-        let camera = mapView.camera
-        camera.altitude = Key.shared.dblAltitude
-        camera.centerCoordinate = Key.shared.selectedLoc
-        mapView.setCamera(camera, animated: false)
-    }
-    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -37,14 +30,16 @@ extension SelectLocationViewController: MKMapViewDelegate {
                         addressToSearchBar += line + ", "
                     }
                 }
-                self.faeSearchController.faeSearchBar.text = addressToSearchBar
+                DispatchQueue.main.async {
+                    self.faeSearchController.faeSearchBar.text = addressToSearchBar
+                }
             }
-            self.latitudeForPin = mapCenterCoordinate.latitude
-            self.longitudeForPin = mapCenterCoordinate.longitude
         })
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        guard faeSearchController != nil else { return }
+        guard faeSearchController.faeSearchBar != nil else { return }
         faeSearchController.faeSearchBar.endEditing(true)
     }
 }

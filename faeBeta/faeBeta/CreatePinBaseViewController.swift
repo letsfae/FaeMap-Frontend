@@ -51,13 +51,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     
     var prevFirstResponder: AnyObject? // this is a variable used to track the previous first responder, it can be either a textView or a textField. After hiding the emoji picker view, we need to make the previous first responder active again
     
-    // MARK: -- location manager
-    var currentLocation: CLLocation!
-    let locManager = CLLocationManager()
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    
     enum PinType: String {
         case comment = "comment"
         case story = "moment"
@@ -474,12 +467,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        currentLocation = locManager.location
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-    }
-    
     func randomLocation() -> CLLocationCoordinate2D {
         let lat = LocManage.shared.curtLat
         let lon = LocManage.shared.curtLong
@@ -493,7 +480,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.pinType = pinType.rawValue
-        selectLocationVC.currentLocation2D = self.currentLocation2D
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     

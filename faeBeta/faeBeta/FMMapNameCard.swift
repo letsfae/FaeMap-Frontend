@@ -61,6 +61,7 @@ extension FaeMapViewController {
     }
     
     func hideNameCard(_ sender: UIButton) {
+        self.deselectAllAnnotations()
         UIView.animate(withDuration: 0.3, animations: ({
             if sender == self.btnCardClose {
                 self.btnCardClose.alpha = 0

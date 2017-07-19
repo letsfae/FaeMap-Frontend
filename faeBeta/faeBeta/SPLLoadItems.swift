@@ -19,6 +19,11 @@ extension SelectLocationViewController {
         slMapView.showsCompass = false
         view.addSubview(slMapView)
         
+        let camera = slMapView.camera
+        camera.altitude = Key.shared.dblAltitude
+        camera.centerCoordinate = Key.shared.selectedLoc
+        slMapView.setCamera(camera, animated: false)
+        
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
         imgPinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")
         view.addSubview(imgPinOnMap)

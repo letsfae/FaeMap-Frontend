@@ -43,11 +43,6 @@ class PinMenuViewController: UIViewController {
     
     var buttonClosePinBlurView: UIButton!
     
-    // MARK: Geo Info pass to create pin view controller
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var currentLocation = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor.clear

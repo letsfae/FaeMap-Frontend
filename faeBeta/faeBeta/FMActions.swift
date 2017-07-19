@@ -43,9 +43,6 @@ extension FaeMapViewController {
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
-        pinMenuVC.currentLatitude = LocManage.shared.curtLat
-        pinMenuVC.currentLongitude = LocManage.shared.curtLong
-        pinMenuVC.currentLocation = mapCenter_coor
         Key.shared.dblAltitude = faeMapView.camera.altitude
         Key.shared.selectedLoc = mapCenter_coor
         pinMenuVC.delegate = self

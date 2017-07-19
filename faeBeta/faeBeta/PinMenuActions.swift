@@ -12,7 +12,6 @@ extension PinMenuViewController {
     func actionCreateCommentPin(_ sender: UIButton) {
         let createCommentPinVC = CreateCommentPinViewController()
         createCommentPinVC.modalPresentationStyle = .overCurrentContext
-        createCommentPinVC.currentLocation2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)//self.currentLocation
         createCommentPinVC.delegate = self
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
@@ -25,7 +24,6 @@ extension PinMenuViewController {
     func actionCreateMediaPin(_ sender: UIButton) {
         let createMediaPinVC = CreateMomentPinViewController()
         createMediaPinVC.modalPresentationStyle = .overCurrentContext
-        createMediaPinVC.currentLocation2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)//self.currentLocation
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0
         }), completion: { (done: Bool) in
@@ -38,7 +36,6 @@ extension PinMenuViewController {
         let createChatPinVC = CreateChatPinViewController()
         createChatPinVC.modalPresentationStyle = .overCurrentContext
         createChatPinVC.delegate = self
-        createChatPinVC.currentLocation2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)// self.currentLocation
         createChatPinVC.modalTransitionStyle = .crossDissolve
         UIView.animate(withDuration: 0.2, delay: 0, options: .transitionFlipFromBottom, animations: ({
             self.uiviewPinSelections.alpha = 0.0

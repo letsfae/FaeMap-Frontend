@@ -59,14 +59,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         } else if view is SocialPinAnnotationView {
             guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
-            
+            guard let mapPin = firstAnn.pinInfo as? MapPin else { return }
             dismissMainBtns()
             boolCanOpenPin = false
-            
-            let mapPin = firstAnn.pinInfo as! MapPin
-            
             openMapPin(annotation: firstAnn, mapPin: mapPin, animated: true)
-            
+            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
             let vcPinDetail = PinDetailViewController()
             vcPinDetail.delegate = self
             vcPinDetail.modalPresentationStyle = .overCurrentContext
@@ -77,6 +74,20 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 self.present(vcPinDetail, animated: false, completion: {
                     self.boolCanOpenPin = true
                 })
+            })
+        } else if view is UserPinAnnotationView {
+            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+            guard firstAnn.id != -1 else { return }
+            boolCanUpdateUserPin = false
+            boolCanOpenPin = false
+            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+            updateNameCard(withUserId: firstAnn.id)
+            animateNameCard()
+            UIView.animate(withDuration: 0.25, delay: 0, animations: {
+                self.btnCardClose.alpha = 1
+            }, completion: { _ in
+                self.boolCanOpenPin = true
             })
         }
     }
@@ -236,40 +247,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         faeMapView.setVisibleMapRect(rect, animated: false)
         
     }
-    /*
-    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-        
-        if marker.userData == nil {
-            return false
+    
+    func deselectAllAnnotations() {
+        for annotation in faeMapView.selectedAnnotations {
+            faeMapView.deselectAnnotation(annotation, animated: false)
         }
-        guard let userData = marker.userData as? [Int: AnyObject] else {
-            return false
-        }
-        guard let type = userData.keys.first else {
-            return false
-        }
-
-        if type == 0 { // fae social pin
-     
-        } else if type == 1 { // user pin
-            guard let userPin = userData.values.first as? FaeUserPin else {
-                return false
-            }
-            pauseAllUserPinTimers()
-            boolCanUpdateUserPin = false
-            animateToCoordinate(type: type, marker: marker, animated: true)
-            updateNameCard(withUserId: userPin.userId)
-            animateNameCard()
-            invalidateAllTimer()
-            UIView.animate(withDuration: 0.25, delay: 0.3, animations: {
-                self.btnCardClose.alpha = 1
-            })
-            return true
-        } else if type == 2 { // place pin
-     
-            return true
-        }
-        return true
+        boolCanOpenPin = true
     }
-    */
 }
