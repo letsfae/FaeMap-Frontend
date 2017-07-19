@@ -67,14 +67,14 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        locManager.requestAlwaysAuthorization()
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined){
-            print("Not Authorised")
-            self.locManager.requestAlwaysAuthorization()
-        }
-        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
-            jumpToLocationEnable()
-        }
+//        locManager.requestAlwaysAuthorization()
+//        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined){
+//            print("Not Authorised")
+//            self.locManager.requestAlwaysAuthorization()
+//        }
+//        if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied){
+//            jumpToLocationEnable()
+//        }
         willAppearFirstLoad = true
         self.actionSelfPosition(self.buttonSelfPosition)
     }
@@ -83,10 +83,10 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         self.navigationController?.isNavigationBarHidden = false
     }
     
-    func jumpToLocationEnable(){
-        let vc = EnableLocationViewController()
-        self.present(vc, animated: true, completion: nil)
-    }
+//    func jumpToLocationEnable(){
+//        let vc = EnableLocationViewController()
+//        self.present(vc, animated: true, completion: nil)
+//    }
     
     func loadMapView() {
         let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)

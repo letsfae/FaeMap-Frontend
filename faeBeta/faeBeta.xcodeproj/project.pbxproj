@@ -205,7 +205,6 @@
 		B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */; };
 		B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8612E341DF202680092C606 /* PinDetailViewController.swift */; };
 		B867B0DA1F1C9C3D005C43BA /* FMCompassRotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B867B0D91F1C9C3D005C43BA /* FMCompassRotation.swift */; };
-		B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */; };
 		B86AE0501ED4FC4400D1357D /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86AE04F1ED4FC4400D1357D /* General.swift */; };
 		B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
@@ -522,7 +521,6 @@
 		B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedPinsViewController.swift; sourceTree = "<group>"; };
 		B8612E341DF202680092C606 /* PinDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailViewController.swift; sourceTree = "<group>"; };
 		B867B0D91F1C9C3D005C43BA /* FMCompassRotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCompassRotation.swift; sourceTree = "<group>"; };
-		B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = EnableLocationAndNotification.storyboard; sourceTree = "<group>"; };
 		B86AE04F1ED4FC4400D1357D /* General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B874AA6F1E763ECE002A16CD /* PDFeelingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFeelingCell.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
@@ -1415,7 +1413,6 @@
 		DC9F45361E078BDF00128444 /* Location&Notification */ = {
 			isa = PBXGroup;
 			children = (
-				B868497B1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard */,
 				B0714E0F1D6252FC00356705 /* EnableLocationViewController.swift */,
 				B0714E131D62530E00356705 /* EnableNotificationViewController.swift */,
 			);
@@ -1592,7 +1589,6 @@
 				B0C0CAA11D42287E00E2E251 /* NameCardGeneralTableViewCell.xib in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				B00EC3D51D29C70600AD9673 /* FaeAccountWithoutTableViewCell.xib in Resources */,
-				B868497C1DE0E4800016FC6E /* EnableLocationAndNotification.storyboard in Resources */,
 				DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */,
 				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,

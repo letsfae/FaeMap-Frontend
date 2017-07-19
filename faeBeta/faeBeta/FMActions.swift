@@ -11,12 +11,12 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        guard curLoc != nil else { return }
+        guard LocManage.shared.curtLoc != nil else { return }
         
         DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(self.curLat)")
-            selfLocation.whereKey("geo_longitude", value: "\(self.curLon)")
+            selfLocation.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+            selfLocation.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
@@ -44,8 +44,8 @@ extension FaeMapViewController {
         invalidateAllTimer()
         let pinMenuVC = PinMenuViewController()
         pinMenuVC.modalPresentationStyle = .overCurrentContext
-        pinMenuVC.currentLatitude = self.curLat
-        pinMenuVC.currentLongitude = self.curLon
+        pinMenuVC.currentLatitude = LocManage.shared.curtLat
+        pinMenuVC.currentLongitude = LocManage.shared.curtLong
         pinMenuVC.currentLocation = mapCenter_coor
         pinMenuVC.zoomLevel = faeMapView.camera.altitude
         pinMenuVC.delegate = self

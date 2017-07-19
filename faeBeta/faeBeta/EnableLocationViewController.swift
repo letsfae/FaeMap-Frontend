@@ -56,7 +56,7 @@ class EnableLocationViewController: UIViewController {
         enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for: UIControlState())
         enableLocationButton.layer.cornerRadius = 25 * screenHeightFactor
         enableLocationButton.backgroundColor = UIColor.faeAppRedColor()
-        enableLocationButton.addTarget(self, action: #selector(EnableLocationViewController.enableLocationButtonTapped), for: .touchUpInside)
+        enableLocationButton.addTarget(self, action: #selector(self.enableLocationButtonTapped), for: .touchUpInside)
         self.view.addSubview(enableLocationButton)
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.checkLocationEnabled), userInfo: nil, repeats: true)

@@ -24,10 +24,10 @@ class SelectLocationViewController: UIViewController {
 
     var imagePinOnMap: UIImageView!
     
-    var currentLocation: CLLocation!
-    let locManager = CLLocationManager()
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
+//    var currentLocation: CLLocation!
+//    let locManager = CLLocationManager()
+//    var currentLatitude: CLLocationDegrees = 34.0205378
+//    var currentLongitude: CLLocationDegrees = -118.2854081
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
     var zoomLevel: Double = 13.8
     var latitudeForPin: CLLocationDegrees = 0

@@ -26,8 +26,8 @@ extension FaeMapViewController {
         }
 //        let zoomLv = faeMapView.camera.zoom
 //        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
-//        let camera = GMSCameraPosition.camera(withLatitude: curLat + offset,
-//                                              longitude: curLon, zoom: zoomLv)
+//        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat + offset,
+//                                              longitude: LocManage.shared.curtLong, zoom: zoomLv)
 //        faeMapView.animate(to: camera)
         animateNameCard()
         

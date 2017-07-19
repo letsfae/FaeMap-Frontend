@@ -26,12 +26,12 @@ extension SelectLocationViewController {
     }
     
     func actionSelfPosition(_ sender: UIButton!) {
-        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-            currentLocation = locManager.location
-        }
-        currentLatitude = currentLocation.coordinate.latitude
-        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: mapSelectLocation.camera.zoom)
+//        if CLLocationManager.authorizationStatus() == .authorizedAlways {
+//            currentLocation = locManager.location
+//        }
+//        currentLatitude = currentLocation.coordinate.latitude
+//        currentLongitude = currentLocation.coordinate.longitude
+        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong, zoom: mapSelectLocation.camera.zoom)
         mapSelectLocation.camera = camera
     }
     
