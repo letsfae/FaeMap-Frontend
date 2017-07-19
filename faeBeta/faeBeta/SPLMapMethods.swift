@@ -7,13 +7,21 @@
 //
 
 import UIKit
+import MapKit
 import GoogleMaps
 
-extension SelectLocationViewController: GMSMapViewDelegate {
+extension SelectLocationViewController: MKMapViewDelegate {
     
-    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
+    func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
+        let camera = mapView.camera
+        camera.altitude = Key.shared.dblAltitude
+        camera.centerCoordinate = Key.shared.selectedLoc
+        mapView.setCamera(camera, animated: false)
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = mapView.projection.coordinate(for: mapCenter)
+        let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
             (response, error) -> Void in
             if let fullAddress = response?.firstResult()?.lines {
@@ -36,11 +44,7 @@ extension SelectLocationViewController: GMSMapViewDelegate {
         })
     }
     
-    func mapView(_ mapView: GMSMapView, willMove gesture: Bool) {
-        faeSearchController.faeSearchBar.endEditing(true)
-    }
-    
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
         faeSearchController.faeSearchBar.endEditing(true)
     }
 }

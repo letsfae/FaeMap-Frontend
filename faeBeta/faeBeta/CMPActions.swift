@@ -208,13 +208,13 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
         
         if strSelectedLocation == nil || strSelectedLocation == "" {
             let defaultLoc = randomLocation()
-            submitLatitude = "\(defaultLoc.latitude)"
-            submitLongitude = "\(defaultLoc.longitude)"
+            submitLatitude = defaultLoc.latitude
+            submitLongitude = defaultLoc.longitude
         }
         
         postSingleMedia.whereKey("file_ids", value: fileIDs)
-        postSingleMedia.whereKey("geo_latitude", value: submitLatitude)
-        postSingleMedia.whereKey("geo_longitude", value: submitLongitude)
+        postSingleMedia.whereKey("geo_latitude", value: "\(submitLatitude)")
+        postSingleMedia.whereKey("geo_longitude", value: "\(submitLongitude)")
         if mediaContent != "" {
             postSingleMedia.whereKey("description", value: mediaContent)
         } else {
@@ -237,13 +237,9 @@ extension CreateMomentPinViewController: UIImagePickerControllerDelegate, UINavi
                 let getJustPostedMedia = FaeMap()
                 getJustPostedMedia.getPin(type: "media", pinId: "\(mediaID)") { (_: Int, _: Any?) in
                     print("[submitMediaPin] get media_id: \(mediaID) of this posted comment")
-                    let latDouble = Double(submitLatitude!)
-                    let longDouble = Double(submitLongitude!)
-                    let lat = CLLocationDegrees(latDouble!)
-                    let long = CLLocationDegrees(longDouble!)
                     self.dismiss(animated: false, completion: {
                         self.activityIndicator.stopAnimating()
-                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", type: "media", latitude: lat, longitude: long, zoom: Float(self.zoomLevelCallBack))
+                        self.delegate?.sendGeoInfo(pinID: "\(mediaID)", type: "media")
                     })
                 }
             } else {

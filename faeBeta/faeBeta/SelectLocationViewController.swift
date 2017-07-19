@@ -7,35 +7,33 @@
 //
 
 import UIKit
-import GoogleMaps
+import MapKit
 import GooglePlaces
 import CoreLocation
 
 protocol SelectLocationViewControllerDelegate: class {
     func sendAddress(_ value: String)
-    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float)
 }
 
 class SelectLocationViewController: UIViewController {
     
     weak var delegate: SelectLocationViewControllerDelegate?
     
-    var mapSelectLocation: GMSMapView!
+    var slMapView: MKMapView!
 
-    var imagePinOnMap: UIImageView!
+    var imgPinOnMap: UIImageView!
     
 //    var currentLocation: CLLocation!
 //    let locManager = CLLocationManager()
 //    var currentLatitude: CLLocationDegrees = 34.0205378
 //    var currentLongitude: CLLocationDegrees = -118.2854081
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Double = 13.8
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
     var willAppearFirstLoad = false
     
-    var buttonCancelSelectLocation: UIButton!
-    var btnSelfLocation: UIButton!
+    var btnCancel: UIButton!
+    var btnLocat: UIButton!
     var buttonSetLocationOnMap: UIButton!
     
     // MARK: -- Search Bar

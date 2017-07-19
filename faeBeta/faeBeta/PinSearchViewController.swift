@@ -64,7 +64,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
 //        }
     }
     
-    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D) {
         //getPinsData()
     }
     
@@ -171,7 +171,6 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
 //            return
 //        }
 //        let vcEditPin = EditPinViewController()
-//        //        vcEditPin.zoomLevel = zoomLevel
 //        vcEditPin.delegate = self
 //        
 //        if(pinType == "comment"){

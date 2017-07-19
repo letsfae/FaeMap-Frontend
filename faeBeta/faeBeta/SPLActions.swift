@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 
 extension SelectLocationViewController {
     
@@ -18,21 +17,19 @@ extension SelectLocationViewController {
     func actionSetLocationForComment(_ sender: UIButton) {
         if let searchText = faeSearchController.faeSearchBar.text {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-            let mapCenterCoordinate = mapSelectLocation.projection.coordinate(for: mapCenter)
+            let mapCenterCoordinate = slMapView.convert(mapCenter, toCoordinateFrom: nil)
+            Key.shared.selectedLoc = mapCenterCoordinate
+            Key.shared.dblAltitude = slMapView.camera.altitude
             delegate?.sendAddress(searchText)
-            delegate?.sendGeoInfo("\(mapCenterCoordinate.latitude)", longitude: "\(mapCenterCoordinate.longitude)", zoom: mapSelectLocation.camera.zoom)
         }
         self.dismiss(animated: false, completion: nil)
     }
     
     func actionSelfPosition(_ sender: UIButton!) {
-//        if CLLocationManager.authorizationStatus() == .authorizedAlways {
-//            currentLocation = locManager.location
-//        }
-//        currentLatitude = currentLocation.coordinate.latitude
-//        currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong, zoom: mapSelectLocation.camera.zoom)
-        mapSelectLocation.camera = camera
+        let camera = slMapView.camera
+        camera.centerCoordinate = LocManage.shared.curtLoc.coordinate
+        slMapView.setCamera(camera, animated: false)
+        
     }
     
     func actionClearSearchBar(_ sender: UIButton) {

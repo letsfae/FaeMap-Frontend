@@ -1100,7 +1100,6 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         }
         self.isKeyboardInThisView = false
         let vcEditPin = EditPinViewController()
-        vcEditPin.zoomLevel = zoomLevel
         vcEditPin.delegate = self
         vcEditPin.previousCommentContent = self.strCurrentTxt
         vcEditPin.pinID = "\(self.strPinId)"
@@ -2420,14 +2419,13 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     // EditPinViewControllerDelegate
-    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D) {
         if self.strPinId != "-1" {
             self.getSeveralInfo()
             tblMain.contentOffset.y = 0
         }
         PinDetailViewController.selectedMarkerPosition = coordinate
-        zoomLevel = Double(zoom)
-        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, zoom: zoom, pinID: self.strPinId, annotation: PinDetailViewController.pinAnnotation)
+        self.delegate?.reloadMapPins(PinDetailViewController.selectedMarkerPosition, pinID: self.strPinId, annotation: PinDetailViewController.pinAnnotation)
     }
     
     // OpenedPinListViewControllerDelegate

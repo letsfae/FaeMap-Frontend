@@ -19,7 +19,7 @@ protocol PinDetailDelegate: class {
     // Change marker icon based on status
     func changeIconImage()
     // Reload map pins because of location changed
-    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, annotation: FaePinAnnotation)
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, pinID: String, annotation: FaePinAnnotation)
     // Go to prev or next pin
     func goTo(nextPin: Bool)
 }
@@ -195,7 +195,6 @@ class PinDetailBaseViewController: UIViewController {
     var uiviewTblHeader: UIView!
     var uiviewMain: UIView!
     var uiviewToFullDragBtnSub: UIView! // Another dragging button for UI effect: shadow
-    var zoomLevel: Double = 13.8
     var anonyUserDict = [Int: Int]()
     var arrNonDupUserId = [Int]() // UserId array with no duplicates
     

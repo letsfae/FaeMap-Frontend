@@ -43,7 +43,6 @@ extension EditMoreOptionsViewController {
         selectLocationVC.modalPresentationStyle = .overCurrentContext
         selectLocationVC.delegate = self
         selectLocationVC.isCreatingMode = false
-        selectLocationVC.zoomLevel = zoomLevel
         selectLocationVC.currentLocation2D = pinGeoLocation
         if pinType == "media"{
             selectLocationVC.pinType = "moment"

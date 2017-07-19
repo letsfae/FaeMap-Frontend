@@ -9,7 +9,7 @@
 import UIKit
 
 protocol CreatePinDelegate: class {
-    func sendGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
+    func sendGeoInfo(pinID: String, type: String)
     func backFromPinCreating(back: Bool)
     func closePinMenu(close: Bool)
 }
@@ -42,8 +42,8 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var inputToolbar: CreatePinInputToolbar!
     
     // pin location
-    var selectedLatitude: String!
-    var selectedLongitude: String!
+    var selectedLatitude: CLLocationDegrees = 0
+    var selectedLongitude: CLLocationDegrees = 0
     
     // emoji
     var isShowingEmoji: Bool = false // whether the emoji picker view is shown
@@ -57,8 +57,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
     var currentLocation2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var zoomLevel: Double = 13.8
-    var zoomLevelCallBack: Double = 13.8
     
     enum PinType: String {
         case comment = "comment"
@@ -496,7 +494,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
         selectLocationVC.delegate = self
         selectLocationVC.pinType = pinType.rawValue
         selectLocationVC.currentLocation2D = self.currentLocation2D
-        selectLocationVC.zoomLevel = self.zoomLevel
         self.present(selectLocationVC, animated: false, completion: nil)
     }
     
@@ -504,13 +501,6 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     func sendAddress(_ value: String) {
         strSelectedLocation = value
         self.tblPinOptions.reloadData()
-    }
-    
-    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
-        self.selectedLatitude = latitude
-        self.selectedLongitude = longitude
-        self.tblPinOptions.reloadData()
-        zoomLevelCallBack = Double(zoom)
     }
     // SelectLocationViewControllerDelegate End
     

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol PinMenuDelegate: class {
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float)
+    func sendPinGeoInfo(pinID: String, type: String)
     func whenDismissPinMenu()
 }
 
@@ -47,7 +47,6 @@ class PinMenuViewController: UIViewController {
     var currentLatitude: CLLocationDegrees = 34.0205378
     var currentLongitude: CLLocationDegrees = -118.2854081
     var currentLocation = CLLocationCoordinate2DMake(34.0205378, -118.2854081)
-    var floatAltitude: Double = 13.8
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -80,4 +80,7 @@ class Key: NSObject { //  singleton class
     let imageDefaultCover = UIImage(named: "defaultCover")
     let imageDefaultMale = UIImage(named: "defaultMen")
     let imageDefaultFemale = UIImage(named: "defaultWomen")
+    
+    var dblAltitude: Double = 500
+    var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
 }

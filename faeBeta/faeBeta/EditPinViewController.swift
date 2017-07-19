@@ -11,7 +11,7 @@ import SwiftyJSON
 import Photos
 
 protocol EditPinViewControllerDelegate: class {
-    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float)
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D)
 }
 
 class EditPinViewController: UIViewController {
@@ -48,11 +48,7 @@ class EditPinViewController: UIViewController {
     
     //Emoji View
     var emojiView: StickerPickView!
-    var isShowingEmoji: Bool = false
-    
-    var zoomLevel: Double = 13.8
-    var zoomLevelCallBack: Double = 13.8
-    
+    var isShowingEmoji: Bool = false    
     
     //New Added ID array
     var newAddedImageArray: [UIImage] = []

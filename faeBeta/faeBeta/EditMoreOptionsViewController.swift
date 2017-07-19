@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 
 protocol EditPinMoreOptionsDelegate: class {
-    func sendMapCameraInfo(latitude: String, longitude: String, zoom: Float)
+    func sendMapCameraInfo(lat: CLLocationDegrees, long: CLLocationDegrees)
 }
 
 class EditMoreOptionsViewController: UIViewController {
@@ -37,8 +37,6 @@ class EditMoreOptionsViewController: UIViewController {
     // Google Map
     var geoCode: CLGeocoder!
     var currentLocation: CLLocation!
-    var zoomLevel: Double = 13.8
-    var zoomLevelCallBack: Double = 13.8
     
     //Data Structure
     var optionImageArray: [Int] = []

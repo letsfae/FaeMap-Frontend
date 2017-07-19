@@ -27,7 +27,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         lblEmptyTbl.text = "You haven’t created any Pins, come again after you create some pins. :)"
     }
     
-    func reloadPinContent(_ coordinate: CLLocationCoordinate2D, zoom: Float) {
+    func reloadPinContent(_ coordinate: CLLocationCoordinate2D) {
         getPinsData()
     }
     

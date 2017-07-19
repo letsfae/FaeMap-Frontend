@@ -254,12 +254,12 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
         
         if strSelectedLocation == nil || strSelectedLocation == "" {
             let defaultLoc = randomLocation()
-            submitLatitude = "\(defaultLoc.latitude)"
-            submitLongitude = "\(defaultLoc.longitude)"
+            submitLatitude = defaultLoc.latitude
+            submitLongitude = defaultLoc.longitude
         }
         
-        postSingleChatPin.whereKey("geo_latitude", value: submitLatitude)
-        postSingleChatPin.whereKey("geo_longitude", value: submitLongitude)
+        postSingleChatPin.whereKey("geo_latitude", value: "\(submitLatitude)")
+        postSingleChatPin.whereKey("geo_longitude", value: "\(submitLongitude)")
         
         if textviewDescrip != nil && textviewDescrip.text! != ""{
             let des = textviewDescrip.text
@@ -277,14 +277,10 @@ class CreateChatPinViewController: CreatePinBaseViewController, SendMutipleImage
                         
                         //upload cover image
                         self.uploadChatRoomCoverImage(chatRoomId: getMessageID as! NSNumber, image: self.imgCreateChatPinImage.image!)
-                        
-                        let latDouble = Double(submitLatitude!)
-                        let longDouble = Double(submitLongitude!)
-                        let lat = CLLocationDegrees(latDouble!)
-                        let long = CLLocationDegrees(longDouble!)
+
                         UIScreenService.hideActivityIndicator()
                         self.dismiss(animated: false, completion: {
-                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room", latitude: lat, longitude: long, zoom: Float(self.zoomLevelCallBack))
+                            self.delegate?.sendGeoInfo(pinID: "\(getMessageID)", type: "chat_room")
                         })
                     }
                 }

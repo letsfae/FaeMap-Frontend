@@ -150,10 +150,4 @@ extension EditMoreOptionsViewController: UITableViewDelegate, UITableViewDataSou
         let cell = tableMoreOptions.cellForRow(at: index as IndexPath) as! EditOptionTableViewCell
         cell.labelMiddle.text = value
     }
-    
-    func sendGeoInfo(_ latitude: String, longitude: String, zoom: Float) {
-        self.pinGeoLocation = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
-        zoomLevel = Double(zoom)
-        self.delegate?.sendMapCameraInfo(latitude: latitude, longitude: longitude, zoom: zoom)
-    }
 }

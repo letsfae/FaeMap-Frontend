@@ -51,7 +51,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         mapPin_new.status = status
         annotation?.pinInfo = mapPin_new as AnyObject
     }
-    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, zoom: Float, pinID: String, annotation: FaePinAnnotation) {
+    func reloadMapPins(_ coordinate: CLLocationCoordinate2D, pinID: String, annotation: FaePinAnnotation) {
         
         mapClusterManager.removeAnnotations([annotation]) {
             self.mapClusterManager.addAnnotations([annotation], withCompletionHandler: nil)
@@ -104,10 +104,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     }
     
     // PinMenuDelegate
-    func sendPinGeoInfo(pinID: String, type: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Float) {
+    func sendPinGeoInfo(pinID: String, type: String) {
         let camera = faeMapView.camera
-        camera.centerCoordinate.latitude = latitude
-        camera.centerCoordinate.longitude = longitude
+        camera.centerCoordinate = Key.shared.selectedLoc
+        camera.altitude = Key.shared.dblAltitude
         faeMapView.setCamera(camera, animated: false)
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()

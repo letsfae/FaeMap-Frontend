@@ -39,8 +39,9 @@ extension SelectLocationViewController: UITableViewDelegate, UITableViewDataSour
             GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
                 (response, error) -> Void in
                 if let selectedAddress = place?.coordinate {
-                    let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.mapSelectLocation.camera.zoom)
-                    self.mapSelectLocation.animate(to: camera)
+                    let camera = self.slMapView.camera
+                    camera.centerCoordinate = selectedAddress
+                    self.slMapView.setCamera(camera, animated: true)
                 }
             })
         })

@@ -156,8 +156,7 @@ extension EditPinViewController: UITextViewDelegate, CreatePinInputToolbarDelega
         }
     }
     
-    func sendMapCameraInfo(latitude: String, longitude: String, zoom: Float) {
-        pinGeoLocation = CLLocationCoordinate2DMake(Double(latitude)!, Double(longitude)!)
-        zoomLevelCallBack = Double(zoom)
+    func sendMapCameraInfo(lat: CLLocationDegrees, long: CLLocationDegrees) {
+        pinGeoLocation = CLLocationCoordinate2DMake(lat, long)
     }
 }

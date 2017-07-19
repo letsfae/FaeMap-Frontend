@@ -15,9 +15,9 @@ extension FaeMapViewController {
         
         DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(self.curLat)")
-            selfLocation.whereKey("geo_longitude", value: "\(self.curLon)")
-            selfLocation.renewCoordinate { (status: Int, _: Any?) in
+            selfLocation.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
+            selfLocation.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+            selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
                 } else {
@@ -46,7 +46,8 @@ extension FaeMapViewController {
         pinMenuVC.currentLatitude = LocManage.shared.curtLat
         pinMenuVC.currentLongitude = LocManage.shared.curtLong
         pinMenuVC.currentLocation = mapCenter_coor
-        pinMenuVC.floatAltitude = faeMapView.camera.altitude
+        Key.shared.dblAltitude = faeMapView.camera.altitude
+        Key.shared.selectedLoc = mapCenter_coor
         pinMenuVC.delegate = self
         self.present(pinMenuVC, animated: false, completion: nil)
     }

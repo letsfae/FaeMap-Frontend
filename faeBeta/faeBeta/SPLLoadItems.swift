@@ -7,45 +7,37 @@
 //
 
 import UIKit
-import GoogleMaps
+import MapKit
 
 extension SelectLocationViewController {
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLocation2D.latitude, longitude: currentLocation2D.longitude, zoom: Float(zoomLevel))
-        self.mapSelectLocation = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        mapSelectLocation.isMyLocationEnabled = true
-        mapSelectLocation.delegate = self
-        self.view = mapSelectLocation
-        let kMapStyle = "[{\"featureType\": \"poi.business\",\"stylers\": [{ \"visibility\": \"off\" }]}]"
-        do {
-            // Set the map style by passing a valid JSON string.
-            mapSelectLocation.mapStyle = try GMSMapStyle(jsonString: kMapStyle)
-        } catch {
-            NSLog("The style definition could not be loaded: \(error)")
-        }
+        slMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        slMapView.showsUserLocation = true
+        slMapView.delegate = self
+        slMapView.showsPointsOfInterest = false
+        slMapView.showsCompass = false
+        view.addSubview(slMapView)
         
-        imagePinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
-        imagePinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")
-        self.view.addSubview(imagePinOnMap)
-        // Default is true, if true, panGesture could not be detected
-        self.mapSelectLocation.settings.consumesGesturesInView = false
+        imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth/2-25, y: screenHeight/2-54, width: 50, height: 54))
+        imgPinOnMap.image = UIImage(named: "\(pinType)MarkerWhenCreated")
+        view.addSubview(imgPinOnMap)
     }
     
     func loadButtons() {
-        buttonCancelSelectLocation = UIButton(frame: CGRect(x: 0, y: 0, width: 59, height: 59))
-        buttonCancelSelectLocation.setImage(UIImage(named: "cancelSelectLocation"), for: UIControlState())
-        self.view.addSubview(buttonCancelSelectLocation)
-        buttonCancelSelectLocation.addTarget(self, action: #selector(SelectLocationViewController.actionCancelSelectLocation(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:|-18-[v0(59)]", options: [], views: buttonCancelSelectLocation)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: buttonCancelSelectLocation)
+        btnCancel = UIButton(frame: CGRect(x: 0, y: 0, width: 59, height: 59))
+        btnCancel.setImage(UIImage(named: "cancelSelectLocation"), for: UIControlState())
+        view.addSubview(btnCancel)
+        btnCancel.addTarget(self, action: #selector(SelectLocationViewController.actionCancelSelectLocation(_:)), for: .touchUpInside)
+        view.addConstraintsWithFormat("H:|-18-[v0(59)]", options: [], views: btnCancel)
+        view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: btnCancel)
         
-        btnSelfLocation = UIButton()
-        self.view.addSubview(btnSelfLocation)
-        btnSelfLocation.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
-        btnSelfLocation.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
-        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: btnSelfLocation)
-        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: btnSelfLocation)
+        btnLocat = UIButton()
+        self.view.addSubview(btnLocat)
+        btnLocat.setImage(UIImage(named: "mainScreenSelfPosition"), for: UIControlState())
+        btnLocat.addTarget(self, action: #selector(SelectLocationViewController.actionSelfPosition(_:)), for: .touchUpInside)
+        self.view.addConstraintsWithFormat("H:[v0(59)]-18-|", options: [], views: btnLocat)
+        self.view.addConstraintsWithFormat("V:[v0(59)]-77-|", options: [], views: btnLocat)
         
         buttonSetLocationOnMap = UIButton()
         buttonSetLocationOnMap.setTitle("Set Location", for: UIControlState())
