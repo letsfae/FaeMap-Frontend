@@ -16,7 +16,7 @@ extension FaeMapViewController {
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
 
     func updateSelfLocation() {
@@ -51,12 +51,35 @@ extension FaeMapViewController {
                 self.boolCanUpdateUserPin = true
                 return
             }
-//            for userJson in mapUserJsonArray {
-//                
-//            }
-            self.faeUserPins = mapUserJsonArray.map { FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: $0) }
-//            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
-            self.boolCanUpdateUserPin = true
+            var userPins = [FaePinAnnotation]()
+            DispatchQueue.global(qos: .default).async {
+                for userJson in mapUserJsonArray {
+                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)
+                    guard user != nil else { continue }
+                    if self.faeUserPins.contains(user!) {
+                        joshprint("[updateUserPins] yes contains")
+                        guard let index = self.faeUserPins.index(of: user!) else { continue }
+                        self.faeUserPins[index].positions = (user?.positions)!
+                        user = nil
+                    } else {
+                        joshPrint("[updateUserPins] no")
+                        self.faeUserPins.append(user!)
+                        userPins.append(user!)
+                    }
+                }
+                guard userPins.count > 0 else {
+                    self.boolCanUpdateUserPin = true
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.mapClusterManager.addAnnotations(userPins, withCompletionHandler: nil)
+                    for user in userPins {
+                        user.isValid = true
+                        user.changePosition()
+                    }
+                    self.boolCanUpdateUserPin = true
+                }
+            }
         }
     }
 }

@@ -13,6 +13,15 @@ import MapKit
 
 class FaePinAnnotation: MKPointAnnotation {
     
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let rhs = object as? FaePinAnnotation else { return false }
+        return self.id == rhs.id && self.type == rhs.type
+    }
+    
+    static func ==(lhs: FaePinAnnotation, rhs: FaePinAnnotation) -> Bool {
+        return lhs.isEqual(rhs)
+    }
+    
     // general
     var type: String!
     var id: Int = -1
@@ -32,6 +41,7 @@ class FaePinAnnotation: MKPointAnnotation {
     var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
     var count = 0
+    var isValid = false
     
     init(type: String, cluster: CCHMapClusterController, json: JSON) {
         super.init()
@@ -57,14 +67,19 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
+        guard isValid else { return }
         let time = Double.random(min: 5, max: 20)
-        joshPrint("[changePosition]", time)
+//        let time: Double = 3
+        joshprint("[changePosition]", time)
         DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+            guard self.isValid else { return }
             if self.count == 5 {
                 self.count = 0
             }
             UIView.animate(withDuration: 0.3, animations: {
+                guard self.isValid else { return }
                 self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
+                    guard self.isValid else { return }
                     self.coordinate = self.positions[self.count]
                     self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
                     self.count += 1

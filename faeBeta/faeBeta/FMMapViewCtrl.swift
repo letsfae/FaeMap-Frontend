@@ -79,6 +79,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
             guard firstAnn.id != -1 else { return }
+            for user in faeUserPins {
+                user.isValid = false
+            }
             boolCanUpdateUserPin = false
             boolCanOpenPin = false
             animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
@@ -253,5 +256,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             faeMapView.deselectAnnotation(annotation, animated: false)
         }
         boolCanOpenPin = true
+        for user in faeUserPins {
+            user.isValid = true
+            user.changePosition()
+        }
     }
 }

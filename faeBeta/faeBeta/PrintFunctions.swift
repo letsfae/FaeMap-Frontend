@@ -8,7 +8,7 @@
 
 import Foundation
 
-func joshPrint(_ items: Any...) {
+func joshprint(_ items: Any...) {
     if Key.shared.joshDebug {
         print(items)
     }
