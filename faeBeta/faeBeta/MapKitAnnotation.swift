@@ -41,7 +41,15 @@ class FaePinAnnotation: MKPointAnnotation {
     var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
     var count = 0
-    var isValid = false
+    var isValid = false {
+        didSet {
+            if isValid {
+                self.changePosition()
+            } else {
+                self.count = 0
+            }
+        }
+    }
     
     init(type: String, cluster: CCHMapClusterController, json: JSON) {
         super.init()
@@ -67,25 +75,27 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
-        guard isValid else { return }
+        guard self.isValid else { return }
         let time = Double.random(min: 5, max: 20)
 //        let time: Double = 3
         joshprint("[changePosition]", time)
-        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+        if self.count >= 5 {
+            self.count = 0
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) { [index = self.count] in
             guard self.isValid else { return }
-            if self.count == 5 {
-                self.count = 0
-            }
-            UIView.animate(withDuration: 0.3, animations: {
+            self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
                 guard self.isValid else { return }
-                self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
-                    guard self.isValid else { return }
-                    self.coordinate = self.positions[self.count]
-                    self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
-                    self.count += 1
+                if self.positions.indices.contains(index) {
+                    self.coordinate = self.positions[index]
+                } else {
                     self.changePosition()
-                })
-            }, completion: nil)
+                    return
+                }
+                self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
+                self.count += 1
+                self.changePosition()
+            })
         }
     }
     

@@ -62,7 +62,7 @@ extension FaeMapViewController {
                         self.faeUserPins[index].positions = (user?.positions)!
                         user = nil
                     } else {
-                        joshPrint("[updateUserPins] no")
+                        joshprint("[updateUserPins] no")
                         self.faeUserPins.append(user!)
                         userPins.append(user!)
                     }
@@ -75,7 +75,6 @@ extension FaeMapViewController {
                     self.mapClusterManager.addAnnotations(userPins, withCompletionHandler: nil)
                     for user in userPins {
                         user.isValid = true
-                        user.changePosition()
                     }
                     self.boolCanUpdateUserPin = true
                 }

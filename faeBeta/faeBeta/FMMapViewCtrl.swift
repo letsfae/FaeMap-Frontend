@@ -84,7 +84,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             }
             boolCanUpdateUserPin = false
             boolCanOpenPin = false
-            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+            animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
             updateNameCard(withUserId: firstAnn.id)
             animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0, animations: {
@@ -231,10 +231,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
         
         // Default is for user pin
-        var offset = 500*screenHeightFactor - screenHeight/2 // 458
+        var offset = 465*screenHeightFactor - screenHeight/2 // 458 500
         
         if type == 0 { // Map pin
-            offset = 530*screenHeightFactor - screenHeight/2 // 488
+            offset = 530*screenHeightFactor - screenHeight/2 // 488 530
         } else if type == 2 { // Place pin
             offset = 492*screenHeightFactor - screenHeight/2 // offset: 42
         }
@@ -258,7 +258,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         boolCanOpenPin = true
         for user in faeUserPins {
             user.isValid = true
-            user.changePosition()
         }
     }
 }
