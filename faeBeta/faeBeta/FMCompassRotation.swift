@@ -102,6 +102,8 @@ extension FaeMapViewController {
     // ... and when he stops.                                                                   *
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        guard btnToNorth != nil else { return }
+        
         if !COMPASS_ROTATION_ENABLE {
             UIView.animate(withDuration: 0.5, animations: {
                 self.btnToNorth.transform =

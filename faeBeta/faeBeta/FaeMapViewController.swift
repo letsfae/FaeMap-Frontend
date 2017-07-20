@@ -12,26 +12,17 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-var screenWidth: CGFloat {
-    return UIScreen.main.bounds.width
-}
+let screenWidth: CGFloat = UIScreen.main.bounds.width
 
-var screenHeight: CGFloat {
-    return UIScreen.main.bounds.height
-}
+let screenHeight: CGFloat = UIScreen.main.bounds.height
 
-var screenWidthFactor: CGFloat {
-    return UIScreen.main.bounds.width / 414
-}
+let screenWidthFactor: CGFloat = UIScreen.main.bounds.width / 414
 
-var screenHeightFactor: CGFloat {
-    return UIScreen.main.bounds.height / 736
-}
+let screenHeightFactor: CGFloat = UIScreen.main.bounds.height / 736
 
-class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
+class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, CLLocationManagerDelegate {
     
     let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
-    let locManager = CLLocationManager() // location manage
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
@@ -82,13 +73,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-//    var curLat: CLLocationDegrees = 34.0205378 // location manage
-    var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-//    var curLoc: CLLocation! // location manage
-//    var curLon: CLLocationDegrees = -118.2854081 // location manage
-    var boolIsFirstLoad = false // location manage
+    var boolIsFirstLoad = true // location manage
     var btnEditNameCard: UIButton! // Map Namecard
-    var end: CGFloat = 0 // Pan gesture var
+    var end: CGFloat = 0 // Pan gesture var for filter
     var faeMapView: MKMapView!
     var faeUserPins = [FaePinAnnotation]()
     var filterCircle_1: UIImageView! // Filter btn inside circles
@@ -112,9 +99,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapFilterArrow: UIImageView! // Filter Button
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
-    var myPositionCircle_1: UIImageView! // Self Position Marker
-    var myPositionCircle_2: UIImageView! // Self Position Marker
-    var myPositionCircle_3: UIImageView! // Self Position Marker
     var nameCardMoreOptions: UIImageView! // Map Namecard
     var percent: Double = 0 // Pan gesture var
     var placeArt = #imageLiteral(resourceName: "placePinArt")
@@ -143,7 +127,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
-//    var subviewSelfMarker: UIView! // Self Position Marker
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
@@ -182,18 +165,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // if false, the map is in 3D position adjust mode.
     var initialMapGestureModeIsRotation: Bool?
     
-    // MARK: - For Place Pin
-    var uiviewPlaceDetail: UIView!
-    var uiviewPlacePinBottomLine: UIView!
-    var imgPlaceQuickView: UIImageView!
-    var imgPlaceType: UIImageView!
-    var lblPlaceTitle: UILabel!
-    var lblPlaceStreet: UILabel!
-    var lblPlaceCity: UILabel!
-    var btnGoToPinList: UIButton!
-    var btnMoreOptions: UIButton!
-    var imgPinIcon: UIImageView!
-    
     var FILTER_ENABLE = false
     var COMPASS_ROTATION_ENABLE = false
     
@@ -213,19 +184,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
 //        loadGestures()
-        
-        loadPlaceDetail()
-        
-        boolIsFirstLoad = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        locManager.requestAlwaysAuthorization()
-//        checkLocationEnablibity()
         loadTransparentNavBarItems()
         loadMapChat()
-        btnCardClose.alpha = 0
         reloadSelfPosAnimation()
     }
     
@@ -245,20 +209,22 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         super.viewWillDisappear(animated)
         print("[FaeMapViewController - viewWillDisappear]")
         navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     func checkDisplayNameExisitency() {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
-            if status / 100 == 2 {
-                let rsltJSON = JSON(result!)
-                if let withNickName = rsltJSON["nick_name"].string {
-                    joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
-                } else {
-                    joshprint("[checkDisplayNameExisitency] display name did not setup")
-                    self.loadFirstLoginVC()
-                }
+            guard status / 100 == 2 else {
+                joshprint("[checkDisplayNameExisitency] status: ", status)
+                return
+            }
+            let rsltJSON = JSON(result!)
+            if let withNickName = rsltJSON["nick_name"].string {
+                joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
+            } else {
+                joshprint("[checkDisplayNameExisitency] display name did not setup")
+                self.loadFirstLoginVC()
             }
         }
     }
@@ -326,16 +292,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
-    // Check if location is enabled
-//    fileprivate func checkLocationEnablibity() {
-//        if CLLocationManager.authorizationStatus() == .notDetermined {
-//            print("Not Authorized")
-//            locManager.requestAlwaysAuthorization()
-//        } else if CLLocationManager.authorizationStatus() == .denied {
-//            jumpToLocationEnable()
-//        }
-//    }
-    
     func updateTimerForAllPins() {
         updateTimerForLoadRegionPin()
         updateTimerForUserPin()
@@ -344,7 +300,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // Testing back from background
     func appBackFromBackground() {
-//        checkLocationEnablibity()
         if faeMapView != nil {
             updateTimerForAllPins()
             renewSelfLocation()
@@ -354,23 +309,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5 {
-//            subviewSelfMarker.isHidden = false
-//            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
-//            subviewSelfMarker.isHidden = true
             faeMapView.showsUserLocation = true
         }
     }
-    
-//    func jumpToLocationEnable() {
-//        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-//        present(locEnableVC, animated: true, completion: nil)
-//    }
-//    func jumpToLocationEnable() {
-//        let vc = EnableLocationViewController()
-//        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
-//    }
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
@@ -408,33 +351,25 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         }
     }
     
+    
     // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         DispatchQueue.global(qos: .default).async {
             if self.boolIsFirstLoad {
                 self.boolIsFirstLoad = false
-//                self.curLoc = manager.location
-//                self.curLat = self.curLoc.coordinate.latitude
-//                self.curLon = self.curLoc.coordinate.longitude
-                self.curLoc2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)
-                let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
-                DispatchQueue.main.async(execute: {
-                    self.faeMapView.setRegion(coordinateRegion, animated: false)
-                    self.reloadSelfPosAnimation()
-                    self.refreshMap(pins: true, users: true, places: true)
-                })
+                let coordinate = CLLocationCoordinate2D(latitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong)
+                let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, 3000, 3000)
+                self.faeMapView.setRegion(coordinateRegion, animated: false)
+                self.reloadSelfPosAnimation()
+                self.refreshMap(pins: true, users: true, places: true)
             }
-            
-            if let location = locations.last {
-                let points = self.faeMapView.convert(location.coordinate, toPointTo: nil)
-//                self.curLoc = location
-//                self.curLoc2D = location.coordinate
-//                self.curLat = location.coordinate.latitude
-//                self.curLon = location.coordinate.longitude
+        }
+        
+        if let location = locations.last {
+            let points = self.faeMapView.convert(location.coordinate, toPointTo: nil)
+            if self.FILTER_ENABLE {
                 DispatchQueue.main.async(execute: {
-                    if self.FILTER_ENABLE {
-                        self.uiviewDistanceRadius.center = points
-                    }
+                    self.uiviewDistanceRadius.center = points
                 })
             }
         }

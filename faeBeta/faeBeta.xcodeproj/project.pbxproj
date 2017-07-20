@@ -232,7 +232,6 @@
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */; };
-		B8912D501F1D4AC50094E089 /* FMPlacePinDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8912D4F1F1D4AC50094E089 /* FMPlacePinDetail.swift */; };
 		B894651B1F16D86F00561CFA /* MapKitAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */; };
 		B89791A51E5CC80E00442B4B /* PDEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */; };
 		B89A8A4C1EB41AE000AE626F /* FaeUserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */; };
@@ -549,7 +548,6 @@
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportCommentPinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportCommentPinViewController.swift; sourceTree = "<group>"; };
-		B8912D4F1F1D4AC50094E089 /* FMPlacePinDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacePinDetail.swift; sourceTree = "<group>"; };
 		B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitAnnotation.swift; sourceTree = "<group>"; };
 		B89791A41E5CC80E00442B4B /* PDEmptyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDEmptyCell.swift; sourceTree = "<group>"; };
 		B89A8A4B1EB41AE000AE626F /* FaeUserPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUserPin.swift; sourceTree = "<group>"; };
@@ -816,7 +814,6 @@
 				B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
-				B8912D4F1F1D4AC50094E089 /* FMPlacePinDetail.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1547,7 +1544,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = fae;
 				TargetAttributes = {
 					B0A2AC941CE3A3C6002E0C9D = {
@@ -1789,7 +1786,6 @@
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				DCEB8C961DEE3CA700B516E9 /* CreatePinOptionsTableViewCell.swift in Sources */,
-				B8912D501F1D4AC50094E089 /* FMPlacePinDetail.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */,
 				DC2C8ACE1DFE771B000626B8 /* CreatePinAddTagsTextView.swift in Sources */,
@@ -1964,14 +1960,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1995,6 +1997,7 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -2013,14 +2016,20 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -2039,11 +2048,12 @@
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

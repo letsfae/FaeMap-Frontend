@@ -39,9 +39,9 @@ extension FaeMapViewController {
     
     func animateNameCard() {
         let targetFrame = CGRect(x: 73, y: 158, w: 268, h: 293)
-        self.uiviewCardPrivacy.isHidden = false
+        uiviewCardPrivacy.isHidden = false
+        btnCardClose.isHidden = false
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.btnCardClose.alpha = 1
             self.imgCardBack.frame = targetFrame
             self.imgCardCover.frame = CGRect(x: 73, y: 158, w: 268, h: 125)
             self.uiviewAvatarShadow.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
@@ -61,10 +61,9 @@ extension FaeMapViewController {
     }
     
     func hideNameCard(_ sender: UIButton) {
-        self.deselectAllAnnotations()
+        deselectAllAnnotations()
         UIView.animate(withDuration: 0.3, animations: ({
             if sender == self.btnCardClose {
-                self.btnCardClose.alpha = 0
                 self.imgCardBack.frame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0)
                 self.imgCardCover.frame = self.startFrame
                 self.uiviewAvatarShadow.frame = self.startFrame
@@ -97,6 +96,7 @@ extension FaeMapViewController {
             if sender == self.btnCardClose {
                 self.boolCanUpdateUserPin = true
                 self.uiviewCardPrivacy.isHidden = true
+                self.btnCardClose.isHidden = true
                 self.lblNickName.alpha = 0
             }
         })
@@ -104,10 +104,10 @@ extension FaeMapViewController {
     
     func loadNameCard() {
         btnCardClose = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 736))
-        self.view.addSubview(btnCardClose)
+        view.addSubview(btnCardClose)
         btnCardClose.layer.zPosition = 900
-        btnCardClose.alpha = 0
         btnCardClose.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
+        btnCardClose.isHidden = true
         
         uiviewCardShadow = UIView(frame: startFrame)
         uiviewCardShadow.backgroundColor = UIColor.white
@@ -248,7 +248,7 @@ extension FaeMapViewController {
     } 
     
     func btnChatAction(_ sender: UIButton) {
-        self.hideNameCard(btnCardClose)
+        btnCardClose.sendActions(for: .touchUpInside)
         let withUserId: NSNumber = NSNumber(value: sender.tag)
         // First get chatroom id
         getFromURL("chats/users/\(user_id)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { status, result in

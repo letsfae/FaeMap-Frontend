@@ -8,21 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
-
-extension Array where Element: Equatable {
-    func removeDuplicates() -> [Element] {
-        var result = [Element]()
-        
-        for value in self {
-            if result.contains(value) == false {
-                result.append(value)
-            }
-        }
-        
-        return result
-    }
-}
 
 extension FaeMapViewController {
     
@@ -36,8 +21,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin", animated: false)
-        let coorDistance = cameraDiagonalDistance()
+        let coorDistance = getRadius()
         if self.boolCanUpdateSocialPin {
             self.boolCanUpdateSocialPin = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
@@ -49,7 +33,7 @@ extension FaeMapViewController {
         }
     }
     
-    fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
+    fileprivate func refreshMapPins(radius: Double, completion: @escaping ([MapPin]) -> ()) {
         self.mapPins.removeAll()
         
         // Get screen center's coordinate
@@ -111,15 +95,6 @@ extension FaeMapViewController {
                     self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
                 }
             }
-            /*
-            let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
-            let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
-            icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-            }, completion: nil)
-             */
         }
     }
     
@@ -183,13 +158,24 @@ extension FaeMapViewController {
         }
     }
     
-    func cameraDiagonalDistance() -> Int {
-//        let region = faeMapView.projection.visibleRegion()
-//        let farLeft = region.farLeft
-//        let nearLeft = region.nearRight
-//        let distance = GMSGeometryDistance(farLeft, nearLeft)
-//        return Int(distance * 4)
+    func getRadius() -> Double {
+        guard faeMapView != nil else { return 8000 }
+        let centerCoor: CLLocationCoordinate2D = getCenterCoordinate()
+        let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
+        let topCenterCoor: CLLocationCoordinate2D = getTopCenterCoordinate()
+        let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
+        let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation) * 4
+        joshprint("[getRadius]", radius)
         return 20000
+    }
+    
+    func getCenterCoordinate() -> CLLocationCoordinate2D {
+        return faeMapView.centerCoordinate
+    }
+    
+    func getTopCenterCoordinate() -> CLLocationCoordinate2D {
+        // to get coordinate from CGPoint of your map
+        return faeMapView.convert(CGPoint(x: faeMapView.frame.size.width / 2.0, y: 0), toCoordinateFrom: faeMapView)
     }
     
     func pinIconSelector(type: String, status: String) -> UIImage {
