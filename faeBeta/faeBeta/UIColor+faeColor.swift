@@ -93,4 +93,8 @@ extension UIColor {
     class func faeAppInactiveBtnGrayColor() -> UIColor {
         return UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 1)
     }
+    
+    class func faeAppSectionBackgroundColor() -> UIColor {
+        return UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1)
+    }
 }

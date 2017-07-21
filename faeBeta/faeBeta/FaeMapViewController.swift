@@ -135,6 +135,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var uiviewFilterMenu: UIView! // Filter Menu
     var prevBearing: Double = 0
     var intPinDistance: Int = 65
+    var aroundUsrId: Int = -1
     
     var mapClusterManager: CCHMapClusterController!
     

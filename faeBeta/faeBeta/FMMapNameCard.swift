@@ -58,6 +58,16 @@ extension FaeMapViewController {
             self.uiviewCardShadow.frame = CGRect(x: 73, y: 158, w: 268, h: 275)
             self.uiviewCardPrivacy.frame = CGRect(x: 88, y: 292, w: 46, h: 18)
         }, completion: nil)
+        
+        imgCardAvatar.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.openFaeUsrInfo(_:)))
+        imgCardAvatar.addGestureRecognizer(tapGesture)
+    }
+    
+    func openFaeUsrInfo(_ sender: UITapGestureRecognizer) {
+        let fmUsrInfo = FMUserInfo()
+        fmUsrInfo.userId = self.aroundUsrId
+        self.navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
     
     func hideNameCard(_ sender: UIButton) {
@@ -122,7 +132,7 @@ extension FaeMapViewController {
         
         imgCardBack = UIImageView(frame: startFrame)
         imgCardBack.layer.anchorPoint = nameCardAnchor
-        imgCardBack.image = UIImage(named: "NameCard")
+        imgCardBack.image = #imageLiteral(resourceName: "NameCard")
         imgCardBack.contentMode = .scaleAspectFit
         imgCardBack.clipsToBounds = true
         imgCardBack.layer.zPosition = 902
@@ -238,6 +248,7 @@ extension FaeMapViewController {
         btnCardOptions.tag = withUserId
         btnCardShowSelf.isHidden = true
         btnCardFav.isHidden = false
+        self.aroundUsrId = withUserId
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgCardAvatar.image = avatarImage
         }

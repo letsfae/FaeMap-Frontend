@@ -32,7 +32,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         animateMapFilterArrow()
         filterCircleAnimation()
         reloadSelfPosAnimation()
-        reloadMainScreenButtons()
+        self.reloadMainScreenButtons()
         deselectAllAnnotations()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
@@ -132,14 +132,22 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             self.invisibleMode()
         }
     }
+    
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         self.navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
+    
     func jumpToCollections() {
         let vcCollections = CollectionsBoardViewController()
         self.navigationController?.pushViewController(vcCollections, animated: true)
     }
+    
+    func jumpToContacts() {
+        let vcContacts = ContactsViewController()
+        self.navigationController?.pushViewController(vcContacts, animated: true)
+    }
+    
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
         let realm = try! Realm()
@@ -147,14 +155,17 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
             realm.deleteAll()
         }
     }
+    
     func jumpToFaeUserMainPage() {
         self.jumpToMyFaeMainPage()
     }
+    
     func reloadSelfPosition() {
         self.boolCanOpenPin = true
         self.reloadMainScreenButtons()
         reloadSelfPosAnimation()
     }
+    
     func switchMapMode() {
         if let vc = self.navigationController?.viewControllers.first {
             if vc is InitialPageController {

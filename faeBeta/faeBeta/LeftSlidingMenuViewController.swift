@@ -16,6 +16,7 @@ protocol LeftSlidingMenuDelegate: class {
     func logOutInLeftMenu()
     func jumpToFaeUserMainPage()
     func jumpToCollections()
+    func jumpToContacts()
     func reloadSelfPosition()
     func switchMapMode()
 }
@@ -182,6 +183,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             tableSelections = .goInvisible
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
             invisibleSwitch(cell.switchRight)
+        } else if indexPath.row == 2 {
+            tableSelections = .contacts
+            actionCloseMenu(btnBackground)
         } else if indexPath.row == 3 {
             tableSelections = .collections
             actionCloseMenu(btnBackground)
@@ -294,6 +298,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     break
                 case .contacts:
                     self.tableSelections = .none
+                    self.delegate?.jumpToContacts()
                     break
                 case .moodAvatar:
                     self.tableSelections = .none

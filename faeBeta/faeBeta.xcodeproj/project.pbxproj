@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		184384561F217F1C009EF36D /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384551F217F1C009EF36D /* ContactsViewController.swift */; };
+		184384611F217F52009EF36D /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384581F217F52009EF36D /* NotificationExtension.swift */; };
+		184384621F217F52009EF36D /* YingChen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384591F217F52009EF36D /* YingChen.swift */; };
+		184384631F217F52009EF36D /* JustinHe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845A1F217F52009EF36D /* JustinHe.swift */; };
+		184384641F217F52009EF36D /* WenJia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845B1F217F52009EF36D /* WenJia.swift */; };
+		184384651F217F52009EF36D /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845C1F217F52009EF36D /* AddFriendViewController.swift */; };
+		184384661F217F52009EF36D /* AddUsernameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845D1F217F52009EF36D /* AddUsernameController.swift */; };
+		184384671F217F52009EF36D /* AddFromContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845E1F217F52009EF36D /* AddFromContactsController.swift */; };
+		184384681F217F52009EF36D /* AddNearbyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843845F1F217F52009EF36D /* AddNearbyController.swift */; };
+		184384691F217F52009EF36D /* ScrollingIndicatorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384601F217F52009EF36D /* ScrollingIndicatorChange.swift */; };
+		184384711F217F6B009EF36D /* FaeRecommendedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846A1F217F6B009EF36D /* FaeRecommendedCell.swift */; };
+		184384721F217F6B009EF36D /* FaeAddUsernameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846B1F217F6B009EF36D /* FaeAddUsernameCell.swift */; };
+		184384731F217F6B009EF36D /* FaeContactsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846C1F217F6B009EF36D /* FaeContactsCell.swift */; };
+		184384741F217F6B009EF36D /* FaeReceivedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846D1F217F6B009EF36D /* FaeReceivedCell.swift */; };
+		184384751F217F6B009EF36D /* FaeRequestedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846E1F217F6B009EF36D /* FaeRequestedCell.swift */; };
+		184384761F217F6B009EF36D /* FaeInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846F1F217F6B009EF36D /* FaeInviteCell.swift */; };
+		184384771F217F6B009EF36D /* FaeAddFriendOptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384701F217F6B009EF36D /* FaeAddFriendOptionsCell.swift */; };
+		1873C4C61F2134D4007669DD /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873C4C51F2134D4007669DD /* FMUserInfo.swift */; };
+		1873C4C81F214261007669DD /* FaeContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873C4C71F214261007669DD /* FaeContact.swift */; };
 		187DA5581F1EADF200219F39 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187DA5571F1EADF200219F39 /* PlacePin.swift */; };
 		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
 		18FCF3061F05907500467423 /* CreatePinBaseTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */; };
@@ -301,6 +320,25 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		184384551F217F1C009EF36D /* ContactsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		184384581F217F52009EF36D /* NotificationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
+		184384591F217F52009EF36D /* YingChen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YingChen.swift; sourceTree = "<group>"; };
+		1843845A1F217F52009EF36D /* JustinHe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustinHe.swift; sourceTree = "<group>"; };
+		1843845B1F217F52009EF36D /* WenJia.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WenJia.swift; sourceTree = "<group>"; };
+		1843845C1F217F52009EF36D /* AddFriendViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
+		1843845D1F217F52009EF36D /* AddUsernameController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddUsernameController.swift; sourceTree = "<group>"; };
+		1843845E1F217F52009EF36D /* AddFromContactsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFromContactsController.swift; sourceTree = "<group>"; };
+		1843845F1F217F52009EF36D /* AddNearbyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNearbyController.swift; sourceTree = "<group>"; };
+		184384601F217F52009EF36D /* ScrollingIndicatorChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollingIndicatorChange.swift; sourceTree = "<group>"; };
+		1843846A1F217F6B009EF36D /* FaeRecommendedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeRecommendedCell.swift; sourceTree = "<group>"; };
+		1843846B1F217F6B009EF36D /* FaeAddUsernameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAddUsernameCell.swift; sourceTree = "<group>"; };
+		1843846C1F217F6B009EF36D /* FaeContactsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeContactsCell.swift; sourceTree = "<group>"; };
+		1843846D1F217F6B009EF36D /* FaeReceivedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeReceivedCell.swift; sourceTree = "<group>"; };
+		1843846E1F217F6B009EF36D /* FaeRequestedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeRequestedCell.swift; sourceTree = "<group>"; };
+		1843846F1F217F6B009EF36D /* FaeInviteCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeInviteCell.swift; sourceTree = "<group>"; };
+		184384701F217F6B009EF36D /* FaeAddFriendOptionsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAddFriendOptionsCell.swift; sourceTree = "<group>"; };
+		1873C4C51F2134D4007669DD /* FMUserInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
+		1873C4C71F214261007669DD /* FaeContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeContact.swift; sourceTree = "<group>"; };
 		187DA5571F1EADF200219F39 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesCell.swift; sourceTree = "<group>"; };
 		18DE42501F1D7878006F5E50 /* LocManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocManage.swift; sourceTree = "<group>"; };
@@ -635,6 +673,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		184384541F217EF5009EF36D /* FaeContacts */ = {
+			isa = PBXGroup;
+			children = (
+				184384551F217F1C009EF36D /* ContactsViewController.swift */,
+				184384571F217F30009EF36D /* FaeContactsExtensions */,
+			);
+			name = FaeContacts;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		184384571F217F30009EF36D /* FaeContactsExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				184384581F217F52009EF36D /* NotificationExtension.swift */,
+				184384591F217F52009EF36D /* YingChen.swift */,
+				1843845A1F217F52009EF36D /* JustinHe.swift */,
+				1843845B1F217F52009EF36D /* WenJia.swift */,
+				1843845C1F217F52009EF36D /* AddFriendViewController.swift */,
+				1843845D1F217F52009EF36D /* AddUsernameController.swift */,
+				1843845E1F217F52009EF36D /* AddFromContactsController.swift */,
+				1843845F1F217F52009EF36D /* AddNearbyController.swift */,
+				184384601F217F52009EF36D /* ScrollingIndicatorChange.swift */,
+				1843846A1F217F6B009EF36D /* FaeRecommendedCell.swift */,
+				1843846B1F217F6B009EF36D /* FaeAddUsernameCell.swift */,
+				1843846C1F217F6B009EF36D /* FaeContactsCell.swift */,
+				1843846D1F217F6B009EF36D /* FaeReceivedCell.swift */,
+				1843846E1F217F6B009EF36D /* FaeRequestedCell.swift */,
+				1843846F1F217F6B009EF36D /* FaeInviteCell.swift */,
+				184384701F217F6B009EF36D /* FaeAddFriendOptionsCell.swift */,
+			);
+			name = FaeContactsExtensions;
+			sourceTree = "<group>";
+		};
 		2467B7FA7A9B4FD0265C0924 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -963,6 +1034,7 @@
 				B0714D7F1D5E463B00356705 /* Chat */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
+				184384541F217EF5009EF36D /* FaeContacts */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
@@ -1057,6 +1129,7 @@
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
+				1873C4C71F214261007669DD /* FaeContact.swift */,
 				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
 			name = Model;
@@ -1756,16 +1829,21 @@
 				B00EC3D91D2BA9BC00AD9673 /* AccountEmailViewController.swift in Sources */,
 				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				DC477A5F1DB2A8EE008A2041 /* PinTalkTalkCell.swift in Sources */,
+				184384621F217F52009EF36D /* YingChen.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
 				B8D20A141F05A47300E8F7BA /* PinDetailBaseViewController.swift in Sources */,
 				B0714D521D5E435200356705 /* FMLeftSlideWindow.swift in Sources */,
+				184384771F217F6B009EF36D /* FaeAddFriendOptionsCell.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
 				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
+				1873C4C61F2134D4007669DD /* FMUserInfo.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
+				184384651F217F52009EF36D /* AddFriendViewController.swift in Sources */,
+				184384731F217F6B009EF36D /* FaeContactsCell.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B00EC3E91D2C4B2200AD9673 /* FaeAccountUsernameViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportCommentPinViewController.swift in Sources */,
@@ -1837,10 +1915,13 @@
 				B8BAFF1B1ECE3B06003B76F9 /* UIDeviceExtension.swift in Sources */,
 				B81563841DDB97E200BF85A1 /* PinMenuActions.swift in Sources */,
 				B064EECE1D6E0CEA00C078F5 /* AlbumTableViewCell.swift in Sources */,
+				184384661F217F52009EF36D /* AddUsernameController.swift in Sources */,
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B0AA088F1D2303F800EE2B2D /* FaeAccountTableViewCell.swift in Sources */,
+				184384691F217F52009EF36D /* ScrollingIndicatorChange.swift in Sources */,
+				184384671F217F52009EF36D /* AddFromContactsController.swift in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* PhotoPickerCollectionViewCell.swift in Sources */,
 				B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */,
 				B8849EBF1EEB147A00D4588D /* MBTalkFeedCell.swift in Sources */,
@@ -1851,6 +1932,8 @@
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
+				184384761F217F6B009EF36D /* FaeInviteCell.swift in Sources */,
+				184384721F217F6B009EF36D /* FaeAddUsernameCell.swift in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				B88905721E36094B00E68D58 /* Reachability.swift in Sources */,
 				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
@@ -1858,6 +1941,7 @@
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
+				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B0C0CAAE1D422E1400E2E251 /* NameCardAddTableViewCell.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
@@ -1868,6 +1952,7 @@
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */,
+				184384741F217F6B009EF36D /* FaeReceivedCell.swift in Sources */,
 				DCEB8C9F1DEEB28700B516E9 /* CreatePinTextView.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
@@ -1886,12 +1971,15 @@
 				B8612E351DF202680092C606 /* PinDetailViewController.swift in Sources */,
 				B85609271E9D411000F68DA4 /* FMDistanceChange.swift in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
+				184384611F217F52009EF36D /* NotificationExtension.swift in Sources */,
 				B00EC3D21D29C70600AD9673 /* FaeAccountWithoutTableViewCell.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
+				184384711F217F6B009EF36D /* FaeRecommendedCell.swift in Sources */,
 				B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */,
 				B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */,
 				B8849EA51EEB143800D4588D /* LoadChooseNearbyPeoplePage.swift in Sources */,
+				184384561F217F1C009EF36D /* ContactsViewController.swift in Sources */,
 				B8849EBE1EEB147A00D4588D /* MBPlacesCell.swift in Sources */,
 				853F27721E23184E00DD80DF /* EditMoreOptionsViewController.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
@@ -1907,9 +1995,11 @@
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,
+				184384681F217F52009EF36D /* AddNearbyController.swift in Sources */,
 				B8D5EEC61DB8422600C62628 /* PinMenuViewController.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
+				184384751F217F6B009EF36D /* FaeRequestedCell.swift in Sources */,
 				853F27751E231B4A00DD80DF /* EOLoadItems.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
@@ -1929,10 +2019,12 @@
 				B0C0CA9E1D42287E00E2E251 /* NameCardGeneralTableViewCell.swift in Sources */,
 				B8CAA03D1DDD931D00DEC329 /* FMSelfPosition.swift in Sources */,
 				B823196B1E736EE200189778 /* PDPeopleCell.swift in Sources */,
+				184384641F217F52009EF36D /* WenJia.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B09E49DE1D96F77F0075EE45 /* KTCenterFlowLayout.m in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B84024801F0C1AC400AC6283 /* MoodAvatarImages.swift in Sources */,
+				184384631F217F52009EF36D /* JustinHe.swift in Sources */,
 				B874AA701E763ECE002A16CD /* PDFeelingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
