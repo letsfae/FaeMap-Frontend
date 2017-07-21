@@ -54,15 +54,18 @@ extension FaeMapViewController {
             var userPins = [FaePinAnnotation]()
             DispatchQueue.global(qos: .default).async {
                 for userJson in mapUserJsonArray {
+                    if userJson["user_id"].intValue == user_id {
+                        continue
+                    }
                     var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)
                     guard user != nil else { continue }
                     if self.faeUserPins.contains(user!) {
-                        joshprint("[updateUserPins] yes contains")
+                        // joshprint("[updateUserPins] yes contains")
                         guard let index = self.faeUserPins.index(of: user!) else { continue }
                         self.faeUserPins[index].positions = (user?.positions)!
                         user = nil
                     } else {
-                        joshprint("[updateUserPins] no")
+                        // joshprint("[updateUserPins] no")
                         self.faeUserPins.append(user!)
                         userPins.append(user!)
                     }

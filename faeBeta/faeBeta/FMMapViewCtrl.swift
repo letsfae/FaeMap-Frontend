@@ -107,7 +107,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
-            anView.layer.zPosition = 2
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             

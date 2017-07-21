@@ -13,11 +13,8 @@ import MapKit
 import CCHMapClusterController
 
 let screenWidth: CGFloat = UIScreen.main.bounds.width
-
 let screenHeight: CGFloat = UIScreen.main.bounds.height
-
 let screenWidthFactor: CGFloat = UIScreen.main.bounds.width / 414
-
 let screenHeightFactor: CGFloat = UIScreen.main.bounds.height / 736
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
@@ -74,10 +71,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-//    var curLat: CLLocationDegrees = 34.0205378 // location manage
     var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-//    var curLoc: CLLocation! // location manage
-//    var curLon: CLLocationDegrees = -118.2854081 // location manage
     var boolIsFirstLoad = true // location manage
     var btnEditNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
@@ -132,7 +126,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
-//    var subviewSelfMarker: UIView! // Self Position Marker
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
@@ -170,18 +163,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     // If it's true than the map is in rotation mode,
     // if false, the map is in 3D position adjust mode.
     var initialMapGestureModeIsRotation: Bool?
-    
-    // MARK: - For Place Pin
-    var uiviewPlaceDetail: UIView!
-    var uiviewPlacePinBottomLine: UIView!
-    var imgPlaceQuickView: UIImageView!
-    var imgPlaceType: UIImageView!
-    var lblPlaceTitle: UILabel!
-    var lblPlaceStreet: UILabel!
-    var lblPlaceCity: UILabel!
-    var btnGoToPinList: UIButton!
-    var btnMoreOptions: UIButton!
-    var imgPinIcon: UIImageView!
     
     var FILTER_ENABLE = false
     var COMPASS_ROTATION_ENABLE = false
@@ -310,16 +291,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
-    // Check if location is enabled
-//    fileprivate func checkLocationEnablibity() {
-//        if CLLocationManager.authorizationStatus() == .notDetermined {
-//            print("Not Authorized")
-//            locManager.requestAlwaysAuthorization()
-//        } else if CLLocationManager.authorizationStatus() == .denied {
-//            jumpToLocationEnable()
-//        }
-//    }
-    
     func updateTimerForAllPins() {
         updateTimerForLoadRegionPin()
         updateTimerForUserPin()
@@ -328,7 +299,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     // Testing back from background
     func appBackFromBackground() {
-//        checkLocationEnablibity()
         if faeMapView != nil {
             updateTimerForAllPins()
             renewSelfLocation()
@@ -338,23 +308,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     
     func reloadSelfPosAnimation() {
         if userStatus != 5 {
-//            subviewSelfMarker.isHidden = false
-//            reloadSelfMarker()
             getSelfAccountInfo()
         } else {
-//            subviewSelfMarker.isHidden = true
             faeMapView.showsUserLocation = true
         }
     }
-    
-//    func jumpToLocationEnable() {
-//        let locEnableVC: UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-//        present(locEnableVC, animated: true, completion: nil)
-//    }
-//    func jumpToLocationEnable() {
-//        let vc = EnableLocationViewController()
-//        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
-//    }
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
