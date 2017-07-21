@@ -24,7 +24,6 @@
 		184384751F217F6B009EF36D /* FaeRequestedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846E1F217F6B009EF36D /* FaeRequestedCell.swift */; };
 		184384761F217F6B009EF36D /* FaeInviteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843846F1F217F6B009EF36D /* FaeInviteCell.swift */; };
 		184384771F217F6B009EF36D /* FaeAddFriendOptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184384701F217F6B009EF36D /* FaeAddFriendOptionsCell.swift */; };
-		1873C4C61F2134D4007669DD /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873C4C51F2134D4007669DD /* FMUserInfo.swift */; };
 		1873C4C81F214261007669DD /* FaeContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873C4C71F214261007669DD /* FaeContact.swift */; };
 		187DA5581F1EADF200219F39 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187DA5571F1EADF200219F39 /* PlacePin.swift */; };
 		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
@@ -32,6 +31,7 @@
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
+		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
@@ -346,6 +346,7 @@
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
+		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		690452871F032A9900B58982 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeGenderView.swift; sourceTree = "<group>"; };
 		82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -885,6 +886,7 @@
 				B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
+				50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1195,6 +1197,7 @@
 			isa = PBXGroup;
 			children = (
 				18DE42501F1D7878006F5E50 /* LocManage.swift */,
+				1873C4C51F2134D4007669DD /* FMUserInfo.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -1774,6 +1777,7 @@
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
 				B85FFE951EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift in Sources */,
+				50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B81563871DDB98FC00BF85A1 /* CreateCommentPinViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
@@ -1840,7 +1844,6 @@
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				B8B86D671DD6674D001273F6 /* NameCardFirstFiveCell.swift in Sources */,
 				B81563921DDBDFA200BF85A1 /* PinMenuDelegateCtrl.swift in Sources */,
-				1873C4C61F2134D4007669DD /* FMUserInfo.swift in Sources */,
 				B09E49B91D9630E20075EE45 /* NameCardShowTableViewCell.swift in Sources */,
 				184384651F217F52009EF36D /* AddFriendViewController.swift in Sources */,
 				184384731F217F6B009EF36D /* FaeContactsCell.swift in Sources */,

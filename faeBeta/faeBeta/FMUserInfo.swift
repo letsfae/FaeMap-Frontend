@@ -79,7 +79,7 @@ class FMUserInfo: UIViewController {
                         friendsList.append(json[i]["friend_id"].intValue)
                     }
                 }
-
+                
                 print("friends \(friendsList)")
                 if friendsList.contains(self.userId) {
                     self.statusMode = .accepted
@@ -153,7 +153,7 @@ class FMUserInfo: UIViewController {
             self.lblShortIntro.text = shortIntro
         }
     }
-
+    
     func loadBtmBar() {
         btnBack = UIButton()
         view.addSubview(btnBack)
@@ -166,12 +166,12 @@ class FMUserInfo: UIViewController {
         btnBelowFirst.setImage(#imageLiteral(resourceName: "btnChat"), for: .normal)
         addConstraintsToView(parent: view, child: btnBelowFirst, left: true, gapH: 133, width: 48, top: false, gapV: 0, height: 48)
         btnBelowFirst.addTarget(self, action: #selector(belowEnterChat(_:)), for: .touchUpInside)
-
+        
         getStatusMode()
     }
     
     func switchBtmSecondBtn() {
-//        removeSwitchBtmSecondBtn()
+        //        removeSwitchBtmSecondBtn()
         btnBelowSecond = UIButton()
         view.addSubview(btnBelowSecond)
         addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
@@ -187,7 +187,7 @@ class FMUserInfo: UIViewController {
             print("accepted")
             break
         case .blocked:
-//            btnBelowFirst.removeFromSuperview()
+            //            btnBelowFirst.removeFromSuperview()
             btnBelowFirst.isHidden = true
             btnBelowSecond.isHidden = true
             lblContent.text = "Content Unavailable"
@@ -496,16 +496,16 @@ class FMUserInfo: UIViewController {
                 btnFriendOK.tag = 3
                 // withdraw friend request
                 /* when api is ready
-                faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                    if status / 2 == 100 {
-                        self.lblFriendSent.text = "Request Withdraw Successfully!"
-                        self.statusMode = .defaultMode
-                        self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-                    } else {
-                        print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
-                    }
-                }
-                */
+                 faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
+                 if status / 2 == 100 {
+                 self.lblFriendSent.text = "Request Withdraw Successfully!"
+                 self.statusMode = .defaultMode
+                 self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
+                 } else {
+                 print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
+                 }
+                 }
+                 */
                 self.lblFriendSent.text = "Request Withdraw Successfully!"
                 self.statusMode = .defaultMode
                 self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
@@ -591,3 +591,4 @@ class FMUserInfo: UIViewController {
         }
     }
 }
+

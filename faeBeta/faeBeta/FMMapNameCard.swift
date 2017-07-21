@@ -67,6 +67,7 @@ extension FaeMapViewController {
     func openFaeUsrInfo(_ sender: UITapGestureRecognizer) {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = self.aroundUsrId
+        hideNameCard(btnCardClose)
         self.navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
     
