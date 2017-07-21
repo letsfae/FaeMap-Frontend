@@ -371,8 +371,14 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     fileprivate func updateSubmitButton() {
         if pinType == .comment {
             boolBtnSubmitEnabled = (textviewDescrip.text?.characters.count)! > 0
-            setSubmitButton(withTitle: btnSubmit.currentTitle!, isEnabled: boolBtnSubmitEnabled)
+            setSubmitButton(withTitle: "Submit!", isEnabled: boolBtnSubmitEnabled)
         }
+//        else if pinType == .chat {
+//            if CreateChatPinViewController().strTappedButton == "right" {
+//                boolBtnSubmitEnabled = (textviewBubble.text?.characters.count)! > 0
+//                setSubmitButton(withTitle: "Submit!", isEnabled: boolBtnSubmitEnabled)
+//            }
+//        }
     }
     
     // MARK: - textfield delegate

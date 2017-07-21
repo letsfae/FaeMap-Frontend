@@ -696,6 +696,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         let vcCollections = CollectionsBoardViewController()
         navigationController?.pushViewController(vcCollections, animated: true)
     }
+    func jumpToContacts() {
+        let vcContacts = ContactsViewController()
+        self.navigationController?.pushViewController(vcContacts, animated: true)
+    }
     func logOutInLeftMenu() {
         let welcomeVC = WelcomeViewController()
         navigationController?.pushViewController(welcomeVC, animated: true)

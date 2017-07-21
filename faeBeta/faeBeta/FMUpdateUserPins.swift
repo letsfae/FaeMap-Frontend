@@ -62,7 +62,7 @@ extension FaeMapViewController {
                         self.faeUserPins[index].positions = (user?.positions)!
                         user = nil
                     } else {
-                        joshPrint("[updateUserPins] no")
+                        joshprint("[updateUserPins] no")
                         self.faeUserPins.append(user!)
                         userPins.append(user!)
                     }

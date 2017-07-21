@@ -12,8 +12,8 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = true
-    var vickyDebug: Bool = false
+    var joshDebug: Bool = false
+    var vickyDebug: Bool = true
     
     private enum SERVERTYPE {
         case development
