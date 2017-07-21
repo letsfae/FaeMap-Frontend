@@ -9,14 +9,9 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
 import CCHMapClusterController
 
 extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate {
-    
-    func clearMap(type: String, animated: Bool) {
-        
-    }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
@@ -88,7 +83,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             updateNameCard(withUserId: firstAnn.id)
             animateNameCard()
             UIView.animate(withDuration: 0.25, delay: 0, animations: {
-                self.btnCardClose.alpha = 1
+                
             }, completion: { _ in
                 self.boolCanOpenPin = true
             })
@@ -107,7 +102,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
-            anView.layer.zPosition = 2
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             

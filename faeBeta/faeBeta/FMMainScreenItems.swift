@@ -22,14 +22,11 @@ extension FaeMapViewController {
         faeMapView.showsCompass = false
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
+        
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 80
         mapClusterManager.marginFactor = 0.1
         mapClusterManager.delegate = self
-
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
     }
     
     // MARK: -- Load Map Main Screen Buttons

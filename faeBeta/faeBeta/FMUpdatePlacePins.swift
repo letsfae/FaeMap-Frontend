@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
 
 extension FaeMapViewController {
     
@@ -21,8 +20,7 @@ extension FaeMapViewController {
     }
     
     func loadCurrentRegionPlacePins() {
-        clearMap(type: "place", animated: true)
-        let coorDistance = cameraDiagonalDistance()
+        let coorDistance = getRadius()
         let placeAllType = allTypePlacesPin()
         if self.boolCanUpdatePlacePin {
             self.boolCanUpdatePlacePin = false
@@ -51,7 +49,7 @@ extension FaeMapViewController {
         }
     }
     
-    fileprivate func refreshPlacePins(radius: Int, all: Bool) {
+    fileprivate func refreshPlacePins(radius: Double, all: Bool) {
         
         placePins.removeAll()
         placeNames.removeAll()
@@ -60,7 +58,7 @@ extension FaeMapViewController {
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         yelpQuery.setLatitude(lat: Double(mapCenterCoordinate.latitude))
         yelpQuery.setLongitude(lon: Double(mapCenterCoordinate.longitude))
-        yelpQuery.setRadius(radius: Int(Double(radius)))
+        yelpQuery.setRadius(radius: Int(radius))
         yelpQuery.setSortRule(sort: "best_match")
         
         func checkPlaceExist(_ result: PlacePin) -> Bool {

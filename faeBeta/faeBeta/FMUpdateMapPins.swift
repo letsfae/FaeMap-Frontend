@@ -8,21 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
-
-extension Array where Element: Equatable {
-    func removeDuplicates() -> [Element] {
-        var result = [Element]()
-        
-        for value in self {
-            if result.contains(value) == false {
-                result.append(value)
-            }
-        }
-        
-        return result
-    }
-}
 
 extension FaeMapViewController {
     
@@ -36,8 +21,7 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin", animated: false)
-        let coorDistance = cameraDiagonalDistance()
+        let coorDistance = getRadius()
         if self.boolCanUpdateSocialPin {
             self.boolCanUpdateSocialPin = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
@@ -49,7 +33,7 @@ extension FaeMapViewController {
         }
     }
     
-    fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
+    fileprivate func refreshMapPins(radius: Double, completion: @escaping ([MapPin]) -> ()) {
         self.mapPins.removeAll()
         
         // Get screen center's coordinate
@@ -174,6 +158,7 @@ extension FaeMapViewController {
         }
     }
     
+<<<<<<< HEAD
     func cameraDiagonalDistance() -> Int {
         guard faeMapView != nil else { return 8000 }
         let centerCoor: CLLocationCoordinate2D = getCenterCoordinate()
@@ -183,6 +168,17 @@ extension FaeMapViewController {
         let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
         let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation)
         return Int(radius * 4)
+=======
+    func getRadius() -> Double {
+        guard faeMapView != nil else { return 8000 }
+        let centerCoor: CLLocationCoordinate2D = getCenterCoordinate()
+        let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
+        let topCenterCoor: CLLocationCoordinate2D = getTopCenterCoordinate()
+        let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
+        let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation) * 4
+        joshprint("[getRadius]", radius)
+        return 20000
+>>>>>>> 5cb1c96259448cc6ed2bb514bba5d4b85b70a4c4
     }
     
     func getCenterCoordinate() -> CLLocationCoordinate2D {
@@ -191,9 +187,14 @@ extension FaeMapViewController {
     
     func getTopCenterCoordinate() -> CLLocationCoordinate2D {
         // to get coordinate from CGPoint of your map
+<<<<<<< HEAD
         return faeMapView.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
     }
 
+=======
+        return faeMapView.convert(CGPoint(x: faeMapView.frame.size.width / 2.0, y: 0), toCoordinateFrom: faeMapView)
+    }
+>>>>>>> 5cb1c96259448cc6ed2bb514bba5d4b85b70a4c4
     
     func pinIconSelector(type: String, status: String) -> UIImage {
         switch type {

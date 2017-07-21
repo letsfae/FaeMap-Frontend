@@ -76,9 +76,9 @@ extension FaeMapViewController {
     func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
-            self.hideNameCard(btnCardClose)
-            if self.mapFilterArrow != nil {
-                self.mapFilterArrow.removeFromSuperview()
+            btnCardClose.sendActions(for: .touchUpInside)
+            if mapFilterArrow != nil {
+                mapFilterArrow.removeFromSuperview()
             }
             let location = pan.location(in: view)
             if uiviewFilterMenu.frame.origin.y == screenHeight {
@@ -115,10 +115,10 @@ extension FaeMapViewController {
                 })
             }
         } else {
-            if self.uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight {
+            if uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight {
                 let location = pan.location(in: view)
-                self.btnMapFilter.frame.origin.y = location.y - spaceFilter
-                self.uiviewFilterMenu.frame.origin.y = location.y + spaceMenu
+                btnMapFilter.frame.origin.y = location.y - spaceFilter
+                uiviewFilterMenu.frame.origin.y = location.y + spaceMenu
                 percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
             }
         }
@@ -134,7 +134,7 @@ extension FaeMapViewController {
         mapFilterArrow.center.x = screenWidth / 2
         mapFilterArrow.image = #imageLiteral(resourceName: "mapFilterArrow")
         mapFilterArrow.contentMode = .scaleAspectFit
-        self.view.addSubview(mapFilterArrow)
+        view.addSubview(mapFilterArrow)
         
         UIView.animate(withDuration: 0.75, delay: 0, options: [.repeat, .autoreverse], animations: {
             UIView.setAnimationRepeatCount(5)
@@ -168,18 +168,18 @@ extension FaeMapViewController {
         polygonInside.center.y = btnMapFilter.center.y
         polygonInside.image = #imageLiteral(resourceName: "mapFilterAnimateInside")
         polygonInside.contentMode = .scaleAspectFit
-        self.view.addSubview(polygonInside)
+        view.addSubview(polygonInside)
         polygonInside.alpha = 0
         polygonInside.layer.zPosition = 601
         
-        if self.mapFilterArrow != nil {
-            self.mapFilterArrow.removeFromSuperview()
+        if mapFilterArrow != nil {
+            mapFilterArrow.removeFromSuperview()
         }
-        self.filterCircle_1.layer.removeAllAnimations()
-        self.filterCircle_2.layer.removeAllAnimations()
-        self.filterCircle_3.layer.removeAllAnimations()
-        self.filterCircle_4.layer.removeAllAnimations()
-        self.polygonInside.alpha = 1
+        filterCircle_1.layer.removeAllAnimations()
+        filterCircle_2.layer.removeAllAnimations()
+        filterCircle_3.layer.removeAllAnimations()
+        filterCircle_4.layer.removeAllAnimations()
+        polygonInside.alpha = 1
         
         UIView.animate(withDuration: 1, delay: 0, options: .repeat, animations: {
             self.btnMapFilter.transform = CGAffineTransform(rotationAngle: 3.1415926)

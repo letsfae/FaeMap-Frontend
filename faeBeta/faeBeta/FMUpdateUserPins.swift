@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
 
 extension FaeMapViewController {
     func updateTimerForUserPin() {
@@ -16,14 +15,14 @@ extension FaeMapViewController {
         if timerUpdateSelfLocation != nil {
             timerUpdateSelfLocation.invalidate()
         }
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
 
     func updateSelfLocation() {
         if boolIsFirstLoad || !boolCanUpdateUserPin {
             return
         }
-        let coorDistance = cameraDiagonalDistance()
+        let coorDistance = getRadius()
         boolCanUpdateUserPin = false
         self.renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
@@ -57,12 +56,10 @@ extension FaeMapViewController {
                     var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)
                     guard user != nil else { continue }
                     if self.faeUserPins.contains(user!) {
-                        joshprint("[updateUserPins] yes contains")
                         guard let index = self.faeUserPins.index(of: user!) else { continue }
                         self.faeUserPins[index].positions = (user?.positions)!
                         user = nil
                     } else {
-                        joshprint("[updateUserPins] no")
                         self.faeUserPins.append(user!)
                         userPins.append(user!)
                     }

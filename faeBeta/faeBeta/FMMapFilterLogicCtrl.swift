@@ -27,7 +27,6 @@ extension FaeMapViewController {
             actionHideFilterMenu(UIButton())
             break
         case .people:
-            clearMap(type: "pin", animated: false)
             timerLoadRegionPins.invalidate()
             checkFilterPeople(sender)
             refreshMap(pins: false, users: true, places: false)

@@ -21,11 +21,6 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
     
     var mapSelectLocation: GMSMapView!
     var imagePinOnMap: UIImageView!
-    
-//    var currentLocation: CLLocation!
-//    let locManager = CLLocationManager()
-//    var currentLatitude: CLLocationDegrees = 34.0205378
-//    var currentLongitude: CLLocationDegrees = -118.2854081
     var latitudeForPin: CLLocationDegrees = 0
     var longitudeForPin: CLLocationDegrees = 0
     var willAppearFirstLoad = false
