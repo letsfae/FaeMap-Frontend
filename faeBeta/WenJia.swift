@@ -10,11 +10,16 @@ import UIKit
 
 extension ContactsViewController {
     
-    func loadNavBar2() {
-        uiviewNavBar2 = FaeNavBar(frame: .zero)
-        view.addSubview(uiviewNavBar2)
-        uiviewNavBar2.lblTitle.text = "Requests"
-        uiviewNavBar2.lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+    func RequestsPressed() {
+//        uiviewNavBar2 = FaeNavBar(frame: .zero)
+//        view.addSubview(uiviewNavBar2)
+        uiviewNavBar.lblTitle.text = "Requests"
+//        uiviewNavBar.lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.bottomLine.isHidden = true
+        uiviewNavBar.lblTitle.isHidden = false
+        btnNavBarMenu.isHidden = true
+        
         tblContacts.tableHeaderView = nil
         tblContacts.frame = CGRect(x: 0, y: 94, width: screenWidth, height: screenHeight - 65)
         loadTabs()

@@ -17,7 +17,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var ageUBVal: Int = 21
     var boolIsLoaded: Bool = false
     var boolNoMatch: Bool = false
-    var boolUsrVisibleIsOn: Bool!
+    var boolUsrVisibleIsOn: Bool = true
     var btnChangeAgeLB: UIButton!
     var btnChangeAgeUB: UIButton!
     var btnChangeDis: UIButton!
@@ -148,7 +148,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
         
-        getUsrInvisibleStatus()
+        // userStatus == 5 -> invisible, userStatus == 1 -> visible
+        userInvisible(isOn: userStatus == 5)
     }
     
     func setGestureRecognizer() -> UITapGestureRecognizer {
@@ -210,7 +211,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     func actionLeftWindowShow(_ sender: UIButton) {
         let leftMenuVC = LeftSlidingMenuViewController()
-        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
+        leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
         leftMenuVC.delegate = self
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         present(leftMenuVC, animated: false, completion: nil)
@@ -494,9 +495,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         default:
             return
         }
-        
         btnNavBarSetTitle()
-        getUsrInvisibleStatus()
         getCurtTableMode()
         hideDropDownMenu()
         setViewContent()
@@ -658,18 +657,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         lblBubbleHint.text = strBubbleHint
     }
     
-    fileprivate func getUsrInvisibleStatus() {
-        if userStatus == 5 { // invisible
-            boolUsrVisibleIsOn = false
-        }
-        if userStatus == 1 { // visible
-            boolUsrVisibleIsOn = true
-        }
-    }
-    
     fileprivate func getPeoplePage() {
-        print("userStatus \(userStatus)")
-        print(boolUsrVisibleIsOn)
+        vickyPrint("userStatus \(userStatus)")
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             tblMapBoard.isHidden = true
             uiviewBubbleHint.isHidden = false
@@ -685,7 +674,12 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
-        getUsrInvisibleStatus()
+        vickyPrint("isOn \(isOn)")
+        if (isOn) {
+            boolUsrVisibleIsOn = false
+        } else {
+            boolUsrVisibleIsOn = true
+        }
         getPeoplePage()
     }
     func jumpToMoodAvatar() {

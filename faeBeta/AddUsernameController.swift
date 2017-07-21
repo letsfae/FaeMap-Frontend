@@ -160,6 +160,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "myCell")
         tblUsernames.isHidden = false
         tblUsernames.indicatorStyle = .white
+        tblUsernames.separatorStyle = .none
         view.addSubview(tblUsernames)
         
         /* ghostBubble Functionality

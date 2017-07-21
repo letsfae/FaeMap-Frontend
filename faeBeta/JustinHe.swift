@@ -15,6 +15,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         tblContacts.frame = CGRect(x: 0, y: 64, width: screenWidth, height: screenHeight - 65)
         tblContacts.dataSource = self
         tblContacts.delegate = self
+        tblContacts.separatorStyle = .none
         self.automaticallyAdjustsScrollViewInsets = false
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         tblContacts.addGestureRecognizer(tapToDismissKeyboard)
@@ -32,7 +33,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         schbarContacts = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor.faeAppInputTextGrayColor())
         schbarContacts.barTintColor = .white
         schbarContacts.tintColor = UIColor.faeAppInputTextGrayColor()
-        schbarContacts.placeholder = "Search Friends                                                      "
+        schbarContacts.placeholder = "Search Friends                                                 "
         schbarContacts.delegate = self
         uiviewSchbar.addSubview(schbarContacts)
         
@@ -108,7 +109,11 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
             btnRR.isSelected = false
             btnFFF.isSelected = true
         }
-        loadNavBar()
+        uiviewNavBar.rightBtn.isHidden = false
+        uiviewNavBar.bottomLine.isHidden = false
+        uiviewNavBar.lblTitle.isHidden = true
+        btnNavBarMenu.isHidden = false
+        
         cellStatus = 1
         self.schbarContacts.isHidden = false
         self.uiviewTabView.isHidden = true
@@ -123,7 +128,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
             btnFFF.isSelected = false
             btnRR.isSelected = true
         }
-        loadNavBar2()
+        RequestsPressed()
         cellStatus = 2
         self.schbarContacts.isHidden = true
         self.uiviewTabView.isHidden = false
@@ -195,9 +200,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         if cellStatus == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCellReceivedRequests", for: indexPath as IndexPath) as! FaeReceivedCell
             print("get into cell2")
+            cell.requestId = testArrayReceivedRequests[indexPath.row].requestUserId
+            
+            cell.imgAvatar.userID = testArrayReceivedRequests[indexPath.row].requestUserId
+            cell.imgAvatar.loadAvatar(id: testArrayReceivedRequests[indexPath.row].requestUserId)
             cell.lblUserName.text = testArrayReceivedRequests[indexPath.row].name
-            cell.lblUserSaying.text = testArrayReceivedRequests[indexPath.row].name
-            cell.requestId = Int(testArrayReceivedRequests[indexPath.row].requestId!)
+            cell.lblUserSaying.text = String(testArrayReceivedRequests[indexPath.row].requestUserId)
             cell.delegate = self
             cell.indexPath = indexPath
             return cell
@@ -212,11 +220,15 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath as IndexPath) as! FaeContactsCell
             if schbarContacts.text != "" {
+                cell.imgAvatar.userID = filtered[indexPath.row].userId
+                cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
                 cell.lblUserName.text = filtered[indexPath.row].name
-                cell.lblUserSaying.text = filtered[indexPath.row].userId
+                cell.lblUserSaying.text = String(filtered[indexPath.row].userId)
             } else {
+                cell.imgAvatar.userID = testArrayFriends[indexPath.row].userId
+                cell.imgAvatar.loadAvatar(id: testArrayFriends[indexPath.row].userId)
                 cell.lblUserName.text = testArrayFriends[indexPath.row].name
-                cell.lblUserSaying.text = testArrayFriends[indexPath.row].userId
+                cell.lblUserSaying.text = String(testArrayFriends[indexPath.row].userId)
             }
             return cell
         }

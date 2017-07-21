@@ -97,20 +97,20 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
 //        }
         // Vicky 07/12/2017
         if indexPath.section == 0 {
-            if indexPath.row == 0 {
+            if indexPath.row == 0 {     // "Search Username"
                 let vc = AddUsernameController()
                 self.navigationController?.pushViewController(vc, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
-            } else if indexPath.row == 1 {
+            } else if indexPath.row == 1 {   // "From Contacts"
                 let vc = AddFromContactsController()
                 self.navigationController?.pushViewController(vc, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
-            } else if indexPath.row == 2 {
+            } else if indexPath.row == 2 {   // "Scan Nearby"
                 let vc = AddNearbyController()
                 self.navigationController?.pushViewController(vc, animated: true)
                 tableView.deselectRow(at: indexPath, animated: true)
             }
-            else {
+            else {   // indexPath.row == 3  "Share Username"
                 tableView.deselectRow(at: indexPath, animated: true)
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: linlin https://www.xxx.com"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view

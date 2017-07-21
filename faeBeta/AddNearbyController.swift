@@ -14,7 +14,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     var lblScanSubtitle: UILabel!
     var imgBigCircle: UIImageView!
     var imgScan: UIImageView!
-    var imgAvatar: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var imgScan2: UIImageView!
     var imgScan3: UIImageView!
     var tblUsernames: UITableView!
@@ -109,7 +109,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         imgScan3 = UIImageView()
         imgScan3.frame = CGRect(x: 117*screenWidthFactor, y: 278, width: 180*screenWidthFactor, height: 180*screenHeightFactor)
         imgScan3.layer.cornerRadius = 90
-        imgScan3.contentMode = .scaleAspectFill
+        imgScan3.contentMode = .scaleToFill
 
         
         view.addSubview(imgScan3)
@@ -125,15 +125,16 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         imgScan2.image = UIImage(named: "imgScan")
         imgScan3.image = UIImage(named: "imgScan")
         
-        imgAvatar = UIImageView()
-        imgAvatar.frame = CGRect(x: 172*screenWidthFactor, y: 333, width: 70*screenWidthFactor, height: 70*screenHeightFactor)
-        imgAvatar.layer.cornerRadius = 35
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 167*screenWidthFactor, y: 328, width: 80*screenWidthFactor, height: 80*screenHeightFactor))
+        imgAvatar.layer.cornerRadius = 41 * screenWidthFactor
         imgAvatar.contentMode = .scaleAspectFill
         view.addSubview(imgAvatar)
-        imgAvatar.backgroundColor = UIColor.blue
+        imgAvatar.userID = user_id
+        imgAvatar.loadAvatar(id: user_id)
         imgAvatar.layer.borderWidth = 5
         imgAvatar.layer.borderColor = UIColor.white.cgColor
         imgAvatar.layer.zPosition = 3
+        imgAvatar.clipsToBounds = true
     }
     
     func loadScanAnimation() {

@@ -19,17 +19,17 @@ struct cellData {
     var Image = UIImage()
     var name: String
     var saying: String?
-    var requestId: String?
-    var userId: String?
+    var requestUserId: Int = -1
+    var userId: Int = -1
     
     init(name: String) {
         self.name = name
     }
-    init(name: String, requestId: String) {
+    init(name: String, requestUserId: Int) {
         self.name = name
-        self.requestId = requestId
+        self.requestUserId = requestUserId
     }
-    init(name: String, userId: String) {
+    init(name: String, userId: Int) {
         self.name = name
         self.userId = userId
     }
@@ -107,7 +107,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayReceivedRequests.append(cellData(name: json[i-1]["request_email"].stringValue, requestId: json[i-1]["friend_request_id"].stringValue))
+                    self.testArrayReceivedRequests.append(cellData(name: json[i-1]["request_user_nick_name"].stringValue, requestUserId: json[i-1]["request_user_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
@@ -117,7 +117,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayFriends.append(cellData(name: json[i-1]["friend_user_name"].stringValue, userId: json[i-1]["friend_id"].stringValue))
+                    self.testArrayFriends.append(cellData(name: json[i-1]["friend_user_nick_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()

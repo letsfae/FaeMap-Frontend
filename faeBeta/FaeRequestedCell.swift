@@ -49,14 +49,14 @@ class FaeRequestedCell: UITableViewCell {
         lblUserName.textAlignment = .left
         lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblUserName.backgroundColor = .blue
+//        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
         lblUserSaying.textColor = UIColor.faeAppInputPlaceholderGrayColor()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblUserSaying.backgroundColor = .green
+//        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
         
         btnCancelRequest = UIButton()
@@ -75,8 +75,8 @@ class FaeRequestedCell: UITableViewCell {
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
 
-        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserName)
-        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
+        addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserName)
+        addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserSaying)
         addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-17-|", options: [], views: lblUserName, lblUserSaying)
         addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnCancelRequest)
         addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnResendRequest)
