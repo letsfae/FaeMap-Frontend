@@ -78,7 +78,7 @@ class FaePinAnnotation: MKPointAnnotation {
         guard self.isValid else { return }
         let time = Double.random(min: 5, max: 20)
 //        let time: Double = 3
-        joshprint("[changePosition]", time)
+//        joshprint("[changePosition]", time)
         if self.count >= 5 {
             self.count = 0
         }

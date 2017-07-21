@@ -12,21 +12,13 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-var screenWidth: CGFloat {
-    return UIScreen.main.bounds.width
-}
+let screenWidth: CGFloat = UIScreen.main.bounds.width
 
-var screenHeight: CGFloat {
-    return UIScreen.main.bounds.height
-}
+let screenHeight: CGFloat = UIScreen.main.bounds.height
 
-var screenWidthFactor: CGFloat {
-    return UIScreen.main.bounds.width / 414
-}
+let screenWidthFactor: CGFloat = UIScreen.main.bounds.width / 414
 
-var screenHeightFactor: CGFloat {
-    return UIScreen.main.bounds.height / 736
-}
+let screenHeightFactor: CGFloat = UIScreen.main.bounds.height / 736
 
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
     
@@ -86,7 +78,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
 //    var curLoc: CLLocation! // location manage
 //    var curLon: CLLocationDegrees = -118.2854081 // location manage
-    var boolIsFirstLoad = false // location manage
+    var boolIsFirstLoad = true // location manage
     var btnEditNameCard: UIButton! // Map Namecard
     var end: CGFloat = 0 // Pan gesture var
     var faeMapView: MKMapView!
@@ -112,9 +104,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var mapFilterArrow: UIImageView! // Filter Button
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
-    var myPositionCircle_1: UIImageView! // Self Position Marker
-    var myPositionCircle_2: UIImageView! // Self Position Marker
-    var myPositionCircle_3: UIImageView! // Self Position Marker
     var nameCardMoreOptions: UIImageView! // Map Namecard
     var percent: Double = 0 // Pan gesture var
     var placeArt = #imageLiteral(resourceName: "placePinArt")
@@ -213,16 +202,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
         loadButton()
         filterAndYelpSetup()
 //        loadGestures()
-        
-        loadPlaceDetail()
-        
-        boolIsFirstLoad = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locManager.requestAlwaysAuthorization()
-//        checkLocationEnablibity()
         loadTransparentNavBarItems()
         loadMapChat()
         btnCardClose.alpha = 0

@@ -111,15 +111,6 @@ extension FaeMapViewController {
                     self.mapClusterManager.addAnnotations([pinMap], withCompletionHandler: nil)
                 }
             }
-            /*
-            let iconSub = UIView(frame: CGRect(x: 0, y: 0, width: 60, height: 61))
-            let icon = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
-            icon.layer.anchorPoint = CGPoint(x: 30, y: 61)
-            pinMap.groundAnchor = CGPoint(x: 0.5, y: 1)
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                icon.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-            }, completion: nil)
-             */
         }
     }
     
@@ -184,13 +175,25 @@ extension FaeMapViewController {
     }
     
     func cameraDiagonalDistance() -> Int {
-//        let region = faeMapView.projection.visibleRegion()
-//        let farLeft = region.farLeft
-//        let nearLeft = region.nearRight
-//        let distance = GMSGeometryDistance(farLeft, nearLeft)
-//        return Int(distance * 4)
-        return 20000
+        guard faeMapView != nil else { return 8000 }
+        let centerCoor: CLLocationCoordinate2D = getCenterCoordinate()
+        // init center location from center coordinate
+        let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
+        let topCenterCoor: CLLocationCoordinate2D = getTopCenterCoordinate()
+        let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
+        let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation)
+        return Int(radius * 4)
     }
+    
+    func getCenterCoordinate() -> CLLocationCoordinate2D {
+        return faeMapView.centerCoordinate
+    }
+    
+    func getTopCenterCoordinate() -> CLLocationCoordinate2D {
+        // to get coordinate from CGPoint of your map
+        return faeMapView.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
+    }
+
     
     func pinIconSelector(type: String, status: String) -> UIImage {
         switch type {
