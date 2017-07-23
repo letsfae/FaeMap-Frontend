@@ -106,7 +106,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
+            //            anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             
@@ -217,25 +217,25 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
-                self.btnMapFilter.frame = CGRect(x: screenWidth/2, y: screenHeight-25, width: 0, height: 0)
+                self.btnMapFilter.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
-            self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5*screenWidthFactor, width: 0, height: 0)
-            self.btnSelfLocation.frame = CGRect(x: 362.5*screenWidthFactor, y: 611.5*screenWidthFactor, width: 0, height: 0)
-            self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5*screenWidthFactor, width: 0, height: 0)
+            self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnSelfLocation.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
             self.labelUnreadMessages.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-            self.btnPinOnMap.frame = CGRect(x: 362.5*screenWidthFactor, y: 685.5*screenWidthFactor, width: 0, height: 0)
+            self.btnPinOnMap.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
         }, completion: nil)
     }
     
     func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
         
         // Default is for user pin
-        var offset = 465*screenHeightFactor - screenHeight/2 // 458 500
+        var offset = 465 * screenHeightFactor - screenHeight / 2 // 458 500
         
         if type == 0 { // Map pin
-            offset = 530*screenHeightFactor - screenHeight/2 // 488 530
+            offset = 530 * screenHeightFactor - screenHeight / 2 // 488 530
         } else if type == 2 { // Place pin
-            offset = 492*screenHeightFactor - screenHeight/2 // offset: 42
+            offset = 492 * screenHeightFactor - screenHeight / 2 // offset: 42
         }
         
         var curPoint = faeMapView.convert(coordinate, toPointTo: nil)

@@ -44,12 +44,17 @@ class FaePinAnnotation: MKPointAnnotation {
     var isValid = false {
         didSet {
             if isValid {
-                self.changePosition()
+                self.timer?.invalidate()
+                self.timer = nil
+                self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
             } else {
                 self.count = 0
+                self.timer = nil
             }
         }
     }
+    
+    var timer: Timer?
     
     init(type: String, cluster: CCHMapClusterController, json: JSON) {
         super.init()
@@ -71,18 +76,40 @@ class FaePinAnnotation: MKPointAnnotation {
         }
         self.avatar = Mood.avatars[miniAvatar]
         self.changePosition()
+        self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+    }
+    
+    
+    
+    func getRandomTime() -> Double {
+        return Double.random(min: 5, max: 20)
     }
     
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
         guard self.isValid else { return }
-        let time = Double.random(min: 5, max: 20)
-//        let time: Double = 3
-//        joshprint("[changePosition]", time)
         if self.count >= 5 {
             self.count = 0
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + time) { [index = self.count] in
+        self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
+            guard self.isValid else { return }
+            if self.positions.indices.contains(self.count) {
+                self.coordinate = self.positions[self.count]
+            } else {
+                self.count = 0
+                self.timer?.invalidate()
+                self.timer = nil
+                self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+                return
+            }
+            self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
+            self.count += 1
+            self.timer?.invalidate()
+            self.timer = nil
+            self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+        })
+        /*
+        DispatchQueue.main.asyncAfter(deadline: .now() + getRandomTime()) { [index = self.count] in
             guard self.isValid else { return }
             self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
                 guard self.isValid else { return }
@@ -97,6 +124,7 @@ class FaePinAnnotation: MKPointAnnotation {
                 self.changePosition()
             })
         }
+        */
     }
     
     // social pin only
@@ -105,35 +133,70 @@ class FaePinAnnotation: MKPointAnnotation {
 
 class SelfAnnotationView: MKAnnotationView {
     
-    var selfMarkerIcon: UIButton!
-    var myPositionCircle_1: UIImageView! // Self Position Marker
-    var myPositionCircle_2: UIImageView! // Self Position Marker
-    var myPositionCircle_3: UIImageView! // Self Position Marker
+    var selfMarkerIcon = UIButton()
+    var myPositionCircle_1: UIImageView!
+    var myPositionCircle_2: UIImageView!
+    var myPositionCircle_3: UIImageView!
+    let anchorPoint = CGPoint(x: 22, y: 22)
+    var mapAvatar: Int = 1 {
+        didSet {
+            self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_\(mapAvatar)"), for: .normal)
+        }
+    }
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 44, height: 44)
         clipsToBounds = false
-        loadSelfMarkerSubview()
-        reloadSelfMarker()
         layer.zPosition = 2
+        loadSelfMarkerSubview()
+        getSelfAccountInfo()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func assignImage(_ image: UIImage) {
-        selfMarkerIcon.setImage(image, for: .normal)
+    func removeAllAnimation() {
+        self.layer.removeAllAnimations()
+    }
+    
+    func getSelfAccountInfo() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+            guard status / 100 == 2 else {
+                self.mapAvatar = 1
+                self.reloadSelfMarker()
+                return
+            }
+            let selfUserInfoJSON = JSON(message!)
+            userFirstname = selfUserInfoJSON["first_name"].stringValue
+            userLastname = selfUserInfoJSON["last_name"].stringValue
+            userBirthday = selfUserInfoJSON["birthday"].stringValue
+            userUserGender = selfUserInfoJSON["gender"].stringValue
+            userUserName = selfUserInfoJSON["user_name"].stringValue
+            if userStatus == 5 {
+                return
+            }
+            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue
+            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue
+            self.reloadSelfMarker()
+        })
     }
     
     func loadSelfMarkerSubview() {
         selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         selfMarkerIcon.adjustsImageWhenHighlighted = false
         selfMarkerIcon.layer.zPosition = 5
-        let point = CGPoint(x: 22, y: 22)
-        selfMarkerIcon.center = point
-        self.addSubview(selfMarkerIcon)
+        selfMarkerIcon.center = anchorPoint
+        addSubview(selfMarkerIcon)
     }
     
     func reloadSelfMarker() {
@@ -142,46 +205,45 @@ class SelfAnnotationView: MKAnnotationView {
             myPositionCircle_2.removeFromSuperview()
             myPositionCircle_3.removeFromSuperview()
         }
-        let point = CGPoint(x: 22, y: 22)
         myPositionCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         myPositionCircle_1.layer.zPosition = 0
         myPositionCircle_2.layer.zPosition = 1
         myPositionCircle_3.layer.zPosition = 2
-        myPositionCircle_1.center = point
-        myPositionCircle_2.center = point
-        myPositionCircle_3.center = point
+        myPositionCircle_1.center = anchorPoint
+        myPositionCircle_2.center = anchorPoint
+        myPositionCircle_3.center = anchorPoint
         myPositionCircle_1.isUserInteractionEnabled = false
         myPositionCircle_2.isUserInteractionEnabled = false
         myPositionCircle_3.isUserInteractionEnabled = false
-        self.myPositionCircle_1.image = UIImage(named: "myPosition_outside")
-        self.myPositionCircle_2.image = UIImage(named: "myPosition_outside")
-        self.myPositionCircle_3.image = UIImage(named: "myPosition_outside")
+        myPositionCircle_1.image = UIImage(named: "myPosition_outside")
+        myPositionCircle_2.image = UIImage(named: "myPosition_outside")
+        myPositionCircle_3.image = UIImage(named: "myPosition_outside")
         
-        self.addSubview(myPositionCircle_3)
-        self.addSubview(myPositionCircle_2)
-        self.addSubview(myPositionCircle_1)
+        addSubview(myPositionCircle_3)
+        addSubview(myPositionCircle_2)
+        addSubview(myPositionCircle_1)
         
         selfMarkerAnimation()
     }
     
     func selfMarkerAnimation() {
-        UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
             if self.myPositionCircle_1 != nil {
                 self.myPositionCircle_1.alpha = 0.0
                 self.myPositionCircle_1.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
             }
         }), completion: nil)
         
-        UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
             if self.myPositionCircle_2 != nil {
                 self.myPositionCircle_2.alpha = 0.0
                 self.myPositionCircle_2.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
             }
         }), completion: nil)
         
-        UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn], animations: ({
+        UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
             if self.myPositionCircle_3 != nil {
                 self.myPositionCircle_3.alpha = 0.0
                 self.myPositionCircle_3.frame = CGRect(x: -38, y: -38, width: 120, height: 120)

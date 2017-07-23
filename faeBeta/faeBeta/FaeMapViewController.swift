@@ -17,9 +17,9 @@ let screenHeight: CGFloat = UIScreen.main.bounds.height
 let screenWidthFactor: CGFloat = UIScreen.main.bounds.width / 414
 let screenHeightFactor: CGFloat = UIScreen.main.bounds.height / 736
 
-class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate {
+class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
     
-    let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
+    
     let locManager = CLLocationManager() // location manage
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
@@ -30,10 +30,78 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnCardChat: UIButton! // Map Namecard
     var btnChatOnMap: UIButton!
     var btnCardCloseOptions: UIButton! // Map Namecard
-    var btnDraggingMenu: UIButton! // Filter Menu
     var btnCardProfile: UIButton! // Map Namecard
     var btnCardFav: UIButton! // Map Namecard
     var btnLeftWindow: UIButton!
+    var btnMainMapSearch: UIButton!
+    var btnCardOptions: UIButton! // Map Namecard
+    var btnPinOnMap: UIButton!
+    var btnSelfLocation: UIButton!
+    var btnCardShowSelf: UIButton! // Map Namecard
+    var btnToNorth: UIButton!
+    var btnCardClose: UIButton! // Map Namecard
+    var btnWindBell: UIButton!
+    var boolCanUpdateSocialPin = true
+    var boolCanUpdatePlacePin = true
+    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
+    var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
+    var boolIsFirstLoad = true // location manage
+    var btnEditNameCard: UIButton! // Map Namecard
+    var end: CGFloat = 0 // Pan gesture var
+    var faeMapView: MKMapView!
+    var faeUserPins = [FaePinAnnotation]()
+    var imgCardAvatar: UIImageView! // Map Namecard
+    var imgCardBack: UIImageView! // Map Namecard
+    var imgCardCover: UIImageView! // Map Namecard
+    var imgCardLine: UIImageView! // Map Namecard
+    var uiviewCardPrivacy: FaeGenderView! // Map Namecard Gender & Age
+    var lblNickName: UILabel! // Map Namecard
+    var lblShortIntro: UILabel! // Map Namecard
+    var labelUnreadMessages: UILabel! // Unread Messages Label
+    var lblDistanceDisplay: UILabel!
+    var mapPins = [MapPin]()
+    var markerMask: UIView! // mask to prevent UI action
+    var nameCardMoreOptions: UIImageView! // Map Namecard
+    var percent: Double = 0 // Pan gesture var
+    var placeArt = #imageLiteral(resourceName: "placePinArt")
+    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
+    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
+    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
+    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
+    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
+    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
+    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
+    var placeNames = [Double]()
+    var placePins = [PlacePin]()
+    var placePizza = #imageLiteral(resourceName: "placePinPizza")
+    var placeSport = #imageLiteral(resourceName: "placePinSport")
+    var previousZoom: Float = 13.8
+    var refreshPins = true
+    var refreshPlaces = true
+    var refreshUsers = true
+    var reportNameCard: UIButton! // Map Namecard
+    var shareNameCard: UIButton! // Map Namecard
+    var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
+    var tempMarker: UIImageView! // temp marker, it is a UIImageView
+    var timerLoadRegionPins: Timer! // timer to renew map pins
+    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
+    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
+    var uiviewCardShadow: UIView! // Map Namecard
+    var uiviewDistanceRadius: UIView!
+    var prevBearing: Double = 0
+    var intPinDistance: Int = 65
+    var aroundUsrId: Int = -1
+    
+    var mapClusterManager: CCHMapClusterController!
+    
+    let FILTER_ENABLE = true
+    let PLACE_ENABLE = true
+    let USER_ENABLE = false
+    
+    var uiviewFilterMenu: UIView! // Filter Menu
+    let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
+    var btnDraggingMenu: UIButton! // Filter Menu
     var btnMFilterBeauty: MFilterButton! // Filter Item
     var btnMFilterCafe: MFilterButton! // Filter Item
     var btnMFilterChats: MFilterButton! // Filter Item
@@ -58,25 +126,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var btnMFilterStories: MFilterButton! // Filter Item
     var btnMFilterTypeAll: MFilterButton! // Filter Item
     var btnMFilterUnread: MFilterButton! // Filter Item
-    var btnMainMapSearch: UIButton!
     var btnMapFilter: UIButton! // Filter Button
-    var btnCardOptions: UIButton! // Map Namecard
-    var btnPinOnMap: UIButton!
-    var btnSelfLocation: UIButton!
-    var btnCardShowSelf: UIButton! // Map Namecard
-    var btnToNorth: UIButton!
-    var btnCardClose: UIButton! // Map Namecard
-    var btnWindBell: UIButton!
-    var boolCanUpdateSocialPin = true
-    var boolCanUpdatePlacePin = true
-    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
-    var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-    var boolIsFirstLoad = true // location manage
-    var btnEditNameCard: UIButton! // Map Namecard
-    var end: CGFloat = 0 // Pan gesture var
-    var faeMapView: MKMapView!
-    var faeUserPins = [FaePinAnnotation]()
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
@@ -85,89 +135,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIImage
     var filterPinTypeDic = [String: MFilterButton]() // Filter data processing
     var filterPlaceDic = [String: MFilterButton]() // Filter data processing
     var filterSlider: UISlider! // Filter Slider
-    var imgCardAvatar: UIImageView! // Map Namecard
-    var imgCardBack: UIImageView! // Map Namecard
-    var imgCardCover: UIImageView! // Map Namecard
-    var imgCardLine: UIImageView! // Map Namecard
-    var uiviewCardPrivacy: FaeGenderView! // Map Namecard Gender & Age
-    var lblNickName: UILabel! // Map Namecard
-    var lblShortIntro: UILabel! // Map Namecard
-    var labelUnreadMessages: UILabel! // Unread Messages Label
-    var lblDistanceDisplay: UILabel!
     var lblFilterDist: UILabel! // Filter Slider
     var mapFilterArrow: UIImageView! // Filter Button
-    var mapPins = [MapPin]()
-    var markerMask: UIView! // mask to prevent UI action
-    var nameCardMoreOptions: UIImageView! // Map Namecard
-    var percent: Double = 0 // Pan gesture var
-    var placeArt = #imageLiteral(resourceName: "placePinArt")
-    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
-    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
-    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
-    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
-    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
-    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
-    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
-    var placeNames = [Double]()
-    var placePins = [PlacePin]()
-    var placePizza = #imageLiteral(resourceName: "placePinPizza")
-    var placeSport = #imageLiteral(resourceName: "placePinSport")
-    var polygonInside: UIImageView! // Filter Button
-    var polygonOutside: UIImageView! // Filter Button
-    var previousZoom: Float = 13.8
-    var refreshPins = true
-    var refreshPlaces = true
-    var refreshUsers = true
-    var reportNameCard: UIButton! // Map Namecard
-    var selfMarkerIcon: UIButton! // Self Position Marker
-    var shareNameCard: UIButton! // Map Namecard
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
+    var polygonInside: UIImageView! // Filter Button
+    var polygonOutside: UIImageView! // Filter Button
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
-    var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
-    var tempMarker: UIImageView! // temp marker, it is a UIImageView
-    var timerLoadRegionPins: Timer! // timer to renew map pins
-    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
-    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var uiviewCardShadow: UIView! // Map Namecard
-    var uiviewDistanceRadius: UIView!
-    var uiviewFilterMenu: UIView! // Filter Menu
-    var prevBearing: Double = 0
-    var intPinDistance: Int = 65
-    var aroundUsrId: Int = -1
-    
-    var mapClusterManager: CCHMapClusterController!
-    
-    // MARK: - For Compass Rotation
-    var rotationGesture: UIRotationGestureRecognizer!
-    var panGesture: UIPanGestureRecognizer!
-    var pinchGesture: UIPinchGestureRecognizer!
-    var displayLink: CADisplayLink!
-    var mapChangedFromUserInteraction = false
-    // The moment the user let go of the map.
-    var startRotateOut = TimeInterval(0)
-    
-    // After that, if there is still momentum left, the velocity is > 0.
-    // The velocity of the rotation gesture in radians per second.
-    var remainingVelocityAfterUserInteractionEnded = CGFloat(0)
-    
-    // We need some values from the last frame
-    var prevHeading = CLLocationDirection()
-    var prevRotationInRadian = CGFloat(0)
-    var prevTime = TimeInterval(0)
-    
-    // The momentum gets slower ower time
-    var currentlyRemainingVelocity = CGFloat(0)
-    
-    // As soon as this optional is set the initial mode is determined.
-    // If it's true than the map is in rotation mode,
-    // if false, the map is in 3D position adjust mode.
-    var initialMapGestureModeIsRotation: Bool?
-    
-    var FILTER_ENABLE = false
-    var COMPASS_ROTATION_ENABLE = false
-    
+ 
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

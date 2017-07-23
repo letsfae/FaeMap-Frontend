@@ -10,6 +10,35 @@ import UIKit
 
 extension FaeMapViewController {
     
+    /*
+     // MARK: - For Compass Rotation
+     var rotationGesture: UIRotationGestureRecognizer!
+     var panGesture: UIPanGestureRecognizer!
+     var pinchGesture: UIPinchGestureRecognizer!
+     var displayLink: CADisplayLink!
+     var mapChangedFromUserInteraction = false
+     // The moment the user let go of the map.
+     var startRotateOut = TimeInterval(0)
+     
+     // After that, if there is still momentum left, the velocity is > 0.
+     // The velocity of the rotation gesture in radians per second.
+     var remainingVelocityAfterUserInteractionEnded = CGFloat(0)
+     
+     // We need some values from the last frame
+     var prevHeading = CLLocationDirection()
+     var prevRotationInRadian = CGFloat(0)
+     var prevTime = TimeInterval(0)
+     
+     // The momentum gets slower ower time
+     var currentlyRemainingVelocity = CGFloat(0)
+     
+     // As soon as this optional is set the initial mode is determined.
+     // If it's true than the map is in rotation mode,
+     // if false, the map is in 3D position adjust mode.
+     var initialMapGestureModeIsRotation: Bool?
+     var COMPASS_ROTATION_ENABLE = false
+     */
+    
     func loadGestures() {
         guard COMPASS_ROTATION_ENABLE else { return }
         rotationGesture = UIRotationGestureRecognizer()

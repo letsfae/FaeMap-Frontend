@@ -18,23 +18,22 @@ extension FaeMapViewController {
 
     func updateUnreadChatIndicator(){
         getFromURL("sync", parameter: nil, authentication: headerAuthentication()) { (status, result) in
-            if(status / 100 == 2){
-                if let cacheRecent = result as? NSDictionary {
-                    let totalUnread = (cacheRecent["chat"] as! NSNumber).int32Value + (cacheRecent["chat_room"] as! NSNumber).int32Value
-                    self.labelUnreadMessages.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
-                    
-                    if(totalUnread / 10 >= 1){
-                        self.labelUnreadMessages.frame.size.width = 28 //San ge dian dao 30
-                    }else{
-                        self.labelUnreadMessages.frame.size.width = 22
-                    }
-                    self.btnChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
-                    self.labelUnreadMessages.isHidden = totalUnread == 0
-                    if totalUnread == 0 {
-                        self.btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
-                    }
-                    UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
+            guard status / 100 == 2 else { return }
+            if let cacheRecent = result as? NSDictionary {
+                let totalUnread = (cacheRecent["chat"] as! NSNumber).int32Value + (cacheRecent["chat_room"] as! NSNumber).int32Value
+                self.labelUnreadMessages.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
+                
+                if(totalUnread / 10 >= 1){
+                    self.labelUnreadMessages.frame.size.width = 28 //San ge dian dao 30
+                }else{
+                    self.labelUnreadMessages.frame.size.width = 22
                 }
+                self.btnChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
+                self.labelUnreadMessages.isHidden = totalUnread == 0
+                if totalUnread == 0 {
+                    self.btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
+                }
+                UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
             }
         }
     }

@@ -299,20 +299,20 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnPrevPin = UIButton(frame: CGRect(x: 41, y: 503, w: 0, h: 0))
         btnPrevPin.setImage(UIImage(named: "prevPin"), for: UIControlState())
         btnPrevPin.layer.zPosition = 60
-        btnPrevPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
-        btnPrevPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        btnPrevPin.layer.shadowOpacity = 0.6
-        btnPrevPin.layer.shadowRadius = 3.0
+//        btnPrevPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
+//        btnPrevPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//        btnPrevPin.layer.shadowOpacity = 0.6
+//        btnPrevPin.layer.shadowRadius = 3.0
         btnPrevPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnPrevPin)
         
         btnNextPin = UIButton(frame: CGRect(x: 373, y: 503, w: 0, h: 0))
         btnNextPin.setImage(UIImage(named: "nextPin"), for: UIControlState())
         btnNextPin.layer.zPosition = 60
-        btnNextPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
-        btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        btnNextPin.layer.shadowOpacity = 0.6
-        btnNextPin.layer.shadowRadius = 3.0
+//        btnNextPin.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
+//        btnNextPin.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
+//        btnNextPin.layer.shadowOpacity = 0.6
+//        btnNextPin.layer.shadowRadius = 3.0
         btnNextPin.addTarget(self, action: #selector(self.actionGotoPin(_:)), for: .touchUpInside)
         view.addSubview(btnNextPin)
     }
@@ -323,10 +323,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         uiviewTableSub = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         uiviewTableSub.backgroundColor = UIColor.white
         uiviewMain.addSubview(uiviewTableSub)
-        uiviewTableSub.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
-        uiviewTableSub.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
-        uiviewTableSub.layer.shadowOpacity = 0.3
-        uiviewTableSub.layer.shadowRadius = 10.0
+//        uiviewTableSub.layer.shadowColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0).cgColor
+//        uiviewTableSub.layer.shadowOffset = CGSize(width: 0.0, height: 10.0)
+//        uiviewTableSub.layer.shadowOpacity = 0.3
+//        uiviewTableSub.layer.shadowRadius = 10.0
         
         tblMain = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 255))
         tblMain.delegate = self

@@ -25,7 +25,7 @@ extension FaeMapViewController {
             return
         }
 //        let zoomLv = faeMapView.camera.zoom
-//        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))
+//        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))≥                                          
 //        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat + offset,
 //                                              longitude: LocManage.shared.curtLong, zoom: zoomLv)
 //        faeMapView.animate(to: camera)
@@ -123,10 +123,10 @@ extension FaeMapViewController {
         uiviewCardShadow = UIView(frame: startFrame)
         uiviewCardShadow.backgroundColor = UIColor.white
         uiviewCardShadow.layer.anchorPoint = nameCardAnchor
-        uiviewCardShadow.layer.shadowColor = UIColor.gray.cgColor
-        uiviewCardShadow.layer.shadowOffset = CGSize.zero
-        uiviewCardShadow.layer.shadowOpacity = 1
-        uiviewCardShadow.layer.shadowRadius = 25 * screenHeightFactor
+//        uiviewCardShadow.layer.shadowColor = UIColor.gray.cgColor
+//        uiviewCardShadow.layer.shadowOffset = CGSize.zero
+//        uiviewCardShadow.layer.shadowOpacity = 1
+//        uiviewCardShadow.layer.shadowRadius = 25 * screenHeightFactor
         uiviewCardShadow.layer.zPosition = 901
         uiviewCardShadow.layer.cornerRadius = 18.9 * screenHeightFactor
         self.view.addSubview(uiviewCardShadow)
@@ -151,10 +151,10 @@ extension FaeMapViewController {
         uiviewAvatarShadow.layer.cornerRadius = 37 * screenHeightFactor
         uiviewAvatarShadow.layer.borderColor = UIColor.white.cgColor
         uiviewAvatarShadow.layer.borderWidth = 6 * screenHeightFactor
-        uiviewAvatarShadow.layer.shadowColor = UIColor.gray.cgColor
-        uiviewAvatarShadow.layer.shadowOffset = CGSize.zero
-        uiviewAvatarShadow.layer.shadowOpacity = 0.5
-        uiviewAvatarShadow.layer.shadowRadius = 6 * screenHeightFactor
+//        uiviewAvatarShadow.layer.shadowColor = UIColor.gray.cgColor
+//        uiviewAvatarShadow.layer.shadowOffset = CGSize.zero
+//        uiviewAvatarShadow.layer.shadowOpacity = 0.5
+//        uiviewAvatarShadow.layer.shadowRadius = 6 * screenHeightFactor
         uiviewAvatarShadow.layer.zPosition = 904
         
         self.view.addSubview(uiviewAvatarShadow)

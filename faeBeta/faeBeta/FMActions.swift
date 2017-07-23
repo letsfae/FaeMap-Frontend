@@ -52,7 +52,7 @@ extension FaeMapViewController {
     func actionSelfPosition(_ sender: UIButton) {
         hideNameCard(btnCardClose)
         let camera = faeMapView.camera
-        camera.centerCoordinate = curLoc2D
+        camera.centerCoordinate = LocManage.shared.curtLoc.coordinate
         faeMapView.setCamera(camera, animated: true)
     }
     

@@ -383,6 +383,7 @@ class FMUserInfo: UIViewController {
     }
     func animationBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
     }
     
     func belowEnterChat(_ sender: UIButton!) {
