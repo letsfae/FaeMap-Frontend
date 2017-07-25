@@ -32,7 +32,7 @@ extension FaeMapViewController {
         let camera = faeMapView.camera
         camera.heading = 0
         faeMapView.setCamera(camera, animated: true)
-        btnToNorth.transform = CGAffineTransform.identity
+        btnCompass.transform = CGAffineTransform.identity
     }
     
     // Jump to pin menu view controller

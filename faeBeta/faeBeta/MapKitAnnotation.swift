@@ -11,6 +11,8 @@ import SwiftyJSON
 import CCHMapClusterController
 import MapKit
 
+let mapAvatarWidth = 38
+
 class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
@@ -79,10 +81,8 @@ class FaePinAnnotation: MKPointAnnotation {
         self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
     }
     
-    
-    
     func getRandomTime() -> Double {
-        return Double.random(min: 5, max: 20)
+        return Double.random(min: 15, max: 30)
     }
     
     // change the position of user pin given the five fake coordinates from Fae-API
@@ -108,26 +108,7 @@ class FaePinAnnotation: MKPointAnnotation {
             self.timer = nil
             self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         })
-        /*
-        DispatchQueue.main.asyncAfter(deadline: .now() + getRandomTime()) { [index = self.count] in
-            guard self.isValid else { return }
-            self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
-                guard self.isValid else { return }
-                if self.positions.indices.contains(index) {
-                    self.coordinate = self.positions[index]
-                } else {
-                    self.changePosition()
-                    return
-                }
-                self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
-                self.count += 1
-                self.changePosition()
-            })
-        }
-        */
     }
-    
-    // social pin only
     
 }
 
@@ -146,7 +127,7 @@ class SelfAnnotationView: MKAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
         clipsToBounds = false
         layer.zPosition = 2
         loadSelfMarkerSubview()
@@ -185,14 +166,14 @@ class SelfAnnotationView: MKAnnotationView {
             if userStatus == 5 {
                 return
             }
-            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue
-            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue
+            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
+            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
             self.reloadSelfMarker()
         })
     }
     
     func loadSelfMarkerSubview() {
-        selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
         selfMarkerIcon.adjustsImageWhenHighlighted = false
         selfMarkerIcon.layer.zPosition = 5
         selfMarkerIcon.center = anchorPoint
@@ -258,8 +239,8 @@ class UserPinAnnotationView: MKAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        frame = CGRect(x: 0, y: 0, width: 44, height: 44)
-        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
+        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
         layer.zPosition = 1

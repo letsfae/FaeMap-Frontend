@@ -219,11 +219,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if self.FILTER_ENABLE {
                 self.btnMapFilter.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
-            self.btnToNorth.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
-            self.btnSelfLocation.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
-            self.btnChatOnMap.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
-            self.labelUnreadMessages.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-            self.btnPinOnMap.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnSelfCenter.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnOpenChat.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
+            self.lblUnreadCount.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            self.btnDiscovery.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
         }, completion: nil)
     }
     
@@ -258,5 +258,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         for user in faeUserPins {
             user.isValid = true
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.btnCompass.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
+        })
     }
 }

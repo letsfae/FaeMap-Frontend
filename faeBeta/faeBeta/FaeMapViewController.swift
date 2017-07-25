@@ -26,19 +26,19 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     let yelpManager = YelpManager() // Yelp API
     let yelpQuery = YelpQuery() // Yelp API
-    var uiviewAvatarShadow: UIView! // Map Namecard
+    var imgAvatarShadow: UIImageView! // Map Namecard
     var btnCardChat: UIButton! // Map Namecard
-    var btnChatOnMap: UIButton!
+    var btnOpenChat: UIButton!
     var btnCardCloseOptions: UIButton! // Map Namecard
     var btnCardProfile: UIButton! // Map Namecard
     var btnCardFav: UIButton! // Map Namecard
     var btnLeftWindow: UIButton!
     var btnMainMapSearch: UIButton!
     var btnCardOptions: UIButton! // Map Namecard
-    var btnPinOnMap: UIButton!
-    var btnSelfLocation: UIButton!
+    var btnDiscovery: UIButton!
+    var btnSelfCenter: UIButton!
     var btnCardShowSelf: UIButton! // Map Namecard
-    var btnToNorth: UIButton!
+    var btnCompass: UIButton!
     var btnCardClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
@@ -58,7 +58,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var uiviewCardPrivacy: FaeGenderView! // Map Namecard Gender & Age
     var lblNickName: UILabel! // Map Namecard
     var lblShortIntro: UILabel! // Map Namecard
-    var labelUnreadMessages: UILabel! // Unread Messages Label
+    var lblUnreadCount: UILabel! // Unread Messages Label
     var lblDistanceDisplay: UILabel!
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
@@ -87,7 +87,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
     var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var uiviewCardShadow: UIView! // Map Namecard
     var uiviewDistanceRadius: UIView!
     var prevBearing: Double = 0
     var intPinDistance: Int = 65
@@ -126,7 +125,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var btnMFilterStories: MFilterButton! // Filter Item
     var btnMFilterTypeAll: MFilterButton! // Filter Item
     var btnMFilterUnread: MFilterButton! // Filter Item
-    var btnMapFilter: UIButton! // Filter Button
+    
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
@@ -139,10 +138,12 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var mapFilterArrow: UIImageView! // Filter Button
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
+    var btnMapFilter: UIButton! // Filter Button
     var polygonInside: UIImageView! // Filter Button
-    var polygonOutside: UIImageView! // Filter Button
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
+    
+    var imgSchbarShadow: UIImageView!
  
     // System Functions
     override func viewDidLoad() {
@@ -179,28 +180,27 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         checkDisplayNameExisitency()
         NotificationCenter.default.addObserver(self, selector: #selector(returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
         updateGenderAge()
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("[FaeMapViewController - viewWillDisappear]")
         navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     func checkDisplayNameExisitency() {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
-            if status / 100 == 2 {
-                let rsltJSON = JSON(result!)
-                if let withNickName = rsltJSON["nick_name"].string {
-                    joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
-                } else {
-                    joshprint("[checkDisplayNameExisitency] display name did not setup")
-                    self.loadFirstLoginVC()
-                }
+            guard status / 100 == 2 else { return }
+            let rsltJSON = JSON(result!)
+            if let withNickName = rsltJSON["nick_name"].string {
+                joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
+            } else {
+                joshprint("[checkDisplayNameExisitency] display name did not setup")
+                self.loadFirstLoginVC()
             }
         }
     }
@@ -285,7 +285,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     func reloadSelfPosAnimation() {
         if userStatus != 5 {
-            getSelfAccountInfo()
+            
         } else {
             faeMapView.showsUserLocation = true
         }

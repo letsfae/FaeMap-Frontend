@@ -134,7 +134,7 @@ extension FaeMapViewController {
         mapFilterArrow.center.x = screenWidth / 2
         mapFilterArrow.image = #imageLiteral(resourceName: "mapFilterArrow")
         mapFilterArrow.contentMode = .scaleAspectFit
-        self.view.addSubview(mapFilterArrow)
+        view.addSubview(mapFilterArrow)
         
         UIView.animate(withDuration: 0.75, delay: 0, options: [.repeat, .autoreverse], animations: {
             UIView.setAnimationRepeatCount(5)

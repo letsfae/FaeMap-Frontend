@@ -47,6 +47,7 @@ class FaeGenderView: UIView {
     }
     
     func loadGenderAge(id: Int, _ completion: @escaping (String, String, String) -> Void ) {
+        guard id > 0 else { return }
         let userNameCard = FaeUser()
         userNameCard.getUserCard("\(id)") { (status: Int, message: Any?) in
             DispatchQueue.main.async(execute: {

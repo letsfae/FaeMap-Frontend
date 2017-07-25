@@ -12,7 +12,7 @@ import UIKit
 extension FaeMapViewController {
     
     func loadMapChat() {
-        self.labelUnreadMessages.isHidden = true
+        self.lblUnreadCount.isHidden = true
         Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.updateUnreadChatIndicator), userInfo: nil, repeats: true)
     }
 
@@ -21,17 +21,17 @@ extension FaeMapViewController {
             guard status / 100 == 2 else { return }
             if let cacheRecent = result as? NSDictionary {
                 let totalUnread = (cacheRecent["chat"] as! NSNumber).int32Value + (cacheRecent["chat_room"] as! NSNumber).int32Value
-                self.labelUnreadMessages.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
+                self.lblUnreadCount.text = totalUnread > 99 ? "•••" : "\(totalUnread)"
                 
                 if(totalUnread / 10 >= 1){
-                    self.labelUnreadMessages.frame.size.width = 28 //San ge dian dao 30
+                    self.lblUnreadCount.frame.size.width = 28 //San ge dian dao 30
                 }else{
-                    self.labelUnreadMessages.frame.size.width = 22
+                    self.lblUnreadCount.frame.size.width = 22
                 }
-                self.btnChatOnMap.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
-                self.labelUnreadMessages.isHidden = totalUnread == 0
+                self.btnOpenChat.setImage(UIImage(named: "mainScreenHaveChat"), for: UIControlState())
+                self.lblUnreadCount.isHidden = totalUnread == 0
                 if totalUnread == 0 {
-                    self.btnChatOnMap.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
+                    self.btnOpenChat.setImage(UIImage(named: "mainScreenNoChat"), for: UIControlState())
                 }
                 UIApplication.shared.applicationIconBadgeNumber = Int(totalUnread)
             }

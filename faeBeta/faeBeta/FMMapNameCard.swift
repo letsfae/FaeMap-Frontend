@@ -24,11 +24,7 @@ extension FaeMapViewController {
         } else {
             return
         }
-//        let zoomLv = faeMapView.camera.zoom
-//        let offset: Double = 0.0012 * pow(2, Double(17 - zoomLv))≥                                          
-//        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat + offset,
-//                                              longitude: LocManage.shared.curtLong, zoom: zoomLv)
-//        faeMapView.animate(to: camera)
+        
         animateNameCard()
         
         uiviewCardPrivacy.loadGenderAge(id: user_id) { (nickName, _, shortIntro) in
@@ -38,13 +34,13 @@ extension FaeMapViewController {
     }
     
     func animateNameCard() {
-        let targetFrame = CGRect(x: 73, y: 158, w: 268, h: 293)
+        let targetFrame = CGRect(x: 47, y: 129, w: 320, h: 350)
         self.uiviewCardPrivacy.isHidden = false
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.btnCardClose.alpha = 1
             self.imgCardBack.frame = targetFrame
             self.imgCardCover.frame = CGRect(x: 73, y: 158, w: 268, h: 125)
-            self.uiviewAvatarShadow.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
+            self.imgAvatarShadow.frame = CGRect(x: 163, y: 233, w: 88, h: 88) // 88 88
             self.imgCardAvatar.frame = CGRect(x: 170, y: 240, w: 74, h: 74)
             self.btnCardChat.frame = CGRect(x: 193.5, y: 393, w: 27, h: 27)
             self.lblNickName.frame = CGRect(x: 114, y: 323, w: 186, h: 25)
@@ -55,7 +51,6 @@ extension FaeMapViewController {
             self.btnCardShowSelf.frame = CGRect(x: 116, y: 393, w: 27, h: 27)
             self.btnCardOptions.frame = CGRect(x: 294, y: 292, w: 32, h: 18)
             self.btnCardProfile.frame = CGRect(x: 271, y: 393, w: 27, h: 27)
-            self.uiviewCardShadow.frame = CGRect(x: 73, y: 158, w: 268, h: 275)
             self.uiviewCardPrivacy.frame = CGRect(x: 88, y: 292, w: 46, h: 18)
         }, completion: nil)
         
@@ -78,7 +73,7 @@ extension FaeMapViewController {
                 self.btnCardClose.alpha = 0
                 self.imgCardBack.frame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0)
                 self.imgCardCover.frame = self.startFrame
-                self.uiviewAvatarShadow.frame = self.startFrame
+                self.imgAvatarShadow.frame = self.startFrame
                 self.imgCardAvatar.frame = self.startFrame
                 self.btnCardChat.frame = self.startFrame
                 self.lblNickName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
@@ -89,7 +84,6 @@ extension FaeMapViewController {
                 self.btnCardOptions.frame = self.startFrame
                 self.btnCardProfile.frame = self.startFrame
                 self.uiviewCardPrivacy.frame = self.startFrame
-                self.uiviewCardShadow.frame = self.startFrame
             }
             if sender.tag == 1 || sender == self.btnCardCloseOptions {
                 self.btnCardOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
@@ -120,20 +114,9 @@ extension FaeMapViewController {
         btnCardClose.alpha = 0
         btnCardClose.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
         
-        uiviewCardShadow = UIView(frame: startFrame)
-        uiviewCardShadow.backgroundColor = UIColor.white
-        uiviewCardShadow.layer.anchorPoint = nameCardAnchor
-//        uiviewCardShadow.layer.shadowColor = UIColor.gray.cgColor
-//        uiviewCardShadow.layer.shadowOffset = CGSize.zero
-//        uiviewCardShadow.layer.shadowOpacity = 1
-//        uiviewCardShadow.layer.shadowRadius = 25 * screenHeightFactor
-        uiviewCardShadow.layer.zPosition = 901
-        uiviewCardShadow.layer.cornerRadius = 18.9 * screenHeightFactor
-        self.view.addSubview(uiviewCardShadow)
-        
         imgCardBack = UIImageView(frame: startFrame)
         imgCardBack.layer.anchorPoint = nameCardAnchor
-        imgCardBack.image = #imageLiteral(resourceName: "NameCard")
+        imgCardBack.image = #imageLiteral(resourceName: "namecardsub_shadow")
         imgCardBack.contentMode = .scaleAspectFit
         imgCardBack.clipsToBounds = true
         imgCardBack.layer.zPosition = 902
@@ -145,19 +128,11 @@ extension FaeMapViewController {
         imgCardCover.layer.zPosition = 903
         self.view.addSubview(imgCardCover)
         
-        uiviewAvatarShadow = UIView(frame: startFrame)
-        uiviewAvatarShadow.layer.anchorPoint = nameCardAnchor
-        uiviewAvatarShadow.backgroundColor = UIColor.white
-        uiviewAvatarShadow.layer.cornerRadius = 37 * screenHeightFactor
-        uiviewAvatarShadow.layer.borderColor = UIColor.white.cgColor
-        uiviewAvatarShadow.layer.borderWidth = 6 * screenHeightFactor
-//        uiviewAvatarShadow.layer.shadowColor = UIColor.gray.cgColor
-//        uiviewAvatarShadow.layer.shadowOffset = CGSize.zero
-//        uiviewAvatarShadow.layer.shadowOpacity = 0.5
-//        uiviewAvatarShadow.layer.shadowRadius = 6 * screenHeightFactor
-        uiviewAvatarShadow.layer.zPosition = 904
-        
-        self.view.addSubview(uiviewAvatarShadow)
+        imgAvatarShadow = UIImageView(frame: startFrame)
+        imgAvatarShadow.image = #imageLiteral(resourceName: "avatar_rim_shadow")
+        imgAvatarShadow.layer.anchorPoint = nameCardAnchor
+        imgAvatarShadow.layer.zPosition = 904
+        self.view.addSubview(imgAvatarShadow)
         
         imgCardAvatar = UIImageView(frame: startFrame)
         imgCardAvatar.layer.anchorPoint = nameCardAnchor
