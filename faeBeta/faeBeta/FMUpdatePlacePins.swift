@@ -214,11 +214,7 @@ extension FaeMapViewController {
     
     fileprivate func allTypePlacesPin() -> Bool {
         guard FILTER_ENABLE else { return true }
-        if btnMFilterPlacesAll.tag == 1 || btnMFilterShowAll.tag == 1 {
-            return true
-        } else {
-            return false
-        }
+        return true
     }
     
     func placesPinIconImage(categoryList: [String]) -> UIImage {

@@ -66,24 +66,24 @@ extension FaeMapViewController {
         loadPinsByZoomLevel.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadCurrentRegionPins] status/100 != 2")
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                // Sent noti to stop filter icon spinning, 2 seconds
                 completion(self.mapPins)
                 return
             }
             let mapInfoJSON = JSON(message!)
             guard let mapPinJsonArray = mapInfoJSON.array else {
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                // Sent noti to stop filter icon spinning, 2 seconds
                 print("[loadCurrentRegionPins] fail to parse pin comments")
                 completion(self.mapPins)
                 return
             }
             if mapPinJsonArray.count <= 0 {
-                Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+                // Sent noti to stop filter icon spinning, 2 seconds
                 completion(self.mapPins)
                 return
             }
             self.processMapPins(results: mapPinJsonArray)
-            Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(self.stopMapFilterSpin), userInfo: nil, repeats: false)
+            // Sent noti to stop filter icon spinning, 2 seconds
             completion(self.mapPins)
         }
     }

@@ -12,14 +12,9 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-let screenWidth: CGFloat = UIScreen.main.bounds.width
-let screenHeight: CGFloat = UIScreen.main.bounds.height
-let screenWidthFactor: CGFloat = UIScreen.main.bounds.width / 414
-let screenHeightFactor: CGFloat = UIScreen.main.bounds.height / 736
-
 class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
     
-    
+    var lblSearchContent: UILabel!
     let locManager = CLLocationManager() // location manage
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
@@ -48,7 +43,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
     var boolIsFirstLoad = true // location manage
     var btnEditNameCard: UIButton! // Map Namecard
-    var end: CGFloat = 0 // Pan gesture var
+    
     var faeMapView: MKMapView!
     var faeUserPins = [FaePinAnnotation]()
     var imgCardAvatar: UIImageView! // Map Namecard
@@ -98,51 +93,25 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let PLACE_ENABLE = true
     let USER_ENABLE = false
     
-    var uiviewFilterMenu: UIView! // Filter Menu
     let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
-    var btnDraggingMenu: UIButton! // Filter Menu
-    var btnMFilterBeauty: MFilterButton! // Filter Item
-    var btnMFilterCafe: MFilterButton! // Filter Item
-    var btnMFilterChats: MFilterButton! // Filter Item
-    var btnMFilterCinema: MFilterButton! // Filter Item
-    var btnMFilterComments: MFilterButton! // Filter Item
-    var btnMFilterDessert: MFilterButton! // Filter Item
-    var btnMFilterDistance: MFilterButton! // Filter Item
-    var btnMFilterGallery: MFilterButton! // Filter Item
-    var btnMFilterHot: MFilterButton! // Filter Item
-    var btnMFilterMyPins: MFilterButton! // Filter Item
-    var btnMFilterNew: MFilterButton! // Filter Item
-    var btnMFilterPeople: MFilterButton! // Filter Item
-    var btnMFilterPlacesAll: MFilterButton! // Filter Item
-    var btnMFilterRead: MFilterButton! // Filter Item
-    var btnMFilterRestr: MFilterButton! // Filter Item
-    var btnMFilterSavedLoc: MFilterButton! // Filter Item
-    var btnMFilterSavedPins: MFilterButton! // Filter Item
-    var btnMFilterSavedPlaces: MFilterButton! // Filter Item
-    var btnMFilterShowAll: MFilterButton! // Filter Item
-    var btnMFilterSports: MFilterButton! // Filter Item
-    var btnMFilterStatusAll: MFilterButton! // Filter Item
-    var btnMFilterStories: MFilterButton! // Filter Item
-    var btnMFilterTypeAll: MFilterButton! // Filter Item
-    var btnMFilterUnread: MFilterButton! // Filter Item
     
     var filterCircle_1: UIImageView! // Filter btn inside circles
     var filterCircle_2: UIImageView! // Filter btn inside circles
     var filterCircle_3: UIImageView! // Filter btn inside circles
     var filterCircle_4: UIImageView! // Filter btn inside circles
-    var filterPinStatusDic = [String: MFilterButton]() // Filter data processing
-    var filterPinTypeDic = [String: MFilterButton]() // Filter data processing
-    var filterPlaceDic = [String: MFilterButton]() // Filter data processing
+    
     var filterSlider: UISlider! // Filter Slider
     var lblFilterDist: UILabel! // Filter Slider
+    
     var mapFilterArrow: UIImageView! // Filter Button
-    var sizeFrom: CGFloat = 0 // Pan gesture var
-    var sizeTo: CGFloat = 0 // Pan gesture var
     var btnMapFilter: UIButton! // Filter Button
     var polygonInside: UIImageView! // Filter Button
+    
+    var sizeFrom: CGFloat = 0 // Pan gesture var
+    var sizeTo: CGFloat = 0 // Pan gesture var
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
-    
+    var end: CGFloat = 0 // Pan gesture var
     var imgSchbarShadow: UIImageView!
  
     // System Functions
@@ -159,8 +128,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         loadMFilterSlider()
         loadMapFilter()
         loadButton()
-        filterAndYelpSetup()
-//        loadGestures()
+        yelpQuery.setCatagoryToAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -175,8 +143,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         renewSelfLocation()
-        animateMapFilterArrow()
-        filterCircleAnimation()
+        // send noti here to start filter icon spinning
         checkDisplayNameExisitency()
         NotificationCenter.default.addObserver(self, selector: #selector(returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
         updateGenderAge()
@@ -234,13 +201,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     fileprivate func openedPinListSetup() {
         let emptyArrayList = [String]()
         storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-    }
-    
-    fileprivate func filterAndYelpSetup() {
-        if FILTER_ENABLE {
-            checkFilterShowAll(btnMFilterShowAll)
-        }
-        yelpQuery.setCatagoryToAll()
     }
     
     func timerSetup() {
