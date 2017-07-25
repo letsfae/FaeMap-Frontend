@@ -16,16 +16,47 @@ extension FaeMapViewController {
         btnMapFilter.center.x = screenWidth / 2
         btnMapFilter.center.y = screenHeight - 25
         btnMapFilter.setImage(#imageLiteral(resourceName: "mapFilterHexagon"), for: .normal)
-        btnMapFilter.addTarget(self, action: #selector(self.animateMapFilterPolygon(_:)), for: .touchUpInside)
+    
         btnMapFilter.adjustsImageWhenDisabled = false
         btnMapFilter.adjustsImageWhenHighlighted = false
         btnMapFilter.clipsToBounds = true
         btnMapFilter.layer.zPosition = 601
         self.view.addSubview(btnMapFilter)
-        loadFilterMenu()
-        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        self.btnMapFilter.addGestureRecognizer(draggingGesture)
+//        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
+//        self.btnMapFilter.addGestureRecognizer(draggingGesture)
     }
+}
+    
+    /*
+    var filterPinStatusDic = [String: MFilterButton]() // Filter data processing
+    var filterPinTypeDic = [String: MFilterButton]() // Filter data processing
+    var filterPlaceDic = [String: MFilterButton]() // Filter data processing
+    var uiviewFilterMenu: UIView! // Filter Menu
+    var btnDraggingMenu: UIButton! // Filter Menu
+    var btnMFilterBeauty: MFilterButton! // Filter Item
+    var btnMFilterCafe: MFilterButton! // Filter Item
+    var btnMFilterChats: MFilterButton! // Filter Item
+    var btnMFilterCinema: MFilterButton! // Filter Item
+    var btnMFilterComments: MFilterButton! // Filter Item
+    var btnMFilterDessert: MFilterButton! // Filter Item
+    var btnMFilterDistance: MFilterButton! // Filter Item
+    var btnMFilterGallery: MFilterButton! // Filter Item
+    var btnMFilterHot: MFilterButton! // Filter Item
+    var btnMFilterMyPins: MFilterButton! // Filter Item
+    var btnMFilterNew: MFilterButton! // Filter Item
+    var btnMFilterPeople: MFilterButton! // Filter Item
+    var btnMFilterPlacesAll: MFilterButton! // Filter Item
+    var btnMFilterRead: MFilterButton! // Filter Item
+    var btnMFilterRestr: MFilterButton! // Filter Item
+    var btnMFilterSavedLoc: MFilterButton! // Filter Item
+    var btnMFilterSavedPins: MFilterButton! // Filter Item
+    var btnMFilterSavedPlaces: MFilterButton! // Filter Item
+    var btnMFilterShowAll: MFilterButton! // Filter Item
+    var btnMFilterSports: MFilterButton! // Filter Item
+    var btnMFilterStatusAll: MFilterButton! // Filter Item
+    var btnMFilterStories: MFilterButton! // Filter Item
+    var btnMFilterTypeAll: MFilterButton! // Filter Item
+    var btnMFilterUnread: MFilterButton! // Filter Item
     
     fileprivate func loadFilterMenu() {
         uiviewFilterMenu = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 700))
@@ -319,3 +350,4 @@ class MFilterButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 }
+*/

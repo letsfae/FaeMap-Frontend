@@ -20,7 +20,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         faeMapView.setCamera(camera, animated: true)
         updateTimerForUserPin()
         timerSetup()
-        filterCircleAnimation()
+        // send noti here to start filter spinning
         reloadSelfPosAnimation()
     }
     
@@ -29,8 +29,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         //        updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
-        animateMapFilterArrow()
-        filterCircleAnimation()
+        // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
         self.reloadMainScreenButtons()
         deselectAllAnnotations()
@@ -109,15 +108,13 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         animatePinWhenItIsCreated(pinID: pinID, type: type)
         timerSetup()
         renewSelfLocation()
-        animateMapFilterArrow()
-        filterCircleAnimation()
+        // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
     }
     func whenDismissPinMenu() {
         timerSetup()
         renewSelfLocation()
-        animateMapFilterArrow()
-        filterCircleAnimation()
+        // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
     }
     

@@ -37,6 +37,18 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         setupNavigationBar()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+    
     // MARK: - Setup
     fileprivate func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: NSNotification.Name(rawValue: "resetPasswordSucceed"), object: nil)
