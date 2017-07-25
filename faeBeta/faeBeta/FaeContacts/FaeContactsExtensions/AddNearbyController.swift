@@ -126,7 +126,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         imgScan3.image = UIImage(named: "imgScan")
         
         imgAvatar = FaeAvatarView(frame: CGRect(x: 167*screenWidthFactor, y: 328, width: 80*screenWidthFactor, height: 80*screenHeightFactor))
-        imgAvatar.layer.cornerRadius = 41 * screenWidthFactor
+        imgAvatar.layer.cornerRadius = 40 * screenWidthFactor
         imgAvatar.contentMode = .scaleAspectFill
         view.addSubview(imgAvatar)
         imgAvatar.userID = user_id

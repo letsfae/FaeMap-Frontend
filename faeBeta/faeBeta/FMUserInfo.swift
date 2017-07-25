@@ -13,6 +13,7 @@ class FMUserInfo: UIViewController {
     
     var userId: Int = -1
     var imgHeadBgd: UIImageView!
+    var uiviewAvatarShadow: UIView!
     var imgAvatar: FaeAvatarView!
     var btnMoreOptions: UIButton!
     var lblNickName: UILabel!
@@ -98,21 +99,26 @@ class FMUserInfo: UIViewController {
         imgHeadBgd.image = #imageLiteral(resourceName: "imgBackground")
         view.addSubview(imgHeadBgd)
         
-        imgAvatar = FaeAvatarView(frame: CGRectWithFactor(x: 0, y: 136, width: 95, height: 95))
-        imgAvatar.center.x = screenWidth / 2
-        imgAvatar.layer.cornerRadius = 41
-        imgAvatar.layer.shadowColor = UIColor.faeAppShadowGrayColor().cgColor
-        imgAvatar.layer.shadowOpacity = 1
-        imgAvatar.layer.shadowRadius = 10
-        imgAvatar.layer.shadowOffset = CGSize(width: 0, height: 0)
-        imgAvatar.layer.masksToBounds = false
+        uiviewAvatarShadow = UIView(frame: CGRectWithFactor(x: 0, y: 136, width: 98, height: 98))
+        uiviewAvatarShadow.center.x = screenWidth / 2
+        uiviewAvatarShadow.layer.cornerRadius = 43
+        uiviewAvatarShadow.layer.shadowColor = UIColor.faeAppInfoLabelGrayColor().cgColor
+        uiviewAvatarShadow.layer.shadowOpacity = 1
+        uiviewAvatarShadow.layer.shadowRadius = 8
+        uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
+        
+        imgAvatar = FaeAvatarView(frame: CGRectWithFactor(x: 0, y: 0, width: 98, height: 98))
+        imgAvatar.layer.cornerRadius = 43
+        imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
+        imgAvatar.layer.borderWidth = 6
+        imgAvatar.layer.borderColor = UIColor.white.cgColor
+        
+        view.addSubview(uiviewAvatarShadow)
+        uiviewAvatarShadow.addSubview(imgAvatar)
         
         imgAvatar.userID = self.userId
         imgAvatar.loadAvatar(id: self.userId)
-        imgAvatar.layer.borderWidth = 6
-        imgAvatar.layer.borderColor = UIColor.white.cgColor
-        view.addSubview(imgAvatar)
         
         btnMoreOptions = UIButton()
         btnMoreOptions.setImage(#imageLiteral(resourceName: "pinDetailMore"), for: .normal)
@@ -171,7 +177,6 @@ class FMUserInfo: UIViewController {
     }
     
     func switchBtmSecondBtn() {
-        //        removeSwitchBtmSecondBtn()
         btnBelowSecond = UIButton()
         view.addSubview(btnBelowSecond)
         addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
@@ -203,7 +208,7 @@ class FMUserInfo: UIViewController {
         removeView(viewArray: [uiviewTblCtrlBtnSub, uiviewGrayTopLine, uiviewGrayMidLine, uiviewRedLine, lblGeneral, btnGeneral, lblActivities, btnActivities, lblAlbums, btnAlbums, lblContent, uiviewTblCtrlBtnSub, uiviewGrayBtmLine])
     }
     func loadSlideBtm() {
-        removeSlideBtm()
+//        removeSlideBtm()
         uiviewTblCtrlBtnSub = UIView(frame: CGRectWithFactor(x: 0, y: 320, width: screenWidth / screenWidthFactor, height: 416))
         uiviewTblCtrlBtnSub.backgroundColor = UIColor.white
         view.addSubview(uiviewTblCtrlBtnSub)

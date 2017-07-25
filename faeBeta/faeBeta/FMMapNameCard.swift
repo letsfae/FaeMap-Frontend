@@ -59,7 +59,7 @@ extension FaeMapViewController {
         imgCardAvatar.addGestureRecognizer(tapGesture)
     }
     
-    func openFaeUsrInfo(_ sender: UITapGestureRecognizer) {
+    func openFaeUsrInfo(_ sender: Any?) {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = self.aroundUsrId
         hideNameCard(btnCardClose)
@@ -199,7 +199,8 @@ extension FaeMapViewController {
         
         btnCardProfile = UIButton(frame: startFrame)
         btnCardProfile.layer.anchorPoint = nameCardAnchor
-        btnCardProfile.setImage(UIImage(named: "Emoji"), for: .normal)
+        btnCardProfile.setImage(#imageLiteral(resourceName: "Emoji"), for: .normal)
+        btnCardProfile.addTarget(self, action: #selector(self.openFaeUsrInfo(_:)), for: .touchUpInside)
         btnCardProfile.layer.zPosition = 910
         self.view.addSubview(btnCardProfile)
         
