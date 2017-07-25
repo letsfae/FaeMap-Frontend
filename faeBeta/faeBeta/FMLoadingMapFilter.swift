@@ -59,17 +59,21 @@ extension FaeMapViewController {
     var btnMFilterUnread: MFilterButton! // Filter Item
     
     fileprivate func loadFilterMenu() {
+//        let viewFilterMenu = MapFilterMenu(frame: CGRect(x: 0, y: screenHeight - 470, width: screenWidth, height: 470))
+//        self.view.addSubview(viewFilterMenu)
+//        viewFilterMenu.layer.zPosition = 700
+        
         uiviewFilterMenu = UIView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 700))
         uiviewFilterMenu.backgroundColor = UIColor.white
         uiviewFilterMenu.layer.zPosition = 600
         self.view.addSubview(uiviewFilterMenu)
-        
+
         let imgMenuArrow = UIImageView(frame: CGRect(x: 0, y: 11 * screenHeightFactor, width: 16 * screenHeightFactor, height: 8 * screenHeightFactor))
         imgMenuArrow.center.x = screenWidth / 2
         imgMenuArrow.image = #imageLiteral(resourceName: "mapFilterMenuArrow")
         imgMenuArrow.contentMode = .scaleAspectFit
         uiviewFilterMenu.addSubview(imgMenuArrow)
-        
+
         let lblMenuTitle = UILabel(frame: CGRect(x: 0, y: 29 * screenHeightFactor, width: 250, height: 27 * screenHeightFactor))
         lblMenuTitle.center.x = screenWidth / 2
         lblMenuTitle.text = "Map Filters"
@@ -77,7 +81,7 @@ extension FaeMapViewController {
         lblMenuTitle.textAlignment = .center
         lblMenuTitle.textColor = UIColor.faeAppInputTextGrayColor()
         uiviewFilterMenu.addSubview(lblMenuTitle)
-        
+
         let btnMenuDragging = UIButton(frame: CGRect(x: -1, y: 0, width: screenWidth+2, height: 66 * screenHeightFactor))
         btnMenuDragging.backgroundColor = UIColor.clear
         btnMenuDragging.layer.borderColor = UIColor(red: 200/255, green: 199/255, blue: 204/255, alpha: 1).cgColor
@@ -91,6 +95,7 @@ extension FaeMapViewController {
     }
     
     // Item collection titles
+    
     fileprivate func loadFilterItemTitles() {
         let lblGeneral = MFilterLabel(frame: CGRect(x: 25, y: 86, width: 89, height: 22))
         lblGeneral.text = "General"
