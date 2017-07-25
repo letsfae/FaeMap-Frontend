@@ -63,7 +63,7 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
 //    }
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
         mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: 0, width: screenWidth, height: 271), camera: camera)
         mapView.isMyLocationEnabled = true
         mapView.delegate = self
@@ -102,10 +102,10 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
 //        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
 //            currentLocation = locManager.location
 //        }
-        if LocManage.shared.curtLoc != nil {
+        if LocManager.shared.curtLoc != nil {
 //            currentLatitude = currentLocation.coordinate.latitude
 //            currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong, zoom: 17)
+            let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
             mapView.animate(to: camera)
         }
     }

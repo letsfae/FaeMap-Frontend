@@ -187,8 +187,8 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func getMBSocialInfo(time: DispatchTime, completion: ((Double) -> ())?) {
         let mbChatList = FaeMap()
-        mbChatList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
-        mbChatList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+        mbChatList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        mbChatList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbChatList.whereKey("radius", value: "9999999")
         mbChatList.whereKey("type", value: "chat_room")
         mbChatList.whereKey("in_duration", value: "false")

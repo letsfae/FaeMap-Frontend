@@ -69,14 +69,14 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbPeopleCell", for: indexPath) as! MBPeopleCell
             
             let people = mbPeople[indexPath.row]
-            cell.setValueForCell(people: people, curtLoc: LocManage.shared.curtLoc)
+            cell.setValueForCell(people: people, curtLoc: LocManager.shared.curtLoc)
             
             return cell
         } else if tableMode == .places {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbPlacesCell", for: indexPath) as! MBPlacesCell
             
             let place = mbPlaces[indexPath.row]
-            cell.setValueForCell(place: place, curtLoc: LocManage.shared.curtLoc)
+            cell.setValueForCell(place: place, curtLoc: LocManager.shared.curtLoc)
             
             return cell
         } else if tableMode == .talk {

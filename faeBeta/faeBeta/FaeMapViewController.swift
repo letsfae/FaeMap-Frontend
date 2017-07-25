@@ -295,7 +295,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
 //                self.curLoc = manager.location
 //                self.curLat = self.curLoc.coordinate.latitude
 //                self.curLon = self.curLoc.coordinate.longitude
-                self.curLoc2D = CLLocationCoordinate2DMake(LocManage.shared.curtLat, LocManage.shared.curtLong)
+                self.curLoc2D = CLLocationCoordinate2DMake(LocManager.shared.curtLat, LocManager.shared.curtLong)
                 let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
                 DispatchQueue.main.async(execute: {
                     self.faeMapView.setRegion(coordinateRegion, animated: false)

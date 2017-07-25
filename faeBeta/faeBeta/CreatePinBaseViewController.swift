@@ -474,8 +474,8 @@ class CreatePinBaseViewController: UIViewController, UITextFieldDelegate, Create
     }
     
     func randomLocation() -> CLLocationCoordinate2D {
-        let lat = LocManage.shared.curtLat
-        let lon = LocManage.shared.curtLong
+        let lat = LocManager.shared.curtLat
+        let lon = LocManager.shared.curtLong
         let random_lat = Double.random(min: -0.01, max: 0.01)
         let random_lon = Double.random(min: -0.01, max: 0.01)
         return CLLocationCoordinate2DMake(lat+random_lat, lon+random_lon)

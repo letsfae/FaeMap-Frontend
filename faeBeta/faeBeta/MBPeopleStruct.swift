@@ -36,7 +36,7 @@ struct MBPeopleStruct {
         position = CLLocation(latitude: json["geolocation"][0]["latitude"].doubleValue,
                               longitude: json["geolocation"][0]["longitude"].doubleValue)
 
-        let curtPos = CLLocation(latitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong)
+        let curtPos = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         
         dis = curtPos.distance(from: position) / 1000
         if dis < 0.1 {

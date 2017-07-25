@@ -84,7 +84,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         
         // update user current location
-        LocManage.shared.updateCurtLoc()
+        LocManager.shared.updateCurtLoc()
         
         return true
     }

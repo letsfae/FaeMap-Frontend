@@ -22,7 +22,7 @@ extension FaeMapViewController {
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
-        mapClusterManager.cellSize = 120
+        mapClusterManager.cellSize = 100
         mapClusterManager.marginFactor = 0.1
         mapClusterManager.delegate = self
 
