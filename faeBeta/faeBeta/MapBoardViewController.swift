@@ -158,10 +158,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        // 如果写在这里，每次回到MapBoard主页时CPU消耗太大。目前获取的comments/stories半径很大
-        //        self.renewSelfLocation()
-        //        self.getMBSocialInfo(socialType: "comment")
-        //        self.getMBSocialInfo(socialType: "media")
         print("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -270,7 +266,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnTalk.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
         // imgTick.frame.origin.y = 20, 70, 120, 168
-        imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 120, width: 16, height: 16))
+        imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
         uiviewDropDownMenu.addSubview(imgTick)
         
