@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13156.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13137.5"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AvenirNext.ttc">
+            <string>AvenirNext-Bold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -23,24 +30,30 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenFullSize" translatesAutoresizingMaskIntoConstraints="NO" id="wPo-fK-oAk">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="wPo-fK-oAk" secondAttribute="height" multiplier="9:16" id="pug-qe-IY9"/>
+                                </constraints>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UZk-SA-SyN">
-                                <rect key="frame" x="116" y="694" width="182" height="28"/>
-                                <string key="text">© 2017 Fae Interactive ::: Faevorite, Inc. 
-All Rights Reserved.</string>
-                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="10"/>
-                                <color key="textColor" red="0.45098039220000002" green="0.45098039220000002" blue="0.45098039220000002" alpha="1" colorSpace="calibratedRGB"/>
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FaeHeart" translatesAutoresizingMaskIntoConstraints="NO" id="YLw-Ay-dtO">
+                                <rect key="frame" x="191" y="637" width="32" height="25"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By Faevorite" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UZk-SA-SyN">
+                                <rect key="frame" x="152.66666666666669" y="665" width="109.00000000000006" height="25"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="18"/>
+                                <color key="textColor" red="0.83912390470504761" green="0.83926850557327271" blue="0.83911478519439697" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="UZk-SA-SyN" firstAttribute="top" secondItem="YLw-Ay-dtO" secondAttribute="bottom" constant="3" id="2LW-rp-W2r"/>
                             <constraint firstItem="wPo-fK-oAk" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailingMargin" constant="20" id="7Hg-Y4-wzT"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="wPo-fK-oAk" secondAttribute="bottom" id="D7i-Sq-adP"/>
+                            <constraint firstItem="UZk-SA-SyN" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottomMargin" priority="750" constant="-46" id="D7i-Sq-adP"/>
                             <constraint firstItem="UZk-SA-SyN" firstAttribute="centerX" secondItem="wPo-fK-oAk" secondAttribute="centerX" id="Goy-ua-jyH"/>
                             <constraint firstItem="wPo-fK-oAk" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="Kdx-LH-PO9"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="UZk-SA-SyN" secondAttribute="bottom" constant="14" id="ep8-z7-onZ"/>
+                            <constraint firstItem="UZk-SA-SyN" firstAttribute="top" secondItem="YLw-Ay-dtO" secondAttribute="bottom" constant="3" id="WNU-rh-mGI"/>
                             <constraint firstItem="wPo-fK-oAk" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-20" id="epk-6s-8v5"/>
+                            <constraint firstItem="YLw-Ay-dtO" firstAttribute="centerX" secondItem="wPo-fK-oAk" secondAttribute="centerX" id="uVe-mG-tcg"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -50,6 +63,7 @@ All Rights Reserved.</string>
         </scene>
     </scenes>
     <resources>
+        <image name="FaeHeart" width="32" height="25"/>
         <image name="launchScreenFullSize" width="414" height="736"/>
     </resources>
 </document>

@@ -16,6 +16,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var ageLBVal: Int = 16
     var ageUBVal: Int = 21
     var boolIsLoaded: Bool = false
+    var boolLoadedTalkPage = false
     var boolNoMatch: Bool = false
     var boolUsrVisibleIsOn: Bool = true
     var btnChangeAgeLB: UIButton!
@@ -35,7 +36,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var btnTalkFeed: UIButton!
     var btnTalkMypost: UIButton!
     var btnTalkTopic: UIButton!
-    var curtTitle: String = "Social"
+    var curtTitle: String = "Places"
     var disVal: String = "23.0"
     var imgBubbleHint: UIImageView!
     var imgIconBeforeAllCom: UIImageView!
@@ -44,7 +45,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var lblAllCom: UILabel!
     var lblBubbleHint: UILabel!
     var lblDisVal: UILabel!
-    var loadedTalkPage = false
 //    var mbComments = [MBSocialStruct]()
 //    var mbStories = [MBSocialStruct]()
     var mbPeople = [MBPeopleStruct]()
@@ -121,7 +121,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         case comment = 1
     }
     
-    var tableMode: MapBoardTableMode = .social
+    var tableMode: MapBoardTableMode = .places
     var talkTableMode: TalkTableMode = .feed
     var talkPostTableMode: TalkPostTableMode = .talk
     
@@ -137,18 +137,15 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadTalkTabView()
         uiviewBubbleHint.isHidden = true
         uiviewTalkTab.isHidden = true
-        
-//        self.updateCurtLoc()
-        // 这两个方法中已经进行了renewSelfLocation的操作
-        //        self.getMBSocialInfo(socialType: "comment")
-        //        self.getMBSocialInfo(socialType: "media")
-//        getMBPlaceInfo()
+
+        getMBPlaceInfo()
         
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
         uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
+        boolLoadedTalkPage = true
         userInvisible(isOn: userStatus == 5)
     }
     
@@ -380,7 +377,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             uiviewTalkTab.isHidden = false
             switchTalkTabPage()
         } else {
-            if loadedTalkPage {
+            if boolLoadedTalkPage {
                 uiviewNavBar.rightBtn.isHidden = true
                 uiviewTalkTab.isHidden = true
                 uiviewTalkPostHead.isHidden = true
