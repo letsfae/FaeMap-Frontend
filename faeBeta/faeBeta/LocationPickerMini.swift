@@ -19,13 +19,6 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
     
     weak var locationDelegate: LocationSendDelegate!
     
-    // MARK: -- Location
-    var currentLatitude: CLLocationDegrees = 34.0205378
-    var currentLongitude: CLLocationDegrees = -118.2854081
-    var currentLocation: CLLocation!
-    let locManager = CLLocationManager()
-    var willAppearFirstLoad = false
-    
     // MARK: -- Map main screen Objects
     var mapView: GMSMapView!
     var buttonSearch: UIButton!
@@ -40,7 +33,6 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
         // super.init(frame : CGRect(x: 0, y: screenHeight - 271 - 64, width: screenWidth, height: 271))
         super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
         loadMapView()
-//        prepareLocationManager()
         loadButton()
         loadPin()
     }
@@ -48,19 +40,6 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-//    func prepareLocationManager() {
-//        locManager.requestAlwaysAuthorization()
-//        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.notDetermined {
-//            print("Not Authorized")
-//            locManager.requestAlwaysAuthorization()
-//        } else if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied {
-//            jumpToLocationEnable()
-//        } else if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
-//            currentLocation = locManager.location
-//        }
-//        willAppearFirstLoad = true
-//    }
     
     func loadMapView() {
         let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
@@ -93,12 +72,8 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
         addSubview(buttonSend)
     }
     
-//    func jumpToLocationEnable() {
-//        let vc = EnableLocationViewController()
-//        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
-//    }
-    
     func actionSelfPosition(_ sender: UIButton!) {
+<<<<<<< HEAD
 //        if CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways {
 //            currentLocation = locManager.location
 //        }
@@ -106,6 +81,10 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
 //            currentLatitude = currentLocation.coordinate.latitude
 //            currentLongitude = currentLocation.coordinate.longitude
             let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
+=======
+        if LocManage.shared.curtLoc != nil {
+            let camera = GMSCameraPosition.camera(withLatitude: LocManage.shared.curtLat, longitude: LocManage.shared.curtLong, zoom: 17)
+>>>>>>> vicky_0725
             mapView.animate(to: camera)
         }
     }
