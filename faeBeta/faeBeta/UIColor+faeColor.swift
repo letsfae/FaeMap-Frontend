@@ -97,4 +97,8 @@ extension UIColor {
     class func faeAppSectionBackgroundColor() -> UIColor {
         return UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1)
     }
+    
+    class func faeMapFilterActiveTxtColor() -> UIColor {
+        return UIColor(red: 115 / 255, green: 115 / 255, blue: 115 / 255, alpha: 1)
+    }
 }

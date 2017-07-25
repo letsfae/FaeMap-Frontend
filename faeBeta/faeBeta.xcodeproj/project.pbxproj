@@ -175,6 +175,7 @@
 		B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */; };
 		B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23D1F267C0500EC6655 /* WenJia.swift */; };
 		B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* YingChen.swift */; };
+		B39453E51F27DD990038EDAD /* MapFilterMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManage.swift */; };
@@ -508,6 +509,7 @@
 		B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingIndicatorChange.swift; sourceTree = "<group>"; };
 		B33FB23D1F267C0500EC6655 /* WenJia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WenJia.swift; sourceTree = "<group>"; };
 		B33FB23E1F267C0500EC6655 /* YingChen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YingChen.swift; sourceTree = "<group>"; };
+		B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterMenu.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
 		B808B49E1F1E9A85008CB624 /* LocManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocManage.swift; sourceTree = "<group>"; };
@@ -997,8 +999,8 @@
 				37C725431E7346C1001A5060 /* PinCollection */,
 				B0714D7F1D5E463B00356705 /* Chat */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
-				B33FB22C1F267C0500EC6655 /* FaeContacts */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
+				B33FB22C1F267C0500EC6655 /* FaeContacts */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
@@ -1346,6 +1348,7 @@
 				B89AB3F61E3D77EC00C5116D /* FMMapFilterLogicCtrl.swift */,
 				B85609261E9D411000F68DA4 /* FMDistanceChange.swift */,
 				5080005B1F249FD2009E3720 /* MapFilter.swift */,
+				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
 			);
 			name = FMMapFilter;
 			sourceTree = "<group>";
@@ -1737,6 +1740,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B39453E51F27DD990038EDAD /* MapFilterMenu.swift in Sources */,
 				B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */,
 				B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */,
 				B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */,
