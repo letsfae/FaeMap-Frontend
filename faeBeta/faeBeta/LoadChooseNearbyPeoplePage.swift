@@ -35,22 +35,24 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     }
     
     func updateNearbyPeople() {
-        // when user is visible
-        if boolUsrVisibleIsOn {
-            getMBPeopleInfo ({ (count: Int) in
-                //            print(self.mbPeople)
-                if count == 0 {   // self.mbPeople.count == 0
-                    self.tblMapBoard.isHidden = true
-                    self.uiviewBubbleHint.isHidden = false
-                    self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
-                    self.lblBubbleHint.text = self.strBubbleHint
-                } else {
-                    self.tblMapBoard.isHidden = false
-                    self.uiviewBubbleHint.isHidden = true
-                    self.tblMapBoard.reloadData()
-                }
-            })
+        // when user is invisible
+        if !boolUsrVisibleIsOn {
+            return
         }
+        
+        getMBPeopleInfo ({ (count: Int) in
+            //            print(self.mbPeople)
+            if count == 0 {   // self.mbPeople.count == 0
+                self.tblMapBoard.isHidden = true
+                self.uiviewBubbleHint.isHidden = false
+                self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
+                self.lblBubbleHint.text = self.strBubbleHint
+            } else {
+                self.tblMapBoard.isHidden = false
+                self.uiviewBubbleHint.isHidden = true
+                self.tblMapBoard.reloadData()
+            }
+        })
     }
     
     func loadChooseNearbyPeopleView() {

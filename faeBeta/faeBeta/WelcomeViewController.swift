@@ -19,7 +19,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     var btnLookAround: UIButton!
     var btnLogin: UIButton!
     var btnCreateAccount: UIButton!
-    var lblRight: UILabel!
+//    var lblRight: UILabel!
     
     // MARK: - View did/will
     override func viewDidLoad() {
@@ -78,14 +78,14 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     fileprivate func setupBottomPart() {
         // look around label
-        btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 216 * screenHeightFactor, width: 125, height: 22))
+        btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 198 * screenHeightFactor, width: 125, height: 22))
         btnLookAround.center.x = screenWidth / 2
         btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
         view.insertSubview(btnLookAround, at: 0)
         
         // log in button
         var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 156 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
@@ -95,7 +95,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         view.bringSubview(toFront: btnLogin)
         
         // create account button
-        btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 106 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
         btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!]), for: UIControlState())
         btnCreateAccount.backgroundColor = UIColor.white
@@ -108,13 +108,13 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         
         // create copyright label
         font = UIFont(name: "AvenirNext-Regular", size: 10)
-        lblRight = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
-        lblRight.numberOfLines = 2
-        lblRight.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!])
-        lblRight.textAlignment = .center
-        lblRight.sizeToFit()
-        lblRight.center.x = screenWidth / 2
-        view.insertSubview(lblRight, at: 0)
+//        lblRight = UILabel(frame: CGRect(x: 0, y: screenHeight - 35, width: 300, height: 50))
+//        lblRight.numberOfLines = 2
+//        lblRight.attributedText = NSAttributedString(string: "© 2017 Fae Interactive ::: Faevorite, Inc.\nAll Rights Reserved.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!])
+//        lblRight.textAlignment = .center
+//        lblRight.sizeToFit()
+//        lblRight.center.x = screenWidth / 2
+//        view.insertSubview(lblRight, at: 0)
     }
     
     // MARK: imageContainerGenerator
