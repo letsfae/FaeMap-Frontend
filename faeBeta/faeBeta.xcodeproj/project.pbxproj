@@ -151,7 +151,7 @@
 		B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* YingChen.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
-		B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManage.swift */; };
+		B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManager.swift */; };
 		B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B4A01F1EC074008CB624 /* PrintFunctions.swift */; };
 		B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */; };
 		B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */; };
@@ -454,7 +454,7 @@
 		B33FB23E1F267C0500EC6655 /* YingChen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YingChen.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
-		B808B49E1F1E9A85008CB624 /* LocManage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocManage.swift; sourceTree = "<group>"; };
+		B808B49E1F1E9A85008CB624 /* LocManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocManager.swift; sourceTree = "<group>"; };
 		B808B4A01F1EC074008CB624 /* PrintFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintFunctions.swift; sourceTree = "<group>"; };
 		B80D98EB1EFCA6B500AB27C4 /* PullToRefreshOption.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshOption.swift; sourceTree = "<group>"; };
 		B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
@@ -1323,7 +1323,7 @@
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
 				187DA5571F1EADF200219F39 /* PlacePin.swift */,
-				B808B49E1F1E9A85008CB624 /* LocManage.swift */,
+				B808B49E1F1E9A85008CB624 /* LocManager.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1759,7 +1759,7 @@
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
-				B808B49F1F1E9A85008CB624 /* LocManage.swift in Sources */,
+				B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
 				B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,

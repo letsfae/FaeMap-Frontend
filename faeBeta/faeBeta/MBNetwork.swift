@@ -189,8 +189,8 @@ extension MapBoardViewController {
     
     func getMBPlaceInfo() {
         let mbPlacesList = FaeMap()
-        mbPlacesList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
-        mbPlacesList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+        mbPlacesList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        mbPlacesList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbPlacesList.whereKey("radius", value: "9999999")
         mbPlacesList.whereKey("type", value: "place")
         mbPlacesList.whereKey("in_duration", value: "false")
@@ -225,8 +225,8 @@ extension MapBoardViewController {
     func getMBPeopleInfo(_ completion: ((Int) -> ())?) {
         let mbPeopleList = FaeMap()
         
-        mbPeopleList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
-        mbPeopleList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+        mbPeopleList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        mbPeopleList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbPeopleList.whereKey("radius", value: "9999999")
         mbPeopleList.whereKey("type", value: "user")
         mbPeopleList.whereKey("in_duration", value: "false")

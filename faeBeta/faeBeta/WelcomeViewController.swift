@@ -11,7 +11,7 @@ import UIKit
 
 public var imgNavBarDefaultShadow: UIImage?
 
-class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate {
+class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - Interface
     var uipageImgContainer: UIPageViewController!

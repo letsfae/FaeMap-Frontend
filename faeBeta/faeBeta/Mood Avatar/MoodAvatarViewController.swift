@@ -175,6 +175,5 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         currentAvatarIndex = sender.tag
         tableView.reloadData()
         imageCurrentAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
-        
     }
 }

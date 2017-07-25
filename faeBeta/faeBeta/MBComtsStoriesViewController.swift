@@ -159,8 +159,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     
     func getMBSocialInfo(socialType: String, time: DispatchTime, completion: ((Double) -> ())?) {
         let mbSocialList = FaeMap()
-        mbSocialList.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
-        mbSocialList.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+        mbSocialList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        mbSocialList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbSocialList.whereKey("radius", value: "9999999")
         mbSocialList.whereKey("type", value: "\(socialType)")
         mbSocialList.whereKey("in_duration", value: "false")

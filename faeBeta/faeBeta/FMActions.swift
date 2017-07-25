@@ -11,12 +11,12 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        guard LocManage.shared.curtLoc != nil else { return }
+        guard LocManager.shared.curtLoc != nil else { return }
         
         DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
-            selfLocation.whereKey("geo_latitude", value: "\(LocManage.shared.curtLat)")
-            selfLocation.whereKey("geo_longitude", value: "\(LocManage.shared.curtLong)")
+            selfLocation.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+            selfLocation.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
             selfLocation.renewCoordinate {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // print("Successfully renew self position")
@@ -52,7 +52,7 @@ extension FaeMapViewController {
     func actionSelfPosition(_ sender: UIButton) {
         hideNameCard(btnCardClose)
         let camera = faeMapView.camera
-        camera.centerCoordinate = LocManage.shared.curtLoc.coordinate
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         faeMapView.setCamera(camera, animated: true)
     }
     

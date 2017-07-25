@@ -8,9 +8,9 @@
 
 import Foundation
 
-class LocManage: NSObject, CLLocationManagerDelegate {
+class LocManager: NSObject, CLLocationManagerDelegate {
     
-    static let shared = LocManage()
+    static let shared = LocManager()
     var curtLoc: CLLocation!
     var locManager: CLLocationManager!
     

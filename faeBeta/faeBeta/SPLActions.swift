@@ -27,7 +27,7 @@ extension SelectLocationViewController {
     
     func actionSelfPosition(_ sender: UIButton!) {
         let camera = slMapView.camera
-        camera.centerCoordinate = LocManage.shared.curtLoc.coordinate
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         slMapView.setCamera(camera, animated: false)
         
     }
