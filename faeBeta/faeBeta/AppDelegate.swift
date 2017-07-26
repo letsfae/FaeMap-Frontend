@@ -9,8 +9,6 @@
 import UIKit
 import CoreData
 import CoreLocation
-import GoogleMaps
-import GooglePlaces
 import Firebase
 import FirebaseDatabase
 import RealmSwift
@@ -42,8 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
         }
         
-        GMSServices.provideAPIKey(GoogleMapKey)
-        GMSPlacesClient.provideAPIKey(GoogleMapKey)
+//        GMSServices.provideAPIKey(GoogleMapKey)
+//        GMSPlacesClient.provideAPIKey(GoogleMapKey)
         
         let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
         

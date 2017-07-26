@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
-import GoogleMaps
 
 protocol OpenedPinListViewControllerDelegate: class {
     // Directly back to main map

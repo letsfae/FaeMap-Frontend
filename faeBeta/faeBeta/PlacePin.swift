@@ -11,6 +11,7 @@ import SwiftyJSON
 import CoreLocation
 
 class PlacePin: NSObject {
+    
     let id: Int
     let name: String
     let coordinate: CLLocationCoordinate2D
@@ -20,6 +21,7 @@ class PlacePin: NSObject {
     let address1: String
     let address2: String
     var icon: UIImage?
+    var imageURL = ""
     
     init(json: JSON) {
         self.id = json["place_id"].intValue

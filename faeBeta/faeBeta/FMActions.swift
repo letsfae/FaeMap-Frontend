@@ -37,6 +37,7 @@ extension FaeMapViewController {
     
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton) {
+        /*
         hideNameCard(btnCardClose)
         let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
@@ -47,6 +48,7 @@ extension FaeMapViewController {
         Key.shared.selectedLoc = mapCenter_coor
         pinMenuVC.delegate = self
         self.present(pinMenuVC, animated: false, completion: nil)
+         */
     }
     
     func actionSelfPosition(_ sender: UIButton) {

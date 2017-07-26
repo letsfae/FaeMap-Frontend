@@ -1,6 +1,5 @@
 //
 //  FaeMapViewController.swift
-//  Using GoogleMaps
 //
 //  Created by Yue on 5/31/16.
 //  Copyright © 2016 Yue. All rights reserved.
@@ -19,8 +18,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
-    let yelpManager = YelpManager() // Yelp API
-    let yelpQuery = YelpQuery() // Yelp API
     var imgAvatarShadow: UIImageView! // Map Namecard
     var btnCardChat: UIButton! // Map Namecard
     var btnOpenChat: UIButton!
@@ -59,19 +56,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
     var nameCardMoreOptions: UIImageView! // Map Namecard
-    var percent: Double = 0 // Pan gesture var
-    var placeArt = #imageLiteral(resourceName: "placePinArt")
-    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
-    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
-    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
-    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
-    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
-    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
-    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
-    var placeNames = [Double]()
-    var placePins = [YelpPlacePin]()
-    var placePizza = #imageLiteral(resourceName: "placePinPizza")
-    var placeSport = #imageLiteral(resourceName: "placePinSport")
+    
     var previousZoom: Float = 13.8
     var refreshPins = true
     var refreshPlaces = true
@@ -104,6 +89,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
+    var percent: Double = 0 // Pan gesture var
+    
     var imgSchbarShadow: UIImageView!
  
     // System Functions
@@ -119,7 +106,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         updateSelfInfo()
         loadButton()
         loadMapFilter()
-        yelpQuery.setCatagoryToAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {

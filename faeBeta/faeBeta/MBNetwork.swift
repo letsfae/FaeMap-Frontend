@@ -8,8 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-//import GoogleMaps
-//import GooglePlaces
 
 extension MapBoardViewController {
     
