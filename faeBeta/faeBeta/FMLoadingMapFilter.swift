@@ -12,18 +12,25 @@ extension FaeMapViewController {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
-        btnMapFilter = MapFilterIcon(frame: CGRect.zero)
-        btnMapFilter.layer.zPosition = 601
-        view.addSubview(btnMapFilter)
-//        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-//        self.btnMapFilter.addGestureRecognizer(draggingGesture)
+        btnFilterIcon = MapFilterIcon(frame: CGRect.zero)
+        btnFilterIcon.layer.zPosition = 601
+        view.addSubview(btnFilterIcon)
+        view.bringSubview(toFront: btnFilterIcon)
+        
+        uiviewFilterMenu = MapFilterMenu(frame: CGRect(x: 0, y: 736, w: 414, h: 471))
+        uiviewFilterMenu.layer.zPosition = 601
+        view.addSubview(uiviewFilterMenu)
+        view.bringSubview(toFront: uiviewFilterMenu)
+        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
+        btnFilterIcon.addGestureRecognizer(draggingGesture)
+//        uiviewFilterMenu.addGestureRecognizer(draggingGesture)
     }
     
-    /*
+    
     func actionHideFilterMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.uiviewFilterMenu.frame.origin.y = screenHeight
-            self.btnMapFilter.center.y = screenHeight - 25
+            self.btnFilterIcon.center.y = screenHeight - 25
         })
     }
     
@@ -31,9 +38,9 @@ extension FaeMapViewController {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             self.hideNameCard(btnCardClose)
-            if self.mapFilterArrow != nil {
-                self.mapFilterArrow.removeFromSuperview()
-            }
+//            if self.mapFilterArrow != nil {
+//                self.mapFilterArrow.removeFromSuperview()
+//            }
             let location = pan.location(in: view)
             if uiviewFilterMenu.frame.origin.y == screenHeight {
                 sizeFrom = screenHeight
@@ -59,23 +66,23 @@ extension FaeMapViewController {
             if percent > 0.1 {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeTo
-                    self.btnMapFilter.center.y = self.sizeTo - 25
+                    self.btnFilterIcon.center.y = self.sizeTo - 25
                 }, completion: nil)
             }
             else {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeFrom
-                    self.btnMapFilter.center.y = self.sizeFrom - 25
+                    self.btnFilterIcon.center.y = self.sizeFrom - 25
                 })
             }
         } else {
             if self.uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight {
                 let location = pan.location(in: view)
-                self.btnMapFilter.frame.origin.y = location.y - spaceFilter
+                self.btnFilterIcon.frame.origin.y = location.y - spaceFilter
                 self.uiviewFilterMenu.frame.origin.y = location.y + spaceMenu
                 percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
             }
         }
     }
-    */
+    
 }

@@ -46,6 +46,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     var faeMapView: MKMapView!
     var faeUserPins = [FaePinAnnotation]()
+    var faePlacePins = [FaePinAnnotation]()
     var imgCardAvatar: UIImageView! // Map Namecard
     var imgCardBack: UIImageView! // Map Namecard
     var imgCardCover: UIImageView! // Map Namecard
@@ -68,7 +69,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var placeDessert = #imageLiteral(resourceName: "placePinDesert")
     var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
     var placeNames = [Double]()
-    var placePins = [PlacePin]()
+    var placePins = [YelpPlacePin]()
     var placePizza = #imageLiteral(resourceName: "placePinPizza")
     var placeSport = #imageLiteral(resourceName: "placePinSport")
     var previousZoom: Float = 13.8
@@ -93,16 +94,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let PLACE_ENABLE = true
     let USER_ENABLE = false
     
-    let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
+    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
     
-    var filterCircle_1: UIImageView! // Filter btn inside circles
-    var filterCircle_2: UIImageView! // Filter btn inside circles
-    var filterCircle_3: UIImageView! // Filter btn inside circles
-    var filterCircle_4: UIImageView! // Filter btn inside circles
-    
-    var mapFilterArrow: UIImageView! // Filter Button
-    var btnMapFilter: MapFilterIcon! // Filter Button
-    var polygonInside: UIImageView! // Filter Button
+    var btnFilterIcon: MapFilterIcon! // Filter Button
+    var uiviewFilterMenu: MapFilterMenu! // Filter Menu
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
@@ -122,8 +117,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadMapFilter()
         loadButton()
+        loadMapFilter()
         yelpQuery.setCatagoryToAll()
     }
     

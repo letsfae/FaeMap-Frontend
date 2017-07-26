@@ -179,7 +179,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func openPlacePin(annotation: FaePinAnnotation, animated: Bool) {
         
-        guard let placePin = annotation.pinInfo as? PlacePin else { return }
+        guard let placePin = annotation.pinInfo as? YelpPlacePin else { return }
         
         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
         PinDetailViewController.pinAnnotation = annotation
@@ -200,24 +200,24 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     fileprivate func dismissMainBtns() {
-        if mapFilterArrow != nil {
-            mapFilterArrow.removeFromSuperview()
-        }
-        if filterCircle_1 != nil {
-            filterCircle_1.removeFromSuperview()
-        }
-        if filterCircle_2 != nil {
-            filterCircle_2.removeFromSuperview()
-        }
-        if filterCircle_3 != nil {
-            filterCircle_3.removeFromSuperview()
-        }
-        if filterCircle_4 != nil {
-            filterCircle_4.removeFromSuperview()
-        }
+//        if mapFilterArrow != nil {
+//            mapFilterArrow.removeFromSuperview()
+//        }
+//        if filterCircle_1 != nil {
+//            filterCircle_1.removeFromSuperview()
+//        }
+//        if filterCircle_2 != nil {
+//            filterCircle_2.removeFromSuperview()
+//        }
+//        if filterCircle_3 != nil {
+//            filterCircle_3.removeFromSuperview()
+//        }
+//        if filterCircle_4 != nil {
+//            filterCircle_4.removeFromSuperview()
+//        }
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
-                self.btnMapFilter.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
             self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnSelfCenter.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
