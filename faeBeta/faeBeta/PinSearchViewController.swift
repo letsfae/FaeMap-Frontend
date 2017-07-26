@@ -9,7 +9,7 @@
 
 import UIKit
 
-class PinSearchViewController: CollectionSearchViewController, PinTableViewCellDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, EditPinViewControllerDelegate, PinDetailCollectionsDelegate {
+class PinSearchViewController: CollectionSearchViewController, PinTableViewCellDelegate, UIGestureRecognizerDelegate, UITableViewDataSource, PinDetailCollectionsDelegate {
     
     // initialize the cellInGivenId
     var cellCurrSwiped = PinsTableViewCell()
@@ -147,58 +147,11 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     }
     
     func toDoItemRemoved(indexCell: Int, pinId: Int, pinType: String) {
-//        let deleteMyPin = FaeMap()
-//        deleteMyPin.deletePin(type: pinType, pinId: pinId.description) {(status: Int, message: Any?) in
-//            if status / 100 == 2 {
-//                print("Successfully delete the pin!")
-//            }
-//        }
-//        self.arrPinData.remove(at: indexCell)
-//        let indexSet = NSMutableIndexSet()
-//        indexSet.add(indexCell)
-//        self.tblPinsData.performUpdate({
-//            self.tblPinsData.deleteSections(indexSet as IndexSet, with: UITableViewRowAnimation.top)
-//        }, completion: {
-//            self.tblPinsData.reloadData()
-//        })
-//        if self.arrPinData.count == 0 {
-//            self.tblPinsData.isHidden = true
-//        }
+
     }
     
     func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String) {
-//        if pinId == -999 {
-//            return
-//        }
-//        let vcEditPin = EditPinViewController()
-//        vcEditPin.delegate = self
-//        
-//        if(pinType == "comment"){
-//            vcEditPin.previousCommentContent = arrPinData[indexCell]["content"] as! String
-//            vcEditPin.editPinMode = .comment
-//        }
-//        if(pinType == "media"){
-//            vcEditPin.previousCommentContent = arrPinData[indexCell]["description"] as! String
-//            
-//            var mediaIdArray : [Int] = []
-//            let fileIDs = arrPinData[indexCell]["file_ids"] as! NSArray
-//            for index in 0...fileIDs.count-1 {
-//                mediaIdArray.append(Int(String(describing: fileIDs[index]))!)
-//            }
-//            vcEditPin.mediaIdArray = mediaIdArray
-//            
-//            vcEditPin.editPinMode = .media
-//        }
-//        vcEditPin.pinID = "\(pinId)"
-//        vcEditPin.pinType = pinType
-//        vcEditPin.pinMediaImageArray = cellCurrSwiped.arrImgPinPic
-//        vcEditPin.pinGeoLocation = CLLocationCoordinate2D(latitude: arrPinData[indexCell]["latitude"] as! CLLocationDegrees, longitude: arrPinData[indexCell]["longitude"] as! CLLocationDegrees)
-//        
-//        
-//        
-//        self.present(vcEditPin, animated: true, completion: {
-//            self.tblPinsData.reloadData()
-//        })
+
     }
     
     func toDoItemShared(indexCell: Int, pinId: Int, pinType: String) {

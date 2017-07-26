@@ -10,23 +10,16 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 import RealmSwift
-import GoogleMaps
 
 /*
  To see the variables defined for this class, check its super class: PinDetailBaseViewController.swift
  */
-class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, OpenedPinListViewControllerDelegate, PinTalkTalkCellDelegate, EditPinViewControllerDelegate, SendStickerDelegate, PinFeelingCellDelegate {
-    
-    static let shared = PinDetailViewController()
+class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITextViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, OpenedPinListViewControllerDelegate, PinTalkTalkCellDelegate, SendStickerDelegate, PinFeelingCellDelegate {
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
-        
-        // modalPresentationStyle defines that this view controller is over the FaeMapViewController,
-        // so that user can see the main map via half pin detail view
-//        modalPresentationStyle = .overCurrentContext
         
         loadPinDetailWindow()
         initPinBasicInfo()
@@ -1095,6 +1088,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     }
     
     func actionEditComment(_ sender: UIButton) {
+        /*
         if strPinId == "-1" {
             return
         }
@@ -1110,6 +1104,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         vcEditPin.mediaIdArray = fileIdArray
         self.present(vcEditPin, animated: true, completion: nil)
         actionToCloseOtherViews()
+        */
     }
     
     func actionReportThisPin() {

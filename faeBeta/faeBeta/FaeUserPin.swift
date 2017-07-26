@@ -6,6 +6,7 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
+/*
 import UIKit
 import GoogleMaps
 import SwiftyJSON
@@ -206,3 +207,5 @@ class FaeUserPin: NSObject {
         }
     }
 }
+ 
+ */

@@ -7,11 +7,23 @@
 //
 
 import UIKit
-import GoogleMaps
-import GooglePlaces
 import CoreLocation
 
 extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDelegate, FaeSearchControllerDelegate {
+    
+    // MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        self.tblSearchResults.reloadData()
+        if self.searchResults.count > 0 {
+            self.searchBarTableShowAnimation()
+        }
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
+    }
     
     // MARK: UISearchResultsUpdating delegate function
     func updateSearchResults(for searchController: UISearchController) {
@@ -31,24 +43,19 @@ extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDele
             tblSearchResults.reloadData()
         }
         
-        if placeholder.count > 0 {
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[0].placeID!, callback: {
-                (place, error) -> Void in
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = self.slMapView.camera
-                        camera.centerCoordinate = selectedAddress
-                        self.slMapView.setCamera(camera, animated: true)
-                    }
-                })
-            })
-            self.faeSearchController.faeSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.faeSearchController.faeSearchBar.resignFirstResponder()
+        if searchResults.count > 0 {
+            let address = searchResults[0].title + searchResults[0].subtitle
+            General.shared.getLocation(address: address) { (coordinate) in
+                if let coor = coordinate {
+                    let camera = self.slMapView.camera
+                    camera.centerCoordinate = coor
+                    self.slMapView.setCamera(camera, animated: true)
+                }
+            }
+            faeSearchController.faeSearchBar.text = address
+            faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
-        
     }
     
     func didTapOnCancelButton() {
@@ -57,30 +64,12 @@ extension SelectLocationViewController: UISearchResultsUpdating, UISearchBarDele
     }
     
     func didChangeSearchText(_ searchText: String) {
-        if searchText != ""  {
-            let placeClient = GMSPlacesClient()
-            placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
-                (results: [GMSAutocompletePrediction]?, error : Error?) -> Void in
-                if(error != nil) {
-                    print(error ?? "error value unreadable")
-                }
-                self.placeholder.removeAll()
-                if results == nil {
-                    return
-                } else {
-                    for result in results! {
-                        self.placeholder.append(result)
-                    }
-                    self.tblSearchResults.reloadData()
-                }
-                if self.placeholder.count > 0 {
-                    self.searchBarTableShowAnimation()
-                }
-            }
+        if searchText != "" {
+            searchCompleter.queryFragment = searchText
         } else {
-            self.placeholder.removeAll()
+            searchResults.removeAll()
             searchBarTableHideAnimation()
-            self.tblSearchResults.reloadData()
+            tblSearchResults.reloadData()
         }
     }
 }

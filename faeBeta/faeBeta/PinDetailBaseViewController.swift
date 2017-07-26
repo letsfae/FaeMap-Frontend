@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GoogleMaps
 
 protocol PinDetailDelegate: class {
     // Cancel marker's shadow when back to Fae Map

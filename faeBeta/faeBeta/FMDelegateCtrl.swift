@@ -11,7 +11,7 @@ import CoreLocation
 import RealmSwift
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, LeftSlidingMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
@@ -99,6 +99,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         */
     }
     
+    /*
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String) {
         let camera = faeMapView.camera
@@ -117,6 +118,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
     }
+    */
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {

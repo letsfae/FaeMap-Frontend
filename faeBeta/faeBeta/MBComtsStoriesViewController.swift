@@ -8,8 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import GoogleMaps
-import GooglePlaces
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate, UIScrollViewDelegate {
     

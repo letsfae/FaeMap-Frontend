@@ -3,8 +3,6 @@ platform :ios, ‘9.0’
 use_frameworks!
 
 target 'faeBeta' do
-	pod 'GoogleMaps'
-	pod 'GooglePlaces'
 	pod 'Alamofire’, '~> 4.1’
     pod 'SwiftyJSON'
 	pod 'SDWebImage', '~>3.8’

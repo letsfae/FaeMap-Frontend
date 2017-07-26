@@ -9,8 +9,8 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
 import CCHMapClusterController
+import CoreLocation
 
 extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate {
     
@@ -179,18 +179,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func openPlacePin(annotation: FaePinAnnotation, animated: Bool) {
         
-        guard let placePin = annotation.pinInfo as? YelpPlacePin else { return }
+        guard let placePin = annotation.pinInfo as? PlacePin else { return }
         
         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
         PinDetailViewController.pinAnnotation = annotation
         PinDetailViewController.pinTypeEnum = .place
-        PinDetailViewController.placeType = placePin.primaryCate
+        PinDetailViewController.placeType = placePin.classTwo
         PinDetailViewController.strPlaceTitle = placePin.name
         PinDetailViewController.strPlaceStreet = placePin.address1
         PinDetailViewController.strPlaceCity = placePin.address2
         PinDetailViewController.strPlaceImageURL = placePin.imageURL
         
-        let opPlace = OpenedPlace(title: placePin.name, category: placePin.primaryCate,
+        let opPlace = OpenedPlace(title: placePin.name, category: placePin.classTwo,
                                   street: placePin.address1, city: placePin.address2,
                                   imageURL: placePin.imageURL,
                                   position: annotation.coordinate)
@@ -200,21 +200,21 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     fileprivate func dismissMainBtns() {
-//        if mapFilterArrow != nil {
-//            mapFilterArrow.removeFromSuperview()
-//        }
-//        if filterCircle_1 != nil {
-//            filterCircle_1.removeFromSuperview()
-//        }
-//        if filterCircle_2 != nil {
-//            filterCircle_2.removeFromSuperview()
-//        }
-//        if filterCircle_3 != nil {
-//            filterCircle_3.removeFromSuperview()
-//        }
-//        if filterCircle_4 != nil {
-//            filterCircle_4.removeFromSuperview()
-//        }
+        //        if mapFilterArrow != nil {
+        //            mapFilterArrow.removeFromSuperview()
+        //        }
+        //        if filterCircle_1 != nil {
+        //            filterCircle_1.removeFromSuperview()
+        //        }
+        //        if filterCircle_2 != nil {
+        //            filterCircle_2.removeFromSuperview()
+        //        }
+        //        if filterCircle_3 != nil {
+        //            filterCircle_3.removeFromSuperview()
+        //        }
+        //        if filterCircle_4 != nil {
+        //            filterCircle_4.removeFromSuperview()
+        //        }
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
                 self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
@@ -247,7 +247,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         rect.origin.y = point.y - rect.size.height * 0.5
         
         faeMapView.setVisibleMapRect(rect, animated: false)
-        
     }
     
     func deselectAllAnnotations() {

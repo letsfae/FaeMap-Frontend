@@ -13,10 +13,7 @@ import FirebaseDatabase
 import Photos
 import MobileCoreServices
 import CoreMedia
-import GoogleMaps
-import GooglePlaces
 import AVFoundation
-
 
 public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
@@ -844,39 +841,32 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
                 locExtendView.setAvator(image: screenShotImage)
-                let geocoder = GMSGeocoder()
-                geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(mapview.camera.target.latitude, mapview.camera.target.longitude)) { (response, error) in
-                    
-                    if(error == nil) {
-                        if response != nil {
-                            self.addResponseToLocationExtend(response: response!, withMini: true)
-                        }
-                    } else {
-                        print(error ?? "ohhhh")
-                    }
+                let location = CLLocation(latitude: mapview.camera.centerCoordinate.latitude, longitude: mapview.camera.centerCoordinate.longitude)
+                General.shared.getAddress(location: location, original: true) { (placeMark) in
+                    guard let response = placeMark as? CLPlacemark else { return }
+                    self.addResponseToLocationExtend(response: response, withMini: false)
                 }
-                
             }
         }
     }
     
-    func addResponseToLocationExtend(response : GMSReverseGeocodeResponse, withMini: Bool) {
+    func addResponseToLocationExtend(response : CLPlacemark, withMini: Bool) {
         var texts : [String] = []
-        texts.append((response.firstResult()?.thoroughfare)!)
-        var cityText = response.firstResult()?.locality
+        texts.append((response.thoroughfare)!)
+        var cityText = response.locality
         
-        if(response.firstResult()?.administrativeArea != nil) {
-            cityText = cityText! + ", " + (response.firstResult()?.administrativeArea)!
+        if(response.administrativeArea != nil) {
+            cityText = cityText! + ", " + (response.administrativeArea)!
         }
         
-        if(response.firstResult()?.postalCode != nil) {
-            cityText = cityText! + " " + (response.firstResult()?.postalCode)!
+        if(response.postalCode != nil) {
+            cityText = cityText! + " " + (response.postalCode)!
         }
         texts.append(cityText!)
-        texts.append((response.firstResult()?.country)!)
+        texts.append((response.country)!)
         
         self.locExtendView.setLabel(texts: texts)
-        self.locExtendView.location = CLLocation(latitude: self.toolbarContentView.miniLocation.mapView.camera.target.latitude, longitude: self.toolbarContentView.miniLocation.mapView.camera.target.longitude)
+        self.locExtendView.location = CLLocation(latitude: self.toolbarContentView.miniLocation.mapView.camera.centerCoordinate.latitude, longitude: self.toolbarContentView.miniLocation.mapView.camera.centerCoordinate.longitude)
         self.locExtendView.isHidden = false
         let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
         if(withMini) {

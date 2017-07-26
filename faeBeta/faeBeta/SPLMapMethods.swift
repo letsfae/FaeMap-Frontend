@@ -8,33 +8,19 @@
 
 import UIKit
 import MapKit
-import GoogleMaps
 
 extension SelectLocationViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
-        GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
-            (response, error) -> Void in
-            if let fullAddress = response?.firstResult()?.lines {
-                var addressToSearchBar = ""
-                for line in fullAddress {
-                    if line == "" {
-                        continue
-                    }
-                    else if fullAddress.index(of: line) == fullAddress.count-1 {
-                        addressToSearchBar += line + ""
-                    }
-                    else {
-                        addressToSearchBar += line + ", "
-                    }
-                }
-                DispatchQueue.main.async {
-                    self.faeSearchController.faeSearchBar.text = addressToSearchBar
-                }
+        let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
+        General.shared.getAddress(location: location) { (address) in
+            guard let addr = address as? String else { return }
+            DispatchQueue.main.async {
+                self.faeSearchController.faeSearchBar.text = addr
             }
-        })
+        }
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {

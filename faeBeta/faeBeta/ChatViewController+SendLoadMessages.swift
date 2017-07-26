@@ -10,8 +10,6 @@ import UIKit
 import JSQMessagesViewController
 import Firebase
 import FirebaseDatabase
-import GoogleMaps
-import GooglePlaces
 import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
@@ -274,16 +272,11 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     // MARK: - locationSend Delegate
     func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: UIImage) {
-        let geocoder = GMSGeocoder()
-        geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(lat, lon)) { response, error in
-            if error == nil {
-                if response != nil {
-                    self.locExtendView.setAvator(image: screenShot)
-                    self.addResponseToLocationExtend(response: response!, withMini: false)
-                }
-            } else {
-                print(error ?? "ohhhh")
-            }
+        let location = CLLocation(latitude: lat, longitude: lon)
+        General.shared.getAddress(location: location, original: true) { (placeMark) in
+            guard let response = placeMark as? CLPlacemark else { return }
+            self.locExtendView.setAvator(image: screenShot)
+            self.addResponseToLocationExtend(response: response, withMini: false)
         }
     }
     
