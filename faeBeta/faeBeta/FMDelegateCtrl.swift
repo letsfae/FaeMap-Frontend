@@ -180,7 +180,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             if self.FILTER_ENABLE {
-                self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
             }
             self.btnCompass.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
             self.btnSelfCenter.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)

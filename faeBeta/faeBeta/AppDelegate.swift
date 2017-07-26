@@ -167,7 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
         print("[applicationWillResignActive]")
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -184,7 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            print("[applicationWillEnterForeground]")
 //            self.popUpEnableLocationViewController()
 //        }
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
     var time: Double = 0

@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		1873C4C81F214261007669DD /* FaeContact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1873C4C71F214261007669DD /* FaeContact.swift */; };
-		187DA5581F1EADF200219F39 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187DA5571F1EADF200219F39 /* PlacePin.swift */; };
+		187DA5581F1EADF200219F39 /* YelpPlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187DA5571F1EADF200219F39 /* YelpPlacePin.swift */; };
 		189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */; };
 		18FCF3061F05907500467423 /* CreatePinBaseTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */; };
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
 		50234AF71F27DAC000055748 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF61F27DAC000055748 /* ScreenFactor.swift */; };
+		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
 		5080005C1F249FD2009E3720 /* MapFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* MapFilterIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
@@ -291,13 +292,14 @@
 
 /* Begin PBXFileReference section */
 		1873C4C71F214261007669DD /* FaeContact.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeContact.swift; sourceTree = "<group>"; };
-		187DA5571F1EADF200219F39 /* PlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
+		187DA5571F1EADF200219F39 /* YelpPlacePin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YelpPlacePin.swift; sourceTree = "<group>"; };
 		189CA0B81EF452C200BAF75A /* MBComtsStoriesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBComtsStoriesCell.swift; sourceTree = "<group>"; };
 		18FCF3051F05907400467423 /* CreatePinBaseTableCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreatePinBaseTableCtrl.swift; sourceTree = "<group>"; };
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
 		50234AF61F27DAC000055748 /* ScreenFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
+		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* MapFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
@@ -1319,8 +1321,9 @@
 				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
-				187DA5571F1EADF200219F39 /* PlacePin.swift */,
+				187DA5571F1EADF200219F39 /* YelpPlacePin.swift */,
 				B808B49E1F1E9A85008CB624 /* LocManager.swift */,
+				50234AF81F2865FD00055748 /* PlacePin.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1737,7 +1740,7 @@
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B86AE0501ED4FC4400D1357D /* General.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
-				187DA5581F1EADF200219F39 /* PlacePin.swift in Sources */,
+				187DA5581F1EADF200219F39 /* YelpPlacePin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
 				B81A19751DEA6843005498E5 /* CMPCollectionViewCell.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
@@ -1772,6 +1775,7 @@
 				8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */,
 				B8158C5D1EFF977200218890 /* CGRectExtension.swift in Sources */,
 				B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */,
+				50234AF91F2865FD00055748 /* PlacePin.swift in Sources */,
 				B0A2AC991CE3A3C7002E0C9D /* AppDelegate.swift in Sources */,
 				B0BF35751D8DC8D700B0540B /* JSQMessagesCollectionViewFlowLayoutCustom.m in Sources */,
 				B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */,
