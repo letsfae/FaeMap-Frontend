@@ -134,15 +134,21 @@ class SelfAnnotationView: MKAnnotationView {
         getSelfAccountInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func changeAvatar() {
+        mapAvatar = userMiniAvatar
     }
     
     func removeAllAnimation() {

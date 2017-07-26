@@ -11,6 +11,11 @@ import GoogleMaps
 
 extension FaeMapViewController {
     
+    /*
+    
+    var filterSlider: UISlider! // Filter Slider
+    var lblFilterDist: UILabel! // Filter Slider
+    
     func loadMFilterSlider() {
         guard FILTER_ENABLE else { return }
         
@@ -65,4 +70,5 @@ extension FaeMapViewController {
         
         lblDistanceDisplay.text = "\(Int(sender.value/4)) km"
     }
+ */
 }
