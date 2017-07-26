@@ -30,18 +30,9 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         loadTableView()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.5, animations: { 
-            
-        }, completion: nil)
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
     private func navigationBarSetting() {
@@ -162,6 +153,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 self.navigationController?.popViewController(animated: true)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
             }
             else {
                 print("Fail to update miniavatar")

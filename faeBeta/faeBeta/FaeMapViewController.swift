@@ -100,11 +100,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var filterCircle_3: UIImageView! // Filter btn inside circles
     var filterCircle_4: UIImageView! // Filter btn inside circles
     
-    var filterSlider: UISlider! // Filter Slider
-    var lblFilterDist: UILabel! // Filter Slider
-    
     var mapFilterArrow: UIImageView! // Filter Button
-    var btnMapFilter: UIButton! // Filter Button
+    var btnMapFilter: MapFilterIcon! // Filter Button
     var polygonInside: UIImageView! // Filter Button
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
@@ -125,7 +122,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadMFilterSlider()
         loadMapFilter()
         loadButton()
         yelpQuery.setCatagoryToAll()
@@ -289,33 +285,16 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     // MARK: -- Location Manager
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard boolIsFirstLoad else { return }
+        boolIsFirstLoad = false
         DispatchQueue.global(qos: .default).async {
-            if self.boolIsFirstLoad {
-                self.boolIsFirstLoad = false
-//                self.curLoc = manager.location
-//                self.curLat = self.curLoc.coordinate.latitude
-//                self.curLon = self.curLoc.coordinate.longitude
-                self.curLoc2D = CLLocationCoordinate2DMake(LocManager.shared.curtLat, LocManager.shared.curtLong)
-                let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
-                DispatchQueue.main.async(execute: {
-                    self.faeMapView.setRegion(coordinateRegion, animated: false)
-                    self.reloadSelfPosAnimation()
-                    self.refreshMap(pins: true, users: true, places: true)
-                })
-            }
-            
-            if let location = locations.last {
-                let points = self.faeMapView.convert(location.coordinate, toPointTo: nil)
-//                self.curLoc = location
-//                self.curLoc2D = location.coordinate
-//                self.curLat = location.coordinate.latitude
-//                self.curLon = location.coordinate.longitude
-                DispatchQueue.main.async(execute: {
-                    if self.FILTER_ENABLE {
-                        self.uiviewDistanceRadius.center = points
-                    }
-                })
-            }
+            self.curLoc2D = CLLocationCoordinate2DMake(LocManager.shared.curtLat, LocManager.shared.curtLong)
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
+            DispatchQueue.main.async(execute: {
+                self.faeMapView.setRegion(coordinateRegion, animated: false)
+                self.reloadSelfPosAnimation()
+                self.refreshMap(pins: true, users: true, places: true)
+            })
         }
     }
 }
