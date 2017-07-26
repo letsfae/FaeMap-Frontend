@@ -58,7 +58,7 @@ extension FaeMapViewController {
         getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getPlaceInfo.whereKey("radius", value: "500000")
         getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count ", value: "1000")
+        getPlaceInfo.whereKey("max_count", value: "1000")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
