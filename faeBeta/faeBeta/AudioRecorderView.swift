@@ -94,11 +94,11 @@ class AudioRecorderView: UIView {
 
                 view.center = self.mainButton.center
                 self.mainButton.transform = CGAffineTransform(scaleX: 0.77, y: 0.77)
-                self.setInfoLabel("1:00", color: UIColor.faeAppRedColor())
+                self.setInfoLabel("1:00", color: UIColor._2499090())
                 self.leftButton.alpha = 1
                 self.rightButton.alpha = 1
                 }, completion: { (complete) in
-                    self.mainButton.backgroundColor = UIColor.faeAppRedColor()
+                    self.mainButton.backgroundColor = UIColor._2499090()
                     view.isHidden = true
                     view.removeFromSuperview()
                     self.generateFlow()
@@ -301,7 +301,7 @@ class AudioRecorderView: UIView {
             self.rightButton.alpha = 1
             
             let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
-            self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
+            self.setInfoLabel("0:\(secondString)", color: UIColor._107107107())
             
         }, completion: { (completed) in
         })
@@ -414,7 +414,7 @@ class AudioRecorderView: UIView {
     @objc private func updateTime(){
         currentTime -= 1
         let secondString = currentTime < 10 ? "0\(currentTime)" : "\(currentTime)"
-        setInfoLabel("0:\(secondString)", color: UIColor.faeAppRedColor())
+        setInfoLabel("0:\(secondString)", color: UIColor._2499090())
         if(currentTime == 0){
             timeTimer.invalidate()
             _ = self.stopRecord()
@@ -424,7 +424,7 @@ class AudioRecorderView: UIView {
     
     private func showWarnMeesage()
     {
-        setInfoLabel("Too Short!", color: UIColor.faeAppRedColor())
+        setInfoLabel("Too Short!", color: UIColor._2499090())
         mainButton.isEnabled = false
         Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(self.recoverRecordButton), userInfo: nil, repeats: false)
     }
@@ -449,7 +449,7 @@ class AudioRecorderView: UIView {
     @objc private func updateProgressTimer()
     {
         let secondString = self.soundPlayer.currentTime < 9 ? "0\(Int(ceil(self.soundPlayer.currentTime)))" : "\(Int(ceil(self.soundPlayer.currentTime)))"
-        self.setInfoLabel("0:\(secondString)", color: UIColor.faeAppTimeTextBlackColor())
+        self.setInfoLabel("0:\(secondString)", color: UIColor._107107107())
     }
     
     // Ask the user for permission to use the microphone
@@ -474,7 +474,7 @@ class AudioRecorderView: UIView {
         if(isPressingMainButton){
             let view = UIView(frame: CGRect(x: 0,y: 0,width: 100,height: 100))
             view.layer.cornerRadius = 50
-            view.backgroundColor = UIColor.faeAppRedColor()
+            view.backgroundColor = UIColor._2499090()
             view.alpha = 0.5
             view.center = self.mainButton.center
             self.addSubview(view)

@@ -51,8 +51,8 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
         let attrRange1 = NSRange(location: 0, length: 14)
         let attrRange2 = NSRange(location: 15, length: 15)
         
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppInputTextGrayColor(), range: attrRange1)
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppTimeTextBlackColor(), range: attrRange2)
+        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._898989(), range: attrRange1)
+        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._107107107(), range: attrRange2)
         astrTitle.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
         astrTitle.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
         titleLabel.attributedText = astrTitle
@@ -62,7 +62,7 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
         textView.attributedText = astrContent()
         textView.sizeToFit()
         textView.isEditable = false
-        textView.tintColor = UIColor.faeAppRedColor()
+        textView.tintColor = UIColor._2499090()
         textView.isScrollEnabled = false
         scrollView.addSubview(textView)
         
@@ -73,7 +73,7 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
-            indicator.backgroundColor = UIColor.faeAppRedColor()
+            indicator.backgroundColor = UIColor._2499090()
         }
     }
     
@@ -86,7 +86,7 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
             return "        \(num).  "
         }
         
-        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
+        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
         astrContent.appendDefaultString("Last Updated: Nov 11, 2016\n\n", bold: true)
         astrContent.appendDefaultString("Welcome to Fae Interactive! We drafted this Privacy Policy (“Policy”) for Fae Map (“Software”) to describe how we collect, store, use, protect and share your information and with whom we share it.\n\n", bold: false)
         astrContent.appendDefaultString("Your access to and use of the Software and our Services (“Services”) is conditioned on your acceptance of and compliance with our Terms [www.faemaps.com/legal/terms] and this Privacy Policy; therefore it is recommended that you read our Terms and Privacy Policy carefully.\n\n", bold: false)

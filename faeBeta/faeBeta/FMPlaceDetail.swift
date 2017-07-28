@@ -6,4 +6,11 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+extension FaeMapViewController {
+    func loadPlaceDetail() {
+        view.addSubview(placeResultBar)
+        placeResultBar.isHidden = true
+    }
+}

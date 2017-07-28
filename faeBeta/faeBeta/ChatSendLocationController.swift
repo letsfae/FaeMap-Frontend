@@ -135,13 +135,13 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
     func configureFaeSearchController() {
         searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         // quick fix for unwant shadow in search bar
         
         if(UIScreen.main.bounds.height == 736) {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         } else {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         }
 
         faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
@@ -181,7 +181,7 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         buttonSetLocationOnMap = UIButton(frame: CGRect(x: 0, y: screenHeight - 65 * heightFactor, width: screenWidth, height: 65 * heightFactor))
         buttonSetLocationOnMap.setTitle("Send Location", for: UIControlState())
         buttonSetLocationOnMap.setTitle("Send Location", for: .highlighted)
-        buttonSetLocationOnMap.setTitleColor(UIColor.faeAppRedColor(), for: UIControlState())
+        buttonSetLocationOnMap.setTitleColor(UIColor._2499090(), for: UIControlState())
         buttonSetLocationOnMap.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)

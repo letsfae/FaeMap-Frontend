@@ -53,6 +53,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        /*
         if !gesturerecognizerTouch.isCellSwiped {
             tableView.deselectRow(at: indexPath, animated: false)
             
@@ -69,6 +70,7 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
             self.indexCurrSelectRowAt = indexPath
             self.navigationController?.pushViewController(vcPinDetail, animated: true)
         }
+         */
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

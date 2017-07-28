@@ -18,7 +18,7 @@ extension UIColor {
         self.init(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
     }
     
-    class func faeAppRedColor() -> UIColor {
+    class func _2499090() -> UIColor {
         return UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
     }
     
@@ -42,7 +42,7 @@ extension UIColor {
         return UIColor(red: 255 / 255, green: 160 / 255, blue: 160 / 255, alpha: 1)
     }
     
-    class func faeAppInputTextGrayColor() -> UIColor {
+    class func _898989() -> UIColor {
         return UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
     }
     
@@ -58,7 +58,7 @@ extension UIColor {
         return UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1)
     }
     
-    class func faeAppTimeTextBlackColor() -> UIColor {
+    class func _107107107() -> UIColor {
         return UIColor(red: 107 / 255, green: 107 / 255, blue: 107 / 255, alpha: 1)
     }
     

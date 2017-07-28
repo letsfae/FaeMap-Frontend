@@ -99,14 +99,14 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblNickname.text = Key.shared.nickname ?? "someone"
         lblNickname.textAlignment = .center
         lblNickname.font = UIFont(name: "AvenirNext-Medium", size: 23)
-        lblNickname.textColor = UIColor.faeAppInputTextGrayColor()
+        lblNickname.textColor = UIColor._898989()
         scroll.addSubview(lblNickname)
         
         lblUsrame = UILabel(frame: CGRect(x: (screenWidth - 280) / 2, y: 190, width: 280, height: 25))
         lblUsrame.text = username
         lblUsrame.textAlignment = .center
         lblUsrame.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblUsrame.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsrame.textColor = UIColor._898989()
         scroll.addSubview(lblUsrame)
         
         uiviewUnderline = UIView(frame: CGRect(x: 20, y: 228, width: screenWidth - 40, height: 2))
@@ -119,7 +119,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblBird.text = "You're an Early Bird"
         lblBird.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblBird.textAlignment = .center
-        lblBird.textColor = UIColor.faeAppInputTextGrayColor()
+        lblBird.textColor = UIColor._898989()
         scroll.addSubview(lblBird)
         
         imgBird = UIImageView(frame: CGRect(x: 0, y: 274, width: 110, height: 110))
@@ -133,17 +133,17 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         let wid = screenWidth - 44 - 24
         uiviewRedCircle1 = UIView(frame: CGRect(x: 0, y: 12, width: 12, height: 12))
         uiviewRedCircle1.layer.cornerRadius = 6
-        uiviewRedCircle1.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedCircle1.backgroundColor = UIColor._2499090()
         uiviewContent.addSubview(uiviewRedCircle1)
         
         uiviewRedCircle2 = UIView(frame: CGRect(x: 0, y: 62, width: 12, height: 12))
         uiviewRedCircle2.layer.cornerRadius = 6
-        uiviewRedCircle2.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedCircle2.backgroundColor = UIColor._2499090()
         uiviewContent.addSubview(uiviewRedCircle2)
         
         uiviewRedCircle3 = UIView(frame: CGRect(x: 0, y: 112, width: 12, height: 12))
         uiviewRedCircle3.layer.cornerRadius = 6
-        uiviewRedCircle3.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedCircle3.backgroundColor = UIColor._2499090()
         uiviewContent.addSubview(uiviewRedCircle3)
         
         lblDesp1 = UILabel(frame: CGRect(x: 24, y: 0, width: wid, height: 36))
@@ -172,7 +172,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         
         btnFeedback = UIButton(frame: CGRect(x: 0, y: 544 + 30, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnFeedback.center.x = screenWidth / 2
-        btnFeedback.backgroundColor = UIColor.faeAppRedColor()
+        btnFeedback.backgroundColor = UIColor._2499090()
         btnFeedback.setTitle("Give Feedback", for: UIControlState())
         btnFeedback.layer.cornerRadius = 25 * screenHeightFactor
         btnFeedback.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -182,7 +182,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     func showPhotoSelected(_ sender: UIGestureRecognizer) {
         let alertMenu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
-        alertMenu.view.tintColor = UIColor.faeAppRedColor()
+        alertMenu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { (_: UIAlertAction) in
             //self.imagePicker.sourceType = .photoLibrary
 //            alertMenu.removeFromParentViewController()

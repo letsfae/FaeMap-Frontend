@@ -52,7 +52,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         lblPlaceholder.isHidden = !textView.text.isEmpty
         let leftcharscount = 50 - textView.text.characters.count
         if leftcharscount < 0 {
-            lblWordsCount.textColor = UIColor.faeAppRedColor()
+            lblWordsCount.textColor = UIColor._2499090()
             btnSave.isEnabled = false
             btnSave.alpha = 0.6
         }
@@ -71,9 +71,9 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         txtMemo = UITextView(frame: CGRect(x: 20, y: 50, width: screenWidth-40, height: screenHeight/2-keyboardHeight-50))
         txtMemo.delegate = self
         txtMemo.isEditable = true
-        txtMemo.tintColor = UIColor.faeAppRedColor()
+        txtMemo.tintColor = UIColor._2499090()
         txtMemo.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        txtMemo.textColor = UIColor.faeAppInputTextGrayColor()
+        txtMemo.textColor = UIColor._898989()
         //placeholder
         lblPlaceholder = UILabel()
         lblPlaceholder.text = "Type a short memo..."
@@ -96,7 +96,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         
         btnSave.setTitle("Save", for: .normal)
         btnSave.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        btnSave.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnSave.setTitleColor(UIColor._2499090(), for: .normal)
         btnSave.backgroundColor = .clear
         btnSave.addTarget(self, action: #selector(self.actionSaveBtn(_:)), for: .touchUpInside)
         uiviewMemo.addSubview(btnSave)

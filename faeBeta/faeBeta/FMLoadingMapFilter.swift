@@ -18,6 +18,7 @@ extension FaeMapViewController {
         view.bringSubview(toFront: btnFilterIcon)
         
         uiviewFilterMenu = MapFilterMenu(frame: CGRect(x: 0, y: 736, w: 414, h: 471))
+        uiviewFilterMenu.btnHideMFMenu.addTarget(self, action: #selector(self.actionHideFilterMenu(_:)), for: .touchUpInside)
         uiviewFilterMenu.layer.zPosition = 601
         view.addSubview(uiviewFilterMenu)
         view.bringSubview(toFront: uiviewFilterMenu)

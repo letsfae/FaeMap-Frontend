@@ -211,7 +211,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor()]
+        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         
         let downAttachment = InlineTextAttachment()
@@ -328,13 +328,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewTalkPostHead.addSubview(uiviewGrayUnderLine)
         
         btnMyTalks.setTitle("My Talks", for: .normal)
-        btnMyTalks.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnMyTalks.setTitleColor(UIColor._2499090(), for: .normal)
         btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnMyTalks.tag = 0
         btnMyTalks.addTarget(self, action: #selector(self.switchBetweenTalkAndComment(_:)), for: .touchUpInside)
         
         uiviewRedUnderLine = UIView(frame: CGRect(x: 40, y: uiviewTalkPostHead.frame.height - 2, width: 130, height: 2))
-        uiviewRedUnderLine.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedUnderLine.backgroundColor = UIColor._2499090()
         uiviewTalkPostHead.addSubview(uiviewRedUnderLine)
         
         btnComments = UIButton()
@@ -360,7 +360,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         }
         
         lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblAllCom.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAllCom.textColor = UIColor._107107107()
         
         if tableMode == .people {
             btnPeopleLocDetail.isHidden = false
@@ -578,14 +578,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             talkPostTableMode = .talk
-            btnMyTalks.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+            btnMyTalks.setTitleColor(UIColor._2499090(), for: .normal)
             btnComments.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnComments.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             targetCenter = btnMyTalks.center.x
         } else if sender.tag == 1 {
             talkPostTableMode = .comment
-            btnComments.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+            btnComments.setTitleColor(UIColor._2499090(), for: .normal)
             btnMyTalks.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             btnComments.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
@@ -643,7 +643,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
         lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblBubbleHint.textColor = UIColor.faeAppInputTextGrayColor()
+        lblBubbleHint.textColor = UIColor._898989()
         lblBubbleHint.lineBreakMode = .byWordWrapping
         lblBubbleHint.numberOfLines = 0
         imgBubbleHint.addSubview(lblBubbleHint)

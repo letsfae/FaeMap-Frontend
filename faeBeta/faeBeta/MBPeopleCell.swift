@@ -43,7 +43,7 @@ class MBPeopleCell: UITableViewCell {
         lblUsrName = UILabel()
         addSubview(lblUsrName)
         lblUsrName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblUsrName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsrName.textColor = UIColor._898989()
         lblUsrName.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-95-[v0]-90-|", options: [], views: lblUsrName)
         

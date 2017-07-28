@@ -21,6 +21,11 @@ extension FaeMapViewController {
         faeMapView.showsCompass = false
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
+        
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.addTarget(self, action: #selector(self.mapViewTapAt(_:)))
+        faeMapView.addGestureRecognizer(tapGesture)
+        
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 100
         mapClusterManager.marginFactor = 0.1
@@ -35,7 +40,7 @@ extension FaeMapViewController {
     func loadButton() {
         imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410, height: 60)
-        imgSchbarShadow.image = #imageLiteral(resourceName: "mainScreenSearchBar")
+        imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
         imgSchbarShadow.isUserInteractionEnabled = true

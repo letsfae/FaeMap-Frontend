@@ -37,7 +37,7 @@ class MBPlacesCell: UITableViewCell {
         lblPlaceName = UILabel()
         addSubview(lblPlaceName)
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblPlaceName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceName.textColor = UIColor._898989()
         lblPlaceName.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceName)
         

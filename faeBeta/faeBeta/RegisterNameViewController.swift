@@ -71,7 +71,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         
         let btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 54, y: 0, width: 45, height: 25))
         let astrTitle = "Log In!"
-        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
+        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor._2499090()]
         let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
         
         btnLogin.setAttributedTitle(attrLogin, for: UIControlState())

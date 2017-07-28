@@ -37,14 +37,14 @@ class FaeCellForMainScreenSearch: UITableViewCell {
         labelTitle.text = ""
         labelTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_18)
         labelTitle.textAlignment = .left
-        labelTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        labelTitle.textColor = UIColor._898989()
         self.addSubview(labelTitle)
         
         labelSubTitle = UILabel(frame: CGRect(x: labelX, y: labelSubTitleY, width: labelWidth, height: labelHeight))
         labelSubTitle.text = ""
         labelSubTitle.font = UIFont(name: "AvenirNext-Medium", size: fontSize_13)
         labelSubTitle.textAlignment = .left
-        labelSubTitle.textColor = UIColor.faeAppTimeTextBlackColor()
+        labelSubTitle.textColor = UIColor._107107107()
         self.addSubview(labelSubTitle)
     }
 }

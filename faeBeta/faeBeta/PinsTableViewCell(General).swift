@@ -125,7 +125,7 @@ class PinsTableViewCell: UITableViewCell {
         lblDate = UILabel()
         lblDate.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDate.textAlignment = .left
-        lblDate.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblDate.textColor = UIColor._107107107()
         uiviewPinView.addSubview(lblDate)
         // lblDate's horizontal constraint will be set in each child class
         uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: lblDate)
@@ -135,14 +135,14 @@ class PinsTableViewCell: UITableViewCell {
         lblContent.numberOfLines = 3
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lblContent.textAlignment = .left
-        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblContent.textColor = UIColor._898989()
         uiviewPinView.addSubview(lblContent)
         uiviewPinView.addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblContent)
         
         lblLikeCount = UILabel()
         lblLikeCount.font = UIFont(name: "AvenirNext-Medium", size: 10)
         lblLikeCount.textAlignment = .right
-        lblLikeCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblLikeCount.textColor = UIColor._107107107()
         uiviewPinView.addSubview(lblLikeCount)
         uiviewPinView.addConstraintsWithFormat("H:[v0(27)]-95-|", options: [], views: lblLikeCount)
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: lblLikeCount)
@@ -157,7 +157,7 @@ class PinsTableViewCell: UITableViewCell {
         lblCommentCount = UILabel()
         lblCommentCount.font = UIFont(name: "AvenirNext-Medium", size: 10)
         lblCommentCount.textAlignment = .right
-        lblCommentCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblCommentCount.textColor = UIColor._107107107()
         uiviewPinView.addSubview(lblCommentCount)
         uiviewPinView.addConstraintsWithFormat("H:[v0(27)]-34-|", options: [], views: lblCommentCount)
         uiviewPinView.addConstraintsWithFormat("V:[v0(14)]-11-|", options: [], views: lblCommentCount)
@@ -194,7 +194,7 @@ class PinsTableViewCell: UITableViewCell {
         lblChatTitle.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lblChatTitle.textAlignment = .left
         lblChatTitle.numberOfLines = 1
-        lblChatTitle.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblChatTitle.textColor = UIColor._107107107()
         uiviewPinView.addSubview(lblChatTitle)
         uiviewPinView.addConstraintsWithFormat("H:|-96-[v0]-40-|", options: [], views: lblChatTitle)
         uiviewPinView.addConstraintsWithFormat("V:|-44-[v0(25)]", options: [], views: lblChatTitle)

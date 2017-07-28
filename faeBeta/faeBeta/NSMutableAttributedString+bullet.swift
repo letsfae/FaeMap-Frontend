@@ -10,7 +10,7 @@
 import Foundation
 extension NSMutableAttributedString {
     func appendDefaultString(_ string: String, bold: Bool) {
-        let astrContent = NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
+        let astrContent = NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
         self.append(astrContent)
     }
     
@@ -41,7 +41,7 @@ extension NSMutableAttributedString {
                 }
             }
             let range = NSRange(location: 0, length: length)
-            title.addAttributes([NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
+            title.addAttributes([NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
         }
         self.append(title)
     }

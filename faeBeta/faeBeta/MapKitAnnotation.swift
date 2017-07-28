@@ -31,6 +31,7 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // place pin & social pin
     var icon: UIImage!
+    var class_two_idx: Int = 0
     var pinInfo: AnyObject!
     
     init(type: String) {
@@ -65,6 +66,7 @@ class FaePinAnnotation: MKPointAnnotation {
             let placePin = PlacePin(json: json)
             self.pinInfo = placePin as AnyObject
             self.id = json["place_id"].intValue
+            self.class_two_idx = json["class_two_idx"].intValue
             self.icon = placePin.icon
             self.coordinate = placePin.coordinate
         }

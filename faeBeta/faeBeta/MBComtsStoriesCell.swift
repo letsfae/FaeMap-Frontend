@@ -65,19 +65,19 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         lblUsrName = UILabel()
         addSubview(lblUsrName)
         lblUsrName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblUsrName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsrName.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblUsrName)
         
         lblTime = UILabel()
         addSubview(lblTime)
         lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblTime.textColor = UIColor._107107107()
         addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblTime)
         
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblContent.textColor = UIColor._898989()
         lblContent.lineBreakMode = .byWordWrapping
         lblContent.numberOfLines = 0
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
@@ -92,7 +92,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         lblLoc = MBAddressLabel(frame: CGRect.zero)
         btnLoc.addSubview(lblLoc)
         lblLoc.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        lblLoc.textColor = UIColor.faeAppInputTextGrayColor()
+        lblLoc.textColor = UIColor._898989()
         lblLoc.lineBreakMode = .byTruncatingTail
         btnLoc.addConstraintsWithFormat("H:|-42-[v0]-2-|", options: [], views: lblLoc)
         btnLoc.addConstraintsWithFormat("V:|-6-[v0(20)]", options: [], views: lblLoc)
@@ -120,14 +120,14 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         lblFavCount = UILabel()
         uiviewCellFooter.addSubview(lblFavCount)
         lblFavCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        lblFavCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblFavCount.textColor = UIColor._107107107()
         lblFavCount.textAlignment = .right
         addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblFavCount)
         
         lblReplyCount = UILabel()
         uiviewCellFooter.addSubview(lblReplyCount)
         lblReplyCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        lblReplyCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblReplyCount.textColor = UIColor._107107107()
         lblReplyCount.textAlignment = .right
         addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblReplyCount)
         

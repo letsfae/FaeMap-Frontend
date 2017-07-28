@@ -34,7 +34,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         lblName = UILabel()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblName.textAlignment = .left
-        lblName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblName.textColor = UIColor._898989()
         self.addSubview(lblName)
         
         lblDistance = UILabel()
@@ -46,7 +46,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         lblAddress = UILabel()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         lblAddress.textAlignment = .left
-        lblAddress.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAddress.textColor = UIColor._107107107()
         lblAddress.lineBreakMode = NSLineBreakMode.byWordWrapping
         lblAddress.numberOfLines = 0;
         self.addSubview(lblAddress)
@@ -54,7 +54,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         lblMemo = UILabel()
         lblMemo.font = UIFont(name: "AvenirNext-DemiBoldItalic", size: 12)
         lblMemo.textAlignment = .left
-        lblMemo.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMemo.textColor = UIColor._107107107()
         lblMemo.lineBreakMode = NSLineBreakMode.byWordWrapping
         lblMemo.numberOfLines = 0;
         self.addSubview(lblMemo)

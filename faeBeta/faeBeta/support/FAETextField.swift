@@ -17,7 +17,7 @@ class FAETextField: UITextField {
     var uiviewRightPlaceHolder: UIView!
     var uiviewLeftPlaceHolderView: UIView!
     
-    fileprivate var _defaultTextColor = UIColor.faeAppRedColor()
+    fileprivate var _defaultTextColor = UIColor._2499090()
     var defaultTextColor: UIColor {
         get {
             return _defaultTextColor
@@ -80,12 +80,12 @@ class FAETextField: UITextField {
     
     fileprivate func setup() {
         self.autocorrectionType = .no
-        self.textColor = UIColor.faeAppInputTextGrayColor()
+        self.textColor = UIColor._898989()
         self.font = UIFont(name: "AvenirNext-Regular", size: 22.0)
         self.clearButtonMode = UITextFieldViewMode.never
         self.contentHorizontalAlignment = .center
         self.textAlignment = .center
-        self.tintColor = UIColor.faeAppRedColor()
+        self.tintColor = UIColor._2499090()
         self.autocapitalizationType = .none
         uiviewRightPlaceHolder = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
         uiviewLeftPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
@@ -98,7 +98,7 @@ class FAETextField: UITextField {
     }
     
     fileprivate func setupPasswordTextField() {
-        self.textColor = UIColor.faeAppRedColor()
+        self.textColor = UIColor._2499090()
         btnRight = UIButton(frame: CGRect(x: contentInset - 25, y: 0, width: 30, height: 30))
         btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
         uiviewRightPlaceHolder.addSubview(btnRight)
@@ -118,7 +118,7 @@ class FAETextField: UITextField {
             self.textColor = defaultTextColor
         } else {
             btnRight.setImage(UIImage(named: "check_eye_open_red_new")!, for: UIControlState())
-            self.textColor = UIColor.faeAppInputTextGrayColor()
+            self.textColor = UIColor._898989()
         }
     }
     

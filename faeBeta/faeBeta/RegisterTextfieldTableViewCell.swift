@@ -88,7 +88,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
             textfield.defaultTextColor = UIColor.faeAppOkPasswordOrangeColor()
             break
         default:
-            textfield.defaultTextColor = UIColor.faeAppRedColor()
+            textfield.defaultTextColor = UIColor._2499090()
             break
         }
     }

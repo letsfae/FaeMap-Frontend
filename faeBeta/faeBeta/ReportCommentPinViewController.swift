@@ -79,7 +79,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         buttonSendReport.center.x = screenWidth / 2
         buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
-        buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
+        buttonSendReport.backgroundColor = UIColor._2499090()
         buttonSendReport.addTarget(self, action: #selector(ReportCommentPinViewController.actionSendReport(_:)), for: .touchUpInside)
         self.view.insertSubview(buttonSendReport, at: 0)
         self.view.bringSubview(toFront: buttonSendReport)
@@ -88,7 +88,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         textViewReportContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewReportContent.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textViewReportContent.backgroundColor = UIColor.clear
-        textViewReportContent.tintColor = UIColor.faeAppRedColor()
+        textViewReportContent.tintColor = UIColor._2499090()
         textViewReportContent.delegate = self
         textViewReportContent.isScrollEnabled = false
         self.view.addSubview(textViewReportContent)
@@ -161,7 +161,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
             if textViewReportContent.text.trimmingCharacters(in: spacing).isEmpty == false {
                 buttonSendReport.isEnabled = true
                 lableTextViewPlaceholder.isHidden = true
-                buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
+                buttonSendReport.backgroundColor = UIColor._2499090()
             }
             else {
                 buttonSendReport.isEnabled = false

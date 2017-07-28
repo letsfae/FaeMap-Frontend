@@ -86,7 +86,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         btnBackground.alpha = 0
         
         backgroundColorViewTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight / 2))
-        backgroundColorViewTop.backgroundColor = UIColor.faeAppRedColor()
+        backgroundColorViewTop.backgroundColor = UIColor._2499090()
         view.addSubview(backgroundColorViewTop)
         backgroundColorViewTop.center.x -= 290
         

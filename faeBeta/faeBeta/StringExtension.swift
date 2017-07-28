@@ -164,7 +164,7 @@ extension String {
         let index = self.index(self.startIndex, offsetBy: endIndex)
         let restContent = " \(self.substring(from: index))"
         
-        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
+        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor._2499090()]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
         let regularString = restContent.convertStringWithEmoji()
@@ -234,7 +234,7 @@ extension String {
                 let index = content.index(content.startIndex, offsetBy: startIndex)
                 finalText = "\(finalText)\(tmpContent.substring(to: index))"
                 content = "\(tmpContent.substring(from: index))"
-                let attrStringWithString = NSAttributedString(string: "\(tmpContent.substring(to: index))", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+                let attrStringWithString = NSAttributedString(string: "\(tmpContent.substring(to: index))", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
                 retString.append(attrStringWithString)
             }
             if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
@@ -261,7 +261,7 @@ extension String {
             }
         }
         finalText = finalText + content
-        let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
         retString.append(attrStringWithString)
         return retString
     }

@@ -151,7 +151,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         lblEmptyTbl.numberOfLines = 3
         lblEmptyTbl.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblEmptyTbl.textAlignment = .left
-        lblEmptyTbl.textColor = UIColor.faeAppInputTextGrayColor()
+        lblEmptyTbl.textColor = UIColor._898989()
         imgEmptyTbl.addSubview(lblEmptyTbl)
         view.addSubview(imgEmptyTbl)
         view.addSubview(tblPinsData)

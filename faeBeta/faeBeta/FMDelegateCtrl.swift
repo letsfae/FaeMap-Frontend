@@ -11,7 +11,7 @@ import CoreLocation
 import RealmSwift
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, LeftSlidingMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
@@ -39,6 +39,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Lef
         animateToCoordinate(type: 2, coordinate: coordinate, animated: false)
     }
     func changeIconImage() {
+        /*
         let annotation = PinDetailViewController.pinAnnotation
         _ = "\(PinDetailViewController.pinTypeEnum)"
         let status = PinDetailViewController.pinStatus
@@ -46,6 +47,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Lef
         var mapPin_new = mapPin
         mapPin_new.status = status
         annotation?.pinInfo = mapPin_new as AnyObject
+         */
     }
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, pinID: String, annotation: FaePinAnnotation) {
         

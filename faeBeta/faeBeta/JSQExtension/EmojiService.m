@@ -20,7 +20,7 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
     NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular"
                                                                              size:16.0f],
-                                     @"NSForegroundColorAttributeName": isOutGoing ? [UIColor whiteColor] : [UIColor faeAppRedColor]
+                                     @"NSForegroundColorAttributeName": isOutGoing ? [UIColor whiteColor] : [UIColor _2499090]
                                      };
     int first = 0;
     for (int i = 0; i < [string length] ; i++) {
