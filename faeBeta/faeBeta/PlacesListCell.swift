@@ -39,7 +39,7 @@ class PlacesListCell: UITableViewCell {
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
         lblUserName.lineBreakMode = .byTruncatingTail
-        lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblUserName)
         addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblUserName)
@@ -47,7 +47,7 @@ class PlacesListCell: UITableViewCell {
         lblAddress = UILabel()
         lblAddress.textAlignment = .left
         lblAddress.lineBreakMode = .byTruncatingTail
-        lblAddress.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAddress.textColor = UIColor._107107107()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblAddress)
         addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblAddress)

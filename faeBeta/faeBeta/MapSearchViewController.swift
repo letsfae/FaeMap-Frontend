@@ -50,7 +50,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.isNavigationBarHidden = true
-        view.backgroundColor = UIColor.faeAppBackgroundColor()
+        view.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
         loadSearchBar()
         loadPlaceBtns()
         loadTable()
@@ -73,7 +73,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblNoResults.numberOfLines = 0
         lblNoResults.text = "No Results Found...\nTry a Different Search!"
         lblNoResults.textAlignment = .center
-        lblNoResults.textColor = UIColor.faeAppNoResultsColor()
+        lblNoResults.textColor = UIColor._115115115()
         lblNoResults.font = UIFont(name: "AvenirNext-Medium", size: 15)
         uiviewNoResults.layer.cornerRadius = 2
         addShadow(uiviewNoResults)
@@ -404,14 +404,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func addShadow(_ uiview: UIView) {
-        uiview.layer.shadowColor = UIColor.faeAppInputTextGrayColor().cgColor
+        uiview.layer.shadowColor = UIColor._898989().cgColor
         uiview.layer.shadowRadius = 2.2
         uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
         uiview.layer.shadowOpacity = 0.6
     }
     
     func backToMap(_ sender: UIButton) {
-        
+        navigationController?.popViewController(animated: false)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

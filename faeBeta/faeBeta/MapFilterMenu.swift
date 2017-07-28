@@ -132,7 +132,7 @@ class MapFilterMenu: UIView {
         lblRefresh = UILabel(frame: CGRect(x: 30, y: 196, width: 159, height: 25))
         lblRefresh.text = "Auto Refresh"
         lblRefresh.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblRefresh.textColor = UIColor.faeMapFilterActiveTxtColor()
+        lblRefresh.textColor = UIColor._115115115()
         uiviewMapOpt1.addSubview(lblRefresh)
         
         lblCyclePins = UILabel(frame: CGRect(x: 30, y: 250, width: 150, height: 25))
@@ -205,7 +205,7 @@ class MapFilterMenu: UIView {
     
     func switchAutoRefresh(_ sender: UISwitch) {
         if switchRefresh.isOn {
-            lblRefresh.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblRefresh.textColor = UIColor._115115115()
             delegate?.autoReresh(isOn: true)
         } else {
             lblRefresh.textColor = UIColor.faeAppInactiveBtnGrayColor()
@@ -215,7 +215,7 @@ class MapFilterMenu: UIView {
     
     func switchAutoCyclePins(_ sender: UISwitch) {
         if switchCyclePins.isOn {
-            lblCyclePins.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblCyclePins.textColor = UIColor._115115115()
             delegate?.autoCyclePins(isOn: true)
         } else {
             lblCyclePins.textColor = UIColor.faeAppInactiveBtnGrayColor()
@@ -225,7 +225,7 @@ class MapFilterMenu: UIView {
     
     func switchShowAvatars(_ sender: UISwitch) {
         if switchShowAvatars.isOn {
-            lblShowAvatars.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblShowAvatars.textColor = UIColor._115115115()
             delegate?.showAvatars(isOn: true)
         } else {
             lblShowAvatars.textColor = UIColor.faeAppInactiveBtnGrayColor()
