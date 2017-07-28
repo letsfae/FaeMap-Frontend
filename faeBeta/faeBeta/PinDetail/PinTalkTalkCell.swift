@@ -9,17 +9,6 @@
 import UIKit
 import SwiftyJSON
 
-protocol PinTalkTalkCellDelegate: class {
-    func directReplyFromPinCell(_ username: String, index: IndexPath) // Reply to this user
-    func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath)
-    // Vicky 06/21/17
-    func upVoteComment(index: IndexPath)
-    func downVoteComment(index: IndexPath)
-//    func cancelCommentVote(index: IndexPath)
-//    func updateCommentVoteCount(index: IndexPath)
-    // Vicky 06/21/17
-}
-
 class PinTalkTalkCell: UITableViewCell {
     
     weak var delegate: PinTalkTalkCellDelegate?
@@ -68,7 +57,7 @@ class PinTalkTalkCell: UITableViewCell {
             imgAvatar.image = PinTalkTalkCell.defaultAvatar
             lblNickName.text = anonyText
             if id == user_id {
-                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                let attri_0 = [NSForegroundColorAttributeName: UIColor._898989(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
                 let attri_1 = [NSForegroundColorAttributeName: UIColor(r: 146, g: 146, b: 146, alpha: 100),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!]
@@ -112,20 +101,20 @@ class PinTalkTalkCell: UITableViewCell {
         lblContent.lineBreakMode = .byWordWrapping
         lblContent.numberOfLines = 0
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblContent.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
         
         lblNickName = UILabel()
         addSubview(lblNickName)
         lblNickName.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblNickName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblNickName.textColor = UIColor._898989()
         lblNickName.textAlignment = .left
         addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblNickName)
         
         lblTime = UILabel()
         addSubview(lblTime)
         lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblTime.textColor = UIColor._107107107()
         lblTime.textAlignment = .left
         addConstraintsWithFormat("H:|-69-[v0]-69-|", options: [], views: lblTime)
         
@@ -133,7 +122,7 @@ class PinTalkTalkCell: UITableViewCell {
         lblVoteCount = UILabel()
         lblVoteCount.text = "0"
         lblVoteCount.font = UIFont(name: "PingFang SC-Semibold", size: 15)
-        lblVoteCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblVoteCount.textColor = UIColor._107107107()
         lblVoteCount.textAlignment = .center
         addSubview(lblVoteCount)
         addConstraintsWithFormat("H:|-42-[v0(56)]", options: [], views: lblVoteCount)

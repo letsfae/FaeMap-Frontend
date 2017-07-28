@@ -30,14 +30,14 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
     func loadInviteContent() {
         lblName = UILabel()
         lblName.textAlignment = .left
-        lblName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblName.textColor = UIColor._898989()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblName)
         addConstraintsWithFormat("H:|-25-[v0]-173-|", options: [], views: lblName)
         
         lblTel = UILabel()
         lblTel.textAlignment = .left
-        lblTel.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblTel.textColor = UIColor._107107107()
         lblTel.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblTel)
         addConstraintsWithFormat("H:|-25-[v0]-173-|", options: [], views: lblTel)

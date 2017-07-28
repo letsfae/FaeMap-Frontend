@@ -24,7 +24,7 @@ extension ContactsViewController {
         setupChooseAnActionAlert()
         setupNoti()
         uiviewOverlayGrayOpaque = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewOverlayGrayOpaque.backgroundColor = UIColor.faeAppTimeTextBlackColor()
+        uiviewOverlayGrayOpaque.backgroundColor = UIColor._107107107()
         uiviewOverlayGrayOpaque.alpha = 0
         let gesture = UITapGestureRecognizer(target: self, action:  #selector (closeBoth))
         uiviewOverlayGrayOpaque.addGestureRecognizer(gesture)

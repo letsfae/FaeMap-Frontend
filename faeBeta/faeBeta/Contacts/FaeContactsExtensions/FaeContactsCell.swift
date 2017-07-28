@@ -36,7 +36,7 @@ class FaeContactsCell: UITableViewCell {
         
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
-        lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
 //        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)

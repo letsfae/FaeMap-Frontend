@@ -16,7 +16,7 @@ class PDChatUserCell: UICollectionViewCell {
         super.init(frame: frame)
         loadCellItems()
         layer.cornerRadius = 25
-        layer.borderColor = UIColor.faeAppRedColor().cgColor
+        layer.borderColor = UIColor._2499090().cgColor
     }
     
     required init?(coder aDecoder: NSCoder) {

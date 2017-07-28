@@ -30,9 +30,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
          2. value of x and y is modified due to the padding reason
          3. your next task is try to understand the following UI layer logic, a little bit complex
          */
-        schbarContacts = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor.faeAppInputTextGrayColor())
+        schbarContacts = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
         schbarContacts.barTintColor = .white
-        schbarContacts.tintColor = UIColor.faeAppInputTextGrayColor()
+        schbarContacts.tintColor = UIColor._898989()
         schbarContacts.placeholder = "Search Friends                                                 "
         schbarContacts.delegate = self
         uiviewSchbar.addSubview(schbarContacts)

@@ -1,5 +1,5 @@
 //
-//  FaeContactsCell.swift
+//  FaeRequestedCell.swift
 //  FaeContacts
 //
 //  Created by 子不语 on 2017/6/14.
@@ -8,19 +8,19 @@
 
 import UIKit
 
-protocol SomeDelegateReceivedRequests: class {
-    func refuseRequest(requestId: Int, indexPath: IndexPath)
-    func acceptRequest(requestId: Int, indexPath: IndexPath)
+protocol SomeDelegateRequested: class {
+    func cancelRequest(requestId: Int, indexPath: IndexPath)
+    func resendRequest(requestId: Int)
 }
 
-class FaeReceivedCell: UITableViewCell {
+class FaeRequestedCell: UITableViewCell {
     
-    weak var delegate: SomeDelegateReceivedRequests?
-    var imgAvatar: FaeAvatarView!
+    weak var delegate: SomeDelegateRequested?
+    var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
-    var btnAgreeRequest: UIButton!
-    var btnRefuseRequest: UIButton!
+    var btnCancelRequest: UIButton!
+    var btnResendRequest: UIButton!
     var requestId: Int!
     var indexPath: IndexPath!
     var bottomLine: UIView!
@@ -37,16 +37,17 @@ class FaeReceivedCell: UITableViewCell {
     }
     
     fileprivate func loadFriendsCellContent() {
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
+        imgAvatar = UIImageView()
+        imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-//        imgAvatar.backgroundColor = .red
+        imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
-        lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
 //        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)
@@ -58,15 +59,15 @@ class FaeReceivedCell: UITableViewCell {
 //        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
         
-        btnAgreeRequest = UIButton()
-        addSubview(btnAgreeRequest)
-        btnAgreeRequest.setImage(#imageLiteral(resourceName: "btnAgree"), for: .normal)
-        btnAgreeRequest.addTarget(self, action: #selector(self.acceptRequest(_:)), for: .touchUpInside)
+        btnCancelRequest = UIButton()
+        addSubview(btnCancelRequest)
+        btnCancelRequest.setImage(#imageLiteral(resourceName: "btnRefuse"), for: .normal)
+        btnCancelRequest.addTarget(self, action: #selector(cancelRequest(_:)), for: .touchUpInside)
         
-        btnRefuseRequest = UIButton()
-        addSubview(btnRefuseRequest)
-        btnRefuseRequest.setImage(#imageLiteral(resourceName: "btnRefuse"), for: .normal)
-        btnRefuseRequest.addTarget(self, action: #selector(self.refuseRequest(_:)), for: .touchUpInside)
+        btnResendRequest = UIButton()
+        addSubview(btnResendRequest)
+        btnResendRequest.setImage(#imageLiteral(resourceName: "btnRequest"), for: .normal)
+        btnResendRequest.addTarget(self, action: #selector(resendRequest(_:)), for: .touchUpInside)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
@@ -74,20 +75,20 @@ class FaeReceivedCell: UITableViewCell {
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
 
-        
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserName)
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserSaying)
         addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-17-|", options: [], views: lblUserName, lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnAgreeRequest)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnRefuseRequest)
-        addConstraintsWithFormat("H:[v0(45)]-0-[v1(45)]-0-|", options: [], views:btnRefuseRequest, btnAgreeRequest)
+        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnCancelRequest)
+        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnResendRequest)
+        addConstraintsWithFormat("H:[v0(45)]-0-[v1(45)]-0-|", options: [], views:btnCancelRequest, btnResendRequest)
     }
     
-    func refuseRequest(_ sender: UIButton) {
-        self.delegate?.refuseRequest(requestId: requestId, indexPath: indexPath)
+    func cancelRequest(_ sender: UIButton) {
+        self.delegate?.cancelRequest(requestId: requestId, indexPath: indexPath)
     }
     
-    func acceptRequest(_ sender: UIButton) {
-        self.delegate?.acceptRequest(requestId: requestId, indexPath: indexPath)
+    func resendRequest(_ sender: UIButton) {
+        self.delegate?.resendRequest(requestId: requestId)
+
     }
 }

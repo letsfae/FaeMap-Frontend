@@ -40,7 +40,7 @@ class FaeRecommendedCell: UITableViewCell {
         
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
-        lblUserName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblUserName)
         addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserName)

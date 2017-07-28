@@ -62,7 +62,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
             uiviewNavBar.rightBtn.isHidden = false
             uiviewNavBar.rightBtn.setImage(nil, for: .normal)
             uiviewNavBar.rightBtn.setTitle("Refresh", for: .normal)
-            uiviewNavBar.rightBtn.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+            uiviewNavBar.rightBtn.setTitleColor(UIColor._2499090(), for: .normal)
             uiviewNavBar.rightBtn.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
             uiviewNavBar.rightBtn.addConstraintsWithFormat("H:|-0-[v0(64)]", options: [], views: uiviewNavBar.rightBtn.titleLabel!)
         }
@@ -72,7 +72,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         lblScanTitle = UILabel()
         lblScanTitle.text = "Scanning for people nerby!"
         lblScanTitle.textAlignment = .center
-        lblScanTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblScanTitle.textColor = UIColor._898989()
         lblScanTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
         
         lblScanSubtitle = UILabel()
