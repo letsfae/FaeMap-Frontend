@@ -111,6 +111,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         loadButton()
         loadMapFilter()
         loadPlaceDetail()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
