@@ -44,11 +44,12 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnClose)
         
         txtSchField = UITextField()
+//        txtSchField.backgroundColor = .blue
         txtSchField.delegate = self
         addSubview(txtSchField)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: txtSchField)
         
-        addConstraintsWithFormat("H:|-10-[v0(15)]-10-[v1]-5-[v2(30)]-21-|", options: [], views: imgSearch, txtSchField, btnClose)
+        addConstraintsWithFormat("H:|-10-[v0(15)]-9-[v1]-5-[v2(30)]-21-|", options: [], views: imgSearch, txtSchField, btnClose)
         
         btnClose.isHidden = true
         
@@ -57,6 +58,7 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         txtSchField.clearButtonMode = .never
         txtSchField.contentHorizontalAlignment = .left
         txtSchField.textAlignment = .left
+        txtSchField.contentVerticalAlignment = .center
         txtSchField.tintColor = UIColor._2499090()
         txtSchField.autocapitalizationType = .none
         txtSchField.autocorrectionType = .no
