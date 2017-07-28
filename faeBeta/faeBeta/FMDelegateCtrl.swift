@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
-import RealmSwift
 import SwiftyJSON
 
 extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
@@ -151,10 +149,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
     
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
     }
     
     func jumpToFaeUserMainPage() {
