@@ -25,6 +25,8 @@ extension FaeMapViewController {
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         btnFilterIcon.addGestureRecognizer(draggingGesture)
 //        uiviewFilterMenu.addGestureRecognizer(draggingGesture)
+        
+        
     }
     
     

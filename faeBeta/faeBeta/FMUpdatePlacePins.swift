@@ -28,32 +28,31 @@ extension FaeMapViewController {
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         placeResultBar.isHidden = false
         placeResultBar.resetSubviews()
-        placeResultBar.loadingData(for: 1, data: PlaceInfo(class_two_idx: firstAnn.class_two_idx, name: placePin.name, address: placePin.address1))
+        placeResultBar.loadingData(for: 1, data: placePin)
         boolCanOpenPin = true
     }
     
     func updateTimerForLoadRegionPlacePin() {
-        self.loadCurrentRegionPlacePins()
-        if timerLoadRegionPlacePins != nil {
-            timerLoadRegionPlacePins.invalidate()
-        }
+        loadCurrentRegionPlacePins()
+//        if timerLoadRegionPlacePins != nil {
+//            timerLoadRegionPlacePins.invalidate()
+//        }
 //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 750, target: self, selector: #selector(self.loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func loadCurrentRegionPlacePins() {
         let coorDistance = cameraDiagonalDistance()
-        if boolCanUpdatePlacePin {
-            boolCanUpdatePlacePin = false
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                self.refreshPlacePins(radius: coorDistance)
-                self.boolCanUpdatePlacePin = true
-            })
-        }
+        guard boolCanUpdatePlacePin else { return }
+        boolCanUpdatePlacePin = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+            self.refreshPlacePins(radius: coorDistance)
+            self.boolCanUpdatePlacePin = true
+        })
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
         boolCanUpdatePlacePin = false
-        self.renewSelfLocation()
+        renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         let getPlaceInfo = FaeMap()
@@ -63,7 +62,7 @@ extension FaeMapViewController {
         getPlaceInfo.whereKey("type", value: "place")
         getPlaceInfo.whereKey("max_count", value: "1000")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
+            guard status / 100 == 2 && message != nil else {
                 print("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdatePlacePin = true
                 return
@@ -74,7 +73,7 @@ extension FaeMapViewController {
                 self.boolCanUpdatePlacePin = true
                 return
             }
-            if mapPlaceJsonArray.count <= 0 {
+            guard mapPlaceJsonArray.count > 0 else {
                 self.boolCanUpdatePlacePin = true
                 return
             }

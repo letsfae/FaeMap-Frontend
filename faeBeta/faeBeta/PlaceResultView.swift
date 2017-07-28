@@ -8,13 +8,24 @@
 
 import UIKit
 
+protocol PlaceViewDelegate: class {
+    func animateTo()
+    func goToNext()
+    func goToPrev()
+}
+
 class PlaceResultView: UIView {
+    
+    weak var delegate: PlaceViewDelegate?
     
     var imgBack_0 = PlaceView()
     var imgBack_1 = PlaceView()
     var imgBack_2 = PlaceView()
     
     var offset: CGFloat = 0
+    
+    var boolLeft = true
+    var boolRight = true
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 68))
@@ -43,22 +54,22 @@ class PlaceResultView: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
-    func loadingData(for index: Int, data: PlaceInfo) {
+    func loadingData(for index: Int, data: PlacePin) {
 //        switch index {
 //        case 0:
             imgBack_0.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
             imgBack_0.lblName.text = data.name
-            imgBack_0.lblAddr.text = data.address
+            imgBack_0.lblAddr.text = data.address1 + ", " + data.address2
 //            break
 //        case 1:
             imgBack_1.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
             imgBack_1.lblName.text = data.name
-            imgBack_1.lblAddr.text = data.address
+            imgBack_1.lblAddr.text = data.address1 + ", " + data.address2
 //            break
 //        case 2:
             imgBack_2.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
             imgBack_2.lblName.text = data.name
-            imgBack_2.lblAddr.text = data.address
+            imgBack_2.lblAddr.text = data.address1 + ", " + data.address2
 //            break
 //        default:
 //            break
@@ -76,6 +87,7 @@ class PlaceResultView: UIView {
                     self.imgBack_0.frame.origin.x = 2
                     self.imgBack_1.frame.origin.x += screenWidth + 2
                 }, completion: {_ in
+                    self.delegate?.goToNext()
                     self.resetSubviews()
                 })
             } else if percent_1 < 0.3 && percent_1 > 0 {
@@ -83,6 +95,7 @@ class PlaceResultView: UIView {
                     self.imgBack_1.frame.origin.x = -screenWidth + 2
                     self.imgBack_2.frame.origin.x = 2
                 }, completion: {_ in
+                    self.delegate?.goToPrev()
                     self.resetSubviews()
                 })
             } else {
@@ -93,7 +106,7 @@ class PlaceResultView: UIView {
         } else {
             let off = location.x - offset
             imgBack_1.frame.origin.x += off
-            if off >= 0 {
+            if off >= 0  {
                 imgBack_0.frame.origin.x += off
             } else {
                 imgBack_2.frame.origin.x += off
@@ -144,10 +157,4 @@ class PlaceView: UIImageView {
         addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblAddr)
         addConstraintsWithFormat("V:|-43-[v0(16)]", options: [], views: lblAddr)
     }
-}
-
-struct PlaceInfo {
-    var class_two_idx: Int = 0
-    var name: String = ""
-    var address: String = ""
 }
