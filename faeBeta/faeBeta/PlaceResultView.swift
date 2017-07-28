@@ -9,9 +9,9 @@
 import UIKit
 
 protocol PlaceViewDelegate: class {
-    func animateTo()
-    func goToNext()
-    func goToPrev()
+    func animateTo(view: MKAnnotationView?)
+    func goToNext(view: MKAnnotationView?)
+    func goToPrev(view: MKAnnotationView?)
 }
 
 class PlaceResultView: UIView {
@@ -26,6 +26,8 @@ class PlaceResultView: UIView {
     
     var boolLeft = true
     var boolRight = true
+    
+    var views = [MKAnnotationView]()
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 68))
@@ -54,26 +56,27 @@ class PlaceResultView: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
-    func loadingData(for index: Int, data: PlacePin) {
-//        switch index {
-//        case 0:
-            imgBack_0.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-            imgBack_0.lblName.text = data.name
-            imgBack_0.lblAddr.text = data.address1 + ", " + data.address2
-//            break
-//        case 1:
-            imgBack_1.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-            imgBack_1.lblName.text = data.name
-            imgBack_1.lblAddr.text = data.address1 + ", " + data.address2
-//            break
-//        case 2:
-            imgBack_2.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-            imgBack_2.lblName.text = data.name
-            imgBack_2.lblAddr.text = data.address1 + ", " + data.address2
-//            break
-//        default:
-//            break
-//        }
+    func loadingData(for index: Int, data: PlacePin, views: [MKAnnotationView]) {
+        self.views = views
+        //        switch index {
+        //        case 0:
+//        imgBack_0.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
+//        imgBack_0.lblName.text = data.name
+//        imgBack_0.lblAddr.text = data.address1 + ", " + data.address2
+        //            break
+        //        case 1:
+        imgBack_1.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
+        imgBack_1.lblName.text = data.name
+        imgBack_1.lblAddr.text = data.address1 + ", " + data.address2
+        //            break
+        //        case 2:
+//        imgBack_2.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
+//        imgBack_2.lblName.text = data.name
+//        imgBack_2.lblAddr.text = data.address1 + ", " + data.address2
+        //            break
+        //        default:
+        //            break
+        //        }
     }
     
     func handlePanGesture(_ pan: UIPanGestureRecognizer) {
@@ -87,7 +90,7 @@ class PlaceResultView: UIView {
                     self.imgBack_0.frame.origin.x = 2
                     self.imgBack_1.frame.origin.x += screenWidth + 2
                 }, completion: {_ in
-                    self.delegate?.goToNext()
+                    self.delegate?.goToNext(view: self.views[0])
                     self.resetSubviews()
                 })
             } else if percent_1 < 0.3 && percent_1 > 0 {
@@ -95,7 +98,7 @@ class PlaceResultView: UIView {
                     self.imgBack_1.frame.origin.x = -screenWidth + 2
                     self.imgBack_2.frame.origin.x = 2
                 }, completion: {_ in
-                    self.delegate?.goToPrev()
+                    self.delegate?.goToPrev(view: self.views[1])
                     self.resetSubviews()
                 })
             } else {
