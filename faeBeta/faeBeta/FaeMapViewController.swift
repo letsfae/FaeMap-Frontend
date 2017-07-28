@@ -240,7 +240,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     // MARK: -- Load Navigation Items
     fileprivate func loadTransparentNavBarItems() {
         tabBarController?.tabBar.isHidden = true
-        navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
+        navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
