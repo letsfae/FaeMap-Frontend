@@ -8,9 +8,29 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
+import CCHMapClusterController
 
 extension FaeMapViewController {
+    
+    func tapPlacePin(didSelect view: MKAnnotationView) {
+        guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+        guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+        boolCanOpenPin = false
+        animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+        if let anView = view as? PlacePinAnnotationView {
+            let idx = firstAnn.class_two_idx
+            firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? UIImage()
+            anView.assignImage(firstAnn.icon)
+            selectedAnnView = anView
+            selectedAnn = firstAnn
+        }
+        
+        guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
+        placeResultBar.isHidden = false
+        placeResultBar.resetSubviews()
+        placeResultBar.loadingData(for: 1, data: PlaceInfo(class_two_idx: firstAnn.class_two_idx, name: placePin.name, address: placePin.address1))
+        boolCanOpenPin = true
+    }
     
     func updateTimerForLoadRegionPlacePin() {
         self.loadCurrentRegionPlacePins()
@@ -21,30 +41,13 @@ extension FaeMapViewController {
     }
     
     func loadCurrentRegionPlacePins() {
-        clearMap(type: "place", animated: true)
         let coorDistance = cameraDiagonalDistance()
-        if self.boolCanUpdatePlacePin {
-            self.boolCanUpdatePlacePin = false
+        if boolCanUpdatePlacePin {
+            boolCanUpdatePlacePin = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
                 self.refreshPlacePins(radius: coorDistance)
                 self.boolCanUpdatePlacePin = true
             })
-        }
-    }
-    
-    fileprivate func pinPlacesOnMap(results: [PlacePin]) {
-        var pins = [FaePinAnnotation]()
-        DispatchQueue.global(qos: .default).async {
-            for result in results {
-                let pinMap = FaePinAnnotation(type: "place")
-                pinMap.coordinate = result.coordinate
-                pinMap.icon = result.icon
-                pinMap.pinInfo = result as AnyObject
-                pins.append(pinMap)
-            }
-            DispatchQueue.main.async {
-                self.mapClusterManager.addAnnotations(pins, withCompletionHandler: nil)
-            }
         }
     }
     

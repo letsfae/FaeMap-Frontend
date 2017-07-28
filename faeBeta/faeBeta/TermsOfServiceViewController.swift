@@ -55,8 +55,8 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         let attrRange1 = NSRange(location: 0, length: 16)
         let attrRange2 = NSRange(location: 17, length: 15)
         
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppInputTextGrayColor(), range: attrRange1)
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor.faeAppTimeTextBlackColor(), range: attrRange2)
+        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._898989(), range: attrRange1)
+        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._107107107(), range: attrRange2)
         astrTitle.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
         astrTitle.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
         titleLabel.attributedText = astrTitle
@@ -65,7 +65,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         textView.attributedText = astrContent()
         textView.sizeToFit()
         textView.isEditable = false
-        textView.tintColor = UIColor.faeAppRedColor()
+        textView.tintColor = UIColor._2499090()
         textView.isScrollEnabled = false
         scrollView.addSubview(textView)
         scrollView.contentSize.height = CGFloat(123) + textView.frame.size.height
@@ -75,7 +75,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
-            indicator.backgroundColor = UIColor.faeAppRedColor()
+            indicator.backgroundColor = UIColor._2499090()
         }
     }
     
@@ -84,7 +84,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
             return "        \(num).  "
         }
         
-        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
+        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
         astrContent.appendDefaultString("Effective: ", bold: true)
         astrContent.appendDefaultString("November 11, 2016.\n\nWelcome to Fae Interactive! We are focused on building real-time interactions to enrich our online experiences with the wonderful things we do in life and to power our lives with the connections from the online world.\n\nWe drafted these Terms of Service (the “Terms”) for our first product Fae Map, an interactive, real-time social map (the “Software”) provided by Fae Interactive (“Fae”), a branch of Faevorite Inc., a Delaware Corporation (“Faevorite” is intentionally spelled that way).  These Terms and our Privacy Policy [www.faemaps.com/legal/privacy] govern your access to and use of our services (the “Services”) and any content, videos, information, texts, graphics, photos or other materials uploaded, downloaded, or appearing in the Software (the “Content”).\n\nYour access to and use of our Services is conditioned on your acceptance of and compliance with these Terms and Privacy Policy; therefore it is recommended that you read these Terms and Privacy Policy carefully.\n\n", bold: false)
         

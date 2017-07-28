@@ -30,7 +30,7 @@ class FaeCellForAddressSearch: UITableViewCell {
         lblName = UILabel()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblName.textAlignment = .left
-        lblName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblName.textColor = UIColor._898989()
         self.addSubview(lblName)
     }
 }

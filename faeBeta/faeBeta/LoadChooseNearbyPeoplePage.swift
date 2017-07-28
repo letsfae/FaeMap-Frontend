@@ -86,7 +86,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         let lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
         lblCurtLoc.text = "Current Location"
         lblCurtLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblCurtLoc.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblCurtLoc.textColor = UIColor._107107107()
         uiviewPeopleLocDetail.addSubview(imgIcon)
         uiviewPeopleLocDetail.addSubview(lblCurtLoc)
         
@@ -130,12 +130,12 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         lblAgeVal.text = "\(ageLBVal)-\(ageUBVal)"
         lblAgeVal.textAlignment = .right
         
-        lblDis.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblGender.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblGenderBoth.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblGenderMale.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblGenderFemale.textColor = UIColor.faeAppTimeTextBlackColor()
-        lblAgeRange.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblDis.textColor = UIColor._107107107()
+        lblGender.textColor = UIColor._107107107()
+        lblGenderBoth.textColor = UIColor._107107107()
+        lblGenderMale.textColor = UIColor._107107107()
+        lblGenderFemale.textColor = UIColor._107107107()
+        lblAgeRange.textColor = UIColor._107107107()
         lblDisVal.textColor = UIColor.faeAppInactiveBtnGrayColor()
         lblAgeVal.textColor = UIColor.faeAppInactiveBtnGrayColor()
         
@@ -175,7 +175,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         sliderDisFilter = UISlider(frame: CGRect(x: 28, y: 104, width: screenWidth - 56, height: 28))
         sliderDisFilter.setThumbImage(#imageLiteral(resourceName: "mb_emptyRedOval"), for: .normal)
         sliderDisFilter.maximumTrackTintColor = UIColor.faeAppNavBarBorderColor()
-        sliderDisFilter.minimumTrackTintColor = UIColor.faeAppRedColor()
+        sliderDisFilter.minimumTrackTintColor = UIColor._2499090()
         sliderDisFilter.minimumValue = 0
         sliderDisFilter.maximumValue = 100
         sliderDisFilter.addTarget(self, action: #selector(self.changeDisRange(_:)), for: .valueChanged)
@@ -183,7 +183,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         sliderAgeFilter = TTRangeSlider(frame: CGRect(x: 28, y: 296, width: screenWidth - 56, height: 28))
         sliderAgeFilter.delegate = self
         sliderAgeFilter.tintColor = UIColor.faeAppNavBarBorderColor()
-        sliderAgeFilter.tintColorBetweenHandles = UIColor.faeAppRedColor()
+        sliderAgeFilter.tintColorBetweenHandles = UIColor._2499090()
         sliderAgeFilter.handleImage = #imageLiteral(resourceName: "mb_emptyRedOval")
         sliderAgeFilter.handleDiameter = 22
         sliderAgeFilter.lineHeight = 2.4

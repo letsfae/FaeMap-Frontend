@@ -62,7 +62,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblMyPins = UILabel()
         lblMyPins.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         lblMyPins.textAlignment = .left
-        lblMyPins.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMyPins.textColor = UIColor._107107107()
         lblMyPins.text = "My Pins"
         view.addSubview(lblMyPins)
         
@@ -93,7 +93,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblMyLists = UILabel()
         lblMyLists.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         lblMyLists.textAlignment = .left
-        lblMyLists.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMyLists.textColor = UIColor._107107107()
         lblMyLists.text = "My Lists"
         view.addSubview(lblMyLists)
         

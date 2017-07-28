@@ -70,6 +70,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
     
     //click cell
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        /*
         if(!gesturerecognizerTouch.isCellSwiped) {
             tableView.deselectRow(at: indexPath, animated: false)
             
@@ -93,6 +94,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
             })
             
         }
+         */
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

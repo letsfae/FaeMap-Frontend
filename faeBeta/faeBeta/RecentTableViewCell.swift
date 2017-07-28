@@ -156,7 +156,7 @@ class RecentTableViewCell: UITableViewCell {
         counterLabel.text = ""
         counterLabel.layer.cornerRadius = 11
         counterLabel.layer.masksToBounds = true
-        counterLabel.backgroundColor = UIColor.faeAppRedColor()
+        counterLabel.backgroundColor = UIColor._2499090()
         if recent.unread > 0 {
             counterLabel.isHidden = false
             counterLabel.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
@@ -172,7 +172,7 @@ class RecentTableViewCell: UITableViewCell {
         let date = recent.date
         let seconds = Date().timeIntervalSince(date as Date)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date as Date)
-        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor.faeAppRedColor()
+        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor._2499090()
         dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
         guard let userid = Int(recent.withUserID) else { return }

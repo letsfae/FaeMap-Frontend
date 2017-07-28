@@ -8,9 +8,29 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
+import CCHMapClusterController
 
 extension FaeMapViewController {
+    
+    func tapUserPin(didSelect view: MKAnnotationView) {
+        guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+        guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+        guard firstAnn.id != -1 else { return }
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        boolCanUpdateUserPin = false
+        boolCanOpenPin = false
+        animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
+        updateNameCard(withUserId: firstAnn.id)
+        animateNameCard()
+        UIView.animate(withDuration: 0.25, delay: 0, animations: {
+            self.btnCardClose.alpha = 1
+        }, completion: { _ in
+            self.boolCanOpenPin = true
+        })
+    }
+    
     func updateTimerForUserPin() {
         self.updateSelfLocation()
         if timerUpdateSelfLocation != nil {

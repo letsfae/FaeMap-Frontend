@@ -45,20 +45,20 @@ class MBTalkCommentsCell: UITableViewCell {
         lblUsrName = UILabel()
         addSubview(lblUsrName)
         lblUsrName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblUsrName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsrName.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-80-[v0]-110-|", options: [], views: lblUsrName)
         
         lblTime = UILabel()
         addSubview(lblTime)
         lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblTime.textColor = UIColor._107107107()
         addConstraintsWithFormat("H:|-80-[v0]-110-|", options: [], views: lblTime)
         addConstraintsWithFormat("V:|-19-[v0(25)]-1-[v1(18)]", options: [], views: lblUsrName, lblTime)
         
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        lblContent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblContent.textColor = UIColor._898989()
         lblContent.lineBreakMode = .byWordWrapping
         lblContent.numberOfLines = 0
         addConstraintsWithFormat("H:|-27-[v0]-27-|", options: [], views: lblContent)
@@ -76,7 +76,7 @@ class MBTalkCommentsCell: UITableViewCell {
         lblVoteCount = UILabel()
         uiviewFav.addSubview(lblVoteCount)
         lblVoteCount.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        lblVoteCount.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblVoteCount.textColor = UIColor._107107107()
         lblVoteCount.textAlignment = .center
         uiviewFav.addConstraintsWithFormat("V:|-6-[v0(20)]", options: [], views: lblVoteCount)
         

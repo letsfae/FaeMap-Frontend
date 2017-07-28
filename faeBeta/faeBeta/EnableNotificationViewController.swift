@@ -35,7 +35,7 @@ class EnableNotificationViewController: UIViewController {
         titleLabel = UILabel(frame: CGRect(x: 15, y: 460 * screenHeightFactor, width: screenWidth - 30, height: 54))
 
         titleLabel.numberOfLines = 2
-        titleLabel.attributedText = NSAttributedString(string:"Help your Windbell in delivering\nimportant notifications!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        titleLabel.attributedText = NSAttributedString(string:"Help your Windbell in delivering\nimportant notifications!", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         titleLabel.textAlignment = .center
         titleLabel.sizeToFit()
         titleLabel.center.x = screenWidth / 2
@@ -54,13 +54,13 @@ class EnableNotificationViewController: UIViewController {
 
         enableNotificationButton.setAttributedTitle(NSAttributedString(string: "Enable Notifications", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         enableNotificationButton.layer.cornerRadius = 25 * screenHeightFactor
-        enableNotificationButton.backgroundColor = UIColor.faeAppRedColor()
+        enableNotificationButton.backgroundColor = UIColor._2499090()
         enableNotificationButton.addTarget(self, action: #selector(EnableNotificationViewController.enableNotificationButtonTapped), for: .touchUpInside)
         self.view.addSubview(enableNotificationButton)
         
         notNowButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 38 * screenHeightFactor - 18, width: 60, height: 18))
         notNowButton.center.x = screenWidth / 2
-        notNowButton.setAttributedTitle(NSAttributedString(string: "Not Now", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+        notNowButton.setAttributedTitle(NSAttributedString(string: "Not Now", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
         notNowButton.addTarget(self, action: #selector(self.notNowButtonTapped), for: .touchUpInside)
         self.view.addSubview(notNowButton)
     }

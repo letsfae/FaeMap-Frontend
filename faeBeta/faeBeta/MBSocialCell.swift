@@ -39,7 +39,7 @@ class MBSocialCell: UITableViewCell {
         lblTitle = UILabel()
         addSubview(lblTitle)
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTitle.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblTitle)
         
         lblContent = UILabel()

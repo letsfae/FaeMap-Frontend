@@ -193,8 +193,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private func navigationBarSet() {
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
-        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor.faeAppInputTextGrayColor()] as [String : Any]
-        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
+        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor._898989()] as [String : Any]
+        self.navigationController?.navigationBar.tintColor = UIColor._2499090()
         self.navigationController!.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
         

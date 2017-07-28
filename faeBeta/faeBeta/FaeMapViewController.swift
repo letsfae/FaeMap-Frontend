@@ -92,7 +92,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var percent: Double = 0 // Pan gesture var
     
     var imgSchbarShadow: UIImageView!
- 
+    
+    var selectedAnnView: PlacePinAnnotationView?
+    var selectedAnn: FaePinAnnotation?
+    
+    var placeResultBar = PlaceResultView()
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,6 +110,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         updateSelfInfo()
         loadButton()
         loadMapFilter()
+        loadPlaceDetail()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -209,15 +214,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         updateTimerForLoadRegionPin()
         updateTimerForUserPin()
         updateTimerForLoadRegionPlacePin()
-    }
-    
-    // Testing back from background
-    func appBackFromBackground() {
-        if faeMapView != nil {
-            updateTimerForAllPins()
-            renewSelfLocation()
-            reloadSelfPosAnimation()
-        }
     }
     
     func reloadSelfPosAnimation() {

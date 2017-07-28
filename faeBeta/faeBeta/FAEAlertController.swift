@@ -13,7 +13,7 @@ class FAEAlertController: UIAlertController {
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.view.tintColor = UIColor.faeAppRedColor()
+        self.view.tintColor = UIColor._2499090()
     }
     
     override func viewWillAppear(_ animated: Bool) {

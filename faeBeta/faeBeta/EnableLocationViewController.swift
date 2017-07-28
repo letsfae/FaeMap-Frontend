@@ -35,7 +35,7 @@ class EnableLocationViewController: UIViewController {
         self.view.addSubview(imageView)
         
         titleLabel = UILabel(frame: CGRect(x: 15, y: 460 * screenHeightFactor, width: screenWidth - 30, height: 27))
-        titleLabel.attributedText = NSAttributedString(string: "Location Access", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        titleLabel.attributedText = NSAttributedString(string: "Location Access", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
         
@@ -55,7 +55,7 @@ class EnableLocationViewController: UIViewController {
         enableLocationButton.center.x = screenWidth / 2
         enableLocationButton.setAttributedTitle(NSAttributedString(string: "Enable Location", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for: UIControlState())
         enableLocationButton.layer.cornerRadius = 25 * screenHeightFactor
-        enableLocationButton.backgroundColor = UIColor.faeAppRedColor()
+        enableLocationButton.backgroundColor = UIColor._2499090()
         enableLocationButton.addTarget(self, action: #selector(self.enableLocationButtonTapped), for: .touchUpInside)
         self.view.addSubview(enableLocationButton)
         

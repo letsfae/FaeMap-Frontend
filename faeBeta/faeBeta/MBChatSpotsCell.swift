@@ -38,13 +38,13 @@ class MBChatSpotsCell: UITableViewCell {
         lblChatTitle = UILabel()
         addSubview(lblChatTitle)
         lblChatTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblChatTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblChatTitle.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatTitle)
         
         lblChatDesp = UILabel()
         addSubview(lblChatDesp)
         lblChatDesp.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblChatDesp.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblChatDesp.textColor = UIColor._107107107()
         lblChatDesp.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatDesp)
         addConstraintsWithFormat("V:|-26-[v0(25)]-1-[v1(18)]", options: [], views: lblChatTitle, lblChatDesp)

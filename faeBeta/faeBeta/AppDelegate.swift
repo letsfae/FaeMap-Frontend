@@ -257,17 +257,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              print("Notification enabled")
              }*/
         }
-        if let vc = self.window?.visibleViewController {
-            if vc is FaeMapViewController {
-                //                print("is FaeMap")
-                if let faeMapVC = vc as? FaeMapViewController {
-                    faeMapVC.appBackFromBackground()
-                    // Sent noti to start filter icon spinning
-                }
-            } else if vc is PinDetailViewController {
-                //                print("is PinDetail")
-            }
-        }
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

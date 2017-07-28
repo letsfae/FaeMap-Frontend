@@ -31,7 +31,7 @@ class MBTalkTopicCell: UITableViewCell {
         lblTopics = UILabel(frame: CGRect(x: 23, y: 13, width: screenWidth - 46, height: 25))
         addSubview(lblTopics)
         lblTopics.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblTopics.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTopics.textColor = UIColor._898989()
         
         lblPostsCount = UILabel(frame: CGRect(x: 23, y: 37, width: screenWidth - 46, height: 18))
         addSubview(lblPostsCount)

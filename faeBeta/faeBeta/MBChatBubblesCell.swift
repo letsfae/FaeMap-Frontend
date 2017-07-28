@@ -39,12 +39,12 @@ class MBChatBubblesCell: UITableViewCell {
         lblBubbleTitle = UILabel(frame: CGRect(x: 72, y: 10, width: 255, height: 25))
         addSubview(lblBubbleTitle)
         lblBubbleTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblBubbleTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblBubbleTitle.textColor = UIColor._898989()
         
         lblBubbleTime = UILabel(frame: CGRect(x: 72, y: 34, width: 280, height:  18))
         addSubview(lblBubbleTime)
         lblBubbleTime.font = UIFont(name: "PingFangSC-Medium", size: 13)
-        lblBubbleTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblBubbleTime.textColor = UIColor._107107107()
         lblBubbleTime.lineBreakMode = .byTruncatingTail
         
     }

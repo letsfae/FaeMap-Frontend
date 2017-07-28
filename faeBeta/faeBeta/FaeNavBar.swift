@@ -36,7 +36,7 @@ class FaeNavBar: UIView {
         
         lblTitle.text = ""
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         addSubview(lblTitle)
         addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: lblTitle)

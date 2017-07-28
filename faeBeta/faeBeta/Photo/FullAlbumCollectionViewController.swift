@@ -149,7 +149,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         showTableButton.titleLabel?.text = ""
         showTableButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.showAlbumTable), for: .touchUpInside)
         
-        self.navigationController?.navigationBar.tintColor = UIColor.faeAppRedColor()
+        self.navigationController?.navigationBar.tintColor = UIColor._2499090()
         self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.isTranslucent = false
         
@@ -175,7 +175,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             strSendBtn = "Done"
         }
         sendButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
-        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
         sendButton.contentHorizontalAlignment = .right
         sendButton.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
@@ -186,7 +186,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         
         cancelButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 30))
-        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         cancelButton.setAttributedTitle(attributedText2, for: UIControlState())
         cancelButton.contentHorizontalAlignment = .left
         cancelButton.addTarget(self, action: #selector(self.cancelSend), for: .touchUpInside)
@@ -328,7 +328,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             strSendBtn = "Done"
         }
         sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
-        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor.faeAppRedColor() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor._2499090() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
     }
     

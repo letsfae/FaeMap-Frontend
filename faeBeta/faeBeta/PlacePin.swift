@@ -16,7 +16,7 @@ class PlacePin: NSObject {
     let name: String
     let coordinate: CLLocationCoordinate2D
     let classTwo: String
-    let classTwo_idx: Int
+    let class_two_idx: Int
     // let imageURL: String
     let address1: String
     let address2: String
@@ -31,8 +31,8 @@ class PlacePin: NSObject {
         self.address2 = json["city"].stringValue + ", " + json["country"].stringValue + ", " + json["zip_code"].stringValue + ", " + json["state"].stringValue
         self.coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         self.classTwo = json["class_two"].stringValue
-        self.classTwo_idx = json["class_two_idx"].intValue
-        self.icon = UIImage(named: "place_map_\(self.classTwo_idx)") ?? UIImage()
+        self.class_two_idx = json["class_two_idx"].intValue
+        self.icon = UIImage(named: "place_map_\(self.class_two_idx)") ?? UIImage()
     }
     
     override func isEqual(_ object: Any?) -> Bool {
