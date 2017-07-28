@@ -18,7 +18,7 @@ class MBSocialCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 80, y: 77, width: screenWidth - 80, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -45,7 +45,7 @@ class MBSocialCell: UITableViewCell {
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblContent.textColor = UIColor.faeAppInfoLabelGrayColor()
+        lblContent.textColor = UIColor._182182182()
         lblContent.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-80-[v0]-15-|", options: [], views: lblContent)
         

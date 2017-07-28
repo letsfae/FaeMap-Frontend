@@ -94,12 +94,12 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
-        topLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        topLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(topLine)
         
         let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(bottomLine)
         
         view.addSubview(uiviewSchbar)
@@ -111,25 +111,25 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         lblMyUsername = UILabel()
         lblMyUsername.textAlignment = .center
         lblMyUsername.text = "My Username:"
-        lblMyUsername.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblMyUsername.textColor = UIColor._155155155()
         lblMyUsername.font = UIFont(name: "AvenirNext-Medium", size: 13)
         
         lblMyUsernameField = UILabel()
         lblMyUsernameField.textAlignment = .center
         lblMyUsernameField.text = "placeholder1"
-        lblMyUsernameField.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblMyUsernameField.textColor = UIColor._155155155()
         lblMyUsernameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         
         lblMyScreenname = UILabel()
         lblMyScreenname.textAlignment = .center
         lblMyScreenname.text = "My Display Name:"
-        lblMyScreenname.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblMyScreenname.textColor = UIColor._155155155()
         lblMyScreenname.font = UIFont(name: "AvenirNext-Medium", size: 13)
         
         lblMyScreennameField = UILabel()
         lblMyScreennameField.textAlignment = .center
         lblMyScreennameField.text = "placeholder2"
-        lblMyScreennameField.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblMyScreennameField.textColor = UIColor._155155155()
         lblMyScreennameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         
         view.addSubview(lblMyUsername)

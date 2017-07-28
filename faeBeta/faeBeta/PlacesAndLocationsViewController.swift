@@ -244,7 +244,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     
     func loadEditBar() {
         uiviewEditbar = UIView(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 56))
-        uiviewEditbar.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewEditbar.backgroundColor = UIColor._234234234()
         uiviewBackground.addSubview(uiviewEditbar)
         
         btnShare = UIButton()
@@ -265,7 +265,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         btnMemo.setTitle("Memo", for: .normal)
         btnMemo.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnMemo.setTitleColor(UIColor.white, for: .normal)
-        btnMemo.backgroundColor = UIColor.faeAppPurpleColor()
+        btnMemo.backgroundColor = UIColor(r: 194, g: 166, b: 217, alpha: 100)
         btnMemo.layer.cornerRadius = 8
         
         btnShare.addTarget(self, action: #selector(actionBtnShare(_:)), for: .touchUpInside)
@@ -361,7 +361,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
             
         default: break
         }
-        searchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        searchBar.barTintColor = UIColor._234234234()
         // hide cancel button
         searchBar.showsCancelButton = false
         // hide bookmark button
@@ -387,7 +387,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     private func loadTblResult() {
         
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewBackground.backgroundColor = UIColor._234234234()
         tblResult = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65), style: UITableViewStyle.plain)
         tblResult.backgroundColor = .white
         tblResult.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")

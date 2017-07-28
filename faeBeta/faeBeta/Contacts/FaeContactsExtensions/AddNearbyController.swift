@@ -78,7 +78,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         lblScanSubtitle = UILabel()
         lblScanSubtitle.text = "make sure others are also scanning..."
         lblScanSubtitle.textAlignment = .center
-        lblScanSubtitle.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblScanSubtitle.textColor = UIColor._138138138()
         lblScanSubtitle.font = UIFont(name: "AvenirNext-Medium", size: 16)
         
         view.addSubview(lblScanTitle)

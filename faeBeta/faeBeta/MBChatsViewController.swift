@@ -49,7 +49,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.addConstraintsWithFormat("H:|-65-[v0(\(130 * screenWidthFactor))]", options: [], views: btnChatSpots)
         
         let uiviewGrayUnderLine = UIView(frame: CGRect(x: 0, y: uiviewNavBar.frame.height - 1, width: screenWidth, height: 1))
-        uiviewGrayUnderLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        uiviewGrayUnderLine.backgroundColor = UIColor._200199204()
         uiviewNavBar.addSubview(uiviewGrayUnderLine)
         
         btnChatSpots.setTitle("Chat Spots", for: .normal)
@@ -64,7 +64,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.addConstraintsWithFormat("H:[v0(\(130 * screenWidthFactor))]-65-|", options: [], views: btnBubbles)
         
         btnBubbles.setTitle("Bubbles", for: .normal)
-        btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+        btnBubbles.setTitleColor(UIColor._146146146(), for: .normal)
         btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
         btnBubbles.tag = 1
         btnBubbles.addTarget(self, action: #selector(self.switchBetweenChatSpotsAndBubbles(_:)), for: .touchUpInside)
@@ -84,14 +84,14 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         if sender.tag == 0 {
             tableMode = .chatSpots
             btnChatSpots.setTitleColor(UIColor._2499090(), for: .normal)
-            btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnBubbles.setTitleColor(UIColor._146146146(), for: .normal)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             targetCenter = btnChatSpots.center.x
         } else if sender.tag == 1 {
             tableMode = .bubbles
             btnBubbles.setTitleColor(UIColor._2499090(), for: .normal)
-            btnChatSpots.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnChatSpots.setTitleColor(UIColor._146146146(), for: .normal)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             targetCenter = btnBubbles.center.x
@@ -122,7 +122,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         // draw line
         let lblAllComUnderLine = UIView(frame: CGRect(x: 0, y: uiviewAllCom.frame.height - 1, width: screenWidth, height: 1))
-        lblAllComUnderLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        lblAllComUnderLine.layer.borderColor = UIColor._200199204cg()
         lblAllComUnderLine.layer.borderWidth = 1
         uiviewAllCom.addSubview(lblAllComUnderLine)
     }

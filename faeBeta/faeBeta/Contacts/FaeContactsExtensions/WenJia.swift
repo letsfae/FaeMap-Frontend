@@ -44,7 +44,7 @@ extension ContactsViewController {
         uiviewTabView.addSubview(btnRequested)
         btnRequested.tag = 1
         btnRequested.setTitle("Requested", for: .normal)
-        btnRequested.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+        btnRequested.setTitleColor(UIColor._146146146(), for: .normal)
         btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
         uiviewTabView.addConstraintsWithFormat("H:[v0(130)]-35-|", options: [], views: btnRequested)
         uiviewTabView.addConstraintsWithFormat("V:|-0-[v0(30)]", options: [], views: btnRequested)
@@ -52,7 +52,7 @@ extension ContactsViewController {
         
         uiviewBottomLine = UIView(frame: CGRect(x: 0, y: uiviewTabView.frame.height - 1, width: screenWidth, height: 1))
         uiviewTabView.addSubview(uiviewBottomLine)
-        uiviewBottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        uiviewBottomLine.backgroundColor = UIColor._200199204()
         
         uiviewRedBottomLine = UIView()
         uiviewTabView.addSubview(uiviewRedBottomLine)
@@ -69,7 +69,7 @@ extension ContactsViewController {
             btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnRequested.setTitleColor(UIColor._2499090(), for: .normal)
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnReceived.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnReceived.setTitleColor(UIColor._146146146(), for: .normal)
             targetCenter = btnRequested.center.x
         }
         else {
@@ -77,7 +77,7 @@ extension ContactsViewController {
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnReceived.setTitleColor(UIColor._2499090(), for: .normal)
             btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            btnRequested.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnRequested.setTitleColor(UIColor._146146146(), for: .normal)
             targetCenter = btnReceived.center.x
         }
         

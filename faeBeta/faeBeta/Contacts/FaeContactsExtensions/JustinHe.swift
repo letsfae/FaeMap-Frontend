@@ -59,12 +59,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
-        topLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        topLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(topLine)
         
         let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(bottomLine)
         
         /* Comment from Joshua:
@@ -78,7 +78,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         
         uiviewBottomNav = UIView()
         uiviewBottomNav.frame = CGRect(x: 0, y: screenHeight - 50, width: screenWidth, height: 50)
-        uiviewBottomNav.backgroundColor = UIColor.faeAppShadowGrayColor()
+        uiviewBottomNav.backgroundColor = UIColor._210210210()
         view.addSubview(uiviewBottomNav)
         
         btnFFF = UIButton()

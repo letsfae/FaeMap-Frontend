@@ -63,7 +63,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         self.uiviewPeopleLocDetail.isHidden = true
         
         let uiviewLowerLine = UIView(frame: CGRect(x: 0, y: 363, width: screenWidth, height: 1))
-        uiviewLowerLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        uiviewLowerLine.backgroundColor = UIColor._200199204()
         uiviewPeopleLocDetail.addSubview(uiviewLowerLine)
         
         // draw three lines
@@ -136,8 +136,8 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         lblGenderMale.textColor = UIColor._107107107()
         lblGenderFemale.textColor = UIColor._107107107()
         lblAgeRange.textColor = UIColor._107107107()
-        lblDisVal.textColor = UIColor.faeAppInactiveBtnGrayColor()
-        lblAgeVal.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblDisVal.textColor = UIColor._146146146()
+        lblAgeVal.textColor = UIColor._146146146()
         
         lblDis.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblGender.font = UIFont(name: "AvenirNext-Medium", size: 16)
@@ -174,7 +174,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         
         sliderDisFilter = UISlider(frame: CGRect(x: 28, y: 104, width: screenWidth - 56, height: 28))
         sliderDisFilter.setThumbImage(#imageLiteral(resourceName: "mb_emptyRedOval"), for: .normal)
-        sliderDisFilter.maximumTrackTintColor = UIColor.faeAppNavBarBorderColor()
+        sliderDisFilter.maximumTrackTintColor = UIColor._200199204()
         sliderDisFilter.minimumTrackTintColor = UIColor._2499090()
         sliderDisFilter.minimumValue = 0
         sliderDisFilter.maximumValue = 100
@@ -182,7 +182,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         
         sliderAgeFilter = TTRangeSlider(frame: CGRect(x: 28, y: 296, width: screenWidth - 56, height: 28))
         sliderAgeFilter.delegate = self
-        sliderAgeFilter.tintColor = UIColor.faeAppNavBarBorderColor()
+        sliderAgeFilter.tintColor = UIColor._200199204()
         sliderAgeFilter.tintColorBetweenHandles = UIColor._2499090()
         sliderAgeFilter.handleImage = #imageLiteral(resourceName: "mb_emptyRedOval")
         sliderAgeFilter.handleDiameter = 22

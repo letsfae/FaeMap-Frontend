@@ -53,7 +53,7 @@ class FaeReceivedCell: UITableViewCell {
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
-        lblUserSaying.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserSaying.textColor = UIColor._155155155()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
 //        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
@@ -69,7 +69,7 @@ class FaeReceivedCell: UITableViewCell {
         btnRefuseRequest.addTarget(self, action: #selector(self.refuseRequest(_:)), for: .touchUpInside)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

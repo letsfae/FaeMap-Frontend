@@ -151,7 +151,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         arrImgView.append(imgAvatar)
         
         let imgShadow = UIView()
-        imgShadow.layer.shadowColor = UIColor.faeAppShadowGrayColor().cgColor
+        imgShadow.layer.shadowColor = UIColor._210210210().cgColor
         imgShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
         imgShadow.layer.shadowOpacity = 0.5
         imgShadow.layer.shadowRadius = 3.0
@@ -180,7 +180,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblCount = UILabel()
         lblCount.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblCount.textAlignment = .left
-        lblCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblCount.textColor = UIColor._155155155()
         lblCount.text = "0 items"
         return lblCount
     }

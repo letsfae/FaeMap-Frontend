@@ -51,7 +51,7 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
         addConstraintsWithFormat("H:[v0(86)]-17-|", options: [], views: btnInvite)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-14-[v0]-60-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

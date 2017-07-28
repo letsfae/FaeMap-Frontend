@@ -104,7 +104,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         schbarPin = UISearchBar()
         schbarPin.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 50)
         schbarPin.placeholder = "Search Pins"
-        schbarPin.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        schbarPin.barTintColor = UIColor._234234234()
         // hide cancel button
         schbarPin.showsCancelButton = false
         // hide bookmark button
@@ -134,9 +134,9 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     }
     
     func loadTblPinsData() {
-        view.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        view.backgroundColor = UIColor._234234234()
         tblPinsData = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65), style: UITableViewStyle.plain)
-        tblPinsData.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        tblPinsData.backgroundColor = UIColor._234234234()
         tblPinsData.isHidden = true
         tblPinsData.showsVerticalScrollIndicator = false
         

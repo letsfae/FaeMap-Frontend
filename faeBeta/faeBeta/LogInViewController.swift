@@ -118,7 +118,7 @@ class LogInViewController: UIViewController {
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.addTarget(self, action: #selector(LogInViewController.loginButtonTapped), for: .touchUpInside)
-        btnLogin.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnLogin.backgroundColor = UIColor._255160160()
         btnLogin.isEnabled = false
         view.insertSubview(btnLogin, at: 0)
     }
@@ -241,7 +241,7 @@ class LogInViewController: UIViewController {
             btnLogin.backgroundColor = UIColor._2499090()
             btnLogin.isEnabled = true
         } else {
-            btnLogin.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnLogin.backgroundColor = UIColor._255160160()
             btnLogin.isEnabled = false
         }
     }

@@ -63,12 +63,12 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
-        topLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        topLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(topLine)
         
         let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(bottomLine)
         
         view.addSubview(uiviewSchbar)
@@ -166,22 +166,22 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         if schbarUsernames.text != "" && filtered.count == 0 {
             return headerView
         }
-        headerView.backgroundColor = UIColor.faeAppSectionBackgroundColor()
+        headerView.backgroundColor = UIColor._248248248()
         if section != 0 {
             let borderTop = UIView()
             borderTop.frame = CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 1)
             borderTop.layer.borderWidth = 1
-            borderTop.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+            borderTop.layer.borderColor = UIColor._200199204cg()
             headerView.addSubview(borderTop)
         }
         let borderBottom = UIView()
         borderBottom.frame = CGRect(x: 0, y: 25, width: tableView.bounds.size.width, height: 1)
         borderBottom.layer.borderWidth = 1
-        borderBottom.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        borderBottom.layer.borderColor = UIColor._200199204cg()
         headerView.addSubview(borderBottom)
         
         let label = UILabel()
-        label.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        label.textColor = UIColor._155155155()
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         headerView.addSubview(label)
         if section == 0 {

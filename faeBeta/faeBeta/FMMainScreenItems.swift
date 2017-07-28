@@ -64,7 +64,7 @@ extension FaeMapViewController {
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textAlignment = .left
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.textColor = UIColor.faeAppInfoLabelGrayColor()
+        lblSearchContent.textColor = UIColor._182182182()
         imgSchbarShadow.addSubview(lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)

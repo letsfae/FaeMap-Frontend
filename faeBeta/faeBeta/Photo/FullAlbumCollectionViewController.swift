@@ -328,7 +328,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             strSendBtn = "Done"
         }
         sendButton.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
-        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor._2499090() : UIColor.faeAppDisabledRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName:sendButton.isEnabled ? UIColor._2499090() : UIColor._255160160(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
     }
     

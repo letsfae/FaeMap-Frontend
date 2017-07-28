@@ -29,7 +29,7 @@ class MBTalkMytalksCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView()
-        separatorView.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        separatorView.backgroundColor = UIColor._234234234()
         addSubview(separatorView)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: separatorView)
         addConstraintsWithFormat("V:[v0(5)]-0-|", options: [], views: separatorView)

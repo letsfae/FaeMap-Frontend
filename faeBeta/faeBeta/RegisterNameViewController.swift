@@ -65,7 +65,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         //Already got an Account? 
         let lblGotAccount = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 94, y: 0, width: 155, height: 25))
         lblGotAccount.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
-            NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor()]
+            NSForegroundColorAttributeName: UIColor._138138138()]
         )
         createAlreadyGotAnAccountView.addSubview(lblGotAccount)
         

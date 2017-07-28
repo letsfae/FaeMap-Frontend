@@ -47,14 +47,14 @@ class FaeRecommendedCell: UITableViewCell {
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
-        lblUserSaying.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserSaying.textColor = UIColor._155155155()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblUserSaying)
         addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
         
         lblUserRecommendReason = UILabel()
         lblUserRecommendReason.textAlignment = .left
-        lblUserRecommendReason.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserRecommendReason.textColor = UIColor._155155155()
         lblUserRecommendReason.font = UIFont(name: "AvenirNext-DemiBoldItalic", size: 12)
         addSubview(lblUserRecommendReason)
         addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserRecommendReason)
@@ -72,7 +72,7 @@ class FaeRecommendedCell: UITableViewCell {
         addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-3-[v2(16)]", options: [], views: lblUserName, lblUserSaying, lblUserRecommendReason)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
