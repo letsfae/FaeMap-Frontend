@@ -250,7 +250,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
         if users {
-            updateTimerForUserPin()
+            updateTimerForUserPin() 
         }
         if pins {
             updateTimerForLoadRegionPin()
