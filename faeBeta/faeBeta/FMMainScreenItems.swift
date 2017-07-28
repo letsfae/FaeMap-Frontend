@@ -39,7 +39,7 @@ extension FaeMapViewController {
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410, height: 60)
+        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
