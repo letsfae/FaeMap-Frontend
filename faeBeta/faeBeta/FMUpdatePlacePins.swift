@@ -12,6 +12,35 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
+    func maintainPlaceBarData(for annotation: FaePinAnnotation) -> [MKAnnotationView] {
+        let annotations = visiblePlaces(except: annotation)
+        let count = annotations.count
+        joshprint("[maintainPlaceBarData], count = \(count)")
+        guard annotations.count > 0 else { return [MKAnnotationView]() }
+        var anViews = [MKAnnotationView]()
+        
+        anViews.append(faeMapView.view(for: annotations.first!)!)
+        anViews.append(faeMapView.view(for: annotations.last!)!)
+        
+        return anViews
+    }
+    
+    func visiblePlaces(except annotation: FaePinAnnotation) -> [FaePinAnnotation] {
+        let visibleAnnos = faeMapView.annotations(in: faeMapView.visibleMapRect)
+        var places = [FaePinAnnotation]()
+        for anno in visibleAnnos {
+            if anno is CCHMapClusterAnnotation {
+                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                guard let place = cluster.annotations.first as? FaePinAnnotation else { continue }
+                guard place != annotation else { continue }
+                places.append(place)
+            } else {
+                continue
+            }
+        }
+        return places
+    }
+    
     func tapPlacePin(didSelect view: MKAnnotationView) {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
@@ -28,8 +57,12 @@ extension FaeMapViewController {
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         placeResultBar.isHidden = false
         placeResultBar.resetSubviews()
-        placeResultBar.loadingData(for: 1, data: placePin)
+        var views = maintainPlaceBarData(for: firstAnn)
+        views.append(view)
+        placeResultBar.loadingData(for: 1, data: placePin, views: views)
         boolCanOpenPin = true
+        
+        
     }
     
     func updateTimerForLoadRegionPlacePin() {

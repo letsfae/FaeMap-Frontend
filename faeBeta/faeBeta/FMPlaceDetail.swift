@@ -8,9 +8,25 @@
 
 import UIKit
 
-extension FaeMapViewController {
+extension FaeMapViewController: PlaceViewDelegate {
     func loadPlaceDetail() {
         view.addSubview(placeResultBar)
         placeResultBar.isHidden = true
+        placeResultBar.delegate = self
+    }
+    
+    func goToNext(view: MKAnnotationView?) {
+        guard let anView = view else { return }
+        tapPlacePin(didSelect: anView)
+    }
+    
+    func goToPrev(view: MKAnnotationView?) {
+        guard let anView = view else { return }
+        tapPlacePin(didSelect: anView)
+    }
+    
+    func animateTo(view: MKAnnotationView?) {
+        guard let anView = view else { return }
+        tapPlacePin(didSelect: anView)
     }
 }
