@@ -61,10 +61,11 @@ extension FaeMapViewController {
     func actionMainScreenSearch(_ sender: UIButton) {
         btnCardClose.sendActions(for: .touchUpInside)
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
-        let mainScreenSearchVC = MainScreenSearchViewController()
-        mainScreenSearchVC.modalPresentationStyle = .overCurrentContext
-        mainScreenSearchVC.delegate = self
-        self.present(mainScreenSearchVC, animated: false, completion: nil)
+        let searchVC = MapSearchViewController()
+//        searchVC.modalPresentationStyle = .overCurrentContext
+//        mainScreenSearchVC.delegate = self
+//        self.present(searchVC, animated: false, completion: nil)
+        navigationController?.pushViewController(searchVC, animated: false)
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {

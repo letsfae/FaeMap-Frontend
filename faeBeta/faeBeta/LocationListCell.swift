@@ -34,13 +34,13 @@ class LocationListCell: UITableViewCell {
         imgPic.contentMode = .scaleAspectFill
         imgPic.clipsToBounds = true
         imgPic.backgroundColor = .white
-        imgPic.image = #imageLiteral(resourceName: "CurrentLocation")
+        imgPic.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
         addSubview(imgPic)
         
         lblPlaceName = UILabel()
         lblPlaceName.textAlignment = .left
         lblPlaceName.lineBreakMode = .byTruncatingTail
-        lblPlaceName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceName.textColor = UIColor._898989()
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblPlaceName)
         addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblPlaceName)

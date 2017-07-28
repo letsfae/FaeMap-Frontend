@@ -52,12 +52,12 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         
         btnClose.isHidden = true
         
-        txtSchField.textColor = UIColor.faeAppInputTextGrayColor()
+        txtSchField.textColor = UIColor._898989()
         txtSchField.font = UIFont(name: "AvenirNext-Medium", size: 18)
         txtSchField.clearButtonMode = .never
         txtSchField.contentHorizontalAlignment = .left
         txtSchField.textAlignment = .left
-        txtSchField.tintColor = UIColor.faeAppRedColor()
+        txtSchField.tintColor = UIColor._2499090()
         txtSchField.autocapitalizationType = .none
         txtSchField.autocorrectionType = .no
         txtSchField.returnKeyType = .search
