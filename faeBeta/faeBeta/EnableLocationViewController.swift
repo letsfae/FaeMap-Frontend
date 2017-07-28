@@ -41,13 +41,13 @@ class EnableLocationViewController: UIViewController {
         
         descriptionLabel = UILabel(frame: CGRect(x: 15, y: 514 * screenHeightFactor, width: screenWidth - 30, height: 44))
         descriptionLabel.numberOfLines = 2
-        descriptionLabel.attributedText = NSAttributedString(string: "Fae Map is a Social Map Platform,\nit needs to use Location to work.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
+        descriptionLabel.attributedText = NSAttributedString(string: "Fae Map is a Social Map Platform,\nit needs to use Location to work.", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         descriptionLabel.textAlignment = .center
         view.addSubview(descriptionLabel)
         
         infoLabel = UILabel(frame: CGRect(x: 15, y: screenHeight - 20 - 36, width: screenWidth - 30, height: 36))
         infoLabel.numberOfLines = 2
-        infoLabel.attributedText = NSAttributedString(string: "Fae Map’s Shadow Security System always\nprotects your location.", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
+        infoLabel.attributedText = NSAttributedString(string: "Fae Map’s Shadow Security System always\nprotects your location.", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
         infoLabel.textAlignment = .center
         self.view.addSubview(infoLabel)
         

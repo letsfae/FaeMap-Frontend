@@ -18,7 +18,7 @@ class MBChatBubblesCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 70.5, y: 61, width: screenWidth - 70.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         self.addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()

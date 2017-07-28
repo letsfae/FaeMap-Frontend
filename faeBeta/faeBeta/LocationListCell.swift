@@ -47,7 +47,7 @@ class LocationListCell: UITableViewCell {
         addConstraintsWithFormat("V:|-12-[v0]-12-|", options: [], views: lblPlaceName)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-39-[v0]-39-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

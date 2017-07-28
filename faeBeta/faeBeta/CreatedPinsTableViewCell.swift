@@ -33,7 +33,7 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
         lblTime = UILabel()
         lblTime.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblTime.textAlignment = .right
-        lblTime.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblTime.textColor = UIColor._155155155()
         uiviewPinView.addSubview(lblTime)
         uiviewPinView.addConstraintsWithFormat("H:[v0(160)]-13-|", options: [], views: lblTime)
         uiviewPinView.addConstraintsWithFormat("V:|-12-[v0(18)]", options: [], views: lblTime)

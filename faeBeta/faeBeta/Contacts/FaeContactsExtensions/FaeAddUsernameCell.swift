@@ -47,7 +47,7 @@ class FaeAddUsernameCell: UITableViewCell {
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
-        lblUserSaying.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserSaying.textColor = UIColor._155155155()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblUserSaying)
         addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
@@ -67,7 +67,7 @@ class FaeAddUsernameCell: UITableViewCell {
         addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

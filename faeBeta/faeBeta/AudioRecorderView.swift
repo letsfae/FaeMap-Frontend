@@ -52,7 +52,7 @@ class AudioRecorderView: UIView {
         // setup UI
         mainButton.layer.cornerRadius = 67
         mainButton.backgroundColor = UIColor.white
-        mainButton.layer.shadowColor = UIColor.faeAppShadowGrayColor().cgColor
+        mainButton.layer.shadowColor = UIColor._210210210().cgColor
         mainButton.layer.shadowOpacity = 1
         mainButton.layer.shadowRadius = 10;
         mainButton.layer.shadowOffset = CGSize(width: 0, height: 0);
@@ -69,7 +69,7 @@ class AudioRecorderView: UIView {
         leftButton.alpha = 0
         rightButton.alpha = 0
         
-        setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+        setInfoLabel("Hold & Speak!", color: UIColor._182182182())
     }
     
     
@@ -318,7 +318,7 @@ class AudioRecorderView: UIView {
             self.leftButton.transform = CGAffineTransform(scaleX: 1, y: 1)
             self.rightButton.transform = CGAffineTransform(scaleX: 1, y: 1)
             
-            self.setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+            self.setInfoLabel("Hold & Speak!", color: UIColor._182182182())
             self.setNeedsLayout()
         }, completion: { (completed) in
             self.leftButton.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), for: UIControlState())
@@ -432,7 +432,7 @@ class AudioRecorderView: UIView {
     // transform the record button to origin looks
     @objc private func recoverRecordButton()
     {
-        setInfoLabel("Hold & Speak!", color: UIColor.faeAppInfoLabelGrayColor())
+        setInfoLabel("Hold & Speak!", color: UIColor._182182182())
         mainButton.isEnabled = true
     }
     

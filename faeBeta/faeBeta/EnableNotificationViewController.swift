@@ -44,7 +44,7 @@ class EnableNotificationViewController: UIViewController {
         
         descriptionLabel = UILabel(frame: CGRect(x: 15, y: 535 * screenHeightFactor, width: screenWidth - 30, height: 44))
         descriptionLabel.numberOfLines = 2
-        descriptionLabel.attributedText = NSAttributedString(string: "Take full advantage of Fae’s Real-Time\nPlatform & Never miss out on Anything!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
+        descriptionLabel.attributedText = NSAttributedString(string: "Take full advantage of Fae’s Real-Time\nPlatform & Never miss out on Anything!", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         descriptionLabel.textAlignment = .center
         descriptionLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(descriptionLabel)

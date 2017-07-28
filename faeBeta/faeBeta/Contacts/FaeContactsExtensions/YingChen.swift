@@ -45,7 +45,7 @@ extension ContactsViewController {
         // Line at y = 103 inside the blurViewDropDownMenu
         let bottomLine = UIView(frame: CGRect(x: 0, y: 103, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         blurViewDropDownMenu.addSubview(bottomLine)
         
         btnTop = UIButton(frame: CGRect(x: (screenWidth - 200) / 2, y: 3, width: 200, height: 45))

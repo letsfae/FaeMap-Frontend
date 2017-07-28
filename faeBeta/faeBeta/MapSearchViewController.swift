@@ -106,7 +106,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let uiviewDivLine = UIView(frame: CGRect(x: 39, y: 48, width: screenWidth - 94, height: 1))
         uiviewDivLine.layer.borderWidth = 1
-        uiviewDivLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        uiviewDivLine.layer.borderColor = UIColor._200199204cg()
         uiviewSearch.addSubview(uiviewDivLine)
     }
     
@@ -120,7 +120,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         // row1 col1
         btnPlace11 = UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58))
-        btnPlace11.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace11.layer.borderColor = UIColor._225225225().cgColor
         btnPlace11.layer.borderWidth = 2
         btnPlace11.layer.cornerRadius = 8.0
         btnPlace11.contentMode = .scaleAspectFit
@@ -130,7 +130,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace11 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace11.text = "Restaurants"
         lblPlace11.textAlignment = .center
-        lblPlace11.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace11.textColor = UIColor._138138138()
         lblPlace11.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace11)
         lblPlace11.center = CGPoint(x: btnPlace11.center.x, y: btnPlace11.center.y + 43)
@@ -138,7 +138,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         // row1 col2
         btnPlace12 = UIButton(frame: CGRect(x: (screenWidth - 16) / 2 - 29, y: 20, width: 58, height: 58))
         btnPlace12.setImage(UIImage(named: "place_result_14"), for: .normal)
-        btnPlace12.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace12.layer.borderColor = UIColor._225225225().cgColor
         btnPlace12.layer.borderWidth = 2
         btnPlace12.layer.cornerRadius = 8.0
         btnPlace12.contentMode = .scaleAspectFit
@@ -147,14 +147,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace12 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace12.text = "Bars"
         lblPlace12.textAlignment = .center
-        lblPlace12.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace12.textColor = UIColor._138138138()
         lblPlace12.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace12)
         lblPlace12.center = CGPoint(x: btnPlace12.center.x, y: btnPlace11.center.y + 43)
         
         // row1 col3
         btnPlace13 = UIButton(frame: CGRect(x: screenWidth - 126, y: 20, width: 58, height: 58))
-        btnPlace13.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace13.layer.borderColor = UIColor._225225225().cgColor
         btnPlace13.layer.borderWidth = 2
         btnPlace13.layer.cornerRadius = 8.0
         btnPlace13.contentMode = .scaleAspectFit
@@ -164,14 +164,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace13 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace13.text = "Shopping"
         lblPlace13.textAlignment = .center
-        lblPlace13.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace13.textColor = UIColor._138138138()
         lblPlace13.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace13)
         lblPlace13.center = CGPoint(x: btnPlace13.center.x, y: btnPlace13.center.y + 43)
         
         // row2 col1
         btnPlace21 = UIButton(frame: CGRect(x: 52, y: 117, width: 58, height: 58))
-        btnPlace21.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace21.layer.borderColor = UIColor._225225225().cgColor
         btnPlace21.layer.borderWidth = 2
         btnPlace21.layer.cornerRadius = 8.0
         btnPlace21.contentMode = .scaleAspectFit
@@ -181,7 +181,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace21 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace21.text = "Coffee Shop"
         lblPlace21.textAlignment = .center
-        lblPlace21.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace21.textColor = UIColor._138138138()
         lblPlace21.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace21)
         lblPlace21.center = CGPoint(x: btnPlace21.center.x, y: btnPlace21.center.y + 43)
@@ -189,7 +189,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         // row2 col2
         btnPlace22 = UIButton(frame: CGRect(x: (screenWidth - 16) / 2 - 29, y: 117, width: 58, height: 58))
         btnPlace22.setImage(UIImage(named: "place_result_30"), for: .normal)
-        btnPlace22.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace22.layer.borderColor = UIColor._225225225().cgColor
         btnPlace22.layer.borderWidth = 2
         btnPlace22.layer.cornerRadius = 8.0
         btnPlace22.contentMode = .scaleAspectFit
@@ -198,14 +198,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace22 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace22.text = "Coffee Shop"
         lblPlace22.textAlignment = .center
-        lblPlace22.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace22.textColor = UIColor._138138138()
         lblPlace22.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace22)
         lblPlace22.center = CGPoint(x: btnPlace22.center.x, y: btnPlace22.center.y + 43)
         
         // row2 col3
         btnPlace23 = UIButton(frame: CGRect(x: screenWidth - 126, y: 117, width: 58, height: 58))
-        btnPlace23.layer.borderColor = UIColor.faeAppLineBetweenCellGrayColor().cgColor
+        btnPlace23.layer.borderColor = UIColor._225225225().cgColor
         btnPlace23.layer.borderWidth = 2
         btnPlace23.layer.cornerRadius = 8.0
         btnPlace23.contentMode = .scaleAspectFit
@@ -215,7 +215,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         lblPlace23 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
         lblPlace23.text = "Coffee Shop"
         lblPlace23.textAlignment = .center
-        lblPlace23.textColor = UIColor.faeAppDescriptionTextGrayColor()
+        lblPlace23.textColor = UIColor._138138138()
         lblPlace23.font = UIFont(name: "AvenirNext-Medium", size: 13)
         uiviewPics.addSubview(lblPlace23)
         lblPlace23.center = CGPoint(x: btnPlace23.center.x, y: btnPlace23.center.y + 43)

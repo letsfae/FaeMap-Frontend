@@ -110,7 +110,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll.addSubview(lblUsrame)
         
         uiviewUnderline = UIView(frame: CGRect(x: 20, y: 228, width: screenWidth - 40, height: 2))
-        uiviewUnderline.backgroundColor = UIColor.faeAppInputPlaceholderGrayColor()
+        uiviewUnderline.backgroundColor = UIColor._155155155()
         scroll.addSubview(uiviewUnderline)
     }
     
@@ -149,7 +149,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblDesp1 = UILabel(frame: CGRect(x: 24, y: 0, width: wid, height: 36))
         lblDesp1.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp1.text = "Congrats! You’re among the first to use Fae Map"
-        lblDesp1.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDesp1.textColor = UIColor._155155155()
         lblDesp1.numberOfLines = 0
         lblDesp1.lineBreakMode = .byWordWrapping
         uiviewContent.addSubview(lblDesp1)
@@ -157,7 +157,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblDesp2 = UILabel(frame: CGRect(x: 24, y: 50, width: wid, height: 36))
         lblDesp2.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp2.text = "No Levels for Early Birds; Full access to everything"
-        lblDesp2.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDesp2.textColor = UIColor._155155155()
         lblDesp2.numberOfLines = 0
         lblDesp2.lineBreakMode = .byWordWrapping
         uiviewContent.addSubview(lblDesp2)
@@ -165,7 +165,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         lblDesp3 = UILabel(frame: CGRect(x: 24, y: 100, width: wid, height: 54))
         lblDesp3.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblDesp3.text = "We value your opinion, chat with us for feedbacks and let’s make Fae Map better together!"
-        lblDesp3.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDesp3.textColor = UIColor._155155155()
         lblDesp3.numberOfLines = 0
         lblDesp3.lineBreakMode = .byWordWrapping
         uiviewContent.addSubview(lblDesp3)

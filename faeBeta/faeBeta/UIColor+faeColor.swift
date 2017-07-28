@@ -19,86 +19,70 @@ extension UIColor {
     }
     
     class func _2499090() -> UIColor {
-        return UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
+        return UIColor(r: 249, g: 90, b: 90, alpha: 100)
     }
     
-    class func faeAppPurpleColor() -> UIColor {
-        return UIColor(red: 194 / 255, green: 166 / 255, blue: 217 / 255, alpha: 1)
-    }
-    
-    class func faeAppDarkblueColor() -> UIColor {
-        return UIColor(red: 49 / 255, green: 63 / 255, blue: 72 / 255, alpha: 1)
-    }
-    
-    class func faeAppWeakPasswordYellowColor() -> UIColor {
-        return UIColor(red: 251 / 255, green: 201 / 255, blue: 64 / 255, alpha: 1)
-    }
-    
-    class func faeAppOkPasswordOrangeColor() -> UIColor {
-        return UIColor(red: 254 / 255, green: 171 / 255, blue: 55 / 255, alpha: 1)
-    }
-    
-    class func faeAppDisabledRedColor() -> UIColor {
-        return UIColor(red: 255 / 255, green: 160 / 255, blue: 160 / 255, alpha: 1)
+    class func _255160160() -> UIColor {
+        return UIColor(r: 255, g: 160, b: 160, alpha: 100)
     }
     
     class func _898989() -> UIColor {
-        return UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
+        return UIColor(r: 89, g: 89, b: 89, alpha: 100)
     }
     
-    class func faeAppInfoLabelGrayColor() -> UIColor {
-        return UIColor(red: 182 / 255, green: 182 / 255, blue: 182 / 255, alpha: 1)
+    class func _182182182() -> UIColor {
+        return UIColor(r: 182, g: 182, b: 182, alpha: 100)
     }
     
-    class func faeAppInputPlaceholderGrayColor() -> UIColor {
-        return UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1)
+    class func _155155155() -> UIColor {
+        return UIColor(r: 155, g: 155, b: 155, alpha: 100)
     }
     
-    class func faeAppDescriptionTextGrayColor() -> UIColor {
-        return UIColor(red: 138 / 255, green: 138 / 255, blue: 138 / 255, alpha: 1)
+    class func _138138138() -> UIColor {
+        return UIColor(r: 138, g: 138, b: 138, alpha: 100)
     }
     
     class func _107107107() -> UIColor {
-        return UIColor(red: 107 / 255, green: 107 / 255, blue: 107 / 255, alpha: 1)
+        return UIColor(r: 107, g: 107, b: 107, alpha: 100)
     }
     
-    class func faeAppShadowGrayColor() -> UIColor {
-        return UIColor(red: 210 / 255, green: 210 / 255, blue: 210 / 255, alpha: 1)
+    class func _210210210() -> UIColor {
+        return UIColor(r: 210, g: 210, b: 210, alpha: 100)
     }
     
-    class func faeAppTextViewPlaceHolderGrayColor() -> UIColor {
-        return UIColor(red: 234 / 255, green: 234 / 255, blue: 234 / 255, alpha: 1.0)
+    class func _234234234() -> UIColor {
+        return UIColor(r: 234, g: 234, b: 234, alpha: 100)
     }
     
-    class func maleBackgroundColor() -> UIColor {
-        return UIColor(red: 149 / 255, green: 207 / 255, blue: 246 / 255, alpha: 1)
+    class func _149207246() -> UIColor {
+        return UIColor(r: 149, g: 207, b: 246, alpha: 100)
     }
     
-    class func femaleBackgroundColor() -> UIColor {
-        return UIColor(red: 253 / 255, green: 175 / 255, blue: 222 / 255, alpha: 1.0)
+    class func _253175222() -> UIColor {
+        return UIColor(r: 253, g: 175, b: 222, alpha: 100)
     }
     
-    class func faeAppNavBarBorderGrayColor() -> CGColor {
-        return UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1).cgColor
+    class func _200199204cg() -> CGColor {
+        return UIColor(r: 200, g: 199, b: 204, alpha: 100).cgColor
     }
     
-    class func faeAppNavBarBorderColor() -> UIColor {
-        return UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1)
+    class func _200199204() -> UIColor {
+        return UIColor(r: 200, g: 199, b: 204, alpha: 100)
     }
     
-    class func faeAppLineBetweenCellGrayColor() -> UIColor {
-        return UIColor(red: 225 / 255, green: 225 / 255, blue: 225 / 255, alpha: 1)
+    class func _225225225() -> UIColor {
+        return UIColor(r: 225, g: 225, b: 225, alpha: 100)
     }
     
-    class func faeAppInactiveBtnGrayColor() -> UIColor {
-        return UIColor(red: 146 / 255, green: 146 / 255, blue: 146 / 255, alpha: 1)
+    class func _146146146() -> UIColor {
+        return UIColor(r: 146, g: 146, b: 146, alpha: 100)
     }
     
-    class func faeAppSectionBackgroundColor() -> UIColor {
-        return UIColor(red: 248 / 255, green: 248 / 255, blue: 248 / 255, alpha: 1)
+    class func _248248248() -> UIColor {
+        return UIColor(r: 248, g: 248, b: 248, alpha: 100)
     }
     
     class func _115115115() -> UIColor {
-        return UIColor(red: 115 / 255, green: 115 / 255, blue: 115 / 255, alpha: 1)
+        return UIColor(r: 115, g: 115, b: 115, alpha: 100)
     }
 }

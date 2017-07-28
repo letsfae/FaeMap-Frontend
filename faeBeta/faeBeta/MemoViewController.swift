@@ -57,7 +57,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
             btnSave.alpha = 0.6
         }
         else {
-            lblWordsCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+            lblWordsCount.textColor = UIColor._155155155()
             btnSave.isEnabled = true
             btnSave.alpha = 1
         }
@@ -89,7 +89,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         btnSave = UIButton(frame: CGRect(x: screenWidth-51, y: 15, width: 36, height: 22))
         btnCancel.setTitle("Cancel", for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        btnCancel.setTitleColor(UIColor.faeAppDarkblueColor(), for: .normal)
+        btnCancel.setTitleColor(UIColor(r: 49, g: 63, b: 72, alpha: 100), for: .normal)
         btnCancel.backgroundColor = .clear
         btnCancel.addTarget(self, action: #selector(self.actionDismissCurrentView(_:)), for: .touchUpInside)
         uiviewMemo.addSubview(btnCancel)
@@ -104,7 +104,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         lblWordsCount = UILabel(frame: CGRect(x: screenWidth-54, y: self.uiviewMemo.frame.height-30, width: 40, height: 22))
         lblWordsCount.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblWordsCount.textAlignment = .right
-        lblWordsCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblWordsCount.textColor = UIColor._155155155()
         lblWordsCount.text = "50"
         uiviewMemo.addSubview(lblWordsCount)
     }

@@ -99,7 +99,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         btnSendCode.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         btnSendCode.layer.cornerRadius = 25 * screenHeightFactor
         btnSendCode.isEnabled = false
-        btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnSendCode.backgroundColor = UIColor._255160160()
         btnSendCode.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), for: .touchUpInside)
         self.view.insertSubview(btnSendCode, at: 0)
         
@@ -123,7 +123,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         verificationCodeView.alpha = 0
         
         btnSendCode.isEnabled = false
-        btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnSendCode.backgroundColor = UIColor._255160160()
         
         // start transaction animation
         UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: {
@@ -209,7 +209,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         }
         else {
             btnSendCode.isEnabled = false
-            btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnSendCode.backgroundColor = UIColor._255160160()
         }
     }
     
@@ -282,7 +282,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         }
         else {
             btnSendCode.isEnabled = false
-            btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnSendCode.backgroundColor = UIColor._255160160()
         }
     }
 }

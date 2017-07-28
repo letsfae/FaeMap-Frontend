@@ -141,19 +141,19 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 1 {
             let header = UIView()
-            header.backgroundColor = UIColor.faeAppSectionBackgroundColor()
+            header.backgroundColor = UIColor._248248248()
             header.frame = CGRect(x: 0, y: 0, width: screenWidth + 2, height: 25)
             let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
             topLine.layer.borderWidth = 1
-            topLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+            topLine.layer.borderColor = UIColor._200199204cg()
             header.addSubview(topLine)
             let bottomLine = UIView(frame: CGRect(x: 0, y: 24, width: screenWidth, height: 1))
             bottomLine.layer.borderWidth = 1
-            bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+            bottomLine.layer.borderColor = UIColor._200199204cg()
             header.addSubview(bottomLine)
             let label = UILabel()
             label.text = "Recommended"
-            label.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+            label.textColor = UIColor._155155155()
             label.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
             label.sizeToFit()
             header.addSubview(label)

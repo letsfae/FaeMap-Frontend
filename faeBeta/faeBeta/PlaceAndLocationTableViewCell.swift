@@ -40,7 +40,7 @@ class PlaceAndLocationTableViewCell: UITableViewCell {
         lblDistance = UILabel()
         lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblDistance.textAlignment = .right
-        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDistance.textColor = UIColor._155155155()
         self.addSubview(lblDistance)
         
         lblAddress = UILabel()

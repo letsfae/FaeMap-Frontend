@@ -56,7 +56,7 @@ class FAETextField: UITextField {
         set {
             _placeholder = newValue!
             let font = UIFont(name: "AvenirNext-Regular", size: 22)
-            self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
+            self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
         }
         get {
             return _placeholder
@@ -107,7 +107,7 @@ class FAETextField: UITextField {
     
     fileprivate func setupUsernameTextField() {
         lblLeft = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
-        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName:font!])
+        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
         uiviewLeftPlaceHolderView.addSubview(lblLeft)
     }
     

@@ -275,7 +275,7 @@ class PinsTableViewCell: UITableViewCell {
         lblPics3Plus = UILabel()
         lblPics3Plus.text = "3+"
         lblPics3Plus.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblPics3Plus.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblPics3Plus.textColor = UIColor._155155155()
         lblPics3Plus.isHidden = true
         uiviewPinView.addSubview(lblPics3Plus)
         

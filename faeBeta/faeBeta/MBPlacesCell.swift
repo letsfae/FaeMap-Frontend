@@ -19,7 +19,7 @@ class MBPlacesCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 89.5, y: 89, width: screenWidth - 89.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -44,7 +44,7 @@ class MBPlacesCell: UITableViewCell {
         lblPlaceAddr = UILabel()
         addSubview(lblPlaceAddr)
         lblPlaceAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        lblPlaceAddr.textColor = UIColor.faeAppInfoLabelGrayColor()
+        lblPlaceAddr.textColor = UIColor._182182182()
         lblPlaceAddr.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceAddr)
         addConstraintsWithFormat("V:|-26-[v0(22)]-1-[v1(16)]", options: [], views: lblPlaceName, lblPlaceAddr)
@@ -52,7 +52,7 @@ class MBPlacesCell: UITableViewCell {
         lblDistance = UILabel()
         addSubview(lblDistance)
         lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDistance.textColor = UIColor._155155155()
         lblDistance.textAlignment = .right
         addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)

@@ -45,7 +45,7 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         addSubview(imgArrow)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

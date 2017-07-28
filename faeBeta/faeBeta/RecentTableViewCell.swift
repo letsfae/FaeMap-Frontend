@@ -172,7 +172,7 @@ class RecentTableViewCell: UITableViewCell {
         let date = recent.date
         let seconds = Date().timeIntervalSince(date as Date)
         dateLabel.text = TimeElipsed(seconds,lastMessageTime:date as Date)
-        dateLabel.textColor = counterLabel.isHidden ? UIColor.faeAppDescriptionTextGrayColor() : UIColor._2499090()
+        dateLabel.textColor = counterLabel.isHidden ? UIColor._138138138() : UIColor._2499090()
         dateLabel.font = counterLabel.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
         guard let userid = Int(recent.withUserID) else { return }

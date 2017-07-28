@@ -25,7 +25,7 @@ class FaeNavBar: UIView {
         // Line at y = 64
         bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         addSubview(bottomLine)
         
         leftBtn.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)

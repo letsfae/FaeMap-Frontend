@@ -54,7 +54,7 @@ class PlacesListCell: UITableViewCell {
         addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblUserName, lblAddress)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-63-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)

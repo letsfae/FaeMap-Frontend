@@ -22,7 +22,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
 
-        uiviewBlurMainScreenSearch.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewBlurMainScreenSearch.backgroundColor = UIColor._234234234()
         // initialize the touch gesture
         gesturerecognizerTouch = TouchGestureRecognizer(target: self, action: #selector(handleAfterTouch))
         gesturerecognizerTouch.delegate = self

@@ -82,10 +82,10 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         
         switch count {
         case 0:
-            textfield.defaultTextColor = UIColor.faeAppWeakPasswordYellowColor()
+            textfield.defaultTextColor = UIColor(r: 251, g: 201, b: 64, alpha: 100)
             break
         case 1:
-            textfield.defaultTextColor = UIColor.faeAppOkPasswordOrangeColor()
+            textfield.defaultTextColor = UIColor(r: 254, g: 171, b: 55, alpha: 100)
             break
         default:
             textfield.defaultTextColor = UIColor._2499090()

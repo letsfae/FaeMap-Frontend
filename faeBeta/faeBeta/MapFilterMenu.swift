@@ -45,15 +45,15 @@ class MapFilterMenu: UIView {
         
         // draw three lines
         let firstLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        firstLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        firstLine.backgroundColor = UIColor._200199204()
         addSubview(firstLine)
         
         let secLine = UIView(frame: CGRect(x: 0, y: 66, width: screenWidth, height: 1))
-        secLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        secLine.backgroundColor = UIColor._200199204()
         addSubview(secLine)
         
         let thirdLine = UIView(frame: CGRect(x: 0, y: 433, width: screenWidth, height: 1))
-        thirdLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        thirdLine.backgroundColor = UIColor._200199204()
         addSubview(thirdLine)
         
         // draw two uiview of Map Options
@@ -72,7 +72,7 @@ class MapFilterMenu: UIView {
         addSubview(imgDot1)
         
         imgDot2 = UIImageView(frame: CGRect(x: screenWidth/2 + 3.5, y: 448, width: 8, height: 8))
-        imgDot2.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+        imgDot2.backgroundColor = UIColor._182182182()
         imgDot2.layer.cornerRadius = 4
         addSubview(imgDot2)
 
@@ -138,13 +138,13 @@ class MapFilterMenu: UIView {
         lblCyclePins = UILabel(frame: CGRect(x: 30, y: 250, width: 150, height: 25))
         lblCyclePins.text = "Auto Cycle Pins"
         lblCyclePins.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblCyclePins.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblCyclePins.textColor = UIColor._146146146()
         uiviewMapOpt1.addSubview(lblCyclePins)
         
         lblShowAvatars = UILabel(frame: CGRect(x: 30, y: 303, width: 150, height: 25))
         lblShowAvatars.text = "Show Avatars"
         lblShowAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblShowAvatars.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblShowAvatars.textColor = UIColor._146146146()
         uiviewMapOpt1.addSubview(lblShowAvatars)
         
         // draw three Switch buttons
@@ -184,7 +184,7 @@ class MapFilterMenu: UIView {
             self.uiviewMapOpt1.frame.origin.x = -screenWidth
             self.uiviewMapOpt2.frame.origin.x = 0
             self.imgDot2.backgroundColor = UIColor._2499090()
-            self.imgDot1.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+            self.imgDot1.backgroundColor = UIColor._182182182()
         }, completion: { _ in
         })
         
@@ -195,7 +195,7 @@ class MapFilterMenu: UIView {
             self.uiviewMapOpt1.frame.origin.x = 0
             self.uiviewMapOpt2.frame.origin.x = screenWidth
             self.imgDot1.backgroundColor = UIColor._2499090()
-            self.imgDot2.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+            self.imgDot2.backgroundColor = UIColor._182182182()
         }, completion: { _ in
         })
     }
@@ -208,7 +208,7 @@ class MapFilterMenu: UIView {
             lblRefresh.textColor = UIColor._115115115()
             delegate?.autoReresh(isOn: true)
         } else {
-            lblRefresh.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblRefresh.textColor = UIColor._146146146()
             delegate?.autoReresh(isOn: false)
         }
     }
@@ -218,7 +218,7 @@ class MapFilterMenu: UIView {
             lblCyclePins.textColor = UIColor._115115115()
             delegate?.autoCyclePins(isOn: true)
         } else {
-            lblCyclePins.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblCyclePins.textColor = UIColor._146146146()
             delegate?.autoCyclePins(isOn: false)
         }
     }
@@ -228,7 +228,7 @@ class MapFilterMenu: UIView {
             lblShowAvatars.textColor = UIColor._115115115()
             delegate?.showAvatars(isOn: true)
         } else {
-            lblShowAvatars.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblShowAvatars.textColor = UIColor._146146146()
             delegate?.showAvatars(isOn: false)
         }
     }

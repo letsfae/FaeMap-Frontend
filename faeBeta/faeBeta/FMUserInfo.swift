@@ -102,7 +102,7 @@ class FMUserInfo: UIViewController {
         uiviewAvatarShadow = UIView(frame: CGRectWithFactor(x: 0, y: 136, width: 98, height: 98))
         uiviewAvatarShadow.center.x = screenWidth / 2
         uiviewAvatarShadow.layer.cornerRadius = 43
-        uiviewAvatarShadow.layer.shadowColor = UIColor.faeAppInfoLabelGrayColor().cgColor
+        uiviewAvatarShadow.layer.shadowColor = UIColor._182182182().cgColor
         uiviewAvatarShadow.layer.shadowOpacity = 1
         uiviewAvatarShadow.layer.shadowRadius = 8
         uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -138,13 +138,13 @@ class FMUserInfo: UIViewController {
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblUserName.adjustsFontSizeToFitWidth = true
         lblUserName.textAlignment = .center
-        lblUserName.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserName.textColor = UIColor._155155155()
         
         lblShortIntro = UILabel(frame: CGRectWithFactor(x: 0, y: 289, width: 343, height: 18))
         lblShortIntro.center.x = screenWidth / 2
         lblShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblShortIntro.textAlignment = .center
-        lblShortIntro.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblShortIntro.textColor = UIColor._146146146()
         
         view.addSubview(lblNickName)
         view.addSubview(lblUserName)
