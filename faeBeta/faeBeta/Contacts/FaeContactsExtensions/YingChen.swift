@@ -52,7 +52,7 @@ extension ContactsViewController {
         blurViewDropDownMenu.addSubview(btnTop)
         btnTop.tag = 0
         btnTop.setTitle(titleArray[0], for: .normal)
-        btnTop.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
+        btnTop.setTitleColor(UIColor._898989(), for: .normal)
         btnTop.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
@@ -60,7 +60,7 @@ extension ContactsViewController {
         blurViewDropDownMenu.addSubview(btnBottom)
         btnBottom.tag = 1
         btnBottom.setTitle(titleArray[1], for: .normal)
-        btnBottom.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
+        btnBottom.setTitleColor(UIColor._898989(), for: .normal)
         btnBottom.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
@@ -130,7 +130,7 @@ extension ContactsViewController {
     }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor()]
+        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         let downAttachment = InlineTextAttachment()
         downAttachment.fontDescender = 1

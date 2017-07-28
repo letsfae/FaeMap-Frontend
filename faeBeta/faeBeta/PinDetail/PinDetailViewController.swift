@@ -67,6 +67,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             uiviewFeelingBar.isHidden = true
             break
         case .place:
+            imgPinIcon.image = imgIcon
+            imgPlaceType.image = UIImage(named: "place_result_\(category_idx)") ?? UIImage()
             break
         }
         
@@ -540,7 +542,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         // "Talk Talk" of this uiview
         lblTalkTalk = UILabel()
         lblTalkTalk.text = "Talk Talk"
-        lblTalkTalk.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTalkTalk.textColor = UIColor._898989()
         lblTalkTalk.textAlignment = .center
         lblTalkTalk.font = UIFont(name: "AvenirNext-Medium", size: 16)
         uiviewTblCtrlBtnSub.addSubview(lblTalkTalk)
@@ -554,7 +556,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         // "Feelings" of this uiview
         lblFeelings = UILabel()
         lblFeelings.text = "Feelings"
-        lblFeelings.textColor = UIColor.faeAppInputTextGrayColor()
+        lblFeelings.textColor = UIColor._898989()
         lblFeelings.textAlignment = .center
         lblFeelings.font = UIFont(name: "AvenirNext-Medium", size: 16)
         uiviewTblCtrlBtnSub.addSubview(lblFeelings)
@@ -568,7 +570,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         // "People" of this uiview
         lblPeople = UILabel()
         lblPeople.text = "People"
-        lblPeople.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPeople.textColor = UIColor._898989()
         lblPeople.textAlignment = .center
         lblPeople.font = UIFont(name: "AvenirNext-Medium", size: 16)
         uiviewTblCtrlBtnSub.addSubview(lblPeople)
@@ -597,8 +599,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         textViewInput = UITextView(frame: CGRect(x: 28, y: 14.5, width: screenWidth - 142, height: 25))
         textViewInput.delegate = self
         textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
-        textViewInput.tintColor = UIColor.faeAppRedColor()
+        textViewInput.textColor = UIColor._898989()
+        textViewInput.tintColor = UIColor._2499090()
         textViewInput.textContainerInset = .zero
         textViewInput.showsVerticalScrollIndicator = false
         textViewInput.autocorrectionType = .no
@@ -663,7 +665,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         btnHideAnony.addTarget(self, action: #selector(self.actionShowHideAnony(_:)), for: .touchUpInside)
         
         switchAnony = UISwitch(frame: CGRect(x: 0, y: 0, width: 39, height: 23))
-        switchAnony.onTintColor = UIColor.faeAppRedColor()
+        switchAnony.onTintColor = UIColor._2499090()
         switchAnony.transform = CGAffineTransform(scaleX: 35 / 51, y: 21 / 31)
         uiviewAnonymous.addSubview(switchAnony)
         uiviewAnonymous.addConstraintsWithFormat("H:[v0(35)]-130-|", options: [], views: switchAnony)
@@ -709,7 +711,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         lblChatRoomTitle = UILabel(frame: CGRect(x: 0, y: 107, width: screenWidth, height: 30))
         lblChatRoomTitle.textAlignment = .center
         lblChatRoomTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblChatRoomTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblChatRoomTitle.textColor = UIColor._898989()
         uiviewChatSpotBar.addSubview(lblChatRoomTitle)
         
         lblChatMemberNum = UILabel(frame: CGRect(x: 0, y: 139, width: screenWidth, height: 30))
@@ -772,7 +774,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     // MARK: - Place Pin Components
     
-    func manageYelpData() {
+    func manageData() {
         lblPlaceTitle.text = PinDetailViewController.strPlaceTitle
         lblPlaceStreet.text = PinDetailViewController.strPlaceStreet
         lblPlaceCity.text = PinDetailViewController.strPlaceCity
@@ -815,7 +817,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         lblPlaceTitle.center.x = screenWidth / 2
         lblPlaceTitle.text = ""
         lblPlaceTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblPlaceTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceTitle.textColor = UIColor._898989()
         lblPlaceTitle.textAlignment = .center
         uiviewPlaceDetail.addSubview(lblPlaceTitle)
         
@@ -823,7 +825,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         lblPlaceStreet.center.x = screenWidth / 2
         lblPlaceStreet.text = ""
         lblPlaceStreet.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblPlaceStreet.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceStreet.textColor = UIColor._898989()
         lblPlaceStreet.textAlignment = .center
         uiviewPlaceDetail.addSubview(lblPlaceStreet)
         
@@ -831,7 +833,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         lblPlaceCity.center.x = screenWidth / 2
         lblPlaceCity.text = ""
         lblPlaceCity.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblPlaceCity.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceCity.textColor = UIColor._898989()
         lblPlaceCity.textAlignment = .center
         uiviewPlaceDetail.addSubview(lblPlaceCity)
         
@@ -847,61 +849,13 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         uiviewPlaceDetail.addConstraintsWithFormat("V:|-165-[v0(48)]", options: [], views: btnMoreOptions_Place)
         btnMoreOptions_Place.addTarget(self, action: #selector(self.showPinMoreButtonDetails(_:)), for: .touchUpInside)
         
-        self.initPlaceBasicInfo()
-        self.manageYelpData()
+        self.manageData()
         
         // Pin icon size is slightly different from social pin's icon
         imgPinIcon.frame.size.width = 48
         imgPinIcon.center.x = screenWidth / 2
         imgPinIcon.center.y = 507 * screenHeightFactor
-        UIApplication.shared.statusBarStyle = .lightContent
-    }
-    
-    func initPlaceBasicInfo() {
-        switch PinDetailViewController.placeType {
-        case "burgers":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinBurger")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBurger")
-            break
-        case "pizza":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinPizza")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailPizza")
-            break
-        case "foodtrucks":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinFoodtruck")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailFoodtruck")
-            break
-        case "coffee":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinCoffee")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailCoffee")
-            break
-        case "desserts":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinDesert")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailDesert")
-            break
-        case "movietheaters":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinCinema")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailCinema")
-            break
-        case "beautysvc":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinBoutique")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBoutique")
-            break
-        case "playgrounds":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinSport")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailSport")
-            break
-        case "museums":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinArt")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailArt")
-            break
-        case "juicebars":
-            imgPinIcon.image = #imageLiteral(resourceName: "placePinBoba")
-            imgPlaceType.image = #imageLiteral(resourceName: "placeDetailBoba")
-            break
-        default:
-            break
-        }
+//        UIApplication.shared.statusBarStyle = .lightContent
     }
     
     // MARK: - Story Pin Images
@@ -1161,8 +1115,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             } else {
                 self.delegate?.goTo(nextPin: true)
             }
-            self.initPlaceBasicInfo()
-            self.manageYelpData()
+            self.manageData()
         }
     }
     
@@ -1604,10 +1557,10 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                 self.chatRoomUserIds.append(userId)
             }
             
-            let stylePeople = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+            let stylePeople = [NSForegroundColorAttributeName: UIColor._898989(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
             
-            let styleMemNum = [NSForegroundColorAttributeName: UIColor.faeAppRedColor(),
+            let styleMemNum = [NSForegroundColorAttributeName: UIColor._2499090(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
             let styleMemTotal = [NSForegroundColorAttributeName: UIColor.faeAppInputPlaceholderGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
             
@@ -1662,7 +1615,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                     feelingCount += feeling!
                 }
             }
-            let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+            let attri_0 = [NSForegroundColorAttributeName: UIColor._898989(),
                            NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
             let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
                            NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
@@ -1785,7 +1738,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
                         feelingCount += feeling!
                     }
                 }
-                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                let attri_0 = [NSForegroundColorAttributeName: UIColor._898989(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
                 let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
@@ -1874,7 +1827,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             let commentsCount = mapInfoJSON["comments"].intValue
             self.lblCommentCount.text = "\(commentsCount)"
             
-            let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+            let attri_0 = [NSForegroundColorAttributeName: UIColor._898989(),
                            NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
             let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
                            NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
@@ -2025,7 +1978,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
             if index != -1 && index == self.pinComments.count - 1 {
                 print("[index != -1 && index == self.pinComments.count - 1]")
                 let peopleCount = self.pinDetailUsers.count
-                let attri_0 = [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(),
+                let attri_0 = [NSForegroundColorAttributeName: UIColor._898989(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
                 let attri_1 = [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(),
                                NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 14)!]
@@ -2442,8 +2395,8 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         PinDetailViewController.strPlaceStreet = OpenedPlaces.openedPlaces[index].street
         PinDetailViewController.strPlaceCity = OpenedPlaces.openedPlaces[index].city
         PinDetailViewController.strPlaceImageURL = OpenedPlaces.openedPlaces[index].imageURL
-        self.initPlaceBasicInfo()
-        self.manageYelpData()
+        
+        self.manageData()
         
         self.delegate?.animateToCamera(coordinate)
         UIApplication.shared.statusBarStyle = .lightContent
@@ -2478,7 +2431,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
     
     func showActionSheet(name: String, userid: Int, index: IndexPath) {
         let menu = UIAlertController(title: nil, message: "Action", preferredStyle: .actionSheet)
-        menu.view.tintColor = UIColor.faeAppRedColor()
+        menu.view.tintColor = UIColor._2499090()
         let writeReply = UIAlertAction(title: "Write a Reply", style: .default) { (_: UIAlertAction) in
             self.strReplyTo = "<a>@\(name)</a> "
             self.lblTxtPlaceholder.isHidden = true
@@ -2682,7 +2635,7 @@ class PinDetailViewController: PinDetailBaseViewController, UITableViewDelegate,
         self.textViewInput.isScrollEnabled = true
         
         self.textViewInput.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        self.textViewInput.textColor = UIColor.faeAppInputTextGrayColor()
+        self.textViewInput.textColor = UIColor._898989()
     }
     
     // MARK: - keyboard input bar tapped event

@@ -50,7 +50,7 @@ class PDPeopleCell: UITableViewCell {
         
         lblDisplayName = UILabel()
         lblDisplayName.textAlignment = .left
-        lblDisplayName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblDisplayName.textColor = UIColor._898989()
         lblDisplayName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblDisplayName)
         lblUserName = UILabel()

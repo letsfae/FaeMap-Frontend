@@ -34,7 +34,7 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         
         lblOption = UILabel()
         lblOption.textAlignment = .left
-        lblOption.textColor = UIColor.faeAppInputTextGrayColor()
+        lblOption.textColor = UIColor._898989()
         lblOption.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblOption)
         

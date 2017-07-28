@@ -41,9 +41,9 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     
     func loadSearchTable() {
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
-        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor.faeAppInputTextGrayColor())
+        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
         schbarUsernames.barTintColor = .white
-        schbarUsernames.tintColor = UIColor.faeAppInputTextGrayColor()
+        schbarUsernames.tintColor = UIColor._898989()
         schbarUsernames.placeholder = "Search Contacts                                                  "
         schbarUsernames.delegate = self
         uiviewSchbar.addSubview(schbarUsernames)

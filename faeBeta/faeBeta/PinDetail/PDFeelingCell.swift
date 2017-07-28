@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol PinFeelingCellDelegate: class {
-    func postFeelingFromFeelingCell(_ feeling: Int)
-    func deleteFeelingFromFeelingCell()
-}
-
 class PDFeelingCell: UITableViewCell {
     
     weak var delegate: PinFeelingCellDelegate?
@@ -118,7 +113,7 @@ class PDFeelingItem: UIButton {
         addSubview(image)
         
         label = UILabel(frame: CGRect(x: 0, y: 46, width: 46, height: 20))
-        label.textColor = UIColor.faeAppTimeTextBlackColor()
+        label.textColor = UIColor._107107107()
         label.textAlignment = .center
         label.text = "0"
         label.font = UIFont(name: "AvenirNext-Medium", size: 15)
@@ -129,7 +124,7 @@ class PDFeelingItem: UIButton {
         avatar.contentMode = .scaleAspectFill
         avatar.layer.cornerRadius = 10
         addSubview(avatar)
-        avatar.backgroundColor = UIColor.faeAppRedColor()
+        avatar.backgroundColor = UIColor._2499090()
         avatar.isHidden = true
     }
 }

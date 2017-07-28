@@ -32,7 +32,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     let btnIndicator: UIButton = {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 3, height: 30))
-        button.backgroundColor = UIColor.faeAppRedColor()
+        button.backgroundColor = UIColor._2499090()
         button.layer.cornerRadius = 3
         button.frame.origin.x = screenWidth - 8
         button.frame.origin.y = 120
@@ -72,9 +72,9 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
          tblUsernames' height should be screenHeight - 65 - height of schbar
          */
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
-        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor.faeAppInputTextGrayColor())
+        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
         schbarUsernames.barTintColor = .white
-        schbarUsernames.tintColor = UIColor.faeAppInputTextGrayColor()
+        schbarUsernames.tintColor = UIColor._898989()
         schbarUsernames.placeholder = "Search Username                                                  "
         schbarUsernames.delegate = self
         uiviewSchbar.addSubview(schbarUsernames)

@@ -36,7 +36,7 @@ extension ContactsViewController {
         uiviewTabView.addConstraintsWithFormat("V:|-0-[v0(30)]", options: [], views: btnReceived)
         btnReceived.tag = 0
         btnReceived.setTitle("Received", for: .normal)
-        btnReceived.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnReceived.setTitleColor(UIColor._2499090(), for: .normal)
         btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnReceived.addTarget(self, action: #selector(self.switchTabs(_:)), for: .touchUpInside)
         
@@ -56,7 +56,7 @@ extension ContactsViewController {
         
         uiviewRedBottomLine = UIView()
         uiviewTabView.addSubview(uiviewRedBottomLine)
-        uiviewRedBottomLine.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedBottomLine.backgroundColor = UIColor._2499090()
         uiviewTabView.addConstraintsWithFormat("H:|-35-[v0(130)]-0-|", options: [], views: uiviewRedBottomLine)
         uiviewTabView.addConstraintsWithFormat("V:[v0(2)]-0-|", options: [], views: uiviewRedBottomLine)
         
@@ -67,7 +67,7 @@ extension ContactsViewController {
         if(sender.tag == 1) {
             cellStatus = 3
             btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-            btnRequested.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+            btnRequested.setTitleColor(UIColor._2499090(), for: .normal)
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             btnReceived.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             targetCenter = btnRequested.center.x
@@ -75,7 +75,7 @@ extension ContactsViewController {
         else {
             cellStatus = 2
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-            btnReceived.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+            btnReceived.setTitleColor(UIColor._2499090(), for: .normal)
             btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             btnRequested.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
             targetCenter = btnReceived.center.x
