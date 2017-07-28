@@ -47,7 +47,7 @@ extension FaeMapViewController {
         
         // Left window on main map to open account system
         btnLeftWindow = UIButton()
-        btnLeftWindow.setImage(#imageLiteral(resourceName: "mainScreenLeftMenu"), for: .normal)
+        btnLeftWindow.setImage(#imageLiteral(resourceName: "mapLeftMenu"), for: .normal)
         imgSchbarShadow.addSubview(btnLeftWindow)
         btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
         imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(48)]", options: [], views: btnLeftWindow)
