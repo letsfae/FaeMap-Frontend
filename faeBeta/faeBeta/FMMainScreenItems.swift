@@ -41,6 +41,7 @@ extension FaeMapViewController {
         imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
+//        imgSchbarShadow.alpha = 0
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
         imgSchbarShadow.isUserInteractionEnabled = true
@@ -60,20 +61,28 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
-        lblSearchContent = UILabel()
-        lblSearchContent.text = "Search Fae Map"
-        lblSearchContent.textAlignment = .left
-        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.textColor = UIColor._182182182()
-        imgSchbarShadow.addSubview(lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
+//        lblSearchContent = UILabel()
+//        lblSearchContent.text = "Search Fae Map"
+////        lblSearchContent.backgroundColor = .blue
+//        lblSearchContent.textAlignment = .left
+//        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+//        lblSearchContent.textColor = UIColor._182182182()
+//        imgSchbarShadow.addSubview(lblSearchContent)
+//        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
+//        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
         btnMainMapSearch = UIButton()
+        // Vicky 07/28/17
+//        btnMainMapSearch.backgroundColor = .blue
+        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
+        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
+        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        btnMainMapSearch.contentHorizontalAlignment = .left
+        // Vicky 07/28/17 End
         imgSchbarShadow.addSubview(btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnMainMapSearch)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
         
         // Click to back to north
