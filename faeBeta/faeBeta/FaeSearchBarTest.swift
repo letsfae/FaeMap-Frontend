@@ -44,7 +44,6 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnClose)
         
         txtSchField = UITextField()
-//        txtSchField.backgroundColor = .blue
         txtSchField.delegate = self
         addSubview(txtSchField)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: txtSchField)
@@ -69,6 +68,7 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
     func actionDeleteSearchTxt(_ sender: UIButton) {
         txtSchField.text = ""
         btnClose.isHidden = true
+        delegate?.searchBar(self, textDidChange: "")
         delegate?.searchBarCancelButtonClicked(self)
     }
     

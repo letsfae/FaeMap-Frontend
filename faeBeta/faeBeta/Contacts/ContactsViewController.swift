@@ -54,7 +54,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var testArrayRequested: [String] = ["testOne", "testTwo", "testThree", "testFour"] // testArray; will replace once backend API is ready.
     var tblContacts: UITableView!
     var filtered: [cellData] = []
-    var schbarContacts: FaeSearchBar!
+    var schbarContacts: FaeSearchBarTest!
     var uiviewSchbar: UIView!
     var uiviewBottomNav: UIView!
     var btnFFF: UIButton! // btnFFF switches to friends, following, followed.
