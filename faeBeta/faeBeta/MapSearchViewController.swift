@@ -56,10 +56,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         loadTable()
         loadNoResultsView()
         
-        uiviewPics.isHidden = false
-        uiviewSchResBg.isHidden = true
-        uiviewNoResults.isHidden = true
-        uiviewSchLocResBg.isHidden = true
+        schPlaceBar.txtSchField.becomeFirstResponder()
     }
     
     // shows "no results"
@@ -93,7 +90,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         btnBack.addTarget(self, action: #selector(self.backToMap(_:)), for: .touchUpInside)
         uiviewSearch.addSubview(btnBack)
         
-        schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 47))
+        schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 1.4, width: screenWidth - 38, height: 46))
         schPlaceBar.delegate = self
         schPlaceBar.txtSchField.placeholder = "Search Fae Map"
         uiviewSearch.addSubview(schPlaceBar)
