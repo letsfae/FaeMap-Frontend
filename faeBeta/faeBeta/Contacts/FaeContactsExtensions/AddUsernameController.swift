@@ -8,11 +8,11 @@
 
 import UIKit
 
-class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
     
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
-    var schbarUsernames: FaeSearchBar!
+    var schbarUsernames: FaeSearchBarTest!
     var tblUsernames: UITableView!
     var filtered: [String] = [] // for search bar results
     var lblMyUsername: UILabel!
@@ -58,6 +58,10 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         view.addSubview(btnIndicator)
         view.backgroundColor = .white
         
+        // Vicky 07/28/17
+        schbarUsernames.becomeFirstResponder()
+        // Vicky 07/28/17 End
+        
         // Add pan gesture to custom indicator
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureIndicator(_:)))
         btnIndicator.addGestureRecognizer(panGesture)
@@ -72,10 +76,8 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
          tblUsernames' height should be screenHeight - 65 - height of schbar
          */
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
-        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
-        schbarUsernames.barTintColor = .white
-        schbarUsernames.tintColor = UIColor._898989()
-        schbarUsernames.placeholder = "Search Username                                                  "
+        schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49))
+        schbarUsernames.txtSchField.placeholder = "Search Username"
         schbarUsernames.delegate = self
         uiviewSchbar.addSubview(schbarUsernames)
         
@@ -83,14 +85,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         schBarTopLine.layer.borderWidth = 1
         schBarTopLine.layer.borderColor = UIColor.white.cgColor
         schbarUsernames.addSubview(schBarTopLine)
-        
-        let imgBarIconSubview = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: 50))
-        imgBarIconSubview.backgroundColor = .white
-        uiviewSchbar.addSubview(imgBarIconSubview)
-        
-        let imgBarIcon = UIImageView(frame: CGRect(x: 15, y: 17, width: 15, height: 15))
-        imgBarIcon.image = #imageLiteral(resourceName: "searchBarIcon")
-        uiviewSchbar.addSubview(imgBarIcon)
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
@@ -184,30 +178,36 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
     }
     
-    // UISearchBarDelegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filter(searchText: searchText)
+    // Vicky 07/28/17
+    // FaeSearchBarTestDelegate
+    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
+        if searchText == "" {
+            filter(searchText: searchText)
+        }
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        schbarUsernames.becomeFirstResponder()
+    func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
+        schbarUsernames.txtSchField.becomeFirstResponder()
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        schbarUsernames.resignFirstResponder()
+    func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
+        filter(searchText: searchBar.txtSchField.text!)
+//        schbarUsernames.txtSchField.resignFirstResponder()
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        schbarUsernames.resignFirstResponder()
+    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+        schbarUsernames.txtSchField.resignFirstResponder()
     }
-    // End of UISearchBarDelegate
+    // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
         filtered = testArray.filter { text in
-            (text.lowercased()).range(of: searchText.lowercased()) != nil
+            (text.lowercased()).elementsEqual(searchText.lowercased())
+            //.range(of: searchText.lowercased()) != nil
         }
         tblUsernames.reloadData()
     }
+    // End of Vicky 07/28/17
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if schbarUsernames.text != "" {
+        if schbarUsernames.txtSchField.text != "" {
             tblUsernames.isHidden = false
             if filtered.count == 0 { // this means no results.
                 imgGhost.isHidden = false
@@ -225,7 +225,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "myCell", isFriend: false)
-        if schbarUsernames.text != "" {
+        if schbarUsernames.txtSchField.text != "" {
             cell.lblUserName.text = filtered[indexPath.row]
             cell.lblUserSaying.text = filtered[indexPath.row]
             cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.
