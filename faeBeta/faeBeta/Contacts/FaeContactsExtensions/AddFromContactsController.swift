@@ -8,12 +8,12 @@
 
 import UIKit
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
     
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
-    var schbarUsernames: FaeSearchBar!
-    var tblUsernames: UITableView!
+    var schbarFromContacts: FaeSearchBarTest!
+    var tblFromContacts: UITableView!
     var filtered: [String] = [] // for search bar results
     var testArray = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
 
@@ -21,7 +21,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         loadSearchTable()
         loadNavBar()
-        tblUsernames.separatorStyle = .none
+        tblFromContacts.separatorStyle = .none
         definesPresentationContext = true
         view.backgroundColor = .white
     }
@@ -41,25 +41,16 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     
     func loadSearchTable() {
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
-        schbarUsernames = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
-        schbarUsernames.barTintColor = .white
-        schbarUsernames.tintColor = UIColor._898989()
-        schbarUsernames.placeholder = "Search Contacts                                                  "
-        schbarUsernames.delegate = self
-        uiviewSchbar.addSubview(schbarUsernames)
+        schbarFromContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
+        schbarFromContacts.txtSchField.placeholder = "Search Contacts"
+        schbarFromContacts.delegate = self
+        uiviewSchbar.addSubview(schbarFromContacts)
         
-        let schBarTopLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        schBarTopLine.layer.borderWidth = 1
-        schBarTopLine.layer.borderColor = UIColor.white.cgColor
-        schbarUsernames.addSubview(schBarTopLine)
-        
-        let imgBarIconSubview = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: 50))
-        imgBarIconSubview.backgroundColor = .white
-        uiviewSchbar.addSubview(imgBarIconSubview)
-        
-        let imgBarIcon = UIImageView(frame: CGRect(x: 15, y: 17, width: 15, height: 15))
-        imgBarIcon.image = #imageLiteral(resourceName: "searchBarIcon")
-        uiviewSchbar.addSubview(imgBarIcon)
+        // Vicky 07/28/17 这段代码在干嘛？
+//        let schBarTopLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+//        schBarTopLine.layer.borderWidth = 1
+//        schBarTopLine.layer.borderColor = UIColor.white.cgColor
+//        schbarFromContacts.addSubview(schBarTopLine)
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
@@ -75,44 +66,44 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         
         /* Joshua 06/16/17
          y should be 114 not 113
-         tblUsernames' height should be screenHeight - 65 - height of schbar
+         tblFromContacts' height should be screenHeight - 65 - height of schbar
          */
-        tblUsernames = UITableView()
-        tblUsernames.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 65 - 50)
-        tblUsernames.dataSource = self
-        tblUsernames.delegate = self
+        tblFromContacts = UITableView()
+        tblFromContacts.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 65 - 50)
+        tblFromContacts.dataSource = self
+        tblFromContacts.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
-        tblUsernames.addGestureRecognizer(tapToDismissKeyboard)
-        tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "myCell")
-        tblUsernames.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
-        tblUsernames.isHidden = false
-        tblUsernames.indicatorStyle = .white
-        view.addSubview(tblUsernames)
+        tblFromContacts.addGestureRecognizer(tapToDismissKeyboard)
+        tblFromContacts.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "myCell")
+        tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
+        tblFromContacts.isHidden = false
+        tblFromContacts.indicatorStyle = .white
+        view.addSubview(tblFromContacts)
     }
-    // UISearchBarDelegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    // FaeSearchBarTestDelegate
+    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         filter(searchText: searchText)
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        schbarUsernames.becomeFirstResponder()
+    func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
+        schbarFromContacts.txtSchField.becomeFirstResponder()
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        schbarUsernames.resignFirstResponder()
+    func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
+        schbarFromContacts.txtSchField.resignFirstResponder()
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        schbarUsernames.resignFirstResponder()
+    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+        schbarFromContacts.txtSchField.resignFirstResponder()
     }
-    // End of UISearchBarDelegate
+    // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
         filtered = testArray.filter { text in
             (text.lowercased()).range(of: searchText.lowercased()) != nil
         }
-        tblUsernames.reloadData()
+        tblFromContacts.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if schbarUsernames.text != "" {
+        if schbarFromContacts.txtSchField.text != "" {
             return filtered.count
         }
         else {
@@ -124,14 +115,14 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "myCell", isFriend: false)
-            if schbarUsernames.text != "" {
+            if schbarFromContacts.txtSchField.text != "" {
                 cell.lblUserName.text = filtered[indexPath.row]
                 cell.lblUserSaying.text = filtered[indexPath.row]
                 cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.
             } else {
                 cell.lblUserName.text = testArray[indexPath.row]
             }
-            if indexPath.row == tblUsernames.numberOfRows(inSection: 0)-1 {
+            if indexPath.row == tblFromContacts.numberOfRows(inSection: 0)-1 {
                 cell.bottomLine.isHidden = true
             }
             return cell
@@ -163,7 +154,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        if schbarUsernames.text != "" && filtered.count == 0 {
+        if schbarFromContacts.txtSchField.text != "" && filtered.count == 0 {
             return headerView
         }
         headerView.backgroundColor = UIColor._248248248()
@@ -196,7 +187,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarUsernames.resignFirstResponder()
+        schbarFromContacts.resignFirstResponder()
     }
 
 }

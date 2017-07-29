@@ -98,7 +98,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 39, y: 49, width: screenWidth - 38, height: 47))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        schLocationBar.txtSchField.placeholder = "Current Location"
+        schLocationBar.txtSchField.text = "Current Location"
         uiviewSearch.addSubview(schLocationBar)
         
         let uiviewDivLine = UIView(frame: CGRect(x: 39, y: 48, width: screenWidth - 94, height: 1))
@@ -256,6 +256,11 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         cellStatus = searchBar == schPlaceBar ? 0 : 1
         showOrHideViews(searchText: searchBar.txtSchField.text!)
+        if searchBar == schLocationBar && (searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View") {
+            searchBar.txtSchField.placeholder = searchBar.txtSchField.text
+            searchBar.txtSchField.text = ""
+            searchBar.btnClose.isHidden = true
+        }
     }
     
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
@@ -285,9 +290,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         searchBar.txtSchField.becomeFirstResponder()
-        searchBarTextDidBeginEditing(searchBar)
-        //        searchBar.txtSchField.resignFirstResponder()
     }
+    // End of FaeSearchBarTestDelegate
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
@@ -395,7 +399,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
                 schLocationBar.txtSchField.text = filteredLocations[indexPath.row]
             } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                schLocationBar.btnClose.isHidden = false
+                schLocationBar.txtSchField.resignFirstResponder()
             }
         }
     }

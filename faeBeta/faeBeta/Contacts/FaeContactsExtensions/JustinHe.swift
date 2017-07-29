@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
     
     func loadTable() {
         tblContacts = UITableView() // note to self: must modify screenHeight - 65 to also subtract the bottom bar
@@ -30,10 +30,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
          2. value of x and y is modified due to the padding reason
          3. your next task is try to understand the following UI layer logic, a little bit complex
          */
-        schbarContacts = FaeSearchBar(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._898989())
-        schbarContacts.barTintColor = .white
-        schbarContacts.tintColor = UIColor._898989()
-        schbarContacts.placeholder = "Search Friends                                                 "
+        schbarContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
+        schbarContacts.txtSchField.placeholder = "Search Friends"
         schbarContacts.delegate = self
         uiviewSchbar.addSubview(schbarContacts)
         
@@ -49,13 +47,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         /* Comment from Joshua:
          the following 7 lines are for boss's customized schbar icon, not the original one
          */
-        let imgBarIconSubview = UIView(frame: CGRect(x: 0, y: 0, width: 41, height: 50))
-        imgBarIconSubview.backgroundColor = .white
-        uiviewSchbar.addSubview(imgBarIconSubview)
-        
-        let imgBarIcon = UIImageView(frame: CGRect(x: 15, y: 17, width: 15, height: 15))
-        imgBarIcon.image = #imageLiteral(resourceName: "searchBarIcon")
-        uiviewSchbar.addSubview(imgBarIcon)
         
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
@@ -135,20 +126,20 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
         tblContacts.reloadData()
     }
     
-    // UISearchBarDelegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    // FaeSearchBarTestDelegate
+    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         filter(searchText: searchText)
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        schbarContacts.becomeFirstResponder()
+    func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
+        schbarContacts.txtSchField.becomeFirstResponder()
     }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        schbarContacts.resignFirstResponder()
+    func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
+        schbarContacts.txtSchField.resignFirstResponder()
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        schbarContacts.resignFirstResponder()
+    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+        schbarContacts.txtSchField.resignFirstResponder()
     }
-    // End of UISearchBarDelegate
+    // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
         filtered = testArrayFriends.filter({(($0.name).lowercased()).range(of: searchText.lowercased()) != nil})
@@ -157,7 +148,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStatus == 1 {
-            if schbarContacts.text != "" {
+            if schbarContacts.txtSchField.text != "" {
                 return filtered.count
             } else {
                 return testArrayFriends.count
@@ -219,7 +210,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, UI
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath as IndexPath) as! FaeContactsCell
-            if schbarContacts.text != "" {
+            if schbarContacts.txtSchField.text != "" {
                 cell.imgAvatar.userID = filtered[indexPath.row].userId
                 cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
                 cell.lblUserName.text = filtered[indexPath.row].name
