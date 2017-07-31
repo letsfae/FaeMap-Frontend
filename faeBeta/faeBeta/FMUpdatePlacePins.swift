@@ -12,27 +12,30 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
-    func maintainPlaceBarData(for annotation: FaePinAnnotation) -> [MKAnnotationView] {
-        let annotations = visiblePlaces(except: annotation)
-        let count = annotations.count
-        joshprint("[maintainPlaceBarData], count = \(count)")
-        guard annotations.count > 0 else { return [MKAnnotationView]() }
-        var anViews = [MKAnnotationView]()
-        
-        anViews.append(faeMapView.view(for: annotations.first!)!)
-        anViews.append(faeMapView.view(for: annotations.last!)!)
-        
-        return anViews
+    func maintainPlaceBarData(for annotation: CCHMapClusterAnnotation) -> [CCHMapClusterAnnotation] {
+//        let annotations = visiblePlaces(except: annotation)
+//        let count = annotations.count
+//        joshprint("[maintainPlaceBarData], count = \(count)")
+        let annos = [CCHMapClusterAnnotation]()
+//        guard count > 0 else { return annos }
+//        let idx_1st = Int(arc4random_uniform(UInt32(count)))
+//        let idx_2nd = Int(arc4random_uniform(UInt32(count)))
+//        let first = annotations[idx_1st]
+//        annos.append(first)
+//        annos.append(annotation)
+//        let last = annotations[idx_2nd]
+//        annos.append(last)
+        return annos
     }
     
-    func visiblePlaces(except annotation: FaePinAnnotation) -> [FaePinAnnotation] {
+    func visiblePlaces() -> [CCHMapClusterAnnotation] {
         let visibleAnnos = faeMapView.annotations(in: faeMapView.visibleMapRect)
-        var places = [FaePinAnnotation]()
+        var places = [CCHMapClusterAnnotation]()
         for anno in visibleAnnos {
             if anno is CCHMapClusterAnnotation {
-                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
-                guard let place = cluster.annotations.first as? FaePinAnnotation else { continue }
-                guard place != annotation else { continue }
+                guard let place = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
+                guard firstAnn.type == "place" else { continue }
                 places.append(place)
             } else {
                 continue
@@ -42,27 +45,22 @@ extension FaeMapViewController {
     }
     
     func tapPlacePin(didSelect view: MKAnnotationView) {
-        guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
-        guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
-        boolCanOpenPin = false
-        animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+        guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
+        guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
+//        boolCanOpenPin = false
         if let anView = view as? PlacePinAnnotationView {
             let idx = firstAnn.class_two_idx
-            firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? UIImage()
+            firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
             anView.assignImage(firstAnn.icon)
             selectedAnnView = anView
             selectedAnn = firstAnn
         }
         
-        guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
+        guard let _ = firstAnn.pinInfo as? PlacePin else { return }
         placeResultBar.isHidden = false
         placeResultBar.resetSubviews()
-        var views = maintainPlaceBarData(for: firstAnn)
-        views.append(view)
-        placeResultBar.loadingData(for: 1, data: placePin, views: views)
-        boolCanOpenPin = true
-        
-        
+        placeResultBar.loadingData(current: cluster)
+//        boolCanOpenPin = true
     }
     
     func updateTimerForLoadRegionPlacePin() {
@@ -129,7 +127,10 @@ extension FaeMapViewController {
                     return
                 }
                 DispatchQueue.main.async {
-                    self.mapClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
+                    self.mapClusterManager.addAnnotations(placePins, withCompletionHandler: {
+                        self.placeResultBar.tag = 1
+                        self.mapView(self.faeMapView, regionDidChangeAnimated: true)
+                    })
                     self.boolCanUpdatePlacePin = true
                 }
             }

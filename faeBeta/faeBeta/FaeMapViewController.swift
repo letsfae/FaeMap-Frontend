@@ -97,6 +97,8 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var selectedAnn: FaePinAnnotation?
     
     var placeResultBar = PlaceResultView()
+    
+    var preventUserPinOpen = false
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,8 +113,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         loadButton()
         loadMapFilter()
         loadPlaceDetail()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
