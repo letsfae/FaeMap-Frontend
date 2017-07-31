@@ -5,6 +5,8 @@
 //  Created by Vicky on 2017-07-28.
 //  Copyright © 2017 fae. All rights reserved.
 //
+import SwiftyJSON
+import MapKit
 
 class MapSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, UIScrollViewDelegate {
     
@@ -14,26 +16,22 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     //    var cityList = ["CA, United States", "CA, United States", "CA, United States", ""]
     var arrCurtLocList = ["Use my Current Location", "Use Current Map View"]
     
-    var filteredPlaces = [String]()
+    var searchedPlaces = [MBPlacesStruct]()
+    var filteredPlaces = [MBPlacesStruct]()
+//    var searchedLocations = [String]()   有location数据后使用
     var filteredLocations = [String]()
+    var searchedLoc: CLLocation!
+    var faeMapView: MKMapView!
     
     var btnBack: UIButton!
     var uiviewSearch: UIView!
     var uiviewPics: UIView!
     var schPlaceBar: FaeSearchBarTest!
     var schLocationBar: FaeSearchBarTest!
-    var btnPlace11: UIButton!
-    var btnPlace12: UIButton!
-    var btnPlace13: UIButton!
-    var btnPlace21: UIButton!
-    var btnPlace22: UIButton!
-    var btnPlace23: UIButton!
-    var lblPlace11: UILabel!
-    var lblPlace12: UILabel!
-    var lblPlace13: UILabel!
-    var lblPlace21: UILabel!
-    var lblPlace22: UILabel!
-    var lblPlace23: UILabel!
+    var btnPlaces = [UIButton]()
+    var lblPlaces = [UILabel]()
+    var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
+    var arrPlaceNames: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var cellStatus = 0
     
     // uiviews with shadow under table views
@@ -57,6 +55,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         loadNoResultsView()
         
         schPlaceBar.txtSchField.becomeFirstResponder()
+        searchedLoc = LocManager.shared.curtLoc
+        getPlaceInfo()
     }
     
     // shows "no results"
@@ -95,7 +95,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         schPlaceBar.txtSchField.placeholder = "Search Fae Map"
         uiviewSearch.addSubview(schPlaceBar)
         
-        schLocationBar = FaeSearchBarTest(frame: CGRect(x: 39, y: 49, width: screenWidth - 38, height: 47))
+        schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 49, width: screenWidth - 38, height: 47))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
         schLocationBar.txtSchField.text = "Current Location"
@@ -115,107 +115,40 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
         
-        // row1 col1
-        btnPlace11 = UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58))
-        btnPlace11.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace11.layer.borderWidth = 2
-        btnPlace11.layer.cornerRadius = 8.0
-        btnPlace11.contentMode = .scaleAspectFit
-        btnPlace11.layer.masksToBounds = true
-        btnPlace11.setImage(UIImage(named: "place_result_5"), for: .normal)
-        uiviewPics.addSubview(btnPlace11)
-        lblPlace11 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace11.text = "Restaurants"
-        lblPlace11.textAlignment = .center
-        lblPlace11.textColor = UIColor._138138138()
-        lblPlace11.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace11)
-        lblPlace11.center = CGPoint(x: btnPlace11.center.x, y: btnPlace11.center.y + 43)
+        for _ in 0..<6 {
+            btnPlaces.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
+            lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
+        }
         
-        // row1 col2
-        btnPlace12 = UIButton(frame: CGRect(x: (screenWidth - 16) / 2 - 29, y: 20, width: 58, height: 58))
-        btnPlace12.setImage(UIImage(named: "place_result_14"), for: .normal)
-        btnPlace12.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace12.layer.borderWidth = 2
-        btnPlace12.layer.cornerRadius = 8.0
-        btnPlace12.contentMode = .scaleAspectFit
-        btnPlace12.layer.masksToBounds = true
-        uiviewPics.addSubview(btnPlace12)
-        lblPlace12 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace12.text = "Bars"
-        lblPlace12.textAlignment = .center
-        lblPlace12.textColor = UIColor._138138138()
-        lblPlace12.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace12)
-        lblPlace12.center = CGPoint(x: btnPlace12.center.x, y: btnPlace11.center.y + 43)
-        
-        // row1 col3
-        btnPlace13 = UIButton(frame: CGRect(x: screenWidth - 126, y: 20, width: 58, height: 58))
-        btnPlace13.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace13.layer.borderWidth = 2
-        btnPlace13.layer.cornerRadius = 8.0
-        btnPlace13.contentMode = .scaleAspectFit
-        btnPlace13.layer.masksToBounds = true
-        btnPlace13.setImage(UIImage(named: "place_result_4"), for: .normal)
-        uiviewPics.addSubview(btnPlace13)
-        lblPlace13 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace13.text = "Shopping"
-        lblPlace13.textAlignment = .center
-        lblPlace13.textColor = UIColor._138138138()
-        lblPlace13.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace13)
-        lblPlace13.center = CGPoint(x: btnPlace13.center.x, y: btnPlace13.center.y + 43)
-        
-        // row2 col1
-        btnPlace21 = UIButton(frame: CGRect(x: 52, y: 117, width: 58, height: 58))
-        btnPlace21.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace21.layer.borderWidth = 2
-        btnPlace21.layer.cornerRadius = 8.0
-        btnPlace21.contentMode = .scaleAspectFit
-        btnPlace21.layer.masksToBounds = true
-        btnPlace21.setImage(UIImage(named: "place_result_19"), for: .normal)
-        uiviewPics.addSubview(btnPlace21)
-        lblPlace21 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace21.text = "Coffee Shop"
-        lblPlace21.textAlignment = .center
-        lblPlace21.textColor = UIColor._138138138()
-        lblPlace21.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace21)
-        lblPlace21.center = CGPoint(x: btnPlace21.center.x, y: btnPlace21.center.y + 43)
-        
-        // row2 col2
-        btnPlace22 = UIButton(frame: CGRect(x: (screenWidth - 16) / 2 - 29, y: 117, width: 58, height: 58))
-        btnPlace22.setImage(UIImage(named: "place_result_30"), for: .normal)
-        btnPlace22.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace22.layer.borderWidth = 2
-        btnPlace22.layer.cornerRadius = 8.0
-        btnPlace22.contentMode = .scaleAspectFit
-        btnPlace22.layer.masksToBounds = true
-        uiviewPics.addSubview(btnPlace22)
-        lblPlace22 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace22.text = "Coffee Shop"
-        lblPlace22.textAlignment = .center
-        lblPlace22.textColor = UIColor._138138138()
-        lblPlace22.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace22)
-        lblPlace22.center = CGPoint(x: btnPlace22.center.x, y: btnPlace22.center.y + 43)
-        
-        // row2 col3
-        btnPlace23 = UIButton(frame: CGRect(x: screenWidth - 126, y: 117, width: 58, height: 58))
-        btnPlace23.layer.borderColor = UIColor._225225225().cgColor
-        btnPlace23.layer.borderWidth = 2
-        btnPlace23.layer.cornerRadius = 8.0
-        btnPlace23.contentMode = .scaleAspectFit
-        btnPlace23.layer.masksToBounds = true
-        btnPlace23.setImage(UIImage(named: "place_result_41"), for: .normal)
-        uiviewPics.addSubview(btnPlace23)
-        lblPlace23 = UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18))
-        lblPlace23.text = "Coffee Shop"
-        lblPlace23.textAlignment = .center
-        lblPlace23.textColor = UIColor._138138138()
-        lblPlace23.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        uiviewPics.addSubview(lblPlace23)
-        lblPlace23.center = CGPoint(x: btnPlace23.center.x, y: btnPlace23.center.y + 43)
+        for i in 0..<6 {
+            if i >= 3 {
+                btnPlaces[i].frame.origin.y = 117
+            }
+            if i == 1 || i == 4 {
+                btnPlaces[i].frame.origin.x = (screenWidth - 16 - 58) / 2
+            } else if i == 2 || i == 5 {
+                btnPlaces[i].frame.origin.x = screenWidth - 126
+            }
+            
+            lblPlaces[i].center = CGPoint(x: btnPlaces[i].center.x, y: btnPlaces[i].center.y + 43)
+            
+            uiviewPics.addSubview(btnPlaces[i])
+            uiviewPics.addSubview(lblPlaces[i])
+            
+            btnPlaces[i].layer.borderColor = UIColor._225225225().cgColor
+            btnPlaces[i].layer.borderWidth = 2
+            btnPlaces[i].layer.cornerRadius = 8.0
+            btnPlaces[i].contentMode = .scaleAspectFit
+            btnPlaces[i].layer.masksToBounds = true
+            btnPlaces[i].setImage(imgPlaces[i], for: .normal)
+            btnPlaces[i].tag = i
+            btnPlaces[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            
+            lblPlaces[i].text = arrPlaceNames[i]
+            lblPlaces[i].textAlignment = .center
+            lblPlaces[i].textColor = UIColor._138138138()
+            lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
+        }
     }
     
     func loadTable() {
@@ -254,13 +187,17 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
-        cellStatus = searchBar == schPlaceBar ? 0 : 1
-        showOrHideViews(searchText: searchBar.txtSchField.text!)
-        if searchBar == schLocationBar && (searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View") {
-            searchBar.txtSchField.placeholder = searchBar.txtSchField.text
-            searchBar.txtSchField.text = ""
-            searchBar.btnClose.isHidden = true
+        if searchBar == schPlaceBar {   // search places
+            cellStatus = 0
+        } else {   // search locations
+            cellStatus = 1
+            if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
+                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
+                searchBar.txtSchField.text = ""
+                searchBar.btnClose.isHidden = true
+            }
         }
+        showOrHideViews(searchText: searchBar.txtSchField.text!)
     }
     
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
@@ -275,9 +212,9 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             cellStatus = 0
             filteredPlaces.removeAll()
-            for (key, _) in placesDict {
-                if key.lowercased().range(of: searchText.lowercased()) != nil {
-                    filteredPlaces.append(key)
+            for searchedPlace in searchedPlaces {
+                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
+                    filteredPlaces.append(searchedPlace)
                 }
             }
         }
@@ -349,7 +286,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         if cellStatus == 1 {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblPlaceName.text = filteredLocations[indexPath.row]
+                cell.lblLocationName.text = filteredLocations[indexPath.row]
                 cell.bottomLine.isHidden = false
                 if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
                     cell.bottomLine.isHidden = true
@@ -357,7 +294,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MyFixedCell", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblPlaceName.text = arrCurtLocList[indexPath.row]
+                cell.lblLocationName.text = arrCurtLocList[indexPath.row]
                 cell.bottomLine.isHidden = false
                 if indexPath.row == arrCurtLocList.count - 1 {
                     cell.bottomLine.isHidden = true
@@ -368,17 +305,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         // search places - cellStatus == 0
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
-        let text = filteredPlaces[indexPath.row]
-        cell.lblUserName.text = text
-        cell.lblAddress.text = text
+        let place = filteredPlaces[indexPath.row]
+        cell.imgIcon.image = place.icon
+        cell.lblPlaceName.text = place.name
+        cell.lblAddress.text = place.address
         cell.bottomLine.isHidden = false
-        if placesDict[text] != nil {
-            cell.imgPic.image = UIImage(named: "place_result_\(placesDict[text]!)")
-        }
+
         if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 {
             cell.bottomLine.isHidden = true
-        } else {
-            cell.bottomLine.isHidden = false
         }
         return cell
     }
@@ -397,9 +331,20 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         if cellStatus == 1 {
             if tableView == tblLocationRes {
                 schLocationBar.txtSchField.text = filteredLocations[indexPath.row]
+                schLocationBar.btnClose.isHidden = false
             } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
+                schLocationBar.btnClose.isHidden = true
+                
+                if indexPath.row == 0 {
+                    searchedLoc = LocManager.shared.curtLoc
+                } else {
+                    let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+                    searchedLoc = CLLocation(latitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).latitude,
+                                             longitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).longitude)
+                }
+                getPlaceInfo()
             }
         }
     }
@@ -418,5 +363,61 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         schPlaceBar.txtSchField.resignFirstResponder()
         schLocationBar.txtSchField.resignFirstResponder()
+    }
+    
+    func getPlaceInfo() {
+        let placesList = FaeMap()
+        placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")
+        placesList.whereKey("geo_longitude", value: "\(searchedLoc.coordinate.longitude)")
+        placesList.whereKey("radius", value: "50000")
+        placesList.whereKey("type", value: "place")
+        placesList.whereKey("max_count", value: "1000")
+        placesList.getMapInformation { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                print("[loadMapSearchPlaceInfo] status/100 != 2")
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
+                return
+            }
+            if placeInfoJsonArray.count <= 0 {
+                print("[loadMapSearchPlaceInfo] array is nil")
+                return
+            }
+            
+            self.searchedPlaces.removeAll()
+            
+            for result in placeInfoJsonArray {
+                let placeData = MBPlacesStruct(json: result)
+//                if placeData.class_two_idx != 0 {
+                    self.searchedPlaces.append(placeData)
+//                }
+            }
+            print(self.searchedPlaces.count)
+        }
+    }
+    
+    func searchByCategories(_ sender: UIButton) {
+        // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
+        // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
+        // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
+        switch sender.tag {
+        case 0:
+            break
+        case 1:
+            break
+        case 2:
+            break
+        case 3:
+            break
+        case 4:
+            break
+        case 5:
+            break
+        default:
+            break
+        }
     }
 }
