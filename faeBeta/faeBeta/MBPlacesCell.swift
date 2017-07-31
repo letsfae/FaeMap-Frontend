@@ -59,21 +59,9 @@ class MBPlacesCell: UITableViewCell {
     }
     
     func setValueForCell(place: MBPlacesStruct, curtLoc: CLLocation) {
-        imgPlaceIcon.image = #imageLiteral(resourceName: "mb_defaultPlace")
+        imgPlaceIcon.image = place.icon
         lblPlaceName.text = place.name
         lblPlaceAddr.text = place.address
-
-//        let curtPos = curtLoc
-//        
-//        let dis = curtPos.distance(from: place.position) / 1000
-//        if dis < 0.1 {
-//            distance = "< 0.1 km"
-//        } else if dis > 999 {
-//            distance = "> 999 km"
-//        } else {
-//            distance = String(format: "%.1f", dis) + " km"
-//        }
-        
         lblDistance.text = place.distance
     }
 }
