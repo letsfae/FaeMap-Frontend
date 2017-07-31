@@ -28,7 +28,7 @@ extension FaeMapViewController {
         
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 100
-        mapClusterManager.marginFactor = 0.1
+        mapClusterManager.marginFactor = 0.5
         mapClusterManager.delegate = self
 
         locManager.delegate = self

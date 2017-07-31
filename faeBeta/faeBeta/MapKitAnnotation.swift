@@ -30,7 +30,7 @@ class FaePinAnnotation: MKPointAnnotation {
     var mapViewCluster: CCHMapClusterController?
     
     // place pin & social pin
-    var icon: UIImage!
+    var icon = UIImage()
     var class_two_idx: Int = 0
     var pinInfo: AnyObject!
     
@@ -40,7 +40,7 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     
     // user pin only
-    var avatar: UIImage!
+    var avatar = UIImage()
     var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
     var count = 0
@@ -67,7 +67,7 @@ class FaePinAnnotation: MKPointAnnotation {
             self.pinInfo = placePin as AnyObject
             self.id = json["place_id"].intValue
             self.class_two_idx = json["class_two_idx"].intValue
-            self.icon = placePin.icon
+            self.icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
             self.coordinate = placePin.coordinate
         }
         else if type == "user" {
@@ -84,7 +84,7 @@ class FaePinAnnotation: MKPointAnnotation {
                 print("[init] map avatar image is nil")
                 return
             }
-            self.avatar = Mood.avatars[miniAvatar]
+            self.avatar = Mood.avatars[miniAvatar] ?? UIImage()
             self.changePosition()
             self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         }

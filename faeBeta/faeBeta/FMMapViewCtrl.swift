@@ -30,18 +30,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
-    /*
-    func findClosestAnnotation(annotations: Set<AnyHashable>, coordinate: CLLocationCoordinate2D) -> FaePinAnnotation? {
-        for annotation in annotations {
-            guard let anno = annotation as? FaePinAnnotation else { continue }
-            if anno.coordinate.latitude == coordinate.latitude && anno.coordinate.longitude == coordinate.longitude {
-                return anno
-            }
-        }
-        return nil
-    }
-     */
-    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         guard boolCanOpenPin else { return }
@@ -51,6 +39,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         } else if view is SocialPinAnnotationView {
             
         } else if view is UserPinAnnotationView {
+            guard preventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         }
     }
@@ -221,7 +210,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
         
         if let idx = selectedAnn?.class_two_idx {
-            selectedAnn?.icon = UIImage(named: "place_map_\(idx)")
+            selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
         }
@@ -231,6 +220,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         UIView.animate(withDuration: 0.5, animations: {
             self.btnCompass.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
         })
+        guard placeResultBar.tag > 0 else { return }
+        placeResultBar.annotations = visiblePlaces()
     }
     
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {

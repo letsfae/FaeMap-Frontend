@@ -32,7 +32,7 @@ class PlacePin: NSObject {
         self.coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         self.classTwo = json["class_two"].stringValue
         self.class_two_idx = json["class_two_idx"].intValue
-        self.icon = UIImage(named: "place_map_\(self.class_two_idx)") ?? UIImage()
+        self.icon = UIImage(named: "place_map_\(self.class_two_idx)") ?? #imageLiteral(resourceName: "place_map_48")
     }
     
     override func isEqual(_ object: Any?) -> Bool {

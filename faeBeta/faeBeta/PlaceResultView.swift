@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import MapKit
+import CCHMapClusterController
 
 protocol PlaceViewDelegate: class {
-    func animateTo(view: MKAnnotationView?)
-    func goToNext(view: MKAnnotationView?)
-    func goToPrev(view: MKAnnotationView?)
+    func animateTo(annotation: CCHMapClusterAnnotation?)
+    func goToNext(annotation: CCHMapClusterAnnotation?)
+    func goToPrev(annotation: CCHMapClusterAnnotation?)
 }
 
 class PlaceResultView: UIView {
@@ -27,7 +29,15 @@ class PlaceResultView: UIView {
     var boolLeft = true
     var boolRight = true
     
-    var views = [MKAnnotationView]()
+    var annotations = [CCHMapClusterAnnotation]() {
+        didSet {
+            boolLeft = annotations.count > 1
+            boolRight = annotations.count > 1
+        }
+    }
+    
+    var prevAnnotation: CCHMapClusterAnnotation!
+    var nextAnnotation: CCHMapClusterAnnotation!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 68))
@@ -35,6 +45,7 @@ class PlaceResultView: UIView {
         let panGesture = UIPanGestureRecognizer()
         panGesture.addTarget(self, action: #selector(self.handlePanGesture(_:)))
         addGestureRecognizer(panGesture)
+        tag = 0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,7 +57,9 @@ class PlaceResultView: UIView {
         addSubview(imgBack_0)
         addSubview(imgBack_1)
         addSubview(imgBack_2)
-        
+//        imgBack_0.layer.borderColor = UIColor.red.cgColor
+//        imgBack_1.layer.borderColor = UIColor.green.cgColor
+//        imgBack_2.layer.borderColor = UIColor.blue.cgColor
         resetSubviews()
     }
     
@@ -54,29 +67,53 @@ class PlaceResultView: UIView {
         imgBack_0.frame.origin.x = -screenWidth + 2
         imgBack_1.frame.origin.x = 0 + 2
         imgBack_2.frame.origin.x = screenWidth + 2
+        
+//        imgBack_0.frame.origin.y = 0
+//        imgBack_1.frame.origin.y = 80
+//        imgBack_2.frame.origin.y = 160
     }
     
-    func loadingData(for index: Int, data: PlacePin, views: [MKAnnotationView]) {
-        self.views = views
-        //        switch index {
-        //        case 0:
-//        imgBack_0.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-//        imgBack_0.lblName.text = data.name
-//        imgBack_0.lblAddr.text = data.address1 + ", " + data.address2
-        //            break
-        //        case 1:
-        imgBack_1.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-        imgBack_1.lblName.text = data.name
-        imgBack_1.lblAddr.text = data.address1 + ", " + data.address2
-        //            break
-        //        case 2:
-//        imgBack_2.imgType.image = UIImage(named: "place_result_\(data.class_two_idx)") ?? UIImage()
-//        imgBack_2.lblName.text = data.name
-//        imgBack_2.lblAddr.text = data.address1 + ", " + data.address2
-        //            break
-        //        default:
-        //            break
-        //        }
+    func loadingData(current: CCHMapClusterAnnotation) {
+        if let place = current.annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_1.lblName.text = placeInfo.name
+                imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+            }
+        }
+        var prev_idx = 0
+        var next_idx = 0
+        guard annotations.count > 0 else { return }
+        for i in 0..<annotations.count {
+            if annotations[i] == current {
+                joshprint("[loadingData], find equals")
+                prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
+                next_idx = (i + 1) >= annotations.count ? 0 : i + 1
+                joshprint("[loadingData], count = \(annotations.count)")
+                joshprint("[loadingData],     i = \(i)")
+                joshprint("[loadingData],  prev = \(prev_idx)")
+                joshprint("[loadingData],  next = \(next_idx)")
+                break
+            } else {
+                continue
+            }
+        }
+        prevAnnotation = annotations[prev_idx]
+        nextAnnotation = annotations[next_idx]
+        if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_0.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_0.lblName.text = placeInfo.name
+                imgBack_0.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+            }
+        }
+        if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_2.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_2.lblName.text = placeInfo.name
+                imgBack_2.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+            }
+        }
     }
     
     func handlePanGesture(_ pan: UIPanGestureRecognizer) {
@@ -85,20 +122,21 @@ class PlaceResultView: UIView {
             offset = location.x
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
             let percent_1 = imgBack_1.center.x / screenWidth
-            if percent_1 > 0.7 && percent_1 < 1 {
+            joshprint("[handlePanGesture]", percent_1)
+            if percent_1 > 0.7 {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.imgBack_0.frame.origin.x = 2
                     self.imgBack_1.frame.origin.x += screenWidth + 2
                 }, completion: {_ in
-                    self.delegate?.goToNext(view: self.views[0])
+                    self.delegate?.goToPrev(annotation: self.prevAnnotation)
                     self.resetSubviews()
                 })
-            } else if percent_1 < 0.3 && percent_1 > 0 {
+            } else if percent_1 < 0.3 {
                 UIView.animate(withDuration: 0.3, animations: {
                     self.imgBack_1.frame.origin.x = -screenWidth + 2
                     self.imgBack_2.frame.origin.x = 2
                 }, completion: {_ in
-                    self.delegate?.goToPrev(view: self.views[1])
+                    self.delegate?.goToNext(annotation: self.nextAnnotation)
                     self.resetSubviews()
                 })
             } else {
@@ -108,10 +146,11 @@ class PlaceResultView: UIView {
             }
         } else {
             let off = location.x - offset
-            imgBack_1.frame.origin.x += off
-            if off >= 0  {
+            if off >= 0 && boolLeft {
                 imgBack_0.frame.origin.x += off
-            } else {
+                imgBack_1.frame.origin.x += off
+            } else if off < 0 && boolRight {
+                imgBack_1.frame.origin.x += off
                 imgBack_2.frame.origin.x += off
             }
             offset = location.x
@@ -129,6 +168,7 @@ class PlaceView: UIImageView {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 2, y: 0, w: 410, h: 80))
         loadContent()
+//        layer.borderWidth = 1
     }
     
     required init?(coder aDecoder: NSCoder) {
