@@ -10,8 +10,8 @@ import UIKit
 
 class PlacesListCell: UITableViewCell {
     
-    var imgPic: UIImageView!
-    var lblUserName: UILabel!
+    var imgIcon: UIImageView!
+    var lblPlaceName: UILabel!
     var lblAddress: UILabel!
     var bottomLine: UIView!
     
@@ -29,20 +29,19 @@ class PlacesListCell: UITableViewCell {
     }
     
     fileprivate func loadRecommendedCellContent() {
-        imgPic = UIImageView()
-        imgPic.frame = CGRect(x: 9, y: 5, width: 58, height: 58)
-        imgPic.contentMode = .scaleAspectFill
-        imgPic.clipsToBounds = true
-        imgPic.backgroundColor = .white
-        addSubview(imgPic)
+        imgIcon = UIImageView()
+        imgIcon.frame = CGRect(x: 15 * screenWidthFactor, y: 11, width: 46, height: 46)
+        imgIcon.contentMode = .scaleAspectFill
+        imgIcon.clipsToBounds = true
+        addSubview(imgIcon)
         
-        lblUserName = UILabel()
-        lblUserName.textAlignment = .left
-        lblUserName.lineBreakMode = .byTruncatingTail
-        lblUserName.textColor = UIColor._898989()
-        lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addSubview(lblUserName)
-        addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblUserName)
+        lblPlaceName = UILabel()
+        lblPlaceName.textAlignment = .left
+        lblPlaceName.lineBreakMode = .byTruncatingTail
+        lblPlaceName.textColor = UIColor._898989()
+        lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        addSubview(lblPlaceName)
+        addConstraintsWithFormat("H:|-\(73*screenWidthFactor)-[v0]-\(20*screenWidthFactor)-|", options: [], views: lblPlaceName)
         
         lblAddress = UILabel()
         lblAddress.textAlignment = .left
@@ -50,13 +49,13 @@ class PlacesListCell: UITableViewCell {
         lblAddress.textColor = UIColor._107107107()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblAddress)
-        addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblAddress)
-        addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblUserName, lblAddress)
+        addConstraintsWithFormat("H:|-\(73*screenWidthFactor)-[v0]-\(20*screenWidthFactor)-|", options: [], views: lblAddress)
+        addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblPlaceName, lblAddress)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
-        addConstraintsWithFormat("H:|-63-[v0]-0-|", options: [], views: bottomLine)
+        addConstraintsWithFormat("H:|-\(62*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     

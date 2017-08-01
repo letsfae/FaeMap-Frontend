@@ -80,13 +80,11 @@ extension MapBoardViewController {
             case "place":
                 let mbPlaceData = MBPlacesStruct(json: result)
 //                if self.mbPlaces.contains(mbPlaceData) {
-//                    if let idx = self.mbPlaces.index(of: mbPlaceData) {
-//                        if mbPlaces[idx].distance != mbPlaceData.distance {
-//                            mbPlaces[idx].distance = mbPlaceData.distance
-//                        }
-//                    }
 //                    continue
 //                } else {
+//                    self.mbPlaces.append(mbPlaceData)
+//                }
+//                if mbPlaceData.class_two_idx != 0 {
                     self.mbPlaces.append(mbPlaceData)
 //                }
                 break
@@ -102,11 +100,6 @@ extension MapBoardViewController {
                 }
                 
                 if (mbPeopleData.dis > Double(disVal)!) || (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") || (Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) {
-//                    if self.mbPeople.contains(mbPeopleData) {
-//                        if let idx = mbPeople.index(of: mbPeopleData) {
-//                            mbPeople.remove(at: idx)
-//                        }
-//                    }
                     continue
                 }
                 
@@ -191,7 +184,6 @@ extension MapBoardViewController {
         mbPlacesList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbPlacesList.whereKey("radius", value: "9999999")
         mbPlacesList.whereKey("type", value: "place")
-        mbPlacesList.whereKey("in_duration", value: "false")
         mbPlacesList.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
@@ -210,12 +202,7 @@ extension MapBoardViewController {
             self.mbPlaces.removeAll()
             self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
             
-//            if let curtPos = LocManage.shared.curtLoc {
-//                self.mbPlaces.sort { $0.position.distance(from: curtPos) < $1.position.distance(from: curtPos) }
-//            }
-            
             self.mbPlaces.sort { $0.dis < $1.dis }
-            
             self.tblMapBoard.reloadData()
         }
     }
@@ -227,7 +214,6 @@ extension MapBoardViewController {
         mbPeopleList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbPeopleList.whereKey("radius", value: "9999999")
         mbPeopleList.whereKey("type", value: "user")
-        mbPeopleList.whereKey("in_duration", value: "false")
         mbPeopleList.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPeopleInfo] status/100 != 2")
@@ -245,11 +231,6 @@ extension MapBoardViewController {
             
             self.mbPeople.removeAll()
             self.processMBInfo(results: peopleInfoJsonArray, socialType: "people")
-            
-//            if let curtPos = LocManage.shared.curtLoc {
-//                print("[getMBPeopleInfo] curtPos: \(curtPos)")
-//                self.mbPeople.sort { $0.position.distance(from: curtPos) < $1.position.distance(from: curtPos) }
-//            }
             
             self.mbPeople.sort{ $0.dis < $1.dis }
 //            print(self.mbPeople)
