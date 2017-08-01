@@ -77,7 +77,7 @@ class RealmChat {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = dateFormatter.date(from: (message as! NSDictionary)["last_message_timestamp"]! as! String)
-            recent.date = date! as NSDate
+            //recent.date = date! as NSDate
             recent.message = (message as! NSDictionary)["last_message"]! as! String
             recent.unread = (message as! NSDictionary)["unread_count"]! as! Int
             try! realm.write{
