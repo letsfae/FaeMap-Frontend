@@ -210,9 +210,9 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         // filter for garbage information
         
-        if item.count < 9 {
-            return false
-        }
+//        if item.count < 9 {
+//            return false
+//        }
         
         let message = incomingMessage.createMessage(item)
         if item["hasTimeStamp"] != nil && item["hasTimeStamp"] as! Bool {
