@@ -10,9 +10,8 @@ import UIKit
 
 class LocationListCell: UITableViewCell {
     
-    var imgPic: UIImageView!
-    var lblPlaceName: UILabel!
-    //var lblAddress: UILabel!
+    var imgIcon: UIImageView!
+    var lblLocationName: UILabel!
     var bottomLine: UIView!
     
     
@@ -29,28 +28,30 @@ class LocationListCell: UITableViewCell {
     }
     
     fileprivate func loadRecommendedCellContent() {
-        imgPic = UIImageView()
-        imgPic.frame = CGRect(x: 48, y: 17, width: 15, height: 15)
-        imgPic.contentMode = .scaleAspectFill
-        imgPic.clipsToBounds = true
-        imgPic.backgroundColor = .white
-        imgPic.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        addSubview(imgPic)
+        imgIcon = UIImageView()
+        imgIcon.contentMode = .scaleAspectFill
+        imgIcon.clipsToBounds = true
+        imgIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        addSubview(imgIcon)
+        addConstraintsWithFormat("V:|-16.5-[v0(15)]", options: [], views: imgIcon)
         
-        lblPlaceName = UILabel()
-        lblPlaceName.textAlignment = .left
-        lblPlaceName.lineBreakMode = .byTruncatingTail
-        lblPlaceName.textColor = UIColor._898989()
-        lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        addSubview(lblPlaceName)
-        addConstraintsWithFormat("H:|-86-[v0]-20-|", options: [], views: lblPlaceName)
-        addConstraintsWithFormat("V:|-12-[v0]-12-|", options: [], views: lblPlaceName)
+        lblLocationName = UILabel()
+        lblLocationName.textAlignment = .left
+        lblLocationName.lineBreakMode = .byTruncatingTail
+        lblLocationName.textColor = UIColor._898989()
+        lblLocationName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        addSubview(lblLocationName)
+        addConstraintsWithFormat("V:|-11.5-[v0]-11.5-|", options: [], views: lblLocationName)
+        
+        addConstraintsWithFormat("H:|-48-[v0(15)]-9-[v1]-20-|", options: [], views: imgIcon, lblLocationName)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-39-[v0]-39-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
+        
+        
     }
     
     
