@@ -24,3 +24,6 @@ DerivedData
 .idea/
 *.hmap
 xcuserdata/*
+*/.DS_Store
+.DS_Store
+../.DS_Store

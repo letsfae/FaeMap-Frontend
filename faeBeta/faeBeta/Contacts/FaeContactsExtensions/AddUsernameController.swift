@@ -199,8 +199,9 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     func filter(searchText: String, scope: String = "All") {
         filtered = testArray.filter { text in
-            (text.lowercased()).elementsEqual(searchText.lowercased())
+            //(text.lowercased()).elementsEqual(searchText.lowercased())
             //.range(of: searchText.lowercased()) != nil
+            (text.lowercased()).range(of: searchText.lowercased()) != nil
         }
         tblUsernames.reloadData()
     }
