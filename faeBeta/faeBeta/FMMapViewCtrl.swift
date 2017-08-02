@@ -170,7 +170,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
             self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
-            self.btnSelfCenter.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnLocateSelf.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnOpenChat.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
             self.lblUnreadCount.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
             self.btnDiscovery.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
@@ -217,9 +217,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.btnCompass.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
-        })
+        joshprint("[regionDidChange] altitude = \(faeMapView.camera.altitude)")
+        btnCompass.rotateCompass()
         loadCurrentRegionPlacePins()
         guard placeResultBar.tag > 0 else { return }
         placeResultBar.annotations = self.visiblePlaces()

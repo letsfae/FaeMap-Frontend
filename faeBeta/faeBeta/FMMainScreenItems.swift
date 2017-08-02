@@ -96,18 +96,12 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
         
         // Click to back to north
-        btnCompass = UIButton(frame: CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59))
+        btnCompass.mapView = faeMapView
         view.addSubview(btnCompass)
-        btnCompass.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
-        btnCompass.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
-        btnCompass.layer.zPosition = 500
         
         // Click to locate the current location
-        btnSelfCenter = UIButton(frame: CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59))
-        view.addSubview(btnSelfCenter)
-        btnSelfCenter.setImage(UIImage(named: "mainScreenSelfCenter"), for: .normal)
-        btnSelfCenter.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
-        btnSelfCenter.layer.zPosition = 500
+        btnLocateSelf.mapView = faeMapView
+        view.addSubview(btnLocateSelf)
         
         // Open chat view
         btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))

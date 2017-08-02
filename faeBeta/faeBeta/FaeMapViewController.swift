@@ -28,9 +28,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var btnMainMapSearch: UIButton!
     var btnCardOptions: UIButton! // Map Namecard
     var btnDiscovery: UIButton!
-    var btnSelfCenter: UIButton!
+    var btnLocateSelf = FMLocateSelf()
     var btnCardShowSelf: UIButton! // Map Namecard
-    var btnCompass: UIButton!
+    var btnCompass = FMCompass()
     var btnCardClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
@@ -244,7 +244,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     // MARK: -- Load Navigation Items
     fileprivate func loadTransparentNavBarItems() {
-        tabBarController?.tabBar.isHidden = true
         navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
