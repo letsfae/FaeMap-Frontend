@@ -77,9 +77,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navMain.viewControllers = [vcEmptyRoot]
         navMain.navigationBar.isHidden = true
         
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = navMain
-        self.window?.makeKeyAndVisible()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = navMain
+        window?.makeKeyAndVisible()
         
         // update user current location
         LocManager.shared.updateCurtLoc()
@@ -90,15 +90,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Network Check
     func reachabilityChanged(notification: Notification) {
         let reachability = notification.object as! Reachability
-        if reachability.isReachable && self.reachaVCPresented {
+        if reachability.isReachable && reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-            self.reachaVC.dismiss(animated: true, completion: nil)
-            self.reachaVCPresented = false
-        } else if !reachability.isReachable && !self.reachaVCPresented {
+            reachaVC.dismiss(animated: true, completion: nil)
+            reachaVCPresented = false
+        } else if !reachability.isReachable && !reachaVCPresented {
             // print("[AppDelegate | reachabilityChanged] Network not reachable")
-            self.reachaVCPresented = true
-            self.window?.makeKeyAndVisible()
-            self.window?.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
+            reachaVCPresented = true
+            window?.makeKeyAndVisible()
+            window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
         }
     }
     
@@ -190,7 +190,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func runSync() {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + time) {
             self.time = 10
-            if is_Login == 0 {
+            if Key.shared.is_Login == 0 {
                 print("not log in, sync fail")
                 self.runSync()
             } else {
@@ -202,7 +202,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         // success
                     } else if status == 401 {
                         self.reachaVCPresented = false
-                        is_Login = 0
+                        Key.shared.is_Login = 0
                         DispatchQueue.main.async {
                             self.popUpWelcomeView()
                         }

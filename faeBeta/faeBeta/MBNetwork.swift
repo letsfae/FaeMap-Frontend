@@ -84,7 +84,7 @@ extension MapBoardViewController {
 //                } else {
 //                    self.mbPlaces.append(mbPlaceData)
 //                }
-//                if mbPlaceData.class_two_idx != 0 {
+//                if mbPlaceData.class_2_icon_id != 0 {
                     self.mbPlaces.append(mbPlaceData)
 //                }
                 break
