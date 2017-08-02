@@ -7,18 +7,14 @@
 //
 
 import UIKit
-import GoogleMaps
-import GooglePlaces
+import MapKit
 import CoreLocation
 
 protocol LocationSendDelegate: class {
     func sendPickedLocation(_ lat : CLLocationDegrees, lon : CLLocationDegrees, screenShot : UIImage)
 }
 
-class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource {
-    
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
+class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearchControllerDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
     
     var widthFactor : CGFloat = 375 / 414
     var heightFactor : CGFloat = 667 / 736
@@ -33,7 +29,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     var willAppearFirstLoad = false
     
     // MARK: -- Map main screen Objects
-    var faeMapView: GMSMapView!
+    var faeMapView: MKMapView!
     var buttonSelfPosition: UIButton!
     var buttonCancelSelectLocation: UIButton!
     var buttonSetLocationOnMap: UIButton!
@@ -47,8 +43,9 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     var searchController: UISearchController!
     var faeSearchController: FaeSearchController!
     var searchBarSubview: UIView!
-    var placeholder = [GMSAutocompletePrediction]()
     var searchBarSubviewButton: UIButton!
+    var searchCompleter = MKLocalSearchCompleter()
+    var searchResults = [MKLocalSearchCompletion]()
     
     //MARK: -- Coordinates to send
     var latitudeForPin: CLLocationDegrees = 0.0
@@ -64,6 +61,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         configureFaeSearchController()
         loadButton()
         loadPin()
+        searchCompleter.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,11 +87,15 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
 //    }
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        faeMapView.isMyLocationEnabled = true
+        faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
-        self.view = faeMapView
+        view.addSubview(faeMapView)
+        faeMapView.showsPointsOfInterest = false
+        faeMapView.showsCompass = false
+        faeMapView.delegate = self
+        faeMapView.showsUserLocation = true
+        let camera = faeMapView.camera
+        camera.centerCoordinate = CLLocationCoordinate2D(latitude: currentLatitude, longitude: currentLongitude)
     }
     
     func loadPin() {
@@ -102,31 +104,20 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         self.view.addSubview(pinImage)
     }
     
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        faeSearchController.faeSearchBar.endEditing(true)
-    }
+//    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+//        faeSearchController.faeSearchBar.endEditing(true)
+//    }
     
-    func mapView(_ mapView: GMSMapView, idleAt position: GMSCameraPosition) {
-        
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-        let mapCenterCoordinate = mapView.projection.coordinate(for: mapCenter)
-        GMSGeocoder().reverseGeocodeCoordinate(mapCenterCoordinate, completionHandler: {
-            (response, error) -> Void in
-            if let fullAddress = response?.firstResult()?.lines {
-                var addressToSearchBar = ""
-                for line in fullAddress {
-                    if fullAddress.index(of: line) == fullAddress.count-1 {
-                        addressToSearchBar += line + ""
-                    }
-                    else {
-                        addressToSearchBar += line + ", "
-                    }
-                }
-                self.faeSearchController.faeSearchBar.text = addressToSearchBar
-            }
+        let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
+        let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
+        General.shared.getAddress(location: location) { (address) in
+            guard let addr = address as? String else { return }
+            self.faeSearchController.faeSearchBar.text = addr
             self.latitudeForPin = mapCenterCoordinate.latitude
             self.longitudeForPin = mapCenterCoordinate.longitude
-        })
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -134,8 +125,9 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
             currentLocation = locManager.location
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.camera = camera
+            let camera = faeMapView.camera
+            camera.centerCoordinate = currentLocation.coordinate
+            faeMapView.setCamera(camera, animated: false)
             willAppearFirstLoad = false
         }
     }
@@ -143,13 +135,13 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     func configureFaeSearchController() {
         searchBarSubview = UIView(frame: CGRect(x: 8 * widthFactor, y: 23 * heightFactor, width: (screenWidth - 8 * 2 * widthFactor), height: 48 * heightFactor))
         
-        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         // quick fix for unwant shadow in search bar
         
         if(UIScreen.main.bounds.height == 736) {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 5 * heightFactor, width: 398 * widthFactor, height: 38.0 * heightFactor), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         } else {
-            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+            faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 0, y: 4.5, width: 360 * 1, height: 34), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18.0)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         }
 
         faeSearchController.faeSearchBar.placeholder = "Search Address or Place                                  "
@@ -189,7 +181,7 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         buttonSetLocationOnMap = UIButton(frame: CGRect(x: 0, y: screenHeight - 65 * heightFactor, width: screenWidth, height: 65 * heightFactor))
         buttonSetLocationOnMap.setTitle("Send Location", for: UIControlState())
         buttonSetLocationOnMap.setTitle("Send Location", for: .highlighted)
-        buttonSetLocationOnMap.setTitleColor(UIColor.faeAppRedColor(), for: UIControlState())
+        buttonSetLocationOnMap.setTitleColor(UIColor._2499090(), for: UIControlState())
         buttonSetLocationOnMap.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
@@ -204,14 +196,14 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         if currentLocation != nil {
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.animate(to: camera)
+            let camera = faeMapView.camera
+            camera.centerCoordinate = currentLocation.coordinate
+            faeMapView.setCamera(camera, animated: true)
         }
     }
     
     func actionCancelSelectLocation(_ sender: UIButton!) {
-        _ = self.navigationController?.popViewController(animated: true)
-//        self.dismissViewControllerAnimated(true, completion: nil);
+        navigationController?.popViewController(animated: true)
     }
     
     func actionSetLocationForComment(_ sender: UIButton!) {
@@ -254,34 +246,29 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return placeholder.count
+        return searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "faeCellForAddressSearch", for: indexPath) as! FaeCellForMainScreenSearch
-        cell.labelTitle.text = placeholder[indexPath.row].attributedPrimaryText.string
-        if let secondaryText = placeholder[indexPath.row].attributedSecondaryText {
-            cell.labelSubTitle.text = secondaryText.string
-        }
+        cell.labelTitle.text = searchResults[indexPath.row].title
+        cell.labelSubTitle.text = searchResults[indexPath.row].subtitle
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let placesClient = GMSPlacesClient()
-        placesClient.lookUpPlaceID(placeholder[indexPath.row].placeID!, callback: {
-            (place, error) -> Void in
-            // Get place.coordinate
-            GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                (response, error) -> Void in
-                if let selectedAddress = place?.coordinate {
-                    let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
-                    self.faeMapView.animate(to: camera)
-                }
-            })
-        })
-        self.faeSearchController.faeSearchBar.text = self.placeholder[indexPath.row].attributedFullText.string
-        self.faeSearchController.faeSearchBar.resignFirstResponder()
-        self.searchBarTableHideAnimation()
+        let address = searchResults[indexPath.row].title + searchResults[indexPath.row].subtitle
+        General.shared.getLocation(address: address) { (coordinate) in
+            if let coor = coordinate {
+                let camera = self.faeMapView.camera
+                camera.centerCoordinate = coor
+                self.faeMapView.setCamera(camera, animated: true)
+            }
+        }
+        
+        faeSearchController.faeSearchBar.text = address
+        faeSearchController.faeSearchBar.resignFirstResponder()
+        searchBarTableHideAnimation()
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -303,6 +290,20 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
         }), completion: nil)
     }
     
+    // MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        self.tblSearchResults.reloadData()
+        if self.searchResults.count > 0 {
+            self.searchBarTableShowAnimation()
+        }
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
+    }
+    
     // MARK: UISearchResultsUpdating delegate function
     func updateSearchResultsForSearchController(_ searchController: UISearchController) {
         tblSearchResults.reloadData()
@@ -321,23 +322,19 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
             tblSearchResults.reloadData()
         }
         
-        if placeholder.count > 0 {
-            let placesClient = GMSPlacesClient()
-            placesClient.lookUpPlaceID(placeholder[0].placeID!, callback: {
-                (place, error) -> Void in
-                GMSGeocoder().reverseGeocodeCoordinate(place!.coordinate, completionHandler: {
-                    (response, error) -> Void in
-                    if let selectedAddress = place?.coordinate {
-                        let camera = GMSCameraPosition.camera(withTarget: selectedAddress, zoom: self.faeMapView.camera.zoom)
-                        self.faeMapView.animate(to: camera)
-                    }
-                })
-            })
-            self.faeSearchController.faeSearchBar.text = self.placeholder[0].attributedFullText.string
-            self.faeSearchController.faeSearchBar.resignFirstResponder()
+        if searchResults.count > 0 {
+            let address = searchResults[0].title + searchResults[0].subtitle
+            General.shared.getLocation(address: address) { (coordinate) in
+                if let coor = coordinate {
+                    let camera = self.faeMapView.camera
+                    camera.centerCoordinate = coor
+                    self.faeMapView.setCamera(camera, animated: true)
+                }
+            }
+            faeSearchController.faeSearchBar.text = address
+            faeSearchController.faeSearchBar.resignFirstResponder()
             self.searchBarTableHideAnimation()
         }
-        
     }
     
     func didTapOnCancelButton() {
@@ -346,31 +343,12 @@ class ChatSendLocationController: UIViewController, GMSMapViewDelegate, FaeSearc
     }
     
     func didChangeSearchText(_ searchText: String) {
-        if(searchText != "") {
-            let placeClient = GMSPlacesClient()
-            placeClient.autocompleteQuery(searchText, bounds: nil, filter: nil) {
-                (results, error : Error?) -> Void in
-                if let error = error {
-                    print(error)
-                }
-                self.placeholder.removeAll()
-                if results == nil {
-                    return
-                } else {
-                    for result in results! {
-                        self.placeholder.append(result)
-                    }
-                    self.tblSearchResults.reloadData()
-                }
-            }
-            if placeholder.count > 0 {
-                searchBarTableShowAnimation()
-            }
-        }
-        else {
-            self.placeholder.removeAll()
+        if searchText != "" {
+            searchCompleter.queryFragment = searchText
+        } else {
+            searchResults.removeAll()
             searchBarTableHideAnimation()
-            self.tblSearchResults.reloadData()
+            tblSearchResults.reloadData()
         }
     }
 }

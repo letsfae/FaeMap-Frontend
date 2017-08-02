@@ -22,7 +22,7 @@ class MBPeopleCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 89.5, y: 89, width: screenWidth - 89.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -43,14 +43,14 @@ class MBPeopleCell: UITableViewCell {
         lblUsrName = UILabel()
         addSubview(lblUsrName)
         lblUsrName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblUsrName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblUsrName.textColor = UIColor._898989()
         lblUsrName.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-95-[v0]-90-|", options: [], views: lblUsrName)
         
         lblIntro = UILabel()
         addSubview(lblIntro)
         lblIntro.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblIntro.textColor = UIColor.faeAppInfoLabelGrayColor()
+        lblIntro.textColor = UIColor._182182182()
         lblIntro.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-95-[v0]-90-|", options: [], views: lblIntro)
         addConstraintsWithFormat("V:|-23-[v0(25)]-1-[v1(18)]", options: [], views: lblUsrName, lblIntro)
@@ -77,7 +77,7 @@ class MBPeopleCell: UITableViewCell {
         lblDistance = UILabel()
         addSubview(lblDistance)
         lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDistance.textColor = UIColor._155155155()
         lblDistance.textAlignment = .right
         addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:[v0(18)]-12-|", options: [], views: lblDistance)

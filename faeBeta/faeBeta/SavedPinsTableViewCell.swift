@@ -35,7 +35,7 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         lblNickName.frame = CGRect(x: 39, y: 12, width: 140, height: 18)
         lblNickName.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblNickName.textAlignment = .left
-        lblNickName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblNickName.textColor = UIColor._898989()
         uiviewPinView.addSubview(lblNickName)
         
         // set the swiped button after swipe the cell

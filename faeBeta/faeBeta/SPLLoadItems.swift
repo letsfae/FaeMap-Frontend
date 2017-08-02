@@ -47,7 +47,7 @@ extension SelectLocationViewController {
         buttonSetLocationOnMap = UIButton()
         buttonSetLocationOnMap.setTitle("Set Location", for: UIControlState())
         buttonSetLocationOnMap.setTitle("Set Location", for: .highlighted)
-        buttonSetLocationOnMap.setTitleColor(UIColor.faeAppRedColor(), for: UIControlState())
+        buttonSetLocationOnMap.setTitleColor(UIColor._2499090(), for: UIControlState())
         buttonSetLocationOnMap.setTitleColor(UIColor.lightGray, for: .highlighted)
         buttonSetLocationOnMap.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
         buttonSetLocationOnMap.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
@@ -60,7 +60,7 @@ extension SelectLocationViewController {
     func loadFaeSearchController() {
         let searchBarSubview = UIView(frame: CGRect(x: 8, y: 23, width: resultTableWidth, height: 48))
         
-        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 10, y: 6, width: resultTableWidth-11, height: 38), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18)!, searchBarTextColor: UIColor.faeAppInputTextGrayColor(), searchBarTintColor: UIColor.white)
+        faeSearchController = FaeSearchController(searchResultsController: self, searchBarFrame: CGRect(x: 10, y: 6, width: resultTableWidth-11, height: 38), searchBarFont: UIFont(name: "AvenirNext-Medium", size: 18)!, searchBarTextColor: UIColor._898989(), searchBarTintColor: UIColor.white)
         faeSearchController.faeSearchBar.placeholder = "Search Address or Place                               "
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0

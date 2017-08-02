@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import GoogleMaps
+import CoreLocation
 
 let mbAddressCache = NSCache<AnyObject, AnyObject>()
 
@@ -37,32 +37,16 @@ class MBAddressLabel: UILabel {
     }
     
     func getSocialPinAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
-        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
-            (response, _) -> Void in
-            DispatchQueue.main.async(execute: {
-//                print("administrativeArea: \(response?.firstResult()?.administrativeArea), locality: \(response?.firstResult()?.locality), subLocality: \(response?.firstResult()?.subLocality), thoroughfare: \(response?.firstResult()?.thoroughfare)")
-                
-                guard let fullAddress = response?.firstResult()?.lines else {
-                    print("[getSocialPinAddress] fail")
-                    return
-                }
-                
-                var addressToCache = ""
-                for line in fullAddress {
-                    if line == "" {
-                        continue
-                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
-                        addressToCache += line + ""
-                    } else {
-                        addressToCache += line + ", "
-                    }
-                }
-
+        
+        let location = CLLocation(latitude: position.latitude, longitude: position.longitude)
+        General.shared.getAddress(location: location) { (address) in
+            guard let addr = address as? String else { return }
+            DispatchQueue.main.async {
                 if "\(self.pinId)" + self.pinType == "\(id)" + type {
-                    self.text = addressToCache
+                    self.text = addr
                 }
-                mbAddressCache.setObject(addressToCache as AnyObject, forKey: "\(id)" + type as AnyObject)
-            })
-        })
+            }
+            mbAddressCache.setObject(address, forKey: "\(id)" + type as AnyObject)
+        }
     }
 }

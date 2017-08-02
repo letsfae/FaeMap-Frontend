@@ -34,7 +34,7 @@ extension SelectLocationViewController {
     
     func actionClearSearchBar(_ sender: UIButton) {
         faeSearchController.faeSearchBar.text = nil
-        self.placeholder.removeAll()
+        self.searchResults.removeAll()
         searchBarTableHideAnimation()
         self.tblSearchResults.reloadData()
     }

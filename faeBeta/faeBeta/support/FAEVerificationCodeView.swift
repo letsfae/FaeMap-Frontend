@@ -49,7 +49,7 @@ class FAEVerificationCodeView: UIView {
     
     fileprivate func setup() {
         for label in numberLabels {
-            label.attributedText = NSAttributedString(string: "･", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
+            label.attributedText = NSAttributedString(string: "･", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
             label.textAlignment = .center
         }
     }
@@ -58,13 +58,13 @@ class FAEVerificationCodeView: UIView {
     func addDigit(_ digit:Int) -> Int {
         if digit >= 0 && pointer < numberLabels.count {
             let label = numberLabels[pointer]
-            label.attributedText = NSAttributedString(string: "\(digit)", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
+            label.attributedText = NSAttributedString(string: "\(digit)", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
             label.textAlignment = .center
             pointer = pointer + 1
         } else if digit < 0 && pointer > 0 {
             pointer = pointer - 1
             let label = numberLabels[pointer]
-            label.attributedText = NSAttributedString(string: "･", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
+            label.attributedText = NSAttributedString(string: "･", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 60)!])
             label.textAlignment = .center
         }
         return pointer

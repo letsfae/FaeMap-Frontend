@@ -72,7 +72,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // set up the title label
         lblTitle = UILabel(frame: CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60))
         lblTitle.numberOfLines = 2
-        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         lblTitle.textAlignment = .center
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
@@ -86,7 +86,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         
         // set up the "We can’t find an account with this Email!" label
         btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67 , width: screenWidth - 175, height: 18))
-        btnInfo.setAttributedTitle(NSAttributedString(string: "We can’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnInfo.setAttributedTitle(NSAttributedString(string: "We can’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnInfo.contentHorizontalAlignment = .center
         btnInfo.sizeToFit()
         btnInfo.center.x = screenWidth / 2
@@ -99,14 +99,14 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         btnSendCode.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         btnSendCode.layer.cornerRadius = 25 * screenHeightFactor
         btnSendCode.isEnabled = false
-        btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnSendCode.backgroundColor = UIColor._255160160()
         btnSendCode.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), for: .touchUpInside)
         self.view.insertSubview(btnSendCode, at: 0)
         
     }
     
     func setupEnteringVerificationCode() {
-        lblTitle.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor.faeAppInputTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        lblTitle.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         lblTitle.sizeToFit()
         lblTitle.center.x = screenWidth / 2
         self.view.endEditing(true)
@@ -123,11 +123,11 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         verificationCodeView.alpha = 0
         
         btnSendCode.isEnabled = false
-        btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnSendCode.backgroundColor = UIColor._255160160()
         
         // start transaction animation
         UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: {
-            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
             self.btnSendCode.setAttributedTitle(NSAttributedString(string: "Continue", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
             
             self.btnInfo.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
@@ -153,7 +153,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
         indicatorView.hidesWhenStopped = true
-        indicatorView.color = UIColor.faeAppRedColor()
+        indicatorView.color = UIColor._2499090()
         
         view.addSubview(indicatorView)
         view.bringSubview(toFront: indicatorView)
@@ -205,31 +205,31 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // means the user entered 6 digits
         if(num == 6) {
             btnSendCode.isEnabled = true
-            btnSendCode.backgroundColor = UIColor.faeAppRedColor()
+            btnSendCode.backgroundColor = UIColor._2499090()
         }
         else {
             btnSendCode.isEnabled = false
-            btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnSendCode.backgroundColor = UIColor._255160160()
         }
     }
     
     //MARK: helper
     func startTimer() {
-        btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(SignInSupportViewController.updateTime), userInfo: nil, repeats: true)
     }
     
     func updateTime()
     {
         if(remainingTime > 0) {
-            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
             remainingTime = remainingTime - 1
         }
         else {
             remainingTime = 59
             timer.invalidate()
             timer = nil
-            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+            self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
             self.btnInfo.addTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), for: .touchUpInside )
         }
     }
@@ -278,11 +278,11 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     func textfieldDidChange(_ textfield: UITextField) {
         if isValidEmail(textfield.text!) {
             btnSendCode.isEnabled = true
-            btnSendCode.backgroundColor = UIColor.faeAppRedColor()
+            btnSendCode.backgroundColor = UIColor._2499090()
         }
         else {
             btnSendCode.isEnabled = false
-            btnSendCode.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnSendCode.backgroundColor = UIColor._255160160()
         }
     }
 }

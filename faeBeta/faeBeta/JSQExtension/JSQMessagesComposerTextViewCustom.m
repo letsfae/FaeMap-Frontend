@@ -35,7 +35,7 @@
     CGFloat cornerRadius = 6.0f;
     
     self.backgroundColor = [UIColor whiteColor];
-    self.tintColor = [UIColor faeAppRedColor];
+    self.tintColor = [UIColor _2499090];
     
     self.scrollIndicatorInsets = UIEdgeInsetsMake(cornerRadius, 0.0f, cornerRadius, 0.0f);
     

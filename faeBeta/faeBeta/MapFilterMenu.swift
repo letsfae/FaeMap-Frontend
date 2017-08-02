@@ -22,6 +22,7 @@ class MapFilterMenu: UIView {
     var imgDot1: UIImageView!
     var imgDot2: UIImageView!
     var btnDiscovery: UIButton!
+    var btnHideMFMenu: UIButton!
     var lblDiscovery: UILabel!
     var lblRefresh: UILabel!
     var lblCyclePins: UILabel!
@@ -44,15 +45,15 @@ class MapFilterMenu: UIView {
         
         // draw three lines
         let firstLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        firstLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        firstLine.backgroundColor = UIColor._200199204()
         addSubview(firstLine)
         
         let secLine = UIView(frame: CGRect(x: 0, y: 66, width: screenWidth, height: 1))
-        secLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        secLine.backgroundColor = UIColor._200199204()
         addSubview(secLine)
         
         let thirdLine = UIView(frame: CGRect(x: 0, y: 433, width: screenWidth, height: 1))
-        thirdLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        thirdLine.backgroundColor = UIColor._200199204()
         addSubview(thirdLine)
         
         // draw two uiview of Map Options
@@ -66,12 +67,12 @@ class MapFilterMenu: UIView {
         
         // draw two dots
         imgDot1 = UIImageView(frame: CGRect(x: screenWidth/2 - 11.5, y: 448, width: 8, height: 8))
-        imgDot1.backgroundColor = UIColor.faeAppRedColor()
+        imgDot1.backgroundColor = UIColor._2499090()
         imgDot1.layer.cornerRadius = 4
         addSubview(imgDot1)
         
         imgDot2 = UIImageView(frame: CGRect(x: screenWidth/2 + 3.5, y: 448, width: 8, height: 8))
-        imgDot2.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+        imgDot2.backgroundColor = UIColor._182182182()
         imgDot2.layer.cornerRadius = 4
         addSubview(imgDot2)
 
@@ -82,8 +83,7 @@ class MapFilterMenu: UIView {
         addSubview(imgDownArrow)
         
         // draw fake button to hide map filter menu
-        let btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 66))
-        btnHideMFMenu.addTarget(self, action: #selector(self.hideMapFilterMenuPage(_:)), for: .touchUpInside)
+        btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 66))
         addSubview(btnHideMFMenu)
         
         // draw "Map Options"
@@ -91,7 +91,7 @@ class MapFilterMenu: UIView {
         lblMapOptions.text = "Map Options"
         lblMapOptions.textAlignment = .center
         lblMapOptions.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblMapOptions.textColor = UIColor.faeAppInputTextGrayColor()
+        lblMapOptions.textColor = UIColor._898989()
         addSubview(lblMapOptions)
 
         loadView1()
@@ -111,7 +111,7 @@ class MapFilterMenu: UIView {
         let lblMapType = UILabel(frame: CGRect(x: 30, y: 15, width: 100, height: 25))
         lblMapType.text = "Map Type"
         lblMapType.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblMapType.textColor = UIColor.faeAppInputTextGrayColor()
+        lblMapType.textColor = UIColor._898989()
         uiviewMapOpt1.addSubview(lblMapType)
         
         // draw Discovery button
@@ -125,31 +125,31 @@ class MapFilterMenu: UIView {
         lblDiscovery.text = "Discovery"
         lblDiscovery.textAlignment = .center
         lblDiscovery.font = UIFont(name: "AvenirNext-DemiBold", size: 14)
-        lblDiscovery.textColor = UIColor.faeAppRedColor()
+        lblDiscovery.textColor = UIColor._2499090()
         uiviewMapOpt1.addSubview(lblDiscovery)
         
         // draw three labels - "Auto Refresh", "Auto Cycle Pins", "Show Avatars"
         lblRefresh = UILabel(frame: CGRect(x: 30, y: 196, width: 159, height: 25))
         lblRefresh.text = "Auto Refresh"
         lblRefresh.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblRefresh.textColor = UIColor.faeMapFilterActiveTxtColor()
+        lblRefresh.textColor = UIColor._115115115()
         uiviewMapOpt1.addSubview(lblRefresh)
         
         lblCyclePins = UILabel(frame: CGRect(x: 30, y: 250, width: 150, height: 25))
         lblCyclePins.text = "Auto Cycle Pins"
         lblCyclePins.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblCyclePins.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblCyclePins.textColor = UIColor._146146146()
         uiviewMapOpt1.addSubview(lblCyclePins)
         
         lblShowAvatars = UILabel(frame: CGRect(x: 30, y: 303, width: 150, height: 25))
         lblShowAvatars.text = "Show Avatars"
         lblShowAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblShowAvatars.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblShowAvatars.textColor = UIColor._146146146()
         uiviewMapOpt1.addSubview(lblShowAvatars)
         
         // draw three Switch buttons
         switchRefresh = UISwitch()
-        switchRefresh.onTintColor = UIColor.faeAppRedColor()
+        switchRefresh.onTintColor = UIColor._2499090()
         switchRefresh.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchRefresh.addTarget(self, action: #selector(self.switchAutoRefresh(_:)), for: .valueChanged)
         switchRefresh.isOn = true
@@ -158,7 +158,7 @@ class MapFilterMenu: UIView {
         addConstraintsWithFormat("V:|-193-[v0(23)]", options: [], views: switchRefresh)
         
         switchCyclePins = UISwitch()
-        switchCyclePins.onTintColor = UIColor.faeAppRedColor()
+        switchCyclePins.onTintColor = UIColor._2499090()
         switchCyclePins.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchCyclePins.addTarget(self, action: #selector(self.switchAutoCyclePins(_:)), for: .valueChanged)
         switchCyclePins.isOn = false
@@ -167,7 +167,7 @@ class MapFilterMenu: UIView {
         addConstraintsWithFormat("V:|-247-[v0(23)]", options: [], views: switchCyclePins)
         
         switchShowAvatars = UISwitch()
-        switchShowAvatars.onTintColor = UIColor.faeAppRedColor()
+        switchShowAvatars.onTintColor = UIColor._2499090()
         switchShowAvatars.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchShowAvatars.addTarget(self, action: #selector(self.switchShowAvatars(_:)), for: .valueChanged)
         switchShowAvatars.isOn = false
@@ -183,8 +183,8 @@ class MapFilterMenu: UIView {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.uiviewMapOpt1.frame.origin.x = -screenWidth
             self.uiviewMapOpt2.frame.origin.x = 0
-            self.imgDot2.backgroundColor = UIColor.faeAppRedColor()
-            self.imgDot1.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+            self.imgDot2.backgroundColor = UIColor._2499090()
+            self.imgDot1.backgroundColor = UIColor._182182182()
         }, completion: { _ in
         })
         
@@ -194,14 +194,10 @@ class MapFilterMenu: UIView {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.uiviewMapOpt1.frame.origin.x = 0
             self.uiviewMapOpt2.frame.origin.x = screenWidth
-            self.imgDot1.backgroundColor = UIColor.faeAppRedColor()
-            self.imgDot2.backgroundColor = UIColor.faeAppInfoLabelGrayColor()
+            self.imgDot1.backgroundColor = UIColor._2499090()
+            self.imgDot2.backgroundColor = UIColor._182182182()
         }, completion: { _ in
         })
-    }
-    
-    func hideMapFilterMenuPage(_ sender: Any?) {
-        print("hideMapFilterMenuPage")
     }
     
     func switchBetweenDisAndSocial(_ sender: UIButton) {
@@ -209,30 +205,30 @@ class MapFilterMenu: UIView {
     
     func switchAutoRefresh(_ sender: UISwitch) {
         if switchRefresh.isOn {
-            lblRefresh.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblRefresh.textColor = UIColor._115115115()
             delegate?.autoReresh(isOn: true)
         } else {
-            lblRefresh.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblRefresh.textColor = UIColor._146146146()
             delegate?.autoReresh(isOn: false)
         }
     }
     
     func switchAutoCyclePins(_ sender: UISwitch) {
         if switchCyclePins.isOn {
-            lblCyclePins.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblCyclePins.textColor = UIColor._115115115()
             delegate?.autoCyclePins(isOn: true)
         } else {
-            lblCyclePins.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblCyclePins.textColor = UIColor._146146146()
             delegate?.autoCyclePins(isOn: false)
         }
     }
     
     func switchShowAvatars(_ sender: UISwitch) {
         if switchShowAvatars.isOn {
-            lblShowAvatars.textColor = UIColor.faeMapFilterActiveTxtColor()
+            lblShowAvatars.textColor = UIColor._115115115()
             delegate?.showAvatars(isOn: true)
         } else {
-            lblShowAvatars.textColor = UIColor.faeAppInactiveBtnGrayColor()
+            lblShowAvatars.textColor = UIColor._146146146()
             delegate?.showAvatars(isOn: false)
         }
     }

@@ -244,7 +244,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     
     func loadEditBar() {
         uiviewEditbar = UIView(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 56))
-        uiviewEditbar.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewEditbar.backgroundColor = UIColor._234234234()
         uiviewBackground.addSubview(uiviewEditbar)
         
         btnShare = UIButton()
@@ -258,14 +258,14 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         btnRemove.setTitle("Remove", for: .normal)
         btnRemove.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnRemove.setTitleColor(UIColor.white, for: .normal)
-        btnRemove.backgroundColor = UIColor.faeAppRedColor()
+        btnRemove.backgroundColor = UIColor._2499090()
         btnRemove.layer.cornerRadius = 8
         
         btnMemo = UIButton()
         btnMemo.setTitle("Memo", for: .normal)
         btnMemo.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnMemo.setTitleColor(UIColor.white, for: .normal)
-        btnMemo.backgroundColor = UIColor.faeAppPurpleColor()
+        btnMemo.backgroundColor = UIColor(r: 194, g: 166, b: 217, alpha: 100)
         btnMemo.layer.cornerRadius = 8
         
         btnShare.addTarget(self, action: #selector(actionBtnShare(_:)), for: .touchUpInside)
@@ -307,7 +307,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         let lblNavBarTitle = UILabel(frame: CGRect(x: screenWidth / 2 - 100, y: 28, width: 200, height: 27))
         lblNavBarTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblNavBarTitle.textAlignment = .center
-        lblNavBarTitle.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblNavBarTitle.textColor = UIColor._107107107()
         lblNavBarTitle.text = strTableTitle
         uiviewNavBar.addSubview(lblNavBarTitle)
         
@@ -315,7 +315,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         btnEdit = UIButton(type: .custom)
         btnEdit.setTitle("Edit", for: .normal)
         btnEdit.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnEdit.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnEdit.setTitleColor(UIColor._2499090(), for: .normal)
         btnEdit.backgroundColor = .clear
         btnEdit.addTarget(self, action: #selector(self.actionEditCurrentTable(_:)), for: .touchUpInside)
         btnEdit.isHidden = true
@@ -361,7 +361,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
             
         default: break
         }
-        searchBar.barTintColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        searchBar.barTintColor = UIColor._234234234()
         // hide cancel button
         searchBar.showsCancelButton = false
         // hide bookmark button
@@ -387,7 +387,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     private func loadTblResult() {
         
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewBackground.backgroundColor = UIColor.faeAppTextViewPlaceHolderGrayColor()
+        uiviewBackground.backgroundColor = UIColor._234234234()
         tblResult = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65), style: UITableViewStyle.plain)
         tblResult.backgroundColor = .white
         tblResult.register(PlaceAndLocationTableViewCell.self, forCellReuseIdentifier: "PlaceAndLocationCell")
@@ -455,8 +455,8 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
                 btnMemo.alpha = 0.6
             }
             arrSelectedItem.append(sectionId)
-            cellInGivenId.btnSelected.layer.borderColor = UIColor.faeAppRedColor().cgColor
-            cellInGivenId.btnSelected.layer.backgroundColor = UIColor.faeAppRedColor().cgColor
+            cellInGivenId.btnSelected.layer.borderColor = UIColor._2499090().cgColor
+            cellInGivenId.btnSelected.layer.backgroundColor = UIColor._2499090().cgColor
         } else {
             arrSelectedItem.remove(at: arrSelectedItem.index(of: sectionId)!)
             cellInGivenId.btnSelected.layer.borderColor = UIColor(red: 225 / 255, green: 225 / 255, blue: 225 / 255, alpha: 1).cgColor
@@ -554,8 +554,8 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
             cell.btnSelected.tag = indexPath.section // 因为每个section只有一个row
             cell.btnSelected.addTarget(self, action: #selector(actionSelectBtnInCell(_:)), for: .touchUpInside)
             if arrSelectedItem.contains(indexPath.section) {
-                cell.btnSelected.layer.borderColor = UIColor.faeAppRedColor().cgColor
-                cell.btnSelected.layer.backgroundColor = UIColor.faeAppRedColor().cgColor
+                cell.btnSelected.layer.borderColor = UIColor._2499090().cgColor
+                cell.btnSelected.layer.backgroundColor = UIColor._2499090().cgColor
             } else {
                 cell.btnSelected.layer.borderColor = UIColor(red: 225 / 255, green: 225 / 255, blue: 225 / 255, alpha: 1).cgColor
                 cell.btnSelected.layer.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1).cgColor

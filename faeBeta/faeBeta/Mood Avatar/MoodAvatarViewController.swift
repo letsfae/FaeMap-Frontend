@@ -47,7 +47,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         lblTitle.text = "Mood Avatar"
         lblTitle.textAlignment = .center
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTitle.textColor = UIColor._898989()
         uiviewNavBar.addSubview(lblTitle)
         
         let buttonCancel = UIButton()

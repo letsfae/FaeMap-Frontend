@@ -8,11 +8,10 @@
 
 import Foundation
 import UIKit
-import GoogleMaps
-import GooglePlaces
+import MapKit
 import CoreLocation
 
-class LocationPickerMini: UIView, GMSMapViewDelegate {
+class LocationPickerMini: UIView {
     
     let widthFactor: CGFloat = screenWidth / 414
     let heightFactor: CGFloat = screenHeight / 736
@@ -20,7 +19,7 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
     weak var locationDelegate: LocationSendDelegate!
     
     // MARK: -- Map main screen Objects
-    var mapView: GMSMapView!
+    var mapView: MKMapView!
     var buttonSearch: UIButton!
     var buttonShareLocation: UIButton!
     var buttonSend: UIButton!
@@ -42,12 +41,16 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
     }
     
     func loadMapView() {
-        let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
-        mapView = GMSMapView.map(withFrame: CGRect(x: 0, y: 0, width: screenWidth, height: 271), camera: camera)
-        mapView.isMyLocationEnabled = true
-        mapView.delegate = self
+        mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
         mapView.layer.zPosition = 100
+        mapView.showsPointsOfInterest = false
+        mapView.showsCompass = false
+        mapView.showsUserLocation = true
         addSubview(mapView)
+        let selfLoc = CLLocationCoordinate2D(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+        let camera = mapView.camera
+        camera.centerCoordinate = selfLoc
+        mapView.setCamera(camera, animated: false)
     }
     
     func loadPin() {
@@ -72,11 +75,10 @@ class LocationPickerMini: UIView, GMSMapViewDelegate {
         addSubview(buttonSend)
     }
     
-    func actionSelfPosition(_ sender: UIButton!) {
-        if LocManager.shared.curtLoc != nil {
-            let camera = GMSCameraPosition.camera(withLatitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong, zoom: 17)
-            mapView.animate(to: camera)
-        }
+    func actionSelfPosition(_ sender: UIButton) {
+        let camera = mapView.camera
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+        mapView.setCamera(camera, animated: true)
     }
     
 }

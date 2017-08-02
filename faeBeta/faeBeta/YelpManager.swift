@@ -34,9 +34,9 @@ class YelpManager {
         
     }
     
-    func query(request : YelpQuery, completion : @escaping (_ res : [PlacePin]) -> ()) {
+    func query(request : YelpQuery, completion : @escaping (_ res : [YelpPlacePin]) -> ()) {
 //        var result = [YelpResult]()
-        var result = [PlacePin]()
+        var result = [YelpPlacePin]()
         if (!hasToken()) {
             Alamofire.request("https://api.yelp.com/oauth2/token",method: .post, parameters: ["grant_type":"client_credentials","client_id":yelpAppID,"client_secret":yelpSecret],headers: yelpHeaders).responseJSON { response in
                 if let val = response.result.value {
@@ -49,7 +49,7 @@ class YelpManager {
                                 completion(result)
                                 return
                             }
-                            result = yelpJSON.map{PlacePin(json: $0)}
+                            result = yelpJSON.map{YelpPlacePin(json: $0)}
                             completion(result)
                         }
                     }
@@ -63,7 +63,7 @@ class YelpManager {
                         completion(result)
                         return
                     }
-                    result = yelpJSON.map{PlacePin(json: $0)}
+                    result = yelpJSON.map{YelpPlacePin(json: $0)}
                     completion(result)
                 }
             }

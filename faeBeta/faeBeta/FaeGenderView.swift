@@ -79,10 +79,10 @@ class FaeGenderView: UIView {
             isHidden = false
             if gender == "male" {
                 imgCardGender.image = FaeGenderView.imageMale
-                backgroundColor = UIColor.maleBackgroundColor()
+                backgroundColor = UIColor._149207246()
             } else if gender == "female" {
                 imgCardGender.image = FaeGenderView.imageFemale
-                backgroundColor = UIColor.femaleBackgroundColor()
+                backgroundColor = UIColor._253175222()
             } else {
                 isHidden = true
                 imgCardGender.image = nil
@@ -97,15 +97,15 @@ class FaeGenderView: UIView {
             frame.size.width = 17 * screenHeightFactor + lblCardAge.intrinsicContentSize.width
             lblCardAge.frame.origin.x = 97 * screenHeightFactor
             imgCardGender.image = nil
-            backgroundColor = UIColor.faeAppShadowGrayColor()
+            backgroundColor = UIColor._210210210()
         } else if showGender && !showAge {
             isHidden = false
             if gender == "male" {
                 imgCardGender.image = FaeGenderView.imageMale
-                backgroundColor = UIColor.maleBackgroundColor()
+                backgroundColor = UIColor._149207246()
             } else if gender == "female" {
                 imgCardGender.image = FaeGenderView.imageFemale
-                backgroundColor = UIColor.femaleBackgroundColor()
+                backgroundColor = UIColor._253175222()
             } else {
                 imgCardGender.image = nil
             }

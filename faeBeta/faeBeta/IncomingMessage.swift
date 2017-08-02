@@ -8,8 +8,6 @@
 
 import Foundation
 import JSQMessagesViewController
-import GooglePlaces
-import GoogleMaps
 
 // this class is used to create JSQMessage object from information in firebase, it can be message from current user
 // or the other user who current user are chatting with.
@@ -107,33 +105,47 @@ class IncomingMessage {
         }
         print(mediaItem!)
         
-        
-        
-        let geocoder = GMSGeocoder()
-        
-        geocoder.reverseGeocodeCoordinate(CLLocationCoordinate2DMake(latitude!, longitude!)) { (response, error) in
-            
-            if(error == nil) {
-                //print("there is no error get address from lat & lon")
-            
-                mediaItem?.addressLine1.text = response?.firstResult()?.thoroughfare
-                var cityText = response?.firstResult()?.locality
-                if(response?.firstResult()?.administrativeArea != nil) {
-                    cityText = cityText! + ", " + (response?.firstResult()?.administrativeArea)!
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+            (placemarks, error) -> Void in
+            if error == nil {
+                guard let addr = placemarks?[0] else { return }
+                mediaItem?.addressLine1.text = addr.thoroughfare
+                var cityText = addr.locality
+                if(addr.administrativeArea != nil) {
+                    cityText = cityText! + ", " + addr.administrativeArea!
                 }
-                if(response?.firstResult()?.postalCode != nil) {
-                    cityText = cityText! + " " + (response?.firstResult()?.postalCode)!
+                if(addr.postalCode != nil) {
+                    cityText = cityText! + " " + addr.postalCode!
                 }
-                mediaItem?.addressLine2.text = cityText!
-                mediaItem?.addressLine3.text = response?.firstResult()?.country
+                mediaItem?.addressLine2.text = cityText
+                mediaItem?.addressLine3.text = addr.country
                 
                 mediaItem?.address1 = mediaItem?.addressLine1.text
                 mediaItem?.address2 = mediaItem?.addressLine2.text
                 mediaItem?.address3 = mediaItem?.addressLine3.text
-            } else {
-                print(error ?? "ohhhh")
             }
-        }
+            else {
+                print("error when fetching address")
+            }
+        })
+        /*General.shared.getAddress(location: loc, original: false) { (placeMark) in
+            guard let addr = placeMark as? CLPlacemark else { return }
+            mediaItem?.addressLine1.text = addr.thoroughfare
+            var cityText = addr.locality
+            print("city:\(cityText)")
+            if(addr.administrativeArea != nil) {
+                cityText = cityText! + ", " + addr.administrativeArea!
+            }
+            if(addr.postalCode != nil) {
+                cityText = cityText! + " " + addr.postalCode!
+            }
+            mediaItem?.addressLine2.text = cityText
+            mediaItem?.addressLine3.text = addr.country
+            
+            mediaItem?.address1 = mediaItem?.addressLine1.text
+            mediaItem?.address2 = mediaItem?.addressLine2.text
+            mediaItem?.address3 = mediaItem?.addressLine3.text
+        }*/
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
@@ -194,8 +206,8 @@ class IncomingMessage {
             pauseButtonImage: UIImage(named: isOutGoingMessage ? "pauseButton_white.png" : "pauseButton_red.png")!,
             label: font!,
             showFractionalSecodns:false,
-            backgroundColor: isOutGoingMessage ? UIColor.faeAppRedColor() : UIColor.white,
-            tintColor: isOutGoingMessage ? UIColor.white : UIColor.faeAppRedColor(),
+            backgroundColor: isOutGoingMessage ? UIColor._2499090() : UIColor.white,
+            tintColor: isOutGoingMessage ? UIColor.white : UIColor._2499090(),
             controlInsets:UIEdgeInsetsMake(7, 12, 3, 14),
             controlPadding:5,
             audioCategory:"AVAudioSessionCategoryPlayback",

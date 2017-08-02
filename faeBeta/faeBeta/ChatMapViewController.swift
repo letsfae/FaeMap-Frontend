@@ -7,18 +7,14 @@
 //
 
 import UIKit
-import GoogleMaps
 import CoreLocation
-import GooglePlaces
 
-class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationManagerDelegate {
+class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     
     // MARK: - properties
-    let screenWidth = UIScreen.main.bounds.width
-    let screenHeight = UIScreen.main.bounds.height
     let navigationBarHeight : CGFloat = 20
     
-    var faeMapView: GMSMapView!
+    var faeMapView: MKMapView!
     
     // address text
     var address1 = ""
@@ -39,13 +35,11 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     var chatLocation: CLLocation!
     var chatLatitude: CLLocationDegrees = 34.0205378
     var chatLongitude: CLLocationDegrees = -118.2854081
-    var chatMarker: GMSMarker!
     
     var currentLocation: CLLocation!
     let locManager = CLLocationManager()
     var currentLatitude: CLLocationDegrees!
     var currentLongitude: CLLocationDegrees!
-    var myPositionIcon: UIImageView!
     var willAppearFirstLoad = false
     var startUpdatingLocation = false
     
@@ -89,12 +83,17 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     //MARK: - Load map elements
     private func loadMapView() {
         // load map
-        let camera = GMSCameraPosition.camera(withLatitude: chatLatitude, longitude: chatLongitude, zoom: 17)
-        faeMapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        faeMapView.isMyLocationEnabled = true
+        faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
+        view.addSubview(faeMapView)
+        faeMapView.showsPointsOfInterest = false
+        faeMapView.showsCompass = false
+        faeMapView.delegate = self
+        faeMapView.showsUserLocation = true
+        let camera = faeMapView.camera
+        camera.centerCoordinate = CLLocationCoordinate2D(latitude: chatLatitude, longitude: chatLongitude)
+        faeMapView.setCamera(camera, animated: false)
         
-        self.view = faeMapView
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locManager.startUpdatingLocation()
@@ -141,13 +140,7 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         viewPopUp.addSubview(buttonShare)
         viewPopUp.addSubview(buttonSave)
         faeMapView.addSubview(viewPopUp)
-        
         loadChatMarker()
-        
-        myPositionIcon = UIImageView(frame: CGRect(x: screenWidth/2-12, y: screenHeight/2-20, width: 12, height: 20))
-        myPositionIcon.image = UIImage(named: "chat_map_myPosition")
-//        faeMapView.addSubview(myPositionIcon)
-        
     }
     
     private func loadButton(){
@@ -176,17 +169,17 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     
     func loadChatMarker(){
         let position = CLLocationCoordinate2DMake(chatLatitude+0.0002, chatLongitude)
-        chatMarker = GMSMarker(position: position)
-        chatMarker.icon = UIImage(named: "chat_map_currentLoc")
-        chatMarker.tracksViewChanges = true
-        chatMarker.map = faeMapView;
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = position
+        faeMapView.addAnnotation(annotation)
     }
     
     //MARK: - button actions
     
     func buttonMiddleRightAction(_ sender: UIButton!){
-        let camera = GMSCameraPosition.camera(withLatitude: chatLatitude, longitude: chatLongitude, zoom: 17)
-        faeMapView.camera = camera
+        let camera = faeMapView.camera
+        camera.centerCoordinate = CLLocationCoordinate2D(latitude: chatLatitude, longitude: chatLongitude)
+        faeMapView.setCamera(camera, animated: false)
         startUpdatingLocation = true
     }
     
@@ -202,8 +195,9 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
         currentLocation = locManager.location
         currentLatitude = currentLocation.coordinate.latitude
         currentLongitude = currentLocation.coordinate.longitude
-        let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-        faeMapView.camera = camera
+        let camera = faeMapView.camera
+        camera.centerCoordinate = CLLocationCoordinate2D(latitude: currentLatitude, longitude: currentLongitude)
+        faeMapView.setCamera(camera, animated: false)
     }
     
     func buttonShareAction(_ sender: UIButton!){
@@ -215,16 +209,36 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
     }
     
     //MARK: - GMS delegate
-    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
-        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
-        hidePopUp()
-    }
+//    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+//        print("You taped at Latitude: \(coordinate.latitude), Longitude: \(coordinate.longitude)")
+//        hidePopUp()
+//    }
     
-    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-        if startUpdatingLocation {
-            currentLocation = locManager.location
-            let selfPositionToPoint = faeMapView.projection.point(for: currentLocation.coordinate)
-            myPositionIcon.center = selfPositionToPoint
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let identifier = "self"
+            var anView: SelfAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.selfMarkerIcon.setImage(UIImage(named: "chat_map_myPosition"), for: .normal)
+            return anView
+        } else {
+            let identifier = "place"
+            var anView: PlacePinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(#imageLiteral(resourceName: "chat_map_currentLoc"))
+            anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+            anView.alpha = 1
+            return anView
         }
     }
     
@@ -234,15 +248,11 @@ class ChatMapViewController: UIViewController, GMSMapViewDelegate, CLLocationMan
             currentLocation = locManager.location
             currentLatitude = currentLocation.coordinate.latitude
             currentLongitude = currentLocation.coordinate.longitude
-            let camera = GMSCameraPosition.camera(withLatitude: currentLatitude, longitude: currentLongitude, zoom: 17)
-            faeMapView.camera = camera
+            let camera = faeMapView.camera
+            camera.centerCoordinate = CLLocationCoordinate2D(latitude: currentLatitude, longitude: currentLongitude)
+            faeMapView.setCamera(camera, animated: false)
             willAppearFirstLoad = false
             startUpdatingLocation = true
-        }
-        
-        if let location = locations.last {
-            let selfPositionToPoint = faeMapView.projection.point(for: location.coordinate)
-            myPositionIcon.center = selfPositionToPoint
         }
     }
     

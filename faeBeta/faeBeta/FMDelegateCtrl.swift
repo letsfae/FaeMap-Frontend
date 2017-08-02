@@ -7,11 +7,9 @@
 //
 
 import UIKit
-import CoreLocation
-import RealmSwift
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, PinMenuDelegate, LeftSlidingMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
@@ -39,6 +37,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         animateToCoordinate(type: 2, coordinate: coordinate, animated: false)
     }
     func changeIconImage() {
+        /*
         let annotation = PinDetailViewController.pinAnnotation
         _ = "\(PinDetailViewController.pinTypeEnum)"
         let status = PinDetailViewController.pinStatus
@@ -46,6 +45,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         var mapPin_new = mapPin
         mapPin_new.status = status
         annotation?.pinInfo = mapPin_new as AnyObject
+         */
     }
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, pinID: String, annotation: FaePinAnnotation) {
         
@@ -99,6 +99,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         */
     }
     
+    /*
     // PinMenuDelegate
     func sendPinGeoInfo(pinID: String, type: String) {
         let camera = faeMapView.camera
@@ -117,6 +118,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
     }
+    */
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
@@ -147,10 +149,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
     
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-        }
     }
     
     func jumpToFaeUserMainPage() {
@@ -180,7 +178,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, PinDetailDelegate, Pin
         
         UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             if self.FILTER_ENABLE {
-                self.btnMapFilter.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
             }
             self.btnCompass.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
             self.btnSelfCenter.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
