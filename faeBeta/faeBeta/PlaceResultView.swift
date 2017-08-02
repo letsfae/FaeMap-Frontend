@@ -24,10 +24,8 @@ class PlaceResultView: UIView {
     var imgBack_1 = PlaceView()
     var imgBack_2 = PlaceView()
     
-    var offset: CGFloat = 0
-    
-    var boolLeft = true
-    var boolRight = true
+    var boolLeft = false
+    var boolRight = false
     
     var annotations = [CCHMapClusterAnnotation]() {
         didSet {
@@ -42,10 +40,12 @@ class PlaceResultView: UIView {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 68))
         loadContent()
+        tag = 0
+        alpha = 0
         let panGesture = UIPanGestureRecognizer()
+        panGesture.maximumNumberOfTouches = 1
         panGesture.addTarget(self, action: #selector(self.handlePanGesture(_:)))
         addGestureRecognizer(panGesture)
-        tag = 0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,9 +57,6 @@ class PlaceResultView: UIView {
         addSubview(imgBack_0)
         addSubview(imgBack_1)
         addSubview(imgBack_2)
-//        imgBack_0.layer.borderColor = UIColor.red.cgColor
-//        imgBack_1.layer.borderColor = UIColor.green.cgColor
-//        imgBack_2.layer.borderColor = UIColor.blue.cgColor
         resetSubviews()
     }
     
@@ -67,10 +64,6 @@ class PlaceResultView: UIView {
         imgBack_0.frame.origin.x = -screenWidth + 2
         imgBack_1.frame.origin.x = 0 + 2
         imgBack_2.frame.origin.x = screenWidth + 2
-        
-//        imgBack_0.frame.origin.y = 0
-//        imgBack_1.frame.origin.y = 80
-//        imgBack_2.frame.origin.y = 160
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
@@ -81,9 +74,9 @@ class PlaceResultView: UIView {
                 imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
             }
         }
-        var prev_idx = 0
-        var next_idx = 0
         guard annotations.count > 0 else { return }
+        var prev_idx = annotations.count - 1
+        var next_idx = 0
         for i in 0..<annotations.count {
             if annotations[i] == current {
                 joshprint("[loadingData], find equals")
@@ -116,44 +109,77 @@ class PlaceResultView: UIView {
         }
     }
     
+    func fadeIn() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+            self.alpha = 1
+        }, completion: nil)
+    }
+    
+    func fadeOut() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+            self.alpha = 0
+        }, completion: nil)
+    }
+    
+    func panToPrev(_ time: Double = 0.3) {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.imgBack_0.frame.origin.x = 2
+            self.imgBack_1.frame.origin.x += screenWidth + 2
+        }, completion: {_ in
+            self.delegate?.goToPrev(annotation: self.prevAnnotation)
+            self.resetSubviews()
+        })
+    }
+    
+    func panToNext(_ time: Double = 0.3) {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.imgBack_1.frame.origin.x = -screenWidth + 2
+            self.imgBack_2.frame.origin.x = 2
+        }, completion: {_ in
+            self.delegate?.goToNext(annotation: self.nextAnnotation)
+            self.resetSubviews()
+        })
+    }
+    
+    func panBack(_ time: Double = 0.3) {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.resetSubviews()
+        }, completion: nil)
+    }
+    
+    var end: CGFloat = 0
+    
     func handlePanGesture(_ pan: UIPanGestureRecognizer) {
-        let location = pan.location(in: self)
+        var resumeTime: Double = 0.5
         if pan.state == .began {
-            offset = location.x
+            end = pan.location(in: self).x
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
-            let percent_1 = imgBack_1.center.x / screenWidth
-            joshprint("[handlePanGesture]", percent_1)
-            if percent_1 > 0.7 {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imgBack_0.frame.origin.x = 2
-                    self.imgBack_1.frame.origin.x += screenWidth + 2
-                }, completion: {_ in
-                    self.delegate?.goToPrev(annotation: self.prevAnnotation)
-                    self.resetSubviews()
-                })
-            } else if percent_1 < 0.3 {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.imgBack_1.frame.origin.x = -screenWidth + 2
-                    self.imgBack_2.frame.origin.x = 2
-                }, completion: {_ in
-                    self.delegate?.goToNext(annotation: self.nextAnnotation)
-                    self.resetSubviews()
-                })
+            let velocity = pan.velocity(in: self)
+            let location = pan.location(in: self)
+            let distanceMoved = end - location.x
+            let percent = distanceMoved / screenWidth
+            resumeTime = abs(Double(CGFloat(distanceMoved) / velocity.x))
+            if resumeTime > 0.5 {
+                resumeTime = 0.5
+            } else if resumeTime < 0.3 {
+                resumeTime = 0.3
+            }
+            let absPercent: CGFloat = 0.1
+            if percent < -absPercent {
+                panToPrev(resumeTime)
+            } else if percent > absPercent {
+                panToNext(resumeTime)
             } else {
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.resetSubviews()
-                }, completion: nil)
+                panBack(resumeTime)
             }
-        } else {
-            let off = location.x - offset
-            if off >= 0 && boolLeft {
-                imgBack_0.frame.origin.x += off
-                imgBack_1.frame.origin.x += off
-            } else if off < 0 && boolRight {
-                imgBack_1.frame.origin.x += off
-                imgBack_2.frame.origin.x += off
+        } else if pan.state == .changed {
+            if boolLeft || boolRight {
+                let translation = pan.translation(in: self)
+                imgBack_0.center.x = imgBack_0.center.x + translation.x
+                imgBack_1.center.x = imgBack_1.center.x + translation.x
+                imgBack_2.center.x = imgBack_2.center.x + translation.x
+                pan.setTranslation(CGPoint.zero, in: self)
             }
-            offset = location.x
         }
     }
 }
@@ -168,7 +194,6 @@ class PlaceView: UIImageView {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 2, y: 0, w: 410, h: 80))
         loadContent()
-//        layer.borderWidth = 1
     }
     
     required init?(coder aDecoder: NSCoder) {

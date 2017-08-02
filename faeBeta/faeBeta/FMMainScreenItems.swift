@@ -27,9 +27,10 @@ extension FaeMapViewController {
         faeMapView.addGestureRecognizer(tapGesture)
         
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
-        mapClusterManager.cellSize = 100
-        mapClusterManager.marginFactor = 0.5
+        mapClusterManager.cellSize = 50
+        mapClusterManager.marginFactor = 0.25
         mapClusterManager.delegate = self
+        mapClusterManager.clusterer = CCHNearCenterMapClusterer()
 
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
@@ -41,7 +42,6 @@ extension FaeMapViewController {
         imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
-//        imgSchbarShadow.alpha = 0
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
         imgSchbarShadow.isUserInteractionEnabled = true

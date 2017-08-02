@@ -34,7 +34,7 @@ extension FaeMapViewController {
     
     func animateNameCard() {
         let targetFrame = CGRect(x: 47, y: 129, w: 320, h: 350)
-        self.uiviewCardPrivacy.isHidden = false
+        uiviewCardPrivacy.isHidden = false
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.btnCardClose.alpha = 1
             self.imgCardBack.frame = targetFrame
@@ -60,13 +60,13 @@ extension FaeMapViewController {
     
     func openFaeUsrInfo(_ sender: Any?) {
         let fmUsrInfo = FMUserInfo()
-        fmUsrInfo.userId = self.aroundUsrId
+        fmUsrInfo.userId = aroundUsrId
         hideNameCard(btnCardClose)
-        self.navigationController?.pushViewController(fmUsrInfo, animated: true)
+        navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
     
     func hideNameCard(_ sender: UIButton) {
-        self.deselectAllAnnotations()
+        deselectAllAnnotations()
         UIView.animate(withDuration: 0.3, animations: ({
             if sender == self.btnCardClose {
                 self.btnCardClose.alpha = 0
@@ -107,11 +107,10 @@ extension FaeMapViewController {
     }
     
     func loadNameCard() {
-        btnCardClose = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 736))
-        self.view.addSubview(btnCardClose)
+        btnCardClose = UIButton()
         btnCardClose.layer.zPosition = 900
         btnCardClose.alpha = 0
-        btnCardClose.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
+        btnCardClose.addTarget(self, action: #selector(hideNameCard(_:)), for: .touchUpInside)
         
         imgCardBack = UIImageView(frame: startFrame)
         imgCardBack.layer.anchorPoint = nameCardAnchor
@@ -119,19 +118,19 @@ extension FaeMapViewController {
         imgCardBack.contentMode = .scaleAspectFit
         imgCardBack.clipsToBounds = true
         imgCardBack.layer.zPosition = 902
-        self.view.addSubview(imgCardBack)
+        view.addSubview(imgCardBack)
         
         imgCardCover = UIImageView(frame: startFrame)
         imgCardCover.image = UIImage(named: "Cover")
         imgCardCover.layer.anchorPoint = nameCardAnchor
         imgCardCover.layer.zPosition = 903
-        self.view.addSubview(imgCardCover)
+        view.addSubview(imgCardCover)
         
         imgAvatarShadow = UIImageView(frame: startFrame)
         imgAvatarShadow.image = #imageLiteral(resourceName: "avatar_rim_shadow")
         imgAvatarShadow.layer.anchorPoint = nameCardAnchor
         imgAvatarShadow.layer.zPosition = 904
-        self.view.addSubview(imgAvatarShadow)
+        view.addSubview(imgAvatarShadow)
         
         imgCardAvatar = UIImageView(frame: startFrame)
         imgCardAvatar.layer.anchorPoint = nameCardAnchor
@@ -142,14 +141,14 @@ extension FaeMapViewController {
         imgCardAvatar.contentMode = .scaleAspectFill
         imgCardAvatar.layer.masksToBounds = true
         imgCardAvatar.layer.zPosition = 905
-        self.view.addSubview(imgCardAvatar)
+        view.addSubview(imgCardAvatar)
         
         btnCardChat = UIButton(frame: startFrame)
         btnCardChat.layer.anchorPoint = nameCardAnchor
         btnCardChat.setImage(#imageLiteral(resourceName: "chatFromMap"), for: .normal)
         btnCardChat.layer.zPosition = 906
-        self.view.addSubview(btnCardChat)
-        btnCardChat.addTarget(self, action: #selector(self.btnChatAction(_:)), for: .touchUpInside)
+        view.addSubview(btnCardChat)
+        btnCardChat.addTarget(self, action: #selector(btnChatAction(_:)), for: .touchUpInside)
         
         lblNickName = UILabel(frame: CGRect(x: 114, y: 451, w: 0, h: 0))
         lblNickName.layer.anchorPoint = nameCardAnchor
@@ -159,7 +158,7 @@ extension FaeMapViewController {
         lblNickName.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1.0)
         lblNickName.layer.zPosition = 907
         lblNickName.alpha = 0
-        self.view.addSubview(lblNickName)
+        view.addSubview(lblNickName)
         
         lblShortIntro = UILabel(frame: startFrame)
         lblShortIntro.layer.anchorPoint = nameCardAnchor
@@ -168,55 +167,55 @@ extension FaeMapViewController {
         lblShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblShortIntro.textColor = UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1.0)
         lblShortIntro.layer.zPosition = 908
-        self.view.addSubview(lblShortIntro)
+        view.addSubview(lblShortIntro)
         
         imgCardLine = UIImageView(frame: startFrame)
         imgCardLine.layer.anchorPoint = nameCardAnchor
         imgCardLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1.0)
         imgCardLine.layer.zPosition = 909
-        self.view.addSubview(imgCardLine)
+        view.addSubview(imgCardLine)
         
         btnCardFav = UIButton(frame: startFrame)
         btnCardFav.layer.anchorPoint = nameCardAnchor
         btnCardFav.setImage(UIImage(named: "Favorite"), for: .normal)
         btnCardFav.layer.zPosition = 910
-        self.view.addSubview(btnCardFav)
+        view.addSubview(btnCardFav)
         
         btnCardShowSelf = UIButton(frame: startFrame)
         btnCardShowSelf.layer.anchorPoint = nameCardAnchor
         btnCardShowSelf.layer.zPosition = 910
         btnCardShowSelf.setImage(#imageLiteral(resourceName: "showSelfWaveToOthers"), for: .normal)
-        self.view.addSubview(btnCardShowSelf)
+        view.addSubview(btnCardShowSelf)
         btnCardShowSelf.isHidden = true
         
         btnCardOptions = UIButton(frame: startFrame)
         btnCardOptions.layer.anchorPoint = nameCardAnchor
         btnCardOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
         btnCardOptions.layer.zPosition = 910
-        self.view.addSubview(btnCardOptions)
-        btnCardOptions.addTarget(self, action: #selector(self.showNameCardOptions(_:)), for: .touchUpInside)
+        view.addSubview(btnCardOptions)
+        btnCardOptions.addTarget(self, action: #selector(showNameCardOptions(_:)), for: .touchUpInside)
         
         btnCardProfile = UIButton(frame: startFrame)
         btnCardProfile.layer.anchorPoint = nameCardAnchor
         btnCardProfile.setImage(#imageLiteral(resourceName: "Emoji"), for: .normal)
-        btnCardProfile.addTarget(self, action: #selector(self.openFaeUsrInfo(_:)), for: .touchUpInside)
+        btnCardProfile.addTarget(self, action: #selector(openFaeUsrInfo(_:)), for: .touchUpInside)
         btnCardProfile.layer.zPosition = 910
-        self.view.addSubview(btnCardProfile)
+        view.addSubview(btnCardProfile)
         
-        self.loadGenderAge()
+        loadGenderAge()
         
         btnCardCloseOptions = UIButton(frame: CGRect(x: 73, y: 158, w: 268, h: 293))
         btnCardCloseOptions.layer.zPosition = 920
-        self.view.addSubview(btnCardCloseOptions)
+        view.addSubview(btnCardCloseOptions)
         btnCardCloseOptions.alpha = 0
-        btnCardCloseOptions.addTarget(self, action: #selector(self.hideNameCard(_:)), for: .touchUpInside)
+        btnCardCloseOptions.addTarget(self, action: #selector(hideNameCard(_:)), for: .touchUpInside)
     }
     
     func loadGenderAge() {
         uiviewCardPrivacy = FaeGenderView(frame: startFrame)
         uiviewCardPrivacy.layer.anchorPoint = nameCardAnchor
         uiviewCardPrivacy.layer.zPosition = 912
-        self.view.addSubview(uiviewCardPrivacy)
+        view.addSubview(uiviewCardPrivacy)
     }
     
     func updateNameCard(withUserId: Int) {
@@ -224,7 +223,7 @@ extension FaeMapViewController {
         btnCardOptions.tag = withUserId
         btnCardShowSelf.isHidden = true
         btnCardFav.isHidden = false
-        self.aroundUsrId = withUserId
+        aroundUsrId = withUserId
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgCardAvatar.image = avatarImage
         }
@@ -235,7 +234,7 @@ extension FaeMapViewController {
     } 
     
     func btnChatAction(_ sender: UIButton) {
-        self.hideNameCard(btnCardClose)
+        hideNameCard(btnCardClose)
         let withUserId: NSNumber = NSNumber(value: sender.tag)
         // First get chatroom id
         getFromURL("chats/users/\(user_id)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { status, result in
@@ -281,7 +280,7 @@ extension FaeMapViewController {
         
         // EndBryan
         
-        self.navigationController?.pushViewController(chatVC, animated: true)
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func showNameCardOptions(_ sender: UIButton) {
@@ -308,28 +307,28 @@ extension FaeMapViewController {
         
         nameCardMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         nameCardMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
-        self.btnCardCloseOptions.addSubview(nameCardMoreOptions)
+        btnCardCloseOptions.addSubview(nameCardMoreOptions)
         
         shareNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         shareNameCard.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: .normal)
-        self.btnCardCloseOptions.addSubview(shareNameCard)
+        btnCardCloseOptions.addSubview(shareNameCard)
         shareNameCard.clipsToBounds = true
         shareNameCard.alpha = 0.0
         //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
         
         btnEditNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         btnEditNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
-        self.btnCardCloseOptions.addSubview(btnEditNameCard)
+        btnCardCloseOptions.addSubview(btnEditNameCard)
         btnEditNameCard.clipsToBounds = true
         btnEditNameCard.alpha = 0.0
         //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
         
         reportNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
         reportNameCard.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
-        self.btnCardCloseOptions.addSubview(reportNameCard)
+        btnCardCloseOptions.addSubview(reportNameCard)
         reportNameCard.clipsToBounds = true
         reportNameCard.alpha = 0.0
-        reportNameCard.addTarget(self, action: #selector(self.actionReportThisPin(_:)), for: .touchUpInside)
+        reportNameCard.addTarget(self, action: #selector(actionReportThisPin(_:)), for: .touchUpInside)
         
         UIView.animate(withDuration: 0.3, animations: ({
             self.nameCardMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, w: subviewWidthAfter, h: subviewHeightAfter)

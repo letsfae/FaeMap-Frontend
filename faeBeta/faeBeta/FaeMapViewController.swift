@@ -15,7 +15,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     var lblSearchContent: UILabel!
     let locManager = CLLocationManager() // location manage
-    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
+    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var imgAvatarShadow: UIImageView! // Map Namecard
