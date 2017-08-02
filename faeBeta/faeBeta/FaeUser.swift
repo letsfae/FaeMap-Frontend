@@ -133,7 +133,7 @@ class FaeUser : NSObject {
         let encode = "FAE "+base64Encoded
         userToken = str
         userTokenEncode = encode
-        is_Login = 1
+        Key.shared.is_Login = 1
         userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
         userPassword = keyValue["password"] as! String
         
@@ -166,7 +166,7 @@ class FaeUser : NSObject {
         userTokenEncode = ""
         session_id = -1
         user_id = -1
-        is_Login = 0
+        Key.shared.is_Login = 0
         userStatus = 1
         let shareAPI = LocalStorageManager()
         shareAPI.saveInt("is_Login", value: 0)

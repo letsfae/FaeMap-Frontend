@@ -24,11 +24,7 @@ extension FaeMapViewController {
         animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
         updateNameCard(withUserId: firstAnn.id)
         animateNameCard()
-        UIView.animate(withDuration: 0.25, delay: 0, animations: {
-            self.btnCardClose.alpha = 1
-        }, completion: { _ in
-            self.boolCanOpenPin = true
-        })
+        boolCanOpenPin = true
     }
     
     func updateTimerForUserPin() {
@@ -42,7 +38,7 @@ extension FaeMapViewController {
     func updateSelfLocation() {
 //        guard USER_ENABLE else { return }
         
-        if boolIsFirstLoad || !boolCanUpdateUserPin {
+        if !boolCanUpdateUserPin {
             return
         }
         let coorDistance = cameraDiagonalDistance()
