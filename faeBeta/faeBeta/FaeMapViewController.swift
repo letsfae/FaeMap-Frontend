@@ -11,7 +11,7 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate, MapSearchDelegate {
     
     var lblSearchContent: UILabel!
     let locManager = CLLocationManager() // location manage
@@ -99,6 +99,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var placeResultBar = PlaceResultView()
     
     var preventUserPinOpen = false
+    
+    var btnClearSearchRes: UIButton!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

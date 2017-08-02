@@ -63,10 +63,20 @@ extension FaeMapViewController {
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
+        searchVC.delegate = self
+        searchVC.strSearchedPlace = lblSearchContent.text
 //        searchVC.modalPresentationStyle = .overCurrentContext
 //        mainScreenSearchVC.delegate = self
 //        self.present(searchVC, animated: false, completion: nil)
         navigationController?.pushViewController(searchVC, animated: false)
+    }
+    
+    func actionClearSearchResults(_ sender: UIButton) {
+//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
+//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
+        lblSearchContent.text = "Search Fae Map"
+        lblSearchContent.textColor = UIColor._182182182()
+        btnClearSearchRes.isHidden = true
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
