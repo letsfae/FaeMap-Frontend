@@ -129,6 +129,7 @@
 		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */; };
 		B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */; };
 		B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */; };
 		B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */; };
@@ -397,6 +398,7 @@
 		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchResult.swift; sourceTree = "<group>"; };
 		B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFromContactsController.swift; sourceTree = "<group>"; };
@@ -675,6 +677,7 @@
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
 				50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */,
 				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
+				B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1575,6 +1578,7 @@
 				B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B8849EBA1EEB147A00D4588D /* MBChatBubblesCell.swift in Sources */,
+				B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
