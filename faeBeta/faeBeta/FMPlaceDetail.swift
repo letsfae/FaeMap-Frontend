@@ -12,7 +12,6 @@ import CCHMapClusterController
 extension FaeMapViewController: PlaceViewDelegate {
     func loadPlaceDetail() {
         view.addSubview(placeResultBar)
-        placeResultBar.isHidden = true
         placeResultBar.delegate = self
     }
     

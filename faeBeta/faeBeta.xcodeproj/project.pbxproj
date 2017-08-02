@@ -19,6 +19,7 @@
 		506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */; };
 		5080005C1F249FD2009E3720 /* MapFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* MapFilterIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
+		50816DBC1F318BF00021EC74 /* FMCustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */; };
 		50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F541F2BB530002553F1 /* MapSearchViewController.swift */; };
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
@@ -129,6 +130,7 @@
 		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
+		B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */; };
 		B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */; };
 		B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */; };
 		B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */; };
@@ -268,6 +270,7 @@
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* MapFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
+		50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCustomComponents.swift; sourceTree = "<group>"; };
 		50902F541F2BB530002553F1 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
@@ -397,6 +400,7 @@
 		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchResult.swift; sourceTree = "<group>"; };
 		B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFromContactsController.swift; sourceTree = "<group>"; };
@@ -660,10 +664,7 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */,
-				B89AB3F11E3D763C00C5116D /* FMMapFilter */,
 				B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */,
-				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
 				B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */,
 				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
@@ -674,7 +675,11 @@
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
 				50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */,
-				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
+				B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */,
+				50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */,
+				B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */,
+				5080005B1F249FD2009E3720 /* MapFilterIcon.swift */,
+				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -945,8 +950,11 @@
 			isa = PBXGroup;
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
+				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
 				506D1FCC1F2A8237004119EA /* PlaceResultView.swift */,
 				B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */,
+				506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */,
+				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
@@ -1071,16 +1079,6 @@
 				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
 			name = OpenedPinList;
-			sourceTree = "<group>";
-		};
-		B89AB3F11E3D763C00C5116D /* FMMapFilter */ = {
-			isa = PBXGroup;
-			children = (
-				B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */,
-				5080005B1F249FD2009E3720 /* MapFilterIcon.swift */,
-				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
-			);
-			name = FMMapFilter;
 			sourceTree = "<group>";
 		};
 		B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */ = {
@@ -1555,6 +1553,7 @@
 				B88905721E36094B00E68D58 /* Reachability.swift in Sources */,
 				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
+				50816DBC1F318BF00021EC74 /* FMCustomComponents.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
@@ -1575,6 +1574,7 @@
 				B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B8849EBA1EEB147A00D4588D /* MBChatBubblesCell.swift in Sources */,
+				B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,

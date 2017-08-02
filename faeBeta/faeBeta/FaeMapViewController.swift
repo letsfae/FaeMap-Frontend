@@ -11,11 +11,10 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
     
     var lblSearchContent: UILabel!
-    let locManager = CLLocationManager() // location manage
-    let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
+    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var imgAvatarShadow: UIImageView! // Map Namecard
@@ -28,17 +27,15 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var btnMainMapSearch: UIButton!
     var btnCardOptions: UIButton! // Map Namecard
     var btnDiscovery: UIButton!
-    var btnSelfCenter: UIButton!
+    var btnLocateSelf: FMLocateSelf!
     var btnCardShowSelf: UIButton! // Map Namecard
-    var btnCompass: UIButton!
+    var btnCompass: FMCompass!
     var btnCardClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var curLoc2D = CLLocationCoordinate2DMake(34.0205378, -118.2854081) // location manage
-    var boolIsFirstLoad = true // location manage
     var btnEditNameCard: UIButton! // Map Namecard
     
     var faeMapView: MKMapView!
@@ -99,6 +96,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var placeResultBar = PlaceResultView()
     
     var preventUserPinOpen = false
+    
+    var btnClearSearchRes: UIButton!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -113,23 +113,21 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         loadButton()
         loadMapFilter()
         loadPlaceDetail()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        locManager.requestAlwaysAuthorization()
         loadTransparentNavBarItems()
         loadMapChat()
-        btnCardClose.alpha = 0
         reloadSelfPosAnimation()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         renewSelfLocation()
-        // send noti here to start filter icon spinning
         checkDisplayNameExisitency()
-        NotificationCenter.default.addObserver(self, selector: #selector(returnFromLoginSignup(_:)), name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
         updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
@@ -156,15 +154,10 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         }
     }
     
-    func returnFromLoginSignup(_ notification: NSNotification) {
-        print("[returnFromLoginSignup] yes it is")
-        refreshMap(pins: true, users: true, places: true)
-    }
-    
     func isUserLoggedIn() {
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
-        if is_Login == 0 {
+        if Key.shared.is_Login == 0 {
             jumpToWelcomeView(animated: false)
         }
     }
@@ -190,7 +183,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     func timerSetup() {
         invalidateAllTimer()
         timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
-        timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPins), userInfo: nil, repeats: true)
 //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
@@ -228,20 +220,11 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
-        self.navigationController?.pushViewController(welcomeVC, animated: true)
-    }
-    
-    // To get opened pin list, but it is a general func
-    func readByKey(_ key: String) -> AnyObject? {
-        if let obj = self.storageForOpenedPinList.object(forKey: key) {
-            return obj as AnyObject?
-        }
-        return nil
+        navigationController?.pushViewController(welcomeVC, animated: true)
     }
     
     // MARK: -- Load Navigation Items
     fileprivate func loadTransparentNavBarItems() {
-        tabBarController?.tabBar.isHidden = true
         navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -259,21 +242,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         }
         if places {
             updateTimerForLoadRegionPlacePin()
-        }
-    }
-    
-    // MARK: -- Location Manager
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard boolIsFirstLoad else { return }
-        boolIsFirstLoad = false
-        DispatchQueue.global(qos: .default).async {
-            self.curLoc2D = CLLocationCoordinate2DMake(LocManager.shared.curtLat, LocManager.shared.curtLong)
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(self.curLoc2D, 3000, 3000)
-            DispatchQueue.main.async(execute: {
-                self.faeMapView.setRegion(coordinateRegion, animated: false)
-                self.reloadSelfPosAnimation()
-                self.refreshMap(pins: true, users: true, places: true)
-            })
         }
     }
 }

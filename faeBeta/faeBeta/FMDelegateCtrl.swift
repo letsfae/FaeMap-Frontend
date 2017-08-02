@@ -24,12 +24,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
     
     // PinDetailDelegate
     func backToMainMap() {
-        //        updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
-        // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
-        self.reloadMainScreenButtons()
+        reloadMainScreenButtons()
         deselectAllAnnotations()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
@@ -60,43 +58,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
         let camera = faeMapView.camera
         camera.centerCoordinate = newCoor
         faeMapView.setCamera(camera, animated: false)
-    }
-    func goTo(nextPin: Bool) {
-        /*
-        var tmpMarkers = [GMSMarker]()
-        for marker in placeMarkers {
-            if marker.map != nil {
-                tmpMarkers.append(marker)
-            }
-        }
-        if let index = tmpMarkers.index(of: PinDetailViewController.pinAnnotation) {
-            var i = index
-            if nextPin {
-                if index == tmpMarkers.count - 1 {
-                    i = 0
-                } else {
-                    i += 1
-                }
-            } else {
-                if index == 0 {
-                    i = tmpMarkers.count - 1
-                } else {
-                    i -= 1
-                }
-            }
-            PinDetailViewController.pinAnnotation = tmpMarkers[i]
-            if tmpMarkers[i].userData == nil {
-                return
-            }
-            guard let userData = tmpMarkers[i].userData as? [Int: AnyObject] else {
-                return
-            }
-            guard let placePin = userData.values.first as? PlacePin else {
-                return
-            }
-            openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
-        }
-        */
     }
     
     /*
@@ -181,7 +142,7 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
                 self.btnFilterIcon.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
             }
             self.btnCompass.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
-            self.btnSelfCenter.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
+            self.btnLocateSelf.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
             self.btnOpenChat.frame = CGRect(x: 12, y: 646 * screenWidthFactor, width: 79, height: 79)
             self.lblUnreadCount.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
             self.updateUnreadChatIndicator()
