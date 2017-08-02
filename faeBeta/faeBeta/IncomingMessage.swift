@@ -105,11 +105,34 @@ class IncomingMessage {
         }
         print(mediaItem!)
         
-        let loc = CLLocation(latitude: latitude!, longitude: longitude!)
-        General.shared.getAddress(location: loc, original: false) { (placeMark) in
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+            (placemarks, error) -> Void in
+            if error == nil {
+                guard let addr = placemarks?[0] else { return }
+                mediaItem?.addressLine1.text = addr.thoroughfare
+                var cityText = addr.locality
+                if(addr.administrativeArea != nil) {
+                    cityText = cityText! + ", " + addr.administrativeArea!
+                }
+                if(addr.postalCode != nil) {
+                    cityText = cityText! + " " + addr.postalCode!
+                }
+                mediaItem?.addressLine2.text = cityText
+                mediaItem?.addressLine3.text = addr.country
+                
+                mediaItem?.address1 = mediaItem?.addressLine1.text
+                mediaItem?.address2 = mediaItem?.addressLine2.text
+                mediaItem?.address3 = mediaItem?.addressLine3.text
+            }
+            else {
+                print("error when fetching address")
+            }
+        })
+        /*General.shared.getAddress(location: loc, original: false) { (placeMark) in
             guard let addr = placeMark as? CLPlacemark else { return }
             mediaItem?.addressLine1.text = addr.thoroughfare
             var cityText = addr.locality
+            print("city:\(cityText)")
             if(addr.administrativeArea != nil) {
                 cityText = cityText! + ", " + addr.administrativeArea!
             }
@@ -122,7 +145,7 @@ class IncomingMessage {
             mediaItem?.address1 = mediaItem?.addressLine1.text
             mediaItem?.address2 = mediaItem?.addressLine2.text
             mediaItem?.address3 = mediaItem?.addressLine3.text
-        }
+        }*/
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
