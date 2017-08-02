@@ -220,13 +220,16 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         UIView.animate(withDuration: 0.5, animations: {
             self.btnCompass.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
         })
+        loadCurrentRegionPlacePins()
         guard placeResultBar.tag > 0 else { return }
-        placeResultBar.annotations = visiblePlaces()
+        placeResultBar.annotations = self.visiblePlaces()
     }
     
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {
+        deselectAllAnnotations()
+        placeResultBar.fadeOut()
+        btnCardClose.sendActions(for: .touchUpInside)
         guard uiviewFilterMenu != nil else { return }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
-        deselectAllAnnotations()
     }
 }

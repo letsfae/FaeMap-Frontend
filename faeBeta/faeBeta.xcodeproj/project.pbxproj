@@ -660,10 +660,7 @@
 		B0714D7C1D5E438F00356705 /* MapViewExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */,
-				B89AB3F11E3D763C00C5116D /* FMMapFilter */,
 				B0714D2D1D5E435200356705 /* FMMainScreenItems.swift */,
-				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
 				B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */,
 				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
@@ -674,7 +671,7 @@
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
 				50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */,
-				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
+				B89AB3F11E3D763C00C5116D /* FMMapFilter */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -945,8 +942,11 @@
 			isa = PBXGroup;
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
+				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
 				506D1FCC1F2A8237004119EA /* PlaceResultView.swift */,
 				B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */,
+				506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */,
+				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
