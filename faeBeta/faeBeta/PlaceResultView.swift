@@ -69,7 +69,7 @@ class PlaceResultView: UIView {
     func loadingData(current: CCHMapClusterAnnotation) {
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_1.lblName.text = placeInfo.name
                 imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
             }
@@ -95,14 +95,14 @@ class PlaceResultView: UIView {
         nextAnnotation = annotations[next_idx]
         if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_0.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_0.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_0.lblName.text = placeInfo.name
                 imgBack_0.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
             }
         }
         if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_2.imgType.image = UIImage(named: "place_result_\(placeInfo.class_two_idx)") ?? UIImage(named: "place_result_48")
+                imgBack_2.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_2.lblName.text = placeInfo.name
                 imgBack_2.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
             }
@@ -186,7 +186,7 @@ class PlaceResultView: UIView {
 
 class PlaceView: UIImageView {
     
-    var class_two_idx = 0
+    var class_2_icon_id = 0
     var imgType: UIImageView!
     var lblName: UILabel!
     var lblAddr: UILabel!

@@ -209,7 +209,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             user.isValid = true
         }
         
-        if let idx = selectedAnn?.class_two_idx {
+        if let idx = selectedAnn?.class_2_icon_id {
             selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
