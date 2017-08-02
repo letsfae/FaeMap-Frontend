@@ -11,8 +11,6 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        guard LocManager.shared.curtLoc != nil else { return }
-        
         DispatchQueue.global(qos: .background).async {
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
@@ -32,7 +30,7 @@ extension FaeMapViewController {
         let camera = faeMapView.camera
         camera.heading = 0
         faeMapView.setCamera(camera, animated: true)
-        btnCompass.transform = CGAffineTransform.identity
+        if btnCompass != nil { btnCompass.transform = CGAffineTransform.identity }
     }
     
     // Jump to pin menu view controller

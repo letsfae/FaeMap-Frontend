@@ -32,9 +32,18 @@ extension FaeMapViewController {
         mapClusterManager.delegate = self
         mapClusterManager.clusterer = CCHNearCenterMapClusterer()
 
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        faeMapView.setRegion(coordinateRegion, animated: false)
+        reloadSelfPosAnimation()
+        refreshMap(pins: false, users: true, places: true)
+    }
+    
+    func firstUpdateLocation() {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        faeMapView.setRegion(coordinateRegion, animated: false)
+        reloadSelfPosAnimation()
+        refreshMap(pins: false, users: true, places: true)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -96,10 +105,12 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
         
         // Click to back to north
+        btnCompass = FMCompass()
         btnCompass.mapView = faeMapView
         view.addSubview(btnCompass)
         
         // Click to locate the current location
+        btnLocateSelf = FMLocateSelf()
         btnLocateSelf.mapView = faeMapView
         view.addSubview(btnLocateSelf)
         

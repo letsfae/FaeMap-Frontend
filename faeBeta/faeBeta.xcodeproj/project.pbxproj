@@ -676,8 +676,10 @@
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
 				50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */,
 				B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */,
-				B89AB3F11E3D763C00C5116D /* FMMapFilter */,
 				50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */,
+				B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */,
+				5080005B1F249FD2009E3720 /* MapFilterIcon.swift */,
+				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1077,16 +1079,6 @@
 				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
 			name = OpenedPinList;
-			sourceTree = "<group>";
-		};
-		B89AB3F11E3D763C00C5116D /* FMMapFilter */ = {
-			isa = PBXGroup;
-			children = (
-				B89AB3F21E3D775F00C5116D /* FMLoadingMapFilter.swift */,
-				5080005B1F249FD2009E3720 /* MapFilterIcon.swift */,
-				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
-			);
-			name = FMMapFilter;
 			sourceTree = "<group>";
 		};
 		B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */ = {

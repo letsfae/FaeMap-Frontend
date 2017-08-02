@@ -217,11 +217,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        joshprint("[regionDidChange] altitude = \(faeMapView.camera.altitude)")
-        btnCompass.rotateCompass()
+//        joshprint("[regionDidChange] altitude = \(faeMapView.camera.altitude)")
         loadCurrentRegionPlacePins()
-        guard placeResultBar.tag > 0 else { return }
-        placeResultBar.annotations = self.visiblePlaces()
+        if btnCompass != nil { btnCompass.rotateCompass() }
+        if placeResultBar.tag > 0 { placeResultBar.annotations = visiblePlaces() }
     }
     
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {

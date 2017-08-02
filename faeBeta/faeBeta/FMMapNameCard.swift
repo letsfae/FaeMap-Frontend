@@ -36,7 +36,6 @@ extension FaeMapViewController {
         let targetFrame = CGRect(x: 47, y: 129, w: 320, h: 350)
         uiviewCardPrivacy.isHidden = false
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.btnCardClose.alpha = 1
             self.imgCardBack.frame = targetFrame
             self.imgCardCover.frame = CGRect(x: 73, y: 158, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 163, y: 233, w: 88, h: 88) // 88 88
@@ -69,7 +68,6 @@ extension FaeMapViewController {
         deselectAllAnnotations()
         UIView.animate(withDuration: 0.3, animations: ({
             if sender == self.btnCardClose {
-                self.btnCardClose.alpha = 0
                 self.imgCardBack.frame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0)
                 self.imgCardCover.frame = self.startFrame
                 self.imgAvatarShadow.frame = self.startFrame

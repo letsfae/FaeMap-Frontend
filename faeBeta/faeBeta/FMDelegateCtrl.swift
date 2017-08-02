@@ -24,12 +24,10 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
     
     // PinDetailDelegate
     func backToMainMap() {
-        //        updateTimerForUserPin()
         timerSetup()
         renewSelfLocation()
-        // send noti here to start filter spinning and arrow
         reloadSelfPosAnimation()
-        self.reloadMainScreenButtons()
+        reloadMainScreenButtons()
         deselectAllAnnotations()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
@@ -60,43 +58,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
         let camera = faeMapView.camera
         camera.centerCoordinate = newCoor
         faeMapView.setCamera(camera, animated: false)
-    }
-    func goTo(nextPin: Bool) {
-        /*
-        var tmpMarkers = [GMSMarker]()
-        for marker in placeMarkers {
-            if marker.map != nil {
-                tmpMarkers.append(marker)
-            }
-        }
-        if let index = tmpMarkers.index(of: PinDetailViewController.pinAnnotation) {
-            var i = index
-            if nextPin {
-                if index == tmpMarkers.count - 1 {
-                    i = 0
-                } else {
-                    i += 1
-                }
-            } else {
-                if index == 0 {
-                    i = tmpMarkers.count - 1
-                } else {
-                    i -= 1
-                }
-            }
-            PinDetailViewController.pinAnnotation = tmpMarkers[i]
-            if tmpMarkers[i].userData == nil {
-                return
-            }
-            guard let userData = tmpMarkers[i].userData as? [Int: AnyObject] else {
-                return
-            }
-            guard let placePin = userData.values.first as? PlacePin else {
-                return
-            }
-            openPlacePin(marker: tmpMarkers[i], placePin: placePin, animated: false)
-        }
-        */
     }
     
     /*

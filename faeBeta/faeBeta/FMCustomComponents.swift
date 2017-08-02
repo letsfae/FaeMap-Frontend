@@ -73,8 +73,7 @@ class FMLocateSelf: UIButton {
     }
     
     func handleTap() {
-        let curLoc2D = CLLocationCoordinate2DMake(LocManager.shared.curtLat, LocManager.shared.curtLong)
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(curLoc2D, 3000, 3000)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
     

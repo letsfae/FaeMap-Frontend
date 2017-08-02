@@ -156,7 +156,6 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
 //                self.navigationController?.pushViewController(UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableNotificationViewController"), animated: true)
             } else {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 self.navigationController?.popToRootViewController(animated: false)
                 if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
                     if vcRoot is InitialPageController {

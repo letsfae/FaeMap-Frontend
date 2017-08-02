@@ -11,22 +11,16 @@ import Foundation
 class LocManager: NSObject, CLLocationManagerDelegate {
     
     static let shared = LocManager()
-    var curtLoc: CLLocation!
+
     var locManager: CLLocationManager!
-    
+    var curtLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
     var curtLat: CLLocationDegrees {
-        if curtLoc != nil {
-            return curtLoc.coordinate.latitude
-        }
-        return 34.0205378
+        return curtLoc.coordinate.latitude
     }
-    
     var curtLong: CLLocationDegrees {
-        if curtLoc != nil {
-            return curtLoc.coordinate.longitude
-        }
-        return -118.2854081
+        return curtLoc.coordinate.longitude
     }
+    var boolFirstLoad = true
     
     func jumpToLocationEnable() {
         print("[LocManager] jumpToLocationEnable")
@@ -45,7 +39,11 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        curtLoc = locManager.location
+        guard let location = manager.location else { return }
+        curtLoc = location
+        guard boolFirstLoad else { return }
+        boolFirstLoad = false
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
 //        print("curtLoc \(curtLoc)")
 //        print("curtLat \(curtLat)")
 //        print("curtLon \(curtLong)")

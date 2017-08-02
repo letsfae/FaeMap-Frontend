@@ -95,15 +95,12 @@ extension FaeMapViewController {
             var placePins = [FaePinAnnotation]()
             DispatchQueue.global(qos: .default).async {
                 for placeJson in mapPlaceJsonArray {
-                    var place: FaePinAnnotation? = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, json: placeJson)
-                    guard place != nil else { continue }
-                    if self.faePlacePins.contains(place!) {
-                        guard let index = self.faeUserPins.index(of: place!) else { continue }
-                        self.faePlacePins[index].positions = (place?.positions)!
-                        place = nil
+                    let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, json: placeJson)
+                    if self.faePlacePins.contains(place) {
+                        continue
                     } else {
-                        self.faePlacePins.append(place!)
-                        placePins.append(place!)
+                        self.faePlacePins.append(place)
+                        placePins.append(place)
                     }
                 }
                 guard placePins.count > 0 else {
