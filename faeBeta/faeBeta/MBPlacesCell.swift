@@ -19,7 +19,7 @@ class MBPlacesCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 89.5, y: 89, width: screenWidth - 89.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -37,14 +37,14 @@ class MBPlacesCell: UITableViewCell {
         lblPlaceName = UILabel()
         addSubview(lblPlaceName)
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblPlaceName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblPlaceName.textColor = UIColor._898989()
         lblPlaceName.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceName)
         
         lblPlaceAddr = UILabel()
         addSubview(lblPlaceAddr)
         lblPlaceAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        lblPlaceAddr.textColor = UIColor.faeAppInfoLabelGrayColor()
+        lblPlaceAddr.textColor = UIColor._182182182()
         lblPlaceAddr.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceAddr)
         addConstraintsWithFormat("V:|-26-[v0(22)]-1-[v1(16)]", options: [], views: lblPlaceName, lblPlaceAddr)
@@ -52,28 +52,16 @@ class MBPlacesCell: UITableViewCell {
         lblDistance = UILabel()
         addSubview(lblDistance)
         lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblDistance.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblDistance.textColor = UIColor._155155155()
         lblDistance.textAlignment = .right
         addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)
     }
     
     func setValueForCell(place: MBPlacesStruct, curtLoc: CLLocation) {
-        imgPlaceIcon.image = #imageLiteral(resourceName: "mb_defaultPlace")
+        imgPlaceIcon.image = place.icon
         lblPlaceName.text = place.name
         lblPlaceAddr.text = place.address
-
-//        let curtPos = curtLoc
-//        
-//        let dis = curtPos.distance(from: place.position) / 1000
-//        if dis < 0.1 {
-//            distance = "< 0.1 km"
-//        } else if dis > 999 {
-//            distance = "> 999 km"
-//        } else {
-//            distance = String(format: "%.1f", dis) + " km"
-//        }
-        
         lblDistance.text = place.distance
     }
 }

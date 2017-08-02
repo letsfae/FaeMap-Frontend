@@ -18,7 +18,7 @@ class MBChatSpotsCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 89.5, y: 89, width: screenWidth - 89.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         self.addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -38,13 +38,13 @@ class MBChatSpotsCell: UITableViewCell {
         lblChatTitle = UILabel()
         addSubview(lblChatTitle)
         lblChatTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblChatTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblChatTitle.textColor = UIColor._898989()
         addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatTitle)
         
         lblChatDesp = UILabel()
         addSubview(lblChatDesp)
         lblChatDesp.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblChatDesp.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblChatDesp.textColor = UIColor._107107107()
         lblChatDesp.lineBreakMode = .byTruncatingTail
         addConstraintsWithFormat("H:|-95-[v0]-14-|", options: [], views: lblChatDesp)
         addConstraintsWithFormat("V:|-26-[v0(25)]-1-[v1(18)]", options: [], views: lblChatTitle, lblChatDesp)

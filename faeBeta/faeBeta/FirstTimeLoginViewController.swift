@@ -101,8 +101,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
         textFieldDisplayName.placeholder = "Display Name"
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
-        textFieldDisplayName.tintColor = UIColor.faeAppRedColor()
-        textFieldDisplayName.textColor = UIColor.faeAppRedColor()
+        textFieldDisplayName.tintColor = UIColor._2499090()
+        textFieldDisplayName.textColor = UIColor._2499090()
         textFieldDisplayName.textAlignment = .center
         textFieldDisplayName.addTarget(self, action: #selector(self.displayNameValueChanged(_:)), for: .editingChanged)
         textFieldDisplayName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
@@ -124,7 +124,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor.faeAppRedColor()
+        activityIndicator.color = UIColor._2499090()
         self.view.addSubview(activityIndicator)
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
@@ -202,7 +202,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
-        menu.view.tintColor = UIColor.faeAppRedColor()
+        menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
             var photoStatus = PHPhotoLibrary.authorizationStatus()
             if photoStatus != .authorized {

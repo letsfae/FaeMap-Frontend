@@ -20,7 +20,7 @@ final class UIScreenService{
 
         }
         Element.indicator.activityIndicatorViewStyle = .whiteLarge
-        Element.indicator.color = UIColor.faeAppRedColor()
+        Element.indicator.color = UIColor._2499090()
         Element.indicator.hidesWhenStopped = true
         Element.indicator.center = UIApplication.shared.keyWindow!.center
         return Element.indicator

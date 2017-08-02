@@ -97,9 +97,9 @@ extension RegisterBaseViewController {
     func enableContinueButton(_ enable: Bool) {
         btnContinue.isEnabled = enable
         if enable {
-            btnContinue.backgroundColor = UIColor.faeAppRedColor()
+            btnContinue.backgroundColor = UIColor._2499090()
         } else {
-            btnContinue.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnContinue.backgroundColor = UIColor._255160160()
         }
     }
     

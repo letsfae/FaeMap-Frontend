@@ -21,9 +21,14 @@ extension FaeMapViewController {
         faeMapView.showsCompass = false
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
+        
+        let tapGesture = UITapGestureRecognizer()
+        tapGesture.addTarget(self, action: #selector(self.mapViewTapAt(_:)))
+        faeMapView.addGestureRecognizer(tapGesture)
+        
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 100
-        mapClusterManager.marginFactor = 0.1
+        mapClusterManager.marginFactor = 0.5
         mapClusterManager.delegate = self
 
         locManager.delegate = self
@@ -34,15 +39,16 @@ extension FaeMapViewController {
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410, height: 60)
-        imgSchbarShadow.image = #imageLiteral(resourceName: "mainScreenSearchBar")
+        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
+        imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
+//        imgSchbarShadow.alpha = 0
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
         imgSchbarShadow.isUserInteractionEnabled = true
         
         // Left window on main map to open account system
         btnLeftWindow = UIButton()
-        btnLeftWindow.setImage(#imageLiteral(resourceName: "mainScreenLeftMenu"), for: .normal)
+        btnLeftWindow.setImage(#imageLiteral(resourceName: "mapLeftMenu"), for: .normal)
         imgSchbarShadow.addSubview(btnLeftWindow)
         btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
         imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(48)]", options: [], views: btnLeftWindow)
@@ -55,20 +61,28 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
-        lblSearchContent = UILabel()
-        lblSearchContent.text = "Search Fae Map"
-        lblSearchContent.textAlignment = .left
-        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.textColor = UIColor.faeAppInfoLabelGrayColor()
-        imgSchbarShadow.addSubview(lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
+//        lblSearchContent = UILabel()
+//        lblSearchContent.text = "Search Fae Map"
+////        lblSearchContent.backgroundColor = .blue
+//        lblSearchContent.textAlignment = .left
+//        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+//        lblSearchContent.textColor = UIColor._182182182()
+//        imgSchbarShadow.addSubview(lblSearchContent)
+//        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
+//        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
         btnMainMapSearch = UIButton()
+        // Vicky 07/28/17
+//        btnMainMapSearch.backgroundColor = .blue
+        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
+        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
+        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        btnMainMapSearch.contentHorizontalAlignment = .left
+        // Vicky 07/28/17 End
         imgSchbarShadow.addSubview(btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnMainMapSearch)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
         
         // Click to back to north

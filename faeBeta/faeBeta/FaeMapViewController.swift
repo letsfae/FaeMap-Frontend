@@ -1,6 +1,5 @@
 //
 //  FaeMapViewController.swift
-//  Using GoogleMaps
 //
 //  Created by Yue on 5/31/16.
 //  Copyright © 2016 Yue. All rights reserved.
@@ -19,8 +18,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let nameCardAnchor = CGPoint(x: screenWidth / 2, y: 451 * screenHeightFactor) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
-    let yelpManager = YelpManager() // Yelp API
-    let yelpQuery = YelpQuery() // Yelp API
     var imgAvatarShadow: UIImageView! // Map Namecard
     var btnCardChat: UIButton! // Map Namecard
     var btnOpenChat: UIButton!
@@ -46,6 +43,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     var faeMapView: MKMapView!
     var faeUserPins = [FaePinAnnotation]()
+    var faePlacePins = [FaePinAnnotation]()
     var imgCardAvatar: UIImageView! // Map Namecard
     var imgCardBack: UIImageView! // Map Namecard
     var imgCardCover: UIImageView! // Map Namecard
@@ -58,19 +56,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
     var nameCardMoreOptions: UIImageView! // Map Namecard
-    var percent: Double = 0 // Pan gesture var
-    var placeArt = #imageLiteral(resourceName: "placePinArt")
-    var placeBeauty = #imageLiteral(resourceName: "placePinBoutique")
-    var placeBoba = #imageLiteral(resourceName: "placePinBoba")
-    var placeBurger = #imageLiteral(resourceName: "placePinBurger")
-    var placeCinema = #imageLiteral(resourceName: "placePinCinema")
-    var placeCoffee = #imageLiteral(resourceName: "placePinCoffee")
-    var placeDessert = #imageLiteral(resourceName: "placePinDesert")
-    var placeFoodtruck = #imageLiteral(resourceName: "placePinFoodtruck")
-    var placeNames = [Double]()
-    var placePins = [PlacePin]()
-    var placePizza = #imageLiteral(resourceName: "placePinPizza")
-    var placeSport = #imageLiteral(resourceName: "placePinSport")
+    
     var previousZoom: Float = 13.8
     var refreshPins = true
     var refreshPlaces = true
@@ -93,24 +79,26 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     let PLACE_ENABLE = true
     let USER_ENABLE = false
     
-    let floatFilterHeight = 542 * screenHeightFactor // Map Filter height
+    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
     
-    var filterCircle_1: UIImageView! // Filter btn inside circles
-    var filterCircle_2: UIImageView! // Filter btn inside circles
-    var filterCircle_3: UIImageView! // Filter btn inside circles
-    var filterCircle_4: UIImageView! // Filter btn inside circles
-    
-    var mapFilterArrow: UIImageView! // Filter Button
-    var btnMapFilter: MapFilterIcon! // Filter Button
-    var polygonInside: UIImageView! // Filter Button
+    var btnFilterIcon: MapFilterIcon! // Filter Button
+    var uiviewFilterMenu: MapFilterMenu! // Filter Menu
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
+    var percent: Double = 0 // Pan gesture var
+    
     var imgSchbarShadow: UIImageView!
- 
+    
+    var selectedAnnView: PlacePinAnnotationView?
+    var selectedAnn: FaePinAnnotation?
+    
+    var placeResultBar = PlaceResultView()
+    
+    var preventUserPinOpen = false
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,9 +110,9 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadMapFilter()
         loadButton()
-        yelpQuery.setCatagoryToAll()
+        loadMapFilter()
+        loadPlaceDetail()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -230,15 +218,6 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
         updateTimerForLoadRegionPlacePin()
     }
     
-    // Testing back from background
-    func appBackFromBackground() {
-        if faeMapView != nil {
-            updateTimerForAllPins()
-            renewSelfLocation()
-            reloadSelfPosAnimation()
-        }
-    }
-    
     func reloadSelfPosAnimation() {
         if userStatus != 5 {
             
@@ -263,7 +242,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     // MARK: -- Load Navigation Items
     fileprivate func loadTransparentNavBarItems() {
         tabBarController?.tabBar.isHidden = true
-        navigationController?.navigationBar.tintColor = UIColor(colorLiteralRed: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
+        navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
         navigationController?.navigationBar.isHidden = true
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
@@ -273,7 +252,7 @@ class FaeMapViewController: UIViewController, CLLocationManagerDelegate, UIGestu
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
         if users {
-            updateTimerForUserPin()
+            updateTimerForUserPin() 
         }
         if pins {
             updateTimerForLoadRegionPin()

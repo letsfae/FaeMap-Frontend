@@ -8,14 +8,13 @@
 
 import UIKit
 import MapKit
-import GooglePlaces
 import CoreLocation
 
 protocol SelectLocationViewControllerDelegate: class {
     func sendAddress(_ value: String)
 }
 
-class SelectLocationViewController: UIViewController {
+class SelectLocationViewController: UIViewController, MKLocalSearchCompleterDelegate {
     
     weak var delegate: SelectLocationViewControllerDelegate?
     
@@ -38,9 +37,10 @@ class SelectLocationViewController: UIViewController {
     var searchController: UISearchController!
     var faeSearchController: FaeSearchController!
     var searchBarSubview: UIView!
-    var placeholder = [GMSAutocompletePrediction]()
     var pinType = "comment"
     var isCreatingMode = true
+    var searchCompleter = MKLocalSearchCompleter()
+    var searchResults = [MKLocalSearchCompletion]()
     
     var resultTableWidth: CGFloat {
         if UIScreen.main.bounds.width == 414 { // 5.5
@@ -62,6 +62,7 @@ class SelectLocationViewController: UIViewController {
         loadTableView()
         loadFaeSearchController()
         UIApplication.shared.statusBarStyle = .default
+        searchCompleter.delegate = self
     }
     
     override func viewDidDisappear(_ animated: Bool) {

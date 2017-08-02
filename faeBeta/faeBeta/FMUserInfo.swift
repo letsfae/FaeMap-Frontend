@@ -102,7 +102,7 @@ class FMUserInfo: UIViewController {
         uiviewAvatarShadow = UIView(frame: CGRectWithFactor(x: 0, y: 136, width: 98, height: 98))
         uiviewAvatarShadow.center.x = screenWidth / 2
         uiviewAvatarShadow.layer.cornerRadius = 43
-        uiviewAvatarShadow.layer.shadowColor = UIColor.faeAppInfoLabelGrayColor().cgColor
+        uiviewAvatarShadow.layer.shadowColor = UIColor._182182182().cgColor
         uiviewAvatarShadow.layer.shadowOpacity = 1
         uiviewAvatarShadow.layer.shadowRadius = 8
         uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -131,20 +131,20 @@ class FMUserInfo: UIViewController {
         lblNickName.font = UIFont(name: "AvenirNext-DemiBold", size: 20 * screenHeightFactor)
         lblNickName.adjustsFontSizeToFitWidth = true
         lblNickName.textAlignment = .center
-        lblNickName.textColor = UIColor.faeAppInputTextGrayColor()
+        lblNickName.textColor = UIColor._898989()
         
         lblUserName = UILabel(frame: CGRectWithFactor(x: 0, y: 265, width: 140, height: 18))
         lblUserName.center.x = screenWidth / 2
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblUserName.adjustsFontSizeToFitWidth = true
         lblUserName.textAlignment = .center
-        lblUserName.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblUserName.textColor = UIColor._155155155()
         
         lblShortIntro = UILabel(frame: CGRectWithFactor(x: 0, y: 289, width: 343, height: 18))
         lblShortIntro.center.x = screenWidth / 2
         lblShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblShortIntro.textAlignment = .center
-        lblShortIntro.textColor = UIColor.faeAppInactiveBtnGrayColor()
+        lblShortIntro.textColor = UIColor._146146146()
         
         view.addSubview(lblNickName)
         view.addSubview(lblUserName)
@@ -230,7 +230,7 @@ class FMUserInfo: UIViewController {
         
         lblGeneral = UILabel()
         lblGeneral.text = "General"
-        lblGeneral.textColor = UIColor.faeAppInputTextGrayColor()
+        lblGeneral.textColor = UIColor._898989()
         lblGeneral.textAlignment = .center
         lblGeneral.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenHeightFactor)
         uiviewTblCtrlBtnSub.addSubview(lblGeneral)
@@ -242,7 +242,7 @@ class FMUserInfo: UIViewController {
         
         lblActivities = UILabel()
         lblActivities.text = "Activities"
-        lblActivities.textColor = UIColor.faeAppInputTextGrayColor()
+        lblActivities.textColor = UIColor._898989()
         lblActivities.textAlignment = .center
         lblActivities.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenHeightFactor)
         uiviewTblCtrlBtnSub.addSubview(lblActivities)
@@ -254,7 +254,7 @@ class FMUserInfo: UIViewController {
         
         lblAlbums = UILabel()
         lblAlbums.text = "Albums"
-        lblAlbums.textColor = UIColor.faeAppInputTextGrayColor()
+        lblAlbums.textColor = UIColor._898989()
         lblAlbums.textAlignment = .center
         lblAlbums.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenHeightFactor)
         uiviewTblCtrlBtnSub.addSubview(lblAlbums)
@@ -304,17 +304,17 @@ class FMUserInfo: UIViewController {
         lblChoose = UILabel(frame: CGRectWithFactor(x: 0, y: 20, width: 290, height: 25))
         lblChoose.textAlignment = .center
         lblChoose.text = "Choose an Action"
-        lblChoose.textColor = UIColor.faeAppInputTextGrayColor()
+        lblChoose.textColor = UIColor._898989()
         lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         
         uiviewAddFriend = UIView(frame: CGRectWithFactor(x: 40, y: 66, width: 208, height: 50))
         uiviewAddFriend.layer.borderWidth = 2
-        uiviewAddFriend.layer.borderColor = UIColor.faeAppRedColor().cgColor
+        uiviewAddFriend.layer.borderColor = UIColor._2499090().cgColor
         uiviewAddFriend.layer.cornerRadius = 23
         
         uiviewFollow = UIView(frame: CGRectWithFactor(x: 40, y: 131, width: 208, height: 50))
         uiviewFollow.layer.borderWidth = 2
-        uiviewFollow.layer.borderColor = UIColor.faeAppRedColor().cgColor
+        uiviewFollow.layer.borderColor = UIColor._2499090().cgColor
         uiviewFollow.layer.cornerRadius = 23
         
         btnActFirst = UIButton(frame: CGRectWithFactor(x: 40, y: 66, width: 208, height: 50))
@@ -332,7 +332,7 @@ class FMUserInfo: UIViewController {
             break
         }
         
-        btnActFirst.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnActFirst.setTitleColor(UIColor._2499090(), for: .normal)
         btnActFirst.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActFirst.addTarget(self, action: #selector(sentActFirstRequest(_:)), for: .touchUpInside)
         
@@ -351,13 +351,13 @@ class FMUserInfo: UIViewController {
             break
         }
         
-        btnActSecond.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnActSecond.setTitleColor(UIColor._2499090(), for: .normal)
         btnActSecond.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActSecond.addTarget(self, action: #selector(sentActSecondRequest(_:)), for: .touchUpInside)
         
         btnCancel = UIButton(frame: CGRectWithFactor(x: 40, y: 185, width: 208, height: 50))
         btnCancel.setTitle("Cancel", for: .normal)
-        btnCancel.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
         
@@ -388,7 +388,7 @@ class FMUserInfo: UIViewController {
     }
     func animationBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
     func belowEnterChat(_ sender: UIButton!) {
@@ -528,12 +528,12 @@ class FMUserInfo: UIViewController {
         lblFriendSent.numberOfLines = 2
         lblFriendSent.textAlignment = .center
         lblFriendSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblFriendSent.textColor = UIColor.faeAppInputTextGrayColor()
+        lblFriendSent.textColor = UIColor._898989()
         
         btnFriendOK.setTitle("OK", for: .normal)
         btnFriendOK.setTitleColor(UIColor.white, for: .normal)
         btnFriendOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-        btnFriendOK.backgroundColor = UIColor.faeAppRedColor()
+        btnFriendOK.backgroundColor = UIColor._2499090()
         btnFriendOK.layer.cornerRadius = 19
         btnFriendOK.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
         

@@ -30,7 +30,8 @@ class FaePinAnnotation: MKPointAnnotation {
     var mapViewCluster: CCHMapClusterController?
     
     // place pin & social pin
-    var icon: UIImage!
+    var icon = UIImage()
+    var class_two_idx: Int = 0
     var pinInfo: AnyObject!
     
     init(type: String) {
@@ -39,7 +40,7 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     
     // user pin only
-    var avatar: UIImage!
+    var avatar = UIImage()
     var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
     var count = 0
@@ -55,30 +56,38 @@ class FaePinAnnotation: MKPointAnnotation {
             }
         }
     }
-    
     var timer: Timer?
     
     init(type: String, cluster: CCHMapClusterController, json: JSON) {
         super.init()
         self.mapViewCluster = cluster
         self.type = type
-        guard type == "user" else { return }
-        self.id = json["user_id"].intValue
-        self.miniAvatar = json["mini_avatar"].intValue
-        guard let posArr = json["geolocation"].array else { return }
-        for pos in posArr {
-            let pos_i = CLLocationCoordinate2DMake(pos["latitude"].doubleValue, pos["longitude"].doubleValue)
-            self.positions.append(pos_i)
+        if type == "place" {
+            let placePin = PlacePin(json: json)
+            self.pinInfo = placePin as AnyObject
+            self.id = json["place_id"].intValue
+            self.class_two_idx = json["class_two_idx"].intValue
+            self.icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
+            self.coordinate = placePin.coordinate
         }
-        self.coordinate = self.positions[self.count]
-        self.count += 1
-        guard Mood.avatars[miniAvatar] != nil else {
-            print("[init] map avatar image is nil")
-            return
+        else if type == "user" {
+            self.id = json["user_id"].intValue
+            self.miniAvatar = json["mini_avatar"].intValue
+            guard let posArr = json["geolocation"].array else { return }
+            for pos in posArr {
+                let pos_i = CLLocationCoordinate2DMake(pos["latitude"].doubleValue, pos["longitude"].doubleValue)
+                self.positions.append(pos_i)
+            }
+            self.coordinate = self.positions[self.count]
+            self.count += 1
+            guard Mood.avatars[miniAvatar] != nil else {
+                print("[init] map avatar image is nil")
+                return
+            }
+            self.avatar = Mood.avatars[miniAvatar] ?? UIImage()
+            self.changePosition()
+            self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         }
-        self.avatar = Mood.avatars[miniAvatar]
-        self.changePosition()
-        self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
     }
     
     func getRandomTime() -> Double {
@@ -132,14 +141,14 @@ class SelfAnnotationView: MKAnnotationView {
         layer.zPosition = 2
         loadSelfMarkerSubview()
         getSelfAccountInfo()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillEnterForeground"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "WillResignActive"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
     }
     

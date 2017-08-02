@@ -65,13 +65,13 @@ class RegisterNameViewController: RegisterBaseViewController {
         //Already got an Account? 
         let lblGotAccount = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 94, y: 0, width: 155, height: 25))
         lblGotAccount.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
-            NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor()]
+            NSForegroundColorAttributeName: UIColor._138138138()]
         )
         createAlreadyGotAnAccountView.addSubview(lblGotAccount)
         
         let btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 54, y: 0, width: 45, height: 25))
         let astrTitle = "Log In!"
-        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor.faeAppRedColor()]
+        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor._2499090()]
         let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
         
         btnLogin.setAttributedTitle(attrLogin, for: UIControlState())

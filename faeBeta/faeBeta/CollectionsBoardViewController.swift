@@ -62,7 +62,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblMyPins = UILabel()
         lblMyPins.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         lblMyPins.textAlignment = .left
-        lblMyPins.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMyPins.textColor = UIColor._107107107()
         lblMyPins.text = "My Pins"
         view.addSubview(lblMyPins)
         
@@ -93,7 +93,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblMyLists = UILabel()
         lblMyLists.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         lblMyLists.textAlignment = .left
-        lblMyLists.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblMyLists.textColor = UIColor._107107107()
         lblMyLists.text = "My Lists"
         view.addSubview(lblMyLists)
         
@@ -151,7 +151,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         arrImgView.append(imgAvatar)
         
         let imgShadow = UIView()
-        imgShadow.layer.shadowColor = UIColor.faeAppShadowGrayColor().cgColor
+        imgShadow.layer.shadowColor = UIColor._210210210().cgColor
         imgShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
         imgShadow.layer.shadowOpacity = 0.5
         imgShadow.layer.shadowRadius = 3.0
@@ -180,7 +180,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         let lblCount = UILabel()
         lblCount.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblCount.textAlignment = .left
-        lblCount.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lblCount.textColor = UIColor._155155155()
         lblCount.text = "0 items"
         return lblCount
     }

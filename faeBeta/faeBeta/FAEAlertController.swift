@@ -13,7 +13,7 @@ class FAEAlertController: UIAlertController {
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        self.view.tintColor = UIColor.faeAppRedColor()
+        self.view.tintColor = UIColor._2499090()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -26,7 +26,7 @@ class FAEAlertController: UIAlertController {
         alertContentView.layer.cornerRadius = 15
         
         //update the title font
-        let attributedTitle = NSAttributedString(string:self.title!, attributes: [NSForegroundColorAttributeName: UIColor.faeAppDescriptionTextGrayColor(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
+        let attributedTitle = NSAttributedString(string:self.title!, attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
         self.setValue(attributedTitle, forKey: "attributedTitle")
     }
 

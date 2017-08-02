@@ -8,8 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import GoogleMaps
-import GooglePlaces
 
 class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, PinDetailCollectionsDelegate, MBComtsStoriesCellDelegate, UIScrollViewDelegate {
     
@@ -140,7 +138,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        
+        /*
         let vcPinDetail = PinDetailViewController()
         let social = mbSocial[indexPath.row]
         vcPinDetail.modalPresentationStyle = .overCurrentContext
@@ -154,7 +152,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         cellCurtIndex = indexPath
         
         navigationController?.pushViewController(vcPinDetail, animated: true)
-        
+        */
     }
     
     func getMBSocialInfo(socialType: String, time: DispatchTime, completion: ((Double) -> ())?) {
@@ -327,6 +325,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     
     // MBComtsStoriesCellDelegate
     func replyToThisPin(indexPath: IndexPath, boolReply: Bool) {
+        /*
         let vcPinDetail = PinDetailViewController()
         let social = mbSocial[indexPath.row]
         vcPinDetail.modalPresentationStyle = .overCurrentContext
@@ -342,6 +341,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         navigationController?.pushViewController(vcPinDetail, animated: true)
         
         vcPinDetail.boolFromMapBoard = boolReply
+         */
     }
     
     // MBComtsStoriesCellDelegate
