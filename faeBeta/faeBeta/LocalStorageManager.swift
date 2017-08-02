@@ -101,7 +101,7 @@ class LocalStorageManager: NSObject {
         saveString("userTokenEncode", value: userTokenEncode)
         saveInt("session_id", value: session_id)
         saveInt("user_id", value: user_id)
-        saveInt("is_Login", value: is_Login)
+        saveInt("is_Login", value: Key.shared.is_Login)
         saveString("userEmail", value: userEmail)
         saveString("userPassword", value: userPassword)
     }
@@ -118,7 +118,7 @@ class LocalStorageManager: NSObject {
     
     func readLogInfo() -> Bool {
         _ = readUsername()
-        if is_Login == 1 {
+        if Key.shared.is_Login == 1 {
             return true
         }
         if let login = readByKey("is_Login") as? Int {
@@ -129,7 +129,7 @@ class LocalStorageManager: NSObject {
                 userTokenEncode = readByKey("userTokenEncode") as! String
                 session_id = readByKey("session_id") as! Int
                 user_id = readByKey("user_id") as! Int
-                is_Login = readByKey("is_Login") as! Int
+                Key.shared.is_Login = readByKey("is_Login") as! Int
                 userEmail = readByKey("userEmail") as! String
                 userPassword = readByKey("userPassword") as! String
                 userFirstname = readByKey("userFirstname") as! String

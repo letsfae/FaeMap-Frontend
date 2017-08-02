@@ -27,13 +27,23 @@ extension FaeMapViewController {
         faeMapView.addGestureRecognizer(tapGesture)
         
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
-        mapClusterManager.cellSize = 100
-        mapClusterManager.marginFactor = 0.5
+        mapClusterManager.cellSize = 50
+        mapClusterManager.marginFactor = 0.25
         mapClusterManager.delegate = self
+        mapClusterManager.clusterer = CCHNearCenterMapClusterer()
 
-        locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locManager.startUpdatingLocation()
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        faeMapView.setRegion(coordinateRegion, animated: false)
+        reloadSelfPosAnimation()
+        refreshMap(pins: false, users: true, places: true)
+    }
+    
+    func firstUpdateLocation() {
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        faeMapView.setRegion(coordinateRegion, animated: false)
+        reloadSelfPosAnimation()
+        refreshMap(pins: false, users: true, places: true)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
     
     // MARK: -- Load Map Main Screen Buttons
@@ -41,7 +51,6 @@ extension FaeMapViewController {
         imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
-//        imgSchbarShadow.alpha = 0
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
         imgSchbarShadow.isUserInteractionEnabled = true
@@ -61,43 +70,49 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
-//        lblSearchContent = UILabel()
-//        lblSearchContent.text = "Search Fae Map"
-////        lblSearchContent.backgroundColor = .blue
-//        lblSearchContent.textAlignment = .left
-//        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-//        lblSearchContent.textColor = UIColor._182182182()
-//        imgSchbarShadow.addSubview(lblSearchContent)
-//        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
-//        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
+        lblSearchContent = UILabel()
+        lblSearchContent.text = "Search Fae Map"
+        lblSearchContent.textAlignment = .left
+        lblSearchContent.lineBreakMode = .byTruncatingTail
+        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblSearchContent.textColor = UIColor._182182182()
+        imgSchbarShadow.addSubview(lblSearchContent)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
         btnMainMapSearch = UIButton()
         // Vicky 07/28/17
 //        btnMainMapSearch.backgroundColor = .blue
-        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
-        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
-        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnMainMapSearch.contentHorizontalAlignment = .left
+//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
+//        btnMainMapSearch.titleLabel?.lineBreakMode = .byTruncatingTail
+//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
+//        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+//        btnMainMapSearch.contentHorizontalAlignment = .left
         // Vicky 07/28/17 End
         imgSchbarShadow.addSubview(btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
         
+        // Click to clear search results
+        btnClearSearchRes = UIButton()
+        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClearSearchRes.isHidden = true
+        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
+        imgSchbarShadow.addSubview(btnClearSearchRes)
+        imgSchbarShadow.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
+        
         // Click to back to north
-        btnCompass = UIButton(frame: CGRect(x: 22, y: 582*screenWidthFactor, width: 59, height: 59))
+        btnCompass = FMCompass()
+        btnCompass.mapView = faeMapView
         view.addSubview(btnCompass)
-        btnCompass.setImage(UIImage(named: "mainScreenNorth"), for: .normal)
-        btnCompass.addTarget(self, action: #selector(FaeMapViewController.actionTrueNorth(_:)), for: .touchUpInside)
-        btnCompass.layer.zPosition = 500
         
         // Click to locate the current location
-        btnSelfCenter = UIButton(frame: CGRect(x: 333*screenWidthFactor, y: 582*screenWidthFactor, width: 59, height: 59))
-        view.addSubview(btnSelfCenter)
-        btnSelfCenter.setImage(UIImage(named: "mainScreenSelfCenter"), for: .normal)
-        btnSelfCenter.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
-        btnSelfCenter.layer.zPosition = 500
+        btnLocateSelf = FMLocateSelf()
+        btnLocateSelf.mapView = faeMapView
+        view.addSubview(btnLocateSelf)
         
         // Open chat view
         btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))

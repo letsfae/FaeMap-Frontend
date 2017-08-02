@@ -158,7 +158,6 @@ class LogInViewController: UIViewController {
         user.whereKey("is_mobile", value: "true")
         user.logInBackground { (status: Int?, message: Any?) in
             if status! / 100 == 2 {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "returnFromLoginSignup"), object: nil)
                 self.navigationController?.popToRootViewController(animated: false)
                 if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
                     if vcRoot is InitialPageController {

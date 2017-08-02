@@ -15,8 +15,8 @@ class PlacePin: NSObject {
     let id: Int
     let name: String
     let coordinate: CLLocationCoordinate2D
-    let classTwo: String
-    let class_two_idx: Int
+    let class_2: String
+    let class_2_icon_id: Int
     // let imageURL: String
     let address1: String
     let address2: String
@@ -27,12 +27,12 @@ class PlacePin: NSObject {
         self.id = json["place_id"].intValue
         // self.imageURL = json["image_url"].stringValue
         self.name = json["name"].stringValue
-        self.address1 = json["address"].stringValue
-        self.address2 = json["city"].stringValue + ", " + json["country"].stringValue + ", " + json["zip_code"].stringValue + ", " + json["state"].stringValue
+        self.address1 = json["location"]["address"].stringValue
+        self.address2 = json["location"]["city"].stringValue + ", " + json["location"]["country"].stringValue + ", " + json["location"]["zip_code"].stringValue + ", " + json["location"]["state"].stringValue
         self.coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
-        self.classTwo = json["class_two"].stringValue
-        self.class_two_idx = json["class_two_idx"].intValue
-        self.icon = UIImage(named: "place_map_\(self.class_two_idx)") ?? #imageLiteral(resourceName: "place_map_48")
+        self.class_2 = json["categories"]["class2"].stringValue
+        self.class_2_icon_id = json["categories"]["class2_icon_id"].intValue
+        self.icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
     }
     
     override func isEqual(_ object: Any?) -> Bool {
