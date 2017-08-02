@@ -72,14 +72,17 @@ class RealmChat {
         for message in recents{
             let recent = RealmRecent()
             //print(type(of: (message as! NSDictionary)["with_user_id"]!))
-            recent.withUserID =  String((message as! NSDictionary)["with_user_id"]! as! Int)
-            recent.withUserNickName = (message as! NSDictionary)["with_nick_name"]! as? String ?? (message as! NSDictionary)["with_user_name"]! as! String
+            let messageNSDict = message as! NSDictionary
+            recent.withUserID =  String(messageNSDict["with_user_id"]! as! Int)
+            recent.withUserNickName = messageNSDict["with_nick_name"]! as? String ?? messageNSDict["with_user_name"]! as! String
             let dateFormatter = DateFormatter()
+            dateFormatter.calendar = Calendar(identifier: .gregorian)
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
-            let date = dateFormatter.date(from: (message as! NSDictionary)["last_message_timestamp"]! as! String)
-            //recent.date = date! as NSDate
-            recent.message = (message as! NSDictionary)["last_message"]! as! String
-            recent.unread = (message as! NSDictionary)["unread_count"]! as! Int
+            let date = dateFormatter.date(from: messageNSDict["last_message_timestamp"] as! String)
+            recent.date = date! as NSDate
+            recent.message = messageNSDict["last_message"]! as! String
+            recent.unread = messageNSDict["unread_count"]! as! Int
             try! realm.write{
                 realm.add(recent, update: true)
                 print("update recent")
