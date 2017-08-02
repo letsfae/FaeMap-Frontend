@@ -62,7 +62,7 @@ class DisconnectionViewController: UIViewController {
             lblFailMessage.numberOfLines = 2
             lblFailMessage.textAlignment = .center
             lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20*screenWidthFactor)
-            lblFailMessage.textColor = UIColor.faeAppInputTextGrayColor()
+            lblFailMessage.textColor = UIColor._898989()
             self.view.addSubview(lblFailMessage)
         }
     }

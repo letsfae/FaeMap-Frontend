@@ -88,7 +88,7 @@ class LogInViewController: UIViewController {
         lblLoginResult = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
         lblLoginResult.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblLoginResult.text = "Oops… Can’t find any Accounts\nwith this Username/Email!"
-        lblLoginResult.textColor = UIColor.faeAppRedColor()
+        lblLoginResult.textColor = UIColor._2499090()
         lblLoginResult.numberOfLines = 2
         lblLoginResult.center = view.center
         lblLoginResult.textAlignment = .center
@@ -106,7 +106,7 @@ class LogInViewController: UIViewController {
         btnSupport = UIButton(frame: CGRect(x: (screenWidth - 150) / 2, y: screenHeight - 50 * screenHeightFactor - 71, width: 150, height: 22))
         btnSupport.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 13)
-        btnSupport.setAttributedTitle(NSAttributedString(string: "Sign In Support", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!]), for: UIControlState())
+        btnSupport.setAttributedTitle(NSAttributedString(string: "Sign In Support", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
         btnSupport.contentHorizontalAlignment = .center
         btnSupport.addTarget(self, action: #selector(LogInViewController.supportButtonTapped), for: .touchUpInside)
         view.insertSubview(btnSupport, at: 0)
@@ -118,7 +118,7 @@ class LogInViewController: UIViewController {
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.addTarget(self, action: #selector(LogInViewController.loginButtonTapped), for: .touchUpInside)
-        btnLogin.backgroundColor = UIColor.faeAppDisabledRedColor()
+        btnLogin.backgroundColor = UIColor._255160160()
         btnLogin.isEnabled = false
         view.insertSubview(btnLogin, at: 0)
     }
@@ -137,7 +137,7 @@ class LogInViewController: UIViewController {
         indicatorActivity.activityIndicatorViewStyle = .whiteLarge
         indicatorActivity.center = view.center
         indicatorActivity.hidesWhenStopped = true
-        indicatorActivity.color = UIColor.faeAppRedColor()
+        indicatorActivity.color = UIColor._2499090()
         view.addSubview(indicatorActivity)
         view.bringSubview(toFront: indicatorActivity)
     }
@@ -238,10 +238,10 @@ class LogInViewController: UIViewController {
     // MARK: - textfield
     func textfieldDidChange(_ textfield: UITextField) {
         if txtUsername.text!.characters.count > 0 && txtPassword.text?.characters.count >= 8 {
-            btnLogin.backgroundColor = UIColor.faeAppRedColor()
+            btnLogin.backgroundColor = UIColor._2499090()
             btnLogin.isEnabled = true
         } else {
-            btnLogin.backgroundColor = UIColor.faeAppDisabledRedColor()
+            btnLogin.backgroundColor = UIColor._255160160()
             btnLogin.isEnabled = false
         }
     }

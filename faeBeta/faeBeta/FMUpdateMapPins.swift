@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
+import CCHMapClusterController
 
 extension Array where Element: Equatable {
     func removeDuplicates() -> [Element] {
@@ -26,6 +26,29 @@ extension Array where Element: Equatable {
 
 extension FaeMapViewController {
     
+    func tapSocialPin(didSelect view: MKAnnotationView) {
+        /*
+        guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
+        guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
+        guard let mapPin = firstAnn.pinInfo as? MapPin else { return }
+        dismissMainBtns()
+        boolCanOpenPin = false
+        openMapPin(annotation: firstAnn, mapPin: mapPin, animated: true)
+        animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
+        let vcPinDetail = PinDetailViewController()
+        vcPinDetail.delegate = self
+        vcPinDetail.modalPresentationStyle = .overCurrentContext
+        vcPinDetail.strPinId = "\(mapPin.pinId)"
+        
+        let time: Double = 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
+            self.present(vcPinDetail, animated: false, completion: {
+                self.boolCanOpenPin = true
+            })
+        })
+        */
+    }
+    
     func updateTimerForLoadRegionPin() {
         self.loadCurrentRegionPins()
         if timerLoadRegionPins != nil {
@@ -36,7 +59,6 @@ extension FaeMapViewController {
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
-        clearMap(type: "pin", animated: false)
         let coorDistance = cameraDiagonalDistance()
         if self.boolCanUpdateSocialPin {
             self.boolCanUpdateSocialPin = false

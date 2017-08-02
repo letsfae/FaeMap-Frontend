@@ -18,7 +18,7 @@ class MBChatBubblesCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let separatorView = UIView(frame: CGRect(x: 70.5, y: 61, width: screenWidth - 70.5, height: 1))
-        separatorView.backgroundColor = UIColor.faeAppLineBetweenCellGrayColor()
+        separatorView.backgroundColor = UIColor._225225225()
         self.addSubview(separatorView)
         selectionStyle = .none
         loadCellContent()
@@ -39,12 +39,12 @@ class MBChatBubblesCell: UITableViewCell {
         lblBubbleTitle = UILabel(frame: CGRect(x: 72, y: 10, width: 255, height: 25))
         addSubview(lblBubbleTitle)
         lblBubbleTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblBubbleTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblBubbleTitle.textColor = UIColor._898989()
         
         lblBubbleTime = UILabel(frame: CGRect(x: 72, y: 34, width: 280, height:  18))
         addSubview(lblBubbleTime)
         lblBubbleTime.font = UIFont(name: "PingFangSC-Medium", size: 13)
-        lblBubbleTime.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblBubbleTime.textColor = UIColor._107107107()
         lblBubbleTime.lineBreakMode = .byTruncatingTail
         
     }

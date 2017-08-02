@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import GoogleMaps
 
 extension FaeMapViewController {
     

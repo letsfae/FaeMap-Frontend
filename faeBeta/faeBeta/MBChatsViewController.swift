@@ -49,11 +49,11 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.addConstraintsWithFormat("H:|-65-[v0(\(130 * screenWidthFactor))]", options: [], views: btnChatSpots)
         
         let uiviewGrayUnderLine = UIView(frame: CGRect(x: 0, y: uiviewNavBar.frame.height - 1, width: screenWidth, height: 1))
-        uiviewGrayUnderLine.backgroundColor = UIColor.faeAppNavBarBorderColor()
+        uiviewGrayUnderLine.backgroundColor = UIColor._200199204()
         uiviewNavBar.addSubview(uiviewGrayUnderLine)
         
         btnChatSpots.setTitle("Chat Spots", for: .normal)
-        btnChatSpots.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
+        btnChatSpots.setTitleColor(UIColor._2499090(), for: .normal)
         btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         btnChatSpots.tag = 0
         btnChatSpots.addTarget(self, action: #selector(self.switchBetweenChatSpotsAndBubbles(_:)), for: .touchUpInside)
@@ -64,13 +64,13 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.addConstraintsWithFormat("H:[v0(\(130 * screenWidthFactor))]-65-|", options: [], views: btnBubbles)
         
         btnBubbles.setTitle("Bubbles", for: .normal)
-        btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+        btnBubbles.setTitleColor(UIColor._146146146(), for: .normal)
         btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
         btnBubbles.tag = 1
         btnBubbles.addTarget(self, action: #selector(self.switchBetweenChatSpotsAndBubbles(_:)), for: .touchUpInside)
         
         uiviewRedUnderLine = UIView(frame: CGRect(x: 60, y: uiviewNavBar.frame.height - 2, width: 130 * screenWidthFactor, height: 2))
-        uiviewRedUnderLine.backgroundColor = UIColor.faeAppRedColor()
+        uiviewRedUnderLine.backgroundColor = UIColor._2499090()
         uiviewNavBar.addSubview(uiviewRedUnderLine)
         
         let btnBackNavBar = UIButton(frame: CGRect(x: 0, y: 20, width: 40.5, height: 42))
@@ -83,15 +83,15 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             tableMode = .chatSpots
-            btnChatSpots.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
-            btnBubbles.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnChatSpots.setTitleColor(UIColor._2499090(), for: .normal)
+            btnBubbles.setTitleColor(UIColor._146146146(), for: .normal)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             targetCenter = btnChatSpots.center.x
         } else if sender.tag == 1 {
             tableMode = .bubbles
-            btnBubbles.setTitleColor(UIColor.faeAppRedColor(), for: .normal)
-            btnChatSpots.setTitleColor(UIColor.faeAppInactiveBtnGrayColor(), for: .normal)
+            btnBubbles.setTitleColor(UIColor._2499090(), for: .normal)
+            btnChatSpots.setTitleColor(UIColor._146146146(), for: .normal)
             btnBubbles.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnChatSpots.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             targetCenter = btnBubbles.center.x
@@ -117,12 +117,12 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         let lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 22))
         lblAllCom.text = "All Communities"
         lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblAllCom.textColor = UIColor.faeAppTimeTextBlackColor()
+        lblAllCom.textColor = UIColor._107107107()
         uiviewAllCom.addSubview(lblAllCom)
         
         // draw line
         let lblAllComUnderLine = UIView(frame: CGRect(x: 0, y: uiviewAllCom.frame.height - 1, width: screenWidth, height: 1))
-        lblAllComUnderLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        lblAllComUnderLine.layer.borderColor = UIColor._200199204cg()
         lblAllComUnderLine.layer.borderWidth = 1
         uiviewAllCom.addSubview(lblAllComUnderLine)
     }

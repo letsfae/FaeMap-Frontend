@@ -25,7 +25,7 @@ class FaeNavBar: UIView {
         // Line at y = 64
         bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
-        bottomLine.layer.borderColor = UIColor.faeAppNavBarBorderGrayColor()
+        bottomLine.layer.borderColor = UIColor._200199204cg()
         addSubview(bottomLine)
         
         leftBtn.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
@@ -36,9 +36,12 @@ class FaeNavBar: UIView {
         
         lblTitle.text = ""
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textColor = UIColor.faeAppInputTextGrayColor()
+        lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         addSubview(lblTitle)
+        // Vicky 07/28/17
+        addConstraintsWithFormat("H:|-70-[v0]-70-|", options: [], views: lblTitle)
+        // Vicky 07/28/17 End
         addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: lblTitle)
         addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: lblTitle)
     }

@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import Firebase
 
 public var isDraggingRecentTableViewCell = false
 
@@ -18,6 +19,8 @@ public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this s
 // ENDBryan
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
+    
+    private let firebase = Database.database().reference().child(fireBaseRef)
     
     // MARK: - properties
     
@@ -191,6 +194,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     ///   - animated: update the table with/without animation
     ///   - indexPathSet: the specific indexpath set needed to update, set nil if you want to update the whole recent list
     private func loadRecents(_ animated: Bool, removeIndexPaths indexPathSet: [IndexPath]?) {
+        
+        //firebase.childbY
+        //
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { _, result in
             if let cacheRecent = result as? NSArray {
                 // Bryan

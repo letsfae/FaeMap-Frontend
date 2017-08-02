@@ -79,7 +79,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         buttonSendReport.center.x = screenWidth / 2
         buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
-        buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
+        buttonSendReport.backgroundColor = UIColor._2499090()
         buttonSendReport.addTarget(self, action: #selector(ReportCommentPinViewController.actionSendReport(_:)), for: .touchUpInside)
         self.view.insertSubview(buttonSendReport, at: 0)
         self.view.bringSubview(toFront: buttonSendReport)
@@ -88,7 +88,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         textViewReportContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
         textViewReportContent.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
         textViewReportContent.backgroundColor = UIColor.clear
-        textViewReportContent.tintColor = UIColor.faeAppRedColor()
+        textViewReportContent.tintColor = UIColor._2499090()
         textViewReportContent.delegate = self
         textViewReportContent.isScrollEnabled = false
         self.view.addSubview(textViewReportContent)
@@ -97,7 +97,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         NSLayoutConstraint(item: textViewReportContent, attribute: .centerX, relatedBy: .equal, toItem: self.view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        lableTextViewPlaceholder.textColor = UIColor.faeAppInputPlaceholderGrayColor()
+        lableTextViewPlaceholder.textColor = UIColor._155155155()
         if reportType == 0 {
             lableTextViewPlaceholder.text = "Describe to us the case..."
             imageDescription.image = UIImage(named: "reportViewDescription")
@@ -161,12 +161,12 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
             if textViewReportContent.text.trimmingCharacters(in: spacing).isEmpty == false {
                 buttonSendReport.isEnabled = true
                 lableTextViewPlaceholder.isHidden = true
-                buttonSendReport.backgroundColor = UIColor.faeAppRedColor()
+                buttonSendReport.backgroundColor = UIColor._2499090()
             }
             else {
                 buttonSendReport.isEnabled = false
                 lableTextViewPlaceholder.isHidden = false
-                buttonSendReport.backgroundColor = UIColor.faeAppDisabledRedColor()
+                buttonSendReport.backgroundColor = UIColor._255160160()
             }
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)

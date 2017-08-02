@@ -9,14 +9,9 @@
 
 import UIKit
 import SwiftyJSON
-import RealmSwift
 import CCHMapClusterController
 
 extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate {
-    
-    func clearMap(type: String, animated: Bool) {
-        
-    }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
@@ -40,58 +35,12 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         guard boolCanOpenPin else { return }
         
         if view is PlacePinAnnotationView {
-            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
-            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
-            dismissMainBtns()
-            boolCanOpenPin = false
-            openPlacePin(annotation: firstAnn, animated: true)
-            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
-            let vcPinDetail = PinDetailViewController()
-            vcPinDetail.modalPresentationStyle = .overCurrentContext
-            vcPinDetail.delegate = self
-            
-            let time: Double = 0
-            DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-                self.present(vcPinDetail, animated: false, completion: {
-                    self.boolCanOpenPin = true
-                })
-            }
+            tapPlacePin(didSelect: view)
         } else if view is SocialPinAnnotationView {
-            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
-            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
-            guard let mapPin = firstAnn.pinInfo as? MapPin else { return }
-            dismissMainBtns()
-            boolCanOpenPin = false
-            openMapPin(annotation: firstAnn, mapPin: mapPin, animated: true)
-            animateToCoordinate(type: 2, coordinate: clusterAnn.coordinate, animated: true)
-            let vcPinDetail = PinDetailViewController()
-            vcPinDetail.delegate = self
-            vcPinDetail.modalPresentationStyle = .overCurrentContext
-            vcPinDetail.strPinId = "\(mapPin.pinId)"
             
-            let time: Double = 0
-            DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: {
-                self.present(vcPinDetail, animated: false, completion: {
-                    self.boolCanOpenPin = true
-                })
-            })
         } else if view is UserPinAnnotationView {
-            guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
-            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
-            guard firstAnn.id != -1 else { return }
-            for user in faeUserPins {
-                user.isValid = false
-            }
-            boolCanUpdateUserPin = false
-            boolCanOpenPin = false
-            animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
-            updateNameCard(withUserId: firstAnn.id)
-            animateNameCard()
-            UIView.animate(withDuration: 0.25, delay: 0, animations: {
-                self.btnCardClose.alpha = 1
-            }, completion: { _ in
-                self.boolCanOpenPin = true
-            })
+            guard preventUserPinOpen == false else { return }
+            tapUserPin(didSelect: view)
         }
     }
     
@@ -112,7 +61,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             
             let clusterAnn = annotation as! CCHMapClusterAnnotation
             let firstAnn = clusterAnn.annotations.first as! FaePinAnnotation
-            
             if firstAnn.type == "place" {
                 let identifier = "place"
                 var anView: PlacePinAnnotationView
@@ -168,56 +116,58 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func openMapPin(annotation: FaePinAnnotation, mapPin: MapPin, animated: Bool) {
-        
+        /*
         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
         PinDetailViewController.pinAnnotation = annotation
         PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
         PinDetailViewController.pinStatus = mapPin.status
         PinDetailViewController.pinStateEnum = PinDetailViewController.PinState(rawValue: "\(mapPin.status)")!
         PinDetailViewController.pinUserId = mapPin.userId
+         */
     }
     
     func openPlacePin(annotation: FaePinAnnotation, animated: Bool) {
-        
+        /*
         guard let placePin = annotation.pinInfo as? PlacePin else { return }
         
         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
         PinDetailViewController.pinAnnotation = annotation
         PinDetailViewController.pinTypeEnum = .place
-        PinDetailViewController.placeType = placePin.primaryCate
+        PinDetailViewController.placeType = placePin.classTwo
         PinDetailViewController.strPlaceTitle = placePin.name
         PinDetailViewController.strPlaceStreet = placePin.address1
         PinDetailViewController.strPlaceCity = placePin.address2
         PinDetailViewController.strPlaceImageURL = placePin.imageURL
         
-        let opPlace = OpenedPlace(title: placePin.name, category: placePin.primaryCate,
+        let opPlace = OpenedPlace(title: placePin.name, category: placePin.classTwo,
                                   street: placePin.address1, city: placePin.address2,
                                   imageURL: placePin.imageURL,
                                   position: annotation.coordinate)
         if !OpenedPlaces.openedPlaces.contains(opPlace) {
             OpenedPlaces.openedPlaces.append(opPlace)
         }
+         */
     }
     
-    fileprivate func dismissMainBtns() {
-        if mapFilterArrow != nil {
-            mapFilterArrow.removeFromSuperview()
-        }
-        if filterCircle_1 != nil {
-            filterCircle_1.removeFromSuperview()
-        }
-        if filterCircle_2 != nil {
-            filterCircle_2.removeFromSuperview()
-        }
-        if filterCircle_3 != nil {
-            filterCircle_3.removeFromSuperview()
-        }
-        if filterCircle_4 != nil {
-            filterCircle_4.removeFromSuperview()
-        }
+    func dismissMainBtns() {
+        //        if mapFilterArrow != nil {
+        //            mapFilterArrow.removeFromSuperview()
+        //        }
+        //        if filterCircle_1 != nil {
+        //            filterCircle_1.removeFromSuperview()
+        //        }
+        //        if filterCircle_2 != nil {
+        //            filterCircle_2.removeFromSuperview()
+        //        }
+        //        if filterCircle_3 != nil {
+        //            filterCircle_3.removeFromSuperview()
+        //        }
+        //        if filterCircle_4 != nil {
+        //            filterCircle_4.removeFromSuperview()
+        //        }
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
-                self.btnMapFilter.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
             self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnSelfCenter.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
@@ -246,17 +196,23 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         rect.origin.x = point.x - rect.size.width * 0.5
         rect.origin.y = point.y - rect.size.height * 0.5
         
-        faeMapView.setVisibleMapRect(rect, animated: false)
-        
+        faeMapView.setVisibleMapRect(rect, animated: animated)
     }
     
     func deselectAllAnnotations() {
         for annotation in faeMapView.selectedAnnotations {
             faeMapView.deselectAnnotation(annotation, animated: false)
         }
+        
         boolCanOpenPin = true
         for user in faeUserPins {
             user.isValid = true
+        }
+        
+        if let idx = selectedAnn?.class_two_idx {
+            selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
+            guard let img = selectedAnn?.icon else { return }
+            selectedAnnView?.assignImage(img)
         }
     }
     
@@ -264,5 +220,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         UIView.animate(withDuration: 0.5, animations: {
             self.btnCompass.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -mapView.camera.heading) / 180.0)
         })
+        guard placeResultBar.tag > 0 else { return }
+        placeResultBar.annotations = visiblePlaces()
+    }
+    
+    func mapViewTapAt(_ sender: UITapGestureRecognizer) {
+        guard uiviewFilterMenu != nil else { return }
+        uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+        deselectAllAnnotations()
     }
 }

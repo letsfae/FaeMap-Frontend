@@ -98,7 +98,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         faeSearchController = FaeSearchController(searchResultsController: self,
                                                   searchBarFrame: CGRect(x: 18, y: 24, width: resultTableWidth, height: 36),
                                                   searchBarFont: UIFont(name: "AvenirNext-Medium", size: 20)!,
-                                                  searchBarTextColor: UIColor.faeAppInputTextGrayColor(),
+                                                  searchBarTextColor: UIColor._898989(),
                                                   searchBarTintColor: UIColor.white)
         
         // blanks for keeping the placeholder not jump during the animation
@@ -106,7 +106,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         faeSearchController.faeDelegate = self
         faeSearchController.faeSearchBar.layer.borderWidth = 2.0
         faeSearchController.faeSearchBar.layer.borderColor = UIColor.white.cgColor
-        faeSearchController.faeSearchBar.tintColor = UIColor.faeAppRedColor()
+        faeSearchController.faeSearchBar.tintColor = UIColor._2499090()
         
         uiviewSearchBarSubview.addSubview(faeSearchController.faeSearchBar)
         uiviewSearchBarSubview.backgroundColor = UIColor.white

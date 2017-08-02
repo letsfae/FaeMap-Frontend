@@ -11,7 +11,7 @@ import UIKit
 import SwiftyJSON
 import UIKit.UIGestureRecognizerSubclass
 
-class CreatedPinsViewController: PinsViewController, UITableViewDataSource, EditPinViewControllerDelegate, PinDetailCollectionsDelegate {
+class CreatedPinsViewController: PinsViewController, UITableViewDataSource, PinDetailCollectionsDelegate {
     
     override func viewDidLoad() {
         strTableTitle = "Created Pins"
@@ -58,6 +58,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        /*
         if !gesturerecognizerTouch.isCellSwiped {
             tableView.deselectRow(at: indexPath, animated: false)
             let vcPinDetail = PinDetailViewController()
@@ -73,6 +74,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
             
             self.navigationController?.pushViewController(vcPinDetail, animated: true)
         }
+         */
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -137,6 +139,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
     }
     
     override func toDoItemEdit(indexCell: Int, pinId: Int, pinType: String) {
+        /*
         if pinId == -999 {
             return
         }
@@ -158,6 +161,7 @@ class CreatedPinsViewController: PinsViewController, UITableViewDataSource, Edit
         self.present(vcEditPin, animated: true, completion: {
             self.tblPinsData.reloadData()
             })
+        */
     }
     
     override func toDoItemShared(indexCell: Int, pinId: Int, pinType: String) {

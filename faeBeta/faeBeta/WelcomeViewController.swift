@@ -101,7 +101,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLogin.center.x = screenWidth / 2
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
-        btnLogin.backgroundColor = UIColor.faeAppRedColor()
+        btnLogin.backgroundColor = UIColor._2499090()
         btnLogin.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
         view.insertSubview(btnLogin, at: 0)
         view.bringSubview(toFront: btnLogin)
@@ -109,9 +109,9 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // create account button
         btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
-        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor.faeAppRedColor(), NSFontAttributeName: font!]), for: UIControlState())
+        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
         btnCreateAccount.backgroundColor = UIColor.white
-        btnCreateAccount.layer.borderColor = UIColor.faeAppRedColor().cgColor
+        btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
         btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
         btnCreateAccount.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
