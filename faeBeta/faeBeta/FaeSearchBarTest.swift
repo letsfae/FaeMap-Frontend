@@ -34,8 +34,8 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         imgSearch = UIImageView()
         imgSearch.image = #imageLiteral(resourceName: "searchBarIcon")
         addSubview(imgSearch)
-        let padding = (self.frame.size.height - 15) / 2
-        addConstraintsWithFormat("V:|-\(padding)-[v0]-\(padding)-|", options: [], views: imgSearch)
+//        let padding = (self.frame.size.height - 15) / 2
+        addConstraintsWithFormat("V:|-17-[v0(15)]", options: [], views: imgSearch)
         
         btnClose = UIButton()
         btnClose.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
@@ -46,7 +46,7 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         txtSchField = UITextField()
         txtSchField.delegate = self
         addSubview(txtSchField)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: txtSchField)
+        addConstraintsWithFormat("V:|-13-[v0(25)]-0-|", options: [], views: txtSchField)
         
         addConstraintsWithFormat("H:|-10-[v0(15)]-9-[v1]-5-[v2(30)]-21-|", options: [], views: imgSearch, txtSchField, btnClose)
         
