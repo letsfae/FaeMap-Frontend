@@ -81,13 +81,13 @@ class OutgoingMessage {
                 
                 //comment this api for now to avoid crash, it will make last message in first VC wrong. Will use it after negotiate with backend.
                 
-                /*postToURL("chats", parameter: ["receiver_id": user.userID as AnyObject, "message": item["message"] as! String, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                postToURL("chats_v2", parameter: ["receiver_id": user.userID as AnyObject, "message": item["message"] as! String, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if(statusCode / 100 == 2){
                         if let resultDic = result as? NSDictionary{
                             self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)
                         }
                     }
-                })*/
+                })
             }
         }
     }
