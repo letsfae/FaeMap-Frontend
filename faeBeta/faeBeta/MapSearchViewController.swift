@@ -327,7 +327,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         let place = filteredPlaces[indexPath.row]
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let img = UIImage(named: "place_result_\(place.class_two_idx)") ?? #imageLiteral(resourceName: "Awkward")
+            let img = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "Awkward")
             DispatchQueue.main.async {
                 cell.imgIcon.image = img
             }
@@ -421,7 +421,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             
             for result in placeInfoJsonArray {
                 let placeData = PlacePin(json: result)
-//                if placeData.class_two_idx != 0 {
+//                if placeData.class_2_icon_id != 0 {
                     self.searchedPlaces.append(placeData)
 //                }
             }

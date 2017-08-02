@@ -209,7 +209,7 @@ func deleteFromURL(_ className: String, parameter: [String: Any], authentication
         }
 }
 
-func getAvatar(userID: Int, type: Int, completion: @escaping (Int, String, Data?) -> Void) {
+func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
     guard let url = URL(string: "\(baseURL)/files/users/\(userID)/avatar/\(type)") else { return }
     var urlRequest = URLRequest(url: url)
@@ -218,6 +218,11 @@ func getAvatar(userID: Int, type: Int, completion: @escaping (Int, String, Data?
     urlRequest.setValue(headerUserAgent, forHTTPHeaderField: "User-Agent")
     urlRequest.setValue(headerClientVersion, forHTTPHeaderField: "Fae-Client-Version")
     urlRequest.setValue(headerAccept, forHTTPHeaderField: "Accept")
+    for (key, value) in authentication {
+        if let val = value as? String {
+            urlRequest.setValue(val, forHTTPHeaderField: key)
+        }
+    }
     
     var avatarInRealm: Data?
     
@@ -286,14 +291,17 @@ func getAvatar(userID: Int, type: Int, completion: @escaping (Int, String, Data?
         }
 }
 
-func getImage(fileID: Int, type: Int, isChatRoom: Bool, completion: @escaping (Int, String, Data?) -> Void) {
+func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
     let URL = isChatRoom ? "\(baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(baseURL)/files/\(fileID)/data"
-    let headers = [
+    var headers = [
         "User-Agent": headerUserAgent,
         "Fae-Client-Version": headerClientVersion,
         "Accept": headerAccept,
     ]
+    for (key, value) in authentication {
+        headers[key] = value as? String
+    }
     
     Alamofire.request(URL, headers: headers)
         .responseJSON { response in
