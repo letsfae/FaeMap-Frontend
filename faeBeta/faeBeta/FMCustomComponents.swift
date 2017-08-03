@@ -10,6 +10,7 @@ import UIKit
 
 protocol NameCardDelegate: class {
     func openFaeUsrInfo()
+    func chatUser(id: Int)
 }
 
 class FMNameCardView: UIView {
@@ -65,6 +66,16 @@ class FMNameCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func openFaeUsrInfo() {
+        delegate?.openFaeUsrInfo()
+    }
+    
+    func btnChatAction() {
+        delegate?.chatUser(id: userId)
+    }
+    
+    
+    
     func hideOptions(_ sender: UIButton) {
         guard boolOptionsOpened else { return }
         boolOptionsOpened = false
@@ -79,9 +90,7 @@ class FMNameCardView: UIView {
             self.btnEditNameCard.alpha = 0
             self.btnReport.alpha = 0
             self.btnCloseOptions.alpha = 0
-        }), completion: { _ in
-            
-        })
+        }), completion: nil)
     }
     
     func showOptions(_ sender: UIButton) {
@@ -261,7 +270,7 @@ class FMNameCardView: UIView {
         btnChat.layer.anchorPoint = nameCardAnchor
         btnChat.setImage(#imageLiteral(resourceName: "chatFromMap"), for: .normal)
         addSubview(btnChat)
-//        btnChat.addTarget(self, action: #selector(btnChatAction(_:)), for: .touchUpInside)
+        btnChat.addTarget(self, action: #selector(btnChatAction), for: .touchUpInside)
         
         lblNickName = UILabel(frame: CGRect(x: 114, y: 451, w: 0, h: 0))
         lblNickName.layer.anchorPoint = nameCardAnchor
@@ -323,11 +332,6 @@ class FMNameCardView: UIView {
         imgAvatar.addGestureRecognizer(tapGesture)
         
     }
-    
-    func openFaeUsrInfo() {
-        delegate?.openFaeUsrInfo()
-    }
-    
 }
 
 class FMCompass: UIButton {
