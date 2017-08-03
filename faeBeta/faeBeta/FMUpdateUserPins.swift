@@ -12,6 +12,19 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
+    func viewForUser(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "user"
+        var anView: UserPinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.avatar)
+        return anView
+    }
+    
     func tapUserPin(didSelect view: MKAnnotationView) {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
