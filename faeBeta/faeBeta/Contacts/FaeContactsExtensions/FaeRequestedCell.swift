@@ -9,19 +9,20 @@
 import UIKit
 
 protocol SomeDelegateRequested: class {
-    func cancelRequest(requestId: Int, indexPath: IndexPath)
+    func withdrawRequest(requestId: Int, indexPath: IndexPath)
     func resendRequest(requestId: Int)
 }
 
 class FaeRequestedCell: UITableViewCell {
     
     weak var delegate: SomeDelegateRequested?
-    var imgAvatar: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var btnCancelRequest: UIButton!
     var btnResendRequest: UIButton!
-    var requestId: Int!
+    var userId: Int = -1
+    var requestId: Int = -1
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
@@ -37,12 +38,12 @@ class FaeRequestedCell: UITableViewCell {
     }
     
     fileprivate func loadFriendsCellContent() {
-        imgAvatar = UIImageView()
+        imgAvatar = FaeAvatarView(frame: CGRect.zero)
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-        imgAvatar.backgroundColor = .red
+//        imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
@@ -84,7 +85,7 @@ class FaeRequestedCell: UITableViewCell {
     }
     
     func cancelRequest(_ sender: UIButton) {
-        self.delegate?.cancelRequest(requestId: requestId, indexPath: indexPath)
+        self.delegate?.withdrawRequest(requestId: requestId, indexPath: indexPath)
     }
     
     func resendRequest(_ sender: UIButton) {
