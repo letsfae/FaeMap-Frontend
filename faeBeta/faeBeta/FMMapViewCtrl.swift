@@ -179,7 +179,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         deselectAllAnnotations()
         placeResultBar.fadeOut()
         uiviewNameCard.hide()
-        uiviewNameCard.btnOptions.sendActions(for: .touchUpInside)
         guard uiviewFilterMenu != nil else { return }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }

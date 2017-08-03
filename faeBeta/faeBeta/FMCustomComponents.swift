@@ -22,11 +22,17 @@ class FMNameCardView: UIView {
         }
     }
     
-    var boolOpened = false
+    var boolCardOpened = false
+    var boolOptionsOpened = false
     
-    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0)
     let initialFrame = CGRect.zero
     let secondaryFrame = CGRect(x: 160, y: 350, w: 0, h: 0)
+    let initFrame = CGRect(x: 269, y: 180, w: 0, h: 0)
+    let nextFrame = CGRect(x: 105, y: 180, w: 164, h: 110)
+    let firstBtnFrame = CGRect(x: 129, y: 220, w: 50, h: 51)
+    let secondBtnFrame = CGRect(x: 198, y: 220, w: 50, h: 51)
+    
+    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0)
     var imgAvatarShadow: UIImageView!
     var btnChat: UIButton!
     var btnCloseOptions: UIButton!
@@ -50,7 +56,7 @@ class FMNameCardView: UIView {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
-        center.y = 451 * screenWidthFactor
+        center.y = 451 * screenHeightFactor
         self.frame.size.width = 320 * screenWidthFactor
         loadContent()
     }
@@ -59,70 +65,77 @@ class FMNameCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showNameCardOptions(_ sender: UIButton) {
+    func hideOptions(_ sender: UIButton) {
+        guard boolOptionsOpened else { return }
+        boolOptionsOpened = false
+        btnOptions.isSelected = false
+        let btnFrame = CGRect(x: 243 + 26, y: 180, w: 0, h: 0)
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.imgMoreOptions.frame = CGRect(x: 243 + 26, y: 180, w: 0, h: 0)
+            self.btnShare.frame = btnFrame
+            self.btnEditNameCard.frame = btnFrame
+            self.btnReport.frame = btnFrame
+            self.btnShare.alpha = 0
+            self.btnEditNameCard.alpha = 0
+            self.btnReport.alpha = 0
+            self.btnCloseOptions.alpha = 0
+        }), completion: { _ in
+            
+        })
+    }
+    
+    func showOptions(_ sender: UIButton) {
+        guard !boolOptionsOpened else { return }
+        boolOptionsOpened = true
         btnCloseOptions.alpha = 1
-        self.tag = 1
+        btnOptions.isSelected = true
         var thisIsMe = false
-        if sender.tag == Int(Key.shared.user_id) {
+        if userId == Int(Key.shared.user_id) {
             print("[showNameCardOptions] this is me")
             thisIsMe = true
         }
-        let subviewXBefore: CGFloat = 243 - 47
-        let subviewYBefore: CGFloat = 151 - 129
-        let subviewXAfter: CGFloat = 79 - 47
-        let subviewYAfter: CGFloat = subviewYBefore
-        let subviewWidthAfter: CGFloat = 164
-        let subviewHeightAfter: CGFloat = 110
-        let firstButtonX: CGFloat = 103 - 47
-        let secondButtonX: CGFloat = 172 - 47
-        let buttonY: CGFloat = 191 - 129
-        let buttonWidth: CGFloat = 50
-        let buttonHeight: CGFloat = 51
         
-        btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
-        
-        imgMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        if imgMoreOptions != nil { imgMoreOptions.removeFromSuperview() }
+        imgMoreOptions = UIImageView(frame: initFrame)
         imgMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
-        btnCloseOptions.addSubview(imgMoreOptions)
+        addSubview(imgMoreOptions)
         
-        btnShare = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        if btnShare != nil { btnShare.removeFromSuperview() }
+        btnShare = UIButton(frame: initFrame)
         btnShare.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: .normal)
-        btnCloseOptions.addSubview(btnShare)
+        addSubview(btnShare)
         btnShare.clipsToBounds = true
-        btnShare.alpha = 0.0
-        //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
+        btnShare.alpha = 0
         
-        btnEditNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        if btnEditNameCard != nil { btnEditNameCard.removeFromSuperview() }
+        btnEditNameCard = UIButton(frame: initFrame)
         btnEditNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
-        btnCloseOptions.addSubview(btnEditNameCard)
+        addSubview(btnEditNameCard)
         btnEditNameCard.clipsToBounds = true
-        btnEditNameCard.alpha = 0.0
-        //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
+        btnEditNameCard.alpha = 0
         
-        btnReport = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        if btnReport != nil { btnReport.removeFromSuperview() }
+        btnReport = UIButton(frame: initFrame)
         btnReport.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
-        btnCloseOptions.addSubview(btnReport)
+        addSubview(btnReport)
         btnReport.clipsToBounds = true
         btnReport.alpha = 0
-//        btnReport.addTarget(self, action: #selector(actionReportThisPin(_:)), for: .touchUpInside)
         
-        UIView.animate(withDuration: 0.3, animations: ({
-            self.imgMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, w: subviewWidthAfter, h: subviewHeightAfter)
-            self.btnShare.frame = CGRect(x: firstButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
-            self.btnShare.alpha = 1.0
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.imgMoreOptions.frame = self.nextFrame
+            self.btnShare.frame = self.firstBtnFrame
+            self.btnShare.alpha = 1
             if thisIsMe {
-                self.btnEditNameCard.alpha = 1.0
-                self.btnEditNameCard.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnEditNameCard.alpha = 1
+                self.btnEditNameCard.frame = self.secondBtnFrame
             } else {
-                self.btnReport.alpha = 1.0
-                self.btnReport.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+                self.btnReport.alpha = 1
+                self.btnReport.frame = self.secondBtnFrame
             }
-        }))
+        }, completion: nil)
     }
     
     func updateNameCard(withUserId: Int) {
-        btnChat.tag = withUserId
-        btnOptions.tag = withUserId
         btnWaveSelf.isHidden = withUserId != Key.shared.user_id
         btnFav.isHidden = withUserId == Key.shared.user_id
         General.shared.avatar(userid: withUserId) { (avatarImage) in
@@ -135,7 +148,7 @@ class FMNameCardView: UIView {
     }
     
     func show() {
-        boolOpened = true
+        boolCardOpened = true
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
@@ -157,8 +170,10 @@ class FMNameCardView: UIView {
     }
     
     func hide() {
-        guard boolOpened else { return }
-        boolOpened = false
+        guard boolCardOpened else { return }
+        boolCardOpened = false
+        self.lblNickName.text = ""
+        self.lblShortIntro.text = ""
         UIView.animate(withDuration: 0.3, animations: {
             self.imgBackShadow.frame = self.secondaryFrame
             self.imgCover.frame = self.secondaryFrame
@@ -174,6 +189,12 @@ class FMNameCardView: UIView {
             self.btnOptions.frame = self.secondaryFrame
             self.btnProfile.frame = self.secondaryFrame
             self.uiviewPrivacy.frame = self.secondaryFrame
+            if self.boolOptionsOpened {
+                self.imgMoreOptions.frame = self.secondaryFrame
+                self.btnShare.frame = self.secondaryFrame
+                self.btnReport.frame = self.secondaryFrame
+                self.btnEditNameCard.frame = self.secondaryFrame
+            }
         }, completion: { _ in
             self.imgBackShadow.frame = self.initialFrame
             self.imgCover.frame = self.initialFrame
@@ -194,8 +215,15 @@ class FMNameCardView: UIView {
             self.center.y = 451 * screenWidthFactor
             self.frame.size.width = 320 * screenWidthFactor
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
-            self.lblNickName.text = ""
-            self.lblShortIntro.text = ""
+            if self.boolOptionsOpened {
+                self.imgMoreOptions.frame = self.initFrame
+                self.btnShare.frame = self.initFrame
+                self.btnReport.frame = self.initFrame
+                self.btnEditNameCard.frame = self.initFrame
+                self.btnOptions.isSelected = false
+                self.btnCloseOptions.alpha = 0
+                self.boolOptionsOpened = false
+            }
         })
     }
     
@@ -264,7 +292,6 @@ class FMNameCardView: UIView {
         
         btnWaveSelf = UIButton(frame: initialFrame)
         btnWaveSelf.layer.anchorPoint = nameCardAnchor
-        btnWaveSelf.layer.zPosition = 910
         btnWaveSelf.setImage(#imageLiteral(resourceName: "showSelfWaveToOthers"), for: .normal)
         addSubview(btnWaveSelf)
         btnWaveSelf.isHidden = true
@@ -272,24 +299,21 @@ class FMNameCardView: UIView {
         btnOptions = UIButton(frame: initialFrame)
         btnOptions.layer.anchorPoint = nameCardAnchor
         btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
-        btnOptions.layer.zPosition = 910
+        btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .selected)
         addSubview(btnOptions)
-        btnOptions.addTarget(self, action: #selector(showNameCardOptions(_:)), for: .touchUpInside)
+        btnOptions.addTarget(self, action: #selector(showOptions(_:)), for: .touchUpInside)
         
         btnProfile = UIButton(frame: initialFrame)
         btnProfile.layer.anchorPoint = nameCardAnchor
         btnProfile.setImage(#imageLiteral(resourceName: "Emoji"), for: .normal)
         btnProfile.addTarget(self, action: #selector(openFaeUsrInfo), for: .touchUpInside)
-        btnProfile.layer.zPosition = 910
         addSubview(btnProfile)
         
         uiviewPrivacy = FaeGenderView(frame: initialFrame)
         uiviewPrivacy.layer.anchorPoint = nameCardAnchor
-        uiviewPrivacy.layer.zPosition = 912
         addSubview(uiviewPrivacy)
         
-        btnCloseOptions = UIButton(frame: CGRect(x: 73, y: 158, w: 268, h: 293))
-        btnCloseOptions.layer.zPosition = 920
+        btnCloseOptions = UIButton(frame: CGRect(x: 0, y: 0, w: 320, h: 350)) // 26 29
         addSubview(btnCloseOptions)
         btnCloseOptions.alpha = 0
         btnCloseOptions.addTarget(self, action: #selector(hideOptions(_:)), for: .touchUpInside)
@@ -298,23 +322,6 @@ class FMNameCardView: UIView {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
         imgAvatar.addGestureRecognizer(tapGesture)
         
-    }
-    
-    func hideOptions(_ sender: UIButton) {
-        guard self.tag == 1 || sender == self.btnCloseOptions else { return }
-        self.tag = 0
-        UIView.animate(withDuration: 0.3, animations: ({
-            self.btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
-            self.imgMoreOptions.frame = CGRect(x: 243 - 47, y: 151 - 129, w: 0, h: 0)
-            let btnFrame = CGRect(x: 243 - 47, y: 191 - 129, w: 0, h: 0)
-            self.btnShare.frame = btnFrame
-            self.btnEditNameCard.frame = btnFrame
-            self.btnReport.frame = btnFrame
-            self.btnShare.alpha = 0
-            self.btnEditNameCard.alpha = 0
-            self.btnReport.alpha = 0
-            self.btnCloseOptions.alpha = 0
-        }), completion: nil)
     }
     
     func openFaeUsrInfo() {
@@ -326,6 +333,7 @@ class FMNameCardView: UIView {
 class FMCompass: UIButton {
     
     var mapView: MKMapView!
+    var nameCard = FMNameCardView()
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59))
@@ -347,6 +355,7 @@ class FMCompass: UIButton {
         camera.heading = 0
         mapView.setCamera(camera, animated: true)
         transform = CGAffineTransform.identity
+        nameCard.hide()
     }
     
     func rotateCompass() {
@@ -359,14 +368,11 @@ class FMCompass: UIButton {
 class FMLocateSelf: UIButton {
     
     var mapView: MKMapView!
+    var nameCard = FMNameCardView()
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59))
         loadContent()
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.numberOfTapsRequired = 2
-        tapGesture.addTarget(self, action: #selector(handleTap))
-        addGestureRecognizer(tapGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -383,11 +389,6 @@ class FMLocateSelf: UIButton {
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         mapView.setCamera(camera, animated: true)
+        nameCard.hide()
     }
-    
-    func handleTap() {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    
 }

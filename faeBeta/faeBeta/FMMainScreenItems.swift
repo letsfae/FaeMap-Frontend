@@ -108,11 +108,13 @@ extension FaeMapViewController {
         btnCompass = FMCompass()
         btnCompass.mapView = faeMapView
         view.addSubview(btnCompass)
+        btnCompass.nameCard = uiviewNameCard
         
         // Click to locate the current location
         btnLocateSelf = FMLocateSelf()
         btnLocateSelf.mapView = faeMapView
         view.addSubview(btnLocateSelf)
+        btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
         btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
