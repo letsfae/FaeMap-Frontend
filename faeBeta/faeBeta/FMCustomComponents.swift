@@ -292,12 +292,29 @@ class FMNameCardView: UIView {
         btnCloseOptions.layer.zPosition = 920
         addSubview(btnCloseOptions)
         btnCloseOptions.alpha = 0
-//        btnCloseOptions.addTarget(self, action: #selector(hideNameCard(_:)), for: .touchUpInside)
+        btnCloseOptions.addTarget(self, action: #selector(hideOptions(_:)), for: .touchUpInside)
     
         imgAvatar.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
         imgAvatar.addGestureRecognizer(tapGesture)
         
+    }
+    
+    func hideOptions(_ sender: UIButton) {
+        guard self.tag == 1 || sender == self.btnCloseOptions else { return }
+        self.tag = 0
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
+            self.imgMoreOptions.frame = CGRect(x: 243 - 47, y: 151 - 129, w: 0, h: 0)
+            let btnFrame = CGRect(x: 243 - 47, y: 191 - 129, w: 0, h: 0)
+            self.btnShare.frame = btnFrame
+            self.btnEditNameCard.frame = btnFrame
+            self.btnReport.frame = btnFrame
+            self.btnShare.alpha = 0
+            self.btnEditNameCard.alpha = 0
+            self.btnReport.alpha = 0
+            self.btnCloseOptions.alpha = 0
+        }), completion: nil)
     }
     
     func openFaeUsrInfo() {
