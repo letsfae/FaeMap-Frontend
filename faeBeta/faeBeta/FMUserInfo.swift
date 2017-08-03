@@ -53,6 +53,11 @@ class FMUserInfo: UIViewController {
     let faeContact = FaeContact()
     var requestId: Int = -1
     
+    let ADD_FRIEND_ACT = 1
+    let FOLLOW_ACT = 2
+    let WITHDRAW_ACT = 3
+    let RESEND_ACT = 4
+    
     enum FriendStatus: String {
         case defaultMode
         case accepted
@@ -108,11 +113,11 @@ class FMUserInfo: UIViewController {
     
     func loadMainPage() {
         self.view.backgroundColor = .white
-        imgHeadBgd = UIImageView(frame: CGRectWithFactor(x: 0, y: 0, width: screenWidth / screenWidthFactor, height: 188))
+        imgHeadBgd = UIImageView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: 188))
         imgHeadBgd.image = #imageLiteral(resourceName: "imgBackground")
         view.addSubview(imgHeadBgd)
         
-        uiviewAvatarShadow = UIView(frame: CGRectWithFactor(x: 0, y: 136, width: 98, height: 98))
+        uiviewAvatarShadow = UIView(frame: CGRect(x: 0, y: 136, w: 98, h: 98))
         uiviewAvatarShadow.center.x = screenWidth / 2
         uiviewAvatarShadow.layer.cornerRadius = 43
         uiviewAvatarShadow.layer.shadowColor = UIColor._182182182().cgColor
@@ -120,7 +125,7 @@ class FMUserInfo: UIViewController {
         uiviewAvatarShadow.layer.shadowRadius = 8
         uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
         
-        imgAvatar = FaeAvatarView(frame: CGRectWithFactor(x: 0, y: 0, width: 98, height: 98))
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 0, y: 0, w: 98, h: 98))
         imgAvatar.layer.cornerRadius = 43
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
@@ -139,21 +144,21 @@ class FMUserInfo: UIViewController {
         addConstraintsToView(parent: view, child: btnMoreOptions, left: false, gapH: 15, width: 27, top: true, gapV: 205, height: 7)
         btnMoreOptions.addTarget(self, action: #selector(showPinMoreButtonDetails(_:)), for: .touchUpInside)
         
-        lblNickName = UILabel(frame: CGRectWithFactor(x: 0, y: 237, width: 350, height: 27))
+        lblNickName = UILabel(frame: CGRect(x: 0, y: 237, w: 350, h: 27))
         lblNickName.center.x = screenWidth / 2
         lblNickName.font = UIFont(name: "AvenirNext-DemiBold", size: 20 * screenHeightFactor)
         lblNickName.adjustsFontSizeToFitWidth = true
         lblNickName.textAlignment = .center
         lblNickName.textColor = UIColor._898989()
         
-        lblUserName = UILabel(frame: CGRectWithFactor(x: 0, y: 265, width: 140, height: 18))
+        lblUserName = UILabel(frame: CGRect(x: 0, y: 265, w: 140, h: 18))
         lblUserName.center.x = screenWidth / 2
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblUserName.adjustsFontSizeToFitWidth = true
         lblUserName.textAlignment = .center
         lblUserName.textColor = UIColor._155155155()
         
-        lblShortIntro = UILabel(frame: CGRectWithFactor(x: 0, y: 289, width: 343, height: 18))
+        lblShortIntro = UILabel(frame: CGRect(x: 0, y: 289, w: 343, h: 18))
         lblShortIntro.center.x = screenWidth / 2
         lblShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         lblShortIntro.textAlignment = .center
@@ -195,9 +200,6 @@ class FMUserInfo: UIViewController {
     }
     
     func switchBtmSecondBtn() {
-//        btnBelowSecond = UIButton()
-//        view.addSubview(btnBelowSecond)
-//        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
         switch statusMode {
         case .defaultMode:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
@@ -219,26 +221,23 @@ class FMUserInfo: UIViewController {
         }
         
     }
-    func removeSlideBtm() {
-        removeView(viewArray: [uiviewTblCtrlBtnSub, uiviewGrayTopLine, uiviewGrayMidLine, uiviewRedLine, lblGeneral, btnGeneral, lblActivities, btnActivities, lblAlbums, btnAlbums, lblContent, uiviewTblCtrlBtnSub, uiviewGrayBtmLine])
-    }
+    
     func loadSlideBtm() {
-//        removeSlideBtm()
-        uiviewTblCtrlBtnSub = UIView(frame: CGRectWithFactor(x: 0, y: 320, width: screenWidth / screenWidthFactor, height: 416))
+        uiviewTblCtrlBtnSub = UIView(frame: CGRect(x: 0, y: 320, w: screenWidth / screenWidthFactor, h: 416))
         uiviewTblCtrlBtnSub.backgroundColor = UIColor.white
         view.addSubview(uiviewTblCtrlBtnSub)
         
-        uiviewGrayTopLine = UIView(frame: CGRectWithFactor(x: 0, y: 0, width: screenWidth / screenWidthFactor, height: 5))
+        uiviewGrayTopLine = UIView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: 5))
         uiviewGrayTopLine.layer.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 100).cgColor
         uiviewTblCtrlBtnSub.addSubview(uiviewGrayTopLine)
         
-        uiviewGrayMidLine = UIView(frame: CGRectWithFactor(x: 0, y: 53, width: screenWidth / screenWidthFactor, height: 1))
+        uiviewGrayMidLine = UIView(frame: CGRect(x: 0, y: 53, w: screenWidth / screenWidthFactor, h: 1))
         uiviewGrayMidLine.layer.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0).cgColor
         uiviewTblCtrlBtnSub.addSubview(uiviewGrayMidLine)
         
         let widthOfThreeButtons = screenWidth / (3 * screenWidthFactor)
         
-        uiviewRedLine = UIView(frame: CGRectWithFactor(x: 0, y: 52, width: widthOfThreeButtons, height: 2))
+        uiviewRedLine = UIView(frame: CGRect(x: 0, y: 52, w: widthOfThreeButtons, h: 2))
         uiviewRedLine.layer.borderWidth = 2
         uiviewRedLine.layer.borderColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0).cgColor
         uiviewTblCtrlBtnSub.addSubview(uiviewRedLine)
@@ -279,7 +278,7 @@ class FMUserInfo: UIViewController {
         uiviewTblCtrlBtnSub.addSubview(btnAlbums)
         btnAlbums.tag = 5
         
-        lblContent = UILabel(frame: CGRectWithFactor(x: 0, y: 98, width: 221, height: 50))
+        lblContent = UILabel(frame: CGRect(x: 0, y: 98, w: 221, h: 50))
         lblContent.center.x = screenWidth / 2
         lblContent.text = ""
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
@@ -294,7 +293,7 @@ class FMUserInfo: UIViewController {
         
         view.addSubview(uiviewTblCtrlBtnSub)
         
-        uiviewGrayBtmLine = UIView(frame: CGRectWithFactor(x: 0, y: 687, width: screenWidth / screenWidthFactor, height: 1))
+        uiviewGrayBtmLine = UIView(frame: CGRect(x: 0, y: 687, w: screenWidth / screenWidthFactor, h: 1))
         uiviewGrayBtmLine.layer.backgroundColor = UIColor(red: 200 / 255, green: 199 / 255, blue: 204 / 255, alpha: 1.0).cgColor
         view.addSubview(uiviewGrayBtmLine)
     }
@@ -302,45 +301,43 @@ class FMUserInfo: UIViewController {
     func showPinMoreButtonDetails(_ sender: UIButton!) {
         print("in more details")
     }
-    func removeBlurViewEle() {
-        removeView(viewArray: [uiviewBlurMainScreen, uiviewAction, lblChoose, uiviewAddFriend, uiviewFollow, btnActFirst, btnActSecond, btnCancel])
-    }
+    
     func loadBlurView() {
-        removeBlurViewEle()
-        uiviewBlurMainScreen = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        
+        uiviewBlurMainScreen = UIView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: screenHeight / screenHeightFactor))
         uiviewBlurMainScreen.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 70 / 100)
         
         uiviewAction = UIView()
         uiviewAction.backgroundColor = UIColor.white
         uiviewAction.layer.cornerRadius = 20
         
-        lblChoose = UILabel(frame: CGRectWithFactor(x: 0, y: 20, width: 290, height: 25))
+        lblChoose = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
         lblChoose.textAlignment = .center
         lblChoose.text = "Choose an Action"
         lblChoose.textColor = UIColor._898989()
         lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         
-        uiviewAddFriend = UIView(frame: CGRectWithFactor(x: 40, y: 66, width: 208, height: 50))
+        uiviewAddFriend = UIView(frame: CGRect(x: 40, y: 66, w: 208, h: 50))
         uiviewAddFriend.layer.borderWidth = 2
         uiviewAddFriend.layer.borderColor = UIColor._2499090().cgColor
         uiviewAddFriend.layer.cornerRadius = 23
         
-        uiviewFollow = UIView(frame: CGRectWithFactor(x: 40, y: 131, width: 208, height: 50))
+        uiviewFollow = UIView(frame: CGRect(x: 40, y: 131, w: 208, h: 50))
         uiviewFollow.layer.borderWidth = 2
         uiviewFollow.layer.borderColor = UIColor._2499090().cgColor
         uiviewFollow.layer.cornerRadius = 23
         
-        btnActFirst = UIButton(frame: CGRectWithFactor(x: 40, y: 66, width: 208, height: 50))
+        btnActFirst = UIButton(frame: CGRect(x: 40, y: 66, w: 208, h: 50))
         btnActFirst.setTitleColor(UIColor._2499090(), for: .normal)
         btnActFirst.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActFirst.addTarget(self, action: #selector(sentActFirstRequest(_:)), for: .touchUpInside)
         
-        btnActSecond = UIButton(frame: CGRectWithFactor(x: 40, y: 131, width: 208, height: 50))
+        btnActSecond = UIButton(frame: CGRect(x: 40, y: 131, w: 208, h: 50))
         btnActSecond.setTitleColor(UIColor._2499090(), for: .normal)
         btnActSecond.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActSecond.addTarget(self, action: #selector(sentActSecondRequest(_:)), for: .touchUpInside)
         
-        btnCancel = UIButton(frame: CGRectWithFactor(x: 40, y: 185, width: 208, height: 50))
+        btnCancel = UIButton(frame: CGRect(x: 40, y: 185, w: 208, h: 50))
         btnCancel.setTitle("Cancel", for: .normal)
         btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
@@ -365,11 +362,11 @@ class FMUserInfo: UIViewController {
         switch statusMode {
         case .defaultMode:
             btnActFirst.setTitle("Add Friend", for: .normal)
-            btnActFirst.tag = 1
+            btnActFirst.tag = ADD_FRIEND_ACT
             break
         case .pending:
             btnActFirst.setTitle("Withdraw", for: .normal)
-            btnActFirst.tag = 2
+            btnActFirst.tag = WITHDRAW_ACT
             break
         default:
             break
@@ -378,11 +375,11 @@ class FMUserInfo: UIViewController {
         switch statusMode {
         case .defaultMode:
             btnActSecond.setTitle("Follow", for: .normal)
-            btnActSecond.tag = 1
+            btnActSecond.tag = FOLLOW_ACT
             break
         case .pending:
             btnActSecond.setTitle("Resend", for: .normal)
-            btnActSecond.tag = 2
+            btnActSecond.tag = RESEND_ACT
             break
         default:
             break
@@ -395,12 +392,14 @@ class FMUserInfo: UIViewController {
 //            self.uiviewBlurMainScreen.alpha = 1
 //        }, completion: nil)
 //    }
+    
     func ActViewAnimation() {
         uiviewAction.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.uiviewAction.alpha = 1
         }, completion: nil)
     }
+    
     func animationBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
@@ -414,6 +413,10 @@ class FMUserInfo: UIViewController {
         uiviewBlurMainScreen.isHidden = false
         animationBlurMainScreen(action: "show")
         getActionInfo()
+        if let uiview = uiviewFriendSent {
+            uiview.isHidden = true
+        }
+        uiviewAction.isHidden = false
     }
     
     func animationBlurMainScreen(action: String) {
@@ -439,25 +442,23 @@ class FMUserInfo: UIViewController {
     }
     
     func sentActFirstRequest(_ sender: UIButton!) {
-        if sender.tag == 1 {   // "Add Friend" button pressed
-            loadSendActRequest(type: 1)
-        } else {     // "Withdraw" button pressed
-            loadSendActRequest(type: 1)
+        if sender.tag == ADD_FRIEND_ACT {   // "Add Friend" button pressed
+            loadSendActRequest(type: ADD_FRIEND_ACT)
+        } else if sender.tag == WITHDRAW_ACT {     // "Withdraw" button pressed
+            loadSendActRequest(type: WITHDRAW_ACT)
         }
     }
     
     func sentActSecondRequest(_ sender: UIButton!) {
-        if sender.tag == 1 {
+        if sender.tag == FOLLOW_ACT {
             print("send follow request")
-            loadSendActRequest(type: 2)
-        } else {
+            loadSendActRequest(type: FOLLOW_ACT)
+        } else if sender.tag == RESEND_ACT {
             print("resend request")
-            loadSendActRequest(type: 2)
+            loadSendActRequest(type: RESEND_ACT)
         }
     }
-    func removeSendActSecondRequest() {
-        removeView(viewArray: [lblFriendSent, btnFriendSentBack, btnFriendOK, uiviewFriendSent])
-    }
+    
     func actionCancel(_ sender: UIButton!) {
         print("action cancel")
         animationBlurMainScreen(action: "hide")
@@ -476,31 +477,25 @@ class FMUserInfo: UIViewController {
 //            }
 //        })
 //    }
+    
     func actionFinish(_ sender: UIButton!) {
         uiviewBlurMainScreen.isHidden = true
         switch sender.tag {
         case 0:
             print("action dismiss")
-        case 1:
+        case ADD_FRIEND_ACT:
             print("request finish")
-        case 2:
+        case FOLLOW_ACT:
             print("follow finish")
-        case 3:
+        case WITHDRAW_ACT:
             print("withdraw finish")
-        case 4:
+        case RESEND_ACT:
             print("resent finish")
         default:break
         }
-        loadSlideBtm()
-        loadBtmBar()
-    }
-    
-    func removeSendActFirstRequest() {
-        removeView(viewArray: [lblFriendSent, btnFriendSentBack, btnFriendOK, uiviewFriendSent])
     }
     
     func loadSendActRequest(type: Int) {
-        removeSendActFirstRequest()
         
         uiviewAction.isHidden = true
         uiviewFriendSent = UIView()
@@ -508,19 +503,19 @@ class FMUserInfo: UIViewController {
         uiviewFriendSent.center.x = screenWidth / 2
         uiviewFriendSent.layer.cornerRadius = 20
         
-        btnFriendSentBack = UIButton(frame: CGRectWithFactor(x: 0, y: 0, width: 42, height: 40))
+        btnFriendSentBack = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
         btnFriendSentBack.tag = 0
         btnFriendSentBack.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
         btnFriendSentBack.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
         
-        lblFriendSent = UILabel(frame: CGRectWithFactor(x: 58, y: 14, width: 190, height: 80))
+        lblFriendSent = UILabel(frame: CGRect(x: 58, y: 14, w: 190, h: 80))
         
-        btnFriendOK = UIButton(frame: CGRectWithFactor(x: 43, y: 102, width: 208, height: 39))
+        btnFriendOK = UIButton(frame: CGRect(x: 43, y: 102, w: 208, h: 39))
         
         switch statusMode {
         case .defaultMode:
-            if type == 1 {   // "Add Friend" button pressed
-                self.btnFriendOK.tag = 1
+            if type == ADD_FRIEND_ACT {   // "Add Friend" button pressed
+                self.btnFriendOK.tag = ADD_FRIEND_ACT
                 // send friend request
                 faeContact.sendFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
@@ -536,14 +531,14 @@ class FMUserInfo: UIViewController {
                         print("[FMUserInfo Friend Request Sent Fail] - \(status) \(message!)")
                     }
                 }
-            } else {  // "Follow" button pressed
+            } else if type == FOLLOW_ACT {  // "Follow" button pressed
                 lblFriendSent.text = "Follow Request Sent Successfully!"
-                btnFriendOK.tag = 2
+                btnFriendOK.tag = FOLLOW_ACT
             }
             break
         case .pending:
-            if type == 1 {    // "Withdraw" button pressed
-                btnFriendOK.tag = 3
+            if type == WITHDRAW_ACT {    // "Withdraw" button pressed
+                btnFriendOK.tag = WITHDRAW_ACT
                 // withdraw friend request
                 faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
                     if status / 100 == 2 {
@@ -574,8 +569,8 @@ class FMUserInfo: UIViewController {
                         print("[FMUserInfo getFriendRequestsSent Fail] - \(status) \(message!)")
                     }
                 }
-            } else {   // "Resend" button pressed
-                btnFriendOK.tag = 4
+            } else if type == RESEND_ACT {   // "Resend" button pressed
+                btnFriendOK.tag = RESEND_ACT
                 faeContact.sendFriendRequest(friendId: String(self.userId), boolResend: "true") {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblFriendSent.text = "Request Resent Successfully!"
@@ -633,10 +628,6 @@ class FMUserInfo: UIViewController {
         })
     }
     
-    func CGRectWithFactor(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) -> CGRect {
-        return CGRect(x: x * screenWidthFactor, y: y * screenHeightFactor, width: width * screenWidthFactor, height: height * screenHeightFactor)
-    }
-    
     func addConstraintsToView(parent: UIView, child: UIView, left: Bool, gapH: CGFloat, width: CGFloat, top: Bool, gapV: CGFloat, height: CGFloat) {
         let H: String!
         if left {
@@ -655,12 +646,5 @@ class FMUserInfo: UIViewController {
         parent.addConstraintsWithFormat(V, options: [], views: child)
     }
     
-    func removeView(viewArray: [UIView?]) {
-        for aview in viewArray {
-            if aview != nil {
-                aview?.removeFromSuperview()
-            }
-        }
-    }
 }
 
