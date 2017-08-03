@@ -26,6 +26,26 @@ extension Array where Element: Equatable {
 
 extension FaeMapViewController {
     
+    func viewForSocial(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "social"
+        var anView: SocialPinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SocialPinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = SocialPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+        DispatchQueue.main.async {
+            anView.imageView.frame = CGRect(x: 30, y: 61, width: 0, height: 0)
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
+            }, completion: nil)
+        }
+        return anView
+    }
+    
     func openMapPin(annotation: FaePinAnnotation, mapPin: MapPin, animated: Bool) {
         /*
          PinDetailViewController.selectedMarkerPosition = annotation.coordinate
