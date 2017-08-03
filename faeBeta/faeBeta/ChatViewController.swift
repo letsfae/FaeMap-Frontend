@@ -142,7 +142,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
-        self.senderId = "\(user_id)"
+        self.senderId = "\(Key.shared.user_id)"
         //Bryan
         self.senderDisplayName = realmWithUser!.userName
         //ENDBryan
@@ -598,10 +598,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     private func createAvatars(_ avatars : NSMutableDictionary?) {
         
-        let currentUserAvatar = avatarDic[user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[user_id] , highlightedImage: avatarDic[user_id], placeholderImage: avatarDic[user_id]) :JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder") , diameter: 70)
+        let currentUserAvatar = avatarDic[Key.shared.user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Key.shared.user_id] , highlightedImage: avatarDic[Key.shared.user_id], placeholderImage: avatarDic[Key.shared.user_id]) :JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder") , diameter: 70)
         //Bryan
         let withUserAvatar = avatarDic[Int(realmWithUser!.userID)!] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Int(realmWithUser!.userID)!], highlightedImage: avatarDic[Int(realmWithUser!.userID)!], placeholderImage: avatarDic[Int(realmWithUser!.userID)!]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = ["\(user_id)" : currentUserAvatar!, realmWithUser!.userID : withUserAvatar!]
+        avatarDictionary = ["\(Key.shared.user_id)" : currentUserAvatar!, realmWithUser!.userID : withUserAvatar!]
         //ENDBryan
         // need to check if collectionView exist before reload
     }

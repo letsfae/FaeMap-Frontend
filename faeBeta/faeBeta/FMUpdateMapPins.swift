@@ -26,6 +26,17 @@ extension Array where Element: Equatable {
 
 extension FaeMapViewController {
     
+    func openMapPin(annotation: FaePinAnnotation, mapPin: MapPin, animated: Bool) {
+        /*
+         PinDetailViewController.selectedMarkerPosition = annotation.coordinate
+         PinDetailViewController.pinAnnotation = annotation
+         PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
+         PinDetailViewController.pinStatus = mapPin.status
+         PinDetailViewController.pinStateEnum = PinDetailViewController.PinState(rawValue: "\(mapPin.status)")!
+         PinDetailViewController.pinUserId = mapPin.userId
+         */
+    }
+    
     func tapSocialPin(didSelect view: MKAnnotationView) {
         /*
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }

@@ -123,14 +123,14 @@ class FaePinAnnotation: MKPointAnnotation {
 
 class SelfAnnotationView: MKAnnotationView {
     
-    var selfMarkerIcon = UIButton()
+    var selfMarkerIcon = UIImageView()
     var myPositionCircle_1: UIImageView!
     var myPositionCircle_2: UIImageView!
     var myPositionCircle_3: UIImageView!
     let anchorPoint = CGPoint(x: 22, y: 22)
     var mapAvatar: Int = 1 {
         didSet {
-            self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_\(mapAvatar)"), for: .normal)
+            self.selfMarkerIcon.image = UIImage(named: "miniAvatar_\(mapAvatar)")
         }
     }
     
@@ -188,8 +188,7 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func loadSelfMarkerSubview() {
-        selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
-        selfMarkerIcon.adjustsImageWhenHighlighted = false
+        selfMarkerIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
         selfMarkerIcon.layer.zPosition = 5
         selfMarkerIcon.center = anchorPoint
         addSubview(selfMarkerIcon)

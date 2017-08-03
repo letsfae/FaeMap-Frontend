@@ -123,7 +123,7 @@ class FaeUser : NSObject {
         let user = messageJSON["user_id"].intValue
         let authentication = "\(user):\(str):\(session)"
         session_id = session
-        user_id = user
+        Key.shared.user_id = user
         
         let utf8str = authentication.data(using: String.Encoding.utf8)
         print(authentication)
@@ -165,7 +165,7 @@ class FaeUser : NSObject {
         userToken = ""
         userTokenEncode = ""
         session_id = -1
-        user_id = -1
+        Key.shared.user_id = -1
         Key.shared.is_Login = 0
         userStatus = 1
         let shareAPI = LocalStorageManager()
