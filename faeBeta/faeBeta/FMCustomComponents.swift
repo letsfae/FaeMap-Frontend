@@ -59,6 +59,67 @@ class FMNameCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func showNameCardOptions(_ sender: UIButton) {
+        btnCloseOptions.alpha = 1
+        self.tag = 1
+        var thisIsMe = false
+        if sender.tag == Int(Key.shared.user_id) {
+            print("[showNameCardOptions] this is me")
+            thisIsMe = true
+        }
+        let subviewXBefore: CGFloat = 243 - 47
+        let subviewYBefore: CGFloat = 151 - 129
+        let subviewXAfter: CGFloat = 79 - 47
+        let subviewYAfter: CGFloat = subviewYBefore
+        let subviewWidthAfter: CGFloat = 164
+        let subviewHeightAfter: CGFloat = 110
+        let firstButtonX: CGFloat = 103 - 47
+        let secondButtonX: CGFloat = 172 - 47
+        let buttonY: CGFloat = 191 - 129
+        let buttonWidth: CGFloat = 50
+        let buttonHeight: CGFloat = 51
+        
+        btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardReal"), for: .normal)
+        
+        imgMoreOptions = UIImageView(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        imgMoreOptions.image = #imageLiteral(resourceName: "nameCardOptions")
+        btnCloseOptions.addSubview(imgMoreOptions)
+        
+        btnShare = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        btnShare.setImage(#imageLiteral(resourceName: "pinDetailShare"), for: .normal)
+        btnCloseOptions.addSubview(btnShare)
+        btnShare.clipsToBounds = true
+        btnShare.alpha = 0.0
+        //        shareNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionShareComment(_:)), for: .TouchUpInside)
+        
+        btnEditNameCard = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        btnEditNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
+        btnCloseOptions.addSubview(btnEditNameCard)
+        btnEditNameCard.clipsToBounds = true
+        btnEditNameCard.alpha = 0.0
+        //        editNameCard.addTarget(self, action: #selector(CommentPinDetailViewController.actionEditComment(_:)), for: .touchUpInside)
+        
+        btnReport = UIButton(frame: CGRect(x: subviewXBefore, y: subviewYBefore, w: 0, h: 0))
+        btnReport.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
+        btnCloseOptions.addSubview(btnReport)
+        btnReport.clipsToBounds = true
+        btnReport.alpha = 0
+//        btnReport.addTarget(self, action: #selector(actionReportThisPin(_:)), for: .touchUpInside)
+        
+        UIView.animate(withDuration: 0.3, animations: ({
+            self.imgMoreOptions.frame = CGRect(x: subviewXAfter, y: subviewYAfter, w: subviewWidthAfter, h: subviewHeightAfter)
+            self.btnShare.frame = CGRect(x: firstButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+            self.btnShare.alpha = 1.0
+            if thisIsMe {
+                self.btnEditNameCard.alpha = 1.0
+                self.btnEditNameCard.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+            } else {
+                self.btnReport.alpha = 1.0
+                self.btnReport.frame = CGRect(x: secondButtonX, y: buttonY, w: buttonWidth, h: buttonHeight)
+            }
+        }))
+    }
+    
     func updateNameCard(withUserId: Int) {
         btnChat.tag = withUserId
         btnOptions.tag = withUserId
@@ -213,7 +274,7 @@ class FMNameCardView: UIView {
         btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
         btnOptions.layer.zPosition = 910
         addSubview(btnOptions)
-//        btnOptions.addTarget(self, action: #selector(showNameCardOptions(_:)), for: .touchUpInside)
+        btnOptions.addTarget(self, action: #selector(showNameCardOptions(_:)), for: .touchUpInside)
         
         btnProfile = UIButton(frame: initialFrame)
         btnProfile.layer.anchorPoint = nameCardAnchor
@@ -265,7 +326,6 @@ class FMCompass: UIButton {
     }
     
     func actionToNorth(_ sender: UIButton) {
-        //        btnCardClose.sendActions(for: .touchUpInside)
         let camera = mapView.camera
         camera.heading = 0
         mapView.setCamera(camera, animated: true)
@@ -303,7 +363,6 @@ class FMLocateSelf: UIButton {
     }
     
     func actionLocateSelf(_ sender: UIButton) {
-        //        btnCardClose.sendActions(for: .touchUpInside)
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         mapView.setCamera(camera, animated: true)
