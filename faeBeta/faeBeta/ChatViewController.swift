@@ -144,7 +144,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
         self.senderId = "\(user_id)"
         //Bryan
-        self.senderDisplayName = realmWithUser!.userName
+//        self.senderDisplayName = realmWithUser!.userName
+        self.senderDisplayName = realmWithUser!.userNickName
         //ENDBryan
         self.inputToolbar.contentView.textView.delegate = self
         
@@ -207,7 +208,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         //Bryan
-        titleLabel.text = realmWithUser!.userName
+        //titleLabel.text = realmWithUser!.userName
+        titleLabel.text = realmWithUser!.userNickName
         //ENDBryan
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
