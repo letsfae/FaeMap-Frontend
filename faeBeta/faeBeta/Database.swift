@@ -11,7 +11,7 @@ import RealmSwift
 //Bryan
 class RealmUser: Object {
     dynamic var userName: String = ""
-    dynamic var userNickName: String? = nil
+    dynamic var userNickName: String = ""
     dynamic var userID: String = ""
     //Avatar has not been added to local storage yet
     dynamic var userSmallAvatar: NSData? = nil
