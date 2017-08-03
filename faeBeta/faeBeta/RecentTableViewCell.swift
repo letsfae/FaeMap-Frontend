@@ -140,7 +140,7 @@ class RecentTableViewCell: UITableViewCell {
     //TODO: Implement it
     
     func bindData(_ recent : RealmRecent) {
-        print(recent)
+        //print(recent)
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
         self.avatarImageView.layer.masksToBounds = true
