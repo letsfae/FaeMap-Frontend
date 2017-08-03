@@ -12,6 +12,27 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
+    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "place"
+        var anView: PlacePinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+        DispatchQueue.main.async {
+            anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+                anView.alpha = 1
+            }, completion: nil)
+        }
+        return anView
+    }
+    
     func visiblePlaces() -> [CCHMapClusterAnnotation] {
         var mapRect = faeMapView.visibleMapRect
         mapRect.origin.y += mapRect.size.height * 0.2

@@ -47,7 +47,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         if annotation is MKUserLocation {
             let identifier = "self"
             var anView: SelfAnnotationView
@@ -57,86 +56,29 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            //            anView.assignImage(#imageLiteral(resourceName: "miniAvatar_7"))
             return anView
         } else if annotation is CCHMapClusterAnnotation {
-            
-            let clusterAnn = annotation as! CCHMapClusterAnnotation
-            let firstAnn = clusterAnn.annotations.first as! FaePinAnnotation
+            guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
+            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == "place" {
-                let identifier = "place"
-                var anView: PlacePinAnnotationView
-                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
-                    dequeuedView.annotation = annotation
-                    anView = dequeuedView
-                } else {
-                    anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                }
-                anView.assignImage(firstAnn.icon)
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                        anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
-                        anView.alpha = 1
-                    }, completion: nil)
-                }
-                return anView
+                return viewForPlace(annotation: annotation, first: firstAnn)
             } else if firstAnn.type == "user" {
-                let identifier = "user"
-                var anView: UserPinAnnotationView
-                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
-                    dequeuedView.annotation = annotation
-                    anView = dequeuedView
-                } else {
-                    anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                }
-                anView.assignImage(firstAnn.avatar)
-                return anView
+                return viewForUser(annotation: annotation, first: firstAnn)
             } else {
-                let identifier = "social"
-                var anView: SocialPinAnnotationView
-                if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SocialPinAnnotationView {
-                    dequeuedView.annotation = annotation
-                    anView = dequeuedView
-                } else {
-                    anView = SocialPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-                }
-                anView.assignImage(firstAnn.icon)
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    anView.imageView.frame = CGRect(x: 30, y: 61, width: 0, height: 0)
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                        anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 51)
-                    }, completion: nil)
-                }
-                return anView
+                return viewForSocial(annotation: annotation, first: firstAnn)
             }
         } else {
             return nil
         }
     }
     
-    func dismissMainBtns() {
-        UIView.animate(withDuration: 0.2, animations: {
-            if self.FILTER_ENABLE {
-                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
-            }
-            self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
-            self.btnLocateSelf.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
-            self.btnOpenChat.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
-            self.lblUnreadCount.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-            self.btnDiscovery.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
-        }, completion: nil)
-    }
-    
     func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
         
-        // Default is for user pin
-        var offset = 465 * screenHeightFactor - screenHeight / 2 // 458 500
-        
+        var offset: CGFloat = 0
         if type == 0 { // Map pin
             offset = 530 * screenHeightFactor - screenHeight / 2 // 488 530
+        } else if type == 1 { // Map pin
+            offset = 465 * screenHeightFactor - screenHeight / 2 // 458 500
         } else if type == 2 { // Place pin
             offset = 492 * screenHeightFactor - screenHeight / 2 // offset: 42
         }
@@ -181,5 +123,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewNameCard.hide()
         guard uiviewFilterMenu != nil else { return }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+    }
+    
+    func dismissMainBtns() {
+        UIView.animate(withDuration: 0.2, animations: {
+            if self.FILTER_ENABLE {
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
+            }
+            self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnLocateSelf.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnOpenChat.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
+            self.lblUnreadCount.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+            self.btnDiscovery.frame = CGRect(x: 362.5 * screenWidthFactor, y: 685.5 * screenWidthFactor, width: 0, height: 0)
+        }, completion: nil)
     }
 }
