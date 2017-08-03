@@ -167,8 +167,8 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
     }
     
     func getAvatar() {
-        guard user_id != -1 else { return }
-        General.shared.avatar(userid: user_id, completion: { image in
+        guard Key.shared.user_id != -1 else { return }
+        General.shared.avatar(userid: Key.shared.user_id, completion: { image in
             for imgView in self.arrImgView {
                 imgView.image = image
             }

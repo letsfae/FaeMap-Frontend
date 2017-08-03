@@ -13,53 +13,52 @@ import CCHMapClusterController
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
     
-    var lblSearchContent: UILabel!
     let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
     let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
-    let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var imgAvatarShadow: UIImageView! // Map Namecard
-    var btnCardChat: UIButton! // Map Namecard
+    var btnChat: UIButton! // Map Namecard
+    var btnCloseOptions: UIButton! // Map Namecard
+    var btnProfile: UIButton! // Map Namecard
+    var btnFav: UIButton! // Map Namecard
+    var btnOptions: UIButton! // Map Namecard
+    var btnWaveSelf: UIButton! // Map Namecard
+    var btnCardClose: UIButton! // Map Namecard
+    var btnEditNameCard: UIButton! // Map Namecard
+    var imgAvatar: UIImageView! // Map Namecard
+    var imgBackShadow: UIImageView! // Map Namecard
+    var imgCover: UIImageView! // Map Namecard
+    var imgMiddleLine: UIImageView! // Map Namecard
+    var lblNickName: UILabel! // Map Namecard
+    var lblShortIntro: UILabel! // Map Namecard
+    var uiviewPrivacy: FaeGenderView! // Map Namecard Gender & Age
+    var nameCardMoreOptions: UIImageView! // Map Namecard
+    var reportNameCard: UIButton! // Map Namecard
+    var shareNameCard: UIButton! // Map Namecard
+    
+    var lblSearchContent: UILabel!
+    let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var btnOpenChat: UIButton!
-    var btnCardCloseOptions: UIButton! // Map Namecard
-    var btnCardProfile: UIButton! // Map Namecard
-    var btnCardFav: UIButton! // Map Namecard
     var btnLeftWindow: UIButton!
     var btnMainMapSearch: UIButton!
-    var btnCardOptions: UIButton! // Map Namecard
     var btnDiscovery: UIButton!
     var btnLocateSelf: FMLocateSelf!
-    var btnCardShowSelf: UIButton! // Map Namecard
     var btnCompass: FMCompass!
-    var btnCardClose: UIButton! // Map Namecard
     var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var btnEditNameCard: UIButton! // Map Namecard
-    
     var faeMapView: MKMapView!
     var faeUserPins = [FaePinAnnotation]()
     var faePlacePins = [FaePinAnnotation]()
-    var imgCardAvatar: UIImageView! // Map Namecard
-    var imgCardBack: UIImageView! // Map Namecard
-    var imgCardCover: UIImageView! // Map Namecard
-    var imgCardLine: UIImageView! // Map Namecard
-    var uiviewCardPrivacy: FaeGenderView! // Map Namecard Gender & Age
-    var lblNickName: UILabel! // Map Namecard
-    var lblShortIntro: UILabel! // Map Namecard
     var lblUnreadCount: UILabel! // Unread Messages Label
     var lblDistanceDisplay: UILabel!
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
-    var nameCardMoreOptions: UIImageView! // Map Namecard
-    
     var previousZoom: Float = 13.8
     var refreshPins = true
     var refreshPlaces = true
     var refreshUsers = true
-    var reportNameCard: UIButton! // Map Namecard
-    var shareNameCard: UIButton! // Map Namecard
     var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
@@ -68,7 +67,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var uiviewDistanceRadius: UIView!
     var prevBearing: Double = 0
     var intPinDistance: Int = 65
-    var aroundUsrId: Int = -1
     
     var mapClusterManager: CCHMapClusterController!
     
@@ -99,6 +97,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     var btnClearSearchRes: UIButton!
     
+    var uiviewNameCard: FMNameCardView!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,6 +114,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         loadMapFilter()
         loadPlaceDetail()
         NotificationCenter.default.addObserver(self, selector: #selector(self.firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        
+        uiviewNameCard = FMNameCardView()
+        uiviewNameCard.delegate = self
+        view.addSubview(uiviewNameCard)
     }
     
     override func viewWillAppear(_ animated: Bool) {

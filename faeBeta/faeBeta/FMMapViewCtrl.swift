@@ -36,11 +36,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         
         if view is PlacePinAnnotationView {
             tapPlacePin(didSelect: view)
-        } else if view is SocialPinAnnotationView {
-            
         } else if view is UserPinAnnotationView {
             guard preventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
+        } else if view is SelfAnnotationView {
+            animateToCoordinate(type: 1, coordinate: LocManager.shared.curtLoc.coordinate, animated: true)
+            uiviewNameCard.userId = Key.shared.user_id
+            uiviewNameCard.show()
         }
     }
     
@@ -115,56 +117,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
-    func openMapPin(annotation: FaePinAnnotation, mapPin: MapPin, animated: Bool) {
-        /*
-        PinDetailViewController.selectedMarkerPosition = annotation.coordinate
-        PinDetailViewController.pinAnnotation = annotation
-        PinDetailViewController.pinTypeEnum = PinDetailViewController.PinType(rawValue: "\(mapPin.type)")!
-        PinDetailViewController.pinStatus = mapPin.status
-        PinDetailViewController.pinStateEnum = PinDetailViewController.PinState(rawValue: "\(mapPin.status)")!
-        PinDetailViewController.pinUserId = mapPin.userId
-         */
-    }
-    
-    func openPlacePin(annotation: FaePinAnnotation, animated: Bool) {
-        /*
-        guard let placePin = annotation.pinInfo as? PlacePin else { return }
-        
-        PinDetailViewController.selectedMarkerPosition = annotation.coordinate
-        PinDetailViewController.pinAnnotation = annotation
-        PinDetailViewController.pinTypeEnum = .place
-        PinDetailViewController.placeType = placePin.classTwo
-        PinDetailViewController.strPlaceTitle = placePin.name
-        PinDetailViewController.strPlaceStreet = placePin.address1
-        PinDetailViewController.strPlaceCity = placePin.address2
-        PinDetailViewController.strPlaceImageURL = placePin.imageURL
-        
-        let opPlace = OpenedPlace(title: placePin.name, category: placePin.classTwo,
-                                  street: placePin.address1, city: placePin.address2,
-                                  imageURL: placePin.imageURL,
-                                  position: annotation.coordinate)
-        if !OpenedPlaces.openedPlaces.contains(opPlace) {
-            OpenedPlaces.openedPlaces.append(opPlace)
-        }
-         */
-    }
-    
     func dismissMainBtns() {
-        //        if mapFilterArrow != nil {
-        //            mapFilterArrow.removeFromSuperview()
-        //        }
-        //        if filterCircle_1 != nil {
-        //            filterCircle_1.removeFromSuperview()
-        //        }
-        //        if filterCircle_2 != nil {
-        //            filterCircle_2.removeFromSuperview()
-        //        }
-        //        if filterCircle_3 != nil {
-        //            filterCircle_3.removeFromSuperview()
-        //        }
-        //        if filterCircle_4 != nil {
-        //            filterCircle_4.removeFromSuperview()
-        //        }
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
                 self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
@@ -217,7 +170,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-//        joshprint("[regionDidChange] altitude = \(faeMapView.camera.altitude)")
         loadCurrentRegionPlacePins()
         if btnCompass != nil { btnCompass.rotateCompass() }
         if placeResultBar.tag > 0 { placeResultBar.annotations = visiblePlaces() }
@@ -226,7 +178,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {
         deselectAllAnnotations()
         placeResultBar.fadeOut()
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         guard uiviewFilterMenu != nil else { return }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }

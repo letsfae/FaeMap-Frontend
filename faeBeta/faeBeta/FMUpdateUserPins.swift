@@ -22,8 +22,8 @@ extension FaeMapViewController {
         boolCanUpdateUserPin = false
         boolCanOpenPin = false
         animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
-        updateNameCard(withUserId: firstAnn.id)
-        animateNameCard()
+        uiviewNameCard.userId = firstAnn.id
+        uiviewNameCard.show()
         boolCanOpenPin = true
     }
     
@@ -72,7 +72,7 @@ extension FaeMapViewController {
             var userPins = [FaePinAnnotation]()
             DispatchQueue.global(qos: .default).async {
                 for userJson in mapUserJsonArray {
-                    if userJson["user_id"].intValue == user_id {
+                    if userJson["user_id"].intValue == Key.shared.user_id {
                         continue
                     }
                     var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)

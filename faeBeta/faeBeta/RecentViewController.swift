@@ -163,7 +163,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let chatVC = segue.destination as! ChatViewController
             chatVC.hidesBottomBarWhenPushed = true
             let recent = recents![indexPath.row]
-            chatVC.chatRoomId = user_id < recent["with_user_id"].intValue ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+            chatVC.chatRoomId = Key.shared.user_id < recent["with_user_id"].intValue ? "\(Key.shared.user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(Key.shared.user_id)"
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
@@ -181,8 +181,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // download current user's avatar from server
     private func downloadCurrentUserAvatar() {
-        General.shared.avatar(userid: user_id) { (avatarImage) in
-            avatarDic[user_id] = avatarImage
+        General.shared.avatar(userid: Key.shared.user_id) { (avatarImage) in
+            avatarDic[Key.shared.user_id] = avatarImage
         }
     }
     

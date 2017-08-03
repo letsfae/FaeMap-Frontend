@@ -26,7 +26,7 @@ extension FaeMapViewController {
     }
     
     func actionTrueNorth(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         let camera = faeMapView.camera
         camera.heading = 0
         faeMapView.setCamera(camera, animated: true)
@@ -36,7 +36,7 @@ extension FaeMapViewController {
     // Jump to pin menu view controller
     func actionCreatePin(_ sender: UIButton) {
         /*
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
         invalidateAllTimer()
@@ -50,14 +50,14 @@ extension FaeMapViewController {
     }
     
     func actionSelfPosition(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         let camera = faeMapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         faeMapView.setCamera(camera, animated: true)
     }
     
     func actionMainScreenSearch(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
@@ -78,7 +78,7 @@ extension FaeMapViewController {
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.displayName = Key.shared.nickname ?? "someone"
         leftMenuVC.delegate = self
@@ -87,14 +87,14 @@ extension FaeMapViewController {
     }
     
     func actionChatWindowShow(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         self.present(UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
     }
     
     func actionReportThisPin(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide()
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
         self.present(reportPinVC, animated: true, completion: nil)
