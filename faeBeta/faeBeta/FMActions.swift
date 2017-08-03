@@ -11,7 +11,7 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
             selfLocation.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")

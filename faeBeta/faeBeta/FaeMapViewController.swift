@@ -13,27 +13,6 @@ import CCHMapClusterController
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
     
-    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
-    let startFrame = CGRect(x: 414 / 2, y: 451, w: 0, h: 0) // Map Namecard
-    var imgAvatarShadow: UIImageView! // Map Namecard
-    var btnChat: UIButton! // Map Namecard
-    var btnCloseOptions: UIButton! // Map Namecard
-    var btnProfile: UIButton! // Map Namecard
-    var btnFav: UIButton! // Map Namecard
-    var btnOptions: UIButton! // Map Namecard
-    var btnWaveSelf: UIButton! // Map Namecard
-    var btnEditNameCard: UIButton! // Map Namecard
-    var imgAvatar: UIImageView! // Map Namecard
-    var imgBackShadow: UIImageView! // Map Namecard
-    var imgCover: UIImageView! // Map Namecard
-    var imgMiddleLine: UIImageView! // Map Namecard
-    var lblNickName: UILabel! // Map Namecard
-    var lblShortIntro: UILabel! // Map Namecard
-    var uiviewPrivacy: FaeGenderView! // Map Namecard Gender & Age
-    var nameCardMoreOptions: UIImageView! // Map Namecard
-    var reportNameCard: UIButton! // Map Namecard
-    var shareNameCard: UIButton! // Map Namecard
-    
     var lblSearchContent: UILabel!
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var btnOpenChat: UIButton!
@@ -66,36 +45,25 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var uiviewDistanceRadius: UIView!
     var prevBearing: Double = 0
     var intPinDistance: Int = 65
-    
     var mapClusterManager: CCHMapClusterController!
-    
     let FILTER_ENABLE = true
     let PLACE_ENABLE = true
     let USER_ENABLE = false
-    
     let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
-    
     var btnFilterIcon: MapFilterIcon! // Filter Button
     var uiviewFilterMenu: MapFilterMenu! // Filter Menu
-    
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var spaceFilter: CGFloat = 0 // Pan gesture var
     var spaceMenu: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
-    
     var imgSchbarShadow: UIImageView!
-    
     var selectedAnnView: PlacePinAnnotationView?
     var selectedAnn: FaePinAnnotation?
-    
     var placeResultBar = PlaceResultView()
-    
     var preventUserPinOpen = false
-    
     var btnClearSearchRes: UIButton!
-    
     var uiviewNameCard: FMNameCardView!
     
     // System Functions
