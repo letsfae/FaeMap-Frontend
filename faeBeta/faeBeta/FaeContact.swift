@@ -19,8 +19,9 @@ class FaeContact {
     }
     
     // Contacts Information
-    func sendFriendRequest(friendId: String, _ completion: @escaping (Int,Any?) -> Void) {
+    func sendFriendRequest(friendId: String, boolResend: String = "false", _ completion: @escaping (Int,Any?) -> Void) {
         self.whereKey("requested_user_id", value: friendId)
+        self.whereKey("resend", value: boolResend)
         postToURL("friends/request", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
@@ -40,6 +41,15 @@ class FaeContact {
     func ignoreFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
         self.whereKey("friend_request_id", value: requestId)
         postToURL("friends/ignore", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func withdrawFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        self.whereKey("friend_request_id", value: requestId)
+        postToURL("friends/withdraw", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
             completion(status, message)
@@ -73,6 +83,14 @@ class FaeContact {
     
     func getFriendRequests(_ completion: @escaping (Int,Any?) -> Void) {
         getFromURL("friends/request", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getFriendRequestsSent(_ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("friends/request_sent", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
             completion(status, message)

@@ -21,7 +21,8 @@ class FaeReceivedCell: UITableViewCell {
     var lblUserSaying: UILabel!
     var btnAgreeRequest: UIButton!
     var btnRefuseRequest: UIButton!
-    var requestId: Int!
+    var userId: Int = -1
+    var requestId: Int = -1
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
