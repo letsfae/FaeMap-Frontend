@@ -913,7 +913,6 @@
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
-				1873C4C71F214261007669DD /* FaeContact.swift */,
 				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
 			name = Model;
@@ -1146,6 +1145,7 @@
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
 				50234AF81F2865FD00055748 /* PlacePin.swift */,
+				1873C4C71F214261007669DD /* FaeContact.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";

@@ -19,15 +19,16 @@ struct cellData {
     var Image = UIImage()
     var name: String
     var saying: String?
-    var requestUserId: Int = -1
+    var requestId: Int = -1
     var userId: Int = -1
     
     init(name: String) {
         self.name = name
     }
-    init(name: String, requestUserId: Int) {
+    init(name: String, userId: Int, requestId: Int) {
         self.name = name
-        self.requestUserId = requestUserId
+        self.userId = userId
+        self.requestId = requestId
     }
     init(name: String, userId: Int) {
         self.name = name
@@ -51,7 +52,8 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     // JustinHe.swift variable declaration for UI objects
     var testArrayFriends: [cellData] = [] // testArray; will replace once backend API is ready.
     var testArrayReceivedRequests: [cellData] = [] // testArray; will replace once backend API is ready.
-    var testArrayRequested: [String] = ["testOne", "testTwo", "testThree", "testFour"] // testArray; will replace once backend API is ready.
+    var testArrayRequested: [cellData] = []
+//    var testArrayRequested: [String] = ["testOne", "testTwo", "testThree", "testFour"] // testArray; will replace once backend API is ready.
     var tblContacts: UITableView!
     var filtered: [cellData] = []
     var schbarContacts: FaeSearchBarTest!
@@ -107,11 +109,23 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayReceivedRequests.append(cellData(name: json[i-1]["request_user_nick_name"].stringValue, requestUserId: json[i-1]["request_user_id"].intValue))
+                    self.testArrayReceivedRequests.append(cellData(name: json[i-1]["request_user_nick_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
         }
+        
+        apiCalls.getFriendRequestsSent() {(status: Int, message: Any?) in
+            self.testArrayRequested = []
+            let json = JSON(message!)
+            if json.count != 0 {
+                for i in 1...json.count {
+                    self.testArrayRequested.append(cellData(name: json[i-1]["requested_user_nick_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                }
+            }
+            self.tblContacts.reloadData()
+        }
+        
         apiCalls.getFriends() {(status: Int, message: Any?) in
             self.testArrayFriends = []
             let json = JSON(message!)
