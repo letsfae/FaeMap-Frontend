@@ -174,9 +174,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             chatVC.chat_id = recent["chat_id"].number?.stringValue
             let withUserUserId = recent["with_user_id"].number?.stringValue
             let withUserName = recent["with_user_name"].string
+            let withUserNickName = recent["with_nick_name"].string
             // Bryan
             chatVC.realmWithUser = RealmUser()
             chatVC.realmWithUser!.userName = withUserName!
+            chatVC.realmWithUser!.userNickName = withUserNickName!
             chatVC.realmWithUser!.userID = withUserUserId!
             // EndBryan
         }
