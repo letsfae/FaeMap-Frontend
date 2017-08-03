@@ -11,24 +11,6 @@ import SwiftyJSON
 
 extension FaeMapViewController {
     
-    func hideNameCard(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: ({
-            if sender.tag == 1 || sender == self.btnCloseOptions {
-                self.btnOptions.setImage(#imageLiteral(resourceName: "moreOptionMapNameCardFade"), for: .normal)
-                sender.tag = 0
-                self.nameCardMoreOptions.frame = CGRect(x: 243, y: 151, w: 0, h: 0)
-                let btnFrame = CGRect(x: 243, y: 191, w: 0, h: 0)
-                self.shareNameCard.frame = btnFrame
-                self.btnEditNameCard.frame = btnFrame
-                self.reportNameCard.frame = btnFrame
-                self.shareNameCard.alpha = 0
-                self.btnEditNameCard.alpha = 0
-                self.reportNameCard.alpha = 0
-                self.btnCloseOptions.alpha = 0
-            }
-        }), completion: nil)
-    }
-    
     func loadNameCard() {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
