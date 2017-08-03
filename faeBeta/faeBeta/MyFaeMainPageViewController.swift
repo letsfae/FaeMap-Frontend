@@ -83,7 +83,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = UIViewContentMode.scaleAspectFill
         
-        General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
         })
         

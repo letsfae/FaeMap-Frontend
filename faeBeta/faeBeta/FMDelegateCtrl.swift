@@ -9,7 +9,15 @@
 import UIKit
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
+extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate, NameCardDelegate {
+    
+    // NameCardDelegate
+    func openFaeUsrInfo() {
+        let fmUsrInfo = FMUserInfo()
+        fmUsrInfo.userId = uiviewNameCard.userId
+        uiviewNameCard.hide()
+        navigationController?.pushViewController(fmUsrInfo, animated: true)
+    }
     
     // MainScreenSearchDelegate
     func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {

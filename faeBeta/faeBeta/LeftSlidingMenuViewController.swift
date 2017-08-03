@@ -261,7 +261,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func loadUserInfo() {
-        General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
             self.imageAvatar.image = avatarImage
         })
         DispatchQueue.global(qos: .utility).async {

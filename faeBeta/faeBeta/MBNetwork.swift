@@ -91,7 +91,7 @@ extension MapBoardViewController {
             case "people":
                 
                 let mbPeopleData = MBPeopleStruct(json: result)
-                if mbPeopleData.userId == user_id {
+                if mbPeopleData.userId == Key.shared.user_id {
                     continue
                 }
                 

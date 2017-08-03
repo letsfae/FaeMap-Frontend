@@ -180,7 +180,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func updateUserRealm() {
         let realm = try! Realm()
         let userRealm = FaeUserRealm()
-        userRealm.userId = Int(user_id)
+        userRealm.userId = Int(Key.shared.user_id)
         userRealm.firstUpdate = true
         try! realm.write {
             realm.add(userRealm, update: true)
