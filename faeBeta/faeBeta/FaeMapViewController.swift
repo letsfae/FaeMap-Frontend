@@ -22,7 +22,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var btnFav: UIButton! // Map Namecard
     var btnOptions: UIButton! // Map Namecard
     var btnWaveSelf: UIButton! // Map Namecard
-    var btnCardClose: UIButton! // Map Namecard
     var btnEditNameCard: UIButton! // Map Namecard
     var imgAvatar: UIImageView! // Map Namecard
     var imgBackShadow: UIImageView! // Map Namecard
@@ -114,10 +113,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         loadMapFilter()
         loadPlaceDetail()
         NotificationCenter.default.addObserver(self, selector: #selector(self.firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
-        
-        uiviewNameCard = FMNameCardView()
-        uiviewNameCard.delegate = self
-        view.addSubview(uiviewNameCard)
     }
     
     override func viewWillAppear(_ animated: Bool) {
