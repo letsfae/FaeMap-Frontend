@@ -162,6 +162,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         }
     }
     
+    // SomeDelegateReceivedRequests
     func refuseRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
         self.chooseAnAction()
@@ -173,8 +174,10 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             self.animateWithdrawal(listType: 1)
         }
     }
+    // SomeDelegateReceivedRequests End
     
-    func cancelRequest(requestId: Int, indexPath: IndexPath) {
+    // SomeDelegateRequested
+    func withdrawRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
         print("button has been executed cancel request")
         self.showNoti(type: 1)
@@ -184,6 +187,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         print("button has been executed resend request")
         self.showNoti(type: 2)
     }
+    // SomeDelegateRequested End
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cell:\(cellStatus)")
@@ -191,20 +195,25 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         if cellStatus == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCellReceivedRequests", for: indexPath as IndexPath) as! FaeReceivedCell
             print("get into cell2")
-            cell.requestId = testArrayReceivedRequests[indexPath.row].requestUserId
+            cell.userId = testArrayReceivedRequests[indexPath.row].userId
+            cell.requestId = testArrayReceivedRequests[indexPath.row].requestId
             
-            cell.imgAvatar.userID = testArrayReceivedRequests[indexPath.row].requestUserId
-            cell.imgAvatar.loadAvatar(id: testArrayReceivedRequests[indexPath.row].requestUserId)
+            cell.imgAvatar.userID = cell.userId
+            cell.imgAvatar.loadAvatar(id: cell.userId)
             cell.lblUserName.text = testArrayReceivedRequests[indexPath.row].name
-            cell.lblUserSaying.text = String(testArrayReceivedRequests[indexPath.row].requestUserId)
+            cell.lblUserSaying.text = String(testArrayReceivedRequests[indexPath.row].requestId)
             cell.delegate = self
             cell.indexPath = indexPath
             return cell
         } else if cellStatus == 3 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCellRequested", for: indexPath as IndexPath) as! FaeRequestedCell
-            cell.lblUserName.text = testArrayRequested[indexPath.row]
-            cell.lblUserSaying.text = testArrayRequested[indexPath.row]
-            cell.requestId = 100 // testing purposes; when api is ready, we can call that.
+            cell.userId = testArrayRequested[indexPath.row].userId
+            cell.requestId = testArrayRequested[indexPath.row].requestId
+            
+            cell.imgAvatar.userID = cell.userId
+            cell.imgAvatar.loadAvatar(id: cell.userId)
+            cell.lblUserName.text = testArrayRequested[indexPath.row].name
+            cell.lblUserSaying.text = String(testArrayRequested[indexPath.row].requestId)
             cell.delegate = self
             cell.indexPath = indexPath
             return cell

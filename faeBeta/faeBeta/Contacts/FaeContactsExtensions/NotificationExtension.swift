@@ -17,7 +17,6 @@ import UIKit
 
 extension ContactsViewController {
     
-    
     // calls other main functions. Contains and configures uiviewOverlayGrayOpaque variable to 
     // set up the "background blur effect" when the pop-up menu occurs.
     func setupViews() {
