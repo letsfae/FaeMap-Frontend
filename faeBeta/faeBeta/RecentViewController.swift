@@ -41,9 +41,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         // downloadCurrentUserAvatar()
         
         // Bryan
-        let realm = try! Realm()
-        self.realmRecents = realm.objects(RealmRecent.self)
-        self.tableView.reloadData()
+//        let realm = try! Realm()
+//        self.realmRecents = realm.objects(RealmRecent.self)
+//        self.tableView.reloadData()
         
         // TODO: Delete userDefaults
         //        if let recentData = UserDefaults.standard.array(forKey: user_id.stringValue + "recentData"){
@@ -59,6 +59,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        startCheckingRecent()
+        let realm = try! Realm()
+        self.realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
+        self.tableView.reloadData()
+        //print("recent will appear")
+        //startCheckingRecent()
+        //self.tableView.reloadData()
         self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
         self.downloadCurrentUserAvatar()
     }
@@ -207,11 +214,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 //                }
                 // ENDBryan
                 let json = JSON(result!)
-                print(json)
+                //print(json)
                 self.recents = json
                 // Bryan
                 // UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
                 RealmChat.updateRecent(recents: cacheRecent)
+                self.tableView.reloadData()
                 if animated && indexPathSet != nil {
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 } else {
