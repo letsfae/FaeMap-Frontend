@@ -77,7 +77,7 @@ class RealmChat {
             recent.withUserNickName = messageNSDict["with_nick_name"]! as? String ?? messageNSDict["with_user_name"]! as! String
             let dateFormatter = DateFormatter()
             dateFormatter.calendar = Calendar(identifier: .gregorian)
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
             let date = dateFormatter.date(from: messageNSDict["last_message_timestamp"] as! String)
             recent.date = date! as NSDate
@@ -85,7 +85,7 @@ class RealmChat {
             recent.unread = messageNSDict["unread_count"]! as! Int
             try! realm.write{
                 realm.add(recent, update: true)
-                print("update recent")
+                //print("update recent")
             }
         }
     }
