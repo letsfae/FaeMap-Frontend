@@ -34,7 +34,7 @@ class FaeAvatarView: UIImageView {
         self.image = nil
         
         if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
-            print("[getAvatar - \(id)] already in cache")
+            joshprint("[getAvatar - \(id)] already in cache")
             self.image = imageFromCache
             return
         }

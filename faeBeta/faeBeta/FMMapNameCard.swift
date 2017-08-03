@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension FaeMapViewController {
+extension FaeMapViewController: NameCardDelegate {
     
     func loadNameCard() {
         uiviewNameCard = FMNameCardView()
@@ -17,9 +17,18 @@ extension FaeMapViewController {
         view.addSubview(uiviewNameCard)
     }
     
-    func btnChatAction(_ sender: UIButton) {
+    // NameCardDelegate
+    func openFaeUsrInfo() {
+        let fmUsrInfo = FMUserInfo()
+        fmUsrInfo.userId = uiviewNameCard.userId
         uiviewNameCard.hide()
-        let withUserId: NSNumber = NSNumber(value: sender.tag)
+        navigationController?.pushViewController(fmUsrInfo, animated: true)
+    }
+    
+    // NameCardDelegate
+    func chatUser(id: Int) {
+        uiviewNameCard.hide()
+        let withUserId: NSNumber = NSNumber(value: id)
         // First get chatroom id
         getFromURL("chats/users/\(Key.shared.user_id)/\(withUserId.stringValue)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])

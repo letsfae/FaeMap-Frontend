@@ -33,22 +33,6 @@ extension FaeMapViewController {
         if btnCompass != nil { btnCompass.transform = CGAffineTransform.identity }
     }
     
-    // Jump to pin menu view controller
-    func actionCreatePin(_ sender: UIButton) {
-        /*
-        uiviewNameCard.hide()
-        let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-        let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
-        invalidateAllTimer()
-        let pinMenuVC = PinMenuViewController()
-        pinMenuVC.modalPresentationStyle = .overCurrentContext
-        Key.shared.dblAltitude = faeMapView.camera.altitude
-        Key.shared.selectedLoc = mapCenter_coor
-        pinMenuVC.delegate = self
-        self.present(pinMenuVC, animated: false, completion: nil)
-         */
-    }
-    
     func actionSelfPosition(_ sender: UIButton) {
         uiviewNameCard.hide()
         let camera = faeMapView.camera
@@ -63,9 +47,6 @@ extension FaeMapViewController {
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
         searchVC.strSearchedPlace = lblSearchContent.text
-//        searchVC.modalPresentationStyle = .overCurrentContext
-//        mainScreenSearchVC.delegate = self
-//        self.present(searchVC, animated: false, completion: nil)
         navigationController?.pushViewController(searchVC, animated: false)
     }
     
@@ -98,5 +79,20 @@ extension FaeMapViewController {
         let reportPinVC = ReportCommentPinViewController()
         reportPinVC.reportType = 0
         self.present(reportPinVC, animated: true, completion: nil)
+    }
+    
+    func actionCreatePin(_ sender: UIButton) {
+        /*
+         uiviewNameCard.hide()
+         let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
+         invalidateAllTimer()
+         let pinMenuVC = PinMenuViewController()
+         pinMenuVC.modalPresentationStyle = .overCurrentContext
+         Key.shared.dblAltitude = faeMapView.camera.altitude
+         Key.shared.selectedLoc = mapCenter_coor
+         pinMenuVC.delegate = self
+         self.present(pinMenuVC, animated: false, completion: nil)
+         */
     }
 }

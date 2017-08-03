@@ -10,6 +10,7 @@ import UIKit
 import CCHMapClusterController
 
 extension FaeMapViewController: PlaceViewDelegate {
+    
     func loadPlaceDetail() {
         view.addSubview(placeResultBar)
         placeResultBar.delegate = self
@@ -18,7 +19,6 @@ extension FaeMapViewController: PlaceViewDelegate {
     func goToNext(annotation: CCHMapClusterAnnotation?) {
         guard let anno = annotation else { return }
         deselectAllAnnotations()
-        joshprint("[goToNext]")
         preventUserPinOpen = true
         faeMapView.selectAnnotation(anno, animated: false)
         preventUserPinOpen = false
@@ -27,7 +27,6 @@ extension FaeMapViewController: PlaceViewDelegate {
     func goToPrev(annotation: CCHMapClusterAnnotation?) {
         guard let anno = annotation else { return }
         deselectAllAnnotations()
-        joshprint("[goToPrev]")
         preventUserPinOpen = true
         faeMapView.selectAnnotation(anno, animated: false)
         preventUserPinOpen = false
