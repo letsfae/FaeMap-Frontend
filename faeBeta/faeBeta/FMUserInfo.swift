@@ -51,6 +51,7 @@ class FMUserInfo: UIViewController {
     var lblContent: UILabel!
     var uiviewCardPrivacy: FaeGenderView!
     let faeContact = FaeContact()
+    var requestId: Int = -1
     
     enum FriendStatus: String {
         case defaultMode
@@ -66,29 +67,41 @@ class FMUserInfo: UIViewController {
         loadMainPage()
         loadSlideBtm()
         loadBtmBar()
-        print(statusMode)
+        loadBlurView()
     }
     
     func getStatusMode() {
         faeContact.getFriends() {(status: Int, message: Any?) in
-            if status / 2 == 100 {
+            if status / 100 == 2 {
                 let json = JSON(message!)
-                var friendsList = [Int]()
-                
                 if json.count != 0 {
-                    for i in 0...json.count-1 {
-                        friendsList.append(json[i]["friend_id"].intValue)
+                    for i in 0..<json.count {
+                        if json[i]["friend_id"].intValue == self.userId {
+                            self.statusMode = .accepted
+                            break
+                        }
                     }
                 }
-                
-                print("friends \(friendsList)")
-                if friendsList.contains(self.userId) {
-                    self.statusMode = .accepted
-                }
-                
                 self.switchBtmSecondBtn()
             } else {
                 print("[FMUserInfo get friends list fail] - \(status) \(message!)")
+            }
+        }
+        
+        faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                if json.count != 0 {
+                    for i in 0..<json.count {
+                        if json[i]["requested_user_id"].intValue == self.userId {
+                            self.statusMode = .pending
+                            break
+                        }
+                    }
+                }
+                self.switchBtmSecondBtn()
+            } else {
+                print("[FMUserInfo get requested friends list fail] - \(status) \(message!)")
             }
         }
     }
@@ -173,22 +186,25 @@ class FMUserInfo: UIViewController {
         addConstraintsToView(parent: view, child: btnBelowFirst, left: true, gapH: 133, width: 48, top: false, gapV: 0, height: 48)
         btnBelowFirst.addTarget(self, action: #selector(belowEnterChat(_:)), for: .touchUpInside)
         
+        btnBelowSecond = UIButton()
+        view.addSubview(btnBelowSecond)
+        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
+        btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
+        
         getStatusMode()
     }
     
     func switchBtmSecondBtn() {
-        btnBelowSecond = UIButton()
-        view.addSubview(btnBelowSecond)
-        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
+//        btnBelowSecond = UIButton()
+//        view.addSubview(btnBelowSecond)
+//        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
         switch statusMode {
         case .defaultMode:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-            btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
             print("in default")
             break
         case .accepted:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
-            btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
             print("accepted")
             break
         case .blocked:
@@ -199,7 +215,6 @@ class FMUserInfo: UIViewController {
             break
         case .pending:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
-            btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
             break
         }
         
@@ -292,10 +307,8 @@ class FMUserInfo: UIViewController {
     }
     func loadBlurView() {
         removeBlurViewEle()
-        
         uiviewBlurMainScreen = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewBlurMainScreen.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 70 / 100)
-        BlurViewAnimation()
         
         uiviewAction = UIView()
         uiviewAction.backgroundColor = UIColor.white
@@ -318,39 +331,11 @@ class FMUserInfo: UIViewController {
         uiviewFollow.layer.cornerRadius = 23
         
         btnActFirst = UIButton(frame: CGRectWithFactor(x: 40, y: 66, width: 208, height: 50))
-        
-        switch statusMode {
-        case .defaultMode:
-            btnActFirst.setTitle("Add Friend", for: .normal)
-            btnActFirst.tag = 1
-            break
-        case .pending:
-            btnActFirst.setTitle("Withdraw", for: .normal)
-            btnActFirst.tag = 2
-            break
-        default:
-            break
-        }
-        
         btnActFirst.setTitleColor(UIColor._2499090(), for: .normal)
         btnActFirst.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActFirst.addTarget(self, action: #selector(sentActFirstRequest(_:)), for: .touchUpInside)
         
         btnActSecond = UIButton(frame: CGRectWithFactor(x: 40, y: 131, width: 208, height: 50))
-        
-        switch statusMode {
-        case .defaultMode:
-            btnActSecond.setTitle("Follow", for: .normal)
-            btnActSecond.tag = 1
-            break
-        case .pending:
-            btnActSecond.setTitle("Resend", for: .normal)
-            btnActSecond.tag = 2
-            break
-        default:
-            break
-        }
-        
         btnActSecond.setTitleColor(UIColor._2499090(), for: .normal)
         btnActSecond.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         btnActSecond.addTarget(self, action: #selector(sentActSecondRequest(_:)), for: .touchUpInside)
@@ -373,13 +358,43 @@ class FMUserInfo: UIViewController {
         addConstraintsToView(parent: uiviewBlurMainScreen, child: uiviewAction, left: true, gapH: (screenWidth / screenWidthFactor - 290) / 2, width: 290, top: true, gapV: 200, height: 237)
         
         view.addSubview(uiviewBlurMainScreen)
+        uiviewBlurMainScreen.isHidden = true
     }
-    func BlurViewAnimation() {
-        uiviewBlurMainScreen.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewBlurMainScreen.alpha = 7
-        }, completion: nil)
+    
+    func getActionInfo() {
+        switch statusMode {
+        case .defaultMode:
+            btnActFirst.setTitle("Add Friend", for: .normal)
+            btnActFirst.tag = 1
+            break
+        case .pending:
+            btnActFirst.setTitle("Withdraw", for: .normal)
+            btnActFirst.tag = 2
+            break
+        default:
+            break
+        }
+        
+        switch statusMode {
+        case .defaultMode:
+            btnActSecond.setTitle("Follow", for: .normal)
+            btnActSecond.tag = 1
+            break
+        case .pending:
+            btnActSecond.setTitle("Resend", for: .normal)
+            btnActSecond.tag = 2
+            break
+        default:
+            break
+        }
     }
+    
+//    func BlurViewAnimation() {
+//        uiviewBlurMainScreen.alpha = 0
+//        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+//            self.uiviewBlurMainScreen.alpha = 1
+//        }, completion: nil)
+//    }
     func ActViewAnimation() {
         uiviewAction.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
@@ -396,8 +411,31 @@ class FMUserInfo: UIViewController {
     }
     
     func belowAddFriend(_ sender: UIButton!) {
-        print("add Friend")
-        loadBlurView()
+        uiviewBlurMainScreen.isHidden = false
+        animationBlurMainScreen(action: "show")
+        getActionInfo()
+    }
+    
+    func animationBlurMainScreen(action: String) {
+        if action == "show" {
+            uiviewBlurMainScreen.alpha = 0
+            uiviewAction.alpha = 0
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.uiviewBlurMainScreen.alpha = 1
+                self.uiviewAction.alpha = 1
+            }, completion: nil)
+        } else if action == "hide" {
+            uiviewBlurMainScreen.alpha = 1
+            uiviewAction.alpha = 1
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.uiviewBlurMainScreen.alpha = 0
+                self.uiviewAction.alpha = 0
+            }, completion: { (done: Bool) in
+                if done {
+                    self.uiviewBlurMainScreen.isHidden = true
+                }
+            })
+        }
     }
     
     func sentActFirstRequest(_ sender: UIButton!) {
@@ -422,21 +460,22 @@ class FMUserInfo: UIViewController {
     }
     func actionCancel(_ sender: UIButton!) {
         print("action cancel")
-        animationBlurScreenCancel()
+        animationBlurMainScreen(action: "hide")
         print("after finish canceling")
     }
-    func animationBlurScreenCancel() {
-        uiviewBlurMainScreen.alpha = 7
-        uiviewAction.alpha = 1
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewBlurMainScreen.alpha = 0
-            self.uiviewAction.alpha = 0
-        }, completion: { (done: Bool) in
-            if done {
-                self.uiviewBlurMainScreen.isHidden = true
-            }
-        })
-    }
+    
+//    func animationBlurScreenCancel() {
+//        uiviewBlurMainScreen.alpha = 7
+//        uiviewAction.alpha = 1
+//        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+//            self.uiviewBlurMainScreen.alpha = 0
+//            self.uiviewAction.alpha = 0
+//        }, completion: { (done: Bool) in
+//            if done {
+//                self.uiviewBlurMainScreen.isHidden = true
+//            }
+//        })
+//    }
     func actionFinish(_ sender: UIButton!) {
         uiviewBlurMainScreen.isHidden = true
         switch sender.tag {
@@ -480,45 +519,73 @@ class FMUserInfo: UIViewController {
         
         switch statusMode {
         case .defaultMode:
-            if type == 1 {
+            if type == 1 {   // "Add Friend" button pressed
                 self.btnFriendOK.tag = 1
                 // send friend request
                 faeContact.sendFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                    if status / 2 == 100 {
+                    if status / 100 == 2 {
                         self.lblFriendSent.text = "Friend Request Sent Successfully!"
                         self.statusMode = .pending
                         self.btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
+                    } else if status == 400 {
+                        self.lblFriendSent.text = "You've Already Sent Friend Request!"
+                        self.statusMode = .pending
+                        self.btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
                     } else {
+                        self.lblFriendSent.text = "Friend Request Sent Fail!"
                         print("[FMUserInfo Friend Request Sent Fail] - \(status) \(message!)")
                     }
                 }
-            } else {
+            } else {  // "Follow" button pressed
                 lblFriendSent.text = "Follow Request Sent Successfully!"
                 btnFriendOK.tag = 2
             }
             break
         case .pending:
-            if type == 1 {
+            if type == 1 {    // "Withdraw" button pressed
                 btnFriendOK.tag = 3
                 // withdraw friend request
-                /* when api is ready
-                 faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                 if status / 2 == 100 {
-                 self.lblFriendSent.text = "Request Withdraw Successfully!"
-                 self.statusMode = .defaultMode
-                 self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-                 } else {
-                 print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
-                 }
-                 }
-                 */
-                self.lblFriendSent.text = "Request Withdraw Successfully!"
-                self.statusMode = .defaultMode
-                self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-                
-            } else {
-                lblFriendSent.text = "Request Resent Successfully!"
+                faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        let json = JSON(message!)
+                        for i in 0..<json.count {
+                            print("json request_id \(json[i]["requested_user_id"].intValue)")
+                            if json[i]["requested_user_id"].intValue == self.userId {
+                                self.requestId = json[i]["friend_request_id"].intValue
+                                break
+                            }
+                        }
+                        self.faeContact.withdrawFriendRequest(requestId: String(self.requestId)) {(status: Int, message: Any?) in
+                            if status / 100 == 2 {
+                                self.lblFriendSent.text = "Request Withdraw Successfully!"
+                                self.statusMode = .defaultMode
+                                self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
+                            } else if status == 404 {
+                                self.lblFriendSent.text = "You haven't Sent Friend Request!"
+                                self.statusMode = .defaultMode
+                                self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
+                            } else {
+                                self.lblFriendSent.text = "Request Withdraw Fail!"
+                                print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
+                            }
+                        }
+                    } else {
+                        self.lblFriendSent.text = "Internet Error"
+                        print("[FMUserInfo getFriendRequestsSent Fail] - \(status) \(message!)")
+                    }
+                }
+            } else {   // "Resend" button pressed
                 btnFriendOK.tag = 4
+                faeContact.sendFriendRequest(friendId: String(self.userId), boolResend: "true") {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        self.lblFriendSent.text = "Request Resent Successfully!"
+                    } else if status == 400 {
+                        self.lblFriendSent.text = "The User Has Already Sent You a Friend Request!"
+                    } else {
+                        self.lblFriendSent.text = "Request Resent Fail!"
+                        print("[FMUserInfo Friend Request Resent Fail] - \(status) \(message!)")
+                    }
+                }
             }
             break
         default:
@@ -563,7 +630,6 @@ class FMUserInfo: UIViewController {
         UIView.animate(withDuration: 0.25, animations: ({
             self.uiviewRedLine.center.x = targetCenter
         }), completion: { _ in
-            
         })
     }
     
