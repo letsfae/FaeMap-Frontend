@@ -83,6 +83,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         super.viewWillAppear(animated)
         loadMapChat()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -96,6 +97,31 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+    
+    func getUserStatus() {
+        let storageForUserStatus = LocalStorageManager()
+        if let user_status = storageForUserStatus.readByKey("userStatus") {
+            userStatus = user_status as! Int
+        }
+    }
+    
+    func jumpToMyFaeMainPage() {
+        let vc = MyFaeMainPageViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func updateSelfInfo() {
+        DispatchQueue.global(qos: .utility).async {
+            let updateNickName = FaeUser()
+            updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
+                guard status / 100 == 2 else { return }
+                let nickNameInfo = JSON(message!)
+                if let str = nickNameInfo["nick_name"].string {
+                    Key.shared.nickname = str
+                }
+            }
+        }
     }
     
     func checkDisplayNameExisitency() {

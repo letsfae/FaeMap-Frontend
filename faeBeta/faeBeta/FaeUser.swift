@@ -466,12 +466,5 @@ class FaeUser : NSObject {
             completion(status,message)
         }
     }
-    
-    
-    func getSynchronization(_ completion:@escaping (Int,Any?)->Void){
-        getFromURL("sync", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
-        }
-    }
   
 }
