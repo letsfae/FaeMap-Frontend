@@ -19,6 +19,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         self.automaticallyAdjustsScrollViewInsets = false
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         tblContacts.addGestureRecognizer(tapToDismissKeyboard)
+        tblContacts.addGestureRecognizer(setTapDismissDropdownMenu())
         
         /* Comment from Joshua:
          uiviewSchbar is an uiview container of searchBar, because we need to adjust the left padding of searchBar
@@ -70,6 +71,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewBottomNav = UIView()
         uiviewBottomNav.frame = CGRect(x: 0, y: screenHeight - 50, width: screenWidth, height: 50)
         uiviewBottomNav.backgroundColor = UIColor._210210210()
+        uiviewBottomNav.addGestureRecognizer(setTapDismissDropdownMenu())
         view.addSubview(uiviewBottomNav)
         
         btnFFF = UIButton()
@@ -142,16 +144,30 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
-        filtered = testArrayFriends.filter({(($0.name).lowercased()).range(of: searchText.lowercased()) != nil})
+        if curtTitle == "Friends" {
+            filtered = testArrayFriends.filter({(($0.name).lowercased()).range(of: searchText.lowercased()) != nil})
+        } else  if curtTitle == "Followers" {
+            filteredFollows = arrFollowers.filter({(($0.name).lowercased()).range(of: searchText.lowercased()) != nil})
+        } else {
+            filteredFollows = arrFollowees.filter({(($0.name).lowercased()).range(of: searchText.lowercased()) != nil})
+        }
         tblContacts.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStatus == 1 {
-            if schbarContacts.txtSchField.text != "" {
-                return filtered.count
+            if curtTitle == "Friends" {
+                if schbarContacts.txtSchField.text != "" {
+                    return filtered.count
+                } else {
+                    return testArrayFriends.count
+                }
             } else {
-                return testArrayFriends.count
+                if schbarContacts.txtSchField.text != "" {
+                    return filteredFollows.count
+                } else {
+                    return curtTitle == "Followers" ? arrFollowers.count : arrFollowees.count
+                }
             }
         }
         else if cellStatus == 2 {
@@ -165,27 +181,30 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     // SomeDelegateReceivedRequests
     func refuseRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
+        idGlobal = requestId
         self.chooseAnAction()
     }
     
     func acceptRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
-        apiCalls.acceptFriendRequest(requestId: String(requestId)) { (status: Int, message: Any?) in
-            self.animateWithdrawal(listType: 1)
-        }
+        idGlobal = requestId
+        animateWithdrawal(listType: ACCEPT)
     }
     // SomeDelegateReceivedRequests End
     
     // SomeDelegateRequested
     func withdrawRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
+        idGlobal = requestId
         print("button has been executed cancel request")
-        self.showNoti(type: 1)
+        self.showNoti(type: WITHDRAW)
     }
     
-    func resendRequest(requestId: Int) {
+    func resendRequest(userId: Int, indexPath: IndexPath) {
         print("button has been executed resend request")
-        self.showNoti(type: 2)
+        indexPathGlobal = indexPath
+        idGlobal = userId
+        self.showNoti(type: RESEND)
     }
     // SomeDelegateRequested End
     
@@ -219,16 +238,42 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath as IndexPath) as! FaeContactsCell
-            if schbarContacts.txtSchField.text != "" {
-                cell.imgAvatar.userID = filtered[indexPath.row].userId
-                cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
-                cell.lblUserName.text = filtered[indexPath.row].name
-                cell.lblUserSaying.text = String(filtered[indexPath.row].userId)
+            if curtTitle == "Friends" {
+                if schbarContacts.txtSchField.text != "" {
+                    cell.imgAvatar.userID = filtered[indexPath.row].userId
+                    cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
+                    cell.lblUserName.text = filtered[indexPath.row].name
+                    cell.lblUserSaying.text = String(filtered[indexPath.row].userId)
+                } else {
+                    cell.imgAvatar.userID = testArrayFriends[indexPath.row].userId
+                    cell.imgAvatar.loadAvatar(id: testArrayFriends[indexPath.row].userId)
+                    cell.lblUserName.text = testArrayFriends[indexPath.row].name
+                    cell.lblUserSaying.text = String(testArrayFriends[indexPath.row].userId)
+                }
+            } else if curtTitle == "Followers" {
+                if schbarContacts.txtSchField.text != "" {
+                    cell.imgAvatar.userID = filteredFollows[indexPath.row].followerId
+                    cell.imgAvatar.loadAvatar(id: filteredFollows[indexPath.row].followerId)
+                    cell.lblUserName.text = filteredFollows[indexPath.row].name
+                    cell.lblUserSaying.text = String(filteredFollows[indexPath.row].followerId)
+                } else {
+                    cell.imgAvatar.userID = arrFollowers[indexPath.row].followerId
+                    cell.imgAvatar.loadAvatar(id: arrFollowers[indexPath.row].followerId)
+                    cell.lblUserName.text = arrFollowers[indexPath.row].name
+                    cell.lblUserSaying.text = String(arrFollowers[indexPath.row].followerId)
+                }
             } else {
-                cell.imgAvatar.userID = testArrayFriends[indexPath.row].userId
-                cell.imgAvatar.loadAvatar(id: testArrayFriends[indexPath.row].userId)
-                cell.lblUserName.text = testArrayFriends[indexPath.row].name
-                cell.lblUserSaying.text = String(testArrayFriends[indexPath.row].userId)
+                if schbarContacts.txtSchField.text != "" {
+                    cell.imgAvatar.userID = filteredFollows[indexPath.row].followeeId
+                    cell.imgAvatar.loadAvatar(id: filteredFollows[indexPath.row].followeeId)
+                    cell.lblUserName.text = filteredFollows[indexPath.row].name
+                    cell.lblUserSaying.text = String(filteredFollows[indexPath.row].followeeId)
+                } else {
+                    cell.imgAvatar.userID = arrFollowees[indexPath.row].followeeId
+                    cell.imgAvatar.loadAvatar(id: arrFollowees[indexPath.row].followeeId)
+                    cell.lblUserName.text = arrFollowees[indexPath.row].name
+                    cell.lblUserSaying.text = String(arrFollowees[indexPath.row].followeeId)
+                }
             }
             return cell
         }
@@ -246,22 +291,69 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarContacts.resignFirstResponder()
+        schbarContacts.txtSchField.resignFirstResponder()
     }
     
     func animateWithdrawal(listType: Int) {
-        if (listType == 0) {
-            testArrayFriends.remove(at: indexPathGlobal.row)
+        switch listType {
+        case WITHDRAW:
+            apiCalls.withdrawFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.testArrayRequested.remove(at: self.indexPathGlobal.row)
+                    self.reloadAfterDelete()
+                } else {
+                    print("[Contacts Request Withdraw Fail] - \(status) \(message!)")
+                }
+            }
+            break
+        case BLOCK:
+            apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.testArrayReceivedRequests.remove(at: self.indexPathGlobal.row)
+                    self.reloadAfterDelete()
+                } else {
+                    print("[Contacts Block Fail] - \(status) \(message!)")
+                }
+            }
+            break
+        case IGNORE:
+            apiCalls.ignoreFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("indexPathGlobal \(self.indexPathGlobal)")
+                    self.testArrayReceivedRequests.remove(at: self.indexPathGlobal.row)
+                    self.reloadAfterDelete()
+                } else {
+                    print("[Contacts Ignore Request Fail] - \(status) \(message!)")
+                }
+            }
+            break
+        case ACCEPT:
+            apiCalls.acceptFriendRequest(requestId: String(idGlobal)) { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.testArrayReceivedRequests.remove(at: self.indexPathGlobal.row)
+                    self.reloadAfterDelete()
+                    print("[Contacts Accept Request Successfully]")
+                } else {
+                    print("[Contacts Accept Request Fail] - \(status) \(message!)")
+                }
+            }
+        case RESEND:
+            apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
+                if status / 100 == 2 {
+                    print("[Contacts resend friend request successfully]")
+                } else {
+                    print("[Contacts resend friend request fail]")
+                }
+            }
+        default:
+            break
         }
-        else if (listType == 1) {
-            testArrayReceivedRequests.remove(at: indexPathGlobal.row)
-        }
-        else if (listType == 2) {
-            testArrayRequested.remove(at: indexPathGlobal.row)
-        }
+    }
+    
+    func reloadAfterDelete() {
         tblContacts.performUpdate({
             self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
-        }) { 
+        }) {
             self.tblContacts.reloadData()
         }
     }
