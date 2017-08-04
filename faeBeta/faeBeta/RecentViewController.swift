@@ -24,7 +24,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: - properties
     
-    @IBOutlet private weak var tableView: UITableView!
+    //@IBOutlet private weak var tableView: UITableView!
+    var tableView: UITableView!
     
     private var recents: JSON? // an array of dic to store recent chatting informations
     private var realmRecents: Results<RealmRecent>?
@@ -34,8 +35,20 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - View did/will funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.backgroundColor = UIColor.white
-        self.tableView.tableFooterView = UIView()
+        tableView = UITableView()
+        tableView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 25)
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(RecentTableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableView.separatorColor = UIColor._225225225()
+        tableView.separatorInset = UIEdgeInsetsMake(0, 74, 0, 0)
+        tableView.tableFooterView = UIView()
+        tableView.backgroundColor = UIColor.white
+        view.addSubview(tableView)
+        
+        
+        //self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
         // downloadCurrentUserAvatar()
@@ -153,7 +166,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         // cell.bindData(recent)
         
         let realmRecent = realmRecents![indexPath.row]
-        cell.bindData(realmRecent)
+        cell.bindData2(realmRecent)
         // ENDBryan
         
         if self.cellsCurrentlyEditing.contains(indexPath) {
