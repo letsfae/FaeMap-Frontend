@@ -116,7 +116,8 @@ extension FaeMapViewController {
         
         // Open chat view
         btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
-        btnOpenChat.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
+        btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
+        btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
         view.addSubview(btnOpenChat)
         btnOpenChat.layer.zPosition = 500

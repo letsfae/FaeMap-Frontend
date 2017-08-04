@@ -196,7 +196,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 let push = FaePush()
                 push.getSync({ (status: Int!, _: Any?) in
-                    //                print("[runSync] status", status)
                     if status / 100 == 2 {
                         self.reachaVCPresented = false
                         // success
@@ -224,9 +223,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let shareAPI = LocalStorageManager()
         _ = shareAPI.readLogInfo()
         
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(AppDelegate.runSync), userInfo: nil, repeats: true)
-        
-        self.runSync()
         let isFirstLaunch = shareAPI.isFirstPushLaunch()
         //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
         //        print(notificationType?.types)
