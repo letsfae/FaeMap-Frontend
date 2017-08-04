@@ -34,14 +34,12 @@ extension FaeMapViewController {
 
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
-        reloadSelfPosAnimation()
         refreshMap(pins: false, users: true, places: true)
     }
     
     func firstUpdateLocation() {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
-        reloadSelfPosAnimation()
         refreshMap(pins: false, users: true, places: true)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
