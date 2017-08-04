@@ -15,8 +15,8 @@ import SwiftyJSON
  
 */
 
-struct cellData {
-    var Image = UIImage()
+struct Friends {
+//    var Image = UIImage()
     var name: String
     var saying: String?
     var requestId: Int = -1
@@ -36,6 +36,23 @@ struct cellData {
     }
 }
 
+struct Follows {
+    var name: String
+    var saying: String?
+    var followeeId: Int = -1
+    var followerId: Int = -1
+    
+    init(followeeJson: JSON) {
+        name = followeeJson["followee_user_nick_name"].stringValue
+        followeeId = followeeJson["followee_id"].intValue
+    }
+    
+    init(followerJson: JSON) {
+        name = followerJson["follower_user_nick_name"].stringValue
+        followerId = followerJson["follower_id"].intValue
+    }
+}
+
 class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, SomeDelegateRequested {
     
 
@@ -50,12 +67,15 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var btnNavBarMenu: UIButton!
     
     // JustinHe.swift variable declaration for UI objects
-    var testArrayFriends: [cellData] = [] // testArray; will replace once backend API is ready.
-    var testArrayReceivedRequests: [cellData] = [] // testArray; will replace once backend API is ready.
-    var testArrayRequested: [cellData] = []
+    var testArrayFriends: [Friends] = [] // testArray; will replace once backend API is ready.
+    var testArrayReceivedRequests: [Friends] = [] // testArray; will replace once backend API is ready.
+    var testArrayRequested: [Friends] = []
+    var arrFollowers: [Follows] = []
+    var arrFollowees: [Follows] = []
 //    var testArrayRequested: [String] = ["testOne", "testTwo", "testThree", "testFour"] // testArray; will replace once backend API is ready.
     var tblContacts: UITableView!
-    var filtered: [cellData] = []
+    var filtered: [Friends] = []
+    var filteredFollows: [Follows] = []
     var schbarContacts: FaeSearchBarTest!
     var uiviewSchbar: UIView!
     var uiviewBottomNav: UIView!
@@ -89,6 +109,13 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var btnYes: UIButton!
     var uiviewOverlayGrayOpaque: UIView!
     var indexPathGlobal: IndexPath!
+    var idGlobal = -1
+    
+    let BLOCK = 0
+    let WITHDRAW = 1
+    let RESEND = 2
+    let IGNORE = 4
+    let ACCEPT = 5
     
     internal var notiContraint = [NSLayoutConstraint]() {
         didSet {
@@ -109,7 +136,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayReceivedRequests.append(cellData(name: json[i-1]["request_user_nick_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                    self.testArrayReceivedRequests.append(Friends(name: json[i-1]["request_user_nick_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
@@ -120,7 +147,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayRequested.append(cellData(name: json[i-1]["requested_user_nick_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                    self.testArrayRequested.append(Friends(name: json[i-1]["requested_user_nick_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
@@ -131,12 +158,46 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayFriends.append(cellData(name: json[i-1]["friend_user_nick_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
+                    self.testArrayFriends.append(Friends(name: json[i-1]["friend_user_nick_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
         }
-
+        
+        apiCalls.getFollowees(userId: String(Key.shared.user_id)) {(status: Int, message: Any?) in
+            self.arrFollowees = []
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                guard let followeeJson = json.array else {
+                    print("[loadFolloweeInfoFail] - fail to parse")
+                    return
+                }
+                for followee in followeeJson {
+                    let followeeData = Follows(followeeJson: followee)
+                    self.arrFollowees.append(followeeData)
+                }
+            } else {
+                print("[loadFolloweeInfoFail] - \(status) \(message!)")
+            }
+        }
+        
+        apiCalls.getFollowers(userId: String(Key.shared.user_id)) {(status: Int, message: Any?) in
+            self.arrFollowers = []
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                guard let followerJson = json.array else {
+                    print("[loadFollowerInfoFail] - fail to parse")
+                    return
+                }
+                for follower in followerJson {
+                    let followerData = Follows(followerJson: follower)
+                    self.arrFollowers.append(followerData)
+                }
+            } else {
+                print("[loadFollowerInfoFail] - \(status) \(message!)")
+            }
+        }
+        
         loadTable()
         loadNavBar()
         setupViews()

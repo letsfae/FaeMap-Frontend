@@ -187,7 +187,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarFromContacts.resignFirstResponder()
+        schbarFromContacts.txtSchField.resignFirstResponder()
     }
 
 }
