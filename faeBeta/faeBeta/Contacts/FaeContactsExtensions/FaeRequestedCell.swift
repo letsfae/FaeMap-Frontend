@@ -10,7 +10,7 @@ import UIKit
 
 protocol SomeDelegateRequested: class {
     func withdrawRequest(requestId: Int, indexPath: IndexPath)
-    func resendRequest(requestId: Int)
+    func resendRequest(userId: Int, indexPath: IndexPath)
 }
 
 class FaeRequestedCell: UITableViewCell {
@@ -89,7 +89,7 @@ class FaeRequestedCell: UITableViewCell {
     }
     
     func resendRequest(_ sender: UIButton) {
-        self.delegate?.resendRequest(requestId: requestId)
+        self.delegate?.resendRequest(userId: userId, indexPath: indexPath)
 
     }
 }

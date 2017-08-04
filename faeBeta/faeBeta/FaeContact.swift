@@ -105,5 +105,37 @@ class FaeContact {
         }
     }
     
+    func followPerson(followeeId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        self.whereKey("followee_id", value: followeeId)
+        postToURL("follows", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
     
+    func getFollowers(userId: String, _ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("follows/" + userId + "/follower", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getFollowees(userId: String, _ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("follows/" + userId + "/followee", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            print("userId \(userId)")
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+
+    func deleteFollow(followeeId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        deleteFromURL("follows/" + followeeId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
 }
