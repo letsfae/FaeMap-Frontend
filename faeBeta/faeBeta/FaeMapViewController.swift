@@ -21,7 +21,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var btnDiscovery: UIButton!
     var btnLocateSelf: FMLocateSelf!
     var btnCompass: FMCompass!
-    var btnWindBell: UIButton!
     var boolCanUpdateSocialPin = true
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
@@ -30,10 +29,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var faeUserPins = [FaePinAnnotation]()
     var faePlacePins = [FaePinAnnotation]()
     var lblUnreadCount: UILabel! // Unread Messages Label
-    var lblDistanceDisplay: UILabel!
     var mapPins = [MapPin]()
     var markerMask: UIView! // mask to prevent UI action
-    var previousZoom: Float = 13.8
     var refreshPins = true
     var refreshPlaces = true
     var refreshUsers = true
@@ -42,9 +39,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
     var timerUpdateSelfLocation: Timer! // timer to renew update user pins
-    var uiviewDistanceRadius: UIView!
     var prevBearing: Double = 0
-    var intPinDistance: Int = 65
     var mapClusterManager: CCHMapClusterController!
     let FILTER_ENABLE = true
     let PLACE_ENABLE = true
@@ -62,9 +57,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     var selectedAnnView: PlacePinAnnotationView?
     var selectedAnn: FaePinAnnotation?
     var placeResultBar = PlaceResultView()
-    var preventUserPinOpen = false
+    var boolPreventUserPinOpen = false
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
+    var mkOverLay = [MKOverlay]()
+    var selfAnView: SelfAnnotationView?
     
     // System Functions
     override func viewDidLoad() {
@@ -72,7 +69,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         isUserLoggedIn()
         getUserStatus()
         loadMapView()
-        loadTransparentNavBarItems()
         loadNameCard()
         timerSetup()
         openedPinListSetup()
@@ -85,9 +81,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        loadTransparentNavBarItems()
         loadMapChat()
-        reloadSelfPosAnimation()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
@@ -102,10 +96,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print("[FaeMapViewController - viewWillDisappear]")
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     func checkDisplayNameExisitency() {
@@ -175,14 +165,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         updateTimerForLoadRegionPin()
         updateTimerForUserPin()
         updateTimerForLoadRegionPlacePin()
-    }
-    
-    func reloadSelfPosAnimation() {
-        if userStatus != 5 {
-            
-        } else {
-            faeMapView.showsUserLocation = true
-        }
     }
     
     func jumpToWelcomeView(animated: Bool) {

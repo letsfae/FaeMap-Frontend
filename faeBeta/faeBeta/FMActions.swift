@@ -25,21 +25,6 @@ extension FaeMapViewController {
         }
     }
     
-    func actionTrueNorth(_ sender: UIButton) {
-        uiviewNameCard.hide()
-        let camera = faeMapView.camera
-        camera.heading = 0
-        faeMapView.setCamera(camera, animated: true)
-        if btnCompass != nil { btnCompass.transform = CGAffineTransform.identity }
-    }
-    
-    func actionSelfPosition(_ sender: UIButton) {
-        uiviewNameCard.hide()
-        let camera = faeMapView.camera
-        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-        faeMapView.setCamera(camera, animated: true)
-    }
-    
     func actionMainScreenSearch(_ sender: UIButton) {
         uiviewNameCard.hide()
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
@@ -72,13 +57,6 @@ extension FaeMapViewController {
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         self.present(UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
-    }
-    
-    func actionReportThisPin(_ sender: UIButton) {
-        uiviewNameCard.hide()
-        let reportPinVC = ReportCommentPinViewController()
-        reportPinVC.reportType = 0
-        self.present(reportPinVC, animated: true, completion: nil)
     }
     
     func actionCreatePin(_ sender: UIButton) {

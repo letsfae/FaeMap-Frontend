@@ -37,7 +37,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if view is PlacePinAnnotationView {
             tapPlacePin(didSelect: view)
         } else if view is UserPinAnnotationView {
-            guard preventUserPinOpen == false else { return }
+            guard boolPreventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
             animateToCoordinate(type: 1, coordinate: LocManager.shared.curtLoc.coordinate, animated: true)
@@ -47,7 +47,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
         if annotation is MKUserLocation {
+            if userStatus == 5 {
+                return nil
+            }
             let identifier = "self"
             var anView: SelfAnnotationView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
@@ -56,6 +60,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
+            selfAnView = anView
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
