@@ -73,6 +73,7 @@ class FMUserInfo: UIViewController {
         loadSlideBtm()
         loadBtmBar()
         loadBlurView()
+        loadSendActRequest()
     }
     
     func getStatusMode() {
@@ -111,7 +112,8 @@ class FMUserInfo: UIViewController {
         }
     }
     
-    func loadMainPage() {
+    // setupUI
+    fileprivate func loadMainPage() {
         self.view.backgroundColor = .white
         imgHeadBgd = UIImageView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: 188))
         imgHeadBgd.image = #imageLiteral(resourceName: "imgBackground")
@@ -178,51 +180,7 @@ class FMUserInfo: UIViewController {
         }
     }
     
-    func loadBtmBar() {
-        btnBack = UIButton()
-        view.addSubview(btnBack)
-        btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
-        addConstraintsToView(parent: view, child: btnBack, left: true, gapH: 0, width: 48, top: false, gapV: 0, height: 48)
-        btnBack.addTarget(self, action: #selector(animationBack(_:)), for: .touchUpInside)
-        
-        btnBelowFirst = UIButton()
-        view.addSubview(btnBelowFirst)
-        btnBelowFirst.setImage(#imageLiteral(resourceName: "btnChat"), for: .normal)
-        addConstraintsToView(parent: view, child: btnBelowFirst, left: true, gapH: 133, width: 48, top: false, gapV: 0, height: 48)
-        btnBelowFirst.addTarget(self, action: #selector(belowEnterChat(_:)), for: .touchUpInside)
-        
-        btnBelowSecond = UIButton()
-        view.addSubview(btnBelowSecond)
-        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
-        btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
-        
-        getStatusMode()
-    }
-    
-    func switchBtmSecondBtn() {
-        switch statusMode {
-        case .defaultMode:
-            btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-            print("in default")
-            break
-        case .accepted:
-            btnBelowSecond.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
-            print("accepted")
-            break
-        case .blocked:
-            //            btnBelowFirst.removeFromSuperview()
-            btnBelowFirst.isHidden = true
-            btnBelowSecond.isHidden = true
-            lblContent.text = "Content Unavailable"
-            break
-        case .pending:
-            btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
-            break
-        }
-        
-    }
-    
-    func loadSlideBtm() {
+    fileprivate func loadSlideBtm() {
         uiviewTblCtrlBtnSub = UIView(frame: CGRect(x: 0, y: 320, w: screenWidth / screenWidthFactor, h: 416))
         uiviewTblCtrlBtnSub.backgroundColor = UIColor.white
         view.addSubview(uiviewTblCtrlBtnSub)
@@ -298,12 +256,28 @@ class FMUserInfo: UIViewController {
         view.addSubview(uiviewGrayBtmLine)
     }
     
-    func showPinMoreButtonDetails(_ sender: UIButton!) {
-        print("in more details")
+    fileprivate func loadBtmBar() {
+        btnBack = UIButton()
+        view.addSubview(btnBack)
+        btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
+        addConstraintsToView(parent: view, child: btnBack, left: true, gapH: 0, width: 48, top: false, gapV: 0, height: 48)
+        btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
+        
+        btnBelowFirst = UIButton()
+        view.addSubview(btnBelowFirst)
+        btnBelowFirst.setImage(#imageLiteral(resourceName: "btnChat"), for: .normal)
+        addConstraintsToView(parent: view, child: btnBelowFirst, left: true, gapH: 133, width: 48, top: false, gapV: 0, height: 48)
+        btnBelowFirst.addTarget(self, action: #selector(belowEnterChat(_:)), for: .touchUpInside)
+        
+        btnBelowSecond = UIButton()
+        view.addSubview(btnBelowSecond)
+        addConstraintsToView(parent: view, child: btnBelowSecond, left: true, gapH: 228, width: 48, top: false, gapV: 0, height: 48)
+        btnBelowSecond.addTarget(self, action: #selector(belowAddFriend(_:)), for: .touchUpInside)
+        
+        getStatusMode()
     }
     
-    func loadBlurView() {
-        
+    fileprivate func loadBlurView() {
         uiviewBlurMainScreen = UIView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: screenHeight / screenHeightFactor))
         uiviewBlurMainScreen.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 70 / 100)
         
@@ -351,56 +325,52 @@ class FMUserInfo: UIViewController {
         uiviewAction.addSubview(btnCancel)
         
         uiviewBlurMainScreen.addSubview(uiviewAction)
-        ActViewAnimation()
         addConstraintsToView(parent: uiviewBlurMainScreen, child: uiviewAction, left: true, gapH: (screenWidth / screenWidthFactor - 290) / 2, width: 290, top: true, gapV: 200, height: 237)
         
         view.addSubview(uiviewBlurMainScreen)
         uiviewBlurMainScreen.isHidden = true
     }
     
-    func getActionInfo() {
-        switch statusMode {
-        case .defaultMode:
-            btnActFirst.setTitle("Add Friend", for: .normal)
-            btnActFirst.tag = ADD_FRIEND_ACT
-            break
-        case .pending:
-            btnActFirst.setTitle("Withdraw", for: .normal)
-            btnActFirst.tag = WITHDRAW_ACT
-            break
-        default:
-            break
-        }
+    fileprivate func loadSendActRequest() {
+        uiviewFriendSent = UIView()
+        uiviewFriendSent.backgroundColor = UIColor.white
+        uiviewFriendSent.center.x = screenWidth / 2
+        uiviewFriendSent.layer.cornerRadius = 20
         
-        switch statusMode {
-        case .defaultMode:
-            btnActSecond.setTitle("Follow", for: .normal)
-            btnActSecond.tag = FOLLOW_ACT
-            break
-        case .pending:
-            btnActSecond.setTitle("Resend", for: .normal)
-            btnActSecond.tag = RESEND_ACT
-            break
-        default:
-            break
-        }
+        btnFriendSentBack = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
+        btnFriendSentBack.tag = 0
+        btnFriendSentBack.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
+        btnFriendSentBack.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
+        
+        lblFriendSent = UILabel(frame: CGRect(x: 58, y: 14, w: 190, h: 80))
+        
+        btnFriendOK = UIButton(frame: CGRect(x: 43, y: 102, w: 208, h: 39))
+        lblFriendSent.numberOfLines = 2
+        lblFriendSent.textAlignment = .center
+        lblFriendSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        lblFriendSent.textColor = UIColor._898989()
+        
+        btnFriendOK.setTitle("OK", for: .normal)
+        btnFriendOK.setTitleColor(UIColor.white, for: .normal)
+        btnFriendOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnFriendOK.backgroundColor = UIColor._2499090()
+        btnFriendOK.layer.cornerRadius = 19
+        btnFriendOK.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
+        
+        uiviewFriendSent.addSubview(lblFriendSent)
+        uiviewFriendSent.addSubview(btnFriendSentBack)
+        uiviewFriendSent.addSubview(btnFriendOK)
+        
+        uiviewBlurMainScreen.addSubview(uiviewFriendSent)
+        addConstraintsToView(parent: uiviewBlurMainScreen, child: uiviewFriendSent, left: false, gapH: 62, width: 290, top: true, gapV: 195, height: 161)
     }
+    // setupUI end
     
-//    func BlurViewAnimation() {
-//        uiviewBlurMainScreen.alpha = 0
-//        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-//            self.uiviewBlurMainScreen.alpha = 1
-//        }, completion: nil)
-//    }
-    
-    func ActViewAnimation() {
-        uiviewAction.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewAction.alpha = 1
-        }, completion: nil)
+    // actions
+    func showPinMoreButtonDetails(_ sender: UIButton!) {
+        print("in more details")
     }
-    
-    func animationBack(_ sender: UIButton!) {
+    func actionBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
@@ -419,65 +389,25 @@ class FMUserInfo: UIViewController {
         uiviewAction.isHidden = false
     }
     
-    func animationBlurMainScreen(action: String) {
-        if action == "show" {
-            uiviewBlurMainScreen.alpha = 0
-            uiviewAction.alpha = 0
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                self.uiviewBlurMainScreen.alpha = 1
-                self.uiviewAction.alpha = 1
-            }, completion: nil)
-        } else if action == "hide" {
-            uiviewBlurMainScreen.alpha = 1
-            uiviewAction.alpha = 1
-            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-                self.uiviewBlurMainScreen.alpha = 0
-                self.uiviewAction.alpha = 0
-            }, completion: { (done: Bool) in
-                if done {
-                    self.uiviewBlurMainScreen.isHidden = true
-                }
-            })
-        }
-    }
-    
     func sentActFirstRequest(_ sender: UIButton!) {
         if sender.tag == ADD_FRIEND_ACT {   // "Add Friend" button pressed
-            loadSendActRequest(type: ADD_FRIEND_ACT)
+            triggerSendActRequest(type: ADD_FRIEND_ACT)
         } else if sender.tag == WITHDRAW_ACT {     // "Withdraw" button pressed
-            loadSendActRequest(type: WITHDRAW_ACT)
+            triggerSendActRequest(type: WITHDRAW_ACT)
         }
     }
     
     func sentActSecondRequest(_ sender: UIButton!) {
         if sender.tag == FOLLOW_ACT {
-            print("send follow request")
-            loadSendActRequest(type: FOLLOW_ACT)
+            triggerSendActRequest(type: FOLLOW_ACT)
         } else if sender.tag == RESEND_ACT {
-            print("resend request")
-            loadSendActRequest(type: RESEND_ACT)
+            triggerSendActRequest(type: RESEND_ACT)
         }
     }
     
     func actionCancel(_ sender: UIButton!) {
-        print("action cancel")
         animationBlurMainScreen(action: "hide")
-        print("after finish canceling")
     }
-    
-//    func animationBlurScreenCancel() {
-//        uiviewBlurMainScreen.alpha = 7
-//        uiviewAction.alpha = 1
-//        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-//            self.uiviewBlurMainScreen.alpha = 0
-//            self.uiviewAction.alpha = 0
-//        }, completion: { (done: Bool) in
-//            if done {
-//                self.uiviewBlurMainScreen.isHidden = true
-//            }
-//        })
-//    }
-    
     func actionFinish(_ sender: UIButton!) {
         uiviewBlurMainScreen.isHidden = true
         switch sender.tag {
@@ -494,23 +424,53 @@ class FMUserInfo: UIViewController {
         default:break
         }
     }
+    // actions end
     
-    func loadSendActRequest(type: Int) {
-        
+    func switchBtmSecondBtn() {
+        switch statusMode {
+        case .defaultMode:
+            btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
+            break
+        case .accepted:
+            btnBelowSecond.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
+            break
+        case .blocked:
+            //            btnBelowFirst.removeFromSuperview()
+            btnBelowFirst.isHidden = true
+            btnBelowSecond.isHidden = true
+            lblContent.text = "Content Unavailable"
+            break
+        case .pending:
+            btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
+            break
+        }
+    }
+    
+    func getActionInfo() {
+        switch statusMode {
+        case .defaultMode:
+            btnActFirst.setTitle("Add Friend", for: .normal)
+            btnActFirst.tag = ADD_FRIEND_ACT
+            btnActSecond.setTitle("Follow", for: .normal)
+            btnActSecond.tag = FOLLOW_ACT
+            break
+        case .pending:
+            btnActFirst.setTitle("Withdraw", for: .normal)
+            btnActFirst.tag = WITHDRAW_ACT
+            btnActSecond.setTitle("Resend", for: .normal)
+            btnActSecond.tag = RESEND_ACT
+            break
+        case .accepted:
+            break
+        default:
+            break
+        }
+    }
+    
+    fileprivate func triggerSendActRequest(type: Int) {
         uiviewAction.isHidden = true
-        uiviewFriendSent = UIView()
-        uiviewFriendSent.backgroundColor = UIColor.white
-        uiviewFriendSent.center.x = screenWidth / 2
-        uiviewFriendSent.layer.cornerRadius = 20
-        
-        btnFriendSentBack = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
-        btnFriendSentBack.tag = 0
-        btnFriendSentBack.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
-        btnFriendSentBack.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
-        
-        lblFriendSent = UILabel(frame: CGRect(x: 58, y: 14, w: 190, h: 80))
-        
-        btnFriendOK = UIButton(frame: CGRect(x: 43, y: 102, w: 208, h: 39))
+        uiviewFriendSent.isHidden = false
+        animationActionView()
         
         switch statusMode {
         case .defaultMode:
@@ -532,8 +492,17 @@ class FMUserInfo: UIViewController {
                     }
                 }
             } else if type == FOLLOW_ACT {  // "Follow" button pressed
-                lblFriendSent.text = "Follow Request Sent Successfully!"
                 btnFriendOK.tag = FOLLOW_ACT
+                faeContact.followPerson(followeeId: String(self.userId)) {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        self.lblFriendSent.text = "Follow Successfully!"
+//                        self.statusMode = .pending
+//                        self.btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
+                    } else {
+                        self.lblFriendSent.text = "Follow Request Sent Fail!"
+                        print("[FMUserInfo Follow Request Sent Fail] - \(status) \(message!)")
+                    }
+                }
             }
             break
         case .pending:
@@ -586,26 +555,36 @@ class FMUserInfo: UIViewController {
         default:
             break
         }
-        
-        lblFriendSent.numberOfLines = 2
-        lblFriendSent.textAlignment = .center
-        lblFriendSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblFriendSent.textColor = UIColor._898989()
-        
-        btnFriendOK.setTitle("OK", for: .normal)
-        btnFriendOK.setTitleColor(UIColor.white, for: .normal)
-        btnFriendOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-        btnFriendOK.backgroundColor = UIColor._2499090()
-        btnFriendOK.layer.cornerRadius = 19
-        btnFriendOK.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
-        
-        uiviewFriendSent.addSubview(lblFriendSent)
-        uiviewFriendSent.addSubview(btnFriendSentBack)
-        uiviewFriendSent.addSubview(btnFriendOK)
-        
-        uiviewBlurMainScreen.addSubview(uiviewFriendSent)
-        addConstraintsToView(parent: uiviewBlurMainScreen, child: uiviewFriendSent, left: false, gapH: 62, width: 290, top: true, gapV: 195, height: 161)
-        
+    }
+    
+    // animations
+    func animationActionView() {
+        uiviewAction.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewAction.alpha = 1
+        }, completion: nil)
+    }
+    
+    func animationBlurMainScreen(action: String) {
+        if action == "show" {
+            uiviewBlurMainScreen.alpha = 0
+            uiviewAction.alpha = 0
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.uiviewBlurMainScreen.alpha = 1
+                self.uiviewAction.alpha = 1
+            }, completion: nil)
+        } else if action == "hide" {
+            uiviewBlurMainScreen.alpha = 1
+            uiviewAction.alpha = 1
+            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+                self.uiviewBlurMainScreen.alpha = 0
+                self.uiviewAction.alpha = 0
+            }, completion: { (done: Bool) in
+                if done {
+                    self.uiviewBlurMainScreen.isHidden = true
+                }
+            })
+        }
     }
     
     func animationRedSlidingLine(_ sender: UIButton!) {
@@ -627,6 +606,7 @@ class FMUserInfo: UIViewController {
         }), completion: { _ in
         })
     }
+    // animations end
     
     func addConstraintsToView(parent: UIView, child: UIView, left: Bool, gapH: CGFloat, width: CGFloat, top: Bool, gapV: CGFloat, height: CGFloat) {
         let H: String!
