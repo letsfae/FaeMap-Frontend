@@ -11,6 +11,7 @@ import UIKit
 protocol NameCardDelegate: class {
     func openFaeUsrInfo()
     func chatUser(id: Int)
+    func reportUser(id: Int)
 }
 
 class FMNameCardView: UIView {
@@ -74,7 +75,9 @@ class FMNameCardView: UIView {
         delegate?.chatUser(id: userId)
     }
     
-    
+    func reportUser() {
+        delegate?.reportUser(id: userId)
+    }
     
     func hideOptions(_ sender: UIButton) {
         guard boolOptionsOpened else { return }
@@ -123,12 +126,16 @@ class FMNameCardView: UIView {
         btnEditNameCard.clipsToBounds = true
         btnEditNameCard.alpha = 0
         
-        if btnReport != nil { btnReport.removeFromSuperview() }
+        if btnReport != nil {
+            btnReport.removeTarget(self, action: #selector(reportUser), for: .touchUpInside)
+            btnReport.removeFromSuperview()
+        }
         btnReport = UIButton(frame: initFrame)
         btnReport.setImage(#imageLiteral(resourceName: "pinDetailReport"), for: .normal)
         addSubview(btnReport)
         btnReport.clipsToBounds = true
         btnReport.alpha = 0
+        btnReport.addTarget(self, action: #selector(reportUser), for: .touchUpInside)
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.imgMoreOptions.frame = self.nextFrame
