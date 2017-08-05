@@ -41,7 +41,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.register(RecentTableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
-        tableView.separatorColor = UIColor._225225225()
+        tableView.separatorColor = UIColor._255160160()
         tableView.separatorInset = UIEdgeInsetsMake(0, 74, 0, 0)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor.white
@@ -144,7 +144,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 76
+        return 74
     }
     
     // MARK: - UItableViewDataSource
