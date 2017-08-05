@@ -172,7 +172,6 @@
 		B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */; };
 		B84024801F0C1AC400AC6283 /* MoodAvatarImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */; };
 		B84663D91E942E8F0010259B /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84663D81E942E8F0010259B /* DoubleExtension.swift */; };
-		B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */; };
 		B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */; };
 		B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */; };
 		B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */; };
@@ -442,7 +441,6 @@
 		B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTimeLoginViewController.swift; sourceTree = "<group>"; };
 		B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodAvatarImages.swift; sourceTree = "<group>"; };
 		B84663D81E942E8F0010259B /* DoubleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
-		B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainScreenSearchViewController.swift; sourceTree = "<group>"; };
 		B84BB9FA1DCAD8A800132BF7 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		B84E1A581DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForMainScreenSearch.swift; sourceTree = "<group>"; };
 		B84F7CCA1ED8E01800090ADA /* MapPinCollections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPinCollections.swift; sourceTree = "<group>"; };
@@ -1032,7 +1030,6 @@
 		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {
 			isa = PBXGroup;
 			children = (
-				B8490EF31DC51B2C00F4D648 /* MainScreenSearchViewController.swift */,
 				50902F541F2BB530002553F1 /* MapSearchViewController.swift */,
 				50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */,
 				50902F581F2BB72B002553F1 /* LocationListCell.swift */,
@@ -1474,7 +1471,6 @@
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				690452881F032A9900B58982 /* FaeGenderView.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
-				B8490EF41DC51B2C00F4D648 /* MainScreenSearchViewController.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,

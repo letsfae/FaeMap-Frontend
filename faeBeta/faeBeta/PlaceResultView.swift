@@ -66,6 +66,15 @@ class PlaceResultView: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
+    func load(for placeInfo: PlacePin) {
+        imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+        imgBack_1.lblName.text = placeInfo.name
+        imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        self.alpha = 1
+        boolLeft = false
+        boolRight = false
+    }
+    
     func loadingData(current: CCHMapClusterAnnotation) {
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {

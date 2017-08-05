@@ -11,7 +11,7 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
-class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
+class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var lblSearchContent: UILabel!
     let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
