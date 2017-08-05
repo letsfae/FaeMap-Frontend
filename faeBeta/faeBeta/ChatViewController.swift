@@ -19,8 +19,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate, CAAnimationDelegate
-{
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate {
     //MARK: - properties
     var ref = Database.database().reference().child(fireBaseRef)// reference to all chat room
     var roomRef : DatabaseReference?
@@ -165,6 +164,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         locExtendView.isHidden = true
         locExtendView.buttonCancel.addTarget(self, action: #selector(self.closeLocExtendView(_:)), for: .touchUpInside)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -196,7 +197,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.navigationBar.topItem?.title = ""
         let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor._898989()] as [String : Any]
         self.navigationController?.navigationBar.tintColor = UIColor._2499090()
-        self.navigationController!.navigationBar.titleTextAttributes = attributes
+        self.navigationController?.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
         
         //ATTENTION: Temporary comment it here because it's not used for now
