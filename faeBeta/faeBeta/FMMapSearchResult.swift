@@ -6,13 +6,26 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
-extension FaeMapViewController {
+extension FaeMapViewController: MapSearchDelegate {
+    
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         updateUI(searchText: searchText)
+        placeResultBar.load(for: place)
         let camera = faeMapView.camera
         camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: true)
+        faeMapView.setCamera(camera, animated: false)
+        mapClusterManager.removeAnnotations(faePlacePins) {
+            self.faePlacePins.removeAll()
+            let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager)
+            pin.pinInfo = place as AnyObject
+            pin.id = place.id
+            pin.class_2_icon_id = place.class_2_icon_id
+            pin.icon = UIImage(named: "place_map_\(place.class_2_icon_id)s") ?? #imageLiteral(resourceName: "place_map_48s")
+            pin.coordinate = place.coordinate
+            self.faePlacePins.append(pin)
+            self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+        }
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {

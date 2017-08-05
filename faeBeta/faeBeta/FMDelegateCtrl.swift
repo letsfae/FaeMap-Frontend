@@ -9,17 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
-    
-    // MainScreenSearchDelegate
-    func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
-        let camera = faeMapView.camera
-        camera.centerCoordinate = coordinate
-        faeMapView.setCamera(camera, animated: true)
-        updateTimerForUserPin()
-        timerSetup()
-        // send noti here to start filter spinning
-    }
+extension FaeMapViewController: LeftSlidingMenuDelegate {
     
     // PinDetailDelegate
     func backToMainMap() {

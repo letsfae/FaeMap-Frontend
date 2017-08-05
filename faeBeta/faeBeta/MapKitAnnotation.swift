@@ -58,7 +58,7 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     var timer: Timer?
     
-    init(type: String, cluster: CCHMapClusterController, json: JSON) {
+    init(type: String, cluster: CCHMapClusterController, json: JSON = JSON([])) {
         super.init()
         self.mapViewCluster = cluster
         self.type = type
