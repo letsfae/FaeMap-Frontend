@@ -68,7 +68,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        //self.loadingRecentTimer.invalidate()
+        self.loadingRecentTimer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +79,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //print("recent will appear")
         //startCheckingRecent()
         //self.tableView.reloadData()
-        //self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
         self.downloadCurrentUserAvatar()
     }
     
@@ -125,10 +125,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - tableView delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.cellsCurrentlyEditing.count == 0 {
-            tableView.deselectRow(at: indexPath, animated: true)
+            //tableView.deselectRow(at: indexPath, animated: true)
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
-                    performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
+                    //performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
+                    gotoChatFromRecent(selectedRowAt: indexPath)
                 }
             }
         } else {
@@ -175,6 +176,25 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         return cell
     }
     // MARK: - helpers
+    
+    func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
+        let chatVC = ChatViewController()
+        chatVC.hidesBottomBarWhenPushed = true
+        let recent = recents![indexPath.row]
+        chatVC.chatRoomId = user_id < recent["with_user_id"].intValue ? "\(user_id)-\(recent["with_user_id"].number!)" : "\(recent["with_user_id"].number!)-\(user_id)"
+        chatVC.chat_id = recent["chat_id"].number?.stringValue
+        let withUserUserId = recent["with_user_id"].number?.stringValue
+        let withUserName = recent["with_user_name"].string
+        let withUserNickName = recent["with_nick_name"].string
+        // Bryan
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userName = withUserName!
+        chatVC.realmWithUser!.userNickName = withUserNickName!
+        chatVC.realmWithUser!.userID = withUserUserId!
+        // EndBryan
+        //present(chatVC, animated: true, completion: nil)
+        navigationController?.pushViewController(chatVC, animated: true)
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -234,7 +254,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 // Bryan
                 // UserDefaults.standard.set(cacheRecent, forKey: (user_id.stringValue + "recentData"))
                 RealmChat.updateRecent(recents: cacheRecent)
-                self.tableView.reloadData()
                 if animated && indexPathSet != nil {
                     self.tableView.deleteRows(at: indexPathSet!, with: .left)
                 } else {
