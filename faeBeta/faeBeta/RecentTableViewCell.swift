@@ -153,19 +153,19 @@ class RecentTableViewCell: UITableViewCell {
         addConstraint(distanceToLeft)
         
         //NSLayoutConstraint.activateConstraint(distanceToLeft)
-        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottomMargin, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -8)
-        //addConstraint(bottomMargin)
+        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -1)
+        addConstraint(bottomMargin)
         
         distanceToRight = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: uiviewMain, attribute: .trailing, multiplier: 1.0, constant: 0)
         addConstraint(distanceToRight)
         
-        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: -11)
+        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0)
         addConstraint(mainviewTop)
         
         let heightConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 74)
-        uiviewMain.addConstraint(heightConstraint)
+        //uiviewMain.addConstraint(heightConstraint)
         let widthConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: screenWidth)
-        uiviewMain.addConstraint(widthConstraint)
+        //uiviewMain.addConstraint(widthConstraint)
         
         
         panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
@@ -175,6 +175,11 @@ class RecentTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        uiviewMain.backgroundColor = .white
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

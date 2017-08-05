@@ -68,7 +68,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.loadingRecentTimer.invalidate()
+        //self.loadingRecentTimer.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,7 +79,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //print("recent will appear")
         //startCheckingRecent()
         //self.tableView.reloadData()
-        self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        //self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
         self.downloadCurrentUserAvatar()
     }
     
