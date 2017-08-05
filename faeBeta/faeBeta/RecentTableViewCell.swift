@@ -45,16 +45,16 @@ protocol SwipeableCellDelegate: class {
 class RecentTableViewCell: UITableViewCell {
     
     // MARK: - properties
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var lastMessageLabel: UILabel!
-    @IBOutlet private weak var dateLabel: UILabel!
-    @IBOutlet private weak var counterLabel: UILabel!
-    @IBOutlet private weak var avatarImageView: UIImageView!
-    @IBOutlet private weak var countLabelLength: NSLayoutConstraint!
-    @IBOutlet private weak var deleteButton: UIButton!
-    @IBOutlet private weak var distanceToRight: NSLayoutConstraint!
-    @IBOutlet private weak var distanceToLeft: NSLayoutConstraint!
-    @IBOutlet private weak var mainView: UIView!
+//    @IBOutlet private weak var nameLabel: UILabel!
+//    @IBOutlet private weak var lastMessageLabel: UILabel!
+//    @IBOutlet private weak var dateLabel: UILabel!
+//    @IBOutlet private weak var counterLabel: UILabel!
+//    @IBOutlet private weak var avatarImageView: UIImageView!
+//    @IBOutlet private weak var countLabelLength: NSLayoutConstraint!
+//    @IBOutlet private weak var deleteButton: UIButton!
+    //@IBOutlet private weak var distanceToRight: NSLayoutConstraint!
+    //@IBOutlet private weak var distanceToLeft: NSLayoutConstraint!
+    //@IBOutlet private weak var mainView: UIView!
     
     // Felix - remove storyboard
     var imgAvatar: UIImageView!
@@ -64,6 +64,8 @@ class RecentTableViewCell: UITableViewCell {
     var lblDate: UILabel!
     var uiviewMain: UIView!
     var btnDelete: UIButton!
+    var distanceToRight: NSLayoutConstraint!
+    var distanceToLeft: NSLayoutConstraint!
     // end Felix
     
     
@@ -80,19 +82,26 @@ class RecentTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        btnDelete = UIButton(frame: CGRect(x: screenWidth - 69, y: 0, width: 69, height: 74.5))
+        btnDelete = UIButton(frame: CGRect(x: screenWidth - 69, y: 0, width: 69, height: 74))
         btnDelete.setImage(UIImage(named: "deleteButton.png"), for: .normal)
         addSubview(btnDelete)
         
+        //let btnDeleteTrailing = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: btnDelete, attribute: .trailing, multiplier: 1.0, constant: 0)
+        //addConstraint(btnDeleteTrailing)
+        
+        //let uiviewContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
+        //addSubview(uiviewContainer)
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
+        //uiviewMain = UIView()
         uiviewMain.backgroundColor = .white
+        uiviewMain.translatesAutoresizingMaskIntoConstraints = false
         
         imgAvatar = UIImageView()
         imgAvatar.layer.cornerRadius = 30
         imgAvatar.layer.masksToBounds = true
         imgAvatar.contentMode = .scaleAspectFill
         uiviewMain.addSubview(imgAvatar)
-        uiviewMain.addConstraintsWithFormat("H:|-9-[v0(60)]", options: [], views: imgAvatar)
+        uiviewMain.addConstraintsWithFormat("H:|-6-[v0(60)]", options: [], views: imgAvatar)
         uiviewMain.addConstraintsWithFormat("V:|-7.5-[v0(60)]", options: [], views: imgAvatar)
         
         lblCounter = UILabel()
@@ -105,7 +114,7 @@ class RecentTableViewCell: UITableViewCell {
         lblCounter.backgroundColor = UIColor._2499090()
         lblCounter.isHidden = true
         uiviewMain.addSubview(lblCounter)
-        //uiviewMain.addConstraintsWithFormat("H:|-50-[v0(22)]", options: [], views: lblCounter)
+        //uiviewMain.addConstraintsWithFormat("H:|-48-[v0(22)]", options: [], views: lblCounter)
         //uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
         
         lblName = UILabel()
@@ -139,15 +148,43 @@ class RecentTableViewCell: UITableViewCell {
         
         addSubview(uiviewMain)
         
+        //addConstraintsWithFormat("H:|-9-[v0(60)]", options: [], views: uiviewMain)
+        distanceToLeft = NSLayoutConstraint(item: uiviewMain, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0)
+        addConstraint(distanceToLeft)
+        
+        //NSLayoutConstraint.activateConstraint(distanceToLeft)
+        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottomMargin, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -8)
+        //addConstraint(bottomMargin)
+        
+        distanceToRight = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: uiviewMain, attribute: .trailing, multiplier: 1.0, constant: 0)
+        addConstraint(distanceToRight)
+        
+        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: -11)
+        addConstraint(mainviewTop)
+        
+        let heightConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 74)
+        uiviewMain.addConstraint(heightConstraint)
+        let widthConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: screenWidth)
+        uiviewMain.addConstraint(widthConstraint)
+        
+        
+        panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
+        panRecognizer.delegate = self
+        addGestureRecognizer(panRecognizer)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        uiviewMain.backgroundColor = .white
+    }
+    
     func bindData2(_ recent : RealmRecent) {
         //print(recent)
-        layoutIfNeeded()
+        //layoutIfNeeded()
         
         if let myInteger = Int(recent.withUserID) {
             //Bryan
@@ -164,10 +201,10 @@ class RecentTableViewCell: UITableViewCell {
             lblCounter.isHidden = false
             lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
             if(lblCounter.text?.characters.count >= 2){
-                uiviewMain.addConstraintsWithFormat("H:|-50-[v0(28)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(28)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             }else{
-                uiviewMain.addConstraintsWithFormat("H:|-50-[v0(22)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(22)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             }
         }else{
@@ -197,11 +234,11 @@ class RecentTableViewCell: UITableViewCell {
         self.mainView.addGestureRecognizer(self.panRecognizer)
     }*/
 
-    /*override func prepareForReuse()
+    override func prepareForReuse()
     {
         super.prepareForReuse()
-        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
-    }*/
+        //self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+    }
     
     // MARK: - populate cell
     // set up the cell with a JSON data
@@ -342,14 +379,16 @@ class RecentTableViewCell: UITableViewCell {
     
     //MARK: - Cell control
     @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
+        //print("pan")
+        //distanceToLeft.constant = 0
         switch (recognizer.state) {
         case .began:
             isDraggingRecentTableViewCell = true
-            self.panStartPoint = recognizer.translation(in: self.mainView)
+            self.panStartPoint = recognizer.translation(in: uiviewMain)
             self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
             break;
         case .changed:
-            let currentPoint = recognizer.translation(in: self.mainView)
+            let currentPoint = recognizer.translation(in: uiviewMain)
             let deltaX = currentPoint.x - self.panStartPoint.x;
             var panningLeft = false
             if (currentPoint.x < self.panStartPoint.x) {  //1
@@ -400,7 +439,7 @@ class RecentTableViewCell: UITableViewCell {
             
 //            if (self.startingRightLayoutConstraintConstant == 0) { //1
                 //Cell was opening
-                let halfOfButtonOne = self.deleteButton.frame.width / 2; //2
+                let halfOfButtonOne = btnDelete.frame.width / 2; //2
                 if (self.distanceToRight.constant >= halfOfButtonOne) { //3
                     //Open all the way
                     self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
