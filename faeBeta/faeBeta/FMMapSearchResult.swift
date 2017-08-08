@@ -12,6 +12,7 @@ extension FaeMapViewController: MapSearchDelegate {
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         updateUI(searchText: searchText)
         placeResultBar.load(for: place)
+        PLACE_ENABLE = false
         let camera = faeMapView.camera
         camera.centerCoordinate = place.coordinate
         faeMapView.setCamera(camera, animated: false)
