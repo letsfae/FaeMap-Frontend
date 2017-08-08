@@ -10,11 +10,19 @@ import UIKit
 import SwiftyJSON
 
 extension FaeMapViewController: NameCardDelegate {
-    
     func loadNameCard() {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
         view.addSubview(uiviewNameCard)
+    }
+    
+    func loadAddFriendView() {
+        uiviewAddWithdrawFriend = FMAddWithdrawFriendView()
+        view.addSubview(uiviewAddWithdrawFriend)
+        uiviewAddWithdrawFriend.layer.zPosition = 1000
+        uiviewAddWithdrawFriend.isHidden = true
+        uiviewAddWithdrawFriend.delegate = uiviewNameCard
+        uiviewNameCard.passStatusDelegate = uiviewAddWithdrawFriend
     }
     
     // NameCardDelegate

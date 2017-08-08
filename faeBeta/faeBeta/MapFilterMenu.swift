@@ -14,13 +14,11 @@ protocol MapFilterMenuDelegate: class {
     func showAvatars(isOn: Bool)
 }
 
-class MapFilterMenu: UIView {
+class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     weak var delegate: MapFilterMenuDelegate?
     
-    var uiviewMapOpt1: UIView!
-    var uiviewMapOpt2: UIView!
-    var imgDot1: UIImageView!
-    var imgDot2: UIImageView!
+    var uiviewMapOpt: UIView!
+    var uiviewPlaceLoc: UIView!
     var btnDiscovery: UIButton!
     var btnHideMFMenu: UIButton!
     var lblDiscovery: UILabel!
@@ -30,6 +28,12 @@ class MapFilterMenu: UIView {
     var switchRefresh: UISwitch!
     var switchCyclePins: UISwitch!
     var switchShowAvatars: UISwitch!
+    var pageMapOptions: UIPageControl!
+    var scrollViewFilterMenu: UIScrollView!
+    var btnPlaceLoc: UIButton!
+    var curtTitle: String = "Places"
+    var uiviewBubbleHint: UIView!
+    var tblPlaceLoc: UITableView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,110 +46,108 @@ class MapFilterMenu: UIView {
     
     fileprivate func setUpUI() {
         backgroundColor = .white
+        // draw header & footer
+        let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        topLine.backgroundColor = UIColor._200199204()
+        addSubview(topLine)
         
-        // draw three lines
-        let firstLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        firstLine.backgroundColor = UIColor._200199204()
-        addSubview(firstLine)
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 433 * screenHeightFactor, width: screenWidth, height: 1))
+        bottomLine.backgroundColor = UIColor._200199204()
+        addSubview(bottomLine)
         
-        let secLine = UIView(frame: CGRect(x: 0, y: 66, width: screenWidth, height: 1))
-        secLine.backgroundColor = UIColor._200199204()
-        addSubview(secLine)
-        
-        let thirdLine = UIView(frame: CGRect(x: 0, y: 433, width: screenWidth, height: 1))
-        thirdLine.backgroundColor = UIColor._200199204()
-        addSubview(thirdLine)
-        
-        // draw two uiview of Map Options
-        uiviewMapOpt1 = UIView(frame: CGRect(x: 0, y: 67, width: screenWidth, height: 366))
-        uiviewMapOpt1.backgroundColor = .white
-        addSubview(uiviewMapOpt1)
-        
-        uiviewMapOpt2 = UIView(frame: CGRect(x: screenWidth, y: 67, width: screenWidth, height: 366))
-        uiviewMapOpt2.backgroundColor = .white
-        addSubview(uiviewMapOpt2)
-        
-        // draw two dots
-        imgDot1 = UIImageView(frame: CGRect(x: screenWidth/2 - 11.5, y: 448, width: 8, height: 8))
-        imgDot1.backgroundColor = UIColor._2499090()
-        imgDot1.layer.cornerRadius = 4
-        addSubview(imgDot1)
-        
-        imgDot2 = UIImageView(frame: CGRect(x: screenWidth/2 + 3.5, y: 448, width: 8, height: 8))
-        imgDot2.backgroundColor = UIColor._182182182()
-        imgDot2.layer.cornerRadius = 4
-        addSubview(imgDot2)
-
         // draw downArraw button
         let imgDownArrow = UIImageView(frame: CGRect(x: (screenWidth-36)/2, y: 0, width: 36, height: 30))
         imgDownArrow.image = #imageLiteral(resourceName: "mapFilterMenuArrow")
         imgDownArrow.contentMode = .center
         addSubview(imgDownArrow)
         
+        // draw two uiview of Map Options
+        uiviewMapOpt = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 405))
+//        uiviewMapOpt1.backgroundColor = .white
+        
+        uiviewPlaceLoc = UIView(frame: CGRect(x: 414, y: 0, w: 414, h: 405))
+//        uiviewPlaceLoc.backgroundColor = .blue
+        
+        scrollViewFilterMenu = UIScrollView(frame: CGRect(x: 0, y: 28, w: 414, h: 405))
+        scrollViewFilterMenu.delegate = self
+        scrollViewFilterMenu.isPagingEnabled = true
+        scrollViewFilterMenu.showsHorizontalScrollIndicator = false
+        scrollViewFilterMenu.addSubview(uiviewMapOpt)
+        scrollViewFilterMenu.addSubview(uiviewPlaceLoc)
+        scrollViewFilterMenu.contentSize = CGSize(width: screenWidth * 2, height: 405 * screenHeightFactor)
+        addSubview(scrollViewFilterMenu)
+        
+        // draw two dots - page control
+        pageMapOptions = UIPageControl(frame: CGRect(x: 0, y: 448 * screenHeightFactor, width: screenWidth, height: 8))
+        pageMapOptions.numberOfPages = 2
+        pageMapOptions.currentPage = 0
+        pageMapOptions.pageIndicatorTintColor = UIColor._182182182()
+        pageMapOptions.currentPageIndicatorTintColor = UIColor._2499090()
+        pageMapOptions.addTarget(self, action: #selector(changePage(_:)), for: .valueChanged)
+        addSubview(pageMapOptions)
+        
         // draw fake button to hide map filter menu
-        btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 66))
+        btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 66))
         addSubview(btnHideMFMenu)
         
-        // draw "Map Options"
-        let lblMapOptions = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 29, width: 250, height: 27))
-        lblMapOptions.text = "Map Options"
-        lblMapOptions.textAlignment = .center
-        lblMapOptions.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblMapOptions.textColor = UIColor._898989()
-        addSubview(lblMapOptions)
-
         loadView1()
         loadView2()
-        
-        let swipeGes1 = UISwipeGestureRecognizer(target: self, action: #selector(self.swipeFromOpt1ToOpt2))
-        swipeGes1.direction = .left
-        uiviewMapOpt1.addGestureRecognizer(swipeGes1)
-        
-        let swipeGes2 = UISwipeGestureRecognizer(target: self, action: #selector(self.swipeFromOpt2ToOpt1))
-        swipeGes2.direction = .right
-        uiviewMapOpt2.addGestureRecognizer(swipeGes2)
     }
     
     func loadView1() {
+        // draw "Map Options"
+        let lblMapOptions = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 0, width: 250, height: 27 * screenHeightFactor))
+        lblMapOptions.text = "Map Options"
+        lblMapOptions.textAlignment = .center
+        lblMapOptions.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
+        lblMapOptions.textColor = UIColor._898989()
+        uiviewMapOpt.addSubview(lblMapOptions)
+        
+        let line = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor, width: screenWidth, height: 1))
+        line.backgroundColor = UIColor._200199204()
+        uiviewMapOpt.addSubview(line)
+        
         // draw "Map Type"
-        let lblMapType = UILabel(frame: CGRect(x: 30, y: 15, width: 100, height: 25))
+        let lblMapType = UILabel(frame: CGRect(x: 30, y: 54, w: 100, h: 25))
         lblMapType.text = "Map Type"
-        lblMapType.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblMapType.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         lblMapType.textColor = UIColor._898989()
-        uiviewMapOpt1.addSubview(lblMapType)
+        uiviewMapOpt.addSubview(lblMapType)
         
         // draw Discovery button
-        btnDiscovery = UIButton(frame: CGRect(x: (screenWidth-138)/2, y: 55, width: 138, height: 90))
+        btnDiscovery = UIButton(frame: CGRect(x: 0, y: 94, w: 138, h: 90))
+        btnDiscovery.center.x = screenWidth / 2
         btnDiscovery.setImage(#imageLiteral(resourceName: "mapFilterDiscovery"), for: .normal)
         btnDiscovery.addTarget(self, action: #selector(self.switchBetweenDisAndSocial(_:)), for: .touchUpInside)
-        uiviewMapOpt1.addSubview(btnDiscovery)
+        uiviewMapOpt.addSubview(btnDiscovery)
         
         // draw "Discovery" label
-        lblDiscovery = UILabel(frame: CGRect(x: (screenWidth-100)/2, y: 152, width: 100, height: 19))
+        lblDiscovery = UILabel(frame: CGRect(x: 0, y: 191, w: 100, h: 19))
+        lblDiscovery.center.x = screenWidth / 2
         lblDiscovery.text = "Discovery"
         lblDiscovery.textAlignment = .center
         lblDiscovery.font = UIFont(name: "AvenirNext-DemiBold", size: 14)
         lblDiscovery.textColor = UIColor._2499090()
-        uiviewMapOpt1.addSubview(lblDiscovery)
+        uiviewMapOpt.addSubview(lblDiscovery)
         
         // draw three labels - "Auto Refresh", "Auto Cycle Pins", "Show Avatars"
-        lblRefresh = UILabel(frame: CGRect(x: 30, y: 196, width: 159, height: 25))
+        lblRefresh = UILabel(frame: CGRect(x: 30, y: 235, w: 159, h: 25))
         lblRefresh.text = "Auto Refresh"
-        lblRefresh.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblRefresh.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         lblRefresh.textColor = UIColor._115115115()
-        uiviewMapOpt1.addSubview(lblRefresh)
+        uiviewMapOpt.addSubview(lblRefresh)
         
-        lblCyclePins = UILabel(frame: CGRect(x: 30, y: 250, width: 150, height: 25))
+        lblCyclePins = UILabel(frame: CGRect(x: 30, y: 289, w: 150, h: 25))
         lblCyclePins.text = "Auto Cycle Pins"
-        lblCyclePins.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblCyclePins.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         lblCyclePins.textColor = UIColor._146146146()
-        uiviewMapOpt1.addSubview(lblCyclePins)
+        uiviewMapOpt.addSubview(lblCyclePins)
         
-        lblShowAvatars = UILabel(frame: CGRect(x: 30, y: 303, width: 150, height: 25))
+        lblShowAvatars = UILabel(frame: CGRect(x: 30, y: 342, w: 150, h: 25))
         lblShowAvatars.text = "Show Avatars"
-        lblShowAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblShowAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         lblShowAvatars.textColor = UIColor._146146146()
-        uiviewMapOpt1.addSubview(lblShowAvatars)
+        uiviewMapOpt.addSubview(lblShowAvatars)
         
         // draw three Switch buttons
         switchRefresh = UISwitch()
@@ -153,51 +155,101 @@ class MapFilterMenu: UIView {
         switchRefresh.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchRefresh.addTarget(self, action: #selector(self.switchAutoRefresh(_:)), for: .valueChanged)
         switchRefresh.isOn = true
-        uiviewMapOpt1.addSubview(switchRefresh)
-        addConstraintsWithFormat("H:[v0(39)]-26-|", options: [], views: switchRefresh)
-        addConstraintsWithFormat("V:|-193-[v0(23)]", options: [], views: switchRefresh)
+        uiviewMapOpt.addSubview(switchRefresh)
+        addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchRefresh)
+        addConstraintsWithFormat("V:|-\(232*screenHeightFactor)-[v0(23)]", options: [], views: switchRefresh)
         
         switchCyclePins = UISwitch()
         switchCyclePins.onTintColor = UIColor._2499090()
         switchCyclePins.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchCyclePins.addTarget(self, action: #selector(self.switchAutoCyclePins(_:)), for: .valueChanged)
         switchCyclePins.isOn = false
-        uiviewMapOpt1.addSubview(switchCyclePins)
-        addConstraintsWithFormat("H:[v0(39)]-26-|", options: [], views: switchCyclePins)
-        addConstraintsWithFormat("V:|-247-[v0(23)]", options: [], views: switchCyclePins)
+        uiviewMapOpt.addSubview(switchCyclePins)
+        addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchCyclePins)
+        addConstraintsWithFormat("V:|-\(286*screenHeightFactor)-[v0(23)]", options: [], views: switchCyclePins)
         
         switchShowAvatars = UISwitch()
         switchShowAvatars.onTintColor = UIColor._2499090()
         switchShowAvatars.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchShowAvatars.addTarget(self, action: #selector(self.switchShowAvatars(_:)), for: .valueChanged)
         switchShowAvatars.isOn = false
-        uiviewMapOpt1.addSubview(switchShowAvatars)
-        addConstraintsWithFormat("H:[v0(39)]-26-|", options: [], views: switchShowAvatars)
-        addConstraintsWithFormat("V:|-300-[v0(23)]", options: [], views: switchShowAvatars)
+        uiviewMapOpt.addSubview(switchShowAvatars)
+        addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchShowAvatars)
+        addConstraintsWithFormat("V:|-\(339*screenHeightFactor)-[v0(23)]", options: [], views: switchShowAvatars)
     }
     
     func loadView2() {
-    }
-    
-    func swipeFromOpt1ToOpt2(_ sender: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.uiviewMapOpt1.frame.origin.x = -screenWidth
-            self.uiviewMapOpt2.frame.origin.x = 0
-            self.imgDot2.backgroundColor = UIColor._2499090()
-            self.imgDot1.backgroundColor = UIColor._182182182()
-        }, completion: { _ in
-        })
+        // button "Places" & "Locations"
+        btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, w: 150, h: 27))
+        btnPlaceLoc.center.x = screenWidth / 2
+        uiviewPlaceLoc.addSubview(btnPlaceLoc)
+        setView2CurtTitle()
         
+        let uiviewMyList = UIView(frame: CGRect(x: 0, y: 36, w: 414, h: 27))
+        uiviewMyList.backgroundColor = UIColor._248248248()
+        uiviewPlaceLoc.addSubview(uiviewMyList)
+        
+        let lblMyList = UILabel(frame: CGRect(x: 15, y: 4, w: 60, h: 20))
+        lblMyList.text = "My Lists"
+        lblMyList.textColor = UIColor._155155155()
+        lblMyList.font = UIFont(name: "AvenirNext-DemiBold", size: 15 * screenHeightFactor)
+        uiviewMyList.addSubview(lblMyList)
+        
+        let firstLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        firstLine.backgroundColor = UIColor._200199204()
+        uiviewMyList.addSubview(firstLine)
+        
+        let secLine = UIView()
+        secLine.backgroundColor = UIColor._200199204()
+        uiviewMyList.addSubview(secLine)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: secLine)
+        addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: secLine)
+        
+        uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 63, w: 414, h: 342))
+        uiviewPlaceLoc.addSubview(uiviewBubbleHint)
+        
+        let imgBubble = UIImageView(frame: CGRect(x: 0, y: 51, w: 260, h: 212))
+        imgBubble.center.x = screenWidth / 2
+        imgBubble.image = #imageLiteral(resourceName: "mb_bubbleHint")
+        uiviewBubbleHint.addSubview(imgBubble)
+        
+        let lblBubbleHint = UILabel(frame: CGRect(x: 20, y: 10, w: 220, h: 75))
+        lblBubbleHint.text = "You don't have any lists \nto show! Let's go create \na List in Collections."
+        lblBubbleHint.lineBreakMode = .byTruncatingTail
+        lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        lblBubbleHint.textColor = UIColor._898989()
+        lblBubbleHint.numberOfLines = 0
+        imgBubble.addSubview(lblBubbleHint)
+        
+        tblPlaceLoc = UITableView(frame: CGRect(x: 0, y: 63, w: 414, h: 342))
+        tblPlaceLoc.delegate = self
+        tblPlaceLoc.dataSource = self
+        tblPlaceLoc.separatorStyle = .none
+        tblPlaceLoc.register(CollectionsPlaceLocCell.self, forCellReuseIdentifier: "PlaceLoc")
+        uiviewPlaceLoc.addSubview(tblPlaceLoc)
+        
+        uiviewBubbleHint.isHidden = true
     }
     
-    func swipeFromOpt2ToOpt1(_ sender: UIGestureRecognizer) {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.uiviewMapOpt1.frame.origin.x = 0
-            self.uiviewMapOpt2.frame.origin.x = screenWidth
-            self.imgDot1.backgroundColor = UIColor._2499090()
-            self.imgDot2.backgroundColor = UIColor._182182182()
-        }, completion: { _ in
-        })
+    func setView2CurtTitle() {
+        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
+        
+        let downAttachment = InlineTextAttachment()
+        downAttachment.fontDescender = 1
+        downAttachment.image = #imageLiteral(resourceName: "mb_btnDropDown")
+        
+        let curtTitlePlusImg = curtTitleStr
+        curtTitlePlusImg.append(NSAttributedString(attachment: downAttachment))
+        btnPlaceLoc.setAttributedTitle(curtTitlePlusImg, for: .normal)
+    }
+    
+    func changePage(_ sender: Any?) {
+        scrollViewFilterMenu.contentOffset.x = screenWidth * CGFloat(pageMapOptions.currentPage)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
     }
     
     func switchBetweenDisAndSocial(_ sender: UIButton) {
@@ -231,5 +283,20 @@ class MapFilterMenu: UIView {
             lblShowAvatars.textColor = UIColor._146146146()
             delegate?.showAvatars(isOn: false)
         }
+    }
+    
+    // MARK - TableView
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "PlaceLoc", for: indexPath) as! CollectionsPlaceLocCell
+        cell.lblListName.text = "My Favorite Place"
+        cell.lblListNum.text = "12 items"
+        return cell
     }
 }
