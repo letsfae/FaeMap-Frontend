@@ -41,6 +41,9 @@ extension FaeMapViewController {
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
+        PLACE_ENABLE = true
+        placeResultBar.alpha = 0
+        mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
