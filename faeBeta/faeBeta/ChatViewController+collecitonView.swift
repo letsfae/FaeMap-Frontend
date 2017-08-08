@@ -27,7 +27,7 @@ extension ChatViewController {
             cell.textView?.textColor = UIColor.white
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
-            cell.textView?.textColor = UIColor(red: 107.0/255.0, green: 105.0/255.0, blue: 105.0/255.0, alpha: 1.0)
+            cell.textView?.textColor = UIColor._107105105()
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
         cell.avatarImageView.layer.cornerRadius = 17.5

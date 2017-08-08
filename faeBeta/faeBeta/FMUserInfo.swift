@@ -279,7 +279,7 @@ class FMUserInfo: UIViewController {
     
     fileprivate func loadBlurView() {
         uiviewBlurMainScreen = UIView(frame: CGRect(x: 0, y: 0, w: screenWidth / screenWidthFactor, h: screenHeight / screenHeightFactor))
-        uiviewBlurMainScreen.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 70 / 100)
+        uiviewBlurMainScreen.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
         
         uiviewAction = UIView()
         uiviewAction.backgroundColor = UIColor.white

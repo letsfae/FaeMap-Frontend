@@ -80,7 +80,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func loadLeftWindow() {
         btnBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        btnBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.7)
+        btnBackground.backgroundColor = UIColor._107105105()
         btnBackground.addTarget(self, action: #selector(actionCloseMenu(_:)), for: .touchUpInside)
         view.addSubview(btnBackground)
         btnBackground.alpha = 0

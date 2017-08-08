@@ -65,8 +65,8 @@ class FaeContact {
         }
     }
     
-    func deleteFriend(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
-        deleteFromURL("friends/" + requestId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+    func deleteFriend(userId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        deleteFromURL("friends/" + userId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
             completion(status, message)
