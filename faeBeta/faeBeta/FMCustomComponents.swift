@@ -780,7 +780,7 @@ class FMAddWithdrawFriendView: UIView, PassStatusFromButtonToView {
     func animationActionView() {
         uiviewChooseAction.alpha = 0
         uiviewMsgSent.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
             self.uiviewMsgSent.alpha = 1
         }, completion: nil)
     }
@@ -788,7 +788,7 @@ class FMAddWithdrawFriendView: UIView, PassStatusFromButtonToView {
     func animationShowSelf() {
         alpha = 0
         uiviewChooseAction.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
             self.alpha = 1
             self.uiviewChooseAction.alpha = 1
         }, completion: nil)
@@ -797,13 +797,11 @@ class FMAddWithdrawFriendView: UIView, PassStatusFromButtonToView {
     func animationHideSelf() {
         alpha = 1
         uiviewChooseAction.alpha = 1
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
             self.alpha = 0
             self.uiviewChooseAction.alpha = 0
-        }, completion: { (done: Bool) in
-            if done {
-                self.isHidden = true
-            }
+        }, completion: { _ in
+            self.isHidden = true
         })
     }
     // animations end
