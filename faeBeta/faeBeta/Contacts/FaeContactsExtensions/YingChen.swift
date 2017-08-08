@@ -84,6 +84,7 @@ extension ContactsViewController {
             self.blurViewDropDownMenu.frame.origin.y = -39
         })
         navBarMenuBtnClicked = false
+        schbarContacts.txtSchField.resignFirstResponder()
     }
     
     // function for drop down menu button, to show / hide the drop down menu (UIVisualView)

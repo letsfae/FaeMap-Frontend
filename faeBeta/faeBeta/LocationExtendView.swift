@@ -42,13 +42,13 @@ class LocationExtendView : UIView {
         LabelLine2.text = "LOS ANGELES, CA 90007"
         
         LabelLine2.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        LabelLine2.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
+        LabelLine2.textColor = UIColor._107105105()
         self.addSubview(LabelLine2)
         
         LabelLine3 = UILabel(frame: CGRect(x: 92, y: 55, width: 267, height: 16))
         LabelLine3.text = "UNITED STATES"
         LabelLine3.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        LabelLine3.textColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 1)
+        LabelLine3.textColor = UIColor._107105105()
         self.addSubview(LabelLine3)
         
         //cancel button
