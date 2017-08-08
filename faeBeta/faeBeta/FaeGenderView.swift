@@ -117,5 +117,4 @@ class FaeGenderView: UIView {
             frame.origin.x = screenWidth - 61 + marginDiff
         }
     }
-    
 }

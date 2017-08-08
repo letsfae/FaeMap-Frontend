@@ -42,7 +42,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevBearing: Double = 0
     var mapClusterManager: CCHMapClusterController!
     let FILTER_ENABLE = true
-    let PLACE_ENABLE = true
+    var PLACE_ENABLE = true
     let USER_ENABLE = false
     let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
     var btnFilterIcon: MapFilterIcon! // Filter Button

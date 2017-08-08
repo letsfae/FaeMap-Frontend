@@ -49,7 +49,7 @@ class FMNameCardView: UIView {
     var imgCover: UIImageView!
     var imgMiddleLine: UIImageView!
     var lblNickName: UILabel!
-    var lblShortIntro: UILabel!
+    var lblUserName: UILabel!
     var uiviewPrivacy: FaeGenderView!
     var imgMoreOptions: UIImageView!
     var btnReport: UIButton!
@@ -157,9 +157,9 @@ class FMNameCardView: UIView {
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
         }
-        uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, _, shortIntro) in
+        uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, _) in
             self.lblNickName.text = nickName
-            self.lblShortIntro.text = shortIntro
+            self.lblUserName.text = "@" + userName
         }
     }
     
@@ -172,7 +172,6 @@ class FMNameCardView: UIView {
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 104, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 111, w: 74, h: 74)
             self.btnChat.frame = CGRect(x: 146.5, y: 264, w: 27, h: 27)
-            self.lblShortIntro.frame = CGRect(x: 75, y: 220, w: 171, h: 18)
             self.imgMiddleLine.frame = CGRect(x: 26, y: 251.5, w: 268, h: 1)
             self.btnFav.frame = CGRect(x: 69, y: 264, w: 27, h: 27)
             self.btnWaveSelf.frame = CGRect(x: 69, y: 264, w: 27, h: 27)
@@ -182,6 +181,8 @@ class FMNameCardView: UIView {
         }, completion: { _ in
             self.lblNickName.frame = CGRect(x: 67, y: 194, w: 186, h: 25)
             self.lblNickName.alpha = 1
+            self.lblUserName.frame = CGRect(x: 75, y: 220, w: 171, h: 18)
+            self.lblUserName.alpha = 1
         })
     }
     
@@ -189,7 +190,7 @@ class FMNameCardView: UIView {
         guard boolCardOpened else { return }
         boolCardOpened = false
         self.lblNickName.text = ""
-        self.lblShortIntro.text = ""
+        self.lblUserName.text = ""
         UIView.animate(withDuration: 0.3, animations: {
             self.imgBackShadow.frame = self.secondaryFrame
             self.imgCover.frame = self.secondaryFrame
@@ -198,7 +199,8 @@ class FMNameCardView: UIView {
             self.btnChat.frame = self.secondaryFrame
             self.lblNickName.frame = self.secondaryFrame
             self.lblNickName.alpha = 0
-            self.lblShortIntro.frame = self.secondaryFrame
+            self.lblUserName.frame = self.secondaryFrame
+            self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.secondaryFrame
             self.btnFav.frame = self.secondaryFrame
             self.btnWaveSelf.frame = self.secondaryFrame
@@ -219,7 +221,8 @@ class FMNameCardView: UIView {
             self.btnChat.frame = self.initialFrame
             self.lblNickName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
             self.lblNickName.alpha = 0
-            self.lblShortIntro.frame = self.initialFrame
+            self.lblUserName.frame = self.initialFrame
+            self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.initialFrame
             self.btnFav.frame = self.initialFrame
             self.btnWaveSelf.frame = self.initialFrame
@@ -288,13 +291,14 @@ class FMNameCardView: UIView {
         lblNickName.alpha = 0
         addSubview(lblNickName)
         
-        lblShortIntro = UILabel(frame: initialFrame)
-        lblShortIntro.layer.anchorPoint = nameCardAnchor
-        lblShortIntro.text = ""
-        lblShortIntro.textAlignment = .center
-        lblShortIntro.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
-        lblShortIntro.textColor = UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1.0)
-        addSubview(lblShortIntro)
+        lblUserName = UILabel(frame: initialFrame)
+        lblUserName.layer.anchorPoint = nameCardAnchor
+        lblUserName.text = ""
+        lblUserName.textAlignment = .center
+        lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
+        lblUserName.textColor = UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1.0)
+        lblUserName.alpha = 0
+        addSubview(lblUserName)
         
         imgMiddleLine = UIImageView(frame: initialFrame)
         imgMiddleLine.layer.anchorPoint = nameCardAnchor

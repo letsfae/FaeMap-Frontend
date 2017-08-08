@@ -87,6 +87,7 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
+        guard PLACE_ENABLE else { return }
         boolCanUpdatePlacePin = false
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
