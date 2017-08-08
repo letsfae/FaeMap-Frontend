@@ -62,6 +62,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewNameCard: FMNameCardView!
     var mkOverLay = [MKOverlay]()
     var selfAnView: SelfAnnotationView?
+    var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
     
     // System Functions
     override func viewDidLoad() {
@@ -70,6 +71,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         getUserStatus()
         loadMapView()
         loadNameCard()
+        loadAddFriendView()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()

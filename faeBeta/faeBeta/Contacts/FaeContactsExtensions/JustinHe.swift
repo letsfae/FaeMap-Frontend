@@ -17,8 +17,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.delegate = self
         tblContacts.separatorStyle = .none
         self.automaticallyAdjustsScrollViewInsets = false
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
-        tblContacts.addGestureRecognizer(tapToDismissKeyboard)
+//        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
+//        tblContacts.addGestureRecognizer(tapToDismissKeyboard)
         tblContacts.addGestureRecognizer(setTapDismissDropdownMenu())
         
         /* Comment from Joshua:
@@ -290,9 +290,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         return 74
     }
     
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarContacts.txtSchField.resignFirstResponder()
-    }
+//    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+//        schbarContacts.txtSchField.resignFirstResponder()
+//    }
     
     func animateWithdrawal(listType: Int) {
         switch listType {
