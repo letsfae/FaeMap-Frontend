@@ -199,9 +199,11 @@ class PlaceView: UIImageView {
     var imgType: UIImageView!
     var lblName: UILabel!
     var lblAddr: UILabel!
+    var lblHours: UILabel!
+    var lblPrice: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 2, y: 0, w: 410, h: 80))
+        super.init(frame: CGRect(x: 2, y: 0, w: 410, h: 102))
         loadContent()
     }
     
@@ -211,27 +213,45 @@ class PlaceView: UIImageView {
     
     private func loadContent() {
         contentMode = .scaleAspectFit
-        image = #imageLiteral(resourceName: "placeResult_shadow")
+        image = #imageLiteral(resourceName: "placeResult_shadow_new")
         
         imgType = UIImageView()
         addSubview(imgType)
-        addConstraintsWithFormat("H:|-15-[v0(58)]", options: [], views: imgType)
-        addConstraintsWithFormat("V:|-11-[v0(58)]", options: [], views: imgType)
+        addConstraintsWithFormat("H:|-15-[v0(66)]", options: [], views: imgType)
+        addConstraintsWithFormat("V:|-18-[v0(66)]", options: [], views: imgType)
         
         lblName = UILabel()
         addSubview(lblName)
         lblName.textAlignment = .left
         lblName.textColor = UIColor._898989()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblName)
-        addConstraintsWithFormat("V:|-22-[v0(20)]", options: [], views: lblName)
+        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblName)
+        addConstraintsWithFormat("V:|-23-[v0(20)]", options: [], views: lblName)
         
         lblAddr = UILabel()
         addSubview(lblAddr)
         lblAddr.textAlignment = .left
         lblAddr.textColor = UIColor._107107107()
         lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblAddr)
-        addConstraintsWithFormat("V:|-43-[v0(16)]", options: [], views: lblAddr)
+        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblAddr)
+        addConstraintsWithFormat("V:|-46-[v0(16)]", options: [], views: lblAddr)
+        
+        lblHours = UILabel()
+        addSubview(lblHours)
+        lblHours.textAlignment = .left
+        lblHours.textColor = UIColor._107107107()
+        lblHours.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblHours)
+        addConstraintsWithFormat("V:|-63-[v0(16)]", options: [], views: lblHours)
+        lblHours.text = "Open 24 Hours"
+        
+        lblPrice = UILabel()
+        addSubview(lblPrice)
+        lblPrice.textAlignment = .right
+        lblPrice.textColor = UIColor._107107107()
+        lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        addConstraintsWithFormat("H:[v0(32)]-18-|", options: [], views: lblPrice)
+        addConstraintsWithFormat("V:|-69-[v0(18)]", options: [], views: lblPrice)
+        lblPrice.text = "$$$$"
     }
 }
