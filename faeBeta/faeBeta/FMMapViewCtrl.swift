@@ -40,9 +40,12 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard boolPreventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
-            animateToCoordinate(type: 1, coordinate: LocManager.shared.curtLoc.coordinate, animated: true)
+            boolCanOpenPin = false
+            mapGesture(isOn: false)
             uiviewNameCard.userId = Key.shared.user_id
-            uiviewNameCard.show()
+            uiviewNameCard.show()  {
+                self.boolCanOpenPin = true
+            }
         }
     }
     
@@ -138,9 +141,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {
         deselectAllAnnotations()
         placeResultBar.fadeOut()
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         guard uiviewFilterMenu != nil else { return }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+    }
+    
+    func mapGesture(isOn: Bool) {
+        faeMapView.isZoomEnabled = isOn
+        faeMapView.isPitchEnabled = isOn
+        faeMapView.isRotateEnabled = isOn
+        faeMapView.isScrollEnabled = isOn
     }
     
     func dismissMainBtns() {
