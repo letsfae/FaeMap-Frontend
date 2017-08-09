@@ -105,12 +105,14 @@ extension FaeMapViewController {
         // Click to back to north
         btnCompass = FMCompass()
         btnCompass.mapView = faeMapView
+        btnCompass.faeMapCtrler = self
         view.addSubview(btnCompass)
         btnCompass.nameCard = uiviewNameCard
         
         // Click to locate the current location
         btnLocateSelf = FMLocateSelf()
         btnLocateSelf.mapView = faeMapView
+        btnLocateSelf.faeMapCtrler = self
         view.addSubview(btnLocateSelf)
         btnLocateSelf.nameCard = uiviewNameCard
         

@@ -36,13 +36,17 @@ extension FaeMapViewController: NameCardDelegate {
     func openFaeUsrInfo() {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
     
     // NameCardDelegate
     func chatUser(id: Int) {
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         // First get chatroom id
         getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])

@@ -47,7 +47,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var boolOptionsOpened = false
     
     let initialFrame = CGRect.zero
-    let secondaryFrame = CGRect(x: 160, y: 350, w: 0, h: 0)
+    let secondaryFrame = CGRect(x: 160, y: 175, w: 0, h: 0) // y: 350
     let initFrame = CGRect(x: 269, y: 180, w: 0, h: 0)
     let nextFrame = CGRect(x: 105, y: 180, w: 164, h: 110)
     let firstBtnFrame = CGRect(x: 129, y: 220, w: 50, h: 51)
@@ -76,7 +76,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
-        center.y = 451 * screenHeightFactor
+        center.y = 276 * screenHeightFactor // 451
         self.frame.size.width = 320 * screenWidthFactor
         loadContent()
     }
@@ -191,7 +191,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         getFriendStatus(id: withUserId)
     }
     
-    func show() {
+    func show(completionHandler: @escaping () -> Void) {
         boolCardOpened = true
         btnProfile.isHidden = self.userId == Key.shared.user_id
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
@@ -210,10 +210,11 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.lblNickName.alpha = 1
             self.lblUserName.frame = CGRect(x: 75, y: 220, w: 171, h: 18)
             self.lblUserName.alpha = 1
+            completionHandler()
         })
     }
     
-    func hide() {
+    func hide(completionHandler: @escaping () -> Void) {
         guard boolCardOpened else { return }
         boolCardOpened = false
         self.lblNickName.text = ""
@@ -255,7 +256,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.uiviewPrivacy.frame = self.initialFrame
             self.frame = CGRect.zero
             self.center.x = screenWidth / 2
-            self.center.y = 451 * screenWidthFactor
+            self.center.y = 276 * screenWidthFactor // 451
             self.frame.size.width = 320 * screenWidthFactor
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
             if self.boolOptionsOpened {
@@ -268,6 +269,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                 self.btnCloseOptions.alpha = 0
                 self.boolOptionsOpened = false
             }
+            completionHandler()
         })
     }
     
@@ -427,6 +429,7 @@ class FMCompass: UIButton {
     
     var mapView: MKMapView!
     var nameCard = FMNameCardView()
+    var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59))
@@ -448,7 +451,9 @@ class FMCompass: UIButton {
         camera.heading = 0
         mapView.setCamera(camera, animated: true)
         transform = CGAffineTransform.identity
-        nameCard.hide()
+        nameCard.hide() {
+            self.faeMapCtrler?.mapGesture(isOn: true)
+        }
     }
     
     func rotateCompass() {
@@ -462,6 +467,7 @@ class FMLocateSelf: UIButton {
     
     var mapView: MKMapView!
     var nameCard = FMNameCardView()
+    var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59))
@@ -482,7 +488,9 @@ class FMLocateSelf: UIButton {
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         mapView.setCamera(camera, animated: true)
-        nameCard.hide()
+        nameCard.hide() {
+            self.faeMapCtrler?.mapGesture(isOn: true)
+        }
     }
 }
 
