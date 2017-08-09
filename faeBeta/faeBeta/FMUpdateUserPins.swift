@@ -33,7 +33,7 @@ extension FaeMapViewController {
         boolCanOpenPin = false
         mapGesture(isOn: false)
         uiviewNameCard.userId = firstAnn.id
-        uiviewNameCard.show {
+        uiviewNameCard.show(avatar: firstAnn.avatar) {
             self.boolCanOpenPin = true
         }
     }

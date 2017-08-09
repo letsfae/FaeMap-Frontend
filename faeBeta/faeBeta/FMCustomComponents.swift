@@ -72,6 +72,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var btnReport: UIButton!
     var btnShare: UIButton!
     var btnBlock: UIButton!
+    var imgMiniAvatar: UIImageView!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
@@ -191,15 +192,17 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         getFriendStatus(id: withUserId)
     }
     
-    func show(completionHandler: @escaping () -> Void) {
+    func show(avatar: UIImage, completionHandler: @escaping () -> Void) {
         boolCardOpened = true
         btnProfile.isHidden = self.userId == Key.shared.user_id
+        self.imgMiniAvatar.image = avatar
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
             self.imgCover.frame = CGRect(x: 26, y: 29, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 104, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 111, w: 74, h: 74)
+            self.imgMiniAvatar.frame = CGRect(x: 169, y: 165, w: 35, h: 35)
             self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 264, w: 27, h: 27)
             self.imgMiddleLine.frame = CGRect(x: 41, y: 251.5, w: 238, h: 1)
             self.btnOptions.frame = CGRect(x: 247, y: 163, w: 32, h: 18)
@@ -224,6 +227,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgCover.frame = self.secondaryFrame
             self.imgAvatarShadow.frame = self.secondaryFrame
             self.imgAvatar.frame = self.secondaryFrame
+            self.imgMiniAvatar.frame = self.secondaryFrame
             self.btnChat.frame = self.secondaryFrame
             self.lblNickName.frame = self.secondaryFrame
             self.lblNickName.alpha = 0
@@ -245,6 +249,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgCover.frame = self.initialFrame
             self.imgAvatarShadow.frame = self.initialFrame
             self.imgAvatar.frame = self.initialFrame
+            self.imgMiniAvatar.frame = self.initialFrame
             self.btnChat.frame = self.initialFrame
             self.lblNickName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
             self.lblNickName.alpha = 0
@@ -259,6 +264,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.center.y = 276 * screenWidthFactor // 451
             self.frame.size.width = 320 * screenWidthFactor
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
+            self.imgMiniAvatar.image = nil
             if self.boolOptionsOpened {
                 self.imgMoreOptions.frame = self.initFrame
                 self.btnShare.frame = self.initFrame
@@ -302,6 +308,12 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.layer.masksToBounds = true
         addSubview(imgAvatar)
+        
+        imgMiniAvatar = UIImageView(frame: initialFrame)
+        imgMiniAvatar.layer.anchorPoint = nameCardAnchor
+        imgMiniAvatar.contentMode = .scaleAspectFit
+        imgMiniAvatar.layer.masksToBounds = true
+        addSubview(imgMiniAvatar)
         
         btnChat = UIButton(frame: initialFrame)
         btnChat.layer.anchorPoint = nameCardAnchor
