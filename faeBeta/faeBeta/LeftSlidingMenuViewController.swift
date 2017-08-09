@@ -71,7 +71,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.3, animations: {
-            self.btnBackground.alpha = 1
+            self.btnBackground.alpha = 0.7
             self.tableLeftSlideWindow.frame.origin.x = 0
             self.backgroundColorViewTop.frame.origin.x = 0
             self.backgroundColorViewDown.frame.origin.x = 0

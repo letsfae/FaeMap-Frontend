@@ -107,10 +107,12 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.btnShare.frame = btnFrame
             self.btnEditNameCard.frame = btnFrame
             self.btnReport.frame = btnFrame
+            self.btnBlock.frame = btnFrame
             self.btnShare.alpha = 0
             self.btnEditNameCard.alpha = 0
             self.btnReport.alpha = 0
             self.btnCloseOptions.alpha = 0
+            self.btnBlock.alpha = 0
         }), completion: nil)
     }
     
@@ -191,7 +193,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     func show() {
         boolCardOpened = true
-        self.btnProfile.isHidden = self.userId == Key.shared.user_id
+        btnProfile.isHidden = self.userId == Key.shared.user_id
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
@@ -274,7 +276,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         
         imgBackShadow = UIImageView(frame: initialFrame)
         imgBackShadow.layer.anchorPoint = nameCardAnchor
-        imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow")
+        imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new")
         imgBackShadow.contentMode = .scaleAspectFit
         imgBackShadow.clipsToBounds = true
         addSubview(imgBackShadow)
@@ -337,7 +339,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         
         btnProfile = UIButton(frame: initialFrame)
         btnProfile.layer.anchorPoint = nameCardAnchor
-//        btnProfile.setImage(#imageLiteral(resourceName: "Emoji"), for: .normal)
+        btnProfile.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
         btnProfile.addTarget(self, action: #selector(chooseFriendActions(_:)), for: .touchUpInside)
         addSubview(btnProfile)
         
