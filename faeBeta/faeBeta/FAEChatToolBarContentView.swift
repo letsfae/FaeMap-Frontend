@@ -195,8 +195,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         //MARK: voice helper function
         
         func setupRecorder() {
-            self.audioRecorderContentView = Bundle.main.loadNibNamed("AudioRecorderView", owner: self, options: nil)![0] as! AudioRecorderView
-            self.audioRecorderContentView.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height)
+            self.audioRecorderContentView = AudioRecorderView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
             self.audioRecorderContentView.delegate = self
             self.addSubview(audioRecorderContentView)
             
