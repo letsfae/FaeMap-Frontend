@@ -43,7 +43,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             boolCanOpenPin = false
             mapGesture(isOn: false)
             uiviewNameCard.userId = Key.shared.user_id
-            uiviewNameCard.show()  {
+            uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(userMiniAvatar)") ?? UIImage())  {
                 self.boolCanOpenPin = true
             }
         }
