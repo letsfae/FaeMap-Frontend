@@ -224,7 +224,7 @@ class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationMana
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.selfMarkerIcon.image = #imageLiteral(resourceName: "chat_map_myPosition")
+            anView.selfIcon.image = #imageLiteral(resourceName: "chat_map_myPosition")
             return anView
         } else {
             let identifier = "place"

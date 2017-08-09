@@ -21,6 +21,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         return curtLoc.coordinate.longitude
     }
     var boolFirstLoad = true
+    var curtHeading: CLLocationDirection = 0
     
     func jumpToLocationEnable() {
         print("[LocManager] jumpToLocationEnable")
@@ -32,6 +33,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+//        locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         if CLLocationManager.locationServicesEnabled() {
             locManager.startUpdatingLocation()
@@ -47,6 +49,10 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 //        print("curtLoc \(curtLoc)")
 //        print("curtLat \(curtLat)")
 //        print("curtLon \(curtLong)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        curtHeading = newHeading.trueHeading
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

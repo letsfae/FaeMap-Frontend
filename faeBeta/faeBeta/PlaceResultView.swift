@@ -216,6 +216,8 @@ class PlaceView: UIImageView {
         image = #imageLiteral(resourceName: "placeResult_shadow_new")
         
         imgType = UIImageView()
+        imgType.layer.cornerRadius = 5
+        imgType.clipsToBounds = true
         addSubview(imgType)
         addConstraintsWithFormat("H:|-15-[v0(66)]", options: [], views: imgType)
         addConstraintsWithFormat("V:|-18-[v0(66)]", options: [], views: imgType)
