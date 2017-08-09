@@ -19,8 +19,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate, CAAnimationDelegate
-{
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate {
     //MARK: - properties
     var ref = Database.database().reference().child(fireBaseRef)// reference to all chat room
     var roomRef : DatabaseReference?
@@ -112,12 +111,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         //update recent
+        print("chat view will disappear")
+        //self.navigationController?.navigationBar.isHidden = false
         closeToolbarContentView()
         removeObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        print("view did disappear")
+        print("chat view did disappear")
         self.toolbarContentView.clearToolBarViews()
 //        messages = []
 //        objects = []
@@ -126,19 +127,21 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("view did appear")
+        print("chat view did appear")
         print("set up tool bar views")
+        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
         self.view.addSubview(locExtendView)
     }
     
     override func viewDidLoad() {
-        print("view did load")
+        print("chat view did load")
         super.viewDidLoad()
         
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        //navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
@@ -165,11 +168,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         locExtendView.isHidden = true
         locExtendView.buttonCancel.addTarget(self, action: #selector(self.closeLocExtendView(_:)), for: .touchUpInside)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
-        print("view will appear")
+        print("chat view will appear")
         super.viewWillAppear(true)
         addObservers()
         loadUserDefault()
@@ -196,7 +201,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         self.navigationController?.navigationBar.topItem?.title = ""
         let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor._898989()] as [String : Any]
         self.navigationController?.navigationBar.tintColor = UIColor._2499090()
-        self.navigationController!.navigationBar.titleTextAttributes = attributes
+        self.navigationController?.navigationBar.titleTextAttributes = attributes
         self.navigationController?.navigationBar.shadowImage = nil
         
         //ATTENTION: Temporary comment it here because it's not used for now
@@ -638,6 +643,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showFullAlbum()
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
+        // TODO
         let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
@@ -824,6 +830,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func showFullLocationView(_ sender : UIButton) {
+        // TODO
         let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
         vc.locationDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)

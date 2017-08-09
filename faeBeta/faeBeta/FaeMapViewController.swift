@@ -12,6 +12,7 @@ import MapKit
 import CCHMapClusterController
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
+    var count:Int = 0
     
     var lblSearchContent: UILabel!
     let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
@@ -118,6 +119,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //navigationController?.view?.sendSubview(toBack: (navigationController?.navigationBar)!)
+        print("chat view will disappear")
+        //navigationController?.setNavigationBarHidden(true, animated: animated)
         loadTransparentNavBarItems()
         loadMapChat()
         reloadSelfPosAnimation()
@@ -131,13 +135,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
         updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("[FaeMapViewController - viewWillDisappear]")
+        //navigationController?.setNavigationBarHidden(true, animated: animated)
+        //navigationController?.view?.bringSubview(toFront: (navigationController?.navigationBar)!)
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        //navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
@@ -227,10 +234,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     fileprivate func loadTransparentNavBarItems() {
         navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
         navigationController?.navigationBar.isHidden = true
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        //navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        navigationController?.navigationBar.isTranslucent = true
+        //navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.isTranslucent = false
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
