@@ -29,15 +29,13 @@ extension FaeMapViewController {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
         guard firstAnn.id != -1 else { return }
-        for user in faeUserPins {
-            user.isValid = false
-        }
         boolCanUpdateUserPin = false
         boolCanOpenPin = false
-        animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
+        mapGesture(isOn: false)
         uiviewNameCard.userId = firstAnn.id
-        uiviewNameCard.show()
-        boolCanOpenPin = true
+        uiviewNameCard.show {
+            self.boolCanOpenPin = true
+        }
     }
     
     func updateTimerForUserPin() {

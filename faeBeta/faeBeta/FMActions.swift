@@ -26,7 +26,9 @@ extension FaeMapViewController {
     }
     
     func actionMainScreenSearch(_ sender: UIButton) {
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
@@ -43,11 +45,14 @@ extension FaeMapViewController {
         btnClearSearchRes.isHidden = true
         PLACE_ENABLE = true
         placeResultBar.alpha = 0
+        mapGesture(isOn: true)
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.displayName = Key.shared.nickname ?? "someone"
         leftMenuVC.delegate = self
@@ -56,13 +61,18 @@ extension FaeMapViewController {
     }
     
     func actionChatWindowShow(_ sender: UIButton) {
-        uiviewNameCard.hide()
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         self.present(UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
     }
     
     func actionCreatePin(_ sender: UIButton) {
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         /*
          uiviewNameCard.hide()
          let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)

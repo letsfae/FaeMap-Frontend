@@ -40,7 +40,9 @@ extension FaeMapViewController {
     func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
-            uiviewNameCard.hide()
+            uiviewNameCard.hide() {
+                self.mapGesture(isOn: true)
+            }
 //            if self.mapFilterArrow != nil {
 //                self.mapFilterArrow.removeFromSuperview()
 //            }
