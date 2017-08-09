@@ -58,9 +58,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var btnChat: UIButton!
     var btnCloseOptions: UIButton!
     var btnProfile: UIButton!
-    var btnFav: UIButton!
     var btnOptions: UIButton!
-    var btnWaveSelf: UIButton!
     var btnCloseCard: UIButton!
     var btnEditNameCard: UIButton!
     var imgAvatar: UIImageView!
@@ -171,8 +169,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func updateNameCard(withUserId: Int) {
-        btnWaveSelf.isHidden = withUserId != Key.shared.user_id
-        btnFav.isHidden = withUserId == Key.shared.user_id
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
         }
@@ -185,18 +181,17 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     func show() {
         boolCardOpened = true
+        self.btnProfile.isHidden = self.userId == Key.shared.user_id
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
             self.imgCover.frame = CGRect(x: 26, y: 29, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 104, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 111, w: 74, h: 74)
-            self.btnChat.frame = CGRect(x: 146.5, y: 264, w: 27, h: 27)
-            self.imgMiddleLine.frame = CGRect(x: 26, y: 251.5, w: 268, h: 1)
-            self.btnFav.frame = CGRect(x: 69, y: 264, w: 27, h: 27)
-            self.btnWaveSelf.frame = CGRect(x: 69, y: 264, w: 27, h: 27)
+            self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 264, w: 27, h: 27)
+            self.imgMiddleLine.frame = CGRect(x: 41, y: 251.5, w: 238, h: 1)
             self.btnOptions.frame = CGRect(x: 247, y: 163, w: 32, h: 18)
-            self.btnProfile.frame = CGRect(x: 224, y: 264, w: 27, h: 27)
+            self.btnProfile.frame = CGRect(x: 195, y: 264, w: 27, h: 27)
             self.uiviewPrivacy.frame = CGRect(x: 41, y: 163, w: 46, h: 18)
         }, completion: { _ in
             self.lblNickName.frame = CGRect(x: 67, y: 194, w: 186, h: 25)
@@ -222,8 +217,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.lblUserName.frame = self.secondaryFrame
             self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.secondaryFrame
-            self.btnFav.frame = self.secondaryFrame
-            self.btnWaveSelf.frame = self.secondaryFrame
             self.btnOptions.frame = self.secondaryFrame
             self.btnProfile.frame = self.secondaryFrame
             self.uiviewPrivacy.frame = self.secondaryFrame
@@ -244,8 +237,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.lblUserName.frame = self.initialFrame
             self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.initialFrame
-            self.btnFav.frame = self.initialFrame
-            self.btnWaveSelf.frame = self.initialFrame
             self.btnOptions.frame = self.initialFrame
             self.btnProfile.frame = self.initialFrame
             self.uiviewPrivacy.frame = self.initialFrame
@@ -322,19 +313,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         
         imgMiddleLine = UIImageView(frame: initialFrame)
         imgMiddleLine.layer.anchorPoint = nameCardAnchor
-        imgMiddleLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1.0)
+        imgMiddleLine.backgroundColor = UIColor(r: 230, g: 230, b: 230, alpha: 100)
         addSubview(imgMiddleLine)
-        
-        btnFav = UIButton(frame: initialFrame)
-        btnFav.layer.anchorPoint = nameCardAnchor
-        btnFav.setImage(#imageLiteral(resourceName: "Favorite"), for: .normal)
-        addSubview(btnFav)
-        
-        btnWaveSelf = UIButton(frame: initialFrame)
-        btnWaveSelf.layer.anchorPoint = nameCardAnchor
-        btnWaveSelf.setImage(#imageLiteral(resourceName: "showSelfWaveToOthers"), for: .normal)
-        addSubview(btnWaveSelf)
-        btnWaveSelf.isHidden = true
         
         btnOptions = UIButton(frame: initialFrame)
         btnOptions.layer.anchorPoint = nameCardAnchor
