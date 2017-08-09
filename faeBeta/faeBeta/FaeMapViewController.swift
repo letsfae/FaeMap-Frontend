@@ -61,7 +61,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
     var mkOverLay = [MKOverlay]()
-    var selfAnView: SelfAnnotationView?
     var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
     var START_WAVE_ANIMATION = false
     

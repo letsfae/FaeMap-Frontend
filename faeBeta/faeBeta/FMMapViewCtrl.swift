@@ -49,9 +49,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         if annotation is MKUserLocation {
-            if userStatus == 5 {
-                return nil
-            }
             let identifier = "self"
             var anView: SelfAnnotationView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
@@ -60,7 +57,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            selfAnView = anView
+            if userStatus == 5 {
+                anView.invisibleMode()
+            }
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
