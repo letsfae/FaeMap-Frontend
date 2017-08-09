@@ -63,6 +63,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var mkOverLay = [MKOverlay]()
     var selfAnView: SelfAnnotationView?
     var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
+    var START_WAVE_ANIMATION = false
     
     // System Functions
     override func viewDidLoad() {

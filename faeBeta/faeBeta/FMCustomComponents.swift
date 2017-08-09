@@ -71,6 +71,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var imgMoreOptions: UIImageView!
     var btnReport: UIButton!
     var btnShare: UIButton!
+    var btnBlock: UIButton!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
@@ -136,6 +137,13 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         btnShare.clipsToBounds = true
         btnShare.alpha = 0
         
+        if btnBlock != nil { btnBlock.removeFromSuperview() }
+        btnBlock = UIButton(frame: initFrame)
+        btnBlock.setImage(#imageLiteral(resourceName: "blockUser"), for: .normal)
+        addSubview(btnBlock)
+        btnBlock.clipsToBounds = true
+        btnBlock.alpha = 0
+        
         if btnEditNameCard != nil { btnEditNameCard.removeFromSuperview() }
         btnEditNameCard = UIButton(frame: initFrame)
         btnEditNameCard.setImage(#imageLiteral(resourceName: "pinDetailEdit"), for: .normal)
@@ -156,12 +164,14 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.imgMoreOptions.frame = self.nextFrame
-            self.btnShare.frame = self.firstBtnFrame
-            self.btnShare.alpha = 1
             if thisIsMe {
+                self.btnShare.alpha = 1
+                self.btnShare.frame = self.firstBtnFrame
                 self.btnEditNameCard.alpha = 1
                 self.btnEditNameCard.frame = self.secondBtnFrame
             } else {
+                self.btnBlock.alpha = 1
+                self.btnBlock.frame = self.firstBtnFrame
                 self.btnReport.alpha = 1
                 self.btnReport.frame = self.secondBtnFrame
             }
@@ -223,6 +233,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             if self.boolOptionsOpened {
                 self.imgMoreOptions.frame = self.secondaryFrame
                 self.btnShare.frame = self.secondaryFrame
+                self.btnBlock.frame = self.secondaryFrame
                 self.btnReport.frame = self.secondaryFrame
                 self.btnEditNameCard.frame = self.secondaryFrame
             }
@@ -248,6 +259,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             if self.boolOptionsOpened {
                 self.imgMoreOptions.frame = self.initFrame
                 self.btnShare.frame = self.initFrame
+                self.btnBlock.frame = self.initFrame
                 self.btnReport.frame = self.initFrame
                 self.btnEditNameCard.frame = self.initFrame
                 self.btnOptions.isSelected = false
@@ -307,7 +319,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         lblUserName.text = ""
         lblUserName.textAlignment = .center
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
-        lblUserName.textColor = UIColor(red: 155 / 255, green: 155 / 255, blue: 155 / 255, alpha: 1.0)
+        lblUserName.textColor = UIColor._107105105()
         lblUserName.alpha = 0
         addSubview(lblUserName)
         

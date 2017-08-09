@@ -120,6 +120,20 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         loadCurrentRegionPlacePins()
         if btnCompass != nil { btnCompass.rotateCompass() }
         if placeResultBar.tag > 0 { placeResultBar.annotations = visiblePlaces() }
+        
+        // re-start wave animation of self avatar annotation view
+        DispatchQueue.global(qos: .userInitiated).async {
+            if MKMapRectContainsPoint(self.faeMapView.visibleMapRect, MKMapPointForCoordinate(LocManager.shared.curtLoc.coordinate)) {
+                if self.START_WAVE_ANIMATION {
+                    self.START_WAVE_ANIMATION = false
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+                    }
+                }
+            } else {
+                self.START_WAVE_ANIMATION = true
+            }
+        }
     }
     
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {
