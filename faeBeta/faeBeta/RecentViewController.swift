@@ -11,6 +11,8 @@ import SwiftyJSON
 import RealmSwift
 import Firebase
 
+typealias BackClosure = (Int) -> Void
+
 public var isDraggingRecentTableViewCell = false
 
 // Bryan
@@ -18,11 +20,12 @@ public var isDraggingRecentTableViewCell = false
 public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this should be moved to else where later
 // ENDBryan
 
-class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SwipeableCellDelegate {
+class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SwipeableCellDelegate {
     
     private let firebase = Database.database().reference().child(fireBaseRef)
     
     // MARK: - properties
+    var uiviewNavBar: FaeNavBar!
     
     //@IBOutlet private weak var tableView: UITableView!
     var tableView: UITableView!
@@ -32,11 +35,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
     private var loadingRecentTimer: Timer!
     
+    var backClosure: BackClosure?
+    
     // MARK: - View did/will funcs
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 25)
+        self.automaticallyAdjustsScrollViewInsets = false
+        tableView = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(RecentTableViewCell.self, forCellReuseIdentifier: "Cell")
@@ -46,8 +51,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor.white
         view.addSubview(tableView)
-        
-        
+        //navigationController?.setNavigationBarHidden(false, animated: true)
         //self.tableView.tableFooterView = UIView()
         navigationBarSet()
         addGestureRecognizer()
@@ -94,9 +98,22 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
      */
     
     func navigationBarSet() {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        view.addSubview(uiviewNavBar)
+        //uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.addConstraintsWithFormat("H:|-15-[v0(24)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "locationPin"), for: .normal)
+        //uiviewNavBar.rightBtn.setImage(nil, for: .normal)
+        
+        /*self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
         self.navigationController?.navigationBar.barTintColor = UIColor.white
         self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.shadowImage = nil
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100, height: 25))
         titleLabel.text = "Chats"
@@ -106,7 +123,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         self.navigationItem.titleView = titleLabel
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "locationPin"), style: .plain, target: self, action: #selector(RecentViewController.navigationLeftItemTapped))*/
         
         // ATTENTION: Temporary comment it here because it's not used for now
         //        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
@@ -119,7 +136,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func navigationLeftItemTapped() {
-        self.dismiss(animated: true, completion: nil)
+        backClosure!(5)
+        //self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
     
     // MARK: - tableView delegate
