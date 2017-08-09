@@ -259,7 +259,8 @@ extension FaeMapViewController {
     }
     
     func startChat(_ chat_id: String?, withUserId: NSNumber, withNickName: String?) {
-        let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        //let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        let chatVC = ChatViewController()
         chatVC.chatRoomId = user_id < Int(withUserId) ? "\(user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(user_id)"
         chatVC.chat_id = chat_id
         // Bryan
