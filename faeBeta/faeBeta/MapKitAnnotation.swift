@@ -11,7 +11,7 @@ import SwiftyJSON
 import CCHMapClusterController
 import MapKit
 
-let mapAvatarWidth = 38
+let mapAvatarWidth = 35
 
 class FaePinAnnotation: MKPointAnnotation {
     
