@@ -85,14 +85,9 @@ class RecentTableViewCell: UITableViewCell {
         btnDelete = UIButton(frame: CGRect(x: screenWidth - 69, y: 0, width: 69, height: 74))
         btnDelete.setImage(UIImage(named: "deleteButton.png"), for: .normal)
         addSubview(btnDelete)
+        btnDelete.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         
-        //let btnDeleteTrailing = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: btnDelete, attribute: .trailing, multiplier: 1.0, constant: 0)
-        //addConstraint(btnDeleteTrailing)
-        
-        //let uiviewContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
-        //addSubview(uiviewContainer)
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
-        //uiviewMain = UIView()
         uiviewMain.backgroundColor = .white
         uiviewMain.translatesAutoresizingMaskIntoConstraints = false
         
@@ -114,8 +109,6 @@ class RecentTableViewCell: UITableViewCell {
         lblCounter.backgroundColor = UIColor._2499090()
         lblCounter.isHidden = true
         uiviewMain.addSubview(lblCounter)
-        //uiviewMain.addConstraintsWithFormat("H:|-48-[v0(22)]", options: [], views: lblCounter)
-        //uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
         
         lblName = UILabel()
         lblName.text = ""
@@ -148,25 +141,19 @@ class RecentTableViewCell: UITableViewCell {
         
         addSubview(uiviewMain)
         
-        //addConstraintsWithFormat("H:|-9-[v0(60)]", options: [], views: uiviewMain)
         distanceToLeft = NSLayoutConstraint(item: uiviewMain, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0)
         addConstraint(distanceToLeft)
         
-        //NSLayoutConstraint.activateConstraint(distanceToLeft)
-        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottomMargin, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -8)
-        //addConstraint(bottomMargin)
+        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: 0)
+        addConstraint(bottomMargin)
         
         distanceToRight = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: uiviewMain, attribute: .trailing, multiplier: 1.0, constant: 0)
         addConstraint(distanceToRight)
         
-        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .topMargin, multiplier: 1.0, constant: -11)
+        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0)
         addConstraint(mainviewTop)
         
-        let heightConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 74)
-        uiviewMain.addConstraint(heightConstraint)
-        let widthConstraint = NSLayoutConstraint(item: uiviewMain, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: screenWidth)
-        uiviewMain.addConstraint(widthConstraint)
-        
+        selectionStyle = .none
         
         panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
         panRecognizer.delegate = self
@@ -175,11 +162,6 @@ class RecentTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        uiviewMain.backgroundColor = .white
     }
     
     func bindData2(_ recent : RealmRecent) {
@@ -373,9 +355,9 @@ class RecentTableViewCell: UITableViewCell {
 
     
     //MARK: - Delete button related
-    /*@IBAction private func deleteButtonTapped(_ sender: UIButton) {
+    func deleteButtonTapped(_ sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
-    }*/
+    }
     
     //MARK: - Cell control
     @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
