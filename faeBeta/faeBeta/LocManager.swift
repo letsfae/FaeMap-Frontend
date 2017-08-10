@@ -25,7 +25,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     func jumpToLocationEnable() {
         print("[LocManager] jumpToLocationEnable")
         let vc = EnableLocationViewController()
-        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true)
     }
     
     func updateCurtLoc() {
@@ -63,6 +63,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 //            print("didChangeAuthorizationStatus .restricted")
             break
         case .authorizedAlways:
+            UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
 //            print("didChangeAuthorizationStatus .authorizedAlways")
             break
         case .authorizedWhenInUse:
