@@ -192,7 +192,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
-//        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
+        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
