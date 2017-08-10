@@ -106,14 +106,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     
-//    func popUpEnableLocationViewController() {
-//        print("[AppDelegate] popUpEnableLocationVC")
-//        let vc = EnableLocationViewController()
-//            //UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-//        self.window?.makeKeyAndVisible()
-//        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
-//    }
-    
     func popUpWelcomeView() {
         let vc = WelcomeViewController()
         self.window?.makeKeyAndVisible()
@@ -122,15 +114,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         UIApplication.shared.registerForRemoteNotifications()
-        /*
-         let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-         print(notificationType?.types)
-         if notificationType?.types == UIUserNotificationType.None {
-         jumpToNotificationEnable()
-         }
-         else{
-         print("Notification enabled")
-         }*/
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -177,11 +160,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
         print("[applicationWillEnterForeground]")
-//        let authstate = CLLocationManager.authorizationStatus()
-//        if authstate != .authorizedAlways || authstate != .authorizedWhenInUse {
-//            print("[applicationWillEnterForeground]")
-//            self.popUpEnableLocationViewController()
-//        }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
@@ -221,38 +199,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
+//        let shareAPI = LocalStorageManager()
+//        _ = shareAPI.readLogInfo()
+//
+//        let isFirstLaunch = shareAPI.isFirstPushLaunch()
+        print("[applicationDidBecomeActive]")
         
-        let isFirstLaunch = shareAPI.isFirstPushLaunch()
-        //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-        //        print(notificationType?.types)
-        if isFirstLaunch == true {
-            // waiting
-        } else {
-            /* while (true) {
-             let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-             print(notificationType?.types)
-             } */
-//            let seconds = 30.0
-//            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
-//            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
-//            
-//            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-//                let authstate = CLLocationManager.authorizationStatus()
-//                if authstate != .authorizedAlways {
-//                    self.popUpEnableLocationViewController()
-//                }
-//            })
-            /*
-             let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-             print(notificationType?.types)
-             if notificationType?.types == UIUserNotificationType.None {
-             jumpToNotificationEnable()
-             }
-             else{
-             print("Notification enabled")
-             }*/
+        if EnableNotificationViewController.boolCurtVCisNoti {
+            checkNotificationStatus()
         }
     }
     
@@ -324,6 +278,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    func checkNotificationStatus() {
+        //        let center = UNUserNotificationCenter.current()
+        //        center.getNotificationSettings { (settings) in
+        //            if settings.authorizationStatus == .authorized {
+        //                print("Push authorized")
+        //            } else {
+        //                print("Push not authorized")
+        //            }
+        //        }
+        
+        let notificationType = UIApplication.shared.currentUserNotificationSettings?.types
+        if notificationType?.rawValue == 7 {   // notification is on
+            // print("notification on")
+            UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
+        }
+    }
 }
 
 public extension UIWindow {
@@ -345,3 +316,5 @@ public extension UIWindow {
         }
     }
 }
+
+
