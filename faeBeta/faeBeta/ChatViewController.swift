@@ -19,7 +19,8 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate ,SendMutipleImagesDelegate, LocationSendDelegate , FAEChatToolBarContentViewDelegate, CAAnimationDelegate
+{
     //MARK: - properties
     var ref = Database.database().reference().child(fireBaseRef)// reference to all chat room
     var roomRef : DatabaseReference?
@@ -37,6 +38,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //var withUser : FaeWithUser?
     var realmWithUser : RealmUser?
     //ENDBryan
+    
+    var uiviewNavBar: FaeNavBar!
 
     var withUserId : String? // the user id we chat to
     var withUserName : String? // the user name we chat to
@@ -140,8 +143,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewDidLoad()
         
         //navigationController?.setNavigationBarHidden(false, animated: true)
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        //self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        //self.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0)// override jsq collection view
@@ -197,6 +200,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: - setup
     
     private func navigationBarSet() {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.rightBtn.setImage(nil, for: .normal)
+        //uiviewNavBar.leftBtn.addTarget(self.navigationController, action: #selector(self.navigationController?.popViewController(animated:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
+        
+        uiviewNavBar.lblTitle.text = realmWithUser!.userNickName
+        /*
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.topItem?.title = ""
         let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor._898989()] as [String : Any]
@@ -220,6 +235,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         self.navigationItem.titleView = titleLabel
+         */
+    }
+    
+    func navigationLeftItemTapped() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func addObservers(){
@@ -317,7 +337,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         
         //heart Button
-        self.automaticallyAdjustsScrollViewInsets = false;
+        self.automaticallyAdjustsScrollViewInsets = false
 
         self.inputToolbar.contentView.heartButtonHidden = false
         self.inputToolbar.contentView.heartButton.addTarget(self, action: #selector(self.heartButtonTapped), for: .touchUpInside)
@@ -329,7 +349,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // be sure to call this in ViewWillAppear!!!
     func setupToolbarContentView()
     {
-        toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0,y: screenHeight,width: screenWidth, height: 271))
+        toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth,  height: 271))
         toolbarContentView.delegate = self
         toolbarContentView.inputToolbar = inputToolbar
         toolbarContentView.cleanUpSelectedPhotos()
@@ -553,7 +573,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 271 - height - 64
+        let yPosition = screenHeight - 271 - height// - 64
         UIView.setAnimationsEnabled(false)
         let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height + extendHeight, right: 0.0)
@@ -570,7 +590,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = self.inputToolbar.frame.height
         let width = self.inputToolbar.frame.width
         let xPosition = self.inputToolbar.frame.origin.x
-        let yPosition = screenHeight - height - 64
+        let yPosition = screenHeight - height// - 64
         let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
@@ -644,7 +664,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         // TODO
-        let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
+        //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
+        let vc = FullAlbumCollectionViewController()
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }

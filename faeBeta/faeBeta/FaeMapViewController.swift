@@ -12,7 +12,6 @@ import MapKit
 import CCHMapClusterController
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSearchDelegate {
-    var count:Int = 0
     
     var lblSearchContent: UILabel!
     let nameCardAnchor = CGPoint(x: 0.5, y: 1.0) // Map Namecard
@@ -119,13 +118,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //navigationController?.view?.sendSubview(toBack: (navigationController?.navigationBar)!)
-        print("chat view will disappear")
-        //navigationController?.setNavigationBarHidden(true, animated: animated)
-        loadTransparentNavBarItems()
         loadMapChat()
-        reloadSelfPosAnimation()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -139,13 +134,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate, MapSe
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print("[FaeMapViewController - viewWillDisappear]")
-        //navigationController?.setNavigationBarHidden(true, animated: animated)
-        //navigationController?.view?.bringSubview(toFront: (navigationController?.navigationBar)!)
-        navigationController?.navigationBar.isTranslucent = false
-        //navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        super.viewDidAppear(animated)
+        renewSelfLocation()
+        checkDisplayNameExisitency()
+        updateGenderAge()
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     func checkDisplayNameExisitency() {

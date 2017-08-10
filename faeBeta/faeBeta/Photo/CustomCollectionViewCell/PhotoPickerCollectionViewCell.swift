@@ -16,31 +16,74 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     //MARK: - properties
     fileprivate(set) var photoSelected = false
     
-    @IBOutlet weak fileprivate var photoImageView: UIImageView!
-    @IBOutlet weak fileprivate var chosenIndicatorImageView: UIImageView!
+//    @IBOutlet weak fileprivate var photoImageView: UIImageView!
+//    @IBOutlet weak fileprivate var chosenIndicatorImageView: UIImageView!
+//    
+//    @IBOutlet weak private var videoDurationLabel: UILabel!
+//    @IBOutlet weak fileprivate var videoIndicatorView: UIView!
+//    @IBOutlet weak private var cameraIconImageView: UIImageView!
+//    @IBOutlet weak fileprivate var videoDurationLabelLength: NSLayoutConstraint!
+//    @IBOutlet weak fileprivate var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
     
-    @IBOutlet weak private var videoDurationLabel: UILabel!
-    @IBOutlet weak fileprivate var videoIndicatorView: UIView!
-    @IBOutlet weak private var cameraIconImageView: UIImageView!
-    @IBOutlet weak fileprivate var videoDurationLabelLength: NSLayoutConstraint!
-    @IBOutlet weak fileprivate var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
+    // Felix 
+    var imgPhoto: UIImageView!
+    var imgChosenIndicator: UIImageView!
+    var uiviewVideoIndicator: UIView!
+    var lblVideoDuration: UILabel!
+    var imgCameraIcon: UIImageView!
+    // Felix - end
+    
     
     //MARK: - life cycle
-    override func awakeFromNib() {
+    /*override func awakeFromNib() {
         super.awakeFromNib()
         self.photoImageView.contentMode = .scaleAspectFill
         deselectCell()
         videoIndicatorView.alpha = 0
+    }*/
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        imgPhoto = UIImageView(frame: frame)
+        imgPhoto.contentMode = .scaleAspectFill
+        addSubview(imgPhoto)
+        
+        imgChosenIndicator = UIImageView(frame: CGRect(x: 100, y: 5, width: 31, height: 31))
+        addSubview(imgChosenIndicator)
+        
+        uiviewVideoIndicator = UIView(frame: CGRect(x: 0, y: 111, width: frame.width, height: 25))
+        uiviewVideoIndicator.backgroundColor = UIColor._585151()
+        
+        imgCameraIcon = UIImageView(frame: CGRect(x: 8, y: 6, width: 18, height: 12))
+        imgCameraIcon.image = UIImage(named: "cameraIconFilled_white")
+        uiviewVideoIndicator.addSubview(imgCameraIcon)
+        
+        lblVideoDuration = UILabel(frame: CGRect(x: 34, y: 2, width: 40, height: 21))
+        lblVideoDuration.text = ""
+        lblVideoDuration.textAlignment = .left
+        lblVideoDuration.textColor = .white
+        lblVideoDuration.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        uiviewVideoIndicator.addSubview(lblVideoDuration)
+        
+        addSubview(uiviewVideoIndicator)
+        uiviewVideoIndicator.isHidden = true
+        
+        
+        
+        deselectCell()
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func prepareForReuse() {
-        photoImageView.image = nil
+        imgPhoto.image = nil
         deselectCell()
-        self.videoIndicatorView.alpha = 0
-        self.cameraIconImageView.alpha = 0
-        if let constraint = self.videoDurationLabelDistanceToLeft{
-            constraint.constant = 38
-        }
+        uiviewVideoIndicator.isHidden = true
+        imgCameraIcon.isHidden = true
     }
     
     //MARK: - select & deselect cell
@@ -53,37 +96,37 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     {
         assert(indicatorNum >= 0 && indicatorNum <= 9, "Invalid indicator number! The number should be between 0 - 9")
         let imageName = "chosenIndicatorIcon_selected\(indicatorNum+1)"
-        self.chosenIndicatorImageView.image = UIImage(named:imageName)
+        imgChosenIndicator.image = UIImage(named:imageName)
         self.photoSelected = true
     }
     
     /// hide the indicator number and
     func deselectCell()
     {
-        self.chosenIndicatorImageView.image = UIImage(named:"chosenIndicatorIcon_unselected")
-        self.photoSelected = false
+        imgChosenIndicator.image = UIImage(named:"chosenIndicatorIcon_unselected")
+        photoSelected = false
     }
     
     //MARK: - image related
     fileprivate func setImage(_ thumbnailImage : UIImage) {
-        self.photoImageView.image = thumbnailImage
+        imgPhoto.image = thumbnailImage
     }
     
     func setVideoDurationLabel(withDuration duration: Int)
     {
         let secondString = (duration % 60) < 9 ? "0\(duration % 60)" : "\(duration % 60)"
         let minString = duration / 60
-        self.videoIndicatorView.alpha = 1
-        self.cameraIconImageView.alpha = 1
-        self.videoDurationLabel.text =  "\(minString):\(secondString)"
-        if(minString / 10 == 0){
-            videoDurationLabelLength.constant = 35
-        }else{
-            videoDurationLabelLength.constant = 40
-        }
-        if let constraint = self.videoDurationLabelDistanceToLeft{
-            constraint.constant = 38
-        }
+        uiviewVideoIndicator.isHidden = false
+        imgCameraIcon.isHidden = false
+        lblVideoDuration.text =  "\(minString):\(secondString)"
+//        if(minString / 10 == 0){
+//            videoDurationLabelLength.constant = 35
+//        }else{
+//            videoDurationLabelLength.constant = 40
+//        }
+//        if let constraint = self.videoDurationLabelDistanceToLeft{
+//            constraint.constant = 38
+//        }
         self.setNeedsUpdateConstraints()
 
         self.layoutSubviews()
@@ -91,13 +134,14 @@ class PhotoPickerCollectionViewCell: UICollectionViewCell {
     
     func setGifLabel()
     {
-        self.videoIndicatorView.alpha = 1
-        self.cameraIconImageView.alpha = 0
-
-        self.videoDurationLabel.text =  "GIF"
-        if let constraint = self.videoDurationLabelDistanceToLeft{
-            constraint.constant = 8
-        }
+        uiviewVideoIndicator.isHidden = false
+        imgCameraIcon.isHidden = true
+        lblVideoDuration.text = "GIF"
+        
+        uiviewVideoIndicator.addConstraintsWithFormat("H:|-8-[v0(22)]", options: [], views: lblVideoDuration)
+//        if let constraint = self.videoDurationLabelDistanceToLeft{
+//            constraint.constant = 8
+//        }
         self.layoutSubviews()
 
     }

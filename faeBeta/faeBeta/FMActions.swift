@@ -96,7 +96,7 @@ extension FaeMapViewController {
         let chatVC = RecentViewController()
         chatVC.backClosure = {
             (backNum: Int) -> Void in
-            self.count = backNum
+            //self.count = backNum
         }
         navigationController?.pushViewController(chatVC, animated: true)
     }
