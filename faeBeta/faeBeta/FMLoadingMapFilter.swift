@@ -12,14 +12,14 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
-        btnFilterIcon = MapFilterIcon(frame: CGRect.zero)
+        btnFilterIcon = MapFilterIcon()
         btnFilterIcon.layer.zPosition = 601
         view.addSubview(btnFilterIcon)
         view.bringSubview(toFront: btnFilterIcon)
         
         uiviewFilterMenu = MapFilterMenu(frame: CGRect(x: 0, y: 736, w: 414, h: 471))
         uiviewFilterMenu.delegate = self
-        uiviewFilterMenu.btnHideMFMenu.addTarget(self, action: #selector(self.actionHideFilterMenu(_:)), for: .touchUpInside)
+        uiviewFilterMenu.btnFilterIcon = btnFilterIcon
         uiviewFilterMenu.layer.zPosition = 601
         view.addSubview(uiviewFilterMenu)
         view.bringSubview(toFront: uiviewFilterMenu)
