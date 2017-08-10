@@ -16,9 +16,8 @@ protocol PasswordCellProtocol: class {
 
 class PasswordTableViewCell: UITableViewCell {
     
-    // MARK: - IBOutlets
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var showPasswordButton: UIButton!
+    var textView: UITextView!
+    var showPasswordButton: UIButton!
     
     // MARK: - Variables
     weak var delegate: PasswordCellProtocol?
@@ -30,10 +29,30 @@ class PasswordTableViewCell: UITableViewCell {
     var showText = false
     var showPasswordButtonImageName = "check_eye_close_yellow"
     
-    // MARK: - Awake Function
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadContent() {
+        backgroundColor = .blue
+        textView = UITextView()
+        addSubview(textView)
+        textView.font = UIFont(name: "AvenirNext-Regular", size: 22)
+        textView.textColor = UIColor._898989()
+        addConstraintsWithFormat("H:|-70-[v0]-70-|", options: [], views: textView)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: textView)
+        
+        showPasswordButton = UIButton()
+        showPasswordButton.setImage(#imageLiteral(resourceName: "check_eye_close_red_new"), for: .normal)
+        addSubview(showPasswordButton)
+        addConstraintsWithFormat("H:[v0(40)]-15-|", options: [], views: showPasswordButton)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: showPasswordButton)
+        showPasswordButton.addTarget(self, action: #selector(showPasswordButtonTapped(_:)), for: .touchUpInside)
     }
     
     // MARK: - Functions
@@ -50,9 +69,7 @@ class PasswordTableViewCell: UITableViewCell {
         textView.resignFirstResponder()
     }
     
-    // MARK: - IBAction
-    @IBAction func showPasswordButtonTapped(_ sender: AnyObject) {
-        
+    func showPasswordButtonTapped(_ sender: AnyObject) {
         showText = !showText
         changeColorOFImage(textEntered)
         showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), for: UIControlState())
@@ -79,12 +96,6 @@ class PasswordTableViewCell: UITableViewCell {
             attributedStringWithImage.addAttributes(myAttribute, range: NSRange.init(location: 0, length: attributedStringWithImage.length))
             self.textView.attributedText = attributedStringWithImage;
         }
-    }
-    
-    // MARK: - Selection
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
     }
 }
 
