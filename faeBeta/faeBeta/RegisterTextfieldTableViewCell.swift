@@ -15,32 +15,30 @@ protocol RegisterTextfieldProtocol: class {
 }
 
 class RegisterTextfieldTableViewCell: UITableViewCell {
-    
-    // MARK: - IBOutlets
     var textfield: FAETextField!
-    
     // MARK: - Variables
     weak var delegate: RegisterTextfieldProtocol?
     var indexPath: IndexPath!
     var isUsernameField = false
     var isCharacterLimit = false
     var limitNumber: Int = Int.max
-    // MARK: - Awake
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        textfield = FAETextField(frame: CGRect(x: 15, y: self.contentView.frame.height / 2 - 17, width: self.contentView.frame.width - 30, height: 34))
-        self.contentView.addSubview(textfield)
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadContent() {
+        textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        addSubview(textfield)
         textfield.delegate = self
         textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged )
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        textfield.frame =  CGRect(x: 15, y: self.contentView.frame.height / 2 - 17, width: self.contentView.frame.width - 30, height: 34)
-    }
-    
-    // MARK: - Functions
     func setPlaceholderLabelText(_ text: String, indexPath: IndexPath)  {
         textfield.placeholder = text
         self.indexPath = indexPath

@@ -49,8 +49,8 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
-        self.navigationController?.isNavigationBarHidden = false
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "NavigationBackNew"), style: UIBarButtonItemStyle.plain, target: self, action:#selector(self.backButtonPressed))
+        super.createTopView("")
+        super.imgProgress.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -104,9 +104,9 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     }
     
     func registerCell() {
-        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
     }
 
     override func didReceiveMemoryWarning() {

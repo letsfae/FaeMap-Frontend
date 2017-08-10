@@ -68,15 +68,8 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     }
     
     func registerCell() {
-        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "SpacerTableViewCell", bundle: nil), forCellReuseIdentifier: "SpacerTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "EnterCodeTableViewCell", bundle: nil), forCellReuseIdentifier: "EnterCodeTableViewCellIdentifier")
-    }
-    
-    // MARK: - Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(EnterCodeTableViewCell.self, forCellReuseIdentifier: "EnterCodeTableViewCellIdentifier")
     }
 }
 
@@ -87,15 +80,14 @@ extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
             cell.setTitleLabelText("Enter the Code we just \nsent to your Email to continue")
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SpacerTableViewCellIdentifier") as! SpacerTableViewCell
-            return cell
+//            let cell = tableView.dequeueReusableCell(withIdentifier: "SpacerTableViewCellIdentifier") as! SpacerTableViewCell
+            return UITableViewCell()
         case 2:
             if cellEnterCode == nil {
                 cellEnterCode = tableView.dequeueReusableCell(withIdentifier: "EnterCodeTableViewCellIdentifier") as! EnterCodeTableViewCell
