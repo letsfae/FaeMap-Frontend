@@ -77,11 +77,11 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     func getErrorView() -> UIView {
         let uiviewError = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
         let lblError = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        lblError.textColor = UIColor.init(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
+        lblError.textColor = UIColor._2499090()
         lblError.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblError.numberOfLines = 2
         lblError.textAlignment = .center
-        lblError.text = "This Username is currently Unavailable. \n Choose another One!"
+        lblError.text = "This Username is currently Unavailable. \n Choose Another One!"
         lblError.isHidden = true
         
         lblUsernameExist = lblError
@@ -119,9 +119,9 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func registerCell() {
-        tableView.register(UINib(nibName: "TitleTableViewCell", bundle: nil), forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "SubTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.register(UINib(nibName: "RegisterTextfieldTableViewCell", bundle: nil), forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
     }
     
     // MARK: - Memory Management

@@ -33,8 +33,6 @@
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
-		B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */; };
-		B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
@@ -69,17 +67,10 @@
 		B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF2A1D74ECDF00C078F5 /* FAENumberKeyboard.xib */; };
 		B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF2B1D74ECDF00C078F5 /* UIColor+faeColor.swift */; };
 		B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF371D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift */; };
-		B064EF461D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF381D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib */; };
 		B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF391D74ED0D00C078F5 /* TitleTableViewCell.swift */; };
-		B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF3A1D74ED0D00C078F5 /* TitleTableViewCell.xib */; };
 		B064EF4F1D74ED0D00C078F5 /* SubTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF3B1D74ED0D00C078F5 /* SubTitleTableViewCell.swift */; };
-		B064EF521D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF3C1D74ED0D00C078F5 /* SubTitleTableViewCell.xib */; };
 		B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF3D1D74ED0D00C078F5 /* PasswordTableViewCell.swift */; };
-		B064EF581D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF3E1D74ED0D00C078F5 /* PasswordTableViewCell.xib */; };
-		B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF3F1D74ED0D00C078F5 /* SpacerTableViewCell.swift */; };
-		B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF401D74ED0D00C078F5 /* SpacerTableViewCell.xib */; };
 		B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF411D74ED0D00C078F5 /* EnterCodeTableViewCell.swift */; };
-		B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */; };
 		B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */; };
 		B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D271D5E435200356705 /* FaeCellForAddressSearch.swift */; };
 		B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D281D5E435200356705 /* FaeSearchBar.swift */; };
@@ -291,8 +282,6 @@
 		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
 		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
 		8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleSizeCalculatingCustom.h; sourceTree = "<group>"; };
-		B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationEnableViewController.swift; sourceTree = "<group>"; };
-		B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationEnableViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -327,17 +316,10 @@
 		B064EF2A1D74ECDF00C078F5 /* FAENumberKeyboard.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FAENumberKeyboard.xib; sourceTree = "<group>"; };
 		B064EF2B1D74ECDF00C078F5 /* UIColor+faeColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+faeColor.swift"; sourceTree = "<group>"; };
 		B064EF371D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterTextfieldTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF381D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RegisterTextfieldTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF391D74ED0D00C078F5 /* TitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF3A1D74ED0D00C078F5 /* TitleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TitleTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF3B1D74ED0D00C078F5 /* SubTitleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubTitleTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF3C1D74ED0D00C078F5 /* SubTitleTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SubTitleTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF3D1D74ED0D00C078F5 /* PasswordTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF3E1D74ED0D00C078F5 /* PasswordTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordTableViewCell.xib; sourceTree = "<group>"; };
-		B064EF3F1D74ED0D00C078F5 /* SpacerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpacerTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF401D74ED0D00C078F5 /* SpacerTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpacerTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF411D74ED0D00C078F5 /* EnterCodeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnterCodeTableViewCell.swift; sourceTree = "<group>"; };
-		B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EnterCodeTableViewCell.xib; sourceTree = "<group>"; };
 		B064EF671D74EE5F00C078F5 /* SignInSupportCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInSupportCodeViewController.swift; sourceTree = "<group>"; };
 		B0714D271D5E435200356705 /* FaeCellForAddressSearch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCellForAddressSearch.swift; sourceTree = "<group>"; };
 		B0714D281D5E435200356705 /* FaeSearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeSearchBar.swift; sourceTree = "<group>"; };
@@ -646,17 +628,10 @@
 			isa = PBXGroup;
 			children = (
 				B064EF371D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift */,
-				B064EF381D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib */,
 				B064EF391D74ED0D00C078F5 /* TitleTableViewCell.swift */,
-				B064EF3A1D74ED0D00C078F5 /* TitleTableViewCell.xib */,
 				B064EF3B1D74ED0D00C078F5 /* SubTitleTableViewCell.swift */,
-				B064EF3C1D74ED0D00C078F5 /* SubTitleTableViewCell.xib */,
 				B064EF3D1D74ED0D00C078F5 /* PasswordTableViewCell.swift */,
-				B064EF3E1D74ED0D00C078F5 /* PasswordTableViewCell.xib */,
-				B064EF3F1D74ED0D00C078F5 /* SpacerTableViewCell.swift */,
-				B064EF401D74ED0D00C078F5 /* SpacerTableViewCell.xib */,
 				B064EF411D74ED0D00C078F5 /* EnterCodeTableViewCell.swift */,
-				B064EF421D74ED0D00C078F5 /* EnterCodeTableViewCell.xib */,
 			);
 			name = TableViewCells;
 			sourceTree = "<group>";
@@ -926,8 +901,6 @@
 		B0CFC9B51CED39CF00EC356A /* ServiceViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				B001825C1D0BBF49002D05C5 /* NotificationEnableViewController.swift */,
-				B00182601D0BBF9A002D05C5 /* LocationEnableViewController.swift */,
 				B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */,
 			);
 			name = ServiceViewControllers;
@@ -1312,7 +1285,6 @@
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
 				DC3982081DD11DFC000CB51F /* QuickPhotoPickerCollectionViewCell.xib in Resources */,
 				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
-				B064EF4C1D74ED0D00C078F5 /* TitleTableViewCell.xib in Resources */,
 				B0BF354A1D8DC7E200B0540B /* Chat.storyboard in Resources */,
 				B0A2ACA61CE3A3C7002E0C9D /* LaunchScreen.storyboard in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
@@ -1324,13 +1296,8 @@
 				B064EED11D6E0CEA00C078F5 /* AlbumTableViewCell.xib in Resources */,
 				DCBE690D1DB60F6E00BFF46C /* AudioRecorderView.xib in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
-				B064EF5E1D74ED0D00C078F5 /* SpacerTableViewCell.xib in Resources */,
 				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
-				B064EF641D74ED0D00C078F5 /* EnterCodeTableViewCell.xib in Resources */,
-				B064EF521D74ED0D00C078F5 /* SubTitleTableViewCell.xib in Resources */,
 				B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */,
-				B064EF581D74ED0D00C078F5 /* PasswordTableViewCell.xib in Resources */,
-				B064EF461D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1591,7 +1558,6 @@
 				506D1FCF1F2A97D5004119EA /* FMPlaceDetail.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
-				B064EF5B1D74ED0D00C078F5 /* SpacerTableViewCell.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */,
@@ -1607,8 +1573,6 @@
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */,
 				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
-				B00182611D0BBF9A002D05C5 /* LocationEnableViewController.swift in Sources */,
-				B001825D1D0BBF49002D05C5 /* NotificationEnableViewController.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
