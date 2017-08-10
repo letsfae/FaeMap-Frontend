@@ -604,12 +604,12 @@
 		B064EEB31D6E0CEA00C078F5 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
-				DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */,
-				B064EEB41D6E0CEA00C078F5 /* CustomCollectionViewCell */,
 				B064EEB91D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift */,
-				B064EEBA1D6E0CEA00C078F5 /* CustomTableViewCell */,
+				DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */,
 				B064EEBD1D6E0CEA00C078F5 /* PhotoPicker.swift */,
 				B064EEBE1D6E0CEA00C078F5 /* SmartAlbum.swift */,
+				B064EEB41D6E0CEA00C078F5 /* CustomCollectionViewCell */,
+				B064EEBA1D6E0CEA00C078F5 /* CustomTableViewCell */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
