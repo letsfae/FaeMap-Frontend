@@ -52,6 +52,7 @@ class FaePinAnnotation: MKPointAnnotation {
                 self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
             } else {
                 self.count = 0
+                self.timer?.invalidate()
                 self.timer = nil
             }
         }
@@ -88,6 +89,10 @@ class FaePinAnnotation: MKPointAnnotation {
             self.changePosition()
             self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         }
+    }
+    
+    deinit {
+        self.isValid = false
     }
     
     func getRandomTime() -> Double {

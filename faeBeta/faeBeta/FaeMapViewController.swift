@@ -38,7 +38,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var tempMarker: UIImageView! // temp marker, it is a UIImageView
     var timerLoadRegionPins: Timer! // timer to renew map pins
     var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
-    var timerUpdateSelfLocation: Timer! // timer to renew update user pins
+    var timerUserPin: Timer? // timer to renew update user pins
     var prevBearing: Double = 0
     var mapClusterManager: CCHMapClusterController!
     let FILTER_ENABLE = true
@@ -167,7 +167,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func timerSetup() {
         invalidateAllTimer()
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
+        timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
 //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
@@ -175,9 +175,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
-        if timerUpdateSelfLocation != nil {
-            timerUpdateSelfLocation.invalidate()
-        }
+        timerUserPin?.invalidate()
+        timerUserPin = nil
         if timerLoadRegionPlacePins != nil {
             timerLoadRegionPlacePins.invalidate()
         }

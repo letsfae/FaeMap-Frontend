@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension FaeMapViewController {
+extension FaeMapViewController: MapFilterMenuDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
@@ -18,6 +18,7 @@ extension FaeMapViewController {
         view.bringSubview(toFront: btnFilterIcon)
         
         uiviewFilterMenu = MapFilterMenu(frame: CGRect(x: 0, y: 736, w: 414, h: 471))
+        uiviewFilterMenu.delegate = self
         uiviewFilterMenu.btnHideMFMenu.addTarget(self, action: #selector(self.actionHideFilterMenu(_:)), for: .touchUpInside)
         uiviewFilterMenu.layer.zPosition = 601
         view.addSubview(uiviewFilterMenu)
@@ -25,10 +26,33 @@ extension FaeMapViewController {
         let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         btnFilterIcon.addGestureRecognizer(draggingGesture)
 //        uiviewFilterMenu.addGestureRecognizer(draggingGesture)
-        
+    }
+    
+    // MapFilterMenuDelegate
+    func autoReresh(isOn: Bool) {
         
     }
     
+    // MapFilterMenuDelegate
+    func autoCyclePins(isOn: Bool) {
+        
+    }
+    
+    // MapFilterMenuDelegate
+    func showAvatars(isOn: Bool) {
+        if isOn {
+            updateTimerForUserPin()
+        } else {
+            timerUserPin?.invalidate()
+            timerUserPin = nil
+            for faeUser in faeUserPins {
+                faeUser.isValid = false
+            }
+            mapClusterManager.removeAnnotations(faeUserPins) {
+                self.faeUserPins.removeAll()
+            }
+        }
+    }
     
     func actionHideFilterMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {

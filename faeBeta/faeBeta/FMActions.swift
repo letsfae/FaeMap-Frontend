@@ -73,6 +73,19 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
+        if faeUserPins.isEmpty {
+            updateTimerForUserPin()
+        } else {
+            timerUserPin?.invalidate()
+            timerUserPin = nil
+            for faeUser in faeUserPins {
+                faeUser.isValid = false
+            }
+            mapClusterManager.removeAnnotations(faeUserPins) {
+                self.faeUserPins.removeAll()
+            }
+        }
+        
         /*
          uiviewNameCard.hide()
          let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
