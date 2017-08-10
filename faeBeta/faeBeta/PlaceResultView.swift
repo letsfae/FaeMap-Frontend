@@ -38,7 +38,7 @@ class PlaceResultView: UIView {
     var nextAnnotation: CCHMapClusterAnnotation!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 68))
+        super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 102))
         loadContent()
         tag = 0
         alpha = 0
@@ -203,7 +203,7 @@ class PlaceView: UIImageView {
     var lblPrice: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 2, y: 0, w: 410, h: 102))
+        super.init(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 102))
         loadContent()
     }
     

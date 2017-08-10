@@ -39,11 +39,10 @@ extension FaeMapViewController {
     }
     
     func updateTimerForUserPin() {
-        self.updateSelfLocation()
-        if timerUpdateSelfLocation != nil {
-            timerUpdateSelfLocation.invalidate()
-        }
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        updateSelfLocation()
+        timerUserPin?.invalidate()
+        timerUserPin = nil
+        timerUserPin = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
 
     func updateSelfLocation() {
