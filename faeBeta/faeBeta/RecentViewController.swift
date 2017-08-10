@@ -106,8 +106,14 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.addConstraintsWithFormat("H:|-15-[v0(24)]", options: [], views: uiviewNavBar.leftBtn)
         uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(24)]-12-|", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-29-[v0(24)]", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "locationPin"), for: .normal)
-        //uiviewNavBar.rightBtn.setImage(nil, for: .normal)
+        uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
+        
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
+        
+        uiviewNavBar.lblTitle.text = "Chats"
         
         /*self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
@@ -136,7 +142,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func navigationLeftItemTapped() {
-        backClosure!(5)
+        //backClosure!(5)
         //self.dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)
     }
