@@ -10,23 +10,27 @@ import UIKit
 
 class SubTitleTableViewCell: UITableViewCell {
 
-    // MARK: - IBOutlets
-    @IBOutlet weak var subTitleLabel: UILabel!
+    var subTitleLabel: UILabel!
     
-    // MARK: - Awake Function
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadContent()
     }
     
-    // MARK: - Function
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadContent() {
+        subTitleLabel = UILabel(frame:CGRect(x: 0, y: 20, width: screenWidth, height: 24))
+        subTitleLabel.textAlignment = .center
+        subTitleLabel.numberOfLines = 0
+        subTitleLabel.textColor = UIColor._138138138()
+        subTitleLabel.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        addSubview(subTitleLabel)
+    }
+
     func setSubTitleLabelText(_ subTitleLabelText: String)  {
         subTitleLabel.text = subTitleLabelText
-    }
-    
-    // MARK: - Selection Function
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
     }
 }

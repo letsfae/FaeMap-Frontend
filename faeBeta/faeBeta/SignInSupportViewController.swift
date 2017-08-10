@@ -72,7 +72,10 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         // set up the title label
         lblTitle = UILabel(frame: CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60))
         lblTitle.numberOfLines = 2
-        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        lblTitle.text = "Enter your Email\nto Reset Password"
+        lblTitle.textColor = UIColor._898989()
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+//        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         lblTitle.textAlignment = .center
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
@@ -82,6 +85,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         txtEmail = FAETextField(frame: CGRect(x: 15, y: 171, width: screenWidth - 30, height: 30))
         txtEmail.placeholder = "Email Address"
         txtEmail.adjustsFontSizeToFitWidth = true
+        txtEmail.becomeFirstResponder()
         self.view.addSubview(txtEmail)
         
         // set up the "We can’t find an account with this Email!" label
@@ -100,15 +104,16 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         btnSendCode.layer.cornerRadius = 25 * screenHeightFactor
         btnSendCode.isEnabled = false
         btnSendCode.backgroundColor = UIColor._255160160()
-        btnSendCode.addTarget(self, action: #selector(SignInSupportViewController.sendCodeButtonTapped), for: .touchUpInside)
+        btnSendCode.addTarget(self, action: #selector(sendCodeButtonTapped), for: .touchUpInside)
         self.view.insertSubview(btnSendCode, at: 0)
         
     }
     
     func setupEnteringVerificationCode() {
-        lblTitle.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-        lblTitle.sizeToFit()
-        lblTitle.center.x = screenWidth / 2
+        lblTitle.text = "Enter the Code we just\nsent to your Email to continue"
+//        lblTitle.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+//        lblTitle.sizeToFit()
+//        lblTitle.center.x = screenWidth / 2
         self.view.endEditing(true)
         
         // setup the fake keyboard for numbers input
@@ -180,11 +185,13 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
                         controller.email = self.txtEmail.text!
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    else {
+                    } else {
                         for _ in 0..<6 {
                             _ = self.verificationCodeView.addDigit(-1)
                         }
+                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnSendCode.isEnabled = false
+                        self.btnSendCode.backgroundColor = UIColor._255160160()
                     }
                     self.indicatorView.stopAnimating()
             })
