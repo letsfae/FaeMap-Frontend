@@ -15,8 +15,10 @@ protocol MapFilterMenuDelegate: class {
 }
 
 class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
+    
     weak var delegate: MapFilterMenuDelegate?
     
+    var btnFilterIcon = MapFilterIcon()
     var uiviewMapOpt: UIView!
     var uiviewPlaceLoc: UIView!
     var btnDiscovery: UIButton!
@@ -88,6 +90,7 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
         
         // draw fake button to hide map filter menu
         btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 66))
+        btnHideMFMenu.addTarget(self, action: #selector(self.hide(_:)), for: .touchUpInside)
         addSubview(btnHideMFMenu)
         
         loadView1()
@@ -283,6 +286,13 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
             lblShowAvatars.textColor = UIColor._146146146()
             delegate?.showAvatars(isOn: false)
         }
+    }
+    
+    func hide(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.frame.origin.y = screenHeight
+            self.btnFilterIcon.center.y = screenHeight - 25
+        })
     }
     
     // MARK - TableView
