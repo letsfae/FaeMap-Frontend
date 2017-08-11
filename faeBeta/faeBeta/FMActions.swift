@@ -38,8 +38,6 @@ extension FaeMapViewController {
     }
     
     func actionClearSearchResults(_ sender: UIButton) {
-//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
-//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
