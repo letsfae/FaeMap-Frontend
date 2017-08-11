@@ -119,7 +119,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        loadCurrentRegionPlacePins()
+        if AUTO_REFRESH {
+            updatePlacePins()
+            updateUserPins()
+        }
         if btnCompass != nil { btnCompass.rotateCompass() }
         if placeResultBar.tag > 0 { placeResultBar.annotations = visiblePlaces() }
         

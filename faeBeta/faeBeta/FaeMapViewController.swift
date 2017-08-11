@@ -61,6 +61,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var mkOverLay = [MKOverlay]()
     var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
     var START_WAVE_ANIMATION = false
+    var AUTO_REFRESH = true
+    var AUTO_CIRCLE_PINS = true
+    var HIDE_AVATARS = false
     
     // System Functions
     override func viewDidLoad() {
@@ -94,8 +97,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
-        print("viewDidAppear")
-        print(FirstTimeLoginViewController.boolFinishClicked)
         if FirstTimeLoginViewController.boolFinishClicked {
             print("jumpToEnableNotification")
             jumpToEnableNotification()
@@ -170,7 +171,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func timerSetup() {
         invalidateAllTimer()
-        timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateSelfLocation), userInfo: nil, repeats: true)
+        timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
 //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
