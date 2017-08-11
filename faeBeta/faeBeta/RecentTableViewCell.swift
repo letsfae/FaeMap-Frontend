@@ -45,16 +45,29 @@ protocol SwipeableCellDelegate: class {
 class RecentTableViewCell: UITableViewCell {
     
     // MARK: - properties
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var lastMessageLabel: UILabel!
-    @IBOutlet private weak var dateLabel: UILabel!
-    @IBOutlet private weak var counterLabel: UILabel!
-    @IBOutlet private weak var avatarImageView: UIImageView!
-    @IBOutlet private weak var countLabelLength: NSLayoutConstraint!
-    @IBOutlet private weak var deleteButton: UIButton!
-    @IBOutlet private weak var distanceToRight: NSLayoutConstraint!
-    @IBOutlet private weak var distanceToLeft: NSLayoutConstraint!
-    @IBOutlet private weak var mainView: UIView!
+//    @IBOutlet private weak var nameLabel: UILabel!
+//    @IBOutlet private weak var lastMessageLabel: UILabel!
+//    @IBOutlet private weak var dateLabel: UILabel!
+//    @IBOutlet private weak var counterLabel: UILabel!
+//    @IBOutlet private weak var avatarImageView: UIImageView!
+//    @IBOutlet private weak var countLabelLength: NSLayoutConstraint!
+//    @IBOutlet private weak var deleteButton: UIButton!
+    //@IBOutlet private weak var distanceToRight: NSLayoutConstraint!
+    //@IBOutlet private weak var distanceToLeft: NSLayoutConstraint!
+    //@IBOutlet private weak var mainView: UIView!
+    
+    // Felix - remove storyboard
+    var imgAvatar: UIImageView!
+    var lblCounter: UILabel!
+    var lblName: UILabel!
+    var lblLastMessage: UILabel!
+    var lblDate: UILabel!
+    var uiviewMain: UIView!
+    var btnDelete: UIButton!
+    var distanceToRight: NSLayoutConstraint!
+    var distanceToLeft: NSLayoutConstraint!
+    // end Felix
+    
     
     private var panRecognizer:UIPanGestureRecognizer!
     private var panStartPoint:CGPoint!
@@ -65,18 +78,148 @@ class RecentTableViewCell: UITableViewCell {
     
     weak var delegate: SwipeableCellDelegate!
     
+    // Felix
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        btnDelete = UIButton(frame: CGRect(x: screenWidth - 69, y: 0, width: 69, height: 74))
+        btnDelete.setImage(UIImage(named: "deleteButton.png"), for: .normal)
+        addSubview(btnDelete)
+        btnDelete.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        
+        uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
+        uiviewMain.backgroundColor = .white
+        uiviewMain.translatesAutoresizingMaskIntoConstraints = false
+        
+        imgAvatar = UIImageView()
+        imgAvatar.layer.cornerRadius = 30
+        imgAvatar.layer.masksToBounds = true
+        imgAvatar.contentMode = .scaleAspectFill
+        uiviewMain.addSubview(imgAvatar)
+        uiviewMain.addConstraintsWithFormat("H:|-6-[v0(60)]", options: [], views: imgAvatar)
+        uiviewMain.addConstraintsWithFormat("V:|-7.5-[v0(60)]", options: [], views: imgAvatar)
+        
+        lblCounter = UILabel()
+        lblCounter.text = ""
+        lblCounter.textColor = .white
+        lblCounter.textAlignment = .center
+        lblCounter.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
+        lblCounter.layer.cornerRadius = 11
+        lblCounter.layer.masksToBounds = true
+        lblCounter.backgroundColor = UIColor._2499090()
+        lblCounter.isHidden = true
+        uiviewMain.addSubview(lblCounter)
+        
+        lblName = UILabel()
+        lblName.text = ""
+        lblName.textAlignment = .left
+        lblName.textColor = UIColor._898989()
+        lblName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        uiviewMain.addSubview(lblName)
+        uiviewMain.addConstraintsWithFormat("H:|-86-[v0]-120-|", options: [], views: lblName)
+        uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblName)
+        
+        lblLastMessage = UILabel()
+        lblLastMessage.text = ""
+        lblLastMessage.textAlignment = .left
+        lblLastMessage.textColor = UIColor._898989()
+        lblLastMessage.lineBreakMode = NSLineBreakMode.byTruncatingTail
+        lblLastMessage.numberOfLines = 2
+        
+        lblLastMessage.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        uiviewMain.addSubview(lblLastMessage)
+        uiviewMain.addConstraintsWithFormat("H:|-86-[v0]-56-|", options: [], views: lblLastMessage)
+        uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
+        
+        
+        lblDate = UILabel()
+        lblDate.text = ""
+        lblDate.textAlignment = .right
+        uiviewMain.addSubview(lblDate)
+        uiviewMain.addConstraintsWithFormat("H:[v0(106)]-14-|", options: [], views: lblDate)
+        uiviewMain.addConstraintsWithFormat("V:|-4-[v0(18.5)]", options: [], views: lblDate)
+        
+        addSubview(uiviewMain)
+        
+        distanceToLeft = NSLayoutConstraint(item: uiviewMain, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 0)
+        addConstraint(distanceToLeft)
+        
+        let bottomMargin = NSLayoutConstraint(item: uiviewMain, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: 0)
+        addConstraint(bottomMargin)
+        
+        distanceToRight = NSLayoutConstraint(item: self, attribute: .trailing, relatedBy: .equal, toItem: uiviewMain, attribute: .trailing, multiplier: 1.0, constant: 0)
+        addConstraint(distanceToRight)
+        
+        let mainviewTop = NSLayoutConstraint(item: uiviewMain, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0)
+        addConstraint(mainviewTop)
+        
+        selectionStyle = .none
+        
+        panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
+        panRecognizer.delegate = self
+        addGestureRecognizer(panRecognizer)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func bindData2(_ recent : RealmRecent) {
+        //print(recent)
+        //layoutIfNeeded()
+        
+        if let myInteger = Int(recent.withUserID) {
+            //Bryan
+            //let withUserIDNumber = NSNumber(value:myInteger)
+            imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
+        }
+        
+        lblName.text = recent.withUserNickName
+        
+        lblLastMessage.text = recent.message
+        //lblLastMessage.sizeToFit()
+        
+        if recent.unread > 0 {
+            lblCounter.isHidden = false
+            lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
+            if(lblCounter.text?.characters.count >= 2){
+                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(28)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
+            }else{
+                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(22)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
+            }
+        }else{
+            lblCounter.isHidden = true
+        }
+        
+        let date = recent.date
+        let seconds = Date().timeIntervalSince(date as Date)
+        lblDate.text = TimeElipsed(seconds,lastMessageTime:date as Date)
+        lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
+        lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
+        
+        guard let userid = Int(recent.withUserID) else { return }
+        guard avatarDic[userid] == nil else { return }
+        General.shared.avatar(userid: userid) { (avatarImage) in
+            avatarDic[userid] = avatarImage
+        }
+    }
+
+    // end Felix
+    
     //MARK : - life cycle
-    override func awakeFromNib() {
+    /*override func awakeFromNib() {
         super.awakeFromNib()
         self.panRecognizer = UIPanGestureRecognizer.init(target: self, action: #selector(RecentTableViewCell.panThisCell))
         self.panRecognizer.delegate = self;
         self.mainView.addGestureRecognizer(self.panRecognizer)
-    }
+    }*/
 
     override func prepareForReuse()
     {
         super.prepareForReuse()
-        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+        //self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
     }
     
     // MARK: - populate cell
@@ -139,7 +282,7 @@ class RecentTableViewCell: UITableViewCell {
     //Bryan
     //TODO: Implement it
     
-    func bindData(_ recent : RealmRecent) {
+    /*func bindData(_ recent : RealmRecent) {
         //print(recent)
         self.layoutIfNeeded()
         self.avatarImageView.layer.cornerRadius = self.avatarImageView.bounds.width / 2 // half the cell's height
@@ -180,7 +323,7 @@ class RecentTableViewCell: UITableViewCell {
         General.shared.avatar(userid: userid) { (avatarImage) in
             avatarDic[userid] = avatarImage
         }
-    }
+    }*/
     //ENDBryan
     
     // MARK: - helper
@@ -212,20 +355,22 @@ class RecentTableViewCell: UITableViewCell {
 
     
     //MARK: - Delete button related
-    @IBAction private func deleteButtonTapped(_ sender: UIButton) {
+    func deleteButtonTapped(_ sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
     }
     
     //MARK: - Cell control
     @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
+        //print("pan")
+        //distanceToLeft.constant = 0
         switch (recognizer.state) {
         case .began:
             isDraggingRecentTableViewCell = true
-            self.panStartPoint = recognizer.translation(in: self.mainView)
+            self.panStartPoint = recognizer.translation(in: uiviewMain)
             self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
             break;
         case .changed:
-            let currentPoint = recognizer.translation(in: self.mainView)
+            let currentPoint = recognizer.translation(in: uiviewMain)
             let deltaX = currentPoint.x - self.panStartPoint.x;
             var panningLeft = false
             if (currentPoint.x < self.panStartPoint.x) {  //1
@@ -276,7 +421,7 @@ class RecentTableViewCell: UITableViewCell {
             
 //            if (self.startingRightLayoutConstraintConstant == 0) { //1
                 //Cell was opening
-                let halfOfButtonOne = self.deleteButton.frame.width / 2; //2
+                let halfOfButtonOne = btnDelete.frame.width / 2; //2
                 if (self.distanceToRight.constant >= halfOfButtonOne) { //3
                     //Open all the way
                     self.setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
@@ -371,5 +516,5 @@ class RecentTableViewCell: UITableViewCell {
     {
         self.resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
     }
-    
+ 
 }

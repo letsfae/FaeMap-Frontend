@@ -16,11 +16,19 @@ class AudioRecorderView: UIView {
 
 //MARK: - properties
     
-    @IBOutlet private weak var mainButton: UIButton!
-    @IBOutlet private weak var leftButton: UIButton!
-    @IBOutlet private weak var rightButton: UIButton!
-    @IBOutlet private weak var infoLabel: UILabel! // the label displaying "to short" or "record duration"
-    @IBOutlet fileprivate weak var signalImageView: UIImageView! // the image view on the record button to show the signal icon
+    // Felix - remove storyboard
+    var btnMain: UIButton!
+    var btnLeft: UIButton!
+    var btnRight: UIButton!
+    var lblInfo: UILabel!
+    var imgSignal: UIImageView!
+    // Felix - end
+    
+    //@IBOutlet private weak var mainButton: UIButton!
+    //@IBOutlet private weak var leftButton: UIButton!
+    //@IBOutlet private weak var rightButton: UIButton!
+    //@IBOutlet private weak var infoLabel: UILabel! // the label displaying "to short" or "record duration"
+    //@IBOutlet fileprivate weak var signalImageView: UIImageView! // the image view on the record button to show the signal icon
     
     fileprivate var isRecordMode = true // true: record mode  false: play mode
     private var isPressingMainButton = false
@@ -41,12 +49,12 @@ class AudioRecorderView: UIView {
     
     private let leftAndRightButtonResizingFactorMax: CGFloat = 1.3 // while recording, the buttom left & right button will become larger when you move your finger toward to it. This factor limit the maximum size of it
     
-    @IBOutlet private weak var signalIconHeight: NSLayoutConstraint!
-    @IBOutlet private weak var signalIconWidth: NSLayoutConstraint!
+    //@IBOutlet private weak var signalIconHeight: NSLayoutConstraint!
+    //@IBOutlet private weak var signalIconWidth: NSLayoutConstraint!
     
     //MARK: - init
     
-    override func awakeFromNib() {
+    /*override func awakeFromNib() {
         super.awakeFromNib()
         
         // setup UI
@@ -70,7 +78,67 @@ class AudioRecorderView: UIView {
         rightButton.alpha = 0
         
         setInfoLabel("Hold & Speak!", color: UIColor._182182182())
+    }*/
+    
+    // Felix
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        btnMain = UIButton()
+        btnMain.layer.cornerRadius = 67
+        btnMain.backgroundColor = UIColor.white
+        btnMain.layer.shadowColor = UIColor._210210210().cgColor
+        btnMain.layer.shadowOpacity = 1
+        btnMain.layer.shadowRadius = 10;
+        btnMain.layer.shadowOffset = CGSize(width: 0, height: 0);
+        btnMain.layer.masksToBounds = false
+        addSubview(btnMain)
+        addConstraintsWithFormat("H:|-\((screenWidth - 133)/2)-[v0(133)]", options: [], views: btnMain)
+        addConstraintsWithFormat("V:|-84-[v0(133)]", options: [], views: btnMain)
+        
+        btnMain.addTarget(self, action: #selector(self.mainButtonPressing(_:)), for: .touchDown)
+        btnMain.addTarget(self, action: #selector(self.mainButtonTouchUpInSide(_:withEvent:)), for: .touchUpInside)
+        btnMain.addTarget(self, action: #selector(self.mainButtonTouchUpOutSide(_:withEvent:)), for: .touchUpOutside )
+        btnMain.addTarget(self, action: #selector(self.mainButtonDragOutside(_:withEvent:)), for: .touchDragOutside)
+        btnMain.addTarget(self, action: #selector(self.mainButtonDragInside(_:withEvent:)), for: .touchDragInside)
+        
+        btnLeft = UIButton()
+        btnLeft.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), for: .normal)
+        addSubview(btnLeft)
+        btnLeft.isHidden = true
+        addConstraintsWithFormat("H:|-15-[v0(60)]", options: [], views: btnLeft)
+        addConstraintsWithFormat("V:[v0(60)]-12-|", options: [], views: btnLeft)
+        btnLeft.addTarget(self, action: #selector(self.leftButtonPressed(_:)), for: .touchUpInside)
+        
+        btnRight = UIButton()
+        btnRight.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), for: .normal)
+        addSubview(btnRight)
+        btnRight.isHidden = true
+        addConstraintsWithFormat("H:[v0(60)]-15-|", options: [], views: btnRight)
+        addConstraintsWithFormat("V:[v0(60)]-12-|", options: [], views: btnRight)
+        btnRight.addTarget(self, action: #selector(self.rightButtonPressed(_:)), for: .touchUpInside)
+        
+        lblInfo = UILabel()
+        setInfoLabel("Hold & Speak!", color: UIColor._182182182())
+        addSubview(lblInfo)
+        addConstraintsWithFormat("H:|-\((screenWidth - 121)/2)-[v0(121)]", options: [], views: lblInfo)
+        addConstraintsWithFormat("V:|-34-[v0(25)]", options: [], views: lblInfo)
+        
+        imgSignal = UIImageView()
+        imgSignal.image = UIImage(named: "signalIcon_gray")
+        imgSignal.contentMode = .scaleAspectFill
+        btnMain.addSubview(imgSignal)
+        btnMain.addConstraintsWithFormat("H:|-\((133 - 50)/2)-[v0(50)]", options: [], views: imgSignal)
+        btnMain.addConstraintsWithFormat("V:|-\((133 - 30)/2)-[v0(30)]", options: [], views: imgSignal)
+        
+        
+        
     }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // Felix - end
     
     
     //MARK: - button actions
@@ -82,9 +150,9 @@ class AudioRecorderView: UIView {
             let view = UIImageView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
             view.image = UIImage(named: "Oval 3")
             self.addSubview(view)
-            view.center = mainButton.center
+            view.center = btnMain.center
             
-            self.signalImageView.image = UIImage(named: "signalIcon_red")
+            imgSignal.image = UIImage(named: "signalIcon_red")
             
             startDisplayingFlow()
             setupRecorder()
@@ -92,13 +160,13 @@ class AudioRecorderView: UIView {
             UIView.animate(withDuration: 0.2, delay: 0, options:.curveLinear ,animations: {
                 view.frame = CGRect(x: 0,y: 0,width: 100,height: 100)
 
-                view.center = self.mainButton.center
-                self.mainButton.transform = CGAffineTransform(scaleX: 0.77, y: 0.77)
+                view.center = self.btnMain.center
+                self.btnMain.transform = CGAffineTransform(scaleX: 0.77, y: 0.77)
                 self.setInfoLabel("1:00", color: UIColor._2499090())
-                self.leftButton.alpha = 1
-                self.rightButton.alpha = 1
+                self.btnLeft.isHidden = false
+                self.btnRight.isHidden = false
                 }, completion: { (complete) in
-                    self.mainButton.backgroundColor = UIColor._2499090()
+                    self.btnMain.backgroundColor = UIColor._2499090()
                     view.isHidden = true
                     view.removeFromSuperview()
                     self.generateFlow()
@@ -117,35 +185,35 @@ class AudioRecorderView: UIView {
             
             let view = UIImageView(frame: CGRect(x: 0,y: 0,width: 5,height: 5))
             view.image = UIImage(named: "Oval 2")
-            view.center = self.mainButton.center
+            view.center = btnMain.center
             self.addSubview(view)
             self.bringSubview(toFront: view)
-            self.signalImageView.image = UIImage(named: "signalIcon_gray")
-            self.bringSubview(toFront: signalImageView)
+            imgSignal.image = UIImage(named: "signalIcon_gray")
+            self.bringSubview(toFront: imgSignal)
             
             UIView.animate(withDuration: 0.2, delay: 0, options:.curveLinear , animations: {
                 view.frame = CGRect(x: 0,y: 0,width: 133,height: 133)
-                view.center = self.mainButton.center
+                view.center = self.btnMain.center
 
-                self.mainButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.leftButton.alpha = 0
-                self.rightButton.alpha = 0
+                self.btnMain.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.btnLeft.isHidden = true
+                self.btnRight.isHidden = true
                 
             }, completion: { (complete) in
                 view.isHidden = true
                 view.removeFromSuperview()
-                self.mainButton.backgroundColor = UIColor.white
+                self.btnMain.backgroundColor = UIColor.white
             })
         }else{
             if(soundPlayer.isPlaying){
-                signalImageView.image = UIImage(named: "playButton_red_new")
+                imgSignal.image = UIImage(named: "playButton_red_new")
                 soundPlayer.pause()
                 if progressTimer != nil{
                     progressTimer.invalidate()
                 }
             }
             else{
-                signalImageView.image = UIImage(named: "pauseButton_red_new")
+                imgSignal.image = UIImage(named: "pauseButton_red_new")
                 soundPlayer.play()
                 self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateProgressTimer), userInfo: nil, repeats: true)
             }
@@ -179,25 +247,25 @@ class AudioRecorderView: UIView {
             let touch: UITouch = (event.allTouches?.first)!
             let loc = touch.location(in: self)
             
-            let disToLeftButton = sqrt( pow(loc.x - self.leftButton.center.x, 2) + pow(loc.y - self.leftButton.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
-            let disToRightButton = sqrt( pow(loc.x - self.rightButton.center.x, 2) + pow(loc.y - self.rightButton.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
-            let firstArg = pow(mainButton.center.x - self.leftButton.center.x, 2) + pow(mainButton.center.y - self.leftButton.center.y, 2)
+            let disToLeftButton = sqrt( pow(loc.x - btnLeft.center.x, 2) + pow(loc.y - btnLeft.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
+            let disToRightButton = sqrt( pow(loc.x - btnRight.center.x, 2) + pow(loc.y - btnRight.center.y, 2)) - 30 * leftAndRightButtonResizingFactorMax
+            let firstArg = pow(btnMain.center.x - btnLeft.center.x, 2) + pow(btnMain.center.y - btnLeft.center.y, 2)
             let distanceThreshold = sqrt(firstArg) - 30 * leftAndRightButtonResizingFactorMax - 67
             let leftFactor = disToLeftButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToLeftButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax) : 1
             let rightFactor = disToRightButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToRightButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax ) : 1
             
-            self.leftButton.transform = CGAffineTransform(scaleX: leftFactor , y: leftFactor)
-            self.rightButton.transform = CGAffineTransform(scaleX: rightFactor , y: rightFactor)
+            btnLeft.transform = CGAffineTransform(scaleX: leftFactor , y: leftFactor)
+            btnRight.transform = CGAffineTransform(scaleX: rightFactor , y: rightFactor)
             
-            if (leftButton.frame.contains(loc)){
-                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), for: UIControlState())
+            if (btnLeft.frame.contains(loc)){
+                btnLeft.setBackgroundImage(UIImage(named:"playButtonIcon_red"), for: UIControlState())
             }
-            else if(rightButton.frame.contains(loc)){
-                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_red"), for: UIControlState())
+            else if(btnRight.frame.contains(loc)){
+                btnRight.setBackgroundImage(UIImage(named:"trashButtonIcon_red"), for: UIControlState())
             }
             else{
-                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_gray"), for: UIControlState())
-                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_gray"), for: UIControlState())
+                btnLeft.setBackgroundImage(UIImage(named:"playButtonIcon_gray"), for: UIControlState())
+                btnRight.setBackgroundImage(UIImage(named:"trashButtonIcon_gray"), for: UIControlState())
             }
         }
     }
@@ -209,24 +277,24 @@ class AudioRecorderView: UIView {
             let touch: UITouch = (event.allTouches?.first)!
             let loc = touch.location(in: self)
             
-            let disToLeftButton = sqrt( pow(loc.x - self.leftButton.center.x, 2) + pow(loc.y - self.leftButton.center.y, 2)) - 33
-            let disToRightButton = sqrt( pow(loc.x - self.rightButton.center.x, 2) + pow(loc.y - self.rightButton.center.y, 2)) - 33
-            let distanceThreshold = sqrt( pow(mainButton.center.x - self.leftButton.center.x, 2) + pow(mainButton.center.y - self.leftButton.center.y, 2)) - 33 - 67
+            let disToLeftButton = sqrt( pow(loc.x - btnLeft.center.x, 2) + pow(loc.y - btnLeft.center.y, 2)) - 33
+            let disToRightButton = sqrt( pow(loc.x - btnRight.center.x, 2) + pow(loc.y - btnRight.center.y, 2)) - 33
+            let distanceThreshold = sqrt( pow(btnMain.center.x - btnLeft.center.x, 2) + pow(btnMain.center.y - btnLeft.center.y, 2)) - 33 - 67
             let leftFactor = disToLeftButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToLeftButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax) : 1
             let rightFactor = disToRightButton < distanceThreshold ? min(leftAndRightButtonResizingFactorMax - disToRightButton / distanceThreshold * (leftAndRightButtonResizingFactorMax - 1), leftAndRightButtonResizingFactorMax ) : 1
             
-            self.leftButton.transform = CGAffineTransform(scaleX: leftFactor , y: leftFactor)
-            self.rightButton.transform = CGAffineTransform(scaleX: rightFactor , y: rightFactor)
+            btnLeft.transform = CGAffineTransform(scaleX: leftFactor , y: leftFactor)
+            btnRight.transform = CGAffineTransform(scaleX: rightFactor , y: rightFactor)
             
-            if (leftButton.frame.contains(loc)){
-                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_red"), for: UIControlState())
+            if (btnLeft.frame.contains(loc)){
+                btnLeft.setBackgroundImage(UIImage(named:"playButtonIcon_red"), for: UIControlState())
             }
-            else if(rightButton.frame.contains(loc)){
-                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_red"), for: UIControlState())
+            else if(btnRight.frame.contains(loc)){
+                btnRight.setBackgroundImage(UIImage(named:"trashButtonIcon_red"), for: UIControlState())
             }
             else{
-                leftButton.setBackgroundImage(UIImage(named:"playButtonIcon_gray"), for: UIControlState())
-                rightButton.setBackgroundImage(UIImage(named:"trashButtonIcon_gray"), for: UIControlState())
+                btnLeft.setBackgroundImage(UIImage(named:"playButtonIcon_gray"), for: UIControlState())
+                btnRight.setBackgroundImage(UIImage(named:"trashButtonIcon_gray"), for: UIControlState())
             }
         }
     }
@@ -239,12 +307,12 @@ class AudioRecorderView: UIView {
             
             let touch: UITouch = (event.allTouches?.first)!
             let loc = touch.location(in: self)
-            if(leftButton.frame.contains(loc)){
+            if(btnLeft.frame.contains(loc)){
                 if audioIsValid{
                     switchToPlayMode()
                 }
             }
-            else if (rightButton.frame.contains(loc)){
+            else if (btnRight.frame.contains(loc)){
                 switchToRecordMode()
                 resumeBackGroundMusic()
             }
@@ -265,11 +333,11 @@ class AudioRecorderView: UIView {
             
             let touch: UITouch = (event.allTouches?.first)!
             let loc = touch.location(in: self)
-            if(leftButton.frame.contains(loc)){
+            if(btnLeft.frame.contains(loc)){
                 if audioIsValid{
                     switchToPlayMode()
                 }
-            }else if (rightButton.frame.contains(loc)){
+            }else if (btnRight.frame.contains(loc)){
                 switchToRecordMode()
                 resumeBackGroundMusic()
             }else{
@@ -287,18 +355,18 @@ class AudioRecorderView: UIView {
         UIView.animate(withDuration: 0.2, animations: {
             
             self.isRecordMode = false
-            self.signalImageView.image = UIImage(named: "playButton_red_new")
-            self.signalIconWidth.constant = 55
-            self.signalIconHeight.constant = 55
-            self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon"), for: UIControlState())
-            self.leftButton.setBackgroundImage(UIImage(named: "cancelButtonIcon_red"), for: .highlighted)
-            self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon"), for: UIControlState())
-            self.rightButton.setBackgroundImage(UIImage(named: "sendButtonIcon_red"), for: .highlighted)
-            self.leftButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-            self.rightButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.imgSignal.image = UIImage(named: "playButton_red_new")
+            //self.signalIconWidth.constant = 55
+            //self.signalIconHeight.constant = 55
+            self.btnLeft.setBackgroundImage(UIImage(named: "cancelButtonIcon"), for: UIControlState())
+            self.btnLeft.setBackgroundImage(UIImage(named: "cancelButtonIcon_red"), for: .highlighted)
+            self.btnRight.setBackgroundImage(UIImage(named: "sendButtonIcon"), for: UIControlState())
+            self.btnRight.setBackgroundImage(UIImage(named: "sendButtonIcon_red"), for: .highlighted)
+            self.btnLeft.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.btnRight.transform = CGAffineTransform(scaleX: 1, y: 1)
             
-            self.leftButton.alpha = 1
-            self.rightButton.alpha = 1
+            self.btnLeft.isHidden = false
+            self.btnRight.isHidden = false
             
             let secondString = self.soundPlayer.duration < 9 ? "0\(Int(ceil(self.soundPlayer.duration)))" : "\(Int(ceil(self.soundPlayer.duration)))"
             self.setInfoLabel("0:\(secondString)", color: UIColor._107107107())
@@ -310,19 +378,21 @@ class AudioRecorderView: UIView {
     func switchToRecordMode(){
         UIView.animate(withDuration: 0.2, animations: {
             self.isRecordMode = true
-            self.signalImageView.image = UIImage(named: "signalIcon_gray")
-            self.signalIconWidth.constant = 50
-            self.signalIconHeight.constant = 30
-            self.leftButton.alpha = 0
-            self.rightButton.alpha = 0
-            self.leftButton.transform = CGAffineTransform(scaleX: 1, y: 1)
-            self.rightButton.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.imgSignal.image = UIImage(named: "signalIcon_gray")
+            //self.signalIconWidth.constant = 50
+            //self.signalIconHeight.constant = 30
+//            self.btnLeft.alpha = 0
+//            self.btnRight.alpha = 0
+            self.btnLeft.isHidden = true
+            self.btnRight.isHidden = true
+            self.btnLeft.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.btnRight.transform = CGAffineTransform(scaleX: 1, y: 1)
             
             self.setInfoLabel("Hold & Speak!", color: UIColor._182182182())
             self.setNeedsLayout()
         }, completion: { (completed) in
-            self.leftButton.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), for: UIControlState())
-            self.rightButton.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), for: UIControlState())
+            self.btnLeft.setBackgroundImage(UIImage(named: "playButtonIcon_gray"), for: UIControlState())
+            self.btnRight.setBackgroundImage(UIImage(named: "trashButtonIcon_gray"), for: UIControlState())
         }) 
     }
     
@@ -352,7 +422,7 @@ class AudioRecorderView: UIView {
     }
     
     private func startRecord(){
-        if(mainButton.isEnabled){
+        if(btnMain.isEnabled){
             if !soundRecorder.isRecording {
                 print("recording")
                 soundRecorder.record()
@@ -393,8 +463,9 @@ class AudioRecorderView: UIView {
     
     func setInfoLabel(_ text:String, color: UIColor){
         let attributedText = NSAttributedString(string:text, attributes: [NSForegroundColorAttributeName: color, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
-        infoLabel.attributedText = attributedText
-        infoLabel.sizeToFit()
+        lblInfo.attributedText = attributedText
+        lblInfo.textAlignment = .center
+        lblInfo.sizeToFit()
         self.setNeedsLayout()
     }
 
@@ -425,7 +496,7 @@ class AudioRecorderView: UIView {
     private func showWarnMeesage()
     {
         setInfoLabel("Too Short!", color: UIColor._2499090())
-        mainButton.isEnabled = false
+        btnMain.isEnabled = false
         Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(self.recoverRecordButton), userInfo: nil, repeats: false)
     }
     
@@ -433,7 +504,7 @@ class AudioRecorderView: UIView {
     @objc private func recoverRecordButton()
     {
         setInfoLabel("Hold & Speak!", color: UIColor._182182182())
-        mainButton.isEnabled = true
+        btnMain.isEnabled = true
     }
     
     private func resumeBackGroundMusic()
@@ -476,7 +547,7 @@ class AudioRecorderView: UIView {
             view.layer.cornerRadius = 50
             view.backgroundColor = UIColor._2499090()
             view.alpha = 0.5
-            view.center = self.mainButton.center
+            view.center = btnMain.center
             self.addSubview(view)
             self.sendSubview(toBack: view)
             
@@ -491,7 +562,7 @@ class AudioRecorderView: UIView {
                 animation.duration = 2
                 view.layer.add(animation, forKey: "cornerRadius")
                 
-                view.center = self.mainButton.center
+                view.center = self.btnMain.center
                 view.alpha = 0
             }, completion: { (complete) in
                 view.removeFromSuperview()
@@ -507,7 +578,7 @@ class AudioRecorderView: UIView {
 extension AudioRecorderView:  AVAudioRecorderDelegate, AVAudioPlayerDelegate{
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if(flag && !isRecordMode){
-            signalImageView.image = UIImage(named: "playButton_red_new")
+            self.imgSignal.image = UIImage(named: "playButton_red_new")
             progressTimer.invalidate()
         }
     }
