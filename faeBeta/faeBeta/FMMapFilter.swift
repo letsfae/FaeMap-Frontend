@@ -13,6 +13,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         guard FILTER_ENABLE else { return }
         
         btnFilterIcon = MapFilterIcon()
+        btnFilterIcon.addTarget(self, action: #selector(self.actionFilterIcon(_:)), for: .touchUpInside)
         btnFilterIcon.layer.zPosition = 601
         view.addSubview(btnFilterIcon)
         view.bringSubview(toFront: btnFilterIcon)
@@ -27,6 +28,11 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         btnFilterIcon.addGestureRecognizer(panGesture_icon)
         let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
+    }
+    
+    func actionFilterIcon(_ sender: UIButton) {
+        updateTimerForUserPin()
+        updateTimerForLoadRegionPlacePin()
     }
     
     // MapFilterMenuDelegate

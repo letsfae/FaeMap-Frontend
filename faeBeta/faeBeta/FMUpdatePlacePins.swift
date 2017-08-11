@@ -88,6 +88,8 @@ extension FaeMapViewController {
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
         guard PLACE_ENABLE else { return }
+        btnFilterIcon.startIconSpin()
+        let time_0 = DispatchTime.now()
         boolCanUpdatePlacePin = false
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
@@ -134,6 +136,17 @@ extension FaeMapViewController {
                     self.boolCanUpdatePlacePin = true
                 }
             }
+            let time_1 = DispatchTime.now()
+            let timeDiff = Double(time_1.uptimeNanoseconds - time_0.uptimeNanoseconds)
+            var delay: Double = 0
+            if timeDiff / Double(NSEC_PER_SEC) < 2 {
+                delay = 2 - timeDiff / Double(NSEC_PER_SEC)
+            } else {
+                delay = timeDiff / Double(NSEC_PER_SEC) - 2
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                self.btnFilterIcon.stopIconSpin()
+            })
         }
     }
 }
