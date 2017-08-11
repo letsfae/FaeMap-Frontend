@@ -11,7 +11,7 @@ import UIKit
 protocol MapFilterMenuDelegate: class {
     func autoReresh(isOn: Bool)
     func autoCyclePins(isOn: Bool)
-    func showAvatars(isOn: Bool)
+    func hideAvatars(isOn: Bool)
 }
 
 class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -26,10 +26,10 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
     var lblDiscovery: UILabel!
     var lblRefresh: UILabel!
     var lblCyclePins: UILabel!
-    var lblShowAvatars: UILabel!
+    var lblHideAvatars: UILabel!
     var switchRefresh: UISwitch!
     var switchCyclePins: UISwitch!
-    var switchShowAvatars: UISwitch!
+    var switchHideAvatars: UISwitch!
     var pageMapOptions: UIPageControl!
     var scrollViewFilterMenu: UIScrollView!
     var btnPlaceLoc: UIButton!
@@ -143,14 +143,14 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
         lblCyclePins = UILabel(frame: CGRect(x: 30, y: 289, w: 150, h: 25))
         lblCyclePins.text = "Auto Cycle Pins"
         lblCyclePins.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblCyclePins.textColor = UIColor._146146146()
+        lblCyclePins.textColor = UIColor._115115115()
         uiviewMapOpt.addSubview(lblCyclePins)
         
-        lblShowAvatars = UILabel(frame: CGRect(x: 30, y: 342, w: 150, h: 25))
-        lblShowAvatars.text = "Show Avatars"
-        lblShowAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblShowAvatars.textColor = UIColor._146146146()
-        uiviewMapOpt.addSubview(lblShowAvatars)
+        lblHideAvatars = UILabel(frame: CGRect(x: 30, y: 342, w: 150, h: 25))
+        lblHideAvatars.text = "Hide Avatars"
+        lblHideAvatars.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        lblHideAvatars.textColor = UIColor._146146146()
+        uiviewMapOpt.addSubview(lblHideAvatars)
         
         // draw three Switch buttons
         switchRefresh = UISwitch()
@@ -166,19 +166,19 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
         switchCyclePins.onTintColor = UIColor._2499090()
         switchCyclePins.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
         switchCyclePins.addTarget(self, action: #selector(self.switchAutoCyclePins(_:)), for: .valueChanged)
-        switchCyclePins.isOn = false
+        switchCyclePins.isOn = true
         uiviewMapOpt.addSubview(switchCyclePins)
         addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchCyclePins)
         addConstraintsWithFormat("V:|-\(286*screenHeightFactor)-[v0(23)]", options: [], views: switchCyclePins)
         
-        switchShowAvatars = UISwitch()
-        switchShowAvatars.onTintColor = UIColor._2499090()
-        switchShowAvatars.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
-        switchShowAvatars.addTarget(self, action: #selector(self.switchShowAvatars(_:)), for: .valueChanged)
-        switchShowAvatars.isOn = false
-        uiviewMapOpt.addSubview(switchShowAvatars)
-        addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchShowAvatars)
-        addConstraintsWithFormat("V:|-\(339*screenHeightFactor)-[v0(23)]", options: [], views: switchShowAvatars)
+        switchHideAvatars = UISwitch()
+        switchHideAvatars.onTintColor = UIColor._2499090()
+        switchHideAvatars.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
+        switchHideAvatars.addTarget(self, action: #selector(self.switchShowAvatars(_:)), for: .valueChanged)
+        switchHideAvatars.isOn = false
+        uiviewMapOpt.addSubview(switchHideAvatars)
+        addConstraintsWithFormat("H:[v0(39)]-\(26*screenWidthFactor)-|", options: [], views: switchHideAvatars)
+        addConstraintsWithFormat("V:|-\(339*screenHeightFactor)-[v0(23)]", options: [], views: switchHideAvatars)
     }
     
     func loadView2() {
@@ -279,12 +279,12 @@ class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITabl
     }
     
     func switchShowAvatars(_ sender: UISwitch) {
-        if switchShowAvatars.isOn {
-            lblShowAvatars.textColor = UIColor._115115115()
-            delegate?.showAvatars(isOn: true)
+        if switchHideAvatars.isOn {
+            lblHideAvatars.textColor = UIColor._115115115()
+            delegate?.hideAvatars(isOn: true)
         } else {
-            lblShowAvatars.textColor = UIColor._146146146()
-            delegate?.showAvatars(isOn: false)
+            lblHideAvatars.textColor = UIColor._146146146()
+            delegate?.hideAvatars(isOn: false)
         }
     }
     

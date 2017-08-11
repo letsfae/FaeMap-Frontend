@@ -37,19 +37,23 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     
     // MapFilterMenuDelegate
     func autoReresh(isOn: Bool) {
-        
+        AUTO_REFRESH = isOn
     }
     
     // MapFilterMenuDelegate
     func autoCyclePins(isOn: Bool) {
-        
+        AUTO_CIRCLE_PINS = isOn
+        if isOn {
+            mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+        } else {
+            mapClusterManager.maxZoomLevelForClustering = 0
+        }
     }
     
     // MapFilterMenuDelegate
-    func showAvatars(isOn: Bool) {
+    func hideAvatars(isOn: Bool) {
+        HIDE_AVATARS = isOn
         if isOn {
-            updateTimerForUserPin()
-        } else {
             timerUserPin?.invalidate()
             timerUserPin = nil
             for faeUser in faeUserPins {
@@ -58,6 +62,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             mapClusterManager.removeAnnotations(faeUserPins) {
                 self.faeUserPins.removeAll()
             }
+        } else {
+            updateTimerForUserPin()
         }
     }
     

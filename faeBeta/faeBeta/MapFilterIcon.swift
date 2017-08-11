@@ -11,6 +11,7 @@ import UIKit
 class MapFilterIcon: UIButton {
     
     var polygonInside: UIImageView!
+    var polygonOutside: UIImageView!
     
     var filterCircle_1: UIImageView!
     var filterCircle_2: UIImageView!
@@ -18,6 +19,8 @@ class MapFilterIcon: UIButton {
     var filterCircle_4: UIImageView!
     
     var mapFilterArrow: UIImageView!
+    
+    var isSpinning = false
     
     var boolHideInsides: Bool = false {
         didSet {
@@ -48,7 +51,11 @@ class MapFilterIcon: UIButton {
     }
     
     fileprivate func loadMapFilter() {
-        setImage(#imageLiteral(resourceName: "mapFilterHexagon"), for: .normal)
+        polygonOutside = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        polygonOutside.image = #imageLiteral(resourceName: "mapFilterHexagon")
+        polygonOutside.contentMode = .scaleAspectFit
+        addSubview(polygonOutside)
+        
         adjustsImageWhenDisabled = false
         adjustsImageWhenHighlighted = false
         center.x = screenWidth / 2
@@ -58,6 +65,8 @@ class MapFilterIcon: UIButton {
     }
     
     func animateInsideCircles() {
+        
+        guard !isSpinning else { return }
         
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = 22
@@ -109,23 +118,42 @@ class MapFilterIcon: UIButton {
     }
     
     func stopIconSpin() {
-        layer.removeAllAnimations()
-        if self.center.y == screenHeight - 25 {
-            self.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
+        
+        polygonOutside.layer.removeAllAnimations()
+        
+        isEnabled = true
+        boolHideInsides = false
+        
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.polygonInside.alpha = 0
+            self.polygonOutside.transform = CGAffineTransform.identity
+            if self.center.y == screenHeight - 25 {
+                self.polygonOutside.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+            }
+            
+        }) { _ in
+            if self.polygonInside != nil {
+                self.polygonInside.layer.removeAllAnimations()
+                self.polygonInside.removeFromSuperview()
+            }
         }
-        self.isEnabled = true
-        self.boolHideInsides = false
-        self.transform = CGAffineTransform(rotationAngle: 0)
-        if self.polygonInside != nil {
-            self.polygonInside.removeFromSuperview()
-        }
+        
+        isSpinning = false
     }
     
     func startIconSpin() {
         
         guard center.y == screenHeight - 25 else { return }
         
-        self.isEnabled = false
+        isSpinning = true
+        boolHideInsides = true
+        isEnabled = false
+        
+        if self.polygonInside != nil {
+            self.polygonInside.alpha = 0
+            self.polygonInside.layer.removeAllAnimations()
+            self.polygonInside.removeFromSuperview()
+        }
         
         polygonInside = UIImageView(frame: CGRect(x: 0, y: 0, width: 19.41, height: 21.71))
         polygonInside.center = CGPoint(x: 22, y: 22)
@@ -134,19 +162,12 @@ class MapFilterIcon: UIButton {
         addSubview(polygonInside)
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.frame = CGRect(x: screenWidth / 2 - 25, y: screenHeight - 50, width: 50, height: 50)
-            self.polygonInside.center = CGPoint(x: 25, y: 25)
+            self.polygonOutside.frame = CGRect(x: -3, y: -3, width: 50, height: 50)
         }, completion: nil)
         
-        if mapFilterArrow != nil {
-            mapFilterArrow.removeFromSuperview()
-        }
-        
-        boolHideInsides = true
-        
         UIView.animate(withDuration: 1, delay: 0, options: .repeat, animations: {
-            self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
-            self.polygonInside.transform = CGAffineTransform(rotationAngle: (CGFloat.pi * 0.999))
+            self.polygonOutside.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 0.999)
+            self.polygonInside.transform = CGAffineTransform(rotationAngle: -(CGFloat.pi * 0.999))
         }, completion: nil)
     }
     
