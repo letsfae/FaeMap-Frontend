@@ -89,4 +89,12 @@ extension UIColor {
     class func _115115115() -> UIColor {
         return UIColor(r: 115, g: 115, b: 115, alpha: 100)
     }
+    
+    class func _496372() -> UIColor {
+        return UIColor(r: 49, g: 63, b: 72, alpha: 100)
+    }
+    
+    class func _585151() -> UIColor {
+        return UIColor(r: 58, g: 51, b: 51, alpha: 80)
+    }
 }

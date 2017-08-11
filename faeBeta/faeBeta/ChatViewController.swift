@@ -38,6 +38,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var realmWithUser: RealmUser?
     //ENDBryan
     
+    var uiviewNavBar: FaeNavBar!
+    
     var withUserId: String? // the user id we chat to
     var withUserName: String? // the user name we chat to
     var currentUserId: String? // my user id
@@ -111,12 +113,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         //update recent
+        print("chat view will disappear")
+        //self.navigationController?.navigationBar.isHidden = false
         closeToolbarContentView()
         removeObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        print("view did disappear")
+        print("chat view did disappear")
         toolbarContentView.clearToolBarViews()
         //        messages = []
         //        objects = []
@@ -125,19 +129,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("view did appear")
+        print("chat view did appear")
         print("set up tool bar views")
+        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
         view.addSubview(locExtendView)
     }
     
     override func viewDidLoad() {
-        print("view did load")
+        print("chat view did load")
         super.viewDidLoad()
         
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0) // override jsq collection view
@@ -164,18 +169,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         locExtendView.isHidden = true
         locExtendView.buttonCancel.addTarget(self, action: #selector(closeLocExtendView(_:)), for: .touchUpInside)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         //check user default
-        print("view will appear")
+        print("chat view will appear")
         super.viewWillAppear(true)
         addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
         moveDownInputBar()
         getAvatar()
-        navigationController?.navigationBar.isHidden = false
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {
@@ -192,12 +198,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: - setup
     
     private func navigationBarSet() {
-        navigationController?.navigationBar.isHidden = false
-        navigationController?.navigationBar.topItem?.title = ""
-        let attributes = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()] as [String: Any]
-        navigationController?.navigationBar.tintColor = UIColor._2499090()
-        navigationController!.navigationBar.titleTextAttributes = attributes
-        navigationController?.navigationBar.shadowImage = nil
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        
+        uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.rightBtn.setImage(nil, for: .normal)
+        //uiviewNavBar.leftBtn.addTarget(self.navigationController, action: #selector(self.navigationController?.popViewController(animated:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
+        
+        uiviewNavBar.lblTitle.text = realmWithUser!.userNickName
+        /*
+(??)        self.navigationController?.navigationBar.isHidden = false
+(??)        self.navigationController?.navigationBar.topItem?.title = ""
+(??)        let attributes = [NSFontAttributeName : UIFont(name: "Avenir Next", size: 20)!, NSForegroundColorAttributeName : UIColor._898989()] as [String : Any]
+(??)        self.navigationController?.navigationBar.tintColor = UIColor._2499090()
+(??)        self.navigationController!.navigationBar.titleTextAttributes = attributes
+(??)        self.navigationController?.navigationBar.shadowImage = nil
         
         //ATTENTION: Temporary comment it here because it's not used for now
         //        navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(ChatViewController.navigationItemTapped))
@@ -215,6 +233,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
         navigationItem.titleView = titleLabel
+         */
+    }
+    
+    func navigationLeftItemTapped() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     func addObservers() {
@@ -541,7 +564,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = inputToolbar.frame.height
         let width = inputToolbar.frame.width
         let xPosition = inputToolbar.frame.origin.x
-        let yPosition = screenHeight - 271 - height - 64
+        let yPosition = screenHeight - 271 - height// - 64
         UIView.setAnimationsEnabled(false)
         let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 271 + height + extendHeight, right: 0.0)
@@ -558,7 +581,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = inputToolbar.frame.height
         let width = inputToolbar.frame.width
         let xPosition = inputToolbar.frame.origin.x
-        let yPosition = screenHeight - height - 64
+        let yPosition = screenHeight - height// - 64
         let extendHeight = locExtendView.isHidden ? 0 : locExtendView.frame.height
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: height + extendHeight, right: 0.0)
@@ -627,7 +650,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // segue to the full album page
     func showFullAlbum() {
         //jump to the get more image collection view, and deselect the image we select in photoes preview
-        let vc = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumCollectionViewController") as! FullAlbumCollectionViewController
+        // TODO
+        //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
+        let layout = UICollectionViewFlowLayout()
+        //layout.scrollDirection = .vertical
+        //layout.itemSize = CGSize(width: (screenWidth - 4) / 3, height: (screenWidth - 4) / 3)
+        //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
+        let vc = FullAlbumCollectionViewController(collectionViewLayout: layout)
+        //vc.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
         vc.imageDelegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -807,7 +837,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func showFullLocationView(_ sender: UIButton) {
-        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        // TODO
+        //let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        let vc = ChatSendLocationController()
         vc.locationDelegate = self
         navigationController?.pushViewController(vc, animated: true)
     }

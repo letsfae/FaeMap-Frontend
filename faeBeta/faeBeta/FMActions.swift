@@ -58,13 +58,21 @@ extension FaeMapViewController {
         self.present(leftMenuVC, animated: false, completion: nil)
     }
     
+    
+    
     func actionChatWindowShow(_ sender: UIButton) {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
-        self.present(UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()!, animated: true, completion: nil)
+        //let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()! as! RecentViewController
+        let chatVC = RecentViewController()
+        chatVC.backClosure = {
+            (backNum: Int) -> Void in
+            //self.count = backNum
+        }
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func actionCreatePin(_ sender: UIButton) {

@@ -53,7 +53,7 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+        //self.navigationController?.isNavigationBarHidden = true
         widthFactor = screenWidth / 414
         heightFactor = screenHeight / 736
         loadMapView()
@@ -78,7 +78,7 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = false
+        //self.navigationController?.isNavigationBarHidden = false
     }
     
 //    func jumpToLocationEnable(){
