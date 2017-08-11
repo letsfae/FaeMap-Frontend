@@ -45,15 +45,13 @@ extension FaeMapViewController {
         timerUserPin = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
 
-    func updateSelfLocation() {
-//        guard USER_ENABLE else { return }
-        
+    func updateSelfLocation() {        
         if !boolCanUpdateUserPin {
             return
         }
         let coorDistance = cameraDiagonalDistance()
         boolCanUpdateUserPin = false
-        self.renewSelfLocation()
+        renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         let getMapUserInfo = FaeMap()

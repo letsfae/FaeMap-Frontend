@@ -9,7 +9,7 @@
 
 import UIKit
 
-class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MoodAvatarCellDelegate {
     
     var tblView: UITableView!
     var intCurtAvatar = -999
@@ -18,13 +18,17 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     var lblCurtAvatar: UILabel!
     var btnSave: UIButton!
     
-    let titles = ["Happy", "Sad", "LOL!", "Bored", "ARGHH", "So Fabulous", "Looking for Love", "Dreaming", "Hit Me Up!", "Shy", "The Feels", "Shh..Meditating", "Not Right Now", "Me Want Food", "Selling", "Doing Faevors", "Tourist", "Much Wow"]
+    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous",  "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Doge"]
     
     var shadowGray = UIColor._200199204()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
+        if LocalStorageManager.shared.readByKey("userMiniAvatar") != nil {
+            userMiniAvatar = LocalStorageManager.shared.readByKey("userMiniAvatar") as! Int
+        }
+        intCurtAvatar = userMiniAvatar
         navigationBarSetting()
         loadAvatarHeader()
         loadTableView()
@@ -36,26 +40,13 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func navigationBarSetting() {
-        let uiviewNavBar = UIView(frame: CGRect(x: -1, y: -1, width: screenWidth+2, height: 66))
-        uiviewNavBar.layer.borderColor = UIColor._200199204().cgColor
-        uiviewNavBar.layer.borderWidth = 1
-        uiviewNavBar.backgroundColor = UIColor.white
+        let uiviewNavBar = FaeNavBar()
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.lblTitle.text = "Mood Avatars"
         view.addSubview(uiviewNavBar)
         
-        let lblTitle = UILabel(frame: CGRect(x: 0, y: 28, width: 130, height: 27))
-        lblTitle.center.x = screenWidth / 2
-        lblTitle.text = "Mood Avatar"
-        lblTitle.textAlignment = .center
-        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.textColor = UIColor._898989()
-        uiviewNavBar.addSubview(lblTitle)
-        
-        let buttonCancel = UIButton()
-        buttonCancel.setImage(UIImage(named: "cancelEditCommentPin"), for: UIControlState())
-        uiviewNavBar.addSubview(buttonCancel)
-        uiviewNavBar.addConstraintsWithFormat("H:|-15-[v0(54)]", options: [], views: buttonCancel)
-        uiviewNavBar.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: buttonCancel)
-        buttonCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
         
         btnSave = UIButton()
         btnSave.setImage(UIImage(named: "saveEditCommentPin"), for: UIControlState())
@@ -117,22 +108,21 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moodAvatarCell", for: indexPath)as! MoodAvatarTableViewCell
-        cell.labelAvatarDes.text = titles[indexPath.row]
+        cell.delegate = self
+        cell.lblAvatarDes.text = titles[indexPath.row]
         let indexMale = indexPath.row + 1
         let indexFemale = indexPath.row + 19
-        cell.maleImage.image = UIImage(named: "miniAvatar_\(indexMale)")
-        cell.femaleImage.image = UIImage(named: "miniAvatar_\(indexFemale)")
-        cell.buttonLeft.addTarget(self, action: #selector(MoodAvatarViewController.changeAvatar), for: .touchUpInside)
-        cell.buttonLeft.tag = indexMale
-        cell.buttonRight.addTarget(self, action: #selector(MoodAvatarViewController.changeAvatar), for: .touchUpInside)
-        cell.buttonRight.tag = indexFemale
-        if intCurtAvatar == cell.buttonLeft.tag {
+        cell.imgMale.image = UIImage(named: "miniAvatar_\(indexMale)")
+        cell.imgFemale.image = UIImage(named: "miniAvatar_\(indexFemale)")
+        cell.btnLeft.tag = indexMale
+        cell.btnRight.tag = indexFemale
+        if intCurtAvatar == cell.btnLeft.tag {
             cell.maleRedBtn.image = UIImage(named: "selectedMoodButton")
         }
         else {
             cell.maleRedBtn.image = UIImage(named: "unselectedMoodButton")
         }
-        if intCurtAvatar == cell.buttonRight.tag {
+        if intCurtAvatar == cell.btnRight.tag {
             cell.femaleRedBtn.image = UIImage(named: "selectedMoodButton")
         }
         else {
@@ -148,6 +138,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         userAvatarMap = "miniAvatar_\(userMiniAvatar)"
+        LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
         updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
             if status / 100 == 2 {
@@ -161,11 +152,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
-    func changeAvatar(_ sender: UIButton) {
+    func changeAvatar(tag: Int) {
         btnSave.isEnabled = true
-        userMiniAvatar = sender.tag
-        intCurtAvatar = sender.tag
+        userMiniAvatar = tag
+        intCurtAvatar = tag
         tblView.reloadData()
-        imgCurtAvatar.image = UIImage(named: "miniAvatar_\(sender.tag)")
+        imgCurtAvatar.image = UIImage(named: "miniAvatar_\(tag)")
     }
 }

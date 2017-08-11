@@ -53,7 +53,6 @@ class FaeUser : NSObject {
     }
     
     fileprivate func saveUserSignUpInfo(){
-        let shareAPI = LocalStorageManager()
         let keyValueJSON = JSON(keyValue)
         userEmail = keyValueJSON["email"].stringValue
         userPassword = keyValueJSON["password"].stringValue
@@ -66,12 +65,12 @@ class FaeUser : NSObject {
         }else {
             userGender = 1
         }
-        shareAPI.saveString("userEmail", value: userEmail)
-        shareAPI.saveString("userPassword", value: userPassword)
-        shareAPI.saveString("userFirstname", value: userFirstname)
-        shareAPI.saveString("userLastname", value: userLastname)
-        shareAPI.saveString("userBirthday", value: userBirthday)
-        shareAPI.saveInt("userGender", value: userGender)
+        LocalStorageManager.shared.saveString("userEmail", value: userEmail)
+        LocalStorageManager.shared.saveString("userPassword", value: userPassword)
+        LocalStorageManager.shared.saveString("userFirstname", value: userFirstname)
+        LocalStorageManager.shared.saveString("userLastname", value: userLastname)
+        LocalStorageManager.shared.saveString("userBirthday", value: userBirthday)
+        LocalStorageManager.shared.saveInt("userGender", value: userGender)
     }
     
     
@@ -102,8 +101,7 @@ class FaeUser : NSObject {
                     }
                     userBirthday = userInfoJSON["birthday"].stringValue
                     userPhoneNumber = userInfoJSON["phone"].stringValue
-                    let shareAPI = LocalStorageManager()
-                    shareAPI.getAccountStorage()
+                    LocalStorageManager.shared.getAccountStorage()
                 }
             }
             else {
@@ -137,8 +135,7 @@ class FaeUser : NSObject {
         userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
         userPassword = keyValue["password"] as! String
         
-        let shareAPI = LocalStorageManager()
-        shareAPI.logInStorage()
+        LocalStorageManager.shared.logInStorage()
     }
     
     
@@ -168,8 +165,7 @@ class FaeUser : NSObject {
         Key.shared.user_id = -1
         Key.shared.is_Login = 0
         userStatus = 1
-        let shareAPI = LocalStorageManager()
-        shareAPI.saveInt("is_Login", value: 0)
+        LocalStorageManager.shared.saveInt("is_Login", value: 0)
     }
     
     /* faeuser check email exist function
@@ -233,8 +229,7 @@ class FaeUser : NSObject {
             if let password = self.keyValue["password"]?.string {
                 userPassword = password
                 print("[changePassword]", userPassword)
-                let shareAPI = LocalStorageManager()
-                _ = shareAPI.savePassword()
+                _ = LocalStorageManager.shared.savePassword()
             }
             self.clearKeyValue()
             completion(status,message)
@@ -268,8 +263,7 @@ class FaeUser : NSObject {
                 userBirthday = userInfoJSON["birthday"].stringValue
                 userPhoneNumber = userInfoJSON["phone"].stringValue
                 userPhoneVerified = userInfoJSON["phone_verified"].boolValue
-                let shareAPI = LocalStorageManager()
-                shareAPI.getAccountStorage()
+                LocalStorageManager.shared.getAccountStorage()
             }
             completion(status,message);
         }
@@ -297,8 +291,7 @@ class FaeUser : NSObject {
                     userGender = 1
                 }
                 userBirthday = userInfoJSON["birthday"].stringValue
-                let shareAPI = LocalStorageManager()
-                shareAPI.getAccountStorage()
+                LocalStorageManager.shared.getAccountStorage()
             }
             completion(status,message)
             self.clearKeyValue()
@@ -326,8 +319,7 @@ class FaeUser : NSObject {
                 //changed successfully
                 if let newPassword = self.keyValue["new_password"]{
                     userPassword = newPassword as! String
-                    let shareAPI = LocalStorageManager()
-                    _ = shareAPI.savePassword()
+                    _ = LocalStorageManager.shared.savePassword()
                 }
             }
             completion(status,message)
@@ -358,8 +350,7 @@ class FaeUser : NSObject {
                 
                 if let newEmail = self.keyValue["email"]{
                     userEmail = newEmail as! String
-                    let shareAPI = LocalStorageManager()
-                    shareAPI.saveEmail()
+                    LocalStorageManager.shared.saveEmail()
                     print("new email")
                     print(userEmail)
                 }
@@ -388,8 +379,7 @@ class FaeUser : NSObject {
             if(status/100==2){
                 if let newPhoneNumber = self.keyValue["phone"]{
                     userPhoneNumber = newPhoneNumber as? String
-                    let shareAPI = LocalStorageManager()
-                    _ = shareAPI.savePhoneNumber()
+                    _ = LocalStorageManager.shared.savePhoneNumber()
                     print("new phone number")
 //                    print(userPhoneNumber)
                 }

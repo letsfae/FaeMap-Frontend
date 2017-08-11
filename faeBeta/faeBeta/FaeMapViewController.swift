@@ -49,8 +49,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewFilterMenu: MapFilterMenu! // Filter Menu
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
-    var spaceFilter: CGFloat = 0 // Pan gesture var
-    var spaceMenu: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
     var imgSchbarShadow: UIImageView!
@@ -63,7 +61,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var mkOverLay = [MKOverlay]()
     var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
     var START_WAVE_ANIMATION = false
-    
     
     // System Functions
     override func viewDidLoad() {
@@ -110,8 +107,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func getUserStatus() {
-        let storageForUserStatus = LocalStorageManager()
-        if let user_status = storageForUserStatus.readByKey("userStatus") {
+        if let user_status = LocalStorageManager.shared.readByKey("userStatus") {
             userStatus = user_status as! Int
         }
     }
@@ -148,8 +144,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func isUserLoggedIn() {
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
+        _ = LocalStorageManager.shared.readLogInfo()
         if Key.shared.is_Login == 0 {
             jumpToWelcomeView(animated: false)
         }

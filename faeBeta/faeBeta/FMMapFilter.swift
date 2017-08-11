@@ -1,5 +1,5 @@
 //
-//  FMLoadingMapFilter.swift
+//  FMMapFilter.swift
 //  MapFilterIcon
 //
 //  Created by Yue on 1/24/17.
@@ -23,9 +23,10 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         uiviewFilterMenu.layer.zPosition = 601
         view.addSubview(uiviewFilterMenu)
         view.bringSubview(toFront: uiviewFilterMenu)
-        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        btnFilterIcon.addGestureRecognizer(draggingGesture)
-//        uiviewFilterMenu.addGestureRecognizer(draggingGesture)
+        let panGesture_icon = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
+        btnFilterIcon.addGestureRecognizer(panGesture_icon)
+        let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
+        uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
     }
     
     // MapFilterMenuDelegate
@@ -67,22 +68,14 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             uiviewNameCard.hide() {
                 self.mapGesture(isOn: true)
             }
-//            if self.mapFilterArrow != nil {
-//                self.mapFilterArrow.removeFromSuperview()
-//            }
             let location = pan.location(in: view)
             if uiviewFilterMenu.frame.origin.y == screenHeight {
                 sizeFrom = screenHeight
                 sizeTo = screenHeight - floatFilterHeight
-                spaceFilter = location.y - screenHeight + 52
-                spaceMenu = screenHeight - location.y
                 end = location.y
-            }
-            else {
+            } else {
                 sizeFrom = screenHeight - floatFilterHeight
                 sizeTo = screenHeight
-                spaceFilter = location.y - screenHeight + floatFilterHeight + 52
-                spaceMenu = screenHeight - floatFilterHeight - location.y
                 end = location.y
             }
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
@@ -97,20 +90,20 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeTo
                     self.btnFilterIcon.center.y = self.sizeTo - 25
                 }, completion: nil)
-            }
-            else {
+            } else {
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeFrom
                     self.btnFilterIcon.center.y = self.sizeFrom - 25
                 })
             }
         } else {
-            if self.uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight {
-                let location = pan.location(in: view)
-                self.btnFilterIcon.frame.origin.y = location.y - spaceFilter
-                self.uiviewFilterMenu.frame.origin.y = location.y + spaceMenu
-                percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
-            }
+            guard uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight else { return }
+            let location = pan.location(in: view)
+            percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
+            let translation = pan.translation(in: view)
+            btnFilterIcon.center.y = btnFilterIcon.center.y + translation.y
+            uiviewFilterMenu.center.y = uiviewFilterMenu.center.y + translation.y
+            pan.setTranslation(CGPoint.zero, in: view)
         }
     }
     
