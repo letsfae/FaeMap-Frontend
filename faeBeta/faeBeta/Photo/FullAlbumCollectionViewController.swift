@@ -101,8 +101,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.register(UINib(nibName: "FullPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        self.automaticallyAdjustsScrollViewInsets = false
+        collectionView?.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
+        collectionView?.backgroundColor = .white
+        //collectionView?.register(UINib(nibName: "FullPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        collectionView?.register(FullPhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: photoPickerCellIdentifier)
         requestOption.isSynchronous = false
         requestOption.resizeMode = .fast
         requestOption.deliveryMode = .highQualityFormat
@@ -362,7 +365,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! FullPhotoPickerCollectionViewCell
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         
         if !cell.photoSelected {
@@ -473,15 +476,16 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 3 - 1, height: view.frame.width / 3 - 1)
+        //return CGSize(width: screenWidth / 3 - 1, height: screenWidth / 3 - 1)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! PhotoPickerCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! FullPhotoPickerCollectionViewCell
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell = cell as! PhotoPickerCollectionViewCell
+        let cell = cell as! FullPhotoPickerCollectionViewCell
         //get image from PHFetchResult
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         if let duration = photoPicker.assetDurationDict[asset]{

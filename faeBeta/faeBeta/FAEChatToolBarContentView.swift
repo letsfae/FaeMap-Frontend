@@ -88,7 +88,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     fileprivate var photoPicker : PhotoPicker!
     fileprivate var photoQuickCollectionView : UICollectionView!//preview of the photoes
     fileprivate let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
-
+    //let photoQuickCollectionReuseIdentifier = "PhotoCell"
+    
     fileprivate let requestOption = PHImageRequestOptions()
     fileprivate var imageQuickPickerShow = false //false : not open the photo preview
     
@@ -159,7 +160,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             layout.itemSize = CGSize(width: 220, height: 271)
             layout.sectionInset = UIEdgeInsetsMake(0, 1, 0, 1)
             photoQuickCollectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
-            photoQuickCollectionView.register(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+            //photoQuickCollectionView.register(UINib(nibName: "QuickPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
+            photoQuickCollectionView.register(QuickPhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
             photoQuickCollectionView.backgroundColor = UIColor.white
             photoQuickCollectionView.delegate = self
             photoQuickCollectionView.dataSource = self
@@ -485,13 +487,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoQuickCollectionReuseIdentifier, for: indexPath) as! PhotoPickerCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoQuickCollectionReuseIdentifier, for: indexPath) as! QuickPhotoPickerCollectionViewCell
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if collectionView == self.photoQuickCollectionView {
-            let cell = cell as! PhotoPickerCollectionViewCell
+            let cell = cell as! QuickPhotoPickerCollectionViewCell
             //get image from PHFetchResult
             if(self.photoPicker.cameraRoll != nil){
                 let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
@@ -516,7 +518,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     //photoes preview delegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
-            let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
+            let cell = collectionView.cellForItem(at: indexPath) as! QuickPhotoPickerCollectionViewCell
             let asset: PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
             
             if !cell.photoSelected {

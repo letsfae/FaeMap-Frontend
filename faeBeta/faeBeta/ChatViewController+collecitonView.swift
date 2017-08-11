@@ -175,8 +175,8 @@ extension ChatViewController {
             
             if let mediaItem = message.media as? JSQLocationMediaItemCustom {
                 
-                let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
-                
+                //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
+                let vc = ChatMapViewController()
                 vc.address1 = mediaItem.address1 ?? "error address1"
                 vc.address2 = mediaItem.address2 ?? "error address2"
                 vc.address3 = mediaItem.address3 ?? "error address3"
