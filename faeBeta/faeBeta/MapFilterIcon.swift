@@ -35,7 +35,6 @@ class MapFilterIcon: UIButton {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         loadMapFilter()
-        addTarget(self, action: #selector(self.startIconSpin(_:)), for: .touchUpInside)
         NotificationCenter.default.addObserver(self, selector: #selector(self.filterCircleAnimation), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.animateMapFilterArrow), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
@@ -138,7 +137,7 @@ class MapFilterIcon: UIButton {
         })
     }
     
-    @objc func startIconSpin(_ sender: UIButton) {
+    func startIconSpin() {
         
         if center.y != screenHeight - 25 {
             return
@@ -167,10 +166,6 @@ class MapFilterIcon: UIButton {
             self.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
             self.polygonInside.transform = CGAffineTransform(rotationAngle: (CGFloat.pi * 0.999))
         }, completion: nil)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.stopIconSpin()
-        }
     }
     
     func animateMapFilterArrow() {
