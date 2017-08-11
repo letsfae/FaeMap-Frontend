@@ -49,6 +49,8 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 class FullAlbumCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
     
     //MARK: - properties
+    //var uiviewNavBar: FaeNavBar!
+    
     private var photoPicker : PhotoPicker!
     
     private let photoPickerCellIdentifier = "FullPhotoPickerCollectionViewCell"
@@ -99,8 +101,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         photoPicker = PhotoPicker.shared
-        collectionView?.backgroundColor = UIColor.white
-        collectionView?.register(UINib(nibName: "FullPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        self.automaticallyAdjustsScrollViewInsets = false
+        collectionView?.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
+        collectionView?.backgroundColor = .white
+        //collectionView?.register(UINib(nibName: "FullPhotoPickerCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: photoPickerCellIdentifier)
+        collectionView?.register(FullPhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: photoPickerCellIdentifier)
         requestOption.isSynchronous = false
         requestOption.resizeMode = .fast
         requestOption.deliveryMode = .highQualityFormat
@@ -118,7 +123,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     //MARK: - Setup
     private func prepareTableView() {
-        tableViewAlbum = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 480))
+        tableViewAlbum = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 480))
         tableViewAlbum.register(UINib(nibName: "AlbumTableViewCell", bundle: nil), forCellReuseIdentifier: albumReuseIdentifiler)
         tableViewAlbum.delegate = self
         tableViewAlbum.dataSource = self
@@ -144,28 +149,35 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     }
     
     func navigationBarSet() {
-        let centerView = UIView(frame: CGRect(x: 0,y: 0,width: 200,height: 30))
+        //uiviewNavBar = FaeNavBar(frame: CGRect.zero)
+        //view.addSubview(uiviewNavBar)
+        
+        let uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        uiviewNavBar.backgroundColor = .white
+        view.addSubview(uiviewNavBar)
+        
+        let centerView = UIView()
+        uiviewNavBar.addSubview(centerView)
+        let gapToSide = (screenWidth - 200) / 2
+        uiviewNavBar.addConstraintsWithFormat("H:|-\(gapToSide)-[v0(200)]", options: [], views: centerView)
+        uiviewNavBar.addConstraintsWithFormat("V:|-28-[v0(30)]", options: [], views: centerView)
+        
         showTableButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
         showTableButton.titleLabel?.text = ""
         showTableButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.showAlbumTable), for: .touchUpInside)
-        
-        self.navigationController?.navigationBar.tintColor = UIColor._2499090()
-        self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.isTranslucent = false
-        
-        titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 25))
-        titleLabel.text = self.photoPicker.currentAlbum.albumName
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        titleLabel.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        centerView.addSubview(titleLabel)
-        
-        
-        let arrow = UIImageView(frame: CGRect(x: 97, y: 25, width: 10, height: 6))
-        arrow.image = UIImage(named: "arrow")
-        centerView.addSubview(arrow)
         centerView.addSubview(showTableButton)
-        self.navigationItem.titleView = centerView
+        
+        titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        attributedStrM.append(albumName)
+        let arrowAttachment : NSTextAttachment = NSTextAttachment()
+        arrowAttachment.image = UIImage(named: "arrow_down")
+        arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
+        attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
+        titleLabel.attributedText = attributedStrM
+        titleLabel.textAlignment = .center
+        centerView.addSubview(titleLabel)
         
         var strSendBtn = "Send"
         if isCSP {
@@ -174,23 +186,32 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if isSelectAvatar {
             strSendBtn = "Done"
         }
-        sendButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60, height: 30))
+        
+        sendButton = UIButton()
         let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         sendButton.setAttributedTitle(attributedText, for: UIControlState())
         sendButton.contentHorizontalAlignment = .right
         sendButton.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
         sendButton.isEnabled = false
-        let offsetItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-        offsetItem.width = -10
-        self.navigationItem.rightBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: sendButton)]
+        uiviewNavBar.addSubview(sendButton)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(60)]-15-|", options: [], views: sendButton)
+        uiviewNavBar.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: sendButton)
+        //let offsetItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+        //offsetItem.width = -10
+        //self.navigationItem.rightBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: sendButton)]
         
         
-        cancelButton = UIButton(frame: CGRect(x: 0,y: 0,width: 60,height: 30))
-        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        cancelButton = UIButton()
+        let attributedText2 = NSAttributedString(string:"Cancel", attributes: [NSForegroundColorAttributeName: UIColor._496372(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
         cancelButton.setAttributedTitle(attributedText2, for: UIControlState())
         cancelButton.contentHorizontalAlignment = .left
         cancelButton.addTarget(self, action: #selector(self.cancelSend), for: .touchUpInside)
-        self.navigationItem.leftBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: cancelButton)]
+        uiviewNavBar.addSubview(cancelButton)
+        uiviewNavBar.addConstraintsWithFormat("H:|-15-[v0(60)]", options: [], views: cancelButton)
+        uiviewNavBar.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: cancelButton)
+        //self.navigationItem.leftBarButtonItems = [offsetItem, UIBarButtonItem.init(customView: cancelButton)]
+        
+        
         
         updateSendButtonStatus()
     }
@@ -344,7 +365,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let cell = collectionView.cellForItem(at: indexPath) as! PhotoPickerCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as! FullPhotoPickerCollectionViewCell
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         
         if !cell.photoSelected {
@@ -455,15 +476,16 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width / 3 - 1, height: view.frame.width / 3 - 1)
+        //return CGSize(width: screenWidth / 3 - 1, height: screenWidth / 3 - 1)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! PhotoPickerCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! FullPhotoPickerCollectionViewCell
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let cell = cell as! PhotoPickerCollectionViewCell
+        let cell = cell as! FullPhotoPickerCollectionViewCell
         //get image from PHFetchResult
         let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
         if let duration = photoPicker.assetDurationDict[asset]{
