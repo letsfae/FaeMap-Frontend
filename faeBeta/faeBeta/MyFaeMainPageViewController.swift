@@ -258,12 +258,17 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         let photoStatus = PHPhotoLibrary.authorizationStatus()
         switch photoStatus {
         case .authorized:
-            let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-            let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+            //let nav = FullAlbumCollectionViewController()
+            //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+            //layout.scrollDirection = .vertical
+            //layout.itemSize = CGSize(width: (screenWidth - 4) / 3, height: (screenWidth - 4) / 3)
+            //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
+            let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
             imagePicker.imageDelegate = self
             imagePicker.isSelectAvatar = true
             imagePicker._maximumSelectedPhotoNum = 1
-            self.present(nav, animated: true, completion: {
+            self.present(imagePicker, animated: true, completion: {
                 UIApplication.shared.statusBarStyle = .default
             })
         case .denied:

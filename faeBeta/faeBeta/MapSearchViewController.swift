@@ -56,7 +56,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.isNavigationBarHidden = true
+        //navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
         loadSearchBar()
         loadPlaceBtns()
