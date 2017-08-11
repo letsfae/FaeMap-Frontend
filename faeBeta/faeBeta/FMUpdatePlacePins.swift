@@ -73,10 +73,10 @@ extension FaeMapViewController {
     }
     
     func updateTimerForLoadRegionPlacePin() {
-        loadCurrentRegionPlacePins()
+        updatePlacePins()
     }
     
-    func loadCurrentRegionPlacePins() {
+    func updatePlacePins() {
         let coorDistance = cameraDiagonalDistance()
         guard boolCanUpdatePlacePin else { return }
         boolCanUpdatePlacePin = false
