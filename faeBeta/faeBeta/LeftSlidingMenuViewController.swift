@@ -151,26 +151,30 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Board Mode", "Go Invisible", "Contacts", "Collections", "Activities", "Mood Avatar", "Log Out"]
-        cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
-        cell.labelMiddle.text = array[indexPath.row]
-        cell.switchRight.tag = indexPath.row
-        if indexPath.row < 2 {
+        let array = ["Board Mode", "Go Invisible", "Contacts", "Collections", "Mood Avatar", "Log Out"]
+        let idx = indexPath.row
+        cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(idx)")
+        cell.lblMiddle.text = array[idx]
+        cell.switchRight.tag = idx
+        if idx == 0 || idx == 2 || idx == 5 {
+            cell.uiviewRedDot.isHidden = false
+        }
+        if idx < 2 {
             cell.switchRight.isHidden = false
         } else {
             cell.switchRight.isHidden = true
         }
-        if indexPath.row == 0 {
+        if idx == 0 {
             cell.switchRight.addTarget(self, action: #selector(self.mapBoardSwitch(_:)), for: .valueChanged)
             cell.switchRight.setOn(LeftSlidingMenuViewController.boolMapBoardIsOn, animated: false)
-        } else if indexPath.row == 1 {
+        } else if idx == 1 {
             cell.switchRight.setOn(userStatus == 5, animated: false)
             cell.switchRight.addTarget(self, action: #selector(self.invisibleSwitch(_:)), for: .valueChanged)
         }
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return 6
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableLeftSlideWindow.cellForRow(at: indexPath) as! LeftSlideWindowCell
@@ -189,10 +193,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         } else if indexPath.row == 3 {
             tableSelections = .collections
             actionCloseMenu(btnBackground)
-        } else if indexPath.row == 5 {
+        } else if indexPath.row == 4 {
             tableSelections = .moodAvatar
             actionCloseMenu(btnBackground)
-        } else if indexPath.row == 6 {
+        } else if indexPath.row == 5 {
             let logOut = FaeUser()
             logOut.logOut { (status: Int?, _: Any?) in
                 if status! / 100 == 2 {
@@ -208,7 +212,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 67
+        return 81 // 67
     }
     
     func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {

@@ -236,7 +236,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     //MARK: add jump to feedback report view
     func jumpToFeedback() {
-        let reportCommentPinVC = ReportCommentPinViewController()
+        let reportCommentPinVC = ReportViewController()
         reportCommentPinVC.reportType = 1
         self.present(reportCommentPinVC, animated: true, completion: nil)
     }

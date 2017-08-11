@@ -80,14 +80,6 @@ extension FaeMapViewController {
         
         // Open main map search
         btnMainMapSearch = UIButton()
-        // Vicky 07/28/17
-//        btnMainMapSearch.backgroundColor = .blue
-//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
-//        btnMainMapSearch.titleLabel?.lineBreakMode = .byTruncatingTail
-//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
-//        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-//        btnMainMapSearch.contentHorizontalAlignment = .left
-        // Vicky 07/28/17 End
         imgSchbarShadow.addSubview(btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
