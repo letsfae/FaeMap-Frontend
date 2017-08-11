@@ -74,6 +74,13 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var btnBlock: UIButton!
     var imgMiniAvatar: UIImageView!
     
+    var btnLeftPart: UIButton!
+    var btnRightPart: UIButton!
+    var btnTopPart: UIButton!
+    var btnBottomPart: UIButton!
+    
+    var isAnimating = false
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
@@ -193,39 +200,47 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func show(avatar: UIImage, completionHandler: @escaping () -> Void) {
+        guard !isAnimating else { return }
+        isAnimating = true
         boolCardOpened = true
         btnProfile.isHidden = self.userId == Key.shared.user_id
         imgMiniAvatar.image = avatar
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
-            self.imgCover.frame = CGRect(x: 26, y: 29, w: 268, h: 125)
-            self.imgAvatarShadow.frame = CGRect(x: 116, y: 104, w: 88, h: 88)
-            self.imgAvatar.frame = CGRect(x: 123, y: 111, w: 74, h: 74)
-            self.imgMiniAvatar.frame = CGRect(x: 169, y: 165, w: 35, h: 35)
-            self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 264, w: 27, h: 27)
-            self.imgMiddleLine.frame = CGRect(x: 41, y: 251.5, w: 238, h: 1)
-            self.btnOptions.frame = CGRect(x: 247, y: 163, w: 32, h: 18)
-            self.btnProfile.frame = CGRect(x: 195, y: 264, w: 27, h: 27)
-            self.uiviewPrivacy.frame = CGRect(x: 41, y: 163, w: 46, h: 18)
+            self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
+            self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
+            self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
+            self.imgMiniAvatar.frame = CGRect(x: 169, y: 173, w: 35, h: 35)
+            self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
+            self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
+            self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
+            self.btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
+            self.uiviewPrivacy.frame = CGRect(x: 41, y: 171, w: 46, h: 18)
+            self.btnLeftPart.frame = CGRect(x: 0, y: 0, w: 26, h: 350)
+            self.btnRightPart.frame = CGRect(x: 294, y: 0, w: 26, h: 350)
+            self.btnTopPart.frame = CGRect(x: 26, y: 0, w: 268, h: 38)
+            self.btnBottomPart.frame = CGRect(x: 26, y: 312, w: 268, h: 38)
         }, completion: { _ in
-            self.lblNickName.frame = CGRect(x: 67, y: 194, w: 186, h: 25)
+            self.lblNickName.frame = CGRect(x: 67, y: 202, w: 186, h: 25)
             self.lblNickName.alpha = 1
-            self.lblUserName.frame = CGRect(x: 75, y: 220, w: 171, h: 18)
+            self.lblUserName.frame = CGRect(x: 75, y: 228, w: 171, h: 18)
             self.lblUserName.alpha = 1
+            self.isAnimating = false
             completionHandler()
         })
     }
     
     func hide(completionHandler: @escaping () -> Void) {
         guard boolCardOpened else { return }
+        guard !isAnimating else { return }
         boolCardOpened = false
-        self.lblNickName.text = ""
-        self.lblUserName.text = ""
-        self.lblNickName.frame = self.initialFrame
-        self.lblNickName.alpha = 0
-        self.lblUserName.frame = self.initialFrame
-        self.lblUserName.alpha = 0
+        lblNickName.text = ""
+        lblUserName.text = ""
+        lblNickName.frame = initialFrame
+        lblNickName.alpha = 0
+        lblUserName.frame = initialFrame
+        lblUserName.alpha = 0
         UIView.animate(withDuration: 0.3, animations: {
             self.imgBackShadow.frame = self.secondaryFrame
             self.imgCover.frame = self.secondaryFrame
@@ -237,6 +252,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.btnOptions.frame = self.secondaryFrame
             self.btnProfile.frame = self.secondaryFrame
             self.uiviewPrivacy.frame = self.secondaryFrame
+            self.btnLeftPart.frame = self.secondaryFrame
+            self.btnRightPart.frame = self.secondaryFrame
+            self.btnTopPart.frame = self.secondaryFrame
+            self.btnBottomPart.frame = self.secondaryFrame
             if self.boolOptionsOpened {
                 self.imgMoreOptions.frame = self.secondaryFrame
                 self.btnShare.frame = self.secondaryFrame
@@ -261,6 +280,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.frame.size.width = 320 * screenWidthFactor
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
             self.imgMiniAvatar.image = nil
+            self.btnLeftPart.frame = self.initialFrame
+            self.btnRightPart.frame = self.initialFrame
+            self.btnTopPart.frame = self.initialFrame
+            self.btnBottomPart.frame = self.initialFrame
             if self.boolOptionsOpened {
                 self.imgMoreOptions.frame = self.initFrame
                 self.btnShare.frame = self.initFrame
@@ -365,6 +388,26 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         imgAvatar.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
         imgAvatar.addGestureRecognizer(tapGesture)
+        
+        btnLeftPart = UIButton(frame: initialFrame)
+        btnLeftPart.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
+        addSubview(btnLeftPart)
+        
+        btnRightPart = UIButton(frame: initialFrame)
+        btnRightPart.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
+        addSubview(btnRightPart)
+        
+        btnTopPart = UIButton(frame: initialFrame)
+        btnTopPart.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
+        addSubview(btnTopPart)
+        
+        btnBottomPart = UIButton(frame: initialFrame)
+        btnBottomPart.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
+        addSubview(btnBottomPart)
+    }
+    
+    @objc private func hideSelf() {
+        self.hide {}
     }
 
     func getFriendStatus(id: Int) {

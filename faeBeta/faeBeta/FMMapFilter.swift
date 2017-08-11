@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CCHMapClusterController
 
 extension FaeMapViewController: MapFilterMenuDelegate {
     func loadMapFilter() {
@@ -44,11 +45,35 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     func autoCyclePins(isOn: Bool) {
         AUTO_CIRCLE_PINS = isOn
         if isOn {
-            mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+            
         } else {
-            mapClusterManager.maxZoomLevelForClustering = 0
+            
         }
     }
+    
+    /*
+    func findMatches() {
+        var arrFaePins = [FaePinAnnotation]()
+        for pin in faeMapView.annotations {
+            guard let cluster = pin as? CCHMapClusterAnnotation else { continue }
+            guard let faePin = cluster.annotations.first as? FaePinAnnotation else { continue }
+            if faePin.type == "place" {
+                arrFaePins.append(faePin)
+            }
+        }
+        var restFaePins = [FaePinAnnotation]()
+        for pin in mapClusterManager.annotations {
+            guard let faePin = pin as? FaePinAnnotation else { continue }
+            if faePin.type != "place" { continue }
+            if arrFaePins.contains(faePin) {
+                continue
+            } else {
+                restFaePins.append(faePin)
+            }
+        }
+        mapClusterManager.removeAnnotations(restFaePins, withCompletionHandler: nil)
+    }
+     */
     
     // MapFilterMenuDelegate
     func hideAvatars(isOn: Bool) {
