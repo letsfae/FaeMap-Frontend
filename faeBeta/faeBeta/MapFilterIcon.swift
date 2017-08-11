@@ -35,7 +35,7 @@ class MapFilterIcon: UIButton {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         loadMapFilter()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.filterCircleAnimation), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.animateInsideCircles), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.animateMapFilterArrow), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
@@ -53,11 +53,11 @@ class MapFilterIcon: UIButton {
         adjustsImageWhenHighlighted = false
         center.x = screenWidth / 2
         center.y = screenHeight - 25
-        filterCircleAnimation()
+        animateInsideCircles()
         animateMapFilterArrow()
     }
     
-    func filterCircleAnimation() {
+    func animateInsideCircles() {
         
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = 22
@@ -69,14 +69,8 @@ class MapFilterIcon: UIButton {
         }
         if filterCircle_1 != nil {
             filterCircle_1.removeFromSuperview()
-        }
-        if filterCircle_2 != nil {
             filterCircle_2.removeFromSuperview()
-        }
-        if filterCircle_3 != nil {
             filterCircle_3.removeFromSuperview()
-        }
-        if filterCircle_4 != nil {
             filterCircle_4.removeFromSuperview()
         }
         filterCircle_1 = createFilterCircle()
@@ -116,32 +110,20 @@ class MapFilterIcon: UIButton {
     
     func stopIconSpin() {
         layer.removeAllAnimations()
-        if polygonInside != nil {
-            polygonInside.layer.removeAllAnimations()
+        if self.center.y == screenHeight - 25 {
+            self.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
         }
-        boolHideInsides = false
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            if self.polygonInside != nil {
-                self.polygonInside.alpha = 0
-            }
-            if self.center.y == screenHeight - 25 {
-                self.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
-                return
-            }
-        }, completion: { _ in
-            self.isEnabled = true
-            self.transform = CGAffineTransform(rotationAngle: 0)
-            if self.polygonInside != nil {
-                self.polygonInside.removeFromSuperview()
-            }
-        })
+        self.isEnabled = true
+        self.boolHideInsides = false
+        self.transform = CGAffineTransform(rotationAngle: 0)
+        if self.polygonInside != nil {
+            self.polygonInside.removeFromSuperview()
+        }
     }
     
     func startIconSpin() {
         
-        if center.y != screenHeight - 25 {
-            return
-        }
+        guard center.y == screenHeight - 25 else { return }
         
         self.isEnabled = false
         
