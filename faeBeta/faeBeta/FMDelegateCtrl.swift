@@ -9,24 +9,12 @@
 import UIKit
 import SwiftyJSON
 
-extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegate {
-    
-    // MainScreenSearchDelegate
-    func animateToCameraFromMainScreenSearch(_ coordinate: CLLocationCoordinate2D) {
-        let camera = faeMapView.camera
-        camera.centerCoordinate = coordinate
-        faeMapView.setCamera(camera, animated: true)
-        updateTimerForUserPin()
-        timerSetup()
-        // send noti here to start filter spinning
-        reloadSelfPosAnimation()
-    }
+extension FaeMapViewController: LeftSlidingMenuDelegate {
     
     // PinDetailDelegate
     func backToMainMap() {
         timerSetup()
         renewSelfLocation()
-        reloadSelfPosAnimation()
         reloadMainScreenButtons()
         deselectAllAnnotations()
     }
@@ -71,25 +59,24 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
         timerSetup()
         renewSelfLocation()
         // send noti here to start filter spinning and arrow
-        reloadSelfPosAnimation()
     }
     func whenDismissPinMenu() {
         timerSetup()
         renewSelfLocation()
         // send noti here to start filter spinning and arrow
-        reloadSelfPosAnimation()
     }
     */
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
-            self.renewSelfLocation()
-            reloadSelfPosAnimation()
+            renewSelfLocation()
             return
         }
         if userStatus == 5 {
-            self.invisibleMode()
+            invisibleMode()
+        } else {
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "willEnterForeground"), object: nil)
         }
     }
     
@@ -119,7 +106,6 @@ extension FaeMapViewController: MainScreenSearchDelegate, LeftSlidingMenuDelegat
     func reloadSelfPosition() {
         self.boolCanOpenPin = true
         self.reloadMainScreenButtons()
-        reloadSelfPosAnimation()
     }
     
     func switchMapMode() {

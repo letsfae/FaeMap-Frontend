@@ -129,8 +129,8 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         imgAvatar.layer.cornerRadius = 40 * screenWidthFactor
         imgAvatar.contentMode = .scaleAspectFill
         view.addSubview(imgAvatar)
-        imgAvatar.userID = user_id
-        imgAvatar.loadAvatar(id: user_id)
+        imgAvatar.userID = Key.shared.user_id
+        imgAvatar.loadAvatar(id: Key.shared.user_id)
         imgAvatar.layer.borderWidth = 5
         imgAvatar.layer.borderColor = UIColor.white.cgColor
         imgAvatar.layer.zPosition = 3

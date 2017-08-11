@@ -28,6 +28,7 @@ extension ContactsViewController {
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMenu(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.goToAddFriendView(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.addGestureRecognizer(setTapDismissDropdownMenu())
         btnNavBarSetTitle()
     }
     
@@ -70,6 +71,22 @@ extension ContactsViewController {
 
     }
     
+    func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
+        var tapRecognizer = UITapGestureRecognizer()
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.cancelsTouchesInView = false
+        return tapRecognizer
+    }
+    
+    func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.blurViewDropDownMenu.frame.origin.y = -39
+        })
+        navBarMenuBtnClicked = false
+        schbarContacts.txtSchField.resignFirstResponder()
+    }
+    
     // function for drop down menu button, to show / hide the drop down menu (UIVisualView)
     func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
@@ -107,16 +124,6 @@ extension ContactsViewController {
         titleArray[sender.tag] = curtTitle
         curtTitle = temp
         
-//        if sender.tag == 0 {
-//            let temp = titleArray[0]
-//            titleArray[0] = curtTitle
-//            curtTitle = temp
-//        } else if sender.tag == 1 {
-//            let temp = titleArray[1]
-//            titleArray[1] = curtTitle
-//            curtTitle = temp
-//        }
-        
         titleArray.sort { $0.characters.count < $1.characters.count }
         btnTop.setTitle(titleArray[0], for: .normal)
         btnBottom.setTitle(titleArray[1], for: .normal)
@@ -125,9 +132,21 @@ extension ContactsViewController {
         UIView.animate(withDuration: 0.2, animations: {
             self.blurViewDropDownMenu.frame.origin.y = -92
         })
-        
         navBarMenuBtnClicked = false
+        
+//        switchFriendsAndFollows()
+        tblContacts.reloadData()
     }
+    
+//    fileprivate func switchFriendsAndFollows() {
+//        if curtTitle == "Friends" {
+//
+//        } else if curtTitle == "Followers" {
+//
+//        } else {   // curtTitle == "Following"
+//
+//        }
+//    }
     
     fileprivate func btnNavBarSetTitle() {
         let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]

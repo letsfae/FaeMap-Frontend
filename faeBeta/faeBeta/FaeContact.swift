@@ -19,8 +19,9 @@ class FaeContact {
     }
     
     // Contacts Information
-    func sendFriendRequest(friendId: String, _ completion: @escaping (Int,Any?) -> Void) {
+    func sendFriendRequest(friendId: String, boolResend: String = "false", _ completion: @escaping (Int,Any?) -> Void) {
         self.whereKey("requested_user_id", value: friendId)
+        self.whereKey("resend", value: boolResend)
         postToURL("friends/request", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
@@ -46,6 +47,15 @@ class FaeContact {
         }
     }
     
+    func withdrawFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        self.whereKey("friend_request_id", value: requestId)
+        postToURL("friends/withdraw", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     func blockPerson(userId: String, _ completion: @escaping (Int, Any?) -> Void) {
         self.whereKey("user_id", value: userId)
         postToURL("blocks", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
@@ -55,8 +65,8 @@ class FaeContact {
         }
     }
     
-    func deleteFriend(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
-        deleteFromURL("friends/" + requestId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+    func deleteFriend(userId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        deleteFromURL("friends/" + userId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
             completion(status, message)
@@ -79,6 +89,14 @@ class FaeContact {
         }
     }
     
+    func getFriendRequestsSent(_ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("friends/request_sent", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     func getFriends(_ completion: @escaping (Int,Any?) -> Void) {
         getFromURL("friends", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
             in
@@ -87,5 +105,37 @@ class FaeContact {
         }
     }
     
+    func followPerson(followeeId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        self.whereKey("followee_id", value: followeeId)
+        postToURL("follows", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
     
+    func getFollowers(userId: String, _ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("follows/" + userId + "/follower", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getFollowees(userId: String, _ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("follows/" + userId + "/followee", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            print("userId \(userId)")
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+
+    func deleteFollow(followeeId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        deleteFromURL("follows/" + followeeId, parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
 }

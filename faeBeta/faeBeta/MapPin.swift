@@ -42,7 +42,7 @@ struct MapPin {
                 self.status = "normal"
             }
         }
-        if self.userId == user_id {
+        if self.userId == Key.shared.user_id {
             self.status = "normal"
         }
         let likeCount = json["pin_object"]["liked_count"].intValue

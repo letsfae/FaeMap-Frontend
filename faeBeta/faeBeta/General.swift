@@ -21,7 +21,7 @@ class General: NSObject {
         }
         
         if let imageFromCache = faeImageCache.object(forKey: userid as AnyObject) as? UIImage {
-            print("[getAvatar - \(userid)] already in cache")
+            joshprint("[getAvatar - \(userid)] already in cache")
             completion(imageFromCache)
             return
         }

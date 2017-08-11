@@ -47,7 +47,6 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         txtSchField.delegate = self
         addSubview(txtSchField)
         addConstraintsWithFormat("V:|-13-[v0(25)]-0-|", options: [], views: txtSchField)
-        
         addConstraintsWithFormat("H:|-10-[v0(15)]-9-[v1]-5-[v2(30)]-21-|", options: [], views: imgSearch, txtSchField, btnClose)
         
         btnClose.isHidden = true

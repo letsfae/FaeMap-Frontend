@@ -79,19 +79,19 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func createDateOfBirthView() {
-        let uiviewDoB = UIView(frame: CGRect(x: 0, y: 90 * screenHeightFactor, width: view.frame.size.width, height: 120 * screenHeightFactor))
-        let lblTitle = UILabel(frame: CGRect(x: 0, y: 10, width: uiviewDoB.frame.size.width, height: 26))
-        lblTitle.textColor = UIColor.init(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
+        let uiviewDoB = UIView(frame: CGRect(x: 0, y: 99 * screenHeightFactor, width: screenWidth, height: 120 * screenHeightFactor))
+        let lblTitle = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
+        lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textAlignment = .center
         lblTitle.text = "Birthday"
         
-        textField = FAETextField(frame: CGRect(x: 15, y: 65 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        textField = FAETextField(frame: CGRect(x: 15, y: 59 * screenHeightFactor, width: screenWidth - 30, height: 34))
         textField.placeholder = "MM/DD/YYYY"
         textField.isEnabled = false
         
-        imgExclamationMark = UIImageView(frame: CGRect(x: screenWidth / 2 + 70, y: 72 * screenHeightFactor, width: 6, height: 17))
-        imgExclamationMark.image = UIImage(named: "exclamation_red_new")
+        imgExclamationMark = UIImageView(frame: CGRect(x: screenWidth / 2 + 70, y: 64 * screenHeightFactor, width: 7, height: 21))
+        imgExclamationMark.image = #imageLiteral(resourceName: "exclamation_red_new")
         imgExclamationMark.isHidden = true
         
         uiviewDoB.addSubview(lblTitle)
@@ -102,22 +102,22 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func createGenderView() {
-        let genderView = UIView(frame: CGRect(x: 0, y: 240 * screenHeightFactor, width: view.frame.size.width, height: 150 * screenHeightFactor))
+        let genderView = UIView(frame: CGRect(x: 0, y: 245 * screenHeightFactor, width: screenWidth, height: 150 * screenHeightFactor))
         
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 10, width: genderView.frame.size.width, height: 26))
-        titleLabel.textColor = UIColor.init(red: 89 / 255.0, green: 89 / 255.0, blue: 89 / 255.0, alpha: 1.0)
+        let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
+        titleLabel.textColor = UIColor._898989()
         titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
         titleLabel.textAlignment = .center
         titleLabel.text = "Gender"
         
-        btnMale = UIButton(frame: CGRect(x: genderView.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 80, height: 80))
-        btnMale.setImage(UIImage(named: "male_unselected"), for: .normal)
-        btnMale.setImage(UIImage(named: "male_selected"), for: .selected)
+        btnMale = UIButton(frame: CGRect(x: screenWidth / 2 - 120, y: 50 * screenHeightFactor, width: 80, height: 80))
+        btnMale.setImage(#imageLiteral(resourceName: "male_unselected"), for: .normal)
+        btnMale.setImage(#imageLiteral(resourceName: "male_selected"), for: .selected)
         btnMale.addTarget(self, action: #selector(self.maleButtonTapped), for: .touchUpInside)
         
-        btnFemale = UIButton(frame: CGRect(x: 2 * genderView.frame.size.width / 3.0 - 30, y: 60 * screenHeightFactor, width: 80, height: 80))
-        btnFemale.setImage(UIImage(named: "female_unselected"), for: .normal)
-        btnFemale.setImage(UIImage(named: "female_selected"), for: .selected)
+        btnFemale = UIButton(frame: CGRect(x: screenWidth / 2 + 40, y: 50 * screenHeightFactor, width: 80, height: 80))
+        btnFemale.setImage(#imageLiteral(resourceName: "female_unselected"), for: .normal)
+        btnFemale.setImage(#imageLiteral(resourceName: "female_selected"), for: .selected)
         btnFemale.addTarget(self, action: #selector(self.femaleButtonTapped), for: .touchUpInside)
         
         genderView.addSubview(titleLabel)

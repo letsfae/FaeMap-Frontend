@@ -21,6 +21,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     var dimBackground: UIView!
     var imageViewAvatar: UIImageView!
     var activityIndicator: UIActivityIndicatorView!
+    static var boolFinishClicked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +83,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         labelTitle.text = "Set your Profile Picture\n & Display Name"
         labelTitle.numberOfLines = 0
         labelTitle.textAlignment = NSTextAlignment.center
-        labelTitle.textColor = UIColor(red: 89/255, green: 89.0/255, blue: 89.0/255, alpha: 1.0)
+        labelTitle.textColor = UIColor._898989()
         labelTitle.font = UIFont(name: "AvenirNext-Medium",size: 16*screenWidthFactor)
         uiViewSetPicture.addSubview(labelTitle)
         
@@ -105,7 +106,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         textFieldDisplayName.textColor = UIColor._2499090()
         textFieldDisplayName.textAlignment = .center
         textFieldDisplayName.addTarget(self, action: #selector(self.displayNameValueChanged(_:)), for: .editingChanged)
-        textFieldDisplayName.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1)
+        textFieldDisplayName.textColor = UIColor._898989()
         textFieldDisplayName.autocorrectionType = .no
         uiViewSetPicture.addSubview(textFieldDisplayName)
         
@@ -113,7 +114,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         buttonFinish.layer.cornerRadius = 20*screenWidthFactor
         buttonFinish.setTitle("Finish!", for: .normal)
         buttonFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16*screenWidthFactor)
-        buttonFinish.backgroundColor = UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 1.0)
+        buttonFinish.backgroundColor = UIColor._255160160()
         uiViewSetPicture.addSubview(buttonFinish)
         buttonFinish.isEnabled = false
         buttonFinish.addTarget(self, action: #selector(self.buttonFinishClicked(_:)), for: .touchUpInside)
@@ -163,13 +164,12 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     self.updateUserRealm()
                     UIView.animate(withDuration: 0.3, animations: {
                         self.dimBackground.alpha = 0
-                    }) { (done: Bool) in
-                        if done {
-                            self.dismiss(animated: false, completion: nil)
-                        }
+                    }) {_ in
+                        self.dismiss(animated: false, completion: nil)
+                        FirstTimeLoginViewController.boolFinishClicked = true
+                        print("finishclicked \(FirstTimeLoginViewController.boolFinishClicked)")
                     }
-                }
-                else {
+                } else {
                     self.activityIndicator.stopAnimating()
                     self.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again")
                 }
@@ -180,7 +180,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func updateUserRealm() {
         let realm = try! Realm()
         let userRealm = FaeUserRealm()
-        userRealm.userId = Int(user_id)
+        userRealm.userId = Int(Key.shared.user_id)
         userRealm.firstUpdate = true
         try! realm.write {
             realm.add(userRealm, update: true)
@@ -189,10 +189,10 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     
     func displayNameValueChanged(_ sender: UITextField) {
         if(sender.text != "") {
-            buttonFinish.backgroundColor = UIColor(red: 249.0/255, green: 90.0/255, blue: 90.0/255, alpha:1.0)
+            buttonFinish.backgroundColor = UIColor._2499090()
             buttonFinish.isEnabled = true
         } else {
-            buttonFinish.backgroundColor = UIColor(red: 255.0/255, green: 160.0/255, blue: 160.0/255, alpha: 1.0)
+            buttonFinish.backgroundColor = UIColor._255160160()
             buttonFinish.isEnabled = false
         }
     }
