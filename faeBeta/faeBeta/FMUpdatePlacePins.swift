@@ -87,6 +87,25 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
+        
+        func getDelay(prevTime: DispatchTime) -> Double {
+            let nowTime = DispatchTime.now()
+            let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
+            var delay: Double = 0
+            if timeDiff / Double(NSEC_PER_SEC) < 2 {
+                delay = 2 - timeDiff / Double(NSEC_PER_SEC)
+            } else {
+                delay = timeDiff / Double(NSEC_PER_SEC) - 2
+            }
+            return delay
+        }
+        
+        func stopIconSpin(delay: Double) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                self.btnFilterIcon.stopIconSpin()
+            })
+        }
+        
         guard PLACE_ENABLE else { return }
         btnFilterIcon.startIconSpin()
         let time_0 = DispatchTime.now()
@@ -104,16 +123,19 @@ extension FaeMapViewController {
             guard status / 100 == 2 && message != nil else {
                 print("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdatePlacePin = true
+                stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 print("[getMapUserInfo] fail to parse pin comments")
                 self.boolCanUpdatePlacePin = true
+                stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 self.boolCanUpdatePlacePin = true
+                stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
             var placePins = [FaePinAnnotation]()
@@ -129,6 +151,7 @@ extension FaeMapViewController {
                 }
                 guard placePins.count > 0 else {
                     self.boolCanUpdatePlacePin = true
+                    stopIconSpin(delay: getDelay(prevTime: time_0))
                     return
                 }
                 DispatchQueue.main.async {
@@ -136,17 +159,7 @@ extension FaeMapViewController {
                     self.boolCanUpdatePlacePin = true
                 }
             }
-            let time_1 = DispatchTime.now()
-            let timeDiff = Double(time_1.uptimeNanoseconds - time_0.uptimeNanoseconds)
-            var delay: Double = 0
-            if timeDiff / Double(NSEC_PER_SEC) < 2 {
-                delay = 2 - timeDiff / Double(NSEC_PER_SEC)
-            } else {
-                delay = timeDiff / Double(NSEC_PER_SEC) - 2
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                self.btnFilterIcon.stopIconSpin()
-            })
+            stopIconSpin(delay: getDelay(prevTime: time_0))
         }
     }
 }
