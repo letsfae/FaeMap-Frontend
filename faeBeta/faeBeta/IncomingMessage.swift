@@ -198,7 +198,7 @@ class IncomingMessage {
         let userId = item["senderId"] as? String
         let date = dateFormatter().date(from: (item["date"] as? String)!)
         
-        let isOutGoingMessage = userId! == "\(user_id)"
+        let isOutGoingMessage = userId! == "\(Key.shared.user_id)"
         let options: AVAudioSessionCategoryOptions = [AVAudioSessionCategoryOptions.duckOthers, AVAudioSessionCategoryOptions.defaultToSpeaker,AVAudioSessionCategoryOptions.allowBluetooth]
         let font = UIFont(name: "AvenirNext-DemiBold", size: 16)
         let attribute = JSQAudioMediaViewAttributesCustom(
@@ -343,7 +343,7 @@ class IncomingMessage {
     
     func returnOutgoingStatusFromUser(_ senderId : String) -> Bool {
         
-        if senderId == "\(user_id)" {
+        if senderId == "\(Key.shared.user_id)" {
             //outgoings
             return true
         } else {

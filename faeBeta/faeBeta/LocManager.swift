@@ -21,17 +21,19 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         return curtLoc.coordinate.longitude
     }
     var boolFirstLoad = true
+    var curtHeading: CLLocationDirection = 0
     
     func jumpToLocationEnable() {
         print("[LocManager] jumpToLocationEnable")
         let vc = EnableLocationViewController()
-        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true, completion: nil)
+        UIApplication.shared.keyWindow?.visibleViewController?.present(vc, animated: true)
     }
     
     func updateCurtLoc() {
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+//        locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         
         if CLLocationManager.locationServicesEnabled() {
             locManager.startUpdatingLocation()
@@ -49,6 +51,10 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 //        print("curtLon \(curtLong)")
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        curtHeading = newHeading.trueHeading
+    }
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
@@ -63,6 +69,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 //            print("didChangeAuthorizationStatus .restricted")
             break
         case .authorizedAlways:
+            UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
 //            print("didChangeAuthorizationStatus .authorizedAlways")
             break
         case .authorizedWhenInUse:

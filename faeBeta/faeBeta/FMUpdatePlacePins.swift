@@ -12,6 +12,27 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
+    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "place"
+        var anView: PlacePinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+        DispatchQueue.main.async {
+            anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
+            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+                anView.alpha = 1
+            }, completion: nil)
+        }
+        return anView
+    }
+    
     func visiblePlaces() -> [CCHMapClusterAnnotation] {
         var mapRect = faeMapView.visibleMapRect
         mapRect.origin.y += mapRect.size.height * 0.2
@@ -66,6 +87,9 @@ extension FaeMapViewController {
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
+        guard PLACE_ENABLE else { return }
+        btnFilterIcon.startIconSpin()
+        let time_0 = DispatchTime.now()
         boolCanUpdatePlacePin = false
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
@@ -112,6 +136,17 @@ extension FaeMapViewController {
                     self.boolCanUpdatePlacePin = true
                 }
             }
+            let time_1 = DispatchTime.now()
+            let timeDiff = Double(time_1.uptimeNanoseconds - time_0.uptimeNanoseconds)
+            var delay: Double = 0
+            if timeDiff / Double(NSEC_PER_SEC) < 2 {
+                delay = 2 - timeDiff / Double(NSEC_PER_SEC)
+            } else {
+                delay = timeDiff / Double(NSEC_PER_SEC) - 2
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                self.btnFilterIcon.stopIconSpin()
+            })
         }
     }
 }

@@ -12,38 +12,46 @@ import CCHMapClusterController
 
 extension FaeMapViewController {
     
+    func viewForUser(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "user"
+        var anView: UserPinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? UserPinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = UserPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.avatar)
+        return anView
+    }
+    
     func tapUserPin(didSelect view: MKAnnotationView) {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
         guard firstAnn.id != -1 else { return }
-        for user in faeUserPins {
-            user.isValid = false
-        }
         boolCanUpdateUserPin = false
         boolCanOpenPin = false
-        animateToCoordinate(type: 1, coordinate: clusterAnn.coordinate, animated: true)
-        updateNameCard(withUserId: firstAnn.id)
-        animateNameCard()
-        boolCanOpenPin = true
+        mapGesture(isOn: false)
+        uiviewNameCard.userId = firstAnn.id
+        uiviewNameCard.show(avatar: firstAnn.avatar) {
+            self.boolCanOpenPin = true
+        }
     }
     
     func updateTimerForUserPin() {
-        self.updateSelfLocation()
-        if timerUpdateSelfLocation != nil {
-            timerUpdateSelfLocation.invalidate()
-        }
-        timerUpdateSelfLocation = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
+        updateSelfLocation()
+        timerUserPin?.invalidate()
+        timerUserPin = nil
+        timerUserPin = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateSelfLocation), userInfo: nil, repeats: true)
     }
 
-    func updateSelfLocation() {
-//        guard USER_ENABLE else { return }
-        
+    func updateSelfLocation() {        
         if !boolCanUpdateUserPin {
             return
         }
         let coorDistance = cameraDiagonalDistance()
         boolCanUpdateUserPin = false
-        self.renewSelfLocation()
+        renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
         let getMapUserInfo = FaeMap()
@@ -72,7 +80,7 @@ extension FaeMapViewController {
             var userPins = [FaePinAnnotation]()
             DispatchQueue.global(qos: .default).async {
                 for userJson in mapUserJsonArray {
-                    if userJson["user_id"].intValue == user_id {
+                    if userJson["user_id"].intValue == Key.shared.user_id {
                         continue
                     }
                     var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)

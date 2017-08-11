@@ -78,8 +78,7 @@ func headerAuthentication() -> [String: AnyObject] {
     if Key.shared.is_Login == 1 && userTokenEncode != "" {
         return ["Authorization": userTokenEncode as AnyObject]
     }
-    let shareAPI = LocalStorageManager()
-    if let encode = shareAPI.readByKey("userTokenEncode") as? String {
+    if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
         userTokenEncode = encode 
         return ["Authorization": userTokenEncode as AnyObject]
     }

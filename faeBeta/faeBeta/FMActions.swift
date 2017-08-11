@@ -11,7 +11,7 @@ import UIKit
 extension FaeMapViewController {
     
     func renewSelfLocation() {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .default).async {
             let selfLocation = FaeMap()
             selfLocation.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
             selfLocation.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
@@ -25,60 +25,32 @@ extension FaeMapViewController {
         }
     }
     
-    func actionTrueNorth(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
-        let camera = faeMapView.camera
-        camera.heading = 0
-        faeMapView.setCamera(camera, animated: true)
-        if btnCompass != nil { btnCompass.transform = CGAffineTransform.identity }
-    }
-    
-    // Jump to pin menu view controller
-    func actionCreatePin(_ sender: UIButton) {
-        /*
-        btnCardClose.sendActions(for: .touchUpInside)
-        let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-        let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
-        invalidateAllTimer()
-        let pinMenuVC = PinMenuViewController()
-        pinMenuVC.modalPresentationStyle = .overCurrentContext
-        Key.shared.dblAltitude = faeMapView.camera.altitude
-        Key.shared.selectedLoc = mapCenter_coor
-        pinMenuVC.delegate = self
-        self.present(pinMenuVC, animated: false, completion: nil)
-         */
-    }
-    
-    func actionSelfPosition(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
-        let camera = faeMapView.camera
-        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-        faeMapView.setCamera(camera, animated: true)
-    }
-    
     func actionMainScreenSearch(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
         searchVC.strSearchedPlace = lblSearchContent.text
-//        searchVC.modalPresentationStyle = .overCurrentContext
-//        mainScreenSearchVC.delegate = self
-//        self.present(searchVC, animated: false, completion: nil)
         navigationController?.pushViewController(searchVC, animated: false)
     }
     
     func actionClearSearchResults(_ sender: UIButton) {
-//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
-//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
+        PLACE_ENABLE = true
+        placeResultBar.alpha = 0
+        mapGesture(isOn: true)
+        mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.displayName = Key.shared.nickname ?? "someone"
         leftMenuVC.delegate = self
@@ -89,7 +61,9 @@ extension FaeMapViewController {
     
     
     func actionChatWindowShow(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
         // check if the user's logged in the backendless
         //let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()! as! RecentViewController
@@ -101,10 +75,34 @@ extension FaeMapViewController {
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func actionReportThisPin(_ sender: UIButton) {
-        btnCardClose.sendActions(for: .touchUpInside)
-        let reportPinVC = ReportCommentPinViewController()
-        reportPinVC.reportType = 0
-        self.present(reportPinVC, animated: true, completion: nil)
+    func actionCreatePin(_ sender: UIButton) {
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
+        if faeUserPins.isEmpty {
+            updateTimerForUserPin()
+        } else {
+            timerUserPin?.invalidate()
+            timerUserPin = nil
+            for faeUser in faeUserPins {
+                faeUser.isValid = false
+            }
+            mapClusterManager.removeAnnotations(faeUserPins) {
+                self.faeUserPins.removeAll()
+            }
+        }
+        
+        /*
+         uiviewNameCard.hide()
+         let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
+         invalidateAllTimer()
+         let pinMenuVC = PinMenuViewController()
+         pinMenuVC.modalPresentationStyle = .overCurrentContext
+         Key.shared.dblAltitude = faeMapView.camera.altitude
+         Key.shared.selectedLoc = mapCenter_coor
+         pinMenuVC.delegate = self
+         self.present(pinMenuVC, animated: false, completion: nil)
+         */
     }
 }

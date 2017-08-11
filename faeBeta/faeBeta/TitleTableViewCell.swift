@@ -10,23 +10,28 @@ import UIKit
 
 class TitleTableViewCell: UITableViewCell {
 
-    // MARK: - IBOutlet
-    @IBOutlet weak var titleLabel: UILabel!
+    var titleLabel: UILabel!
     
-    // MARK: - Awake
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadContent()
     }
     
-    // MARK: - Function
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadContent() {
+        titleLabel = UILabel(frame:CGRect(x: 0, y: 0, width: screenWidth, height: 56))
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+        titleLabel.textColor = UIColor._898989()
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        addSubview(titleLabel)
+    }
+    
     func setTitleLabelText(_ titleText: String)  {
         titleLabel.text = titleText
     }
-    
-    // MARK: - Selection
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
+
 }

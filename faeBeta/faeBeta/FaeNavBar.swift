@@ -16,7 +16,7 @@ class FaeNavBar: UIView {
     var lblTitle = UILabel()
     var bottomLine = UIView()
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect = CGRect.zero) {
         let newFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: screenWidth, height: 65))
         super.init(frame: newFrame)
         

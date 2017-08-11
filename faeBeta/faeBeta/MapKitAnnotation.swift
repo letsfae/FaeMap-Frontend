@@ -11,7 +11,7 @@ import SwiftyJSON
 import CCHMapClusterController
 import MapKit
 
-let mapAvatarWidth = 38
+let mapAvatarWidth = 35
 
 class FaePinAnnotation: MKPointAnnotation {
     
@@ -52,13 +52,14 @@ class FaePinAnnotation: MKPointAnnotation {
                 self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
             } else {
                 self.count = 0
+                self.timer?.invalidate()
                 self.timer = nil
             }
         }
     }
     var timer: Timer?
     
-    init(type: String, cluster: CCHMapClusterController, json: JSON) {
+    init(type: String, cluster: CCHMapClusterController, json: JSON = JSON([])) {
         super.init()
         self.mapViewCluster = cluster
         self.type = type
@@ -88,6 +89,10 @@ class FaePinAnnotation: MKPointAnnotation {
             self.changePosition()
             self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         }
+    }
+    
+    deinit {
+        self.isValid = false
     }
     
     func getRandomTime() -> Double {
@@ -123,16 +128,24 @@ class FaePinAnnotation: MKPointAnnotation {
 
 class SelfAnnotationView: MKAnnotationView {
     
-    var selfMarkerIcon = UIButton()
-    var myPositionCircle_1: UIImageView!
-    var myPositionCircle_2: UIImageView!
-    var myPositionCircle_3: UIImageView!
-    let anchorPoint = CGPoint(x: 22, y: 22)
+    var selfIcon = UIImageView()
+    var outsideCircle_1: UIImageView!
+    var outsideCircle_2: UIImageView!
+    var outsideCircle_3: UIImageView!
+    let anchorPoint = CGPoint(x: 19, y: 19)
+    
+    var selfIcon_invisible: UIImageView!
+    var outsideCircle_invisible: UIImageView!
+    
+    var boolInvisible = false
+    
     var mapAvatar: Int = 1 {
         didSet {
-            self.selfMarkerIcon.setImage(UIImage(named: "miniAvatar_\(mapAvatar)"), for: .normal)
+            selfIcon.image = UIImage(named: "miniAvatar_\(mapAvatar)")
         }
     }
+    
+    var timer: Timer?
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -144,23 +157,68 @@ class SelfAnnotationView: MKAnnotationView {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.invisibleMode), name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func invisibleMode() {
+        if outsideCircle_1 != nil {
+            outsideCircle_1.removeFromSuperview()
+            outsideCircle_2.removeFromSuperview()
+            outsideCircle_3.removeFromSuperview()
+        }
+        
+        selfIcon.isHidden = true
+        
+        if selfIcon_invisible != nil {
+            selfIcon_invisible.removeFromSuperview()
+            outsideCircle_invisible.removeFromSuperview()
+        }
+        
+        let offset_1: CGFloat = CGFloat(mapAvatarWidth - 80) / 2.0
+        outsideCircle_invisible = UIImageView(frame: CGRect(x: offset_1, y: offset_1, w: 80, h: 80))
+        outsideCircle_invisible.image = #imageLiteral(resourceName: "invisible_mode_outside")
+        addSubview(outsideCircle_invisible)
+        
+        let offset_0: CGFloat = CGFloat(mapAvatarWidth - 12) / 2.0
+        selfIcon_invisible = UIImageView(frame: CGRect(x: offset_0 - 3, y: offset_0 - 4.5, w: 18, h: 20))
+        selfIcon_invisible.image = #imageLiteral(resourceName: "invisible_mode_inside")
+        selfIcon_invisible.contentMode = .scaleAspectFit
+        selfIcon_invisible.clipsToBounds = false
+        selfIcon_invisible.layer.anchorPoint = CGPoint(x: 0.5, y: 0.57) // perfect
+        addSubview(selfIcon_invisible)
+        
+        LocManager.shared.locManager.startUpdatingHeading()
+        
+        timer?.invalidate()
+        timer = nil
+        
+        timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateHeading), userInfo: nil, repeats: true)
+    }
+    
+    func updateHeading() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.selfIcon_invisible.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * LocManager.shared.curtHeading) / 180.0)
+        }, completion: nil)
+    }
+    
     func changeAvatar() {
+        guard userStatus != 5 else { return }
         mapAvatar = userMiniAvatar
     }
     
     func removeAllAnimation() {
+        guard userStatus != 5 else { return }
         self.layer.removeAllAnimations()
     }
     
@@ -178,71 +236,89 @@ class SelfAnnotationView: MKAnnotationView {
             userBirthday = selfUserInfoJSON["birthday"].stringValue
             userUserGender = selfUserInfoJSON["gender"].stringValue
             userUserName = selfUserInfoJSON["user_name"].stringValue
+            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
+            LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
+            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
             if userStatus == 5 {
                 return
             }
-            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
-            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
             self.reloadSelfMarker()
         })
     }
     
     func loadSelfMarkerSubview() {
-        selfMarkerIcon = UIButton(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
-        selfMarkerIcon.adjustsImageWhenHighlighted = false
-        selfMarkerIcon.layer.zPosition = 5
-        selfMarkerIcon.center = anchorPoint
-        addSubview(selfMarkerIcon)
+        selfIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
+        selfIcon.layer.zPosition = 5
+        selfIcon.center = anchorPoint
+        addSubview(selfIcon)
     }
     
     func reloadSelfMarker() {
-        if myPositionCircle_1 != nil {
-            myPositionCircle_1.removeFromSuperview()
-            myPositionCircle_2.removeFromSuperview()
-            myPositionCircle_3.removeFromSuperview()
-        }
-        myPositionCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        myPositionCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        myPositionCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        myPositionCircle_1.layer.zPosition = 0
-        myPositionCircle_2.layer.zPosition = 1
-        myPositionCircle_3.layer.zPosition = 2
-        myPositionCircle_1.center = anchorPoint
-        myPositionCircle_2.center = anchorPoint
-        myPositionCircle_3.center = anchorPoint
-        myPositionCircle_1.isUserInteractionEnabled = false
-        myPositionCircle_2.isUserInteractionEnabled = false
-        myPositionCircle_3.isUserInteractionEnabled = false
-        myPositionCircle_1.image = UIImage(named: "myPosition_outside")
-        myPositionCircle_2.image = UIImage(named: "myPosition_outside")
-        myPositionCircle_3.image = UIImage(named: "myPosition_outside")
         
-        addSubview(myPositionCircle_3)
-        addSubview(myPositionCircle_2)
-        addSubview(myPositionCircle_1)
+        guard userStatus != 5 else { return }
+        
+        timer?.invalidate()
+        timer = nil
+        LocManager.shared.locManager.stopUpdatingHeading()
+        
+        selfIcon.isHidden = false
+        
+        if selfIcon_invisible != nil {
+            selfIcon_invisible.removeFromSuperview()
+            outsideCircle_invisible.removeFromSuperview()
+        }
+        
+        if outsideCircle_1 != nil {
+            outsideCircle_1.removeFromSuperview()
+            outsideCircle_2.removeFromSuperview()
+            outsideCircle_3.removeFromSuperview()
+        }
+        outsideCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        outsideCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        outsideCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        outsideCircle_1.layer.zPosition = 0
+        outsideCircle_2.layer.zPosition = 1
+        outsideCircle_3.layer.zPosition = 2
+        outsideCircle_1.center = anchorPoint
+        outsideCircle_2.center = anchorPoint
+        outsideCircle_3.center = anchorPoint
+        outsideCircle_1.isUserInteractionEnabled = false
+        outsideCircle_2.isUserInteractionEnabled = false
+        outsideCircle_3.isUserInteractionEnabled = false
+        outsideCircle_1.image = UIImage(named: "myPosition_outside")
+        outsideCircle_2.image = UIImage(named: "myPosition_outside")
+        outsideCircle_3.image = UIImage(named: "myPosition_outside")
+        
+        addSubview(outsideCircle_3)
+        addSubview(outsideCircle_2)
+        addSubview(outsideCircle_1)
         
         selfMarkerAnimation()
     }
     
     func selfMarkerAnimation() {
+        
+        let circleWidth = 100
+        let offSet = -(circleWidth - mapAvatarWidth) / 2
+        
         UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.myPositionCircle_1 != nil {
-                self.myPositionCircle_1.alpha = 0.0
-                self.myPositionCircle_1.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
+            if self.outsideCircle_1 != nil {
+                self.outsideCircle_1.alpha = 0.0
+                self.outsideCircle_1.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
             }
         }), completion: nil)
         
         UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.myPositionCircle_2 != nil {
-                self.myPositionCircle_2.alpha = 0.0
-                self.myPositionCircle_2.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
+            if self.outsideCircle_2 != nil {
+                self.outsideCircle_2.alpha = 0.0
+                self.outsideCircle_2.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
             }
         }), completion: nil)
         
         UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.myPositionCircle_3 != nil {
-                self.myPositionCircle_3.alpha = 0.0
-                self.myPositionCircle_3.frame = CGRect(x: -38, y: -38, width: 120, height: 120)
+            if self.outsideCircle_3 != nil {
+                self.outsideCircle_3.alpha = 0.0
+                self.outsideCircle_3.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
             }
         }), completion: nil)
     }

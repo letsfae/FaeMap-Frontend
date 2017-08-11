@@ -244,7 +244,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarUsernames.resignFirstResponder()
+        schbarUsernames.txtSchField.resignFirstResponder()
     }
     
 }
