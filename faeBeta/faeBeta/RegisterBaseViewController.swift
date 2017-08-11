@@ -16,13 +16,15 @@ class RegisterBaseViewController: UIViewController {
     var uiviewBottom: UIView!
     var activeIndexPath: IndexPath?
     var activityIndicator: UIActivityIndicatorView!
+    var imgProgress: UIImageView!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        //self.navigationController?.isNavigationBarHidden = true
+//        self.navigationController?.isNavigationBarHidden = true
         addTapGesture()
         self.view.backgroundColor = .white
+        automaticallyAdjustsScrollViewInsets = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,13 +59,13 @@ extension RegisterBaseViewController {
     
     func createTopView(_ imageNamed: String) {
         let uiviewTop = UIView(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 50))
-        uiviewTop.backgroundColor = UIColor.white
+        uiviewTop.backgroundColor = .white
         let btnBack = UIButton(frame: CGRect(x: 10, y: 5, width: 40, height: 40))
-        btnBack.setImage(UIImage(named: "Fill 1"), for: UIControlState())
+        btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.setTitleColor(UIColor.blue, for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
+        imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
         imgProgress.image = UIImage(named: imageNamed)
     
         uiviewTop.addSubview(btnBack)
@@ -104,11 +106,11 @@ extension RegisterBaseViewController {
     }
     
     func createTableView(_ height: CGFloat) {
-        tableView = UITableView(frame: CGRect(x: 0, y: 70, width: view.frame.size.width, height: height))
+        tableView = UITableView(frame: CGRect(x: 0, y: 72, width: view.frame.size.width, height: height))
         view.addSubview(tableView)
         
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 100
+        tableView.estimatedRowHeight = 60
         
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
@@ -120,7 +122,7 @@ extension RegisterBaseViewController {
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0)
+        activityIndicator.color = UIColor._2499090()
         
         view.addSubview(activityIndicator)
         view.bringSubview(toFront: activityIndicator)

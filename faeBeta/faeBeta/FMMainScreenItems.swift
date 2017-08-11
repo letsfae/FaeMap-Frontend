@@ -34,14 +34,12 @@ extension FaeMapViewController {
 
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
-        reloadSelfPosAnimation()
         refreshMap(pins: false, users: true, places: true)
     }
     
     func firstUpdateLocation() {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
-        reloadSelfPosAnimation()
         refreshMap(pins: false, users: true, places: true)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
@@ -82,14 +80,6 @@ extension FaeMapViewController {
         
         // Open main map search
         btnMainMapSearch = UIButton()
-        // Vicky 07/28/17
-//        btnMainMapSearch.backgroundColor = .blue
-//        btnMainMapSearch.setTitle("Search Fae Map", for: .normal)
-//        btnMainMapSearch.titleLabel?.lineBreakMode = .byTruncatingTail
-//        btnMainMapSearch.setTitleColor(UIColor._182182182(), for: .normal)
-//        btnMainMapSearch.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-//        btnMainMapSearch.contentHorizontalAlignment = .left
-        // Vicky 07/28/17 End
         imgSchbarShadow.addSubview(btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
@@ -107,16 +97,21 @@ extension FaeMapViewController {
         // Click to back to north
         btnCompass = FMCompass()
         btnCompass.mapView = faeMapView
+        btnCompass.faeMapCtrler = self
         view.addSubview(btnCompass)
+        btnCompass.nameCard = uiviewNameCard
         
         // Click to locate the current location
         btnLocateSelf = FMLocateSelf()
         btnLocateSelf.mapView = faeMapView
+        btnLocateSelf.faeMapCtrler = self
         view.addSubview(btnLocateSelf)
+        btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
         btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
-        btnOpenChat.setImage(UIImage(named: "mainScreenNoChat"), for: .normal)
+        btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
+        btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
         view.addSubview(btnOpenChat)
         btnOpenChat.layer.zPosition = 500

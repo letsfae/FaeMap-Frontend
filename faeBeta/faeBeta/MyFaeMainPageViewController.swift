@@ -83,7 +83,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = UIViewContentMode.scaleAspectFill
         
-        General.shared.avatar(userid: user_id, completion: { (avatarImage) in
+        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
         })
         
@@ -236,7 +236,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     //MARK: add jump to feedback report view
     func jumpToFeedback() {
-        let reportCommentPinVC = ReportCommentPinViewController()
+        let reportCommentPinVC = ReportViewController()
         reportCommentPinVC.reportType = 1
         self.present(reportCommentPinVC, animated: true, completion: nil)
     }

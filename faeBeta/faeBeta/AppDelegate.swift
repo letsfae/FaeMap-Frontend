@@ -17,13 +17,12 @@ import RealmSwift
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
+    let navMain = UINavigationController()
     
     // Reachability variables
-    var vcPresented = false
     var reachaVCPresented = false 
     var reachaVC = DisconnectionViewController()
-    private var reachability: Reachability!
-    let navMain = UINavigationController()
+    var reachability: Reachability!
     
     let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
     let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
@@ -34,17 +33,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
         
-        self.reachability = Reachability.init()
+        reachability = Reachability.init()
         do {
-            try self.reachability.startNotifier()
+            try reachability.startNotifier()
         } catch {
         }
         
-//        GMSServices.provideAPIKey(GoogleMapKey)
-//        GMSPlacesClient.provideAPIKey(GoogleMapKey)
-        
         let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-        
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
         
@@ -52,7 +47,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Database.database().isPersistenceEnabled = true
         
         // Config Realm Database
-        
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 3,
             migrationBlock: { _, _ in
@@ -63,7 +57,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //                }
             }
         )
-        
         // Delete all realm swift database data
         do {
             try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
@@ -72,8 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
         let vcEmptyRoot = InitialPageController()
-//        let vcEmptyRoot = EnableNotificationViewController()
-
         navMain.viewControllers = [vcEmptyRoot]
         navMain.navigationBar.isHidden = true
         
@@ -89,16 +80,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // MARK: - Network Check
     func reachabilityChanged(notification: Notification) {
-        let reachability = notification.object as! Reachability
-        if reachability.isReachable && reachaVCPresented {
-            // print("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-            reachaVC.dismiss(animated: true, completion: nil)
+        let reach = notification.object as! Reachability
+        if reach.isReachable && reachaVCPresented {
+            joshprint("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
+            DisconnectionViewController.shared.dismiss(animated: true, completion: nil)
             reachaVCPresented = false
-        } else if !reachability.isReachable && !reachaVCPresented {
-            // print("[AppDelegate | reachabilityChanged] Network not reachable")
+        } else if !reach.isReachable && !reachaVCPresented {
+            joshprint("[AppDelegate | reachabilityChanged] Network not reachable")
             reachaVCPresented = true
             window?.makeKeyAndVisible()
-            window?.visibleViewController?.present(reachaVC, animated: true, completion: nil)
+            window?.visibleViewController?.present(DisconnectionViewController.shared, animated: true, completion: nil)
         }
     }
     
@@ -106,31 +97,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
     }
     
-//    func popUpEnableLocationViewController() {
-//        print("[AppDelegate] popUpEnableLocationVC")
-//        let vc = EnableLocationViewController()
-//            //UIViewController = UIStoryboard(name: "EnableLocationAndNotification", bundle: nil).instantiateViewController(withIdentifier: "EnableLocationViewController") as! EnableLocationViewController
-//        self.window?.makeKeyAndVisible()
-//        self.window?.visibleViewController?.present(vc, animated: true, completion: nil)
-//    }
-    
     func popUpWelcomeView() {
         let vc = WelcomeViewController()
-        self.window?.makeKeyAndVisible()
-        self.window?.visibleViewController?.navigationController?.pushViewController(vc, animated: true)
+        window?.makeKeyAndVisible()
+        window?.visibleViewController?.navigationController?.pushViewController(vc, animated: true)
     }
     
     func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
         UIApplication.shared.registerForRemoteNotifications()
-        /*
-         let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-         print(notificationType?.types)
-         if notificationType?.types == UIUserNotificationType.None {
-         jumpToNotificationEnable()
-         }
-         else{
-         print("Notification enabled")
-         }*/
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -177,85 +151,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
         print("[applicationWillEnterForeground]")
-//        let authstate = CLLocationManager.authorizationStatus()
-//        if authstate != .authorizedAlways || authstate != .authorizedWhenInUse {
-//            print("[applicationWillEnterForeground]")
-//            self.popUpEnableLocationViewController()
-//        }
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
     }
     
-    var time: Double = 0
-    
-    func runSync() {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + time) {
-            self.time = 10
-            if Key.shared.is_Login == 0 {
-                print("not log in, sync fail")
-                self.runSync()
-            } else {
-                let push = FaePush()
-                push.getSync({ (status: Int!, _: Any?) in
-                    //                print("[runSync] status", status)
-                    if status / 100 == 2 {
-                        self.reachaVCPresented = false
-                        // success
-                    } else if status == 401 {
-                        self.reachaVCPresented = false
-                        Key.shared.is_Login = 0
-                        DispatchQueue.main.async {
-                            self.popUpWelcomeView()
-                        }
-                    } else if !self.reachaVCPresented {
-                        DispatchQueue.main.async {
-                            self.reachaVCPresented = true
-                            self.window?.makeKeyAndVisible()
-                            self.navMain.visibleViewController?.present(self.reachaVC, animated: true, completion: nil)
-                        }
-                    }
-                    self.runSync()
-                })
-            }
-        }
-    }
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-        let shareAPI = LocalStorageManager()
-        _ = shareAPI.readLogInfo()
+//        _ = LocalStorageManager.shared.readLogInfo()
+//
+//        let isFirstLaunch = shareAPI.isFirstPushLaunch()
+        print("[applicationDidBecomeActive]")
         
-        Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(AppDelegate.runSync), userInfo: nil, repeats: true)
-        
-        self.runSync()
-        let isFirstLaunch = shareAPI.isFirstPushLaunch()
-        //        let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-        //        print(notificationType?.types)
-        if isFirstLaunch == true {
-            // waiting
-        } else {
-            /* while (true) {
-             let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-             print(notificationType?.types)
-             } */
-//            let seconds = 30.0
-//            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
-//            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
-//            
-//            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-//                let authstate = CLLocationManager.authorizationStatus()
-//                if authstate != .authorizedAlways {
-//                    self.popUpEnableLocationViewController()
-//                }
-//            })
-            /*
-             let notificationType = UIApplication.sharedApplication().currentUserNotificationSettings()
-             print(notificationType?.types)
-             if notificationType?.types == UIUserNotificationType.None {
-             jumpToNotificationEnable()
-             }
-             else{
-             print("Notification enabled")
-             }*/
+        if EnableNotificationViewController.boolCurtVCisNoti {
+            checkNotificationStatus()
         }
     }
     
@@ -325,6 +233,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
                 abort()
             }
+        }
+    }
+    
+    func checkNotificationStatus() {
+        //        let center = UNUserNotificationCenter.current()
+        //        center.getNotificationSettings { (settings) in
+        //            if settings.authorizationStatus == .authorized {
+        //                print("Push authorized")
+        //            } else {
+        //                print("Push not authorized")
+        //            }
+        //        }
+        
+        let notificationType = UIApplication.shared.currentUserNotificationSettings?.types
+        if notificationType?.rawValue == 7 {   // notification is on
+            // print("notification on")
+            UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
         }
     }
 }

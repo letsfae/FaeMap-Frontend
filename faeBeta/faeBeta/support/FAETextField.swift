@@ -73,10 +73,10 @@ class FAETextField: UITextField {
         setup()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        setup()
-    }
+//    override func awakeFromNib() {
+//        super.awakeFromNib()
+//        setup()
+//    }
     
     fileprivate func setup() {
         self.autocorrectionType = .no

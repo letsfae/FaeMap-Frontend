@@ -23,11 +23,11 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == "\(user_id)" {
+        if data.senderId == "\(Key.shared.user_id)" {
             cell.textView?.textColor = UIColor.white
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
-            cell.textView?.textColor = UIColor(red: 107.0/255.0, green: 105.0/255.0, blue: 105.0/255.0, alpha: 1.0)
+            cell.textView?.textColor = UIColor._107105105()
             cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
         cell.avatarImageView.layer.cornerRadius = 17.5
@@ -67,7 +67,7 @@ extension ChatViewController {
 
             //Do not allow user to send two heart continously
             let userId = object["senderId"] as? String
-            let isOutGoingMessage = userId! == "\(user_id)"
+            let isOutGoingMessage = userId! == "\(Key.shared.user_id)"
             
 
             if object["type"] as! String == "sticker" && object["isHeartSticker"] != nil && object["isHeartSticker"] as! Bool == true && isOutGoingMessage{
@@ -91,7 +91,7 @@ extension ChatViewController {
         
         let data = messages[indexPath.row]
         
-        if data.senderId == "\(user_id)" {
+        if data.senderId == "\(Key.shared.user_id)" {
             if data.isMediaMessage {
                 outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleRed())
             }

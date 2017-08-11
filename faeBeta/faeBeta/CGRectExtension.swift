@@ -14,9 +14,9 @@ extension CGRect {
      Init a CGRect with auto-layout feature
     */
     init(x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat) {
-        let newX = x * screenHeightFactor
+        let newX = x * screenWidthFactor
         let newY = y * screenHeightFactor
-        let newW = w * screenHeightFactor
+        let newW = w * screenWidthFactor
         let newH = h * screenHeightFactor
         self.init(x: newX, y: newY, width: newW, height: newH)
     }

@@ -230,7 +230,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
     if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userID)'").first {
         if let etag = type == 2 ? avatarRealm.smallAvatarEtag : avatarRealm.largeAvatarEtag {
             urlRequest.setValue(etag, forHTTPHeaderField: "If-None-Match")
-            print("[getAvatar - \(userID)] If-None-Match ", etag)
+            joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
         }
         avatarInRealm = type == 2 ? avatarRealm.userSmallAvatar as Data? : avatarRealm.userLargeAvatar as Data?
     }
@@ -250,15 +250,15 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
                     completion(statusCode, "", nil)
                     return
                 }
-                print("[getAvatar - \(userID)] before", etag)
+                joshprint("[getAvatar - \(userID)] before", etag)
                 etag = etag.removeSpecialChars()
-                print("[getAvatar - \(userID)] after ", etag)
+                joshprint("[getAvatar - \(userID)] after ", etag)
                 if statusCode / 100 == 3 {
                     completion(304, etag, avatarInRealm)
-                    print("[getAvatar - \(userID)] 304")
+                    joshprint("[getAvatar - \(userID)] 304")
                     return
                 }
-                print("[getAvatar - \(userID)] check statusCode", statusCode)
+                joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
                 if let reamlUser = realm.objects(RealmUser.self).filter("userID == '\(userID)'").first {
                     try! realm.write {
                         if type == 0 {

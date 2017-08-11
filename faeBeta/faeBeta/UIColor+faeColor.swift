@@ -46,6 +46,10 @@ extension UIColor {
         return UIColor(r: 107, g: 107, b: 107, alpha: 100)
     }
     
+    class func _107105105() -> UIColor {
+        return UIColor(r: 107, g: 105, b: 105, alpha: 100)
+    }
+    
     class func _210210210() -> UIColor {
         return UIColor(r: 210, g: 210, b: 210, alpha: 100)
     }

@@ -17,7 +17,6 @@ import UIKit
 
 extension ContactsViewController {
     
-    
     // calls other main functions. Contains and configures uiviewOverlayGrayOpaque variable to 
     // set up the "background blur effect" when the pop-up menu occurs.
     func setupViews() {
@@ -42,22 +41,20 @@ extension ContactsViewController {
             self.uiviewNotification.alpha = 1
             self.uiviewOverlayGrayOpaque.alpha = 0.7
         }, completion: nil)
-        if (type == 0){
+        if type == BLOCK {
             notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(208)]", options: [], views: uiviewNotification)
             lblNotificationText.text = "Are you sure you want to block this person?"
-            btnYes.tag = 0
             lblBlockSetting.alpha = 1
-        } else if(type == 1) {
+        } else if type == WITHDRAW {
             lblBlockSetting.alpha = 0
             notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(161)]", options: [], views: uiviewNotification)
             lblNotificationText.text = "Are you sure you want to withdraw this request?"
-            btnYes.tag = 1
-        } else if(type == 2) {
+        } else if type == RESEND {
             lblBlockSetting.alpha = 0
             notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(161)]", options: [], views: uiviewNotification)
             lblNotificationText.text = "Are you sure you want to resend this request?"
-            btnYes.tag = 2
         }
+        btnYes.tag = type
     }
     
     // this function stops revealing both the "noti" UI and the "chooseNoti" UI by calling both functions.
@@ -225,33 +222,52 @@ extension ContactsViewController {
     // 0 is for block, 1 is for withdrawing a request, and 2 is to resend a request.
     func yesButtonFunction(button: UIButton) {
         closeNoti()
-        if (button.tag == 0) {
-            blockRequest()
-        }
-        else if (button.tag == 1) {
-            withdrawRequest()
-        }
-        else if (button.tag == 2) {
-        }
-    }
-    
-    func withdrawRequest() {
-        // call api to withdraw this request
-        animateWithdrawal(listType: 2)
+        animateWithdrawal(listType: button.tag)
+//        switch button.tag {
+//        case BLOCK:
+////            blockRequest()
+//            animateWithdrawal(listType: BLOCK)
+//            break
+//        case WITHDRAW:
+////            withdrawRequest()
+//            animateWithdrawal(listType: WITHDRAW)
+//            break
+//        case RESEND:
+//            animateWithdrawal(listType: RESEND)
+//            break
+//        default:
+//            break
+//        }
     }
     
     func ignoreRequest() {
         //api request here
-        animateWithdrawal(listType: 1)
+        animateWithdrawal(listType: IGNORE)
         closeChooseNoti()
     }
     
     func confirmBlockRequest() {
-        self.showNoti(type: 0)
+        self.showNoti(type: BLOCK)
     }
     
-    func blockRequest() {
-        // api request
-        animateWithdrawal(listType: 1)
-    }
+//    func withdrawRequest() {
+//        // call api to withdraw this request
+//        animateWithdrawal(listType: WITHDRAW)
+//    }
+    
+//    func blockRequest() {
+//        // api request
+//        animateWithdrawal(listType: BLOCK)
+//    }
+    
+//    func resendRequest() {
+////        let userId = testArrayRequested[indexPathGlobal.row].userId
+//        apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
+//            if status / 100 == 2 {
+//                print("[Contacts resend friend request successfully]")
+//            } else {
+//                print("[Contacts resend friend request fail]")
+//            }
+//        }
+//    }
 }

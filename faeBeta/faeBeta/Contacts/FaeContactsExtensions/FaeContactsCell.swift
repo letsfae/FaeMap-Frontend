@@ -40,6 +40,7 @@ class FaeContactsCell: UITableViewCell {
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
 //        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)
+        addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserName)
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
@@ -47,16 +48,13 @@ class FaeContactsCell: UITableViewCell {
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
 //        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
+        addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserSaying)
+        addConstraintsWithFormat("V:|-17-[v0(20)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-        
-        addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserName)
-        addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(20)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
-        
     }
 }

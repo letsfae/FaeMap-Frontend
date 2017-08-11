@@ -34,7 +34,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        setupNavigationBar()
+        super.viewWillAppear(animated)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,10 +52,6 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     // MARK: - Setup
     fileprivate func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(WelcomeViewController.loginButtonTapped), name: NSNotification.Name(rawValue: "resetPasswordSucceed"), object: nil)
-    }
-    
-    fileprivate func setupNavigationBar() {
-        navigationController?.isNavigationBarHidden = true
     }
     
     fileprivate func setupViewFrame() {
@@ -92,7 +88,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // look around label
         btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 198 * screenHeightFactor, width: 125, height: 22))
         btnLookAround.center.x = screenWidth / 2
-        btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
+//        btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
+        btnLookAround.setTitle("Look Around", for: .normal)
+        btnLookAround.setTitleColor(UIColor._2499090(), for: .normal)
+        btnLookAround.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16)
         view.insertSubview(btnLookAround, at: 0)
         
         // log in button
@@ -102,19 +101,19 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor._2499090()
-        btnLogin.addTarget(self, action: #selector(WelcomeViewController.loginButtonTapped), for: .touchUpInside)
+        btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         view.insertSubview(btnLogin, at: 0)
         view.bringSubview(toFront: btnLogin)
         
         // create account button
         btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
-        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create a Fae Account", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
+        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create Fae Account", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
         btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
-        btnCreateAccount.addTarget(self, action: #selector(WelcomeViewController.jumpToSignUp), for: .touchUpInside)
+        btnCreateAccount.addTarget(self, action: #selector(jumpToSignUp), for: .touchUpInside)
         view.insertSubview(btnCreateAccount, at: 0)
         view.bringSubview(toFront: btnCreateAccount)
         
