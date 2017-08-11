@@ -20,7 +20,7 @@ class RegisterBaseViewController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.isNavigationBarHidden = true
+        //self.navigationController?.isNavigationBarHidden = true
         addTapGesture()
         self.view.backgroundColor = .white
     }

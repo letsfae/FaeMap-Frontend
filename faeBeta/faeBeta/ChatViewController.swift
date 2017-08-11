@@ -665,7 +665,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         // TODO
         //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
-        let vc = FullAlbumCollectionViewController()
+        let layout = UICollectionViewFlowLayout()
+        //layout.scrollDirection = .vertical
+        //layout.itemSize = CGSize(width: (screenWidth - 4) / 3, height: (screenWidth - 4) / 3)
+        //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
+        let vc = FullAlbumCollectionViewController(collectionViewLayout: layout)
+        //vc.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
         vc.imageDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -852,7 +857,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showFullLocationView(_ sender : UIButton) {
         // TODO
-        let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        //let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        let vc = ChatSendLocationController()
         vc.locationDelegate = self
         self.navigationController?.pushViewController(vc, animated: true)
     }

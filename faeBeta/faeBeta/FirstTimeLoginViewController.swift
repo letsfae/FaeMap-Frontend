@@ -212,20 +212,22 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                         self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
                         return
                     }
-                    let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                    let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                    //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                    //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                    let imagePicker = FullAlbumCollectionViewController()
                     imagePicker.imageDelegate = self
                     imagePicker.isCSP = false
                     imagePicker._maximumSelectedPhotoNum = 1
-                    self.present(nav, animated: true, completion: nil)
+                    self.present(imagePicker, animated: true, completion: nil)
                 })
             } else {
-                let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
+                //let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
+                let albumPicker = FullAlbumCollectionViewController()
                 albumPicker.imageDelegate = self
                 albumPicker.isCSP = false
                 albumPicker._maximumSelectedPhotoNum = 1
-                self.present(nav, animated: true, completion: nil)
+                self.present(albumPicker, animated: true, completion: nil)
             }
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
