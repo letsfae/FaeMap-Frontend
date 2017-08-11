@@ -9,18 +9,21 @@
 import UIKit
 
 class LocalStorageManager: NSObject {
+    
+    static let shared = LocalStorageManager()
+    
     fileprivate let defaults = UserDefaults.standard
     func saveString(_ key: String, value: String) {
-        self.defaults.set(value, forKey: key)
+        defaults.set(value, forKey: key)
     }
-    func saveInt(_ key:String,value:Int){
-        self.defaults.set(value, forKey: key)
+    func saveInt(_ key: String, value: Int) {
+        defaults.set(value, forKey: key)
     }
-    func saveNumber(_ key:String,value:NSNumber){
-        self.defaults.set(value, forKey: key)
+    func saveNumber(_ key: String, value: NSNumber) {
+        defaults.set(value, forKey: key)
     }
     
-    func readByKey(_ key:String)->AnyObject? {
+    func readByKey(_ key: String) -> AnyObject? {
         //        return self.defaults.objectForKey(key)?
         if let obj = self.defaults.object(forKey: key) {
             return obj as AnyObject?
@@ -36,11 +39,11 @@ class LocalStorageManager: NSObject {
     }
     func readUsername() -> Bool {
         if username == "" {
-            if let usernames = readByKey("username"){
+            if let usernames = readByKey("username") {
                 username = usernames as! String
                 return true
             }
-            //should we need to read from internet
+            // should we need to read from internet
             return false
         }
         return true
@@ -48,55 +51,55 @@ class LocalStorageManager: NSObject {
     func saveEmail() {
         saveString("userEmail", value: userEmail)
     }
-    func readEmail()->Bool{
+    func readEmail() -> Bool {
         if userEmail == "" {
-            if let useremail = readByKey("userEmail"){
+            if let useremail = readByKey("userEmail") {
                 userEmail = useremail as! String
                 return true
             }
-            //should we need to read from internet
+            // should we need to read from internet
             return false
         }
         return true
     }
-    func savePhoneNumber()->Bool{
+    func savePhoneNumber() -> Bool {
         if userPhoneNumber != nil {
             saveString("userPhoneNumber", value: userPhoneNumber!)
             return true
         }
         return false
     }
-    func readPhoneNumber()->Bool{
-        if(userPhoneNumber == nil){
-            if let userephonenumber = readByKey("userPhoneNumber"){
+    func readPhoneNumber() -> Bool {
+        if userPhoneNumber == nil {
+            if let userephonenumber = readByKey("userPhoneNumber") {
                 userPhoneNumber = userephonenumber as? String
                 return true
             }
-            //should we need to read from internet
+            // should we need to read from internet
             return false
         }
         return true
     }
     
-    func savePassword() -> Bool{
+    func savePassword() -> Bool {
         if userPassword != "" {
             saveString("userPassword", value: userPassword)
             return true
         }
         return false
     }
-    func readPassword() -> Bool{
+    func readPassword() -> Bool {
         if userPassword == "" {
-            if let userpassword = readByKey("userPassword"){
+            if let userpassword = readByKey("userPassword") {
                 userPassword = userpassword as! String
                 return true
             }
-            //should we need to read from internet
+            // should we need to read from internet
             return false
         }
         return true
     }
-    func logInStorage(){
+    func logInStorage() {
         saveString("userToken", value: userToken)
         saveString("userTokenEncode", value: userTokenEncode)
         saveInt("session_id", value: session_id)
@@ -136,6 +139,9 @@ class LocalStorageManager: NSObject {
                 userLastname = readByKey("userLastname") as! String
                 userBirthday = readByKey("userBirthday") as! String
                 userGender = readByKey("userGender") as! Int
+                if readByKey("userMiniAvatar") != nil {
+                    userMiniAvatar = readByKey("userMiniAvatar") as! Int
+                }
             }
         }
         return false
@@ -150,4 +156,3 @@ class LocalStorageManager: NSObject {
         return isFirstLaunch
     }
 }
-

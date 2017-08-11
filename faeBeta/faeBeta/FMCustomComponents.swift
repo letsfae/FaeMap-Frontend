@@ -195,7 +195,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     func show(avatar: UIImage, completionHandler: @escaping () -> Void) {
         boolCardOpened = true
         btnProfile.isHidden = self.userId == Key.shared.user_id
-        self.imgMiniAvatar.image = avatar
+        imgMiniAvatar.image = avatar
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
@@ -222,6 +222,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         boolCardOpened = false
         self.lblNickName.text = ""
         self.lblUserName.text = ""
+        self.lblNickName.frame = self.initialFrame
+        self.lblNickName.alpha = 0
+        self.lblUserName.frame = self.initialFrame
+        self.lblUserName.alpha = 0
         UIView.animate(withDuration: 0.3, animations: {
             self.imgBackShadow.frame = self.secondaryFrame
             self.imgCover.frame = self.secondaryFrame
@@ -229,10 +233,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgAvatar.frame = self.secondaryFrame
             self.imgMiniAvatar.frame = self.secondaryFrame
             self.btnChat.frame = self.secondaryFrame
-            self.lblNickName.frame = self.secondaryFrame
-            self.lblNickName.alpha = 0
-            self.lblUserName.frame = self.secondaryFrame
-            self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.secondaryFrame
             self.btnOptions.frame = self.secondaryFrame
             self.btnProfile.frame = self.secondaryFrame
@@ -251,10 +251,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgAvatar.frame = self.initialFrame
             self.imgMiniAvatar.frame = self.initialFrame
             self.btnChat.frame = self.initialFrame
-            self.lblNickName.frame = CGRect(x: 114, y: 451, w: 0, h: 0)
-            self.lblNickName.alpha = 0
-            self.lblUserName.frame = self.initialFrame
-            self.lblUserName.alpha = 0
             self.imgMiddleLine.frame = self.initialFrame
             self.btnOptions.frame = self.initialFrame
             self.btnProfile.frame = self.initialFrame
