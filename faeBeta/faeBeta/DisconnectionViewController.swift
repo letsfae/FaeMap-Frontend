@@ -10,6 +10,8 @@ import UIKit
 
 class DisconnectionViewController: UIViewController {
     
+    static let shared = DisconnectionViewController()
+    
     var uiviewNavBar: UIView!
     var btnNavBar: UIButton!
     var lblFailMessage: UILabel!
