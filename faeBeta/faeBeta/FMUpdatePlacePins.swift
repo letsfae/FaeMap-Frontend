@@ -63,13 +63,17 @@ extension FaeMapViewController {
             selectedAnnView = anView
             selectedAnn = firstAnn
         }
-        
-        guard let _ = firstAnn.pinInfo as? PlacePin else { return }
+        guard firstAnn.type == "place" else { return }
+        guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         placeResultBar.fadeIn()
         placeResultBar.resetSubviews()
         placeResultBar.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: true)
-        placeResultBar.loadingData(current: cluster)
+        if swipingState == .map {
+            placeResultBar.loadingData(current: cluster)
+        } else if swipingState == .multipleSearch {
+            placeResultBar.loading(current: placePin)
+        }
     }
     
     func updateTimerForLoadRegionPlacePin() {

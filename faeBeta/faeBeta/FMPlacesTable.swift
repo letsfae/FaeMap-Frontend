@@ -19,11 +19,30 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         loadContent()
         alpha = 0
         layer.zPosition = 605
-        
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func show() {
+        self.frame.size.height = 102
+        self.alpha = 1
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+            self.frame.size.height = screenHeight - 180
+        }) { _ in
+            
+        }
+    }
+    
+    func hide() {
+        self.frame.size.height = 102
+        UIView.animate(withDuration: 0.3, animations: {
+            self.frame.size.height = 102
+            self.alpha = 0
+        }) { _ in
+            
+        }
     }
     
     fileprivate func loadContent() {
@@ -110,32 +129,32 @@ class FMPlaceResultBarCell: UITableViewCell {
         imgType.layer.cornerRadius = 5
         imgType.clipsToBounds = true
         addSubview(imgType)
-        addConstraintsWithFormat("H:|-15-[v0(66)]", options: [], views: imgType)
-        addConstraintsWithFormat("V:|-18-[v0(66)]", options: [], views: imgType)
+        addConstraintsWithFormat("H:|-9-[v0(66)]", options: [], views: imgType)
+        addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgType)
         
         lblName = UILabel()
         addSubview(lblName)
         lblName.textAlignment = .left
         lblName.textColor = UIColor._898989()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblName)
-        addConstraintsWithFormat("V:|-23-[v0(20)]", options: [], views: lblName)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblName)
+        addConstraintsWithFormat("V:|-17-[v0(20)]", options: [], views: lblName)
         
         lblAddr = UILabel()
         addSubview(lblAddr)
         lblAddr.textAlignment = .left
         lblAddr.textColor = UIColor._107107107()
         lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblAddr)
-        addConstraintsWithFormat("V:|-46-[v0(16)]", options: [], views: lblAddr)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblAddr)
+        addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblAddr)
         
         lblHours = UILabel()
         addSubview(lblHours)
         lblHours.textAlignment = .left
         lblHours.textColor = UIColor._107107107()
         lblHours.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblHours)
-        addConstraintsWithFormat("V:|-63-[v0(16)]", options: [], views: lblHours)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblHours)
+        addConstraintsWithFormat("V:|-57-[v0(16)]", options: [], views: lblHours)
         lblHours.text = "Open 24 Hours"
         
         lblPrice = UILabel()
@@ -143,8 +162,8 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblPrice.textAlignment = .right
         lblPrice.textColor = UIColor._107107107()
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        addConstraintsWithFormat("H:[v0(32)]-18-|", options: [], views: lblPrice)
-        addConstraintsWithFormat("V:|-69-[v0(18)]", options: [], views: lblPrice)
+        addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
+        addConstraintsWithFormat("V:|-69-[v0(12)]", options: [], views: lblPrice)
         lblPrice.text = "$$$$"
     }
 }

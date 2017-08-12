@@ -124,7 +124,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             updateUserPins()
         }
         if btnCompass != nil { btnCompass.rotateCompass() }
-        if placeResultBar.tag > 0 { placeResultBar.annotations = visiblePlaces() }
+        if placeResultBar.tag > 0 && PLACE_ENABLE { placeResultBar.annotations = visiblePlaces() }
         
         // re-start wave animation of self avatar annotation view
         DispatchQueue.global(qos: .userInitiated).async {

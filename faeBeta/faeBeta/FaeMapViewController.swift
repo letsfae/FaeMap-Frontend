@@ -68,6 +68,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var placeResultTbl = FMPlacesTable()
     var btnTapToShowResultTbl: UIButton!
     
+    var swipingState: PlaceResultBarState = .map
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,8 +85,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadPlaceDetail()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
-        joshprint("size:")
-        joshprint(#imageLiteral(resourceName: "tapToShowResultTbl").size)
     }
     
     override func viewWillAppear(_ animated: Bool) {
