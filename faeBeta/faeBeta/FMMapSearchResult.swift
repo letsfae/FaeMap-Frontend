@@ -36,6 +36,7 @@ extension FaeMapViewController: MapSearchDelegate {
         }
         placeResultTbl.arrPlaces = places
         placeResultTbl.tblResults.reloadData()
+        placeResultTbl.lblNumResults.text = places.count == 1 ? "1 Result" : "\(places.count) Results"
     }
     
     func backToMainMapFromMapSearch() {
