@@ -65,6 +65,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
     
+    var placeResultTbl = FMPlacesTable()
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

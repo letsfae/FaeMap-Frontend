@@ -31,6 +31,11 @@ extension FaeMapViewController: MapSearchDelegate {
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
         updateUI(searchText: searchText)
+        UIView.animate(withDuration: 0.3) {
+            self.placeResultTbl.alpha = 1
+        }
+        placeResultTbl.arrPlaces = places
+        placeResultTbl.tblResults.reloadData()
     }
     
     func backToMainMapFromMapSearch() {
