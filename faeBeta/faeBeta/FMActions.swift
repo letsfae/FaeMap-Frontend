@@ -43,10 +43,12 @@ extension FaeMapViewController {
         btnClearSearchRes.isHidden = true
         PLACE_ENABLE = true
         placeResultBar.alpha = 0
+        placeResultBar.state = .map
         placeResultTbl.alpha = 0
         btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)
         mapView(faeMapView, regionDidChangeAnimated: false)
+        mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
@@ -60,7 +62,9 @@ extension FaeMapViewController {
         self.present(leftMenuVC, animated: false, completion: nil)
     }
     
-    
+    func actionShowResultTbl(_ sender: UIButton) {
+        placeResultTbl.show()
+    }
     
     func actionChatWindowShow(_ sender: UIButton) {
         uiviewNameCard.hide() {

@@ -12,8 +12,14 @@ import CCHMapClusterController
 
 protocol PlaceViewDelegate: class {
     func animateTo(annotation: CCHMapClusterAnnotation?)
-    func goToNext(annotation: CCHMapClusterAnnotation?)
-    func goToPrev(annotation: CCHMapClusterAnnotation?)
+    func goToNext(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
+    func goToPrev(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
+}
+
+enum PlaceResultBarState: String {
+    case singleSearch
+    case multipleSearch
+    case map
 }
 
 class PlaceResultView: UIView {
@@ -27,15 +33,19 @@ class PlaceResultView: UIView {
     var boolLeft = false
     var boolRight = false
     
-    var annotations = [CCHMapClusterAnnotation]() {
-        didSet {
-            boolLeft = annotations.count > 1
-            boolRight = annotations.count > 1
-        }
-    }
+    var annotations = [CCHMapClusterAnnotation]()
+    
+    var places = [PlacePin]()
     
     var prevAnnotation: CCHMapClusterAnnotation!
     var nextAnnotation: CCHMapClusterAnnotation!
+    
+    var state: PlaceResultBarState = .map {
+        didSet {
+            boolLeft = annotations.count > 1 || places.count > 1
+            boolRight = annotations.count > 1 || places.count > 1
+        }
+    }
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 102))
@@ -67,6 +77,7 @@ class PlaceResultView: UIView {
     }
     
     func load(for placeInfo: PlacePin) {
+        state = .singleSearch
         imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
         imgBack_1.lblName.text = placeInfo.name
         imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
@@ -75,7 +86,47 @@ class PlaceResultView: UIView {
         boolRight = false
     }
     
+    var prevPlacePin: PlacePin!
+    var nextPlacePin: PlacePin!
+    
+    func loading(current: PlacePin) {
+        state = .multipleSearch
+        guard let curt_idx = places.index(of: current) else { return }
+        imgBack_1.imgType.image = UIImage(named: "place_result_\(current.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+        imgBack_1.lblName.text = "\(curt_idx+1). " + current.name
+        imgBack_1.lblAddr.text = current.address1 + ", " + current.address2
+        self.alpha = 1
+        guard places.count > 0 else { return }
+        var prev_idx = places.count - 1
+        var next_idx = 0
+        for i in 0..<places.count {
+            if places[i] == current {
+                joshprint("[loading], find equals")
+                prev_idx = (i - 1) < 0 ? places.count - 1 : i - 1
+                next_idx = (i + 1) >= places.count ? 0 : i + 1
+                joshprint("[loading], count = \(places.count)")
+                joshprint("[loading],     i = \(i)")
+                joshprint("[loading],  prev = \(prev_idx)")
+                joshprint("[loading],  next = \(next_idx)")
+                break
+            } else {
+                continue
+            }
+        }
+        prevPlacePin = places[prev_idx]
+        nextPlacePin = places[next_idx]
+        
+        imgBack_0.imgType.image = UIImage(named: "place_result_\(prevPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+        imgBack_0.lblName.text = "\(prev_idx+1). " + prevPlacePin.name
+        imgBack_0.lblAddr.text = prevPlacePin.address1 + ", " + prevPlacePin.address2
+        
+        imgBack_2.imgType.image = UIImage(named: "place_result_\(nextPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+        imgBack_2.lblName.text = "\(next_idx+1). " + nextPlacePin.name
+        imgBack_2.lblAddr.text = nextPlacePin.address1 + ", " + nextPlacePin.address2
+    }
+    
     func loadingData(current: CCHMapClusterAnnotation) {
+        state = .map
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
@@ -135,7 +186,11 @@ class PlaceResultView: UIView {
             self.imgBack_0.frame.origin.x = 2
             self.imgBack_1.frame.origin.x += screenWidth + 2
         }, completion: {_ in
-            self.delegate?.goToPrev(annotation: self.prevAnnotation)
+            if self.state == .map {
+                self.delegate?.goToPrev(annotation: self.prevAnnotation, place: nil)
+            } else if self.state == .multipleSearch {
+                self.delegate?.goToPrev(annotation: nil, place: self.prevPlacePin)
+            }
             self.resetSubviews()
         })
     }
@@ -144,8 +199,12 @@ class PlaceResultView: UIView {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.imgBack_1.frame.origin.x = -screenWidth + 2
             self.imgBack_2.frame.origin.x = 2
-        }, completion: {_ in
-            self.delegate?.goToNext(annotation: self.nextAnnotation)
+        }, completion: { _ in
+            if self.state == .map {
+                self.delegate?.goToNext(annotation: self.nextAnnotation, place: nil)
+            } else if self.state == .multipleSearch {
+                self.delegate?.goToNext(annotation: nil, place: self.nextPlacePin)
+            }
             self.resetSubviews()
         })
     }

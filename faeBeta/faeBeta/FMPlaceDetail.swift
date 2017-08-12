@@ -24,24 +24,67 @@ extension FaeMapViewController: PlaceViewDelegate {
         btnTapToShowResultTbl.center.y = 181
         view.addSubview(btnTapToShowResultTbl)
         btnTapToShowResultTbl.alpha = 0
+        btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)
     }
     
-    func goToNext(annotation: CCHMapClusterAnnotation?) {
-        guard let anno = annotation else { return }
+    // PlaceViewDelegate
+    func goToNext(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
         deselectAllAnnotations()
-        boolPreventUserPinOpen = true
-        faeMapView.selectAnnotation(anno, animated: false)
-        boolPreventUserPinOpen = false
+        if let anno = annotation {
+            swipingState = .map
+            boolPreventUserPinOpen = true
+            faeMapView.selectAnnotation(anno, animated: false)
+            boolPreventUserPinOpen = false
+        }
+        if let placePin = place {
+            swipingState = .multipleSearch
+            var desiredAnno: CCHMapClusterAnnotation!
+            for anno in faeMapView.annotations {
+                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
+                guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
+                if placeInfo == placePin {
+                    joshprint("[goToNext] find equal place")
+                    desiredAnno = cluster
+                    break
+                }
+            }
+            if desiredAnno != nil {
+                joshprint("[goToNext] selected place")
+                faeMapView.selectAnnotation(desiredAnno, animated: false)
+            }
+        }
     }
     
-    func goToPrev(annotation: CCHMapClusterAnnotation?) {
-        guard let anno = annotation else { return }
+    // PlaceViewDelegate
+    func goToPrev(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
         deselectAllAnnotations()
-        boolPreventUserPinOpen = true
-        faeMapView.selectAnnotation(anno, animated: false)
-        boolPreventUserPinOpen = false
+        if let anno = annotation {
+            boolPreventUserPinOpen = true
+            faeMapView.selectAnnotation(anno, animated: false)
+            boolPreventUserPinOpen = false
+        }
+        if let placePin = place {
+            swipingState = .multipleSearch
+            var desiredAnno: CCHMapClusterAnnotation!
+            for anno in faeMapView.annotations {
+                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
+                guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
+                if placeInfo == placePin {
+                    joshprint("[goToPrev] find equal place")
+                    desiredAnno = cluster
+                    break
+                }
+            }
+            if desiredAnno != nil {
+                joshprint("[goToPrev] selected place")
+                faeMapView.selectAnnotation(desiredAnno, animated: false)
+            }
+        }
     }
     
+    // PlaceViewDelegate
     func animateTo(annotation: CCHMapClusterAnnotation?) {
         guard let anno = annotation else { return }
         deselectAllAnnotations()

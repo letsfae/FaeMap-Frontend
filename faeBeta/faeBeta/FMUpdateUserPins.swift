@@ -29,6 +29,7 @@ extension FaeMapViewController {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
         guard firstAnn.id != -1 else { return }
+        guard firstAnn.type == "user" else { return }
         boolCanUpdateUserPin = false
         boolCanOpenPin = false
         mapGesture(isOn: false)
