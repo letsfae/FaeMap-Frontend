@@ -14,6 +14,8 @@ extension FaeMapViewController: PlaceViewDelegate {
     func loadPlaceDetail() {
         view.addSubview(placeResultBar)
         placeResultBar.delegate = self
+        
+        view.addSubview(placeResultTbl)
     }
     
     func goToNext(annotation: CCHMapClusterAnnotation?) {
