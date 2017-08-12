@@ -212,7 +212,7 @@ class PlaceView: UIImageView {
     }
     
     private func loadContent() {
-        contentMode = .scaleAspectFit
+        contentMode = .scaleAspectFill
         image = #imageLiteral(resourceName: "placeResult_shadow_new")
         
         imgType = UIImageView()
