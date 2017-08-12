@@ -16,6 +16,14 @@ extension FaeMapViewController: PlaceViewDelegate {
         placeResultBar.delegate = self
         
         view.addSubview(placeResultTbl)
+        
+        btnTapToShowResultTbl = UIButton()
+        btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
+        btnTapToShowResultTbl.frame.size = CGSize(width: 58, height: 30)
+        btnTapToShowResultTbl.center.x = screenWidth / 2
+        btnTapToShowResultTbl.center.y = 181
+        view.addSubview(btnTapToShowResultTbl)
+        btnTapToShowResultTbl.alpha = 0
     }
     
     func goToNext(annotation: CCHMapClusterAnnotation?) {

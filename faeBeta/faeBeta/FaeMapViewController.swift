@@ -66,6 +66,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var HIDE_AVATARS = false
     
     var placeResultTbl = FMPlacesTable()
+    var btnTapToShowResultTbl: UIButton!
     
     // System Functions
     override func viewDidLoad() {
@@ -81,7 +82,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadButton()
         loadMapFilter()
         loadPlaceDetail()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        joshprint("size:")
+        joshprint(#imageLiteral(resourceName: "tapToShowResultTbl").size)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,7 +126,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func updateSelfInfo() {
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
-            updateNickName.getSelfNamecard(){(status:Int, message: Any?) in
+            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
                 guard status / 100 == 2 else { return }
                 let nickNameInfo = JSON(message!)
                 if let str = nickNameInfo["nick_name"].string {
@@ -174,7 +177,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
-//        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
+        //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
@@ -217,7 +220,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
         if users {
-            updateTimerForUserPin() 
+            updateTimerForUserPin()
         }
         if pins {
             updateTimerForLoadRegionPin()
@@ -233,7 +236,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         if notificationType?.types == UIUserNotificationType() {
             let vc = EnableNotificationViewController()
             //            UIApplication.shared.keyWindow?.visibleViewController?
-            present(vc, animated: true, completion: {_ in
+            present(vc, animated: true, completion: { _ in
                 FirstTimeLoginViewController.boolFinishClicked = false
             })
         }

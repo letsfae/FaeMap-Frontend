@@ -43,6 +43,8 @@ extension FaeMapViewController {
         btnClearSearchRes.isHidden = true
         PLACE_ENABLE = true
         placeResultBar.alpha = 0
+        placeResultTbl.alpha = 0
+        btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
