@@ -12,13 +12,14 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     var tblResults: UITableView!
     var arrPlaces = [PlacePin]()
+    var lblNumResults: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 8, y: 76, width: 398, height: screenHeight - 180))
         loadContent()
         alpha = 0
         layer.zPosition = 605
-        tblResults.tableFooterView = UIView()
+        
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -32,11 +33,28 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack.contentMode = .scaleAspectFill
         addSubview(imgBack)
         
-        tblResults = UITableView(frame: CGRect(x: 0, y: 0, w: 398, h: screenHeight - 180))
+        tblResults = UITableView(frame: CGRect(x: 0, y: 0, width: 398, height: screenHeight - 229))
         tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
         tblResults.delegate = self
         tblResults.dataSource = self
+        tblResults.tableFooterView = UIView()
         addSubview(tblResults)
+        
+        let footView = UIView()
+        addSubview(footView)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
+        addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: footView)
+        let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        grayLine.backgroundColor = UIColor._200199204()
+        footView.addSubview(grayLine)
+        
+        lblNumResults = UILabel()
+        lblNumResults.textAlignment = .center
+        lblNumResults.textColor = UIColor._107105105()
+        lblNumResults.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        footView.addSubview(lblNumResults)
+        footView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblNumResults)
+        footView.addConstraintsWithFormat("V:[v0(21)]-13-|", options: [], views: lblNumResults)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
