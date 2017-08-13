@@ -42,7 +42,7 @@ extension FaeMapViewController: MapSearchDelegate {
         btnTapToShowResultTbl.alpha = 1
         mapClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
-            for place in places {
+            for place in self.placeResultBar.places {
                 let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager)
                 pin.pinInfo = place as AnyObject
                 pin.id = place.id

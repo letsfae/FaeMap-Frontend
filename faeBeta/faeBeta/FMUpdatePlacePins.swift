@@ -93,13 +93,14 @@ extension FaeMapViewController {
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
         
         func getDelay(prevTime: DispatchTime) -> Double {
+            let standardInterval: Double = 1
             let nowTime = DispatchTime.now()
             let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
             var delay: Double = 0
-            if timeDiff / Double(NSEC_PER_SEC) < 2 {
-                delay = 2 - timeDiff / Double(NSEC_PER_SEC)
+            if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
+                delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
             } else {
-                delay = timeDiff / Double(NSEC_PER_SEC) - 2
+                delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
             }
             return delay
         }
@@ -155,7 +156,6 @@ extension FaeMapViewController {
                 }
                 guard placePins.count > 0 else {
                     self.boolCanUpdatePlacePin = true
-                    stopIconSpin(delay: getDelay(prevTime: time_0))
                     return
                 }
                 DispatchQueue.main.async {
