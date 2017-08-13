@@ -47,8 +47,12 @@ extension FaeMapViewController {
         placeResultTbl.alpha = 0
         btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)
-        mapView(faeMapView, regionDidChangeAnimated: false)
         deselectAllAnnotations()
+        mapClusterManager.removeAnnotations(faePlacePins) {
+            self.faePlacePins.removeAll()
+            self.updatePlacePins()
+            self.updateUserPins()
+        }
         mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
     }
     
