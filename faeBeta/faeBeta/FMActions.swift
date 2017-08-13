@@ -48,6 +48,7 @@ extension FaeMapViewController {
         btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)
         mapView(faeMapView, regionDidChangeAnimated: false)
+        deselectAllAnnotations()
         mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
     }
     

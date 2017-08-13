@@ -34,10 +34,8 @@ extension FaeMapViewController: MapSearchDelegate {
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
         updateUI(searchText: searchText)
         PLACE_ENABLE = false
-        placeResultTbl.arrPlaces = places
-        placeResultTbl.tblResults.reloadData()
-        placeResultTbl.lblNumResults.text = places.count == 1 ? "1 Result" : "\(places.count) Results"
-        placeResultBar.places = places
+        swipingState = .multipleSearch
+        placeResultBar.places = placeResultTbl.updatePlacesArray(places: places)
         if let firstPlacePin = places.first {
             placeResultBar.loading(current: firstPlacePin)
         }
@@ -59,8 +57,9 @@ extension FaeMapViewController: MapSearchDelegate {
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
+        guard let firstAnn = annotations.first else { return }
         mapClusterManager.maxZoomLevelForClustering = 0
-        let point = MKMapPointForCoordinate(LocManager.shared.curtLoc.coordinate)
+        let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {
             let annotationPoint = MKMapPointForCoordinate(annotation.coordinate)
