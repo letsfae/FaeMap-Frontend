@@ -15,24 +15,36 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var lblNumResults: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 8, y: 76, width: 398, height: screenHeight - 180))
+        super.init(frame: CGRect(x: 0, y: 68, width: screenWidth, height: screenHeight - 164 * screenHeightFactor))
         loadContent()
         alpha = 0
         layer.zPosition = 605
+        clipsToBounds = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
+        arrPlaces.removeAll()
+        for i in 0...50 {
+            if i >= places.count { break }
+            let place = places[i]
+            place.name = "\(i+1). " + place.name
+            arrPlaces.append(place)
+        }
+        tblResults.reloadData()
+        lblNumResults.text = places.count == 1 ? "1 Result" : "\(places.count) Results"
+        return arrPlaces
+    }
+    
     func show() {
         self.frame.size.height = 102
         self.alpha = 1
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.frame.size.height = screenHeight - 180
-        }) { _ in
-            
-        }
+        UIView.animate(withDuration: 0.3, animations: {
+            self.frame.size.height = screenHeight - 164 * screenHeightFactor
+        })
     }
     
     func hide() {
@@ -40,19 +52,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.size.height = 102
             self.alpha = 0
-        }) { _ in
-            
-        }
+        })
     }
     
     fileprivate func loadContent() {
         
-        let imgBack = UIImageView(frame: CGRect(x: -8, y: -8, width: screenWidth, height: screenHeight - 164))
+        let imgBack = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 164 * screenHeightFactor))
         imgBack.image = #imageLiteral(resourceName: "placeResultTbl_shadow")
-        imgBack.contentMode = .scaleAspectFill
+        imgBack.contentMode = .scaleAspectFit
         addSubview(imgBack)
         
-        tblResults = UITableView(frame: CGRect(x: 0, y: 0, width: 398, height: screenHeight - 229))
+        tblResults = UITableView(frame: CGRect(x: 8, y: 8, width: 397 * screenWidthFactor, height: screenHeight - 229 * screenHeightFactor))
         tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
         tblResults.delegate = self
         tblResults.dataSource = self
@@ -62,7 +72,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         let footView = UIView()
         addSubview(footView)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
-        addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: footView)
+        addConstraintsWithFormat("V:[v0(\(49*screenHeightFactor))]-8-|", options: [], views: footView)
         let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         grayLine.backgroundColor = UIColor._200199204()
         footView.addSubview(grayLine)
@@ -73,7 +83,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         lblNumResults.font = UIFont(name: "AvenirNext-Medium", size: 16)
         footView.addSubview(lblNumResults)
         footView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblNumResults)
-        footView.addConstraintsWithFormat("V:[v0(21)]-13-|", options: [], views: lblNumResults)
+        footView.addConstraintsWithFormat("V:[v0(\(21*screenHeightFactor))]-\(13*screenHeightFactor)-|", options: [], views: lblNumResults)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,6 +127,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: 90, bottom: 0, right: 0)
         layoutMargins = UIEdgeInsets.zero
         selectionStyle = .none
+        backgroundColor = .clear
         loadContent()
     }
     
