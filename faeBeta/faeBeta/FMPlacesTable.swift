@@ -28,14 +28,14 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
         arrPlaces.removeAll()
-        for i in 0...50 {
+        for i in 0..<50 {
             if i >= places.count { break }
             let place = places[i]
             place.name = "\(i+1). " + place.name
             arrPlaces.append(place)
         }
         tblResults.reloadData()
-        lblNumResults.text = places.count == 1 ? "1 Result" : "\(places.count) Results"
+        lblNumResults.text = arrPlaces.count == 1 ? "1 Result" : "\(arrPlaces.count) Results"
         return arrPlaces
     }
     
