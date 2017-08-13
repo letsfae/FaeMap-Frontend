@@ -13,7 +13,7 @@ import CoreLocation
 class PlacePin: NSObject {
     
     let id: Int
-    let name: String
+    var name: String
     let coordinate: CLLocationCoordinate2D
     let class_2: String
     let class_2_icon_id: Int

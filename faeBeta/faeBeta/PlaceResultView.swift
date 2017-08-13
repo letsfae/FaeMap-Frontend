@@ -91,9 +91,8 @@ class PlaceResultView: UIView {
     
     func loading(current: PlacePin) {
         state = .multipleSearch
-        guard let curt_idx = places.index(of: current) else { return }
         imgBack_1.imgType.image = UIImage(named: "place_result_\(current.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-        imgBack_1.lblName.text = "\(curt_idx+1). " + current.name
+        imgBack_1.lblName.text = current.name
         imgBack_1.lblAddr.text = current.address1 + ", " + current.address2
         self.alpha = 1
         guard places.count > 0 else { return }
@@ -117,11 +116,11 @@ class PlaceResultView: UIView {
         nextPlacePin = places[next_idx]
         
         imgBack_0.imgType.image = UIImage(named: "place_result_\(prevPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-        imgBack_0.lblName.text = "\(prev_idx+1). " + prevPlacePin.name
+        imgBack_0.lblName.text = prevPlacePin.name
         imgBack_0.lblAddr.text = prevPlacePin.address1 + ", " + prevPlacePin.address2
         
         imgBack_2.imgType.image = UIImage(named: "place_result_\(nextPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-        imgBack_2.lblName.text = "\(next_idx+1). " + nextPlacePin.name
+        imgBack_2.lblName.text = nextPlacePin.name
         imgBack_2.lblAddr.text = nextPlacePin.address1 + ", " + nextPlacePin.address2
     }
     
@@ -271,7 +270,7 @@ class PlaceView: UIImageView {
     }
     
     private func loadContent() {
-        contentMode = .scaleAspectFill
+        contentMode = .scaleAspectFit
         image = #imageLiteral(resourceName: "placeResult_shadow_new")
         
         imgType = UIImageView()
