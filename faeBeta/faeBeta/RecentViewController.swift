@@ -46,8 +46,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.register(RecentTableViewCell.self, forCellReuseIdentifier: "Cell")
         tableView.separatorStyle = UITableViewCellSeparatorStyle.singleLine
-        tableView.separatorColor = UIColor._255160160()
-        tableView.separatorInset = UIEdgeInsetsMake(0, 74, 0, 0)
+        tableView.separatorColor = UIColor._200199204()
+        tableView.separatorInset = UIEdgeInsetsMake(0, 89, 0, 0)
         tableView.tableFooterView = UIView()
         tableView.backgroundColor = UIColor.white
         view.addSubview(tableView)
@@ -134,7 +134,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         // ATTENTION: Temporary comment it here because it's not used for now
         //        self.navigationItem.rightBarButtonItems = [UIBarButtonItem.init(image: UIImage(named: "bellHollow"), style: .Plain, target: self, action: #selector(RecentViewController.navigationRightItemTapped)),UIBarButtonItem.init(image: UIImage(named: "cross"), style: .Plain, target: self, action: #selector(RecentViewController.crossTapped))]
         
-        self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 89, bottom: 0, right: 0)
+        //self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 89, bottom: 0, right: 0)
     }
     
     private func addGestureRecognizer() {
