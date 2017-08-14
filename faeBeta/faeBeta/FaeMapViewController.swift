@@ -69,28 +69,30 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnTapToShowResultTbl: UIButton!
     
     var swipingState: PlaceResultBarState = .map
+    var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         isUserLoggedIn()
         getUserStatus()
-        loadMapView()
         loadNameCard()
         loadAddFriendView()
+        loadMapFilter()
+        loadMapView()
+        loadButton()
+        loadPlaceDetail()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
-        loadButton()
-        loadMapFilter()
-        loadPlaceDetail()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadMapChat()
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
         navigationController?.navigationBar.isHidden = true
     }
     

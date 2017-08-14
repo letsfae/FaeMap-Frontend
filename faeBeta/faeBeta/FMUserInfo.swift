@@ -370,9 +370,10 @@ class FMUserInfo: UIViewController {
     func showPinMoreButtonDetails(_ sender: UIButton!) {
         print("in more details")
     }
+    
     func actionBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
     }
     
     func belowEnterChat(_ sender: UIButton!) {

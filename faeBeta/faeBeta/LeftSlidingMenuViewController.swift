@@ -367,7 +367,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to online")
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
                 } else {
                     print("Fail to switch to online")
                 }
