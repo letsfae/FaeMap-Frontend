@@ -162,7 +162,7 @@ extension ChatViewController: OutgoingMessageProtocol {
             self.insertMessages()
             self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
-            self.scrollToBottom(true)
+            self.scrollToBottom(false)
         }
     }
     
