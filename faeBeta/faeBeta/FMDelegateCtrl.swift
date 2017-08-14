@@ -76,7 +76,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate {
         if userStatus == 5 {
             invisibleMode()
         } else {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "willEnterForeground"), object: nil)
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         }
     }
     

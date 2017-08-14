@@ -118,10 +118,36 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    func calculateDistanceOffset() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let curtMapCenter = self.faeMapView.camera.centerCoordinate
+            let point_a = MKMapPointForCoordinate(self.prevMapCenter)
+            let point_b = MKMapPointForCoordinate(curtMapCenter)
+            let distance = MKMetersBetweenMapPoints(point_a, point_b)
+            guard distance >= self.screenWidthInMeters() else { return }
+            self.prevMapCenter = curtMapCenter
+            DispatchQueue.main.async {
+                self.updatePlacePins()
+                self.updateUserPins()
+            }
+        }
+        
+    }
+    
+    func screenWidthInMeters() -> CLLocationDistance {
+        let cgpoint_a = CGPoint(x: 0, y: 0)
+        let cgpoint_b = CGPoint(x: screenWidth, y: 0)
+        let coor_a = faeMapView.convert(cgpoint_a, toCoordinateFrom: nil)
+        let coor_b = faeMapView.convert(cgpoint_b, toCoordinateFrom: nil)
+        let point_a = MKMapPointForCoordinate(coor_a)
+        let point_b = MKMapPointForCoordinate(coor_b)
+        let distance = MKMetersBetweenMapPoints(point_a, point_b)
+        return distance * 0.6
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         if AUTO_REFRESH {
-            updatePlacePins()
-            updateUserPins()
+            calculateDistanceOffset()
         }
         if btnCompass != nil { btnCompass.rotateCompass() }
         if placeResultBar.tag > 0 && PLACE_ENABLE { placeResultBar.annotations = visiblePlaces() }
@@ -132,7 +158,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 if self.START_WAVE_ANIMATION {
                     self.START_WAVE_ANIMATION = false
                     DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
                     }
                 }
             } else {

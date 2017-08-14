@@ -38,12 +38,11 @@ class MapFilterIcon: UIButton {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         loadMapFilter()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.animateInsideCircles), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.animateMapFilterArrow), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.startAnimation), name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -60,6 +59,11 @@ class MapFilterIcon: UIButton {
         adjustsImageWhenHighlighted = false
         center.x = screenWidth / 2
         center.y = screenHeight - 25
+        
+        startAnimation()
+    }
+    
+    func startAnimation() {
         animateInsideCircles()
         animateMapFilterArrow()
     }

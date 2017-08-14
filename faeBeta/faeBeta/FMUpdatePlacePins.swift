@@ -85,9 +85,10 @@ extension FaeMapViewController {
         guard boolCanUpdatePlacePin else { return }
         boolCanUpdatePlacePin = false
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-            self.refreshPlacePins(radius: coorDistance)
-            self.boolCanUpdatePlacePin = true
+            
         })
+        self.refreshPlacePins(radius: coorDistance)
+        self.boolCanUpdatePlacePin = true
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {

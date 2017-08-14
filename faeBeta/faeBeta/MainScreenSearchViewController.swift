@@ -59,6 +59,7 @@ class MainScreenSearchViewController: UIViewController, UISearchResultsUpdating,
         loadFaeSearchController()
         loadNavBarUnderLine()
         searchCompleter.delegate = self
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

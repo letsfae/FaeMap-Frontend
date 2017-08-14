@@ -68,6 +68,33 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         getPlaceInfo()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        var delay: Double = 0
+        
+        for i in 0..<6 {
+            UIView.animate(withDuration: 0.8, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                self.btnPlaces[i].frame.size = CGSize(width: 58, height: 58)
+                self.btnPlaces[i].alpha = 1
+                self.lblPlaces[i].center.y += 43
+                self.lblPlaces[i].alpha = 1
+                if i >= 3 {
+                    self.btnPlaces[i].frame.origin.y = 117
+                } else {
+                    self.btnPlaces[i].frame.origin.y = 20
+                }
+                if i == 1 || i == 4 {
+                    self.btnPlaces[i].frame.origin.x = (screenWidth - 16 - 58) / 2
+                } else if i == 2 || i == 5 {
+                    self.btnPlaces[i].frame.origin.x = screenWidth - 126
+                } else {
+                    self.btnPlaces[i].frame.origin.x = 52
+                }
+            }, completion: nil)
+            delay += 0.1
+        }
+    }
+    
     // shows "no results"
     func loadNoResultsView() {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124, width: screenWidth - 16, height: 100))
@@ -130,6 +157,43 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         addShadow(uiviewPics)
         
         for _ in 0..<6 {
+            btnPlaces.append(UIButton(frame: CGRect(x: 52 + 29, y: 20 + 29, width: 0, height: 0)))
+            lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
+        }
+        
+        for i in 0..<6 {
+            self.btnPlaces[i].alpha = 0
+            if i >= 3 {
+                btnPlaces[i].frame.origin.y = 117 + 29
+            }
+            if i == 1 || i == 4 {
+                btnPlaces[i].frame.origin.x = (screenWidth - 16 - 58) / 2 + 29
+            } else if i == 2 || i == 5 {
+                btnPlaces[i].frame.origin.x = screenWidth - 126 + 29
+            }
+            
+            lblPlaces[i].center = CGPoint(x: btnPlaces[i].center.x, y: btnPlaces[i].center.y)
+            lblPlaces[i].alpha = 0
+            
+            uiviewPics.addSubview(btnPlaces[i])
+            uiviewPics.addSubview(lblPlaces[i])
+            
+            btnPlaces[i].layer.borderColor = UIColor._225225225().cgColor
+            btnPlaces[i].layer.borderWidth = 2
+            btnPlaces[i].layer.cornerRadius = 8.0
+            btnPlaces[i].contentMode = .scaleAspectFit
+            btnPlaces[i].layer.masksToBounds = true
+            btnPlaces[i].setImage(imgPlaces[i], for: .normal)
+            btnPlaces[i].tag = i
+            btnPlaces[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            
+            lblPlaces[i].text = arrPlaceNames[i]
+            lblPlaces[i].textAlignment = .center
+            lblPlaces[i].textColor = UIColor._138138138()
+            lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
+        }
+        /*
+        for _ in 0..<6 {
             btnPlaces.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
             lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
         }
@@ -163,6 +227,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             lblPlaces[i].textColor = UIColor._138138138()
             lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
         }
+         */
     }
     
     func loadTable() {
