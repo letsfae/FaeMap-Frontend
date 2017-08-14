@@ -96,7 +96,7 @@ class RecentTableViewCell: UITableViewCell {
         imgAvatar.layer.masksToBounds = true
         imgAvatar.contentMode = .scaleAspectFill
         uiviewMain.addSubview(imgAvatar)
-        uiviewMain.addConstraintsWithFormat("H:|-6-[v0(60)]", options: [], views: imgAvatar)
+        uiviewMain.addConstraintsWithFormat("H:|-15-[v0(60)]", options: [], views: imgAvatar)
         uiviewMain.addConstraintsWithFormat("V:|-7.5-[v0(60)]", options: [], views: imgAvatar)
         
         lblCounter = UILabel()
@@ -116,7 +116,7 @@ class RecentTableViewCell: UITableViewCell {
         lblName.textColor = UIColor._898989()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         uiviewMain.addSubview(lblName)
-        uiviewMain.addConstraintsWithFormat("H:|-86-[v0]-120-|", options: [], views: lblName)
+        uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-120-|", options: [], views: lblName)
         uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblName)
         
         lblLastMessage = UILabel()
@@ -128,7 +128,7 @@ class RecentTableViewCell: UITableViewCell {
         
         lblLastMessage.font = UIFont(name: "AvenirNext-Medium", size: 15)
         uiviewMain.addSubview(lblLastMessage)
-        uiviewMain.addConstraintsWithFormat("H:|-86-[v0]-56-|", options: [], views: lblLastMessage)
+        uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
         uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
         
         
