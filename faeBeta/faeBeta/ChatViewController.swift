@@ -384,13 +384,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let height = inputToolbar.frame.height
         let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
         if !locExtendView.isHidden {
-            //collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardHeight + height + extendHeight, right: 0.0)
-            //collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardHeight + height + extendHeight, right: 0.0)
+            collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardHeight + height + extendHeight, right: 0.0)
+            collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardHeight + height + extendHeight, right: 0.0)
             //inputToolbar.frame.origin.y = screenHeight - (keyboardHeight + height + extendHeight)
         }
         collectionView.isScrollEnabled = true
         //moveUpInputBarContentView(false)
-        //inputToolbar.contentView.textView.becomeFirstResponder()
+        inputToolbar.contentView.textView.becomeFirstResponder()
         scrollToBottom(true)
         
     }
@@ -503,9 +503,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             //locExtendView.isHidden = false
             let extendHeight = self.locExtendView.isHidden ? 0 : self.locExtendView.frame.height
             locExtendView.frame.origin.y = screenHeight - self.keyboardHeight - extendHeight - 90
+            UIView.animate(withDuration: 0.2, animations: {
+                self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.keyboardHeight + self.inputToolbar.frame.height, right: 0.0)
+                self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.keyboardHeight + self.inputToolbar.frame.height, right: 0.0)
+            }, completion: { (_) -> Void in
+            })
+            
             //showKeyboard()
             
         }
+
        
     }
     
