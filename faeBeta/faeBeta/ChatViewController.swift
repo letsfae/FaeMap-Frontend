@@ -246,6 +246,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        //NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
         inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
     }
@@ -412,7 +414,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
-        scrollToBottom(true)
+        scrollToBottom(false)
     }
     
     func showLibrary() {
@@ -428,7 +430,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.showLibrary()
         locExtendView.isHidden = true
         moveUpInputBarContentView(animated)
-        scrollToBottom(true)
+        scrollToBottom(false)
     }
     
     func showRecord() {
@@ -437,7 +439,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         toolbarContentView.showRecord()
         moveUpInputBarContentView(animated)
-        scrollToBottom(true)
+        scrollToBottom(false)
     }
     
     func sendLocation() {
@@ -447,7 +449,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.keyboardShow
         toolbarContentView.showMiniLocation()
         moveUpInputBarContentView(animated)
-        scrollToBottom(true)
+        scrollToBottom(false)
     }
     
     func sendMessageButtonTapped() {
@@ -488,6 +490,30 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         buttonKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         showKeyboard()
         buttonSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0 || !locExtendView.isHidden
+    }
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+            let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+            let animationCurve:UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
+            if (endFrame?.origin.y)! >= UIScreen.main.bounds.size.height {
+                //self.keyboardHeightLayoutConstraint?.constant = 0.0
+            } else {
+                //self.keyboardHeightLayoutConstraint?.constant = endFrame?.size.height ?? 0.0
+            }
+            keyboardHeight = (endFrame?.size.height)!
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: animationCurve,
+                           animations: {
+                            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.keyboardHeight + self.inputToolbar.frame.height, right: 0.0)
+                            self.collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: self.keyboardHeight + self.inputToolbar.frame.height, right: 0.0)
+            },
+                           completion: nil)
+        }
     }
     
     func keyboardWillShow(_ notification: Notification) {
@@ -897,7 +923,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let inset = collectionView.contentInset.bottom
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - locExtendView.frame.height, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - locExtendView.frame.height, right: 0.0)
-        buttonSend.isEnabled = !locExtendView.isHidden
+        //buttonSend.isEnabled = !locExtendView.isHidden
+        buttonSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0
     }
     
     func sendLocationMessageFromMini(_ sender: UIButton) {
@@ -924,7 +951,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func addResponseToLocationExtend(response: CLPlacemark, withMini: Bool) {
         var texts: [String] = []
-        texts.append((response.thoroughfare)!)
+        texts.append((response.subThoroughfare)! + " " + (response.thoroughfare)!)
         var cityText = response.locality
         
         if response.administrativeArea != nil {
@@ -958,7 +985,4 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func appendEmoji(_ name: String) {}
     func deleteLastEmoji() {}
     
-    //@objc override func jsq_updateCollectionViewInsets() {
-        
-    //}
 }
