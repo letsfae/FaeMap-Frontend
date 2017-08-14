@@ -154,15 +154,13 @@ class SelfAnnotationView: MKAnnotationView {
         layer.zPosition = 2
         loadSelfMarkerSubview()
         getSelfAccountInfo()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.removeAllAnimation), name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.invisibleMode), name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willEnterForeground"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "willResignActive"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
@@ -215,11 +213,6 @@ class SelfAnnotationView: MKAnnotationView {
     func changeAvatar() {
         guard userStatus != 5 else { return }
         mapAvatar = userMiniAvatar
-    }
-    
-    func removeAllAnimation() {
-        guard userStatus != 5 else { return }
-        self.layer.removeAllAnimations()
     }
     
     func getSelfAccountInfo() {

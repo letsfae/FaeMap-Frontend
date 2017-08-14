@@ -17,6 +17,7 @@ extension FaeMapViewController {
         faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
         view.addSubview(faeMapView)
+        view.sendSubview(toBack: faeMapView)
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = false
         faeMapView.delegate = self
@@ -34,6 +35,7 @@ extension FaeMapViewController {
 
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
+        prevMapCenter = LocManager.shared.curtLoc.coordinate
         refreshMap(pins: false, users: true, places: true)
     }
     
