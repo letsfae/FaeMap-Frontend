@@ -19,7 +19,7 @@ class LocationExtendView : UIView {
     var location : CLLocation!
     
     init() {
-        super.init(frame : CGRect(x: 0, y: screenHeight - 64 - 76 - 90, width: screenWidth, height: 76));
+        super.init(frame : CGRect(x: 0, y: screenHeight - 76 - 90, width: screenWidth, height: 76));
         
         // test background color
         self.backgroundColor = UIColor.white

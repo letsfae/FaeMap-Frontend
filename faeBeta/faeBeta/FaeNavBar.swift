@@ -42,7 +42,7 @@ class FaeNavBar: UIView {
         // Vicky 07/28/17
         addConstraintsWithFormat("H:|-70-[v0]-70-|", options: [], views: lblTitle)
         // Vicky 07/28/17 End
-        addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: lblTitle)
+        //addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: lblTitle)
         addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: lblTitle)
     }
     

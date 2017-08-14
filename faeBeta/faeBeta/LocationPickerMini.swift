@@ -46,11 +46,14 @@ class LocationPickerMini: UIView {
         mapView.showsPointsOfInterest = false
         mapView.showsCompass = false
         mapView.showsUserLocation = true
+        mapView.tintColor = UIColor._2499090()
         addSubview(mapView)
         let selfLoc = CLLocationCoordinate2D(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         let camera = mapView.camera
         camera.centerCoordinate = selfLoc
         mapView.setCamera(camera, animated: false)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 800, 800)
+        mapView.setRegion(coordinateRegion, animated: false)
     }
     
     func loadPin() {
@@ -65,10 +68,10 @@ class LocationPickerMini: UIView {
         buttonSearch.setImage(UIImage(named: "locationSearch"), for: .normal)
         buttonSearch.layer.zPosition = 101
         addSubview(buttonSearch)
-        buttonShareLocation = UIButton(frame: CGRect(x: 81, y: 204, width: 51, height: 51))
-        buttonShareLocation.setImage(UIImage(named: "locationShare"), for: .normal)
-        buttonShareLocation.layer.zPosition = 101
-        addSubview(buttonShareLocation)
+        //buttonShareLocation = UIButton(frame: CGRect(x: 81, y: 204, width: 51, height: 51))
+        //buttonShareLocation.setImage(UIImage(named: "locationShare"), for: .normal)
+        //buttonShareLocation.layer.zPosition = 101
+        //addSubview(buttonShareLocation)
         buttonSend = UIButton(frame: CGRect(x: screenWidth - 71, y: 204, width: 51, height: 51))
         buttonSend.setImage(UIImage(named: "locationSend"), for: .normal)
         buttonSend.layer.zPosition = 101
