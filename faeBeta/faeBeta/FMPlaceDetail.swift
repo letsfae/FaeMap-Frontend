@@ -28,7 +28,7 @@ extension FaeMapViewController: PlaceViewDelegate {
     }
     
     // PlaceViewDelegate
-    func goToNext(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
+    func goTo(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
         deselectAllAnnotations()
         if let anno = annotation {
             swipingState = .map
@@ -44,50 +44,13 @@ extension FaeMapViewController: PlaceViewDelegate {
                 guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
                 guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
                 if placeInfo == placePin {
-                    joshprint("[goToNext] find equal place")
                     desiredAnno = cluster
                     break
                 }
             }
             if desiredAnno != nil {
-                joshprint("[goToNext] selected place")
                 faeMapView.selectAnnotation(desiredAnno, animated: false)
             }
         }
-    }
-    
-    // PlaceViewDelegate
-    func goToPrev(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
-        deselectAllAnnotations()
-        if let anno = annotation {
-            boolPreventUserPinOpen = true
-            faeMapView.selectAnnotation(anno, animated: false)
-            boolPreventUserPinOpen = false
-        }
-        if let placePin = place {
-            swipingState = .multipleSearch
-            var desiredAnno: CCHMapClusterAnnotation!
-            for anno in faeMapView.annotations {
-                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
-                guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
-                guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
-                if placeInfo == placePin {
-                    joshprint("[goToPrev] find equal place")
-                    desiredAnno = cluster
-                    break
-                }
-            }
-            if desiredAnno != nil {
-                joshprint("[goToPrev] selected place")
-                faeMapView.selectAnnotation(desiredAnno, animated: false)
-            }
-        }
-    }
-    
-    // PlaceViewDelegate
-    func animateTo(annotation: CCHMapClusterAnnotation?) {
-        guard let anno = annotation else { return }
-        deselectAllAnnotations()
-        faeMapView.selectAnnotation(anno, animated: false)
     }
 }

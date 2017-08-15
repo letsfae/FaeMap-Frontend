@@ -24,9 +24,9 @@ extension FaeMapViewController {
         anView.assignImage(first.icon)
         let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
         DispatchQueue.main.async {
-            anView.imageView.frame = CGRect(x: 30, y: 64, width: 0, height: 0)
+            anView.imageView.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+                anView.imageView.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
                 anView.alpha = 1
             }, completion: nil)
         }
@@ -62,13 +62,14 @@ extension FaeMapViewController {
             anView.assignImage(firstAnn.icon)
             selectedAnnView = anView
             selectedAnn = firstAnn
+            anView.showButtons()
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         placeResultBar.fadeIn()
         placeResultBar.resetSubviews()
         placeResultBar.tag = 1
-        mapView(faeMapView, regionDidChangeAnimated: true)
+        mapView(faeMapView, regionDidChangeAnimated: false)
         if swipingState == .map {
             placeResultBar.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
