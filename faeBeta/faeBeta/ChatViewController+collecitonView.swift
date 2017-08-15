@@ -25,11 +25,10 @@ extension ChatViewController {
         
         if data.senderId == "\(Key.shared.user_id)" {
             cell.textView?.textColor = UIColor.white
-            cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         } else {
             cell.textView?.textColor = UIColor._107105105()
-            cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         }
+        cell.textView?.font = UIFont(name: "Avenir Next", size: 16)
         cell.avatarImageView.layer.cornerRadius = 17.5
         cell.avatarImageView.contentMode = .scaleAspectFill
         cell.avatarImageView.layer.masksToBounds = true
