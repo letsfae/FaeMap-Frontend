@@ -106,8 +106,8 @@ extension ContactsViewController {
         lblNotificationText.numberOfLines = 2
         lblNotificationText.font = UIFont(name: "AvenirNext-Medium", size: 18)
         uiviewNotification.addSubview(lblNotificationText)
-        view.addConstraintsWithFormat("H:|-41-[v0(210)]|", options: [], views: lblNotificationText)
-        view.addConstraintsWithFormat("V:|-30-[v0(50)]", options: [], views: lblNotificationText)
+        view.addConstraintsWithFormat("H:|-\(41 * screenWidthFactor)-[v0(210)]|", options: [], views: lblNotificationText)
+        view.addConstraintsWithFormat("V:|-\(30 * screenHeightFactor)-[v0(50)]", options: [], views: lblNotificationText)
         
         // configuring description for blocking mechanism
         lblBlockSetting = UILabel()
@@ -152,8 +152,8 @@ extension ContactsViewController {
         lblTitleInActions.textAlignment = .center
         lblTitleInActions.text = "Choose an action"
         lblTitleInActions.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        view.addConstraintsWithFormat("H:|-13-[v0(263.5)]|", options: [], views: lblTitleInActions)
-        view.addConstraintsWithFormat("V:|-20-[v0(25)]", options: [], views: lblTitleInActions)
+        view.addConstraintsWithFormat("H:|-\(13 * screenWidthFactor)-[v0(263.5)]|", options: [], views: lblTitleInActions)
+        view.addConstraintsWithFormat("V:|-\(20 * screenHeightFactor)-[v0(25)]", options: [], views: lblTitleInActions)
         
         // For the first action "Ignore"
         btnForIgnore = UIButton()
@@ -161,11 +161,11 @@ extension ContactsViewController {
         btnForIgnore.layer.cornerRadius = 25
         // we need the api request here to ignore the current request
         btnForIgnore.addTarget(self, action: #selector(ignoreRequest), for: .touchUpInside)
-        let titleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18), NSForegroundColorAttributeName: UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 100)]
+        let titleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18), NSForegroundColorAttributeName: UIColor._2499090()]
         let attributedTitleForIgnore = NSAttributedString(string: "Ignore", attributes: titleAttr as Any as? [String : Any])
         btnForIgnore.setAttributedTitle(attributedTitleForIgnore, for: .normal)
         btnForIgnore.layer.borderWidth = 2
-        btnForIgnore.layer.borderColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 100).cgColor
+        btnForIgnore.layer.borderColor = UIColor._2499090().cgColor
         view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForIgnore)
         view.addConstraintsWithFormat("V:|-65-[v0(50)]", options: [], views: btnForIgnore)
         
@@ -176,9 +176,9 @@ extension ContactsViewController {
         btnForBlock.addTarget(self, action: #selector(confirmBlockRequest), for: .touchUpInside)
         let attributedTitleForBlock = NSAttributedString(string: "Block", attributes: titleAttr as Any as? [String : Any])
         btnForBlock.setAttributedTitle(attributedTitleForBlock, for: .normal)
-        btnForBlock.setTitleColor(UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1), for: .normal)
+        btnForBlock.setTitleColor(UIColor._2499090(), for: .normal)
         btnForBlock.layer.borderWidth = 2
-        btnForBlock.layer.borderColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1).cgColor
+        btnForBlock.layer.borderColor = UIColor._2499090().cgColor
         view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForBlock)
         view.addConstraintsWithFormat("V:|-130-[v0(50)]", options: [], views: btnForBlock)
         

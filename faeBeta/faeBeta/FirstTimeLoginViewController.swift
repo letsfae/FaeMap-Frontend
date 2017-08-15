@@ -11,8 +11,13 @@ import SwiftyJSON
 import RealmSwift
 import Photos
 
+protocol ButtonFinishClickedDelegate: class {
+    func jumpToEnableNotification()
+}
+
 class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
 
+    weak var delegate: ButtonFinishClickedDelegate?
     var uiViewSetPicture: UIView!
     var labelTitle: UILabel!
     var buttonAvatar: UIButton!
@@ -21,7 +26,6 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     var dimBackground: UIView!
     var imageViewAvatar: UIImageView!
     var activityIndicator: UIActivityIndicatorView!
-    static var boolFinishClicked = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,9 +169,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     UIView.animate(withDuration: 0.3, animations: {
                         self.dimBackground.alpha = 0
                     }) {_ in
-                        self.dismiss(animated: false, completion: nil)
-                        FirstTimeLoginViewController.boolFinishClicked = true
-                        print("finishclicked \(FirstTimeLoginViewController.boolFinishClicked)")
+                        self.dismiss(animated: false, completion: {_ in
+                            self.delegate?.jumpToEnableNotification()
+                        })
                     }
                 } else {
                     self.activityIndicator.stopAnimating()

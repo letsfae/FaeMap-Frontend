@@ -26,6 +26,7 @@ struct MBPlacesStruct {
     let classTwo: String
     let class_2_icon_id: Int
     var icon: UIImage?
+    let classOne: String
     
     init(json: JSON) {
         placeId = json["place_id"].intValue
@@ -46,8 +47,9 @@ struct MBPlacesStruct {
             distance = String(format: "%.1f", dis) + " km"
         }
         
-        self.classTwo = json["categories"]["class2"].stringValue
-        self.class_2_icon_id = json["categories"]["class2_icon_id"].intValue
-        self.icon = UIImage(named: "place_result_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "Awkward")
+        classOne = json["categories"]["class1"].stringValue
+        classTwo = json["categories"]["class2"].stringValue
+        class_2_icon_id = json["categories"]["class2_icon_id"].intValue
+        icon = UIImage(named: "place_result_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "Awkward")
     }
 }

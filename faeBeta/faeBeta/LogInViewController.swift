@@ -117,7 +117,7 @@ class LogInViewController: UIViewController {
         btnLogin.center.x = screenWidth / 2
         btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
-        btnLogin.addTarget(self, action: #selector(LogInViewController.loginButtonTapped), for: .touchUpInside)
+        btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         btnLogin.backgroundColor = UIColor._255160160()
         btnLogin.isEnabled = false
         view.insertSubview(btnLogin, at: 0)
@@ -156,8 +156,8 @@ class LogInViewController: UIViewController {
         user.whereKey("password", value: txtPassword.text!)
         user.whereKey("device_id", value: headerDeviceID)
         user.whereKey("is_mobile", value: "true")
-        user.logInBackground { (status: Int?, message: Any?) in
-            if status! / 100 == 2 {
+        user.logInBackground { (status: Int, message: Any?) in
+            if status / 100 == 2 {
                 self.navigationController?.popToRootViewController(animated: false)
                 if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
                     if vcRoot is InitialPageController {
@@ -168,9 +168,9 @@ class LogInViewController: UIViewController {
                 }
             } else {
                 // Vicky 07/12/2017  - 把使用error message的判断改为使用error code判断
-                print("[LOGIN STATUS]: \(status!), [LOGIN ERROR MESSAGE]: \(message!)")
+                print("[LOGIN STATUS]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                 
-                if status! == 500 {
+                if status == 500 {
                     self.setLoginResult("Internet Error!")
                 }
                 

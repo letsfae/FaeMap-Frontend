@@ -151,7 +151,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         tblUsernames.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         tblUsernames.addGestureRecognizer(tapToDismissKeyboard)
-        tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "myCell")
+        tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")
         tblUsernames.isHidden = false
         tblUsernames.indicatorStyle = .white
         tblUsernames.separatorStyle = .none
@@ -224,7 +224,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "myCell", isFriend: false)
+        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
         if schbarUsernames.txtSchField.text != "" {
             cell.lblUserName.text = filtered[indexPath.row]
             cell.lblUserSaying.text = filtered[indexPath.row]

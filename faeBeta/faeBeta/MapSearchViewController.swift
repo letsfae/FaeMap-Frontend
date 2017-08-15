@@ -23,6 +23,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     var arrCurtLocList = ["Use my Current Location", "Use Current Map View"]
     
     weak var delegate: MapSearchDelegate?
+    var searchCompleter: MKLocalSearchCompleter!
     
     var searchedPlaces = [PlacePin]()
     var filteredPlaces = [PlacePin]()
