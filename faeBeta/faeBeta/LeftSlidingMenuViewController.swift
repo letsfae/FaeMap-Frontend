@@ -99,7 +99,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         uiViewLeftWindow.backgroundColor = UIColor.white
         
         imageLeftSlideWindowUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
-        imageLeftSlideWindowUp.image = UIImage(named: "leftWindowbackground")
+        imageLeftSlideWindowUp.image = #imageLiteral(resourceName: "leftWindowbackground")
         uiViewLeftWindow.addSubview(imageLeftSlideWindowUp)
         
         imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))

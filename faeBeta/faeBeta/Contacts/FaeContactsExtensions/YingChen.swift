@@ -33,42 +33,70 @@ extension ContactsViewController {
     }
     
     func loadDropDownMenu() {
-        blurViewDropDownMenu = UIVisualEffectView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 103))
-        if #available(iOS 10.0, *) {
-            blurViewDropDownMenu.effect = UIBlurEffect(style: .regular)
-        } else {
-            // Fallback on earlier versions
-            blurViewDropDownMenu.effect = UIBlurEffect(style: .light)
-        }
-        view.addSubview(blurViewDropDownMenu)
-        blurViewDropDownMenu.frame.origin.y = -39 // 64 - 103
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 103))
+//        if #available(iOS 10.0, *) {
+//            uiviewDropDownMenu.effect = UIBlurEffect(style: .regular)
+//        } else {
+//            // Fallback on earlier versions
+//            uiviewDropDownMenu.effect = UIBlurEffect(style: .light)
+//        }
+        uiviewDropDownMenu.backgroundColor = .white
+        view.addSubview(uiviewDropDownMenu)
+        uiviewDropDownMenu.frame.origin.y = -39 // 64 - 103
         
         // Line at y = 103 inside the blurViewDropDownMenu
         let bottomLine = UIView(frame: CGRect(x: 0, y: 103, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
         bottomLine.layer.borderColor = UIColor._200199204cg()
-        blurViewDropDownMenu.addSubview(bottomLine)
+        uiviewDropDownMenu.addSubview(bottomLine)
         
-        btnTop = UIButton(frame: CGRect(x: (screenWidth - 200) / 2, y: 3, width: 200, height: 45))
-        blurViewDropDownMenu.addSubview(btnTop)
+        btnTop = UIButton(frame: CGRect(x: 41, y: 0, width: 200, height: 50))
+        uiviewDropDownMenu.addSubview(btnTop)
         btnTop.tag = 0
-        btnTop.setTitle(titleArray[0], for: .normal)
-        btnTop.setTitleColor(UIColor._898989(), for: .normal)
-        btnTop.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+//        btnTop.setTitle(titleArray[0], for: .normal)
+//        btnTop.setTitleColor(UIColor._898989(), for: .normal)
+//        btnTop.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnBottom = UIButton(frame: CGRect(x: (screenWidth - 200) / 2, y: 55, width: 200, height: 45))
-        blurViewDropDownMenu.addSubview(btnBottom)
+        btnBottom = UIButton(frame: CGRect(x: 41, y: 52, width: 200, height: 50))
+        uiviewDropDownMenu.addSubview(btnBottom)
         btnBottom.tag = 1
-        btnBottom.setTitle(titleArray[1], for: .normal)
-        btnBottom.setTitleColor(UIColor._898989(), for: .normal)
-        btnBottom.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+//        btnBottom.setTitle(titleArray[1], for: .normal)
+//        btnBottom.setTitleColor(UIColor._898989(), for: .normal)
+//        btnBottom.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
+        let imgTop = UIImageView(frame: CGRect(x: 15, y: 14, width: 28, height: 28))
+        let imgBottom = UIImageView(frame: CGRect(x: 15, y: 14, width: 28, height: 28))
+        imgTop.image = #imageLiteral(resourceName: "FFFselected")
+        imgBottom.image = #imageLiteral(resourceName: "RRselected")
+        btnTop.addSubview(imgTop)
+        btnBottom.addSubview(imgBottom)
+        
+        lblTop = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
+        lblTop.textColor = UIColor._898989()
+        lblTop.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        let strTop = "Friends"
+        lblTop.text = strTop
+        btnTop.addSubview(lblTop)
+        
+        lblBottom = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
+        lblBottom.textColor = UIColor._898989()
+        lblBottom.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblBottom.text = "Requests"
+        btnBottom.addSubview(lblBottom)
+        
         let uiviewDropMenuLineTop = UIView(frame: CGRect(x: (screenWidth - 280) / 2, y: 51, width: 280, height: 1))
-        blurViewDropDownMenu.addSubview(uiviewDropMenuLineTop)
+        uiviewDropDownMenu.addSubview(uiviewDropMenuLineTop)
         uiviewDropMenuLineTop.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
-
+        
+        imgTick = UIImageView(frame: CGRect(x: screenWidth - 75, y: 20, width: 16, height: 16))
+        imgTick.image = #imageLiteral(resourceName: "mb_tick")
+        uiviewDropDownMenu.addSubview(imgTick)
+    }
+    
+    func setBtnTopTitle() {
+//        btnTop.setAttributedTitle(, for: .normal)
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
@@ -81,7 +109,7 @@ extension ContactsViewController {
     
     func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.2, animations: {
-            self.blurViewDropDownMenu.frame.origin.y = -39
+            self.uiviewDropDownMenu.frame.origin.y = -39
         })
         navBarMenuBtnClicked = false
         schbarContacts.txtSchField.resignFirstResponder()
@@ -91,13 +119,13 @@ extension ContactsViewController {
     func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
-                self.blurViewDropDownMenu.frame.origin.y = 64
+                self.uiviewDropDownMenu.frame.origin.y = 64
             })
             btnNavBarSetTitle()
             navBarMenuBtnClicked = true
         } else {
             UIView.animate(withDuration: 0.2, animations: {
-                self.blurViewDropDownMenu.frame.origin.y = -39
+                self.uiviewDropDownMenu.frame.origin.y = -39
             })
             btnNavBarSetTitle()
             navBarMenuBtnClicked = false
@@ -116,21 +144,28 @@ extension ContactsViewController {
     
     // function for buttons in drop down menu
     func dropDownMenuAct(_ sender: UIButton) {
+        curtTitle = titleArray[sender.tag]
         
-        /* Comment from Joshua:
-         I comment the following codes you wrote, and replace them by the following 3 lines for efficiency
-         */
-        let temp = titleArray[sender.tag]
-        titleArray[sender.tag] = curtTitle
-        curtTitle = temp
+        if sender.tag == 0 {
+            imgTick.frame.origin.y = 20
+            uiviewNavBar.rightBtn.isHidden = false
+            uiviewBottomNav.isHidden = true
+            uiviewSchbar.isHidden = false
+            tblContacts.frame.origin.y = 114
+            cellStatus = 0
+        } else {
+            imgTick.frame.origin.y = 62
+            uiviewNavBar.rightBtn.isHidden = true
+            uiviewBottomNav.isHidden = false
+            uiviewSchbar.isHidden = true
+            tblContacts.frame.origin.y = 65
+            cellStatus = btnFFF.isSelected ? 1 : 2
+        }
         
-        titleArray.sort { $0.characters.count < $1.characters.count }
-        btnTop.setTitle(titleArray[0], for: .normal)
-        btnBottom.setTitle(titleArray[1], for: .normal)
         btnNavBarSetTitle()
         
         UIView.animate(withDuration: 0.2, animations: {
-            self.blurViewDropDownMenu.frame.origin.y = -92
+            self.uiviewDropDownMenu.frame.origin.y = -92
         })
         navBarMenuBtnClicked = false
         
@@ -158,10 +193,5 @@ extension ContactsViewController {
         let curtTitlePlusImg = curtTitleStr
         curtTitlePlusImg.append(NSAttributedString(attachment: downAttachment))
         btnNavBarMenu.setAttributedTitle(curtTitlePlusImg, for: .normal)
-        if curtTitle == "Friends" {
-            uiviewNavBar.rightBtn.isHidden = false
-        } else {
-            uiviewNavBar.rightBtn.isHidden = true
-        }
     }
 }

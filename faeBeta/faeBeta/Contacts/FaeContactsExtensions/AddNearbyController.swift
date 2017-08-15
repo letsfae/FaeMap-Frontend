@@ -14,7 +14,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     var lblScanSubtitle: UILabel!
     var imgBigCircle: UIImageView!
     var imgScan: UIImageView!
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var imgScan2: UIImageView!
     var imgScan3: UIImageView!
     var tblUsernames: UITableView!
@@ -125,12 +125,13 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         imgScan2.image = UIImage(named: "imgScan")
         imgScan3.image = UIImage(named: "imgScan")
         
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 167*screenWidthFactor, y: 328, width: 80*screenWidthFactor, height: 80*screenHeightFactor))
+        imgAvatar = UIImageView(frame: CGRect(x: 167*screenWidthFactor, y: 328, width: 80*screenWidthFactor, height: 80*screenHeightFactor))
         imgAvatar.layer.cornerRadius = 40 * screenWidthFactor
         imgAvatar.contentMode = .scaleAspectFill
         view.addSubview(imgAvatar)
-        imgAvatar.userID = Key.shared.user_id
-        imgAvatar.loadAvatar(id: Key.shared.user_id)
+        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
         imgAvatar.layer.borderWidth = 5
         imgAvatar.layer.borderColor = UIColor.white.cgColor
         imgAvatar.layer.zPosition = 3
@@ -165,7 +166,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         tblUsernames.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
-        tblUsernames.register(FaeContactsCell.self, forCellReuseIdentifier: "myCell")
+        tblUsernames.register(FaeContactsCell.self, forCellReuseIdentifier: "FaeContactsCell")
         tblUsernames.indicatorStyle = .white
         view.addSubview(tblUsernames)
     }
@@ -179,7 +180,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "myCell", isFriend: false)
+        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
         cell.lblUserName.text = testArray[indexPath.row]
         cell.lblUserSaying.text = testArray[indexPath.row]
         cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.

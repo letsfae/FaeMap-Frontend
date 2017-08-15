@@ -10,7 +10,7 @@ import UIKit
 
 class MBPeopleCell: UITableViewCell {
 
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var lblUsrName: UILabel!
     var lblIntro: UILabel!
     var lblDistance: UILabel!
@@ -34,7 +34,7 @@ class MBPeopleCell: UITableViewCell {
     
     fileprivate func loadCellContent() {
         
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 15, y: 15, width: 66, height: 66))
+        imgAvatar = UIImageView(frame: CGRect(x: 15, y: 15, width: 66, height: 66))
         addSubview(imgAvatar)
         imgAvatar.layer.cornerRadius = 33
         imgAvatar.clipsToBounds = true
@@ -89,8 +89,9 @@ class MBPeopleCell: UITableViewCell {
             imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
         } else {
             lblUsrName.text = people.displayName
-            imgAvatar.userID = people.userId
-            imgAvatar.loadAvatar(id: people.userId)
+            General.shared.avatar(userid: people.userId, completion: { (avatarImage) in
+                self.imgAvatar.image = avatarImage
+            })
         }
         lblIntro.text = people.shortIntro
         

@@ -10,7 +10,7 @@ import UIKit
 
 class SavedPinsTableViewCell: PinsTableViewCell {
     
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var lblNickName: UILabel!
     
     var btnUnSave: UIButton!
@@ -25,7 +25,7 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         uiviewPinView.addConstraintsWithFormat("H:[v0(200)]-13-|", options: [], views: lblDate)
         lblDate.textAlignment = .right
         
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 13, y: 11, width: 20, height: 20))
+        imgAvatar = UIImageView(frame: CGRect(x: 13, y: 11, width: 20, height: 20))
         imgAvatar.layer.cornerRadius = 10
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.layer.masksToBounds = true
@@ -67,8 +67,9 @@ class SavedPinsTableViewCell: PinsTableViewCell {
         
         lblNickName.text = pin.nickName
         
-        imgAvatar.userID = pin.userId
-        imgAvatar.loadAvatar(id: pin.userId)
+        General.shared.avatar(userid: pin.userId, completion: { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
     }
     
     // delete current cell

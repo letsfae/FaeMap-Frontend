@@ -10,7 +10,7 @@ import UIKit
 
 class FaeContactsCell: UITableViewCell {
     
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var bottomLine: UIView!
@@ -19,6 +19,7 @@ class FaeContactsCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
         layoutMargins = UIEdgeInsets.zero
+        selectionStyle = .none
         loadFriendsCellContent()
     }
     
@@ -27,7 +28,7 @@ class FaeContactsCell: UITableViewCell {
     }
     
     fileprivate func loadFriendsCellContent() {
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
+        imgAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true

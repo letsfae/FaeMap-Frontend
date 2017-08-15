@@ -19,7 +19,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
     var btnLoc: UIButton!
     var btnFav: UIButton!
     var btnReply: UIButton!
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var imgHotPin: UIImageView!
     var lblLoc: MBAddressLabel!
     var lblContent: UILabel!
@@ -55,7 +55,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
     }
     
     func loadCellContent() {
-        imgAvatar = FaeAvatarView(frame: CGRect.zero)
+        imgAvatar = UIImageView(frame: CGRect.zero)
         addSubview(imgAvatar)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.clipsToBounds = true
@@ -191,8 +191,9 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
             imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
         } else {
             lblUsrName.text = social.displayName
-            imgAvatar.userID = social.userId
-            imgAvatar.loadAvatar(id: social.userId)
+            General.shared.avatar(userid: social.userId, completion: { (avatarImage) in
+                self.imgAvatar.image = avatarImage
+            })
         }
         lblTime.text = social.date
         lblContent.attributedText = social.attributedText
