@@ -117,13 +117,21 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //update recent
         print("chat view will disappear")
         //self.navigationController?.navigationBar.isHidden = false
-        closeToolbarContentView()
+        //closeToolbarContentView()
+        //moveUpInputBar()
+        //closeLocExtendView()
+        //moveDownInputBar()
         removeObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         print("chat view did disappear")
+        closeToolbarContentView()
+        closeLocExtendView()
+        moveDownInputBar()
+        
         toolbarContentView.clearToolBarViews()
+        
         //        messages = []
         //        objects = []
         //        loaded = []
@@ -142,9 +150,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewDidLoad() {
         print("chat view did load")
         super.viewDidLoad()
-        
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
-        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         
         navigationBarSet()
         collectionView.backgroundColor = UIColor(red: 241 / 255, green: 241 / 255, blue: 241 / 255, alpha: 1.0) // override jsq collection view
@@ -170,9 +175,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView.miniLocation.buttonSend.addTarget(self, action: #selector(sendLocationMessageFromMini), for: .touchUpInside)
         
         locExtendView.isHidden = true
-        locExtendView.buttonCancel.addTarget(self, action: #selector(closeLocExtendView(_:)), for: .touchUpInside)
+        locExtendView.buttonCancel.addTarget(self, action: #selector(closeLocExtendView), for: .touchUpInside)
         
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
         
+        moveDownInputBar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -182,7 +190,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         addObservers()
         loadUserDefault()
         // This line is to fix the collectionView messed up function
-        moveDownInputBar()
+        //moveDownInputBar()
         getAvatar()
     }
     
@@ -652,6 +660,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func moveDownInputBar() {
         //
+        view.endEditing(true)
         let height = inputToolbar.frame.height
         let width = inputToolbar.frame.width
         let xPosition = inputToolbar.frame.origin.x
@@ -918,7 +927,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func closeLocExtendView(_ sender: UIButton) {
+    func closeLocExtendView() {
         locExtendView.isHidden = true
         let inset = collectionView.contentInset.bottom
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: inset - locExtendView.frame.height, right: 0.0)
@@ -985,4 +994,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func appendEmoji(_ name: String) {}
     func deleteLastEmoji() {}
     
+    func dismissKeyboard() {
+        view.endEditing(true)
+        moveDownInputBar()
+    }
 }
