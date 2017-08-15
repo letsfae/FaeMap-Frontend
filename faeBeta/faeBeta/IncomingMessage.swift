@@ -95,7 +95,7 @@ class IncomingMessage {
         
         //if let comment = item["message"] as? String {
         let comment = item["message"] as? String
-        let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil, text : comment)
+        let mediaItem = JSQLocationMediaItemCustom(location: location, snapImage: nil, text: comment)
         //}
         
         //init?
