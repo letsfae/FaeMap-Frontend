@@ -157,7 +157,7 @@
 
 - (UIView *)mediaView
 {
-    printf("creating media view");
+    //printf("creating media view");
     
     CGFloat height = 0;
     //BRYAN: Not empty and not location
@@ -219,7 +219,7 @@
     [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:locationView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
     self.cachedMapImageView = locationView;
     
-    printf("done creating media view");
+    //printf("done creating media view");
     
     return locationView;
 }
