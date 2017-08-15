@@ -16,10 +16,13 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
      *  2 == tag
      */
     var reportType: Int = 0
+    let REPORT = 0
+    let FEEDBACK = 1
+    let TAG = 2
     
     let screenWidth = UIScreen.main.bounds.width
     let screenHeight = UIScreen.main.bounds.height
-    let colorPlaceHolder = UIColor(red: 155/255, green: 155/255, blue: 155/255, alpha: 1.0)
+    let colorPlaceHolder = UIColor._155155155()
     
     var buttonBackToCommentDetail: UIButton!
     var imageDescription: UIImageView!
@@ -58,12 +61,12 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
     
     func loadBasicItems() {
         buttonBackToCommentDetail = UIButton()
-        buttonBackToCommentDetail.setImage(UIImage(named: "reportCommentBackToMap"), for: UIControlState())
+        buttonBackToCommentDetail.setImage(#imageLiteral(resourceName: "reportCommentBackToMap"), for: UIControlState())
         self.view.addSubview(buttonBackToCommentDetail)
-        self.view.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: buttonBackToCommentDetail)
-        self.view.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonBackToCommentDetail)
+        self.view.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: buttonBackToCommentDetail)
+        self.view.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: buttonBackToCommentDetail)
         buttonBackToCommentDetail.addTarget(self,
-                               action: #selector(ReportCommentPinViewController.actionBackToCommentPinDetail(_:)),
+                               action: #selector(actionBackToCommentPinDetail(_:)),
                                for: .touchUpInside)
         
         imageDescription = UIImageView(frame: CGRect(x: 0, y: 72, width: 361*screenWidthFactor, height: 54*screenHeightFactor))
@@ -71,7 +74,7 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         imageDescription.contentMode = .scaleAspectFit
         self.view.addSubview(imageDescription)
         
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(ReportCommentPinViewController.tapOutsideToDismissKeyboard(_:)))
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(tapOutsideToDismissKeyboard(_:)))
         self.view.addGestureRecognizer(tapToDismissKeyboard)
         
         let font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -80,13 +83,13 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font! ]), for: UIControlState())
         buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
         buttonSendReport.backgroundColor = UIColor._2499090()
-        buttonSendReport.addTarget(self, action: #selector(ReportCommentPinViewController.actionSendReport(_:)), for: .touchUpInside)
+        buttonSendReport.addTarget(self, action: #selector(actionSendReport(_:)), for: .touchUpInside)
         self.view.insertSubview(buttonSendReport, at: 0)
         self.view.bringSubview(toFront: buttonSendReport)
         
         textViewReportContent = UITextView()
         textViewReportContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        textViewReportContent.textColor = UIColor(red: 89/255, green: 89/255, blue: 89/255, alpha: 1.0)
+        textViewReportContent.textColor = UIColor._898989()
         textViewReportContent.backgroundColor = UIColor.clear
         textViewReportContent.tintColor = UIColor._2499090()
         textViewReportContent.delegate = self
@@ -98,15 +101,15 @@ class ReportCommentPinViewController: UIViewController, UITextViewDelegate {
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lableTextViewPlaceholder.textColor = UIColor._155155155()
-        if reportType == 0 {
+        if reportType == REPORT {
             lableTextViewPlaceholder.text = "Describe to us the case..."
-            imageDescription.image = UIImage(named: "reportViewDescription")
+            imageDescription.image = #imageLiteral(resourceName: "reportViewDescription")
         }
-        else if reportType == 1 {
+        else if reportType == FEEDBACK {
             lableTextViewPlaceholder.text = "Your Feedback..."
-            imageDescription.image = UIImage(named: "reportYourFeedback")
+            imageDescription.image = #imageLiteral(resourceName: "reportYourFeedback")
         }
-        else if reportType == 2 {
+        else if reportType == TAG {
             lableTextViewPlaceholder.text = "New Tag(s)..."
             imageDescription.image = UIImage(named: "reportNewTags")
         }

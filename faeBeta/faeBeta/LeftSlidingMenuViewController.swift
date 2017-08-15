@@ -99,7 +99,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         uiViewLeftWindow.backgroundColor = UIColor.white
         
         imageLeftSlideWindowUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
-        imageLeftSlideWindowUp.image = UIImage(named: "leftWindowbackground")
+        imageLeftSlideWindowUp.image = #imageLiteral(resourceName: "leftWindowbackground")
         uiViewLeftWindow.addSubview(imageLeftSlideWindowUp)
         
         imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
@@ -151,8 +151,13 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Board Mode", "Go Invisible", "Contacts", "Collections", "Activities", "Mood Avatar", "Log Out"]
-        cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
+        let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatars", "Settings"]
+        //  "Activities",
+        if indexPath.row < 4 {
+            cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
+        } else {
+           cell.imageLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
+        }
         cell.labelMiddle.text = array[indexPath.row]
         cell.switchRight.tag = indexPath.row
         if indexPath.row < 2 {
@@ -170,7 +175,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return 6 // 7
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableLeftSlideWindow.cellForRow(at: indexPath) as! LeftSlideWindowCell
@@ -189,10 +194,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         } else if indexPath.row == 3 {
             tableSelections = .collections
             actionCloseMenu(btnBackground)
-        } else if indexPath.row == 5 {
+        } else if indexPath.row == 4 {
             tableSelections = .moodAvatar
             actionCloseMenu(btnBackground)
-        } else if indexPath.row == 6 {
+        } else if indexPath.row == 5 {
             let logOut = FaeUser()
             logOut.logOut { (status: Int?, _: Any?) in
                 if status! / 100 == 2 {

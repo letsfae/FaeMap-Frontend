@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension FaeMapViewController: LeftSlidingMenuDelegate {
+extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDelegate {
     
     // PinDetailDelegate
     func backToMainMap() {
@@ -137,7 +137,18 @@ extension FaeMapViewController: LeftSlidingMenuDelegate {
             let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
             self.btnCompass.transform = CGAffineTransform(rotationAngle: angle)
         }, completion: { _ in
-            
         })
     }
+    
+    // ButtonFinishClickedDelegate
+    func jumpToEnableNotification() {
+        print("jumpToEnableNotification")
+        let notificationType = UIApplication.shared.currentUserNotificationSettings
+        if notificationType?.types == UIUserNotificationType() {
+            let vc = EnableNotificationViewController()
+            //            UIApplication.shared.keyWindow?.visibleViewController?
+            present(vc, animated: true)
+        }
+    }
+    // ButtonFinishClickedDelegate End
 }

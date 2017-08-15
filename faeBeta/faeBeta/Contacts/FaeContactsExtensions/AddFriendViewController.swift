@@ -43,8 +43,8 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         tblOptions.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
         tblOptions.dataSource = self
         tblOptions.delegate = self
-        tblOptions.register(FaeAddFriendOptionsCell.self, forCellReuseIdentifier: "myOptionsCell")
-        tblOptions.register(FaeRecommendedCell.self, forCellReuseIdentifier: "myRecommendedCell")
+        tblOptions.register(FaeAddFriendOptionsCell.self, forCellReuseIdentifier: "FaeAddFriendOptionsCell")
+        tblOptions.register(FaeRecommendedCell.self, forCellReuseIdentifier: "FaeRecommendedCell")
         view.addSubview(tblOptions)
     }
     
@@ -54,7 +54,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "myOptionsCell", for: indexPath as IndexPath) as! FaeAddFriendOptionsCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddFriendOptionsCell", for: indexPath as IndexPath) as! FaeAddFriendOptionsCell
             cell.lblOption.text = "\(optionsArray[indexPath.row])"
             cell.imgIcon.image = optionsImagesArray[indexPath.row]
             if indexPath.row == optionsArray.count-1 {
@@ -62,39 +62,17 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             return cell
         } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "myRecommendedCell", for: indexPath as IndexPath) as! FaeRecommendedCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FaeRecommendedCell", for: indexPath as IndexPath) as! FaeRecommendedCell
             cell.lblUserName.text = optionsArray[indexPath.row]
             cell.lblUserSaying.text = optionsArray[indexPath.row]
             cell.lblUserRecommendReason.text = "through Contacts."
             return cell
         }
-        // Vicky 07/12/2017
-        //        else {
-        //            let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath as IndexPath)
-        //            cell.textLabel!.text = "\(optionsArray[indexPath.row])"
-        //            return cell
-        //        }
         return UITableViewCell()
-        // Vicky 07/12/2017 END
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("User selected table row \(indexPath.row) and item \(optionsArray[indexPath.row])")
-//        if indexPath.row == 0 && indexPath.section == 0 {
-//            let vc = AddUsernameController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//            tableView.deselectRow(at: indexPath, animated: true)
-//        }
-//        if indexPath.row == 1 && indexPath.section == 0 {
-//            let vc = AddFromContactsController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//            tableView.deselectRow(at: indexPath, animated: true)
-//        }
-//        if indexPath.row == 2 && indexPath.section == 0 {
-//            let vc = AddNearbyController()
-//            self.navigationController?.pushViewController(vc, animated: true)
-//            tableView.deselectRow(at: indexPath, animated: true)
-//        }
         // Vicky 07/12/2017
         if indexPath.section == 0 {
             if indexPath.row == 0 {     // "Search Username"

@@ -17,38 +17,41 @@ import SwiftyJSON
 
 struct Friends {
 //    var Image = UIImage()
-    var name: String
+    var displayName: String
+    var userName: String
     var saying: String?
     var requestId: Int = -1
     var userId: Int = -1
     
-    init(name: String) {
-        self.name = name
-    }
-    init(name: String, userId: Int, requestId: Int) {
-        self.name = name
+    init(displayName: String, userName: String, userId: Int, requestId: Int) {
+        self.displayName = displayName
+        self.userName = userName
         self.userId = userId
         self.requestId = requestId
     }
-    init(name: String, userId: Int) {
-        self.name = name
+    init(displayName: String, userName: String, userId: Int) {
+        self.displayName = displayName
+        self.userName = userName
         self.userId = userId
     }
 }
 
 struct Follows {
-    var name: String
+    var displayName: String
+    var userName: String
     var saying: String?
     var followeeId: Int = -1
     var followerId: Int = -1
     
     init(followeeJson: JSON) {
-        name = followeeJson["followee_user_nick_name"].stringValue
+        displayName = followeeJson["followee_user_nick_name"].stringValue
+        userName = followeeJson["followee_user_name"].stringValue
         followeeId = followeeJson["followee_id"].intValue
     }
     
     init(followerJson: JSON) {
-        name = followerJson["follower_user_nick_name"].stringValue
+        displayName = followerJson["follower_user_nick_name"].stringValue
+        userName = followerJson["follower_user_name"].stringValue
         followerId = followerJson["follower_id"].intValue
     }
 }
@@ -58,21 +61,24 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
 
     // YingChen.swift variable declaration for UI objects
     var uiviewNavBar: FaeNavBar!
-    var blurViewDropDownMenu: UIVisualEffectView!
+    var uiviewDropDownMenu: UIView!
     var btnTop: UIButton!
     var btnBottom: UIButton!
+    var lblTop: UILabel!
+    var lblBottom: UILabel!
+    var imgTick: UIImageView!
     var navBarMenuBtnClicked = false
     var curtTitle: String = "Friends"
-    var titleArray: [String] = ["Following", "Followers"]
+    var titleArray: [String] = ["Friends", "Requests"] //["Following", "Followers"]
     var btnNavBarMenu: UIButton!
     
     // JustinHe.swift variable declaration for UI objects
-    var testArrayFriends: [Friends] = [] // testArray; will replace once backend API is ready.
-    var testArrayReceivedRequests: [Friends] = [] // testArray; will replace once backend API is ready.
-    var testArrayRequested: [Friends] = []
+    var arrFriends: [Friends] = []
+    var arrReceivedRequests: [Friends] = []
+    var arrRequested: [Friends] = []
     var arrFollowers: [Follows] = []
     var arrFollowees: [Follows] = []
-//    var testArrayRequested: [String] = ["testOne", "testTwo", "testThree", "testFour"] // testArray; will replace once backend API is ready.
+
     var tblContacts: UITableView!
     var filtered: [Friends] = []
     var filteredFollows: [Follows] = []
@@ -81,14 +87,13 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var uiviewBottomNav: UIView!
     var btnFFF: UIButton! // btnFFF switches to friends, following, followed.
     var btnRR: UIButton! // btnRR switches to requests, requested.
-    var cellStatus = 1 // 3 cases: 1st case is Contacts, 2nd is RecievedRequests, 3rd is Requested.
+    var cellStatus = 0 // 3 cases: 1st case is Contacts, 2nd is RecievedRequests, 3rd is Requested.
                        // This is used to switch out cell types and cells in the main table (tblContacts)
     
     // attempting api calls to pull some information.
     let apiCalls = FaeContact()
     
     // Wenjia.swift variable declaration for UI objects.
-    var uiviewNavBar2: FaeNavBar!
     var uiviewTabView: UIView!
     var btnReceived: UIButton!
     var btnRequested: UIButton!
@@ -131,36 +136,48 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     // Basic viewDidLoad() implementation, needed for start of program
     override func viewDidLoad() {
         super.viewDidLoad()
+        getFriendStatus()
+        loadSearchBar()
+        loadTable()
+        loadNavBar()
+        loadTabView()
+        setupViews()
+        view.backgroundColor = .white
+        definesPresentationContext = true
+    }
+    
+    func getFriendStatus() {
         apiCalls.getFriendRequests() {(status: Int, message: Any?) in
-            self.testArrayReceivedRequests = []
+            self.arrReceivedRequests = []
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayReceivedRequests.append(Friends(name: json[i-1]["request_user_nick_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                    self.arrReceivedRequests.append(Friends(displayName: json[i-1]["request_user_nick_name"].stringValue, userName: json[i-1]["request_user_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
         }
         
         apiCalls.getFriendRequestsSent() {(status: Int, message: Any?) in
-            self.testArrayRequested = []
+            self.arrRequested = []
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayRequested.append(Friends(name: json[i-1]["requested_user_nick_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                    self.arrRequested.append(Friends(displayName: json[i-1]["requested_user_nick_name"].stringValue, userName: json[i-1]["requested_user_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
             self.tblContacts.reloadData()
         }
         
         apiCalls.getFriends() {(status: Int, message: Any?) in
-            self.testArrayFriends = []
+            self.arrFriends = []
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.testArrayFriends.append(Friends(name: json[i-1]["friend_user_nick_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
+                    self.arrFriends.append(Friends(displayName: json[i-1]["friend_user_nick_name"].stringValue, userName: json[i-1]["friend_user_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
                 }
             }
+            self.arrFriends.sort{ $0.displayName < $1.displayName }
             self.tblContacts.reloadData()
         }
         
@@ -197,11 +214,5 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 print("[loadFollowerInfoFail] - \(status) \(message!)")
             }
         }
-        
-        loadTable()
-        loadNavBar()
-        setupViews()
-        definesPresentationContext = true
     }
-    
 }
