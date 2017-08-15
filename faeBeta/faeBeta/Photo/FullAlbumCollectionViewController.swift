@@ -123,8 +123,17 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     //MARK: - Setup
     private func prepareTableView() {
-        tableViewAlbum = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 480))
-        tableViewAlbum.register(UINib(nibName: "AlbumTableViewCell", bundle: nil), forCellReuseIdentifier: albumReuseIdentifiler)
+        tableViewAlbum = UITableView()
+        tableViewAlbum.separatorStyle = UITableViewCellSeparatorStyle.singleLine
+        tableViewAlbum.separatorColor = UIColor._200199204()
+        tableViewAlbum.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
+        tableViewAlbum.tableFooterView = UIView()
+        
+        let tableViewHeight = min(CGFloat(photoPicker.selectedAlbum.count * 80), screenHeight - 65)
+        tableViewAlbum.frame = CGRect(x: 0, y: 65, width: screenWidth, height: tableViewHeight)
+        
+        //tableViewAlbum.register(UINib(nibName: "AlbumTableViewCell", bundle: nil), forCellReuseIdentifier: albumReuseIdentifiler)
+        tableViewAlbum.register(AlbumTableViewCell.self, forCellReuseIdentifier: albumReuseIdentifiler)
         tableViewAlbum.delegate = self
         tableViewAlbum.dataSource = self
     }
@@ -156,6 +165,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         uiviewNavBar.backgroundColor = .white
         view.addSubview(uiviewNavBar)
         
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        bottomLine.layer.borderWidth = screenWidth
+        bottomLine.layer.borderColor = UIColor._200199204cg()
+        uiviewNavBar.addSubview(bottomLine)
+        
         let centerView = UIView()
         uiviewNavBar.addSubview(centerView)
         let gapToSide = (screenWidth - 200) / 2
@@ -164,7 +178,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         showTableButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
         showTableButton.titleLabel?.text = ""
-        showTableButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.showAlbumTable), for: .touchUpInside)
+        showTableButton.addTarget(self, action: #selector(showAlbumTable), for: .touchUpInside)
         centerView.addSubview(showTableButton)
         
         titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
@@ -220,12 +234,22 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     @objc private func showAlbumTable() {
         if !tableViewAlbumVisible {
-            quitButton = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            quitButton = UIButton(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight))
             quitButton.backgroundColor = UIColor(red: 58 / 255, green: 51 / 255, blue: 51 / 255, alpha: 0.5)
             self.view.addSubview(quitButton)
-            quitButton.addTarget(self, action: #selector(FullAlbumCollectionViewController.dismissAlbumTable), for: .touchUpInside)
+            quitButton.addTarget(self, action: #selector(dismissAlbumTable), for: .touchUpInside)
             self.view.addSubview(tableViewAlbum)
             tableViewAlbum.setContentOffset(CGPoint.zero, animated: true)
+            
+            let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+            let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+            attributedStrM.append(albumName)
+            let arrowAttachment : NSTextAttachment = NSTextAttachment()
+            arrowAttachment.image = UIImage(named: "arrow_up")
+            arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
+            attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
+            
+            self.titleLabel.attributedText = attributedStrM
         } else {
             dismissAlbumTable()
         }
@@ -521,22 +545,22 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         let cell = tableView.dequeueReusableCell(withIdentifier: albumReuseIdentifiler) as! AlbumTableViewCell
         
         if let albumName = photoPicker.selectedAlbum[indexPath.row].albumName{
-            cell.albumTitleLabel.text = albumName
+            cell.lblAlbumTitle.text = albumName
         }
         if let albumCount = photoPicker.selectedAlbum[indexPath.row].albumCount{
-            cell.albumNumberLabel.text = "\(albumCount)"
+            cell.lblAlbumNumber.text = "\(albumCount)"
         }
 
-        cell.checkMarkImage.isHidden = photoPicker.selectedAlbum[indexPath.row].albumName != photoPicker.currentAlbum.albumName
+        cell.imgCheckMark.isHidden = photoPicker.selectedAlbum[indexPath.row].albumName != photoPicker.currentAlbum.albumName
         
-        if !cell.checkMarkImage.isHidden {
+        if !cell.imgCheckMark.isHidden {
             currentCell = cell
         }
         //set thumbnail
         let asset : PHAsset = self.photoPicker.selectedAlbum[indexPath.row].albumContent[0] as! PHAsset
         
         PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: view.frame.width - 1 / 10, height: view.frame.width - 1 / 10), contentMode: .aspectFill, options: nil) { (result, info) in
-            cell.titleImageView.image = result
+            cell.imgTitle.image = result
         }
         
         return cell
@@ -552,15 +576,24 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! AlbumTableViewCell
-        if cell.checkMarkImage.isHidden {
+        if cell.imgCheckMark.isHidden {
             photoPicker.currentAlbum = photoPicker.selectedAlbum[indexPath.row]
             tableView.deselectRow(at: indexPath, animated: true)
             dismissAlbumTable()
             tableViewAlbumVisible = !tableViewAlbumVisible
-            self.titleLabel.text = photoPicker.currentAlbum.albumName
-            currentCell.checkMarkImage.isHidden = true
+            
+            let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+            let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+            attributedStrM.append(albumName)
+            let arrowAttachment : NSTextAttachment = NSTextAttachment()
+            arrowAttachment.image = UIImage(named: "arrow_down")
+            arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
+            attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
+            
+            self.titleLabel.attributedText = attributedStrM
+            currentCell.imgCheckMark.isHidden = true
             let cellNew = tableView.cellForRow(at: indexPath) as! AlbumTableViewCell
-            cellNew.checkMarkImage.isHidden = false
+            cellNew.imgCheckMark.isHidden = false
             currentCell = cellNew
             collectionView?.reloadData()
         }
