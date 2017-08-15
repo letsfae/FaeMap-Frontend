@@ -11,9 +11,7 @@ import MapKit
 import CCHMapClusterController
 
 protocol PlaceViewDelegate: class {
-    func animateTo(annotation: CCHMapClusterAnnotation?)
-    func goToNext(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
-    func goToPrev(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
+    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
 }
 
 enum PlaceResultBarState: String {
@@ -186,9 +184,9 @@ class PlaceResultView: UIView {
             self.imgBack_1.frame.origin.x += screenWidth + 2
         }, completion: {_ in
             if self.state == .map {
-                self.delegate?.goToPrev(annotation: self.prevAnnotation, place: nil)
+                self.delegate?.goTo(annotation: self.prevAnnotation, place: nil)
             } else if self.state == .multipleSearch {
-                self.delegate?.goToPrev(annotation: nil, place: self.prevPlacePin)
+                self.delegate?.goTo(annotation: nil, place: self.prevPlacePin)
             }
             self.resetSubviews()
         })
@@ -200,9 +198,9 @@ class PlaceResultView: UIView {
             self.imgBack_2.frame.origin.x = 2
         }, completion: { _ in
             if self.state == .map {
-                self.delegate?.goToNext(annotation: self.nextAnnotation, place: nil)
+                self.delegate?.goTo(annotation: self.nextAnnotation, place: nil)
             } else if self.state == .multipleSearch {
-                self.delegate?.goToNext(annotation: nil, place: self.nextPlacePin)
+                self.delegate?.goTo(annotation: nil, place: self.nextPlacePin)
             }
             self.resetSubviews()
         })
