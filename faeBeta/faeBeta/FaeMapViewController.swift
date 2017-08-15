@@ -71,6 +71,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var swipingState: PlaceResultBarState = .map
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
+    var isTapping = true
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

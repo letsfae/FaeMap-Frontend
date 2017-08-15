@@ -343,14 +343,20 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var imageView: UIImageView!
     
+    var btnDetail: UIButton!
+    var btnCollect: UIButton!
+    var btnRoute: UIButton!
+    var btnShare: UIButton!
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        frame = CGRect(x: 0, y: 0, width: 60, height: 64)
-        imageView = UIImageView(frame: CGRect(x: 30, y: 64, width: 0, height: 0))
+        frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+        imageView = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
         layer.zPosition = 1
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        loadButtons()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -361,6 +367,57 @@ class PlacePinAnnotationView: MKAnnotationView {
         // when an image is set for the annotation view,
         // it actually adds the image to the image view
         imageView.image = image
+    }
+    
+    fileprivate func loadButtons() {
+        btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 42, height: 42))
+        btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
+        addSubview(btnDetail)
+        btnDetail.alpha = 0
+        
+        btnCollect = UIButton(frame: CGRect(x: 35, y: 0, width: 42, height: 42))
+        btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect"), for: .normal)
+        addSubview(btnCollect)
+        btnCollect.alpha = 0
+        
+        btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 42, height: 42))
+        btnRoute.setImage(#imageLiteral(resourceName: "place_new_route"), for: .normal)
+        addSubview(btnRoute)
+        btnRoute.alpha = 0
+        
+        btnShare = UIButton(frame: CGRect(x: 128, y: 43, width: 42, height: 42))
+        btnShare.setImage(#imageLiteral(resourceName: "place_new_share"), for: .normal)
+        addSubview(btnShare)
+        btnShare.alpha = 0
+    }
+    
+    func showButtons() {
+        btnDetail.alpha = 1
+        btnCollect.alpha = 1
+        btnRoute.alpha = 1
+        btnShare.alpha = 1
+//        self.frame.size = CGSize(width: 170, height: 110)
+        var point = self.frame.origin
+        point.x -= 57
+        point.y -= 54
+        self.frame = CGRect(x: point.x, y: point.y, width: 170, height: 110)
+        imageView.center.x = 85
+        imageView.frame.origin.y = 54
+        layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+    }
+    
+    func hideButtons() {
+        btnDetail.alpha = 0
+        btnCollect.alpha = 0
+        btnRoute.alpha = 0
+        btnShare.alpha = 0
+//        self.frame.size = CGSize(width: 56, height: 56)
+        var point = self.frame.origin
+        point.x += 57
+        point.y += 54
+        self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
+        imageView.frame.origin = CGPoint.zero
+        layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
     }
 }
 

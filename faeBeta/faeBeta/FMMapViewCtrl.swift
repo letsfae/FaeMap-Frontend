@@ -80,7 +80,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
-        
         var offset: CGFloat = 0
         if type == 0 { // Map pin
             offset = 530 * screenHeightFactor - screenHeight / 2 // 488 530
@@ -115,6 +114,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
+            selectedAnnView?.hideButtons()
         }
     }
     
@@ -150,6 +150,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             calculateDistanceOffset()
         }
         if btnCompass != nil { btnCompass.rotateCompass() }
+        
         if placeResultBar.tag > 0 && PLACE_ENABLE { placeResultBar.annotations = visiblePlaces() }
         
         // re-start wave animation of self avatar annotation view
