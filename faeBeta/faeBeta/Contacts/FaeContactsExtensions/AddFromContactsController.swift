@@ -74,7 +74,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         tblFromContacts.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         tblFromContacts.addGestureRecognizer(tapToDismissKeyboard)
-        tblFromContacts.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "myCell")
+        tblFromContacts.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")
         tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
         tblFromContacts.isHidden = false
         tblFromContacts.indicatorStyle = .white
@@ -114,7 +114,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "myCell", isFriend: false)
+            let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
             if schbarFromContacts.txtSchField.text != "" {
                 cell.lblUserName.text = filtered[indexPath.row]
                 cell.lblUserSaying.text = filtered[indexPath.row]

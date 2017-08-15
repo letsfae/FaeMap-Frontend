@@ -176,7 +176,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         btnFeedback.setTitle("Give Feedback", for: UIControlState())
         btnFeedback.layer.cornerRadius = 25 * screenHeightFactor
         btnFeedback.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        btnFeedback.addTarget(self, action: #selector(MyFaeMainPageViewController.jumpToFeedback), for: .touchUpInside)
+        btnFeedback.addTarget(self, action: #selector(jumpToFeedback), for: .touchUpInside)
         scroll.addSubview(btnFeedback)
     }
     

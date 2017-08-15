@@ -17,9 +17,12 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
         if tableMode == .social {
             tblMapBoard.estimatedRowHeight = 78
             return 78
-        } else if tableMode == .people || tableMode == .places {
+        } else if tableMode == .people {
             tblMapBoard.estimatedRowHeight = 90
             return 90
+        } else if tableMode == .places {
+            tblMapBoard.estimatedRowHeight = placeTableMode == .recommend ? 222 : 90
+            return placeTableMode == .recommend ? 222 : 90
         } else if tableMode == .talk {
             if talkTableMode == .topic {
                 tblMapBoard.estimatedRowHeight = 66
@@ -40,7 +43,11 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
         case .people:
             return mbPeople.count
         case .places:
-            return mbPlaces.count
+            if placeTableMode == .recommend {
+                return testArrPlaces.count
+            } else {
+                return mbPlaces.count
+            }
         case .talk:
             switch talkTableMode {
             case .feed:
@@ -73,12 +80,21 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             
             return cell
         } else if tableMode == .places {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "mbPlacesCell", for: indexPath) as! MBPlacesCell
-            
-            let place = mbPlaces[indexPath.row]
-            cell.setValueForCell(place: place, curtLoc: LocManager.shared.curtLoc)
-            
-            return cell
+            if placeTableMode == . recommend {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "mbPlacesCell", for: indexPath) as! MBPlacesCell
+                cell.delegate = self
+                let title = arrTitle[indexPath.row]
+                let placeCategory = testArrPlaces[indexPath.row]
+                cell.places = placeCategory
+//                cell.tableCellIndexPath = indexPath
+                cell.setValueForCell(title: title, places: placeCategory)//, place: place, curtLoc: LocManager.shared.curtLoc)
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "AllPlacesCell", for: indexPath) as! AllPlacesCell
+                let place = mbPlaces[indexPath.row]
+                cell.setValueForCell(place: place) //, curtLoc: LocManager.shared.curtLoc)
+                return cell
+            }
         } else if tableMode == .talk {
             if talkTableMode == .feed {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "mbTalkFeedCell", for: indexPath) as! MBTalkFeedCell

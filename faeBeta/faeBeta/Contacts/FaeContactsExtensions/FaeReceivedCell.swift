@@ -16,7 +16,7 @@ protocol SomeDelegateReceivedRequests: class {
 class FaeReceivedCell: UITableViewCell {
     
     weak var delegate: SomeDelegateReceivedRequests?
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var btnAgreeRequest: UIButton!
@@ -30,6 +30,7 @@ class FaeReceivedCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
         layoutMargins = UIEdgeInsets.zero
+        selectionStyle = .none
         loadFriendsCellContent()
     }
     
@@ -38,7 +39,7 @@ class FaeReceivedCell: UITableViewCell {
     }
     
     fileprivate func loadFriendsCellContent() {
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
+        imgAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
@@ -61,12 +62,12 @@ class FaeReceivedCell: UITableViewCell {
         
         btnAgreeRequest = UIButton()
         addSubview(btnAgreeRequest)
-        btnAgreeRequest.setImage(#imageLiteral(resourceName: "btnAgree"), for: .normal)
+        btnAgreeRequest.setImage(#imageLiteral(resourceName: "acceptRequest"), for: .normal)
         btnAgreeRequest.addTarget(self, action: #selector(self.acceptRequest(_:)), for: .touchUpInside)
         
         btnRefuseRequest = UIButton()
         addSubview(btnRefuseRequest)
-        btnRefuseRequest.setImage(#imageLiteral(resourceName: "btnRefuse"), for: .normal)
+        btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
         btnRefuseRequest.addTarget(self, action: #selector(self.refuseRequest(_:)), for: .touchUpInside)
         
         bottomLine = UIView()
@@ -78,10 +79,10 @@ class FaeReceivedCell: UITableViewCell {
         
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserName)
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-17-|", options: [], views: lblUserName, lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnAgreeRequest)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnRefuseRequest)
-        addConstraintsWithFormat("H:[v0(45)]-0-[v1(45)]-0-|", options: [], views:btnRefuseRequest, btnAgreeRequest)
+        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnAgreeRequest)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnRefuseRequest)
+        addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAgreeRequest)
     }
     
     func refuseRequest(_ sender: UIButton) {

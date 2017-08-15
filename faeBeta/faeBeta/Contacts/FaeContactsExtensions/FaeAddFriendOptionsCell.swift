@@ -19,6 +19,7 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
         layoutMargins = UIEdgeInsets.zero
+        selectionStyle = .none
         loadAddFriendOptionsCellContent()
     }
     

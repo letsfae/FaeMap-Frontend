@@ -91,7 +91,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
         lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lableTextViewPlaceholder.textColor = UIColor._155155155()
-        if reportType == 0 {
+        if reportType == REPORT {
             lableTextViewPlaceholder.text = "Describe to us the case..."
             imageDescription.image = UIImage(named: "reportViewDescription")
         } else if reportType == 1 {

@@ -10,17 +10,23 @@ import TTRangeSlider
 extension MapBoardViewController: TTRangeSliderDelegate {
     // function for button on upper right of People table mode
     func chooseNearbyPeopleInfo(_ sender: UIButton) {
-        self.uiviewPeopleLocDetail.isHidden = false
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.uiviewPeopleLocDetail.frame.origin.y = 65
-        }, completion: nil)
-        btnNavBarMenu.isUserInteractionEnabled = false
-        self.tblMapBoard.delaysContentTouches = false
-        sliderDisFilter.setValue(Float(disVal)!, animated: false)
-        
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.rollUpPeopleLocPage(_:)))
-        uiviewPeopleLocDetail.addGestureRecognizer(swipeGesture)
-        swipeGesture.direction = .up
+        // in people page
+        if sender.tag == 1 {
+            uiviewPeopleLocDetail.isHidden = false
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                self.uiviewPeopleLocDetail.frame.origin.y = 65
+            }, completion: nil)
+            btnNavBarMenu.isUserInteractionEnabled = false
+            self.tblMapBoard.delaysContentTouches = false
+            sliderDisFilter.setValue(Float(disVal)!, animated: false)
+            
+            let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.rollUpPeopleLocPage(_:)))
+            uiviewPeopleLocDetail.addGestureRecognizer(swipeGesture)
+            swipeGesture.direction = .up
+        } else { // in place page
+            let vc = ChooseLocationViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
     
     func rollUpPeopleLocPage(_ sender: AnyObject) {
@@ -89,6 +95,15 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         lblCurtLoc.textColor = UIColor._107107107()
         uiviewPeopleLocDetail.addSubview(imgIcon)
         uiviewPeopleLocDetail.addSubview(lblCurtLoc)
+        
+        let imgRightArrow = UIImageView(frame: CGRect(x: screenWidth - 5 - 39, y: 6, width: 39, height: 38))
+        imgRightArrow.image = #imageLiteral(resourceName: "mb_rightArrow")
+        imgRightArrow.contentMode = .center
+        uiviewPeopleLocDetail.addSubview(imgRightArrow)
+        
+        let btnSearchLoc = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 48))
+        btnSearchLoc.addTarget(self, action: #selector(searchLoc(_:)), for: .touchUpInside)
+        uiviewPeopleLocDetail.addSubview(btnSearchLoc)
         
         // draw labels and buttons
         let lblDis = UILabel(frame: CGRect(x: 15, y: 70, width: 150, height: 21))
@@ -189,7 +204,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         sliderAgeFilter.lineHeight = 2.4
         sliderAgeFilter.selectedHandleDiameterMultiplier = 1.0
         sliderAgeFilter.hideLabels = true
-        sliderAgeFilter.minValue = 16
+        sliderAgeFilter.minValue = 18
         sliderAgeFilter.maxValue = 55
         sliderAgeFilter.selectedMinimum = Float(ageLBVal)
         sliderAgeFilter.selectedMaximum = Float(ageUBVal)
@@ -200,7 +215,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         
         // draw upArraw button
         let btnUpArrow = UIButton(frame: CGRect(x: (screenWidth-36)/2, y: 336, width: 36, height: 25))
-        btnUpArrow.setImage(#imageLiteral(resourceName: "mb_btnUpArrow"), for: .normal)
+        btnUpArrow.setImage(#imageLiteral(resourceName: "mapFilterArrow"), for: .normal)
         uiviewPeopleLocDetail.addSubview(btnUpArrow)
         btnUpArrow.addTarget(self, action: #selector(self.rollUpPeopleLocPage(_:)), for: .touchUpInside)
         
@@ -243,5 +258,10 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         ageLBVal = Int(selectedMinimum)
         ageUBVal = Int(selectedMaximum)
         lblAgeVal.text = "\(ageLBVal)-\(ageUBVal)"
+    }
+    
+    func searchLoc(_ sender: UIButton) {
+        let vc = ChooseLocationViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
