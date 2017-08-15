@@ -109,7 +109,7 @@ class IncomingMessage {
             (placemarks, error) -> Void in
             if error == nil {
                 guard let addr = placemarks?[0] else { return }
-                mediaItem?.addressLine1.text = addr.thoroughfare
+                mediaItem?.addressLine1.text = addr.subThoroughfare! + " " + addr.thoroughfare!
                 var cityText = addr.locality
                 if(addr.administrativeArea != nil) {
                     cityText = cityText! + ", " + addr.administrativeArea!
