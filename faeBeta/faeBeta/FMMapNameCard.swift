@@ -16,13 +16,15 @@ extension FaeMapViewController: NameCardDelegate {
         view.addSubview(uiviewNameCard)
     }
     
-    func loadAddFriendView() {
-        uiviewAddWithdrawFriend = FMAddWithdrawFriendView()
-        view.addSubview(uiviewAddWithdrawFriend)
-        uiviewAddWithdrawFriend.layer.zPosition = 1000
-        uiviewAddWithdrawFriend.isHidden = true
-        uiviewAddWithdrawFriend.delegate = uiviewNameCard
-        uiviewNameCard.passStatusDelegate = uiviewAddWithdrawFriend
+    // NameCardDelegate
+    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
+        let addFriendVC = AddFriendFromNameCardViewController()
+        addFriendVC.delegate = uiviewNameCard
+        addFriendVC.userId = userId
+        addFriendVC.requestId = requestId
+        addFriendVC.statusMode = status
+        addFriendVC.modalPresentationStyle = .overCurrentContext
+        present(addFriendVC, animated: false)
     }
     
     // NameCardDelegate

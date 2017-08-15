@@ -71,7 +71,6 @@ class EnableNotificationViewController: UIViewController {
         if notificationType?.types == UIUserNotificationType() {
             UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
         }
-//        self.dismiss(animated: true, completion: nil)
     }
 
     func notNowButtonTapped() {

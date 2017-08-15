@@ -16,7 +16,7 @@ protocol SomeDelegateRequested: class {
 class FaeRequestedCell: UITableViewCell {
     
     weak var delegate: SomeDelegateRequested?
-    var imgAvatar: FaeAvatarView!
+    var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var btnCancelRequest: UIButton!
@@ -30,6 +30,7 @@ class FaeRequestedCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
         layoutMargins = UIEdgeInsets.zero
+        selectionStyle = .none
         loadFriendsCellContent()
     }
     
@@ -38,7 +39,7 @@ class FaeRequestedCell: UITableViewCell {
     }
     
     fileprivate func loadFriendsCellContent() {
-        imgAvatar = FaeAvatarView(frame: CGRect.zero)
+        imgAvatar = UIImageView(frame: CGRect.zero)
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
@@ -62,12 +63,12 @@ class FaeRequestedCell: UITableViewCell {
         
         btnCancelRequest = UIButton()
         addSubview(btnCancelRequest)
-        btnCancelRequest.setImage(#imageLiteral(resourceName: "btnRefuse"), for: .normal)
+        btnCancelRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
         btnCancelRequest.addTarget(self, action: #selector(cancelRequest(_:)), for: .touchUpInside)
         
         btnResendRequest = UIButton()
         addSubview(btnResendRequest)
-        btnResendRequest.setImage(#imageLiteral(resourceName: "btnRequest"), for: .normal)
+        btnResendRequest.setImage(#imageLiteral(resourceName: "resendRequest"), for: .normal)
         btnResendRequest.addTarget(self, action: #selector(resendRequest(_:)), for: .touchUpInside)
         
         bottomLine = UIView()
@@ -78,10 +79,10 @@ class FaeRequestedCell: UITableViewCell {
 
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserName)
         addConstraintsWithFormat("H:|-86-[v0]-114-|", options: [], views: lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-17-|", options: [], views: lblUserName, lblUserSaying)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnCancelRequest)
-        addConstraintsWithFormat("V:|-17-[v0(45)]-17-|", options: [], views: btnResendRequest)
-        addConstraintsWithFormat("H:[v0(45)]-0-[v1(45)]-0-|", options: [], views:btnCancelRequest, btnResendRequest)
+        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnCancelRequest)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnResendRequest)
+        addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnCancelRequest, btnResendRequest)
     }
     
     func cancelRequest(_ sender: UIButton) {

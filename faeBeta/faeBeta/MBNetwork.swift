@@ -87,6 +87,28 @@ extension MapBoardViewController {
 //                if mbPlaceData.class_2_icon_id != 0 {
                     self.mbPlaces.append(mbPlaceData)
 //                }
+                
+                if mbPlaceData.classOne.contains("Arts") && testArrPopular.count < 15 {
+                    testArrPopular.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Education") && testArrRecommend.count < 15{
+                    testArrRecommend.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Food") && testArrFood.count < 15 {
+                    testArrFood.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Drink") && testArrDrinks.count < 15 {
+                    testArrDrinks.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Shopping") && testArrShopping.count < 15 {
+                    testArrShopping.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Outdoors") && testArrOutdoors.count < 15 {
+                    testArrOutdoors.append(mbPlaceData)
+                }
+                if mbPlaceData.classOne.contains("Recreation") && testArrRecreation.count < 15 {
+                    testArrRecreation.append(mbPlaceData)
+                }
                 break
             case "people":
                 
@@ -111,79 +133,13 @@ extension MapBoardViewController {
         }
     }
     
-
-//    fileprivate func getSocialPinAddress(position: CLLocationCoordinate2D, socialType: String, index: Int) {
-//        GMSGeocoder().reverseGeocodeCoordinate(position, completionHandler: {
-//            (response, _) -> Void in
-//            
-//            if let fullAddress = response?.firstResult()?.lines {
-//                var address: String = ""
-//                for line in fullAddress {
-//                    if line == "" {
-//                        continue
-//                    } else if fullAddress.index(of: line) == fullAddress.count - 1 {
-//                        address += line + ""
-//                    } else {
-//                        address += line + ", "
-//                    }
-//                }
-//                
-//                if socialType == "comment" {
-//                    self.mbComments[index].address = address
-//                } else if socialType == "media" {
-//                    self.mbStories[index].address = address
-//                    
-//                    //                    print("\(index) \(position) \(address)")
-//                }
-//            }
-//        })
-    
-        /*
-        CLGeocoder().reverseGeocodeLocation(position, completionHandler: {
-            (placemarks, error) -> Void in
-            var placemark:CLPlacemark!
-            var address: String = ""
-         
-            if error == nil && placemarks!.count > 0 {
-                placemark = placemarks![0] as CLPlacemark
-         
-                if placemark.subThoroughfare != nil {
-                    address += "\(placemark.subThoroughfare!)"
-                }
-                if placemark.thoroughfare != nil {
-                    address += ", \(placemark.thoroughfare!)"
-                }
-                if placemark.locality != nil {
-                    address += ", \(placemark.locality!)"
-                }
-                if placemark.administrativeArea != nil {
-                    address += ", \(placemark.administrativeArea!)"
-                }
-                if placemark.country != nil {
-                    address += ", \(placemark.country!)"
-                }
-                if placemark.postalCode != nil {
-                    address += ", \(placemark.postalCode!)"
-                }
-//                address = "\(placemark.subThoroughfare!), \(placemark.thoroughfare!), \(placemark.postalCode!), \(placemark.locality!), \(placemark.administrativeArea!), \(placemark.country!)"
-         
-                if socialType == "comment" {
-                    self.mbComments[index].address = address
-                } else if socialType == "media" {
-                    self.mbStories[index].address = address
-                }
-            }
-        })
-        */
-//    }
- 
-    
     func getMBPlaceInfo() {
         let mbPlacesList = FaeMap()
         mbPlacesList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
         mbPlacesList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         mbPlacesList.whereKey("radius", value: "9999999")
         mbPlacesList.whereKey("type", value: "place")
+        mbPlacesList.whereKey("max_count", value: "1000")
         mbPlacesList.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
@@ -200,9 +156,27 @@ extension MapBoardViewController {
             }
             
             self.mbPlaces.removeAll()
-            self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
+            self.testArrPlaces.removeAll()
             
+            self.testArrPopular.removeAll()
+            self.testArrRecommend.removeAll()
+            self.testArrFood.removeAll()
+            self.testArrDrinks.removeAll()
+            self.testArrShopping.removeAll()
+            self.testArrOutdoors.removeAll()
+            self.testArrRecreation.removeAll()
+            
+            self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
             self.mbPlaces.sort { $0.dis < $1.dis }
+            
+            self.testArrPlaces.append(self.testArrPopular)
+            self.testArrPlaces.append(self.testArrRecommend)
+            self.testArrPlaces.append(self.testArrFood)
+            self.testArrPlaces.append(self.testArrDrinks)
+            self.testArrPlaces.append(self.testArrShopping)
+            self.testArrPlaces.append(self.testArrOutdoors)
+            self.testArrPlaces.append(self.testArrRecreation)
+            
             self.tblMapBoard.reloadData()
         }
     }

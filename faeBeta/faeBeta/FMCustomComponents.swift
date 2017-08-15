@@ -13,10 +13,7 @@ protocol NameCardDelegate: class {
     func openFaeUsrInfo()
     func chatUser(id: Int)
     func reportUser(id: Int)
-}
-
-protocol PassStatusFromButtonToView: class {
-    func passFriendStatusFromButton(id: Int, status: FriendStatus)
+    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus)
 }
 
 protocol PassStatusFromViewToButton: class {
@@ -28,12 +25,12 @@ enum FriendStatus: String {
     case accepted
     case blocked
     case pending
+    case requested
 }
 
 class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     weak var delegate: NameCardDelegate?
-    weak var passStatusDelegate: PassStatusFromButtonToView?
     let faeContact = FaeContact()
     var statusMode: FriendStatus = .defaultMode
     
@@ -42,6 +39,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             if userId > 0 { updateNameCard(withUserId: userId) }
         }
     }
+    var requestId: Int = -1
     
     var boolCardOpened = false
     var boolOptionsOpened = false
@@ -436,6 +434,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                     for i in 0..<json.count {
                         if json[i]["requested_user_id"].intValue == id {
                             self.statusMode = .pending
+                            self.requestId = json[i]["friend_request_id"].intValue
                             break
                         }
                     }
@@ -443,6 +442,24 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                 self.setButtonImage()
             } else {
                 print("[FMUserInfo get requested friends list fail] - \(status) \(message!)")
+            }
+        }
+        
+        faeContact.getFriendRequests() {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                if json.count != 0 {
+                    for i in 0..<json.count {
+                        if json[i]["request_user_id"].intValue == id {
+                            self.statusMode = .requested
+                            self.requestId = json[i]["friend_request_id"].intValue
+                            break
+                        }
+                    }
+                }
+                self.setButtonImage()
+            } else {
+                print("[FMUserInfo get request friends list fail] - \(status) \(message!)")
             }
         }
     }
@@ -458,14 +475,17 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         case .pending:
             btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
             break
+        case .requested:
+            btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
+            break
         case .blocked:
-            isHidden = true
+            btnProfile.isHidden = true
             break
         }
     }
     
     func chooseFriendActions(_ sender: UIButton) {
-        passStatusDelegate?.passFriendStatusFromButton(id: userId, status: statusMode)
+        delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
     }
     
     // PassStatusFromViewToButton
@@ -543,319 +563,4 @@ class FMLocateSelf: UIButton {
             self.faeMapCtrler?.mapGesture(isOn: true)
         }
     }
-}
-
-class FMAddWithdrawFriendView: UIView, PassStatusFromButtonToView {
-    weak var delegate: PassStatusFromViewToButton?
-    var uiviewChooseAction: UIView!
-    var uiviewMsgSent: UIView!
-    var btnActFirst: UIButton!
-    var btnActSecond: UIButton!
-    var btnActThird: UIButton!
-    var btnOK: UIButton!
-    var btnCancel:UIButton!
-    var btnFriendSentBack: UIButton!
-    var lblChoose: UILabel!
-    var lblMsgSent: UILabel!
-    
-    var userId: Int = -1
-    let faeContact = FaeContact()
-    var requestId: Int = -1
-    
-    let ADD_FRIEND_ACT = 1
-    let FOLLOW_ACT = 2
-    let WITHDRAW_ACT = 3
-    let RESEND_ACT = 4
-    let REMOVE_FRIEND_ACT = 5
-    let BLOCK_ACT = 6
-    let REPORT_ACT = 7
-    let UNFOLLOW_ACT = 8
-    
-    override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        loadContent()
-        animationShowSelf()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadContent() {
-        backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 70 / 100)
-        
-        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 237))
-        uiviewChooseAction.center.x = screenWidth / 2
-        uiviewChooseAction.backgroundColor = .white
-        uiviewChooseAction.layer.cornerRadius = 20
-        
-        lblChoose = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
-//        lblChoose.center.x = screenWidth / 2
-        lblChoose.textAlignment = .center
-        lblChoose.text = "Choose an Action"
-        lblChoose.textColor = UIColor._898989()
-        lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        uiviewChooseAction.addSubview(lblChoose)
-        
-        btnActFirst = UIButton(frame: CGRect(x: 41, y: 65, w: 208, h: 50))
-        btnActSecond = UIButton(frame: CGRect(x: 41, y: 130, w: 208, h: 50))
-        btnActThird = UIButton(frame: CGRect(x: 41, y: 195, w: 208, h: 50))
-        btnActThird.isHidden = true
-        
-        var btnActions = [UIButton]()
-        btnActions.append(btnActFirst)
-        btnActions.append(btnActSecond)
-        btnActions.append(btnActThird)
-        
-        for i in 0..<btnActions.count {
-            btnActions[i].setTitleColor(UIColor._2499090(), for: .normal)
-            btnActions[i].titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-            btnActions[i].addTarget(self, action: #selector(sentActRequest(_:)), for: .touchUpInside)
-            btnActions[i].layer.borderWidth = 2
-            btnActions[i].layer.borderColor = UIColor._2499090().cgColor
-            btnActions[i].layer.cornerRadius = 26 * screenWidthFactor
-            uiviewChooseAction.addSubview(btnActions[i])
-        }
-        
-        btnCancel = UIButton()
-        btnCancel.setTitle("Cancel", for: .normal)
-        btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
-        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
-        uiviewChooseAction.addSubview(btnCancel)
-        addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnCancel)
-        addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
-        
-        addSubview(uiviewChooseAction)
-        loadSendActRequest()
-    }
-    
-    fileprivate func loadSendActRequest() {
-        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
-        uiviewMsgSent.backgroundColor = .white
-        uiviewMsgSent.center.x = screenWidth / 2
-        uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor
-        
-        btnFriendSentBack = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
-        btnFriendSentBack.tag = 0
-        btnFriendSentBack.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
-        btnFriendSentBack.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
-        
-        lblMsgSent = UILabel(frame: CGRect(x: 58, y: 14, w: 190, h: 80))
-        
-        btnOK = UIButton(frame: CGRect(x: 43, y: 102, w: 208, h: 39))
-        lblMsgSent.numberOfLines = 2
-        lblMsgSent.textAlignment = .center
-        lblMsgSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblMsgSent.textColor = UIColor._898989()
-        
-        btnOK.setTitle("OK", for: .normal)
-        btnOK.setTitleColor(UIColor.white, for: .normal)
-        btnOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-        btnOK.backgroundColor = UIColor._2499090()
-        btnOK.layer.cornerRadius = 19 * screenWidthFactor
-        btnOK.addTarget(self, action: #selector(actionFinish(_:)), for: .touchUpInside)
-        
-        uiviewMsgSent.addSubview(lblMsgSent)
-        uiviewMsgSent.addSubview(btnFriendSentBack)
-        uiviewMsgSent.addSubview(btnOK)
-        addSubview(uiviewMsgSent)
-    }
-    
-    // PassStatusFromButtonToView
-    func passFriendStatusFromButton(id: Int, status: FriendStatus) {
-        userId = id
-        isHidden = false
-        uiviewChooseAction.isHidden = false
-        animationShowSelf()
-        uiviewMsgSent.isHidden = true
-        switch status {
-        case .defaultMode:
-            btnActFirst.setTitle("Add Friend", for: .normal)
-            btnActFirst.tag = ADD_FRIEND_ACT
-            btnActSecond.setTitle("Follow", for: .normal)
-            btnActSecond.tag = FOLLOW_ACT
-            break
-        case .pending:
-            btnActFirst.setTitle("Withdraw", for: .normal)
-            btnActFirst.tag = WITHDRAW_ACT
-            btnActSecond.setTitle("Resend", for: .normal)
-            btnActSecond.tag = RESEND_ACT
-            break
-        case .accepted:
-            btnActFirst.setTitle("Remove Friend", for: .normal)
-            btnActFirst.tag = REMOVE_FRIEND_ACT
-            btnActSecond.setTitle("Block", for: .normal)
-            btnActSecond.tag = BLOCK_ACT
-            btnActThird.setTitle("Report", for: .normal)
-            btnActThird.tag = REPORT_ACT
-            break
-        default:
-            break
-        }
-        
-        if status == .accepted {
-            uiviewChooseAction.frame.size.height = 302 * screenHeightFactor
-            btnActThird.isHidden = false
-        } else {
-            uiviewChooseAction.frame.size.height = 237 * screenHeightFactor
-            btnActThird.isHidden = true
-        }
-    }
-    // PassStatusFromButtonToView End
-    
-    // actions
-    func sentActRequest(_ sender: UIButton!) {
-        btnOK.tag = sender.tag
-        uiviewChooseAction.isHidden = true
-        uiviewMsgSent.isHidden = false
-        animationActionView()
-        switch sender.tag {
-        case ADD_FRIEND_ACT:
-            // send friend request
-            faeContact.sendFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblMsgSent.text = "Friend Request Sent Successfully!"
-                    self.delegate?.passFriendStatusFromView(status: .pending)
-                } else if status == 400 {
-                    self.lblMsgSent.text = "You've Already Sent Friend Request!"
-                    self.delegate?.passFriendStatusFromView(status: .pending)
-                } else {
-                    self.lblMsgSent.text = "Friend Request Sent Fail!"
-                    print("[FMUserInfo Friend Request Sent Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case FOLLOW_ACT:
-            faeContact.followPerson(followeeId: String(self.userId)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblMsgSent.text = "Follow Request Sent Successfully!"
-                } else {
-                    self.lblMsgSent.text = "Follow Request Sent Fail!"
-                    print("[FMUserInfo Follow Request Sent Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case WITHDRAW_ACT:
-            // withdraw friend request
-            faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    let json = JSON(message!)
-                    for i in 0..<json.count {
-                        print("json request_id \(json[i]["requested_user_id"].intValue)")
-                        if json[i]["requested_user_id"].intValue == self.userId {
-                            self.requestId = json[i]["friend_request_id"].intValue
-                            break
-                        }
-                    }
-                    self.faeContact.withdrawFriendRequest(requestId: String(self.requestId)) {(status: Int, message: Any?) in
-                        if status / 100 == 2 {
-                            self.lblMsgSent.text = "Request Withdraw Successfully!"
-                            self.delegate?.passFriendStatusFromView(status: .defaultMode)
-                        } else if status == 404 {
-                            self.lblMsgSent.text = "You haven't Sent Friend Request!"
-                            self.delegate?.passFriendStatusFromView(status: .defaultMode)
-                        } else {
-                            self.lblMsgSent.text = "Request Withdraw Fail!"
-                            print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
-                        }
-                    }
-                } else {
-                    self.lblMsgSent.text = "Internet Error"
-                    print("[FMUserInfo getFriendRequestsSent Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case RESEND_ACT:
-            faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblMsgSent.text = "Request Resent Successfully!"
-                } else if status == 400 {
-                    self.lblMsgSent.text = "The User Has Already Sent You a Friend Request!"
-                } else {
-                    self.lblMsgSent.text = "Request Resent Fail!"
-                    print("[FMUserInfo Friend Request Resent Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case REMOVE_FRIEND_ACT:
-            faeContact.deleteFriend(userId: String(userId)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblMsgSent.text = "Remove Friend Successfully!"
-                    self.delegate?.passFriendStatusFromView(status: .defaultMode)
-                } else {
-                    self.lblMsgSent.text = "Remove Friend Fail!"
-                    print("[FMUserInfo Delete Friend Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case BLOCK_ACT:
-            faeContact.blockPerson(userId: String(userId)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblMsgSent.text = "Block Friend Successfully!"
-                    self.delegate?.passFriendStatusFromView(status: .blocked)
-                } else {
-                    self.lblMsgSent.text = "Block Friend Fail!"
-                    print("[FMUserInfo Friend Block Fail] - \(status) \(message!)")
-                }
-            }
-            break
-        case REPORT_ACT:
-            break
-        default:
-            break
-        }
-    }
-    
-    func actionCancel(_ sender: UIButton) {
-        animationHideSelf()
-    }
-    
-    func actionFinish(_ sender: UIButton!) {
-        isHidden = true
-        switch sender.tag {
-        case 0:
-            print("action dismiss")
-        case ADD_FRIEND_ACT:
-            print("request finish")
-        case FOLLOW_ACT:
-            print("follow finish")
-        case WITHDRAW_ACT:
-            print("withdraw finish")
-        case RESEND_ACT:
-            print("resent finish")
-        default:break
-        }
-    }
-    // actions end
-    
-    // animations
-    func animationActionView() {
-        uiviewChooseAction.alpha = 0
-        uiviewMsgSent.alpha = 0
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewMsgSent.alpha = 1
-        }, completion: nil)
-    }
-    
-    func animationShowSelf() {
-        alpha = 0
-        uiviewChooseAction.alpha = 0
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.alpha = 1
-            self.uiviewChooseAction.alpha = 1
-        }, completion: nil)
-    }
-    
-    func animationHideSelf() {
-        alpha = 1
-        uiviewChooseAction.alpha = 1
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.alpha = 0
-            self.uiviewChooseAction.alpha = 0
-        }, completion: { _ in
-            self.isHidden = true
-        })
-    }
-    // animations end
 }

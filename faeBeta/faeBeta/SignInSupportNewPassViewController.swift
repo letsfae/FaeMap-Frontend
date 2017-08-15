@@ -95,10 +95,31 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                      "code":code!,
                      "password":password!]
         postToURL("/reset_login/password", parameter: param as [String : AnyObject]?, authentication: headerAuthentication()) {(status:Int, message: Any?) in
-            self.shouldShowActivityIndicator(false)
             if(status / 100 == 2) {
-                _ = self.navigationController?.popToRootViewController(animated: true)
+                let user = FaeUser()
+                user.whereKey("email", value: self.email!)
+                user.whereKey("password", value: self.password!)
+                user.whereKey("device_id", value: headerDeviceID)
+                user.whereKey("is_mobile", value: "true")
+                user.logInBackground { (status: Int, message: Any?) in
+                    self.shouldShowActivityIndicator(false)
+                    if status / 100 == 2 {
+                        self.navigationController?.popToRootViewController(animated: false)
+                        if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
+                            if vcRoot is InitialPageController {
+                                if let vc = vcRoot as? InitialPageController {
+                                    vc.goToFaeMap()
+                                }
+                            }
+                        }
+                    } else {
+                        print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
+                    }
+//                _ = self.navigationController?.popToRootViewController(animated: true)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
+                }
+            } else {
+                print("[Fail to Reset Password] \(status) \(message!)")
             }
         }
     }
