@@ -61,7 +61,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
     var mkOverLay = [MKOverlay]()
-    var uiviewAddWithdrawFriend: FMAddWithdrawFriendView!
     var START_WAVE_ANIMATION = false
     
     
@@ -72,7 +71,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         getUserStatus()
         loadMapView()
         loadNameCard()
-        loadAddFriendView()
         timerSetup()
         openedPinListSetup()
         updateSelfInfo()
@@ -96,13 +94,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
-        print("viewDidAppear")
-        print(FirstTimeLoginViewController.boolFinishClicked)
-        if FirstTimeLoginViewController.boolFinishClicked {
-            print("jumpToEnableNotification")
-            jumpToEnableNotification()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -192,7 +183,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     fileprivate func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
-//        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
+        firstTimeLoginVC.delegate = self
+        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)
     }
     
@@ -226,18 +218,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         if places {
             updateTimerForLoadRegionPlacePin()
-        }
-    }
-    
-    func jumpToEnableNotification() {
-        print("jumpToEnableNotification")
-        let notificationType = UIApplication.shared.currentUserNotificationSettings
-        if notificationType?.types == UIUserNotificationType() {
-            let vc = EnableNotificationViewController()
-            //            UIApplication.shared.keyWindow?.visibleViewController?
-            present(vc, animated: true, completion: {_ in
-                FirstTimeLoginViewController.boolFinishClicked = false
-            })
         }
     }
 }
