@@ -166,7 +166,7 @@
     }
     //UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
     
-    UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 330, height == 0 ? 92 : 92 + 15 + height)];
+    UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 238, height == 0 ? 92 : 92 + 15 + height)];
     
     locationView.backgroundColor = [UIColor whiteColor];
     
