@@ -236,7 +236,7 @@ class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationMana
                 anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             anView.assignImage(#imageLiteral(resourceName: "chat_map_currentLoc"))
-            anView.imageView.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
+            anView.imgIcon.frame = CGRect(x: 6, y: 10, width: 48, height: 54)
             anView.alpha = 1
             return anView
         }

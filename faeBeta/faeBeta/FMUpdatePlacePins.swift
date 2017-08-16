@@ -10,7 +10,39 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController {
+extension FaeMapViewController: PlacePinAnnotationDelegate {
+    
+    // PlacePinAnnotationDelegate
+    func placePinAction(action: PlacePinAction) {
+        btnPlacePinActionOnSrchBar.alpha = 1
+        switch action {
+        case .detail:
+            joshprint(action)
+            btnPlacePinActionOnSrchBar.tag = 1
+            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._2559180()
+            btnPlacePinActionOnSrchBar.setTitle("View Place Details", for: .normal)
+            break
+        case .collect:
+            joshprint(action)
+            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._202144214()
+            btnPlacePinActionOnSrchBar.setTitle("Collect this Place", for: .normal)
+            break
+        case .route:
+            joshprint(action)
+            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._144162242()
+            btnPlacePinActionOnSrchBar.setTitle("Draw Route to this Place", for: .normal)
+            break
+        case .share:
+            joshprint(action)
+            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._35197143()
+            btnPlacePinActionOnSrchBar.setTitle("Share this Place", for: .normal)
+            break
+        }
+    }
+    
+    func placeDetail() {
+        
+    }
     
     func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "place"
@@ -22,11 +54,12 @@ extension FaeMapViewController {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
         anView.assignImage(first.icon)
+        anView.delegate = self
         let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
         DispatchQueue.main.async {
-            anView.imageView.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+            anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
             UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imageView.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+                anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
                 anView.alpha = 1
             }, completion: nil)
         }
@@ -146,7 +179,8 @@ extension FaeMapViewController {
                 return
             }
             var placePins = [FaePinAnnotation]()
-            DispatchQueue.global(qos: .default).async {
+            let serialQueue = DispatchQueue(label: "appendPlaces")
+            serialQueue.sync {
                 for placeJson in mapPlaceJsonArray {
                     let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, json: placeJson)
                     if self.faePlacePins.contains(place) {
@@ -165,6 +199,9 @@ extension FaeMapViewController {
                     self.boolCanUpdatePlacePin = true
                 }
             }
+//            DispatchQueue.global(qos: .default).async {
+//                
+//            }
             stopIconSpin(delay: getDelay(prevTime: time_0))
         }
     }

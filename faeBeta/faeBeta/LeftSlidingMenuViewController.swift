@@ -151,30 +151,31 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Board Mode", "Go Invisible", "Contacts", "Collections", "Mood Avatar", "Log Out"]
-        let idx = indexPath.row
-        cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(idx)")
-        cell.lblMiddle.text = array[idx]
-        cell.switchRight.tag = idx
-        if idx == 0 || idx == 2 || idx == 5 {
-            cell.uiviewRedDot.isHidden = false
+        let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatars", "Settings"]
+        //  "Activities",
+        if indexPath.row < 4 {
+            cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
+        } else {
+           cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
         }
-        if idx < 2 {
+        cell.lblMiddle.text = array[indexPath.row]
+        cell.switchRight.tag = indexPath.row
+        if indexPath.row < 2 {
             cell.switchRight.isHidden = false
         } else {
             cell.switchRight.isHidden = true
         }
-        if idx == 0 {
+        if indexPath.row == 0 {
             cell.switchRight.addTarget(self, action: #selector(self.mapBoardSwitch(_:)), for: .valueChanged)
             cell.switchRight.setOn(LeftSlidingMenuViewController.boolMapBoardIsOn, animated: false)
-        } else if idx == 1 {
+        } else if indexPath.row == 1 {
             cell.switchRight.setOn(userStatus == 5, animated: false)
             cell.switchRight.addTarget(self, action: #selector(self.invisibleSwitch(_:)), for: .valueChanged)
         }
         return cell
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 6 // 7
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableLeftSlideWindow.cellForRow(at: indexPath) as! LeftSlideWindowCell
@@ -248,7 +249,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.tableLeftSlideWindow.frame.origin.x = self.sizeFrom
                     self.backgroundColorViewTop.frame.origin.x = self.sizeFrom
                     self.backgroundColorViewDown.frame.origin.x = self.sizeFrom
-                    self.btnBackground.alpha = 1
+                    self.btnBackground.alpha = 0.7
                 })
             }
         } else {
@@ -257,7 +258,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 tableLeftSlideWindow.frame.origin.x = location.x - (290 + space)
                 backgroundColorViewTop.frame.origin.x = location.x - (290 + space)
                 backgroundColorViewDown.frame.origin.x = location.x - (290 + space)
-                btnBackground.alpha = (location.x - space) / 290
+                btnBackground.alpha = (location.x - space) / 290 * 0.7
                 percent = Double((end - location.x) / 290)
             }
             

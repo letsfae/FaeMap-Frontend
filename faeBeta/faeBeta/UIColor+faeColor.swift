@@ -94,7 +94,31 @@ extension UIColor {
         return UIColor(r: 49, g: 63, b: 72, alpha: 100)
     }
     
+    class func _206203203() -> UIColor {
+        return UIColor(r: 206, g: 203, b: 203, alpha: 100)
+    }
+    
     class func _585151() -> UIColor {
         return UIColor(r: 58, g: 51, b: 51, alpha: 80)
+    }
+    
+    class func _241241241() -> UIColor {
+        return UIColor(r: 241, g: 241, b: 241, alpha: 100)
+    }
+    
+    class func _2559180() -> UIColor {
+        return UIColor(r: 255, g: 91, b: 80, alpha: 100)
+    }
+    
+    class func _202144214() -> UIColor {
+        return UIColor(r: 202, g: 144, b: 214, alpha: 100)
+    }
+    
+    class func _144162242() -> UIColor {
+        return UIColor(r: 144, g: 162, b: 242, alpha: 100)
+    }
+    
+    class func _35197143() -> UIColor {
+        return UIColor(r: 35, g: 197, b: 143, alpha: 100)
     }
 }

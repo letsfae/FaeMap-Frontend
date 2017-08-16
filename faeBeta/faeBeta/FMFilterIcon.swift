@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MapFilterIcon: UIButton {
+class FMFilterIcon: UIButton {
     
     var polygonInside: UIImageView!
     var polygonOutside: UIImageView!
