@@ -9,8 +9,8 @@
 import UIKit
 
 protocol SeeAllPlacesDelegate: class {
-    func jumpToAllPlaces(places inCategory: [MBPlacesStruct], title: String)
-    func jumpToPlaceDetail(place: MBPlacesStruct)
+    func jumpToAllPlaces(places inCategory: [PlacePin], title: String)
+    func jumpToPlaceDetail(place: PlacePin)
 }
 
 class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -24,7 +24,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
     var lblTitle: UILabel!
     var btnSeeAll: UIButton!
     var colInfo: UICollectionView!
-    var places = [MBPlacesStruct]()
+    var places = [PlacePin]()
     var title: String!
     weak var delegate: SeeAllPlacesDelegate?
     
@@ -69,7 +69,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
         colInfo.backgroundColor = .clear
     }
     
-    func setValueForCell(title: String, places: [MBPlacesStruct]) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
+    func setValueForCell(title: String, places: [PlacePin]) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
         self.title = title
         lblTitle.text = title
         btnSeeAll.setTitle("See All", for: .normal)
@@ -152,7 +152,6 @@ class PlacesCollectionCell: UICollectionViewCell {
     
     fileprivate func loadCellContent() {
         imgPic = UIImageView(frame: CGRect(x: 0, y: 4, width: 120, height: 120))
-//        imgPic.backgroundColor = .red
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 5
         imgPic.layer.borderWidth = 1
@@ -168,16 +167,11 @@ class PlacesCollectionCell: UICollectionViewCell {
         lblAddress.textColor = UIColor._115115115()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblAddress)
-        
-//        lblName.backgroundColor = .blue
-//        lblAddress.backgroundColor = .green
-//        lblName.text = "This is name"
-//        lblAddress.text = "This is address"
     }
     
-    func setValueForColCell(place: MBPlacesStruct) {
+    func setValueForColCell(place: PlacePin) {
         imgPic.image = place.icon
         lblName.text = place.name
-        lblAddress.text = place.address
+        lblAddress.text = place.address1 + ", " + place.address2
     }
 }

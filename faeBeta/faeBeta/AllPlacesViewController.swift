@@ -11,7 +11,7 @@ import UIKit
 class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var tblAllPlaces: UITableView!
     var strTitle: String! = ""
-    var places = [MBPlacesStruct]()
+    var places = [PlacePin]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
