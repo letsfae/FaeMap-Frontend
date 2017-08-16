@@ -48,7 +48,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
 //    var mbComments = [MBSocialStruct]()
 //    var mbStories = [MBSocialStruct]()
     var mbPeople = [MBPeopleStruct]()
-    var mbPlaces = [MBPlacesStruct]()
+    var mbPlaces = [PlacePin]()
     
     var navBarMenuBtnClicked = false
     var selectedGender: String = "Both"
@@ -81,14 +81,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var imgPlaces2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
     var arrPlaceNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
     let arrTitle = ["Most Popular", "Recommended", "Nearby Food", "Nearby Drinks", "Shopping", "Outdoors", "Recreation"]
-    var testArrPlaces = [[MBPlacesStruct]]()
-    var testArrPopular = [MBPlacesStruct]()
-    var testArrRecommend = [MBPlacesStruct]()
-    var testArrFood = [MBPlacesStruct]()
-    var testArrDrinks = [MBPlacesStruct]()
-    var testArrShopping = [MBPlacesStruct]()
-    var testArrOutdoors = [MBPlacesStruct]()
-    var testArrRecreation = [MBPlacesStruct]()
+    var testArrPlaces = [[PlacePin]]()
+    var testArrPopular = [PlacePin]()
+    var testArrRecommend = [PlacePin]()
+    var testArrFood = [PlacePin]()
+    var testArrDrinks = [PlacePin]()
+    var testArrShopping = [PlacePin]()
+    var testArrOutdoors = [PlacePin]()
+    var testArrRecreation = [PlacePin]()
     
     // data for social table
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
@@ -187,7 +187,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
+//        print("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
@@ -201,7 +201,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print("[viewWillDisappear]")
+//        print("[viewWillDisappear]")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
         boolIsLoaded = false
@@ -695,14 +695,14 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     // SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: [MBPlacesStruct], title: String) {
+    func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.places = places
         vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func jumpToPlaceDetail(place: MBPlacesStruct) {
+    func jumpToPlaceDetail(place: PlacePin) {
         let vc = PlaceDetailViewController()
         vc.place = place
         navigationController?.pushViewController(vc, animated: true)

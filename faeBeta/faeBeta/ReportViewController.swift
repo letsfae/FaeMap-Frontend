@@ -97,10 +97,10 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         if reportType == REPORT {
             lableTextViewPlaceholder.text = "Describe to us the case..."
             imageDescription.image = UIImage(named: "reportViewDescription")
-        } else if reportType == 1 {
+        } else if reportType == FEEDBACK {
             lableTextViewPlaceholder.text = "Your Feedback..."
             imageDescription.image = UIImage(named: "reportYourFeedback")
-        } else if reportType == 2 {
+        } else if reportType == TAG {
             lableTextViewPlaceholder.text = "New Tag(s)..."
             imageDescription.image = UIImage(named: "reportNewTags")
         }
