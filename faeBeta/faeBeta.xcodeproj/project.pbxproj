@@ -13,14 +13,15 @@
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
 		5018565E1F33E39100ADD0F3 /* FMRouteCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5018565D1F33E39100ADD0F3 /* FMRouteCalculator.swift */; };
+		501D6B651F43BA6200A1F614 /* FMNameCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D6B641F43BA6200A1F614 /* FMNameCardView.swift */; };
 		50234AF71F27DAC000055748 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF61F27DAC000055748 /* ScreenFactor.swift */; };
 		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
-		506D1FCD1F2A8237004119EA /* PlaceResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* PlaceResultView.swift */; };
+		506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */; };
 		506D1FCF1F2A97D5004119EA /* FMPlaceDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */; };
 		506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */; };
-		5080005C1F249FD2009E3720 /* MapFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* MapFilterIcon.swift */; };
+		5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMFilterIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
-		50816DBC1F318BF00021EC74 /* FMCustomComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */; };
+		50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */; };
 		50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F541F2BB530002553F1 /* MapSearchViewController.swift */; };
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
@@ -163,8 +164,6 @@
 		B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
 		B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */; };
-		B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */; };
-		B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */; };
 		B83F8AED1E0353DB00F31CEF /* FMMapNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */; };
 		B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */; };
 		B84024801F0C1AC400AC6283 /* MoodAvatarImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */; };
@@ -259,14 +258,15 @@
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
 		5018565D1F33E39100ADD0F3 /* FMRouteCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMRouteCalculator.swift; sourceTree = "<group>"; };
+		501D6B641F43BA6200A1F614 /* FMNameCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMNameCardView.swift; sourceTree = "<group>"; };
 		50234AF61F27DAC000055748 /* ScreenFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
-		506D1FCC1F2A8237004119EA /* PlaceResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceResultView.swift; sourceTree = "<group>"; };
+		506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceInfoBar.swift; sourceTree = "<group>"; };
 		506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceDetail.swift; sourceTree = "<group>"; };
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
-		5080005B1F249FD2009E3720 /* MapFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFilterIcon.swift; sourceTree = "<group>"; };
+		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
-		50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMCustomComponents.swift; sourceTree = "<group>"; };
+		50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMCompass+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		50902F541F2BB530002553F1 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
@@ -428,8 +428,6 @@
 		B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAvatarView.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		B837D1F11D8F2F8500E44FAE /* PasswordTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextField.swift; sourceTree = "<group>"; };
-		B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenedPinListViewController.swift; sourceTree = "<group>"; };
-		B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OPLTableViewCell.swift; sourceTree = "<group>"; };
 		B83F8AEC1E0353DB00F31CEF /* FMMapNameCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapNameCard.swift; sourceTree = "<group>"; };
 		B83F8AEE1E0367FA00F31CEF /* FirstTimeLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstTimeLoginViewController.swift; sourceTree = "<group>"; };
 		B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodAvatarImages.swift; sourceTree = "<group>"; };
@@ -646,7 +644,6 @@
 			isa = PBXGroup;
 			children = (
 				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
-				50816DBB1F318BF00021EC74 /* FMCustomComponents.swift */,
 				B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B89AB3F21E3D775F00C5116D /* FMMapFilter.swift */,
@@ -657,13 +654,15 @@
 				B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */,
 				B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */,
 				B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */,
-				5080005B1F249FD2009E3720 /* MapFilterIcon.swift */,
-				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
 				B357D9971F3A35A500DA0258 /* CollectionsPlaceLocCell.swift */,
-				506D1FCC1F2A8237004119EA /* PlaceResultView.swift */,
 				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
 				5018565D1F33E39100ADD0F3 /* FMRouteCalculator.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
+				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
+				B39453E41F27DBBE0038EDAD /* MapFilterMenu.swift */,
+				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
+				50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */,
+				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1085,8 +1084,6 @@
 		B88A3E331DC9465200351A2A /* OpenedPinList */ = {
 			isa = PBXGroup;
 			children = (
-				B839AA1E1DC946AA00E315DF /* OpenedPinListViewController.swift */,
-				B839AA221DC95B2D00E315DF /* OPLTableViewCell.swift */,
 			);
 			name = OpenedPinList;
 			sourceTree = "<group>";
@@ -1444,7 +1441,7 @@
 				DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */,
 				8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */,
 				B064EEE71D6E0D1000C078F5 /* StickerAlbum.swift in Sources */,
-				B839AA231DC95B2D00E315DF /* OPLTableViewCell.swift in Sources */,
+				501D6B651F43BA6200A1F614 /* FMNameCardView.swift in Sources */,
 				B85FFE931EA84CEB0079D1A7 /* CollectionsBoardViewController.swift in Sources */,
 				B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */,
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
@@ -1471,7 +1468,7 @@
 				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
 				B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */,
-				506D1FCD1F2A8237004119EA /* PlaceResultView.swift in Sources */,
+				506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				690452881F032A9900B58982 /* FaeGenderView.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
@@ -1480,7 +1477,7 @@
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
-				5080005C1F249FD2009E3720 /* MapFilterIcon.swift in Sources */,
+				5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
@@ -1556,7 +1553,7 @@
 				B88905721E36094B00E68D58 /* Reachability.swift in Sources */,
 				B0714D551D5E435200356705 /* FMMainScreenItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
-				50816DBC1F318BF00021EC74 /* FMCustomComponents.swift in Sources */,
+				50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
 				B33F8A061F3ECB7D0033610D /* ChooseLocationViewController.swift in Sources */,
@@ -1612,7 +1609,6 @@
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
 				B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */,
-				B839AA1F1DC946AA00E315DF /* OpenedPinListViewController.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,

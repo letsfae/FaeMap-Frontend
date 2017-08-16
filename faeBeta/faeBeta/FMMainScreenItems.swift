@@ -96,6 +96,18 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
         
+        // Click to take an action for place pin
+        btnPlacePinActionOnSrchBar = UIButton()
+        btnPlacePinActionOnSrchBar.alpha = 0
+        btnPlacePinActionOnSrchBar.layer.cornerRadius = 2
+        btnPlacePinActionOnSrchBar.setTitleColor(UIColor.white, for: .normal)
+        btnPlacePinActionOnSrchBar.setTitleColor(UIColor.lightGray, for: .highlighted)
+        btnPlacePinActionOnSrchBar.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        
+        imgSchbarShadow.addSubview(btnPlacePinActionOnSrchBar)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
+        
         // Click to back to north
         btnCompass = FMCompass()
         btnCompass.mapView = faeMapView

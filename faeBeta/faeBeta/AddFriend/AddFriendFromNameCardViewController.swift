@@ -350,7 +350,7 @@ class AddFriendFromNameCardViewController: UIViewController {
             break
         case REPORT_ACT:
             self.indicatorView.stopAnimating()
-            let reportPinVC = ReportCommentPinViewController()
+            let reportPinVC = ReportViewController()
             reportPinVC.reportType = 0
             reportPinVC.modalPresentationStyle = .overCurrentContext
             self.present(reportPinVC, animated: true, completion: nil)

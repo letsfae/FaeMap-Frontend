@@ -101,6 +101,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func deselectAllAnnotations() {
+        
+        btnPlacePinActionOnSrchBar.alpha = 0
+        
         for annotation in faeMapView.selectedAnnotations {
             faeMapView.deselectAnnotation(annotation, animated: false)
         }
@@ -115,6 +118,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
             selectedAnnView?.hideButtons()
+            selectedAnnView = nil
         }
     }
     
