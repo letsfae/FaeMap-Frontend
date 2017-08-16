@@ -11,25 +11,25 @@ import UIKit
 extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        tblMapBoard.rowHeight = UITableViewAutomaticDimension
-        tblMapBoard.estimatedRowHeight = 200
+//        tblMapBoard.rowHeight = UITableViewAutomaticDimension
+//        tblMapBoard.estimatedRowHeight = 200
         
         if tableMode == .social {
-            tblMapBoard.estimatedRowHeight = 78
+//            tblMapBoard.estimatedRowHeight = 78
             return 78
         } else if tableMode == .people {
-            tblMapBoard.estimatedRowHeight = 90
+//            tblMapBoard.estimatedRowHeight = 90
             return 90
         } else if tableMode == .places {
             tblMapBoard.estimatedRowHeight = placeTableMode == .recommend ? 222 : 90
             return placeTableMode == .recommend ? 222 : 90
         } else if tableMode == .talk {
             if talkTableMode == .topic {
-                tblMapBoard.estimatedRowHeight = 66
+//                tblMapBoard.estimatedRowHeight = 66
                 return 66
             }
         }
-        return tblMapBoard.rowHeight
+        return 0 // tblMapBoard.rowHeight
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -95,7 +95,8 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.setValueForCell(place: place) //, curtLoc: LocManager.shared.curtLoc)
                 return cell
             }
-        } else if tableMode == .talk {
+        /*
+        else if tableMode == .talk {
             if talkTableMode == .feed {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "mbTalkFeedCell", for: indexPath) as! MBTalkFeedCell
                 cell.imgAvatar.image = avatarArr[indexPath.row]
@@ -130,6 +131,7 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
                     return cell
                 }
             }
+            */
         }
         
         return UITableViewCell()

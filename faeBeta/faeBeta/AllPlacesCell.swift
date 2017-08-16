@@ -59,11 +59,11 @@ class AllPlacesCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(18)]-9-|", options: [], views: lblPrice)
     }
     
-    func setValueForCell(place: MBPlacesStruct) {
+    func setValueForCell(place: PlacePin) {
         imgPlaceIcon.image = place.icon
         lblPlaceName.text = place.name
-        lblPlaceAddr.text = place.address
-        lblOpeninghour.text = place.distance
+        lblPlaceAddr.text = place.address1 + ", " + place.address2
+        lblOpeninghour.text = place.class_1
         lblPrice.text = "$$"
     }
 }

@@ -16,6 +16,10 @@ class ReportViewController: UIViewController, UITextViewDelegate {
      *  2 == tag
      */
     var reportType: Int = 0
+    let REPORT = 0
+    let FEEDBACK = 1
+    let TAG = 2
+    
     let colorPlaceHolder = UIColor(r: 155, g: 155, b: 155, alpha: 100)
     
     var buttonBackToCommentDetail: UIButton!
@@ -94,10 +98,10 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         if reportType == REPORT {
             lableTextViewPlaceholder.text = "Describe to us the case..."
             imageDescription.image = UIImage(named: "reportViewDescription")
-        } else if reportType == 1 {
+        } else if reportType == FEEDBACK {
             lableTextViewPlaceholder.text = "Your Feedback..."
             imageDescription.image = UIImage(named: "reportYourFeedback")
-        } else if reportType == 2 {
+        } else if reportType == TAG {
             lableTextViewPlaceholder.text = "New Tag(s)..."
             imageDescription.image = UIImage(named: "reportNewTags")
         }

@@ -78,7 +78,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         isUserLoggedIn()
         getUserStatus()
         loadNameCard()
-        loadAddFriendView()
         loadMapFilter()
         loadMapView()
         loadButton()
@@ -104,11 +103,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
-        if FirstTimeLoginViewController.boolFinishClicked {
-            print("jumpToEnableNotification")
-            jumpToEnableNotification()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -230,18 +224,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         if places {
             updateTimerForLoadRegionPlacePin()
-        }
-    }
-    
-    func jumpToEnableNotification() {
-        print("jumpToEnableNotification")
-        let notificationType = UIApplication.shared.currentUserNotificationSettings
-        if notificationType?.types == UIUserNotificationType() {
-            let vc = EnableNotificationViewController()
-            //            UIApplication.shared.keyWindow?.visibleViewController?
-            present(vc, animated: true, completion: { _ in
-                FirstTimeLoginViewController.boolFinishClicked = false
-            })
         }
     }
 }

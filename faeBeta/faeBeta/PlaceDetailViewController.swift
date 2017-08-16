@@ -9,7 +9,7 @@
 import UIKit
 
 class PlaceDetailViewController: UIViewController {
-    var place: MBPlacesStruct!
+    var place: PlacePin!
     var uiviewHeader: UIView!
     var uiviewSubHeader: UIView!
     var uiviewFooter: UIView!
@@ -24,6 +24,7 @@ class PlaceDetailViewController: UIViewController {
     var imgPic_1: UIImageView!
     var imgPic_2: UIImageView!
     var tblPlaceDetail: UITableView!
+    let arrTitle = ["Similar Places", "Near this Place"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +35,10 @@ class PlaceDetailViewController: UIViewController {
     }
     
     func loadHeader() {
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 304))
-        view.addSubview(uiviewHeader)
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
+//        uiviewHeader.layer.borderColor = UIColor.black.cgColor
+//        uiviewHeader.layer.borderWidth = 1
+//        view.addSubview(uiviewHeader)
         imgPic_0 = UIImageView(frame: CGRect(x: -414, y: 0, w: 414, h: 208))
         imgPic_1 = UIImageView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
         imgPic_2 = UIImageView(frame: CGRect(x: 414, y: 0, w: 414, h: 208))
@@ -47,7 +50,8 @@ class PlaceDetailViewController: UIViewController {
         imgPic_2.backgroundColor = .green
         
         uiviewSubHeader = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
-        uiviewHeader.addSubview(uiviewSubHeader)
+        uiviewSubHeader.backgroundColor = .white
+//        uiviewHeader.addSubview(uiviewSubHeader)
         
         lblName = UILabel(frame: CGRect(x: 20, y: 21 * screenHeightFactor, width: screenWidth - 40, height: 27))
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 20)
@@ -57,7 +61,7 @@ class PlaceDetailViewController: UIViewController {
         lblCategory = UILabel(frame: CGRect(x: 20, y: 53 * screenHeightFactor, width: screenWidth - 90, height: 22))
         lblCategory.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblCategory.textColor = UIColor._146146146()
-        lblCategory.text = place.classOne
+        lblCategory.text = place.class_1
         
         lblPrice = UILabel()
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 16)
@@ -68,8 +72,8 @@ class PlaceDetailViewController: UIViewController {
         uiviewSubHeader.addSubview(lblName)
         uiviewSubHeader.addSubview(lblCategory)
         uiviewSubHeader.addSubview(lblPrice)
-        view.addConstraintsWithFormat("H:[v0(100)]-15-|", options: [], views: lblPrice)
-        view.addConstraintsWithFormat("V:[v0(22)]-\(14 * screenHeightFactor)-|", options: [], views: lblPrice)
+        uiviewSubHeader.addConstraintsWithFormat("H:[v0(100)]-15-|", options: [], views: lblPrice)
+        uiviewSubHeader.addConstraintsWithFormat("V:[v0(22)]-\(14 * screenHeightFactor)-|", options: [], views: lblPrice)
         
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
@@ -77,7 +81,19 @@ class PlaceDetailViewController: UIViewController {
     }
     
     func loadMidTable() {
+        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
+//        tblPlaceDetail.contentInset = UIEdgeInsets(top: -22, left: 0, bottom: 0, right: 0)
+        view.addSubview(tblPlaceDetail)
+        tblPlaceDetail.tableHeaderView = uiviewHeader
         
+        tblPlaceDetail.delegate = self
+        tblPlaceDetail.dataSource = self
+        tblPlaceDetail.register(PlaceDetailSection1Cell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
+        tblPlaceDetail.register(PlaceDetailSection2Cell.self, forCellReuseIdentifier: "PlaceDetailSection2Cell")
+        tblPlaceDetail.register(PlaceDetailSection3Cell.self, forCellReuseIdentifier: "PlaceDetailSection3Cell")
+        tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
+        tblPlaceDetail.separatorStyle = .none
+        tblPlaceDetail.showsVerticalScrollIndicator = false
     }
 
     func loadFooter() {
@@ -111,10 +127,6 @@ class PlaceDetailViewController: UIViewController {
         uiviewFooter.addSubview(btnSave)
         uiviewFooter.addSubview(btnRoute)
         uiviewFooter.addSubview(btnShare)
-        
-        btnSave.backgroundColor = .red
-        btnRoute.backgroundColor = .yellow
-        btnShare.backgroundColor = .green
     }
     
     func backToMapBoard(_ sender: UIButton) {
