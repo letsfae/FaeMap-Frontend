@@ -143,7 +143,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("chat view did appear")
-        print("set up tool bar views")
+        //print("set up tool bar views")
         inputToolbar.frame.origin.y = toolbarLastY
         //collectionView.isScrollEnabled = false
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: collectionViewLastBottomInset, right: 0.0)
