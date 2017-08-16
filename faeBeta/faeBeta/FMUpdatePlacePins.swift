@@ -68,8 +68,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
     
     func visiblePlaces() -> [CCHMapClusterAnnotation] {
         var mapRect = faeMapView.visibleMapRect
-        mapRect.origin.y += mapRect.size.height * 0.2
-        mapRect.size.height = mapRect.size.height * 0.8
+        mapRect.origin.y += mapRect.size.height * 0.3
+        mapRect.size.height = mapRect.size.height * 0.7
         let visibleAnnos = faeMapView.annotations(in: mapRect)
         var places = [CCHMapClusterAnnotation]()
         for anno in visibleAnnos {
@@ -95,7 +95,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
             anView.assignImage(firstAnn.icon)
             selectedAnnView = anView
             selectedAnn = firstAnn
-            anView.showButtons()
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
@@ -199,9 +198,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
                     self.boolCanUpdatePlacePin = true
                 }
             }
-//            DispatchQueue.global(qos: .default).async {
-//                
-//            }
             stopIconSpin(delay: getDelay(prevTime: time_0))
         }
     }

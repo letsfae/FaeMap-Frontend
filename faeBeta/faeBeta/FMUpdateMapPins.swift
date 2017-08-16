@@ -81,15 +81,18 @@ extension FaeMapViewController {
     }
     
     func updateTimerForLoadRegionPin() {
+        /*
         self.loadCurrentRegionPins()
         if timerLoadRegionPins != nil {
             timerLoadRegionPins.invalidate()
         }
         timerLoadRegionPins = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(self.loadCurrentRegionPins), userInfo: nil, repeats: true)
+     */
     }
     
     // MARK: -- Load Pins based on the Current Region Camera
     func loadCurrentRegionPins() {
+        /*
         let coorDistance = cameraDiagonalDistance()
         if self.boolCanUpdateSocialPin {
             self.boolCanUpdateSocialPin = false
@@ -100,9 +103,11 @@ extension FaeMapViewController {
                 })
             })
         }
+         */
     }
     
     fileprivate func refreshMapPins(radius: Int, completion: @escaping ([MapPin]) -> ()) {
+        /*
         self.mapPins.removeAll()
         
         // Get screen center's coordinate
@@ -139,9 +144,11 @@ extension FaeMapViewController {
             // Sent noti to stop filter icon spinning, 2 seconds
             completion(self.mapPins)
         }
+         */
     }
     
     fileprivate func processMapPins(results: [JSON]) {
+        /*
         for result in results {
             let mapPin = MapPin(json: result)
             if self.mapPins.contains(mapPin) {
@@ -150,9 +157,11 @@ extension FaeMapViewController {
                 self.mapPins.append(mapPin)
             }
         }
+         */
     }
     
     fileprivate func pinMapPinsOnMap(results: [MapPin]) {
+        /*
         for result in results {
             DispatchQueue.global(qos: .default).async {
                 let pinMap = FaePinAnnotation(type: result.type)
@@ -165,10 +174,12 @@ extension FaeMapViewController {
                 }
             }
         }
+         */
     }
     
     // Animation for pin logo
     func animatePinWhenItIsCreated(pinID: String, type: String) {
+        /*
         tempMarker = UIImageView(frame: CGRect(x: 0, y: 0, width: 120, height: 128))
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2 - 25.5)
         tempMarker.center = mapCenter
@@ -192,9 +203,11 @@ extension FaeMapViewController {
                 self.loadMarkerWithpinID(pinID: pinID, type: type, tempMaker: self.tempMarker)
             }
         })
+     */
     }
     
     fileprivate func loadMarkerWithpinID(pinID: String, type: String, tempMaker: UIImageView) {
+        /*
         let loadPin = FaeMap()
         loadPin.getPin(type: type, pinId: pinID) { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
@@ -225,6 +238,7 @@ extension FaeMapViewController {
                 self.tempMarker.removeFromSuperview()
             })
         }
+     */
     }
     
     func cameraDiagonalDistance() -> Int {

@@ -27,6 +27,8 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         view.backgroundColor = UIColor.white
         if LocalStorageManager.shared.readByKey("userMiniAvatar") != nil {
             userMiniAvatar = LocalStorageManager.shared.readByKey("userMiniAvatar") as! Int
+        } else {
+            userMiniAvatar = 1
         }
         intCurtAvatar = userMiniAvatar
         navigationBarSetting()

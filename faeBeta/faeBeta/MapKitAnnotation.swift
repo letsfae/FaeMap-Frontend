@@ -31,7 +31,7 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // place pin & social pin
     var icon = UIImage()
-    var class_2_icon_id: Int = 0
+    var class_2_icon_id: Int = 48
     var pinInfo: AnyObject!
     
     init(type: String) {
@@ -67,7 +67,11 @@ class FaePinAnnotation: MKPointAnnotation {
             let placePin = PlacePin(json: json)
             self.pinInfo = placePin as AnyObject
             self.id = json["place_id"].intValue
-            self.class_2_icon_id = json["categories"]["class2_icon_id"].intValue != 0 ? json["categories"]["class2_icon_id"].intValue : 48
+            if let _3_icon_id = json["categories"]["class3_icon_id"].int {
+                class_2_icon_id = _3_icon_id
+            } else if let _2_icon_id = json["categories"]["class2_icon_id"].int {
+                class_2_icon_id = _2_icon_id
+            }
             self.icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
             self.coordinate = placePin.coordinate
         }
@@ -363,6 +367,8 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var arrBtns = [UIButton]()
     
+    var boolBtnsReadyToOpened = false
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
@@ -386,23 +392,27 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     fileprivate func loadButtons() {
-        btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 42, height: 42))
+        btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 46, height: 46))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
+        btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail_s"), for: .selected)
         btnDetail.alpha = 0
         btnDetail.layer.zPosition = 0
         
-        btnCollect = UIButton(frame: CGRect(x: 35, y: 0, width: 42, height: 42))
+        btnCollect = UIButton(frame: CGRect(x: 35, y: 0, width: 46, height: 46))
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect"), for: .normal)
+        btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect_s"), for: .selected)
         btnCollect.alpha = 0
         btnCollect.layer.zPosition = 0
         
-        btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 42, height: 42))
+        btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 46, height: 46))
         btnRoute.setImage(#imageLiteral(resourceName: "place_new_route"), for: .normal)
+        btnRoute.setImage(#imageLiteral(resourceName: "place_new_route_s"), for: .selected)
         btnRoute.alpha = 0
         btnRoute.layer.zPosition = 0
         
-        btnShare = UIButton(frame: CGRect(x: 128, y: 43, width: 42, height: 42))
+        btnShare = UIButton(frame: CGRect(x: 128, y: 43, width: 46, height: 46))
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share"), for: .normal)
+        btnShare.setImage(#imageLiteral(resourceName: "place_new_share_s"), for: .selected)
         btnShare.alpha = 0
         btnShare.layer.zPosition = 0
         
@@ -410,6 +420,11 @@ class PlacePinAnnotationView: MKAnnotationView {
         addSubview(btnCollect)
         addSubview(btnRoute)
         addSubview(btnShare)
+        bringSubview(toFront: btnDetail)
+        bringSubview(toFront: btnCollect)
+        bringSubview(toFront: btnRoute)
+        bringSubview(toFront: btnShare)
+        self.superview?.bringSubview(toFront: self)
         
         arrBtns.append(btnDetail)
         arrBtns.append(btnCollect)
@@ -426,10 +441,12 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func showButtons() {
+        guard arrBtns.count == 0 else { return }
+        boolBtnsReadyToOpened = true
         loadButtons()
-        var point = self.frame.origin; point.x -= 57 ;point.y -= 54
-        frame = CGRect(x: point.x, y: point.y, width: 170, height: 110)
-        imgIcon.center.x = 85; imgIcon.frame.origin.y = 54
+        var point = self.frame.origin; point.x -= 59 ;point.y -= 56
+        frame = CGRect(x: point.x, y: point.y, width: 174, height: 112)
+        imgIcon.center.x = 87; imgIcon.frame.origin.y = 56
         var delay: Double = 0
         for btn in arrBtns {
             btn.addTarget(self, action: #selector(self.action(_:)), for: .touchUpInside)
@@ -446,13 +463,15 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func hideButtons() {
+        guard arrBtns.count == 4 else { return }
+        boolBtnsReadyToOpened = false
         UIView.animate(withDuration: 0.2, animations: {
             for btn in self.arrBtns {
                 btn.alpha = 0
                 btn.center = self.imgIcon.center
             }
         }, completion: { _ in
-            var point = self.frame.origin; point.x += 57; point.y += 54
+            var point = self.frame.origin; point.x += 59; point.y += 56
             self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
             self.imgIcon.frame.origin = CGPoint.zero
             self.removeButtons()
@@ -460,6 +479,10 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func action(_ sender: UIButton) {
+        btnDetail.isSelected = sender == btnDetail
+        btnCollect.isSelected = sender == btnCollect
+        btnRoute.isSelected = sender == btnRoute
+        btnShare.isSelected = sender == btnShare
         if sender == btnDetail { delegate?.placePinAction(action: .detail) }
         else if sender == btnCollect { delegate?.placePinAction(action: .collect) }
         else if sender == btnRoute { delegate?.placePinAction(action: .route) }

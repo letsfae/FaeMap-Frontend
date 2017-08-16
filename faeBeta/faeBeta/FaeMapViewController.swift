@@ -24,7 +24,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var boolCanUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
-    var faeMapView: MKMapView!
+    var faeMapView: FaeMapView!
     var faeUserPins = [FaePinAnnotation]()
     var faePlacePins = [FaePinAnnotation]()
     var lblUnreadCount: UILabel! // Unread Messages Label
@@ -67,6 +67,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var swipingState: PlaceResultBarState = .map
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var prevAltitude: CLLocationDistance = 0
     
     var btnPlacePinActionOnSrchBar: UIButton!
     
