@@ -138,6 +138,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 @property (nonatomic) BOOL shouldSetOffsetToZero;
 
+@property (nonatomic) CGRect toolBarLastFrame;
+
 @end
 
 
@@ -291,7 +293,7 @@ JSQMessagesKeyboardControllerDelegate>
 
     if (self.automaticallyScrollsToMostRecentMessage) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self scrollToBottomAnimated:NO];
+            //[self scrollToBottomAnimated:NO];
             [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
         });
     }
@@ -938,6 +940,8 @@ JSQMessagesKeyboardControllerDelegate>
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
         {
+            _toolBarLastFrame = self.inputToolbar.frame;
+            
             if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
                 [self.snapshotView removeFromSuperview];
             }
@@ -959,11 +963,14 @@ JSQMessagesKeyboardControllerDelegate>
             }
         }
             break;
-        case UIGestureRecognizerStateChanged:
+        case UIGestureRecognizerStateChanged: {
+            self.inputToolbar.frame = _toolBarLastFrame;
+        }
             break;
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
         case UIGestureRecognizerStateFailed:
+            self.inputToolbar.frame = _toolBarLastFrame;
             [self.keyboardController beginListeningForKeyboard];
             if (self.textViewWasFirstResponderDuringInteractivePop) {
                 [self.inputToolbar.contentView.textView becomeFirstResponder];
