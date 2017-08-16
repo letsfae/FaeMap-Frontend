@@ -14,8 +14,9 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map
     func loadMapView() {
-        faeMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        faeMapView = FaeMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
+        faeMapView.faeMapCtrler = self
         view.addSubview(faeMapView)
         view.sendSubview(toBack: faeMapView)
         faeMapView.showsPointsOfInterest = false
@@ -23,9 +24,9 @@ extension FaeMapViewController {
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
         
-        let tapGesture = UITapGestureRecognizer()
-        tapGesture.addTarget(self, action: #selector(self.mapViewTapAt(_:)))
-        faeMapView.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer()
+//        tapGesture.addTarget(self, action: #selector(self.mapViewTapAt(_:)))
+//        faeMapView.addGestureRecognizer(tapGesture)
         
         mapClusterManager = CCHMapClusterController(mapView: faeMapView)
         mapClusterManager.cellSize = 50
