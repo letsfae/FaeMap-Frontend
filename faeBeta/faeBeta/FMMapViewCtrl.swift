@@ -118,6 +118,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
             selectedAnnView?.hideButtons()
+            selectedAnnView?.boolBtnsReadyToOpened = false
             selectedAnnView = nil
         }
     }
@@ -170,6 +171,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 self.START_WAVE_ANIMATION = true
             }
         }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        if btnPlacePinActionOnSrchBar != nil { btnPlacePinActionOnSrchBar.alpha = 0 }
+        selectedAnnView?.hideButtons()
     }
     
     func mapViewTapAt(_ sender: UITapGestureRecognizer) {
