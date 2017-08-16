@@ -122,6 +122,8 @@
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */; };
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
+		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
+		B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */; };
 		B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */; };
 		B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */; };
 		B33F89FE1F3EA3870033610D /* AllPlacesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */; };
@@ -386,6 +388,8 @@
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchResult.swift; sourceTree = "<group>"; };
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
+		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
+		B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailTableView.swift; sourceTree = "<group>"; };
 		B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendFromNameCardViewController.swift; sourceTree = "<group>"; };
 		B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesViewController.swift; sourceTree = "<group>"; };
 		B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesCell.swift; sourceTree = "<group>"; };
@@ -975,6 +979,8 @@
 			isa = PBXGroup;
 			children = (
 				B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */,
+				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
+				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -1544,6 +1550,7 @@
 				B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */,
 				B8849EBF1EEB147A00D4588D /* MBTalkFeedCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
+				B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */,
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
@@ -1603,6 +1610,7 @@
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
+				B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */,
 				B357D9981F3A35A500DA0258 /* CollectionsPlaceLocCell.swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,

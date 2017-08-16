@@ -78,7 +78,7 @@ extension MapBoardViewController {
 //                }
 //                break
             case "place":
-                let mbPlaceData = MBPlacesStruct(json: result)
+                let mbPlaceData = PlacePin(json: result)
 //                if self.mbPlaces.contains(mbPlaceData) {
 //                    continue
 //                } else {
@@ -88,25 +88,25 @@ extension MapBoardViewController {
                     self.mbPlaces.append(mbPlaceData)
 //                }
                 
-                if mbPlaceData.classOne.contains("Arts") && testArrPopular.count < 15 {
+                if mbPlaceData.class_1.contains("Arts") && testArrPopular.count < 15 {
                     testArrPopular.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Education") && testArrRecommend.count < 15{
+                if mbPlaceData.class_1.contains("Education") && testArrRecommend.count < 15{
                     testArrRecommend.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Food") && testArrFood.count < 15 {
+                if mbPlaceData.class_1.contains("Food") && testArrFood.count < 15 {
                     testArrFood.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Drink") && testArrDrinks.count < 15 {
+                if mbPlaceData.class_1.contains("Drink") && testArrDrinks.count < 15 {
                     testArrDrinks.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Shopping") && testArrShopping.count < 15 {
+                if mbPlaceData.class_1.contains("Shopping") && testArrShopping.count < 15 {
                     testArrShopping.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Outdoors") && testArrOutdoors.count < 15 {
+                if mbPlaceData.class_1.contains("Outdoors") && testArrOutdoors.count < 15 {
                     testArrOutdoors.append(mbPlaceData)
                 }
-                if mbPlaceData.classOne.contains("Recreation") && testArrRecreation.count < 15 {
+                if mbPlaceData.class_1.contains("Recreation") && testArrRecreation.count < 15 {
                     testArrRecreation.append(mbPlaceData)
                 }
                 break
@@ -167,7 +167,7 @@ extension MapBoardViewController {
             self.testArrRecreation.removeAll()
             
             self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
-            self.mbPlaces.sort { $0.dis < $1.dis }
+//            self.mbPlaces.sort { $0.dis < $1.dis }
             
             self.testArrPlaces.append(self.testArrPopular)
             self.testArrPlaces.append(self.testArrRecommend)
