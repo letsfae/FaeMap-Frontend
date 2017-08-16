@@ -14,11 +14,11 @@ protocol MapFilterMenuDelegate: class {
     func hideAvatars(isOn: Bool)
 }
 
-class MapFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
+class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     weak var delegate: MapFilterMenuDelegate?
     
-    var btnFilterIcon = MapFilterIcon()
+    var btnFilterIcon = FMFilterIcon()
     var uiviewMapOpt: UIView!
     var uiviewPlaceLoc: UIView!
     var btnDiscovery: UIButton!

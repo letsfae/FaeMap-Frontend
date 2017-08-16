@@ -1,5 +1,5 @@
 //
-//  FMPlaceInfoBar.swift
+//  PlaceResultView.swift
 //  faeBeta
 //
 //  Created by Yue Shen on 7/27/17.

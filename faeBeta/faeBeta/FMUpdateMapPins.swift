@@ -179,16 +179,16 @@ extension FaeMapViewController {
         } else if type == "chat_room" {
             tempMarker.image = UIImage(named: "chatMarkerWhenCreated")
         }
-        self.view.addSubview(tempMarker)
-        markerMask = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        self.view.addSubview(markerMask)
+        view.addSubview(tempMarker)
+        let markerMask = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        view.addSubview(markerMask)
         UIView.animate(withDuration: 0.783, delay: 0.15, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.tempMarker.frame.size.width = 48
             self.tempMarker.frame.size.height = 51
             self.tempMarker.center = mapCenter
         }, completion: { (done: Bool) in
             if done {
-                self.markerMask.removeFromSuperview()
+                markerMask.removeFromSuperview()
                 self.loadMarkerWithpinID(pinID: pinID, type: type, tempMaker: self.tempMarker)
             }
         })

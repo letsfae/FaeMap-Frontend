@@ -16,6 +16,9 @@ class ReportViewController: UIViewController, UITextViewDelegate {
      *  2 == tag
      */
     var reportType: Int = 0
+    let REPORT = 0
+    let FEEDBACK = 1
+    let TAG = 2
     let colorPlaceHolder = UIColor(r: 155, g: 155, b: 155, alpha: 100)
     
     var buttonBackToCommentDetail: UIButton!

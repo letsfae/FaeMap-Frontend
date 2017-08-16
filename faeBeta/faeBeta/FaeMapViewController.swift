@@ -14,7 +14,6 @@ import CCHMapClusterController
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var lblSearchContent: UILabel!
-    let storageForOpenedPinList = UserDefaults.standard // Local Storage for storing opened pin id, for opened pin list use
     var btnOpenChat: UIButton!
     var btnLeftWindow: UIButton!
     var btnMainMapSearch: UIButton!
@@ -30,7 +29,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var faePlacePins = [FaePinAnnotation]()
     var lblUnreadCount: UILabel! // Unread Messages Label
     var mapPins = [MapPin]()
-    var markerMask: UIView! // mask to prevent UI action
     var refreshPins = true
     var refreshPlaces = true
     var refreshUsers = true
@@ -45,8 +43,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var PLACE_ENABLE = true
     let USER_ENABLE = false
     let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
-    var btnFilterIcon: MapFilterIcon! // Filter Button
-    var uiviewFilterMenu: MapFilterMenu! // Filter Menu
+    var btnFilterIcon: FMFilterIcon! // Filter Button
+    var uiviewFilterMenu: FMFilterMenu! // Filter Menu
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
@@ -54,7 +52,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgSchbarShadow: UIImageView!
     var selectedAnnView: PlacePinAnnotationView?
     var selectedAnn: FaePinAnnotation?
-    var placeResultBar = PlaceResultView()
+    var placeResultBar = FMPlaceInfoBar()
     var boolPreventUserPinOpen = false
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
@@ -70,7 +68,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var swipingState: PlaceResultBarState = .map
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
-    var isTapping = true
+    var btnPlacePinActionOnSrchBar: UIButton!
     
     // System Functions
     override func viewDidLoad() {
@@ -78,13 +76,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         isUserLoggedIn()
         getUserStatus()
         loadNameCard()
-        loadAddFriendView()
         loadMapFilter()
         loadMapView()
         loadButton()
         loadPlaceDetail()
         timerSetup()
-        openedPinListSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
     }
@@ -104,11 +100,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
-        
-        if FirstTimeLoginViewController.boolFinishClicked {
-            print("jumpToEnableNotification")
-            jumpToEnableNotification()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -172,11 +163,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    fileprivate func openedPinListSetup() {
-        let emptyArrayList = [String]()
-        storageForOpenedPinList.set(emptyArrayList, forKey: "openedPinList")
-    }
-    
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
@@ -230,18 +216,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         if places {
             updateTimerForLoadRegionPlacePin()
-        }
-    }
-    
-    func jumpToEnableNotification() {
-        print("jumpToEnableNotification")
-        let notificationType = UIApplication.shared.currentUserNotificationSettings
-        if notificationType?.types == UIUserNotificationType() {
-            let vc = EnableNotificationViewController()
-            //            UIApplication.shared.keyWindow?.visibleViewController?
-            present(vc, animated: true, completion: { _ in
-                FirstTimeLoginViewController.boolFinishClicked = false
-            })
         }
     }
 }

@@ -59,7 +59,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         switch status {
         case .notDetermined:
 //            print("didChangeAuthorizationStatus .notDetermined")
-            locManager.requestAlwaysAuthorization()
+            locManager.requestWhenInUseAuthorization()
             break
         case .denied:
 //            print("didChangeAuthorizationStatus .denied")
@@ -73,6 +73,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 //            print("didChangeAuthorizationStatus .authorizedAlways")
             break
         case .authorizedWhenInUse:
+            UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
             break
         }
     }

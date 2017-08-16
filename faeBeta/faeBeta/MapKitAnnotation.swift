@@ -339,24 +339,40 @@ class UserPinAnnotationView: MKAnnotationView {
     }
 }
 
+protocol PlacePinAnnotationDelegate: class {
+    func placePinAction(action: PlacePinAction)
+}
+
+enum PlacePinAction: String {
+    case detail
+    case collect
+    case route
+    case share
+}
+
 class PlacePinAnnotationView: MKAnnotationView {
     
-    var imageView: UIImageView!
+    weak var delegate: PlacePinAnnotationDelegate?
+    
+    var imgIcon: UIImageView!
     
     var btnDetail: UIButton!
     var btnCollect: UIButton!
     var btnRoute: UIButton!
     var btnShare: UIButton!
     
+    var arrBtns = [UIButton]()
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-        imageView = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
-        addSubview(imageView)
-        imageView.contentMode = .scaleAspectFit
         layer.zPosition = 1
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
-        loadButtons()
+        
+        imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
+        imgIcon.contentMode = .scaleAspectFit
+        imgIcon.layer.zPosition = 1
+        addSubview(imgIcon)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -366,58 +382,88 @@ class PlacePinAnnotationView: MKAnnotationView {
     func assignImage(_ image: UIImage) {
         // when an image is set for the annotation view,
         // it actually adds the image to the image view
-        imageView.image = image
+        imgIcon.image = image
     }
     
     fileprivate func loadButtons() {
         btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 42, height: 42))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
-        addSubview(btnDetail)
         btnDetail.alpha = 0
+        btnDetail.layer.zPosition = 0
         
         btnCollect = UIButton(frame: CGRect(x: 35, y: 0, width: 42, height: 42))
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect"), for: .normal)
-        addSubview(btnCollect)
         btnCollect.alpha = 0
+        btnCollect.layer.zPosition = 0
         
         btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 42, height: 42))
         btnRoute.setImage(#imageLiteral(resourceName: "place_new_route"), for: .normal)
-        addSubview(btnRoute)
         btnRoute.alpha = 0
+        btnRoute.layer.zPosition = 0
         
         btnShare = UIButton(frame: CGRect(x: 128, y: 43, width: 42, height: 42))
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share"), for: .normal)
-        addSubview(btnShare)
         btnShare.alpha = 0
+        btnShare.layer.zPosition = 0
+        
+        addSubview(btnDetail)
+        addSubview(btnCollect)
+        addSubview(btnRoute)
+        addSubview(btnShare)
+        
+        arrBtns.append(btnDetail)
+        arrBtns.append(btnCollect)
+        arrBtns.append(btnRoute)
+        arrBtns.append(btnShare)
+    }
+    
+    fileprivate func removeButtons() {
+        for btn in arrBtns {
+            btn.removeTarget(nil, action: nil, for: .touchUpInside)
+            btn.removeFromSuperview()
+        }
+        arrBtns.removeAll()
     }
     
     func showButtons() {
-        btnDetail.alpha = 1
-        btnCollect.alpha = 1
-        btnRoute.alpha = 1
-        btnShare.alpha = 1
-//        self.frame.size = CGSize(width: 170, height: 110)
-        var point = self.frame.origin
-        point.x -= 57
-        point.y -= 54
-        self.frame = CGRect(x: point.x, y: point.y, width: 170, height: 110)
-        imageView.center.x = 85
-        imageView.frame.origin.y = 54
-        layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        loadButtons()
+        var point = self.frame.origin; point.x -= 57 ;point.y -= 54
+        frame = CGRect(x: point.x, y: point.y, width: 170, height: 110)
+        imgIcon.center.x = 85; imgIcon.frame.origin.y = 54
+        var delay: Double = 0
+        for btn in arrBtns {
+            btn.addTarget(self, action: #selector(self.action(_:)), for: .touchUpInside)
+            btn.center = self.imgIcon.center
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: {
+                btn.alpha = 1
+                if btn == self.btnDetail { btn.frame.origin = CGPoint(x: 0, y: 43) }
+                else if btn == self.btnCollect { btn.frame.origin = CGPoint(x: 35, y: 0) }
+                else if btn == self.btnRoute { btn.frame.origin = CGPoint(x: 93, y: 0) }
+                else if btn == self.btnShare { btn.frame.origin = CGPoint(x: 128, y: 43) }
+            }, completion: nil)
+            delay += 0.075
+        }
     }
     
     func hideButtons() {
-        btnDetail.alpha = 0
-        btnCollect.alpha = 0
-        btnRoute.alpha = 0
-        btnShare.alpha = 0
-//        self.frame.size = CGSize(width: 56, height: 56)
-        var point = self.frame.origin
-        point.x += 57
-        point.y += 54
-        self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
-        imageView.frame.origin = CGPoint.zero
-        layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
+        UIView.animate(withDuration: 0.2, animations: {
+            for btn in self.arrBtns {
+                btn.alpha = 0
+                btn.center = self.imgIcon.center
+            }
+        }, completion: { _ in
+            var point = self.frame.origin; point.x += 57; point.y += 54
+            self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
+            self.imgIcon.frame.origin = CGPoint.zero
+            self.removeButtons()
+        })
+    }
+    
+    func action(_ sender: UIButton) {
+        if sender == btnDetail { delegate?.placePinAction(action: .detail) }
+        else if sender == btnCollect { delegate?.placePinAction(action: .collect) }
+        else if sender == btnRoute { delegate?.placePinAction(action: .route) }
+        else if sender == btnShare { delegate?.placePinAction(action: .share) }
     }
 }
 
