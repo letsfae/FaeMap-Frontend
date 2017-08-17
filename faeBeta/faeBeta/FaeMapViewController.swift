@@ -69,7 +69,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var prevAltitude: CLLocationDistance = 0
     
-    var btnPlacePinActionOnSrchBar: UIButton!
+    var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
+    
+    var hitTestCount = 0
     
     // System Functions
     override func viewDidLoad() {
