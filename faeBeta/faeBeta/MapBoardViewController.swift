@@ -502,6 +502,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        hideDropDownMenu()
+    }
+    
     fileprivate func loadCannotFindPeople() {
         uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
         uiviewBubbleHint.backgroundColor = .white
@@ -675,6 +679,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     fileprivate func loadPlaceTabView() {
         uiviewPlaceTab = PlaceTabView()
         uiviewPlaceTab.delegate = self
+        uiviewPlaceTab.addGestureRecognizer(setGestureRecognizer())
         view.addSubview(uiviewPlaceTab)
     }
     

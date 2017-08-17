@@ -26,7 +26,7 @@ class CollectionsPlaceLocCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func loadCellContent() {
+    fileprivate func loadCellContent() {
         imgPic = UIImageView(frame: CGRect(x: 11, y: 15, width: 70, height: 70))
         imgPic.image = #imageLiteral(resourceName: "defaultPlaceIcon")
 //        imgPic.backgroundColor = .red
@@ -43,5 +43,9 @@ class CollectionsPlaceLocCell: UITableViewCell {
         lblListNum.textColor = UIColor._107105105()
         lblListNum.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblListNum)
+    }
+    
+    func setValueForCell() {
+        
     }
 }

@@ -62,7 +62,6 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
         if section == 0 || section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
             PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
-            print("indexPath \(indexPath)")
             tblPlaceDetail.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         } else if section == 2 {   // open place website / call place phone number
             let phoneNum = "2098299986"

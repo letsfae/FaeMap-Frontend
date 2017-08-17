@@ -20,11 +20,11 @@ class PlaceDetailCell: UITableViewCell {
     internal var cellConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
-                print("removeConstraints")
+//                print("removeConstraints")
                 removeConstraints(oldValue)
             }
             if cellConstraint.count != 0 {
-                print("addConstraints")
+//                print("addConstraints")
                 addConstraints(cellConstraint)
             }
         }
