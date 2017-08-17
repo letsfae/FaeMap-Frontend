@@ -12,18 +12,15 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? uiviewSubHeader.frame.size.height : 0
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return section == 0 ? uiviewSubHeader : nil
-//        return uiviewSubHeader
-    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section < 2 ? 1 : 2
+        if section < 2 {
+            return 1
+        } else if section == 2 {
+            return 2
+        } else {
+        return arrRelatedPlaces.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -49,10 +46,8 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
             return cell
         case 3:   // similar / nearby places
             let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
-            var places = [PlacePin]()
-            places.append(place)
-            places.append(place)
-            
+            cell.delegate = self
+            let places = arrRelatedPlaces[indexPath.row]
             cell.setValueForCell(title: arrTitle[indexPath.row], places: places)
             return cell
         default:
@@ -66,11 +61,19 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
         
         if section == 0 || section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
-            cell.imgDownArrow.image = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_down") ? #imageLiteral(resourceName: "arrow_up") : #imageLiteral(resourceName: "arrow_down")
-            cell.setCellContraints()
-            tableView.reloadData()
+            PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
+            print("indexPath \(indexPath)")
+            tblPlaceDetail.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+        } else if section == 2 {   // open place website / call place phone number
+            let phoneNum = "2098299986"
+            let strURL = indexPath.row == 0 ? "https://www.faemaps.com/" : "tel://\(phoneNum)"
+            if let url = URL(string: strURL), UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10, *) {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+            }
         }
-        
     }
-    
 }
