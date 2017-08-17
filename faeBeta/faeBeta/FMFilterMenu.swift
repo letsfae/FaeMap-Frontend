@@ -228,7 +228,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         tblPlaceLoc.delegate = self
         tblPlaceLoc.dataSource = self
         tblPlaceLoc.separatorStyle = .none
-        tblPlaceLoc.register(CollectionsPlaceLocCell.self, forCellReuseIdentifier: "PlaceLoc")
+        tblPlaceLoc.register(CollectionsPlaceLocCell.self, forCellReuseIdentifier: "CollectionsPlaceLocCell")
         uiviewPlaceLoc.addSubview(tblPlaceLoc)
         
         uiviewBubbleHint.isHidden = true
@@ -304,7 +304,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "PlaceLoc", for: indexPath) as! CollectionsPlaceLocCell
+        let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsPlaceLocCell", for: indexPath) as! CollectionsPlaceLocCell
         cell.lblListName.text = "My Favorite Place"
         cell.lblListNum.text = "12 items"
         return cell
