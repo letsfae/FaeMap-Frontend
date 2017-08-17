@@ -148,7 +148,7 @@ extension ChatViewController: OutgoingMessageProtocol {
                     if isIncoming {
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
-                    self.finishReceivingMessage(animated: true)
+                    self.finishReceivingMessage(animated: false)
                 } else {
                     // add each dictionary to loaded array
                     self.loaded.append(item)
