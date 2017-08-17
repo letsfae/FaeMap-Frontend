@@ -183,10 +183,10 @@ class RecentTableViewCell: UITableViewCell {
             lblCounter.isHidden = false
             lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
             if(lblCounter.text?.characters.count >= 2){
-                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(28)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             }else{
-                uiviewMain.addConstraintsWithFormat("H:|-47-[v0(22)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(22)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             }
         }else{
