@@ -23,6 +23,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     //MARK: - properties
     var ref = Database.database().reference().child(fireBaseRef) // reference to all chat room
     var roomRef: DatabaseReference?
+    var _refHandle: DatabaseHandle?
     var messages: [JSQMessage] = []
     var objects: [NSDictionary] = [] //
     var loaded: [NSDictionary] = [] // load dict from firebase that this chat room all message
@@ -111,10 +112,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var keyboardHeight: CGFloat = 0.0
     var toolbarLastY: CGFloat = screenHeight - 90
     var collectionViewLastBottomInset: CGFloat = 90
+    var boolIsDisappear:Bool = false
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
+        boolIsDisappear = true
         //update recent
         print("chat view will disappear")
         //self.navigationController?.navigationBar.isHidden = false
@@ -132,7 +135,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         closeToolbarContentView()
         closeLocExtendView()
         moveDownInputBar()
-        
+        ref.removeObserver(withHandle: _refHandle!)
         toolbarContentView.clearToolBarViews()
         
         //        messages = []
@@ -153,6 +156,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
         
+        //boolIsDisappear = false
     }
     
     override func viewDidLoad() {
@@ -169,7 +173,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         inputToolbar.contentView.textView.delegate = self
         
         //load firebase messages
-        loadMessages()
+        loadInitMessages()
         // Do any additional setup after loading the view.
         loadInputBarComponent()
         
@@ -204,6 +208,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewWillAppear(true)
         addObservers()
         loadUserDefault()
+        loadNewMessages()
         // This line is to fix the collectionView messed up function
         //moveDownInputBar()
         getAvatar()
