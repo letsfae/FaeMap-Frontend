@@ -31,7 +31,6 @@ class SavedPinsViewController: PinsViewController, UITableViewDataSource, PinDet
         let getSavedPinsData = FaeMap()
         getSavedPinsData.getSavedPins() {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                print("Successfully get saved pins!")
                 self.arrMapPin.removeAll()
                 let savedPinsJSON = JSON(message!)
                 guard let arrSavedPins = savedPinsJSON.array else {
