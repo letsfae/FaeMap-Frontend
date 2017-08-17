@@ -338,6 +338,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else if miniLocationShow {
                 self.miniLocationShow = false
                 self.miniLocation.isHidden = true
+                self.quickSendImageButton.alpha = 1
+                self.moreImageButton.alpha = 1
             }
             else if (keyboardShow){
                 UIView.setAnimationsEnabled(false)
