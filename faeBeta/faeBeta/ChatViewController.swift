@@ -153,8 +153,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: collectionViewLastBottomInset, right: 0.0)
         //collectionView.isScrollEnabled = true
         scrollToBottom(false)
-        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
-        toolbarContentView.setup(initializeType)
+        //let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
+        //toolbarContentView.setup(initializeType)
         
         //boolIsDisappear = false
     }
@@ -422,7 +422,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.isScrollEnabled = true
         //moveUpInputBarContentView(false)
         inputToolbar.contentView.textView.becomeFirstResponder()
-        scrollToBottom(true)
+        scrollToBottom(false)
         
     }
     
@@ -747,7 +747,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func closeToolbarContentView() {
         resetToolbarButtonIcon()
         moveDownInputBar()
-        scrollToBottom(true)
+        scrollToBottom(false)
         toolbarContentView.closeAll()
         toolbarContentView.frame.origin.y = screenHeight
     }
@@ -1015,7 +1015,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         //showKeyboard()
         //inputToolbar.contentView.textView.becomeFirstResponder()
-        scrollToBottom(true)
+        scrollToBottom(false)
         buttonSend.isEnabled = true
         
     }
