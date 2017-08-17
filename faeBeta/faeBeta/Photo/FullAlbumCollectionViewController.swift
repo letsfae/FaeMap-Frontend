@@ -241,17 +241,10 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             self.view.addSubview(tableViewAlbum)
             tableViewAlbum.setContentOffset(CGPoint.zero, animated: true)
             
-            let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-            let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-            attributedStrM.append(albumName)
-            let arrowAttachment : NSTextAttachment = NSTextAttachment()
-            arrowAttachment.image = UIImage(named: "arrow_up")
-            arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
-            attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
-            
-            self.titleLabel.attributedText = attributedStrM
+            setupNavTitle(true)
         } else {
             dismissAlbumTable()
+            setupNavTitle(false)
         }
         tableViewAlbumVisible = !tableViewAlbumVisible
     }
@@ -582,15 +575,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             dismissAlbumTable()
             tableViewAlbumVisible = !tableViewAlbumVisible
             
-            let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-            let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-            attributedStrM.append(albumName)
-            let arrowAttachment : NSTextAttachment = NSTextAttachment()
-            arrowAttachment.image = UIImage(named: "arrow_down")
-            arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
-            attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
+            setupNavTitle(false)
             
-            self.titleLabel.attributedText = attributedStrM
             currentCell.imgCheckMark.isHidden = true
             let cellNew = tableView.cellForRow(at: indexPath) as! AlbumTableViewCell
             cellNew.imgCheckMark.isHidden = false
@@ -602,5 +588,22 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             dismissAlbumTable()
             tableViewAlbumVisible = !tableViewAlbumVisible
         }
+    }
+    
+    // MARK: set the title of navigation bar
+    func setupNavTitle(_ albumIsOpen: Bool) {
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        let albumName = NSAttributedString(string: photoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        attributedStrM.append(albumName)
+        let arrowAttachment : NSTextAttachment = NSTextAttachment()
+        if albumIsOpen {
+            arrowAttachment.image = UIImage(named: "arrow_up")
+        }
+        else {
+            arrowAttachment.image = UIImage(named: "arrow_down")
+        }
+        arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
+        attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
+        titleLabel.attributedText = attributedStrM
     }
 }
