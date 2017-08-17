@@ -123,6 +123,9 @@
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
 		B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */; };
 		B31437AA1F310B1E007AE884 /* FMMapSearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */; };
+		B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */; };
+		B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */; };
+		B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */; };
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
 		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
 		B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */; };
@@ -391,6 +394,9 @@
 		B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarViewController.swift; sourceTree = "<group>"; };
 		B0F688E41CE4FB8E00D91CF9 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		B31437A91F310B1E007AE884 /* FMMapSearchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchResult.swift; sourceTree = "<group>"; };
+		B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingView.swift; sourceTree = "<group>"; };
+		B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceToCollectionView.swift; sourceTree = "<group>"; };
+		B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateColListViewController.swift; sourceTree = "<group>"; };
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
 		B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailTableView.swift; sourceTree = "<group>"; };
@@ -555,19 +561,8 @@
 		37C725431E7346C1001A5060 /* PinCollection */ = {
 			isa = PBXGroup;
 			children = (
-				B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */,
-				3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */,
-				B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */,
-				B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */,
-				B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell(General).swift */,
-				B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */,
-				B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */,
-				B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift */,
-				372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */,
-				372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */,
-				B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */,
-				B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */,
-				B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */,
+				B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */,
+				B3170EA11F4560DF0072F9CD /* Temporarily unused */,
 			);
 			name = PinCollection;
 			sourceTree = "<group>";
@@ -954,6 +949,26 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		B3170EA11F4560DF0072F9CD /* Temporarily unused */ = {
+			isa = PBXGroup;
+			children = (
+				B85FFE891EA84CEB0079D1A7 /* CollectionsBoardViewController.swift */,
+				3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */,
+				B85FFE8C1EA84CEB0079D1A7 /* CreatedPinsViewController.swift */,
+				B85FFE921EA84CEB0079D1A7 /* SavedPinsViewController.swift */,
+				B85FFE8E1EA84CEB0079D1A7 /* PinsTableViewCell(General).swift */,
+				B85FFE8B1EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift */,
+				B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */,
+				B85FFE8A1EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift */,
+				372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */,
+				372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */,
+				B85FFE901EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift */,
+				B85FFE8F1EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift */,
+				B85FFE8D1EA84CEB0079D1A7 /* MemoViewController.swift */,
+			);
+			name = "Temporarily unused";
+			sourceTree = "<group>";
+		};
 		B33F89F51F3CDBEE0033610D /* AddFriend */ = {
 			isa = PBXGroup;
 			children = (
@@ -986,6 +1001,8 @@
 				B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */,
 				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
+				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
+				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -1467,6 +1484,7 @@
 				B8B7AF521E728BAF00BE92AB /* FMUpdateUserPins.swift in Sources */,
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
+				B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
 				50234AF71F27DAC000055748 /* ScreenFactor.swift in Sources */,
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
@@ -1496,6 +1514,7 @@
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
+				B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */,
 				B0714D731D5E435200356705 /* FMUpdateMapPins.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
@@ -1553,6 +1572,7 @@
 				B0714E1C1D62537300356705 /* SignInSupportViewController.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
