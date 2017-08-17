@@ -570,7 +570,9 @@ class PlacePinAnnotationView: MKAnnotationView {
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share)
         }
-        optionsToNormal()
+        if boolOptionsOpened {
+            optionsToNormal()
+        }
     }
 }
 
