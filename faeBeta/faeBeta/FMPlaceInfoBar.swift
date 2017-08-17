@@ -136,13 +136,13 @@ class FMPlaceInfoBar: UIView {
         var next_idx = 0
         for i in 0..<annotations.count {
             if annotations[i] == current {
-                joshprint("[loadingData], find equals")
+//                joshprint("[loadingData], find equals")
                 prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
                 next_idx = (i + 1) >= annotations.count ? 0 : i + 1
-                joshprint("[loadingData], count = \(annotations.count)")
-                joshprint("[loadingData],     i = \(i)")
-                joshprint("[loadingData],  prev = \(prev_idx)")
-                joshprint("[loadingData],  next = \(next_idx)")
+//                joshprint("[loadingData], count = \(annotations.count)")
+//                joshprint("[loadingData],     i = \(i)")
+//                joshprint("[loadingData],  prev = \(prev_idx)")
+//                joshprint("[loadingData],  next = \(next_idx)")
                 break
             } else {
                 continue

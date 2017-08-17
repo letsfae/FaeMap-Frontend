@@ -27,6 +27,7 @@
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
 		50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F5A1F2BB736002553F1 /* PlacesListCell.swift */; };
+		50A12D551F44CE83005821CB /* FMPlaceActionBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
@@ -275,6 +276,7 @@
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		50902F5A1F2BB736002553F1 /* PlacesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListCell.swift; sourceTree = "<group>"; };
+		50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceActionBtn.swift; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
@@ -671,6 +673,7 @@
 				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
 				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
 				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
+				50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -946,7 +949,6 @@
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
 				B8E819541DB3248C00D418D1 /* ReportPin */,
-				B88A3E331DC9465200351A2A /* OpenedPinList */,
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
 			name = Map;
@@ -1088,13 +1090,6 @@
 				B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */,
 			);
 			name = MapBoardExtensions;
-			sourceTree = "<group>";
-		};
-		B88A3E331DC9465200351A2A /* OpenedPinList */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = OpenedPinList;
 			sourceTree = "<group>";
 		};
 		B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */ = {
@@ -1572,6 +1567,7 @@
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
+				50A12D551F44CE83005821CB /* FMPlaceActionBtn.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,

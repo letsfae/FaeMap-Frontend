@@ -102,16 +102,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func deselectAllAnnotations() {
         
-        btnPlacePinActionOnSrchBar.alpha = 0
-        
-        for annotation in faeMapView.selectedAnnotations {
-            faeMapView.deselectAnnotation(annotation, animated: false)
-        }
-        
+        btnPlacePinActionOnSrchBar.hide()
         boolCanOpenPin = true
-        for user in faeUserPins {
-            user.isValid = true
-        }
         
         if let idx = selectedAnn?.class_2_icon_id {
             selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
@@ -119,6 +111,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             selectedAnnView?.assignImage(img)
             selectedAnnView?.hideButtons()
             selectedAnnView?.boolBtnsReadyToOpened = false
+            selectedAnnView?.boolOptionsOpened = false
             selectedAnnView = nil
         }
     }
@@ -174,18 +167,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        if btnPlacePinActionOnSrchBar != nil { btnPlacePinActionOnSrchBar.alpha = 0 }
+        if btnPlacePinActionOnSrchBar != nil { btnPlacePinActionOnSrchBar.hide() }
         selectedAnnView?.hideButtons()
-    }
-    
-    func mapViewTapAt(_ sender: UITapGestureRecognizer) {
-        deselectAllAnnotations()
-        placeResultBar.fadeOut()
-        uiviewNameCard.hide() {
-            self.mapGesture(isOn: true)
-        }
-        guard uiviewFilterMenu != nil else { return }
-        uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
     
     func mapGesture(isOn: Bool) {

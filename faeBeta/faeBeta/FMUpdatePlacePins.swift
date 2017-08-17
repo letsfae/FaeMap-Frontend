@@ -14,36 +14,32 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
-        btnPlacePinActionOnSrchBar.alpha = 1
+        btnPlacePinActionOnSrchBar.changeStyle(action: action)
         switch action {
         case .detail:
-            joshprint(action)
-            btnPlacePinActionOnSrchBar.tag = 1
-            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._2559180()
-            btnPlacePinActionOnSrchBar.setTitle("View Place Details", for: .normal)
+            guard let ann = selectedAnn else { return }
+            guard let placePin = ann.pinInfo as? PlacePin else { return }
+            let vcPlaceDetail = PlaceDetailViewController()
+            vcPlaceDetail.place = placePin
+            navigationController?.pushViewController(vcPlaceDetail, animated: true)
             break
         case .collect:
-            joshprint(action)
-            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._202144214()
-            btnPlacePinActionOnSrchBar.setTitle("Collect this Place", for: .normal)
+            guard let ann = selectedAnn else { return }
+            guard let placePin = ann.pinInfo as? PlacePin else { return }
+            let pinId = placePin.id
+            let collectPlace = FaePinAction()
+            collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
+                guard status / 100 == 2 else { return }
+                self.selectedAnnView?.optionsToNormal(saved: true)
+            })
             break
         case .route:
-            joshprint(action)
-            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._144162242()
-            btnPlacePinActionOnSrchBar.setTitle("Draw Route to this Place", for: .normal)
             break
         case .share:
-            joshprint(action)
-            btnPlacePinActionOnSrchBar.backgroundColor = UIColor._35197143()
-            btnPlacePinActionOnSrchBar.setTitle("Share this Place", for: .normal)
             break
         }
     }
-    
-    func placeDetail() {
-        
-    }
-    
+
     func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "place"
         var anView: PlacePinAnnotationView
@@ -90,6 +86,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         if let anView = view as? PlacePinAnnotationView {
+            anView.layer.zPosition = 2
+            anView.imgIcon.layer.zPosition = 2
             let idx = firstAnn.class_2_icon_id
             firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
             anView.assignImage(firstAnn.icon)
@@ -157,7 +155,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
         getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getPlaceInfo.whereKey("radius", value: "500000")
         getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count", value: "100")
+        getPlaceInfo.whereKey("max_count", value: "200")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 print("DEBUG: getMapUserInfo status/100 != 2")
@@ -178,8 +176,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
                 return
             }
             var placePins = [FaePinAnnotation]()
-            let serialQueue = DispatchQueue(label: "appendPlaces")
-            serialQueue.sync {
+            var serialQueue = DispatchQueue(label: "appendPlaces")
+            if #available(iOS 10.0, *) {
+                serialQueue = DispatchQueue(label: "appendPlaces", qos: .userInteractive, attributes: [], autoreleaseFrequency: .workItem, target: nil)
+            } else {
+                // Fallback on earlier versions
+            }
+            serialQueue.async {
                 for placeJson in mapPlaceJsonArray {
                     let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, json: placeJson)
                     if self.faePlacePins.contains(place) {

@@ -9,6 +9,7 @@
 import UIKit
 
 class PlaceDetailViewController: UIViewController {
+    
     var place: PlacePin!
     var uiviewHeader: UIView!
     var uiviewSubHeader: UIView!
