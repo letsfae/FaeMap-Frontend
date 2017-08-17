@@ -530,34 +530,42 @@ class PlacePinAnnotationView: MKAnnotationView {
                 }
             }
             if sender == self.btnDetail {
-                self.delegate?.placePinAction(action: .detail)
                 sender.frame.origin = CGPoint(x: -3, y: 40)
                 self.btnCollect.frame.origin = CGPoint(x: 45, y: 0)
                 self.btnRoute.frame.origin = CGPoint(x: 103, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 53)
             }
             else if sender == self.btnCollect {
-                self.delegate?.placePinAction(action: .collect)
                 sender.frame.origin = CGPoint(x: 32, y: -3)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 53)
                 self.btnRoute.frame.origin = CGPoint(x: 103, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 50)
             }
             else if sender == self.btnRoute {
-                self.delegate?.placePinAction(action: .route)
                 sender.frame.origin = CGPoint(x: 90, y: -3)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 50)
                 self.btnCollect.frame.origin = CGPoint(x: 28, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 53)
             }
             else if sender == self.btnShare {
-                self.delegate?.placePinAction(action: .share)
                 sender.frame.origin = CGPoint(x: 125, y: 40)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 53)
                 self.btnCollect.frame.origin = CGPoint(x: 25, y: 0)
                 self.btnRoute.frame.origin = CGPoint(x: 83, y: 0)
             }
         }, completion: nil)
+    }
+    
+    func chooseAction() {
+        if btnDetail.isSelected {
+            delegate?.placePinAction(action: .detail)
+        } else if btnCollect.isSelected {
+            delegate?.placePinAction(action: .collect)
+        } else if btnRoute.isSelected {
+            delegate?.placePinAction(action: .route)
+        } else if btnShare.isSelected {
+            delegate?.placePinAction(action: .share)
+        }
     }
 }
 
