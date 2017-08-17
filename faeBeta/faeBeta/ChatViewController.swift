@@ -605,12 +605,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
+            //print("current offset: \(scrollViewCurrentOffset)")
             if scrollViewCurrentOffset - scrollViewOriginOffset < 0
                 && (toolbarContentView.mediaContentShow)
                 && !isClosingToolbarContentView && scrollView.isScrollEnabled == true {
                 toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight)
                 
-                inputToolbar.frame.origin.y = min(screenHeight - 273 - inputToolbar.frame.height - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - inputToolbar.frame.height - 64)
+                inputToolbar.frame.origin.y = min(screenHeight - 273 - inputToolbar.frame.height - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - inputToolbar.frame.height)
                 
                 locExtendView.frame.origin.y = screenHeight - 271 - 76 - 90 - (scrollViewCurrentOffset - scrollViewOriginOffset)
             }
@@ -629,6 +630,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
+            print("current offset:\(scrollViewCurrentOffset)")
             if scrollViewCurrentOffset - scrollViewOriginOffset < -5 {
                 
                 isClosingToolbarContentView = true
