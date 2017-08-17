@@ -82,11 +82,9 @@ class PlaceDetailCell: UITableViewCell {
         if PlaceDetailCell.boolFold {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_down")
             cellConstraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
-            uiviewHiddenCell.isHidden = true
         } else {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_up")
             cellConstraint = returnConstraintsWithFormat("V:|-18-[v0]-9-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
-            uiviewHiddenCell.isHidden = false
         }
     }
     
