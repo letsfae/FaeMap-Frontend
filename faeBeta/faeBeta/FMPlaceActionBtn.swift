@@ -21,34 +21,6 @@ class FMPlaceActionBtn: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func actionPlaceAction(_ sender: UIButton) {
-        switch sender.tag {
-        case 1:
-            guard let ann = faeMapCtrler?.selectedAnn else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let vcPlaceDetail = PlaceDetailViewController()
-            vcPlaceDetail.place = placePin
-            faeMapCtrler?.navigationController?.pushViewController(vcPlaceDetail, animated: true)
-            break
-        case 2:
-            guard let ann = faeMapCtrler?.selectedAnn else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let pinId = placePin.id
-            let collectPlace = FaePinAction()
-            collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
-                guard status / 100 == 2 else { return }
-                self.faeMapCtrler?.selectedAnnView?.optionsToNormal(saved: true)
-            })
-            break
-        case 3:
-            break
-        case 4:
-            break
-        default:
-            break
-        }
-    }
-    
     private func loadContent() {
         alpha = 0
         layer.cornerRadius = 2
@@ -61,22 +33,18 @@ class FMPlaceActionBtn: UIButton {
         show()
         switch style {
         case .detail:
-            tag = 1
             backgroundColor = UIColor._2559180()
             setTitle("View Place Details", for: .normal)
             break
         case .collect:
-            tag = 2
             backgroundColor = UIColor._202144214()
             setTitle("Collect this Place", for: .normal)
             break
         case .route:
-            tag = 3
             backgroundColor = UIColor._144162242()
             setTitle("Draw Route to this Place", for: .normal)
             break
         case .share:
-            tag = 4
             backgroundColor = UIColor._35197143()
             setTitle("Share this Place", for: .normal)
             break

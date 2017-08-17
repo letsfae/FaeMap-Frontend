@@ -14,7 +14,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
-        btnPlacePinActionOnSrchBar.changeStyle(action: action)
         switch action {
         case .detail:
             guard let ann = selectedAnn else { return }
@@ -30,7 +29,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
             let collectPlace = FaePinAction()
             collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
                 guard status / 100 == 2 else { return }
-                self.selectedAnnView?.optionsToNormal(saved: true)
+                self.selectedAnnView?.showCollectedNoti()
             })
             break
         case .route:

@@ -98,6 +98,7 @@ class FaeMapView: MKMapView {
             }
             if let anView = faeMapCtrler?.selectedAnnView {
                 anView.chooseAction()
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.hide()
             }
             let delayInSeconds: Double = 0.1
             let popTime = DispatchTime.now() + delayInSeconds
@@ -107,24 +108,23 @@ class FaeMapView: MKMapView {
         } else if sender.state == .changed {
             guard let anView = faeMapCtrler?.selectedAnnView else { return }
             let point = sender.location(in: anView)
-            joshprint(point)
             if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
-                anView.action(anView.btnDetail)
+                anView.action(anView.btnDetail, animated: true)
                 faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .detail)
             }
             else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
-                anView.action(anView.btnCollect)
+                anView.action(anView.btnCollect, animated: true)
                 faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .collect)
             }
             else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
-                anView.action(anView.btnRoute)
+                anView.action(anView.btnRoute, animated: true)
                 faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .route)
             }
             else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
-                anView.action(anView.btnShare)
+                anView.action(anView.btnShare, animated: true)
                 faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .share)
             } else {
-                anView.optionsToNormal(saved: false)
+                anView.optionsToNormal()
                 faeMapCtrler?.btnPlacePinActionOnSrchBar.hide()
             }
         }
