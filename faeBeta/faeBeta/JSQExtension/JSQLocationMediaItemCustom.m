@@ -46,9 +46,9 @@
 {
     self = [super init];
     _text = comment;
-    _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 20, 215, 22)];
-    _addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 40, 215, 16)];
-    _addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 58, 215, 16)];
+    _addressLine1 = [[UILabel alloc] initWithFrame:CGRectMake(92, 20, 133, 22)];
+    _addressLine2 = [[UILabel alloc] initWithFrame:CGRectMake(92, 40, 133, 16)];
+    _addressLine3 = [[UILabel alloc] initWithFrame:CGRectMake(92, 58, 133, 16)];
     if (self) {
         [self setLocation:location snapImage: snap withCompletionHandler:nil];
     }
@@ -157,7 +157,7 @@
 
 - (UIView *)mediaView
 {
-    printf("creating media view");
+    //printf("creating media view");
     
     CGFloat height = 0;
     //BRYAN: Not empty and not location
@@ -171,14 +171,14 @@
     locationView.backgroundColor = [UIColor whiteColor];
     
     if(height != 0) {
-        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 96, 291, height)];
+        _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 96, 209, height)];
         _textLabel.font = [UIFont fontWithName:@"Avenir Next" size : 17.5];
         _textLabel.text = _text;
         _textLabel.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
         _textLabel.numberOfLines = 0;
         [locationView addSubview:_textLabel];
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(16, 90, 291, 1)];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(16, 90, 209, 1)];
         line.backgroundColor = [UIColor colorWithRed: 234 / 255.0 green: 234 / 255.0 blue: 234 / 255.0 alpha: 1.0];
         
         [locationView addSubview:line];
@@ -219,7 +219,7 @@
     [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:locationView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
     self.cachedMapImageView = locationView;
     
-    printf("done creating media view");
+    //printf("done creating media view");
     
     return locationView;
 }
@@ -232,10 +232,10 @@
 - (CGSize) mediaViewDisplaySize
 {
     if([_text isEqualToString:@""] || [_text isEqualToString:@"[Location]"]) {
-        return CGSizeMake(330, 92);
+        return CGSizeMake(238, 92);
     } else {
         CGFloat height = [_text boundingRectWithSize:CGSizeMake(291, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]} context:nil].size.height;
-        return CGSizeMake(330, 92 + 15 + height);
+        return CGSizeMake(238, 92 + 15 + height);
     }
 }
 
