@@ -45,6 +45,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
             })
         })
         PlaceDetailCell.boolFold = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -115,7 +116,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
-        
     }
     
     func loadFixedHeader() {
@@ -126,12 +126,17 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func loadMidTable() {
+        
+        
         tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
         automaticallyAdjustsScrollViewInsets = false
-        tblPlaceDetail.contentInset = .zero
+        
+        if screenHeight == 736 {
+            tblPlaceDetail.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+        }
         
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
