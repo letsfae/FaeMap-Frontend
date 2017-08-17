@@ -91,13 +91,41 @@ class FaeMapView: MKMapView {
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
-                anView.hideButtons()
+                if !anView.boolOptionsOpened {
+                    anView.hideButtons()
+                }
                 anView.boolBtnsReadyToOpened = true
+            }
+            if let anView = faeMapCtrler?.selectedAnnView {
+                anView.chooseAction()
             }
             let delayInSeconds: Double = 0.1
             let popTime = DispatchTime.now() + delayInSeconds
             DispatchQueue.main.asyncAfter(deadline: popTime) {
                 self.blockTap = false
+            }
+        } else if sender.state == .changed {
+            guard let anView = faeMapCtrler?.selectedAnnView else { return }
+            let point = sender.location(in: anView)
+            joshprint(point)
+            if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
+                anView.action(anView.btnDetail)
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .detail)
+            }
+            else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
+                anView.action(anView.btnCollect)
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .collect)
+            }
+            else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
+                anView.action(anView.btnRoute)
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .route)
+            }
+            else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
+                anView.action(anView.btnShare)
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .share)
+            } else {
+                anView.optionsToNormal(saved: false)
+                faeMapCtrler?.btnPlacePinActionOnSrchBar.hide()
             }
         }
     }
