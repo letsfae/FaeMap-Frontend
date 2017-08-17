@@ -452,7 +452,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         imgIcon.center.x = 87; imgIcon.frame.origin.y = 56
         var delay: Double = 0
         for btn in arrBtns {
-            btn.addTarget(self, action: #selector(self.action(_:)), for: .touchUpInside)
+            btn.addTarget(self, action: #selector(self.action(_:animated:)), for: .touchUpInside)
             btn.center = self.imgIcon.center
             UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: {
                 btn.alpha = 1
@@ -492,7 +492,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         arrBtns.removeAll()
     }
     
-    func optionsToNormal(saved: Bool = false) {
+    func optionsToNormal() {
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.btnDetail.frame.origin = CGPoint(x: 0, y: 43)
@@ -503,19 +503,23 @@ class PlacePinAnnotationView: MKAnnotationView {
                 btn.isSelected = false
                 btn.frame.size = CGSize(width: 46, height: 46)
             }
-        }, completion: { _ in
-            if saved { self.showCollectedNoti() }
-        })
+        }, completion: nil)
     }
     
-    fileprivate func showCollectedNoti() {
+    func showCollectedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgCollected.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgCollected.alpha = 1
         }, completion: nil)
     }
     
-    func action(_ sender: UIButton) {
+    func action(_ sender: UIButton, animated: Bool = false) {
+        
+        guard animated else {
+            chooseAction(sender)
+            return
+        }
+        
         btnDetail.isSelected = sender == btnDetail
         btnCollect.isSelected = sender == btnCollect
         btnRoute.isSelected = sender == btnRoute
@@ -556,16 +560,17 @@ class PlacePinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func chooseAction() {
-        if btnDetail.isSelected {
+    func chooseAction(_ sender: UIButton = UIButton()) {
+        if btnDetail.isSelected || sender == btnDetail {
             delegate?.placePinAction(action: .detail)
-        } else if btnCollect.isSelected {
+        } else if btnCollect.isSelected || sender == btnCollect {
             delegate?.placePinAction(action: .collect)
-        } else if btnRoute.isSelected {
+        } else if btnRoute.isSelected || sender == btnRoute {
             delegate?.placePinAction(action: .route)
-        } else if btnShare.isSelected {
+        } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share)
         }
+        optionsToNormal()
     }
 }
 
