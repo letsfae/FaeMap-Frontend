@@ -9,8 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class PlaceDetailViewController: UIViewController {
-    
+class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate {
     var place: PlacePin!
     var uiviewHeader: UIView!
     var uiviewSubHeader: FixedHeader!
