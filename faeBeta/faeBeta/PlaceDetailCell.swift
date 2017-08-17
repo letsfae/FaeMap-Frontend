@@ -14,14 +14,18 @@ class PlaceDetailCell: UITableViewCell {
     var imgDownArrow: UIImageView!
     var separatorView: UIView!
     var uiviewHiddenCell: UIView!
+    var mapView: MKMapView!
+    static var boolFold = true
     
-    internal var cellContraint = [NSLayoutConstraint]() {
+    internal var cellConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
+                print("removeConstraints")
                 removeConstraints(oldValue)
             }
-            if cellContraint.count != 0 {
-                addConstraints(cellContraint)
+            if cellConstraint.count != 0 {
+                print("addConstraints")
+                addConstraints(cellConstraint)
             }
         }
     }
@@ -52,12 +56,10 @@ class PlaceDetailCell: UITableViewCell {
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblContent.textColor = UIColor._898989()
         lblContent.numberOfLines = 0
-        lblContent.lineBreakMode = .byWordWrapping
         addSubview(lblContent)
         addConstraintsWithFormat("H:|-68-[v0]-68-|", options: [], views: lblContent)
         
         uiviewHiddenCell = UIView()
-//        uiviewHiddenCell.backgroundColor = .red
         addSubview(uiviewHiddenCell)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewHiddenCell)
         
@@ -65,11 +67,13 @@ class PlaceDetailCell: UITableViewCell {
     }
     
     func setCellContraints() {
-        if imgDownArrow.image == nil || imgDownArrow.image == #imageLiteral(resourceName: "arrow_down") {
-            cellContraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1(0)]-1-|", options: [], views: lblContent, uiviewHiddenCell)
+        if PlaceDetailCell.boolFold {
+            imgDownArrow.image = #imageLiteral(resourceName: "arrow_down")
+            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1(0)]-1-|", options: [], views: lblContent, uiviewHiddenCell)
             uiviewHiddenCell.isHidden = true
         } else {
-            cellContraint = returnConstraintsWithFormat("V:|-18-[v0]-9-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
+            imgDownArrow.image = #imageLiteral(resourceName: "arrow_up")
+            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0]-9-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
             uiviewHiddenCell.isHidden = false
         }
     }
@@ -77,7 +81,6 @@ class PlaceDetailCell: UITableViewCell {
     fileprivate func loadDownArrow() {
         imgDownArrow = UIImageView(frame: CGRect(x: screenWidth - 41, y: 16, width: 26, height: 30))
         imgDownArrow.contentMode = .center
-        imgDownArrow.image = #imageLiteral(resourceName: "arrow_down")
         addSubview(imgDownArrow)
     }
     
@@ -98,21 +101,22 @@ class PlaceDetailSection1Cell: PlaceDetailCell {
     override func setValueForCell(place: PlacePin) {
         imgIcon.image = #imageLiteral(resourceName: "place_location")
         lblContent.text = place.address1 + ", " + place.address2
+        mapView.camera.centerCoordinate = place.coordinate
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
+        mapView.setRegion(coordinateRegion, animated: false)
     }
     
     func loadHiddenContent() {
-        let mapView = UIImageView()
-        mapView.image = #imageLiteral(resourceName: "defaultPlaceIcon")
-        mapView.contentMode = .scaleToFill
+        mapView = MKMapView()
         uiviewHiddenCell.addSubview(mapView)
         uiviewHiddenCell.addConstraintsWithFormat("V:|-0-[v0(150)]-8-|", options: [], views: mapView)
-        uiviewHiddenCell.addConstraintsWithFormat("H:|-\(screenWidth / 2 - 140)-[v0(280)]", options: [], views: mapView)
+        uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
     }
 }
 
 class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableViewDataSource {
     var arrDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    var arrHour = ["10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "N.A", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "N.A"]
+    var arrHour = ["10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "N.A", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "Not Open"]
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -125,29 +129,38 @@ class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableView
     
     override func setValueForCell(place: PlacePin) {
         imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-        lblContent.text = "Open / 9:00am - 8:00pm"
+        lblContent.text = "Open / 9:00 AM - 8:00 PM"
     }
     
     func loadHiddenContent() {
+        let tblOpeningHours = UITableView()
+        uiviewHiddenCell.addSubview(tblOpeningHours)
+        uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0]-38-|", options: [], views: tblOpeningHours)
+        
+        tblOpeningHours.delegate = self
+        tblOpeningHours.dataSource = self
+        tblOpeningHours.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
+        tblOpeningHours.separatorStyle = .none
+        tblOpeningHours.isUserInteractionEnabled = true
+        tblOpeningHours.isScrollEnabled = false
+        tblOpeningHours.rowHeight = 28
+        
+//        let foldCell = UITapGestureRecognizer(target: self, action: #selector(actionFoldCell(_:)))
+//        tblOpeningHours.addGestureRecognizer(foldCell)
+        
         let lblHint = UILabel()
         lblHint.text = "Holiday might affect these hours."
         lblHint.textColor = UIColor._182182182()
         lblHint.font = UIFont(name: "AvenirNext-MediumItalic", size: 15)
         uiviewHiddenCell.addSubview(lblHint)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(240)]", options: [], views: lblHint)
-        
-        let tblOpeningHours = UITableView()
-        uiviewHiddenCell.addSubview(tblOpeningHours)
-        uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0]-38-|", options: [], views: tblOpeningHours)
         uiviewHiddenCell.addConstraintsWithFormat("V:|-2-[v0(\(28 * 7))]-11-[v1(20)]-16-|", options: [], views: tblOpeningHours, lblHint)
-        
-        tblOpeningHours.delegate = self
-        tblOpeningHours.dataSource = self
-        tblOpeningHours.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
-        tblOpeningHours.separatorStyle = .none
-        tblOpeningHours.allowsSelection = false
-        tblOpeningHours.rowHeight = 28
     }
+    
+//    func actionFoldCell(_ sender: UITapGestureRecognizer) {
+//        PlaceDetailCell.boolFold = true
+//        setCellContraints()
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrDay.count
@@ -185,6 +198,7 @@ class PlaceOpeningHourCell: UITableViewCell {
     var lblHour: UILabel!
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         loadContent()
     }
     
