@@ -11,21 +11,65 @@ import UIKit
 class FaeMapView: MKMapView {
 
     private var blockTap = false
+    private var blockDoubleTap = false
     var faeMapCtrler: FaeMapViewController?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        
+        let tapGesture_tps_1 = UITapGestureRecognizer(target: self, action: #selector(handleTap_1(_:)))
+        tapGesture_tps_1.numberOfTapsRequired = 1
+        
+        let tapGesture_tps_2 = UITapGestureRecognizer(target: self, action: #selector(handleTap_2(_:)))
+        tapGesture_tps_2.numberOfTapsRequired = 2
+        
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        addGestureRecognizer(tapGesture)
+        
+        addGestureRecognizer(tapGesture_tps_1)
         addGestureRecognizer(longPressGesture)
+        guard let subview = self.subviews.first else { return }
+        subview.addGestureRecognizer(tapGesture_tps_2)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func handleTap(_ tapGesture: UITapGestureRecognizer) {
+    func handleTap_2(_ tapGesture: UITapGestureRecognizer) {
+        let tapPoint: CGPoint = tapGesture.location(in: self)
+        let numberOfTouches: Int = tapGesture.numberOfTouches
+        if numberOfTouches == 1 && tapGesture.state == .ended {
+            if !blockTap {
+                blockTap = true
+                faeMapCtrler?.uiviewNameCard.hide() {
+                    self.faeMapCtrler?.mapGesture(isOn: true)
+                }
+                let v: Any? = hitTest(tapPoint, with: nil)
+                if v is MKAnnotationView {
+                    if let anView = v as? PlacePinAnnotationView {
+                        if !anView.boolOptionsOpened {
+                            faeMapCtrler?.deselectAllAnnotations()
+                            faeMapCtrler?.tapPlacePin(didSelect: anView)
+                            anView.showButtons()
+                            anView.boolBtnsReadyToOpened = true
+                            anView.boolOptionsOpened = true
+                        }
+                    } else if let anView = v as? UserPinAnnotationView {
+                        faeMapCtrler?.placeResultBar.fadeOut()
+                        faeMapCtrler?.tapUserPin(didSelect: anView)
+                    }
+                } else {
+//                    faeMapCtrler?.placeResultBar.fadeOut()
+//                    faeMapCtrler?.deselectAllAnnotations()
+                }
+                blockTap = false
+                guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
+                faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+            }
+        }
+    }
+    
+    func handleTap_1(_ tapGesture: UITapGestureRecognizer) {
         let tapPoint: CGPoint = tapGesture.location(in: self)
         let numberOfTouches: Int = tapGesture.numberOfTouches
         if numberOfTouches == 1 && tapGesture.state == .ended {
