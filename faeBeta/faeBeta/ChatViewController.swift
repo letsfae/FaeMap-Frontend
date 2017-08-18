@@ -25,6 +25,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var roomRef: DatabaseReference?
     var _refHandle: DatabaseHandle?
     var messages: [JSQMessage] = []
+    var messagesKey: [String] = []
     var objects: [NSDictionary] = [] //
     var loaded: [NSDictionary] = [] // load dict from firebase that this chat room all message
     
@@ -112,12 +113,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var keyboardHeight: CGFloat = 0.0
     var toolbarLastY: CGFloat = screenHeight - 90
     var collectionViewLastBottomInset: CGFloat = 90
-    var boolIsDisappear:Bool = false
+    var boolGoToFullContent:Bool = false
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
-        boolIsDisappear = true
         //update recent
         print("chat view will disappear")
         //self.navigationController?.navigationBar.isHidden = false
@@ -132,7 +132,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidDisappear(_ animated: Bool) {
         print("chat view did disappear")
-        closeToolbarContentView()
+        //closeToolbarContentView()
         closeLocExtendView()
         moveDownInputBar()
         ref.removeObserver(withHandle: _refHandle!)
@@ -152,7 +152,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: collectionViewLastBottomInset, right: 0.0)
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: collectionViewLastBottomInset, right: 0.0)
         //collectionView.isScrollEnabled = true
-        scrollToBottom(false)
+        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
         toolbarContentView.setup(initializeType)
         
@@ -195,8 +195,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture(_:)))
         //swipeRight.direction = .right
         //view.addGestureRecognizer(swipeRight)
-        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
-        toolbarContentView.setup(initializeType)
+        //let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
+        //toolbarContentView.setup(initializeType)
        
         view.addSubview(locExtendView)
         moveDownInputBar()
@@ -209,6 +209,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         addObservers()
         loadUserDefault()
         loadNewMessages()
+        if boolGoToFullContent {
+            scrollToBottom(false)
+            boolGoToFullContent = false
+        }
         // This line is to fix the collectionView messed up function
         //moveDownInputBar()
         getAvatar()
@@ -422,13 +426,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.isScrollEnabled = true
         //moveUpInputBarContentView(false)
         inputToolbar.contentView.textView.becomeFirstResponder()
-        scrollToBottom(true)
+        scrollToBottom(false)
         
     }
     
     func showCamera() {
         view.endEditing(true)
         locExtendView.isHidden = true
+        boolGoToFullContent = true
         UIView.animate(withDuration: 0.3, animations: {
             self.closeToolbarContentView()
         }, completion: { (_) -> Void in
@@ -605,12 +610,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
+            //print("current offset: \(scrollViewCurrentOffset)")
             if scrollViewCurrentOffset - scrollViewOriginOffset < 0
                 && (toolbarContentView.mediaContentShow)
                 && !isClosingToolbarContentView && scrollView.isScrollEnabled == true {
                 toolbarContentView.frame.origin.y = min(screenHeight - 273 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight)
                 
-                inputToolbar.frame.origin.y = min(screenHeight - 273 - inputToolbar.frame.height - 64 - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - inputToolbar.frame.height - 64)
+                inputToolbar.frame.origin.y = min(screenHeight - 273 - inputToolbar.frame.height - (scrollViewCurrentOffset - scrollViewOriginOffset), screenHeight - inputToolbar.frame.height)
                 
                 locExtendView.frame.origin.y = screenHeight - 271 - 76 - 90 - (scrollViewCurrentOffset - scrollViewOriginOffset)
             }
@@ -629,6 +635,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
+            //print("current offset:\(scrollViewCurrentOffset)")
             if scrollViewCurrentOffset - scrollViewOriginOffset < -5 {
                 
                 isClosingToolbarContentView = true
@@ -745,7 +752,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func closeToolbarContentView() {
         resetToolbarButtonIcon()
         moveDownInputBar()
-        scrollToBottom(true)
+        scrollToBottom(false)
         toolbarContentView.closeAll()
         toolbarContentView.frame.origin.y = screenHeight
     }
@@ -759,6 +766,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // segue to the full album page
     func showFullAlbum() {
         closeToolbarContentView()
+        boolGoToFullContent = true
+        //scrollToBottom(false)
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         // TODO
         //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
@@ -949,6 +958,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showFullLocationView(_ sender: UIButton) {
         // TODO
         //let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
+        closeToolbarContentView()
+        boolGoToFullContent = true
         let vc = ChatSendLocationController()
         vc.locationDelegate = self
         navigationController?.pushViewController(vc, animated: true)
@@ -1013,7 +1024,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         //showKeyboard()
         //inputToolbar.contentView.textView.becomeFirstResponder()
-        scrollToBottom(true)
+        scrollToBottom(false)
         buttonSend.isEnabled = true
         
     }
