@@ -13,7 +13,7 @@ extension FaeMapViewController: MapSearchDelegate {
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         updateUI(searchText: searchText)
-        placeResultBar.load(for: place)
+        uiviewPlaceBar.load(for: place)
         PLACE_ENABLE = false
         let camera = faeMapView.camera
         camera.centerCoordinate = place.coordinate
@@ -35,14 +35,14 @@ extension FaeMapViewController: MapSearchDelegate {
         updateUI(searchText: searchText)
         PLACE_ENABLE = false
         swipingState = .multipleSearch
-        placeResultBar.places = placeResultTbl.updatePlacesArray(places: places)
+        uiviewPlaceBar.places = placeResultTbl.updatePlacesArray(places: places)
         if let firstPlacePin = places.first {
-            placeResultBar.loading(current: firstPlacePin)
+            uiviewPlaceBar.loading(current: firstPlacePin)
         }
         btnTapToShowResultTbl.alpha = 1
         mapClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
-            for place in self.placeResultBar.places {
+            for place in self.uiviewPlaceBar.places {
                 let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager)
                 pin.pinInfo = place as AnyObject
                 pin.id = place.id

@@ -1,5 +1,5 @@
 //
-//  MainScreenButtons.swift
+//  FMLoadMainItems.swift
 //  faeBeta
 //
 //  Created by Yue on 8/9/16.
@@ -95,7 +95,6 @@ extension FaeMapViewController {
         
         // Click to take an action for place pin
         btnPlacePinActionOnSrchBar = FMPlaceActionBtn()
-        btnPlacePinActionOnSrchBar.faeMapCtrler = self
         imgSchbarShadow.addSubview(btnPlacePinActionOnSrchBar)
         imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
         imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
