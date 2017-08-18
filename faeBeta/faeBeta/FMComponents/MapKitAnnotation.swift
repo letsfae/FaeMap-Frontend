@@ -59,30 +59,23 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     var timer: Timer?
     
-    init(type: String, cluster: CCHMapClusterController, json: JSON = JSON([])) {
+    init(type: String, cluster: CCHMapClusterController, data: AnyObject) {
         super.init()
         self.mapViewCluster = cluster
         self.type = type
         if type == "place" {
-            let placePin = PlacePin(json: json)
-            self.pinInfo = placePin as AnyObject
-            self.id = json["place_id"].intValue
-            if let _3_icon_id = json["categories"]["class3_icon_id"].int {
-                class_2_icon_id = _3_icon_id
-            } else if let _2_icon_id = json["categories"]["class2_icon_id"].int {
-                class_2_icon_id = _2_icon_id
-            }
+            guard let placePin = data as? PlacePin else { return }
+            self.pinInfo = data
+            self.id = placePin.id
+            self.class_2_icon_id = placePin.class_2_icon_id
             self.icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
             self.coordinate = placePin.coordinate
         }
         else if type == "user" {
-            self.id = json["user_id"].intValue
-            self.miniAvatar = json["mini_avatar"].intValue
-            guard let posArr = json["geolocation"].array else { return }
-            for pos in posArr {
-                let pos_i = CLLocationCoordinate2DMake(pos["latitude"].doubleValue, pos["longitude"].doubleValue)
-                self.positions.append(pos_i)
-            }
+            guard let userPin = data as? UserPin else { return }
+            self.id = userPin.id
+            self.miniAvatar = userPin.miniAvatar
+            self.positions = userPin.positions
             self.coordinate = self.positions[self.count]
             self.count += 1
             guard Mood.avatars[miniAvatar] != nil else {
