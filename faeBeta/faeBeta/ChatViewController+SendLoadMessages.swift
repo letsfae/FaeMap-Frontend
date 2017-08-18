@@ -141,7 +141,12 @@ extension ChatViewController: OutgoingMessageProtocol {
         _refHandle = roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded, with: { (snapshot: DataSnapshot) in
             if snapshot.exists() {
                 // because the type is ChildAdded so the snapshot is the new message
-                let item = (snapshot.value as? NSDictionary)!
+                let item = (snapshot.value as? NSMutableDictionary)!
+                item["keyValue"] = snapshot.key
+                
+                if self.messagesKey.contains(snapshot.key) {
+                    return
+                }
                 
                 if self.initialLoadComplete { // message has been downloaded from database but not load to collectionview yet.
                     let isIncoming = self.insertMessage(item)
@@ -160,8 +165,9 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     func loadInitMessages() {
         roomRef = ref.child(chatRoomId)
-        roomRef?.child(chatRoomId).observeSingleEvent(of: .value) { (_: DataSnapshot) in
+        roomRef?.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
             //this function will run only once
+            print(snapshot.key)
             self.insertMessages()
             self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
@@ -223,6 +229,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         if let message = message {
             objects.append(item)
             messages.append(message)
+            messagesKey.append(item["keyValue"] as! String)
             return self.incoming(item)
         }
         return false
