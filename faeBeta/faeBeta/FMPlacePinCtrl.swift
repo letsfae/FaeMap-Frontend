@@ -190,11 +190,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             }
             serialQueue.async {
                 for placeJson in mapPlaceJsonArray {
-                    let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, json: placeJson)
-                    if self.faePlacePins.contains(place) {
+                    let placeData = PlacePin(json: placeJson)
+                    if self.arrPlaceData.contains(placeData) {
                         continue
                     } else {
                         // MARK: - Bug Here, negative count and malloc problem
+                        let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: placeData)
+                        self.arrPlaceData.append(placeData)
                         self.faePlacePins.append(place)
                         placePins.append(place)
                     }

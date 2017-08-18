@@ -20,12 +20,7 @@ extension FaeMapViewController: MapSearchDelegate {
         faeMapView.setCamera(camera, animated: false)
         mapClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
-            let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager)
-            pin.pinInfo = place as AnyObject
-            pin.id = place.id
-            pin.class_2_icon_id = place.class_2_icon_id
-            pin.icon = UIImage(named: "place_map_\(place.class_2_icon_id)s") ?? #imageLiteral(resourceName: "place_map_48s")
-            pin.coordinate = place.coordinate
+            let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: place)
             self.faePlacePins.append(pin)
             self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }
@@ -43,12 +38,7 @@ extension FaeMapViewController: MapSearchDelegate {
         mapClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
             for place in self.uiviewPlaceBar.places {
-                let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager)
-                pin.pinInfo = place as AnyObject
-                pin.id = place.id
-                pin.class_2_icon_id = place.class_2_icon_id
-                pin.icon = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
-                pin.coordinate = place.coordinate
+                let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: place)
                 self.faePlacePins.append(pin)
             }
             self.mapClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
