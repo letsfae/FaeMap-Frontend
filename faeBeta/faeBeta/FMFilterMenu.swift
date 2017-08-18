@@ -291,7 +291,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     func hide(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.origin.y = screenHeight
-            self.btnFilterIcon.center.y = screenHeight - 25
+            if self.btnFilterIcon.center.y < screenHeight - 25 {
+                self.btnFilterIcon.center.y = screenHeight - 25
+            }
         })
     }
     

@@ -1,5 +1,5 @@
 //
-//  FMUpdatePlacePins.swift
+//  FMPlacePinsCtrl.swift
 //  faeBeta
 //
 //  Created by Yue on 3/9/17.
@@ -10,11 +10,27 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate {
+    
+    // AddPlacetoCollectionDelegate
+    func createColList() {
+        
+    }
+    
+    // AddPlacetoCollectionDelegate
+    func cancelAddPlace() {
+        uiviewPlaceList.hide()
+    }
+    
+    func loadPlaceListView() {
+        uiviewPlaceList = AddPlaceToCollectionView()
+        uiviewPlaceList.delegate = self
+        view.addSubview(uiviewPlaceList)
+    }
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
-        selectedAnnView?.hideButtons()
+//        selectedAnnView?.hideButtons()
         switch action {
         case .detail:
             guard let ann = selectedAnn else { return }
@@ -24,6 +40,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
             break
         case .collect:
+            uiviewPlaceList.show()
             guard let ann = selectedAnn else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let pinId = placePin.id
@@ -34,6 +51,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
             })
             break
         case .route:
+            guard let coor = selectedAnnView?.annotation?.coordinate else { return }
+            routeCalculator(destination: coor)
             break
         case .share:
             break

@@ -54,6 +54,7 @@ class FaeMapView: MKMapView {
                     anView.optionsOpened = true
                 }
             } else if let anView = v as? UserPinAnnotationView {
+                faeMapCtrler?.deselectAllAnnotations()
                 faeMapCtrler?.placeResultBar.fadeOut()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             }
@@ -101,14 +102,6 @@ class FaeMapView: MKMapView {
     }
 
     func handleLongPress(_ sender: UILongPressGestureRecognizer) {
-//        joshprint("state:")
-//        joshprint(1, sender.state == .began)
-//        joshprint(2, sender.state == .cancelled)
-//        joshprint(3, sender.state == .changed)
-//        joshprint(4, sender.state == .ended)
-//        joshprint(5, sender.state == .failed)
-//        joshprint(6, sender.state == .possible)
-//        joshprint(7, sender.state == .recognized)
         blockTap = true
         let tapPoint = sender.location(in: self)
         let numberOfTouches = sender.numberOfTouches
@@ -129,6 +122,8 @@ class FaeMapView: MKMapView {
                     anView.hideButtons()
                 }
                 anView.optionsReady = true
+            } else {
+                faeMapCtrler?.selectedAnnView?.hideButtons()
             }
             if let anView = faeMapCtrler?.selectedAnnView {
                 anView.chooseAction()

@@ -10,7 +10,7 @@ import UIKit
 
 protocol AddPlacetoCollectionDelegate: class {
     func createColList()
-    func cancel()
+    func cancelAddPlace()
 }
 
 class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
@@ -22,23 +22,36 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var tblAddCollection: UITableView!
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight - 434 * screenHeightFactor, width:screenWidth, height: 434 * screenHeightFactor))
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
         backgroundColor = .white
         loadContent()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func show() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight - self.frame.size.height
+        }, completion: nil)
+    }
+    
+    func hide() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight
+        }, completion: nil)
+    }
+    
     fileprivate func loadContent() {
+        layer.zPosition = 1001
+        
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 58))
         addSubview(uiviewHeader)
         
-//        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
-//        swipeGesture.direction = .down
-//        uiviewHeader.addGestureRecognizer(swipeGesture)
+        //        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
+        //        swipeGesture.direction = .down
+        //        uiviewHeader.addGestureRecognizer(swipeGesture)
         
         let upperLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         upperLine.backgroundColor = UIColor._200199204()
@@ -99,7 +112,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     }
     
     func actionCancel(_ sender: UIButton) {
-        delegate?.cancel()
+        delegate?.cancelAddPlace()
     }
     
     func actionNew(_ sender: UIButton) {
