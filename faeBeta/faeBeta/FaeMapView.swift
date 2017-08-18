@@ -11,7 +11,6 @@ import UIKit
 class FaeMapView: MKMapView {
 
     private var blockTap = false
-    private var blockDoubleTap = false
     var faeMapCtrler: FaeMapViewController?
 
     override init(frame: CGRect) {
@@ -36,76 +35,69 @@ class FaeMapView: MKMapView {
     }
     
     func handleTap_2(_ tapGesture: UITapGestureRecognizer) {
-        let tapPoint: CGPoint = tapGesture.location(in: self)
-        let numberOfTouches: Int = tapGesture.numberOfTouches
-        if numberOfTouches == 1 && tapGesture.state == .ended {
-            if !blockTap {
-                blockTap = true
-                faeMapCtrler?.uiviewNameCard.hide() {
-                    self.faeMapCtrler?.mapGesture(isOn: true)
+        let tapPoint = tapGesture.location(in: self)
+        let numberOfTouches = tapGesture.numberOfTouches
+        guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
+        guard !blockTap else { return }
+        blockTap = true
+        faeMapCtrler?.uiviewNameCard.hide() {
+            self.faeMapCtrler?.mapGesture(isOn: true)
+        }
+        let v: Any? = hitTest(tapPoint, with: nil)
+        if v is MKAnnotationView {
+            if let anView = v as? PlacePinAnnotationView {
+                if !anView.optionsOpened {
+                    faeMapCtrler?.deselectAllAnnotations()
+                    faeMapCtrler?.tapPlacePin(didSelect: anView)
+                    anView.showButtons()
+                    anView.optionsReady = true
+                    anView.optionsOpened = true
                 }
-                let v: Any? = hitTest(tapPoint, with: nil)
-                if v is MKAnnotationView {
-                    if let anView = v as? PlacePinAnnotationView {
-                        if !anView.boolOptionsOpened {
-                            faeMapCtrler?.deselectAllAnnotations()
-                            faeMapCtrler?.tapPlacePin(didSelect: anView)
-                            anView.showButtons()
-                            anView.boolBtnsReadyToOpened = true
-                            anView.boolOptionsOpened = true
-                        }
-                    } else if let anView = v as? UserPinAnnotationView {
-                        faeMapCtrler?.placeResultBar.fadeOut()
-                        faeMapCtrler?.tapUserPin(didSelect: anView)
-                    }
-                } else {
-//                    faeMapCtrler?.placeResultBar.fadeOut()
-//                    faeMapCtrler?.deselectAllAnnotations()
-                }
-                blockTap = false
-                guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-                faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+            } else if let anView = v as? UserPinAnnotationView {
+                faeMapCtrler?.placeResultBar.fadeOut()
+                faeMapCtrler?.tapUserPin(didSelect: anView)
             }
         }
+        blockTap = false
+        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
+        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
     
     func handleTap_1(_ tapGesture: UITapGestureRecognizer) {
-        let tapPoint: CGPoint = tapGesture.location(in: self)
-        let numberOfTouches: Int = tapGesture.numberOfTouches
-        if numberOfTouches == 1 && tapGesture.state == .ended {
-            if !blockTap {
-                blockTap = true
-                faeMapCtrler?.uiviewNameCard.hide() {
-                    self.faeMapCtrler?.mapGesture(isOn: true)
-                }
-                let v: Any? = hitTest(tapPoint, with: nil)
-                if v is MKAnnotationView {
-                    if let anView = v as? PlacePinAnnotationView {
-                        if anView.boolBtnsReadyToOpened == false {
-                            faeMapCtrler?.deselectAllAnnotations()
-                            faeMapCtrler?.tapPlacePin(didSelect: anView)
-                            anView.boolBtnsReadyToOpened = true
-                        } else if anView.boolBtnsReadyToOpened && !anView.boolOptionsOpened {
-                            anView.showButtons()
-                            anView.boolOptionsOpened = true
-                            faeMapCtrler?.tapPlacePin(didSelect: anView)
-                        } else if anView.boolBtnsReadyToOpened && anView.boolOptionsOpened {
-                            anView.hideButtons()
-                            anView.boolOptionsOpened = false
-                        }
-                    } else if let anView = v as? UserPinAnnotationView {
-                        faeMapCtrler?.placeResultBar.fadeOut()
-                        faeMapCtrler?.tapUserPin(didSelect: anView)
-                    }
-                } else {
-                    faeMapCtrler?.placeResultBar.fadeOut()
-                    faeMapCtrler?.deselectAllAnnotations()
-                }
-                blockTap = false
-                guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-                faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
-            }
+        let tapPoint = tapGesture.location(in: self)
+        let numberOfTouches = tapGesture.numberOfTouches
+        guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
+        guard !blockTap else { return }
+        blockTap = true
+        faeMapCtrler?.uiviewNameCard.hide() {
+            self.faeMapCtrler?.mapGesture(isOn: true)
         }
+        let v: Any? = hitTest(tapPoint, with: nil)
+        if v is MKAnnotationView {
+            if let anView = v as? PlacePinAnnotationView {
+                if anView.optionsReady == false {
+                    faeMapCtrler?.deselectAllAnnotations()
+                    faeMapCtrler?.tapPlacePin(didSelect: anView)
+                    anView.optionsReady = true
+                } else if anView.optionsReady && !anView.optionsOpened {
+                    anView.showButtons()
+                    anView.optionsOpened = true
+                    faeMapCtrler?.tapPlacePin(didSelect: anView)
+                } else if anView.optionsReady && anView.optionsOpened {
+                    anView.hideButtons()
+                    anView.optionsOpened = false
+                }
+            } else if let anView = v as? UserPinAnnotationView {
+                faeMapCtrler?.placeResultBar.fadeOut()
+                faeMapCtrler?.tapUserPin(didSelect: anView)
+            }
+        } else {
+            faeMapCtrler?.placeResultBar.fadeOut()
+            faeMapCtrler?.deselectAllAnnotations()
+        }
+        blockTap = false
+        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
+        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
 
     func handleLongPress(_ sender: UILongPressGestureRecognizer) {
@@ -118,11 +110,9 @@ class FaeMapView: MKMapView {
 //        joshprint(6, sender.state == .possible)
 //        joshprint(7, sender.state == .recognized)
         blockTap = true
-        let tapPoint: CGPoint = sender.location(in: self)
-        let numberOfTouches: Int = sender.numberOfTouches
-        
+        let tapPoint = sender.location(in: self)
+        let numberOfTouches = sender.numberOfTouches
         guard numberOfTouches == 1 else { return }
-        
         if sender.state == .began {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
@@ -135,10 +125,10 @@ class FaeMapView: MKMapView {
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
-                if !anView.boolOptionsOpened {
+                if !anView.optionsOpened {
                     anView.hideButtons()
                 }
-                anView.boolBtnsReadyToOpened = true
+                anView.optionsReady = true
             }
             if let anView = faeMapCtrler?.selectedAnnView {
                 anView.chooseAction()
