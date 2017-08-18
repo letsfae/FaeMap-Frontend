@@ -29,7 +29,7 @@ extension FaeMapViewController {
         mapClusterManager.marginFactor = 0.5
         mapClusterManager.delegate = self
         mapClusterManager.clusterer = CCHNearCenterMapClusterer()
-
+        
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
         prevMapCenter = LocManager.shared.curtLoc.coordinate
@@ -115,7 +115,7 @@ extension FaeMapViewController {
         btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
-        btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646*screenWidthFactor, width: 79, height: 79))
+        btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646 * screenHeightFactor, width: 79, height: 79))
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
@@ -124,7 +124,7 @@ extension FaeMapViewController {
         
         // Show the number of unread messages on main map
         lblUnreadCount = UILabel(frame: CGRect(x: 55, y: 1, width: 25, height: 22))
-        lblUnreadCount.backgroundColor = UIColor.init(red: 102/255, green: 192/255, blue: 251/255, alpha: 1)
+        lblUnreadCount.backgroundColor = UIColor.init(red: 102 / 255, green: 192 / 255, blue: 251 / 255, alpha: 1)
         lblUnreadCount.layer.cornerRadius = 11
         lblUnreadCount.layer.masksToBounds = true
         lblUnreadCount.layer.opacity = 0.9
@@ -135,7 +135,7 @@ extension FaeMapViewController {
         btnOpenChat.addSubview(lblUnreadCount)
         
         // Create pin on main map
-        btnDiscovery = UIButton(frame: CGRect(x: 323*screenWidthFactor, y: 646*screenWidthFactor, width: 79, height: 79))
+        btnDiscovery = UIButton(frame: CGRect(x: 323 * screenWidthFactor, y: 646 * screenHeightFactor, width: 79, height: 79))
         btnDiscovery.setImage(UIImage(named: "mainScreenDiscovery"), for: .normal)
         view.addSubview(btnDiscovery)
         btnDiscovery.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)

@@ -26,4 +26,8 @@ public extension Double {
     public static func random(min: Double, max: Double) -> Double {
         return Double.random * (max - min) + min
     }
+    
+    func format(f: String) -> String {
+        return String(format: "%\(f)f", self)
+    }
 }

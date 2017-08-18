@@ -192,7 +192,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         uiviewAddCollection = AddPlaceToCollectionView()
         uiviewAddCollection.delegate = self
         view.addSubview(uiviewAddCollection)
-        uiviewAddCollection.frame.origin.y = screenHeight
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -243,15 +242,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func showAddCollectionView() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewAddCollection.frame.origin.y = screenHeight - 434 * screenHeightFactor
-        }, completion: nil)
+        uiviewAddCollection.show()
     }
     
     func hideAddCollectionView() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewAddCollection.frame.origin.y = screenHeight
-        }, completion: nil)
+        uiviewAddCollection.hide()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -274,7 +269,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     // SeeAllPlacesDelegate End
     
     // AddPlacetoCollectionDelegate
-    func cancel() {
+    func cancelAddPlace() {
         hideAddCollectionView()
     }
     

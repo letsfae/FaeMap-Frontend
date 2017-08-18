@@ -14,8 +14,8 @@ class FMCompass: UIButton {
     var nameCard = FMNameCardView()
     var faeMapCtrler: FaeMapViewController?
     
-    override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59))
+    override init(frame: CGRect = .zero) {
+        super.init(frame: CGRect(x: 22, y: 582 * screenHeightFactor, width: 59, height: 59))
         loadContent()
     }
     
@@ -53,7 +53,7 @@ class FMLocateSelf: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59))
+        super.init(frame: CGRect(x: 333 * screenWidthFactor, y: 582 * screenHeightFactor, width: 59, height: 59))
         loadContent()
     }
     
