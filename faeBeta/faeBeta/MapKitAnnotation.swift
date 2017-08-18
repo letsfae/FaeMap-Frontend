@@ -136,10 +136,10 @@ class SelfAnnotationView: MKAnnotationView {
     var outsideCircle_1: UIImageView!
     var outsideCircle_2: UIImageView!
     var outsideCircle_3: UIImageView!
-    let anchorPoint = CGPoint(x: 19, y: 19)
+    let anchorPoint = CGPoint(x: mapAvatarWidth / 2, y: mapAvatarWidth / 2)
     
     var selfIcon_invisible: UIImageView!
-    var outsideCircle_invisible: UIImageView!
+//    var outsideCircle_invisible: UIImageView!
     
     var boolInvisible = false
     
@@ -174,26 +174,27 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func invisibleMode() {
-        if outsideCircle_1 != nil {
-            outsideCircle_1.removeFromSuperview()
-            outsideCircle_2.removeFromSuperview()
-            outsideCircle_3.removeFromSuperview()
-        }
+//        if outsideCircle_1 != nil {
+//            outsideCircle_1.removeFromSuperview()
+//            outsideCircle_2.removeFromSuperview()
+//            outsideCircle_3.removeFromSuperview()
+//        }
         
         selfIcon.isHidden = true
         
         if selfIcon_invisible != nil {
             selfIcon_invisible.removeFromSuperview()
-            outsideCircle_invisible.removeFromSuperview()
+//            outsideCircle_invisible.removeFromSuperview()
         }
         
-        let offset_1: CGFloat = CGFloat(mapAvatarWidth - 80) / 2.0
-        outsideCircle_invisible = UIImageView(frame: CGRect(x: offset_1, y: offset_1, w: 80, h: 80))
-        outsideCircle_invisible.image = #imageLiteral(resourceName: "invisible_mode_outside")
-        addSubview(outsideCircle_invisible)
+//        let offset_1: CGFloat = CGFloat(mapAvatarWidth - 80) / 2.0
+//        outsideCircle_invisible = UIImageView(frame: CGRect(x: offset_1, y: offset_1, w: 80, h: 80))
+//        outsideCircle_invisible.image = #imageLiteral(resourceName: "invisible_mode_outside")
+//        addSubview(outsideCircle_invisible)
         
-        let offset_0: CGFloat = CGFloat(mapAvatarWidth - 12) / 2.0
-        selfIcon_invisible = UIImageView(frame: CGRect(x: offset_0 - 3, y: offset_0 - 4.5, w: 18, h: 20))
+        let offset_0: CGFloat = CGFloat(mapAvatarWidth - 27) / 2.0
+        selfIcon_invisible = UIImageView(frame: CGRect(x: offset_0 - 0.25, y: offset_0 - 2, w: 27, h: 30))
+        selfIcon_invisible.layer.zPosition = 3
         selfIcon_invisible.image = #imageLiteral(resourceName: "invisible_mode_inside")
         selfIcon_invisible.contentMode = .scaleAspectFit
         selfIcon_invisible.clipsToBounds = false
@@ -206,6 +207,21 @@ class SelfAnnotationView: MKAnnotationView {
         timer = nil
         
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateHeading), userInfo: nil, repeats: true)
+        
+//        let line_0 = UIView()
+//        line_0.center = anchorPoint
+//        line_0.frame.size = CGSize(width: 60, height: 1)
+//        line_0.backgroundColor = .black
+//        addSubview(line_0)
+//        line_0.layer.zPosition = 10
+//
+//        let line_1 = UIView()
+//        line_1.center = anchorPoint
+//        line_1.frame.size = CGSize(width: 1, height: 60)
+//        line_1.backgroundColor = .black
+//        addSubview(line_1)
+//        line_1.layer.zPosition = 10
+        selfMarkerAnimation()
     }
     
     func updateHeading() {
@@ -252,6 +268,8 @@ class SelfAnnotationView: MKAnnotationView {
     
     func reloadSelfMarker() {
         
+        selfMarkerAnimation()
+        
         guard userStatus != 5 else { return }
         
         timer?.invalidate()
@@ -262,17 +280,23 @@ class SelfAnnotationView: MKAnnotationView {
         
         if selfIcon_invisible != nil {
             selfIcon_invisible.removeFromSuperview()
-            outsideCircle_invisible.removeFromSuperview()
+//            outsideCircle_invisible.removeFromSuperview()
         }
+    }
+    
+    func selfMarkerAnimation() {
         
         if outsideCircle_1 != nil {
             outsideCircle_1.removeFromSuperview()
             outsideCircle_2.removeFromSuperview()
             outsideCircle_3.removeFromSuperview()
         }
-        outsideCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        outsideCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-        outsideCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        
+        let initWidth: CGFloat = 20
+        
+        outsideCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
+        outsideCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
+        outsideCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
         outsideCircle_1.layer.zPosition = 0
         outsideCircle_2.layer.zPosition = 1
         outsideCircle_3.layer.zPosition = 2
@@ -282,18 +306,13 @@ class SelfAnnotationView: MKAnnotationView {
         outsideCircle_1.isUserInteractionEnabled = false
         outsideCircle_2.isUserInteractionEnabled = false
         outsideCircle_3.isUserInteractionEnabled = false
-        outsideCircle_1.image = UIImage(named: "myPosition_outside")
-        outsideCircle_2.image = UIImage(named: "myPosition_outside")
-        outsideCircle_3.image = UIImage(named: "myPosition_outside")
+        outsideCircle_1.image = #imageLiteral(resourceName: "myPosition_outside")
+        outsideCircle_2.image = #imageLiteral(resourceName: "myPosition_outside")
+        outsideCircle_3.image = #imageLiteral(resourceName: "myPosition_outside")
         
         addSubview(outsideCircle_3)
         addSubview(outsideCircle_2)
         addSubview(outsideCircle_1)
-        
-        selfMarkerAnimation()
-    }
-    
-    func selfMarkerAnimation() {
         
         let circleWidth = 100
         let offSet = -(circleWidth - mapAvatarWidth) / 2
@@ -367,8 +386,9 @@ class PlacePinAnnotationView: MKAnnotationView {
     var btnShare: UIButton!
     var arrBtns = [UIButton]()
     
-    var boolBtnsReadyToOpened = false
-    var boolOptionsOpened = false
+    var optionsReady = false
+    var optionsOpened = false
+    var optionsOpeing = false
     
     var imgCollected: UIImageView!
     
@@ -389,8 +409,6 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func assignImage(_ image: UIImage) {
-        // when an image is set for the annotation view,
-        // it actually adds the image to the image view
         imgIcon.image = image
     }
     
@@ -445,7 +463,8 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     func showButtons() {
         guard arrBtns.count == 0 else { return }
-        boolBtnsReadyToOpened = true
+        optionsReady = true
+        optionsOpeing = true
         loadButtons()
         var point = self.frame.origin; point.x -= 59 ;point.y -= 56
         frame = CGRect(x: point.x, y: point.y, width: 174, height: 112)
@@ -466,8 +485,6 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func hideButtons() {
-        
-        self.layer.zPosition = 1
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, animations: {
             for btn in self.arrBtns {
@@ -479,6 +496,7 @@ class PlacePinAnnotationView: MKAnnotationView {
             self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
             self.imgIcon.frame.origin = CGPoint.zero
             self.imgIcon.layer.zPosition = 1
+            self.layer.zPosition = 1
             self.removeButtons()
         })
     }
@@ -515,10 +533,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     func action(_ sender: UIButton, animated: Bool = false) {
         
-        guard animated else {
-            chooseAction(sender)
-            return
-        }
+        guard animated else { chooseAction(sender); return}
         
         btnDetail.isSelected = sender == btnDetail
         btnCollect.isSelected = sender == btnCollect
@@ -569,9 +584,6 @@ class PlacePinAnnotationView: MKAnnotationView {
             delegate?.placePinAction(action: .route)
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share)
-        }
-        if boolOptionsOpened {
-            optionsToNormal()
         }
     }
 }

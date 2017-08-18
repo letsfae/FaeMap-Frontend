@@ -21,7 +21,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnLocateSelf: FMLocateSelf!
     var btnCompass: FMCompass!
     var boolCanUpdateSocialPin = true
-    var boolCanUpdatePlacePin = true
+    var readyUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var faeMapView: FaeMapView!
