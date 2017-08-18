@@ -96,6 +96,8 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         faeMapView.showsUserLocation = true
         let camera = faeMapView.camera
         camera.centerCoordinate = CLLocationCoordinate2D(latitude: currentLatitude, longitude: currentLongitude)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
+        faeMapView.setRegion(coordinateRegion, animated: false)
     }
     
     func loadPin() {

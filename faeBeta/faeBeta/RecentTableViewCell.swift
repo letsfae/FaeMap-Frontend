@@ -459,16 +459,19 @@ class RecentTableViewCell: UITableViewCell {
         self.distanceToRight.constant = -kBounceValue;
         self.distanceToLeft.constant = kBounceValue;
         
-        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-            self.distanceToRight.constant = 0;
-            self.distanceToLeft.constant = 0;
-            
+        UIView.animate(withDuration: 0.3, animations: {
             self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
-                isDraggingRecentTableViewCell = false
-
+                self.distanceToRight.constant = 0;
+                self.distanceToLeft.constant = 0;
+                
+                self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                    self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+                    isDraggingRecentTableViewCell = false
+                    
+                });
             });
-        });
+        })
+        
     }
     
     private func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool)
@@ -485,16 +488,19 @@ class RecentTableViewCell: UITableViewCell {
         self.distanceToLeft.constant = -self.buttonTotalWidth - kBounceValue;
         self.distanceToRight.constant = self.buttonTotalWidth + kBounceValue;
         
-        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-            //3
-            self.distanceToLeft.constant = -self.buttonTotalWidth;
-            self.distanceToRight.constant = self.buttonTotalWidth;
-            
+        UIView.animate(withDuration: 0.3, animations: {
             self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                //4
-                self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+                //3
+                self.distanceToLeft.constant = -self.buttonTotalWidth;
+                self.distanceToRight.constant = self.buttonTotalWidth;
+                
+                self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                    //4
+                    self.startingRightLayoutConstraintConstant = self.distanceToRight.constant;
+                })
             })
         })
+        
     }
     
     private func updateConstraintsIfNeeded(_ animated:Bool, completion: @escaping ( (_ finised:Bool) -> Void))
@@ -510,7 +516,7 @@ class RecentTableViewCell: UITableViewCell {
     
     func openCell()
     {
-        self.setConstraintsToShowAllButtons(false, notifyDelegateDidOpen:false)
+        self.setConstraintsToShowAllButtons(false, notifyDelegateDidOpen: false)
     }
     func closeCell()
     {
