@@ -110,8 +110,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
             selectedAnnView?.hideButtons()
-            selectedAnnView?.boolBtnsReadyToOpened = false
-            selectedAnnView?.boolOptionsOpened = false
+            selectedAnnView?.optionsReady = false
+            selectedAnnView?.optionsOpened = false
             selectedAnnView = nil
         }
     }
