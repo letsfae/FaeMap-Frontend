@@ -55,7 +55,7 @@ class FaeMapView: MKMapView {
                 }
             } else if let anView = v as? UserPinAnnotationView {
                 faeMapCtrler?.deselectAllAnnotations()
-                faeMapCtrler?.placeResultBar.fadeOut()
+                faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             }
         }
@@ -89,11 +89,11 @@ class FaeMapView: MKMapView {
                     anView.optionsOpened = false
                 }
             } else if let anView = v as? UserPinAnnotationView {
-                faeMapCtrler?.placeResultBar.fadeOut()
+                faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             }
         } else {
-            faeMapCtrler?.placeResultBar.fadeOut()
+            faeMapCtrler?.uiviewPlaceBar.hide()
             faeMapCtrler?.deselectAllAnnotations()
         }
         blockTap = false

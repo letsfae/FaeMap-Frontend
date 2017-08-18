@@ -52,7 +52,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgSchbarShadow: UIImageView!
     var selectedAnnView: PlacePinAnnotationView?
     var selectedAnn: FaePinAnnotation?
-    var placeResultBar = FMPlaceInfoBar()
+    var uiviewPlaceBar = FMPlaceInfoBar()
     var boolPreventUserPinOpen = false
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
@@ -72,6 +72,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
     var uiviewPlaceList: AddPlaceToCollectionView!
     var imgDistIndicator: FMDistIndicator!
+    var uiviewChooseLocs: FMChooseLocs!
     
     // System Functions
     override func viewDidLoad() {
@@ -90,10 +91,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
-        joshprint("distance size:")
-        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_5_5").size)
-        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_4_7").size)
-        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_4_0").size)
     }
     
     override func viewWillAppear(_ animated: Bool) {
