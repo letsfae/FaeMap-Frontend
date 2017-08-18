@@ -10,17 +10,13 @@ import UIKit
 
 class FMDistIndicator: UIImageView {
     
-    var faeMapCtrler: FaeMapViewController?
     var lblDistance: UILabel!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         loadContent()
-        isUserInteractionEnabled = true
+        isUserInteractionEnabled = false
         layer.zPosition = 1001
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.hide))
-        addGestureRecognizer(tapGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -56,32 +52,19 @@ class FMDistIndicator: UIImageView {
     }
     
     func hide() {
-        faeMapCtrler?.removeAllRoutes()
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight + 10
-            self.faeMapCtrler?.btnCompass.frame.origin.y = 582 * screenHeightFactor
-            self.faeMapCtrler?.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
-            self.faeMapCtrler?.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
-            self.faeMapCtrler?.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
-            self.faeMapCtrler?.btnFilterIcon.center.y = screenHeight - 25
         })
     }
     
     func show() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - 74
-            self.faeMapCtrler?.btnCompass.frame.origin.y = 664 * screenHeightFactor
-            self.faeMapCtrler?.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
-            self.faeMapCtrler?.btnOpenChat.frame.origin.y = screenHeight + 10
-            self.faeMapCtrler?.btnDiscovery.frame.origin.y = screenHeight + 10
-            self.faeMapCtrler?.btnFilterIcon.frame.origin.y = screenHeight + 10
         })
     }
 }
 
 class FMPlaceActionBtn: UIButton {
-    
-    var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)

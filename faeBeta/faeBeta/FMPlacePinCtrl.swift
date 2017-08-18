@@ -30,7 +30,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
-//        selectedAnnView?.hideButtons()
         switch action {
         case .detail:
             guard let ann = selectedAnn else { return }
@@ -115,14 +114,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
-        placeResultBar.fadeIn()
-        placeResultBar.resetSubviews()
-        placeResultBar.tag = 1
+        uiviewPlaceBar.show()
+        uiviewPlaceBar.resetSubviews()
+        uiviewPlaceBar.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: false)
         if swipingState == .map {
-            placeResultBar.loadingData(current: cluster)
+            uiviewPlaceBar.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
-            placeResultBar.loading(current: placePin)
+            uiviewPlaceBar.loading(current: placePin)
         }
     }
     
@@ -195,6 +194,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                     if self.faePlacePins.contains(place) {
                         continue
                     } else {
+                        // MARK: - Bug Here, negative count and malloc problem
                         self.faePlacePins.append(place)
                         placePins.append(place)
                     }
