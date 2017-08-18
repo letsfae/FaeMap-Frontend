@@ -27,7 +27,7 @@
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
 		50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F5A1F2BB736002553F1 /* PlacesListCell.swift */; };
-		50A12D551F44CE83005821CB /* FMPlaceActionBtn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */; };
+		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
@@ -220,7 +220,7 @@
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
 		B8B7AF521E728BAF00BE92AB /* FMUpdateUserPins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */; };
-		B8B7AF541E728C2300BE92AB /* FMUpdatePlacePins.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */; };
+		B8B7AF541E728C2300BE92AB /* FMPlacePinsCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B7AF531E728C2300BE92AB /* FMPlacePinsCtrl.swift */; };
 		B8BAFF1B1ECE3B06003B76F9 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */; };
 		B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C46DBD1E63786B00FD7E27 /* PinComment.swift */; };
 		B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */; };
@@ -279,7 +279,7 @@
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		50902F5A1F2BB736002553F1 /* PlacesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListCell.swift; sourceTree = "<group>"; };
-		50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceActionBtn.swift; sourceTree = "<group>"; };
+		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
@@ -492,7 +492,7 @@
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
 		B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdateUserPins.swift; sourceTree = "<group>"; };
-		B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUpdatePlacePins.swift; sourceTree = "<group>"; };
+		B8B7AF531E728C2300BE92AB /* FMPlacePinsCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMPlacePinsCtrl.swift; sourceTree = "<group>"; };
 		B8BAFF1A1ECE3B06003B76F9 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		B8C46DBD1E63786B00FD7E27 /* PinComment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinComment.swift; sourceTree = "<group>"; };
 		B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinDetailUser.swift; sourceTree = "<group>"; };
@@ -656,7 +656,7 @@
 				506D1FCE1F2A97D5004119EA /* FMPlaceDetail.swift */,
 				B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */,
 				B8B7AF511E728BAF00BE92AB /* FMUpdateUserPins.swift */,
-				B8B7AF531E728C2300BE92AB /* FMUpdatePlacePins.swift */,
+				B8B7AF531E728C2300BE92AB /* FMPlacePinsCtrl.swift */,
 				B357D9971F3A35A500DA0258 /* CollectionsPlaceLocCell.swift */,
 				B0714D371D5E435200356705 /* FMUpdateMapPins.swift */,
 				5018565D1F33E39100ADD0F3 /* FMRouteCalculator.swift */,
@@ -668,7 +668,7 @@
 				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
 				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
 				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
-				50A12D541F44CE83005821CB /* FMPlaceActionBtn.swift */,
+				50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1554,7 +1554,7 @@
 				B89AB3F31E3D775F00C5116D /* FMMapFilter.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
-				B8B7AF541E728C2300BE92AB /* FMUpdatePlacePins.swift in Sources */,
+				B8B7AF541E728C2300BE92AB /* FMPlacePinsCtrl.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */,
 				C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */,
 				B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */,
@@ -1587,7 +1587,7 @@
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
-				50A12D551F44CE83005821CB /* FMPlaceActionBtn.swift in Sources */,
+				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,

@@ -576,6 +576,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     func chooseAction(_ sender: UIButton = UIButton()) {
+        guard arrBtns.count == 4 else { return }
         if btnDetail.isSelected || sender == btnDetail {
             delegate?.placePinAction(action: .detail)
         } else if btnCollect.isSelected || sender == btnCollect {

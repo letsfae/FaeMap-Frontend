@@ -70,22 +70,30 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevAltitude: CLLocationDistance = 0
     
     var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
-    
-    var hitTestCount = 0
+    var uiviewPlaceList: AddPlaceToCollectionView!
+    var imgDistIndicator: FMDistIndicator!
     
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         isUserLoggedIn()
         getUserStatus()
+        
         loadNameCard()
         loadMapFilter()
         loadMapView()
         loadButton()
         loadPlaceDetail()
+        loadPlaceListView()
+        loadDistanceComponents()
+        
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        joshprint("distance size:")
+        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_5_5").size)
+        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_4_7").size)
+        joshprint(#imageLiteral(resourceName: "place_new_dist_sub_4_0").size)
     }
     
     override func viewWillAppear(_ animated: Bool) {
