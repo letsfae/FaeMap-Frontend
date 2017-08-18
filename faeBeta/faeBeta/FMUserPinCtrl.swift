@@ -84,7 +84,8 @@ extension FaeMapViewController {
                     if userJson["user_id"].intValue == Key.shared.user_id {
                         continue
                     }
-                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, json: userJson)
+                    let userPin = UserPin(json: userJson)
+                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, data: userPin)
                     guard user != nil else { continue }
                     if self.faeUserPins.contains(user!) {
                         // joshprint("[updateUserPins] yes contains")
