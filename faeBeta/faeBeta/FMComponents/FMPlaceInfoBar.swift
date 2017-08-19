@@ -166,13 +166,13 @@ class FMPlaceInfoBar: UIView {
         }
     }
     
-    func fadeIn() {
+    func show() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
         }, completion: nil)
     }
     
-    func fadeOut() {
+    func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
         }, completion: nil)

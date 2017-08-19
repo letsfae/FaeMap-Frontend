@@ -110,8 +110,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let img = selectedAnn?.icon else { return }
             selectedAnnView?.assignImage(img)
             selectedAnnView?.hideButtons()
-            selectedAnnView?.boolBtnsReadyToOpened = false
-            selectedAnnView?.boolOptionsOpened = false
+            selectedAnnView?.optionsReady = false
+            selectedAnnView?.optionsOpened = false
             selectedAnnView = nil
         }
     }
@@ -129,7 +129,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 self.updateUserPins()
             }
         }
-        
     }
     
     func screenWidthInMeters() -> CLLocationDistance {
@@ -149,7 +148,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
         if btnCompass != nil { btnCompass.rotateCompass() }
         
-        if placeResultBar.tag > 0 && PLACE_ENABLE { placeResultBar.annotations = visiblePlaces() }
+        if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
         
         // re-start wave animation of self avatar annotation view
         DispatchQueue.global(qos: .userInitiated).async {

@@ -146,12 +146,11 @@ class FMFilterIcon: UIButton {
     }
     
     func startIconSpin() {
+        guard self.center.y == screenHeight - 25 else { return }
         
-        guard center.y == screenHeight - 25 else { return }
-        
-        isSpinning = true
-        boolHideInsides = true
-        isEnabled = false
+        self.isSpinning = true
+        self.boolHideInsides = true
+        self.isEnabled = false
         
         if self.polygonInside != nil {
             self.polygonInside.alpha = 0
@@ -159,11 +158,11 @@ class FMFilterIcon: UIButton {
             self.polygonInside.removeFromSuperview()
         }
         
-        polygonInside = UIImageView(frame: CGRect(x: 0, y: 0, width: 19.41, height: 21.71))
-        polygonInside.center = CGPoint(x: 22, y: 22)
-        polygonInside.image = #imageLiteral(resourceName: "mapFilterAnimateInside")
-        polygonInside.contentMode = .scaleAspectFit
-        addSubview(polygonInside)
+        self.polygonInside = UIImageView(frame: CGRect(x: 0, y: 0, width: 19.41, height: 21.71))
+        self.polygonInside.center = CGPoint(x: 22, y: 22)
+        self.polygonInside.image = #imageLiteral(resourceName: "mapFilterAnimateInside")
+        self.polygonInside.contentMode = .scaleAspectFit
+        self.addSubview(self.polygonInside)
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.polygonOutside.frame = CGRect(x: -3, y: -3, width: 50, height: 50)
