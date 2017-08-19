@@ -112,6 +112,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(navigationRightItemTapped), for: .touchUpInside)
         
         uiviewNavBar.lblTitle.text = "Chats"
         
@@ -145,6 +146,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //backClosure!(5)
         //self.dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func navigationRightItemTapped() {
+        let vc = NewChatShareController(chatOrShare: "chat")
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - tableView delegate
