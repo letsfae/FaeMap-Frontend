@@ -1,5 +1,5 @@
 //
-//  FMUpdatePlacePins.swift
+//  FMPlacePinsCtrl.swift
 //  faeBeta
 //
 //  Created by Yue on 3/9/17.
@@ -10,7 +10,23 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate {
+    
+    // AddPlacetoCollectionDelegate
+    func createColList() {
+        
+    }
+    
+    // AddPlacetoCollectionDelegate
+    func cancelAddPlace() {
+        uiviewPlaceList.hide()
+    }
+    
+    func loadPlaceListView() {
+        uiviewPlaceList = AddPlaceToCollectionView()
+        uiviewPlaceList.delegate = self
+        view.addSubview(uiviewPlaceList)
+    }
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
@@ -23,16 +39,19 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
             break
         case .collect:
+            uiviewPlaceList.show()
             guard let ann = selectedAnn else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let pinId = placePin.id
             let collectPlace = FaePinAction()
             collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
-                guard status / 100 == 2 else { return }
+                guard status / 100 == 2 || status == 400 else { return }
                 self.selectedAnnView?.showCollectedNoti()
             })
             break
         case .route:
+            guard let coor = selectedAnnView?.annotation?.coordinate else { return }
+            routeCalculator(destination: coor)
             break
         case .share:
             break
@@ -95,14 +114,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
-        placeResultBar.fadeIn()
-        placeResultBar.resetSubviews()
-        placeResultBar.tag = 1
+        uiviewPlaceBar.show()
+        uiviewPlaceBar.resetSubviews()
+        uiviewPlaceBar.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: false)
         if swipingState == .map {
-            placeResultBar.loadingData(current: cluster)
+            uiviewPlaceBar.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
-            placeResultBar.loading(current: placePin)
+            uiviewPlaceBar.loading(current: placePin)
         }
     }
     
@@ -112,13 +131,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
     
     func updatePlacePins() {
         let coorDistance = cameraDiagonalDistance()
-        guard boolCanUpdatePlacePin else { return }
-        boolCanUpdatePlacePin = false
-        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-            
-        })
-        self.refreshPlacePins(radius: coorDistance)
-        self.boolCanUpdatePlacePin = true
+        refreshPlacePins(radius: coorDistance)
     }
     
     fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
@@ -145,7 +158,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
         guard PLACE_ENABLE else { return }
         btnFilterIcon.startIconSpin()
         let time_0 = DispatchTime.now()
-        boolCanUpdatePlacePin = false
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -157,20 +169,15 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
         getPlaceInfo.whereKey("max_count", value: "200")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
-                print("DEBUG: getMapUserInfo status/100 != 2")
-                self.boolCanUpdatePlacePin = true
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
-                print("[getMapUserInfo] fail to parse pin comments")
-                self.boolCanUpdatePlacePin = true
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
-                self.boolCanUpdatePlacePin = true
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 return
             }
@@ -187,17 +194,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate {
                     if self.faePlacePins.contains(place) {
                         continue
                     } else {
+                        // MARK: - Bug Here, negative count and malloc problem
                         self.faePlacePins.append(place)
                         placePins.append(place)
                     }
                 }
-                guard placePins.count > 0 else {
-                    self.boolCanUpdatePlacePin = true
-                    return
-                }
+                guard placePins.count > 0 else { return }
                 DispatchQueue.main.async {
                     self.mapClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
-                    self.boolCanUpdatePlacePin = true
                 }
             }
             stopIconSpin(delay: getDelay(prevTime: time_0))

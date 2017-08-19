@@ -42,8 +42,8 @@ extension FaeMapViewController {
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
         PLACE_ENABLE = true
-        placeResultBar.alpha = 0
-        placeResultBar.state = .map
+        uiviewPlaceBar.alpha = 0
+        uiviewPlaceBar.state = .map
         placeResultTbl.alpha = 0
         btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)

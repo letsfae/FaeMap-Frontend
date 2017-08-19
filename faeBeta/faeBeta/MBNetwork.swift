@@ -176,7 +176,7 @@ extension MapBoardViewController {
             self.testArrPlaces.append(self.testArrShopping)
             self.testArrPlaces.append(self.testArrOutdoors)
             self.testArrPlaces.append(self.testArrRecreation)
-            print(self.testArrPlaces)
+            
             self.tblMapBoard.reloadData()
         }
     }

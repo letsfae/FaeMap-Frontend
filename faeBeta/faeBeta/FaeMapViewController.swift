@@ -21,7 +21,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnLocateSelf: FMLocateSelf!
     var btnCompass: FMCompass!
     var boolCanUpdateSocialPin = true
-    var boolCanUpdatePlacePin = true
+    var readyUpdatePlacePin = true
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     var faeMapView: FaeMapView!
@@ -52,7 +52,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgSchbarShadow: UIImageView!
     var selectedAnnView: PlacePinAnnotationView?
     var selectedAnn: FaePinAnnotation?
-    var placeResultBar = FMPlaceInfoBar()
+    var uiviewPlaceBar = FMPlaceInfoBar()
     var boolPreventUserPinOpen = false
     var btnClearSearchRes: UIButton!
     var uiviewNameCard: FMNameCardView!
@@ -70,19 +70,24 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevAltitude: CLLocationDistance = 0
     
     var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
-    
-    var hitTestCount = 0
+    var uiviewPlaceList: AddPlaceToCollectionView!
+    var imgDistIndicator: FMDistIndicator!
+    var uiviewChooseLocs: FMChooseLocs!
     
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
         isUserLoggedIn()
         getUserStatus()
+        
         loadNameCard()
         loadMapFilter()
         loadMapView()
         loadButton()
         loadPlaceDetail()
+        loadPlaceListView()
+        loadDistanceComponents()
+        
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
