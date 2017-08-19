@@ -238,6 +238,8 @@
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
 		DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0B09331F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift */; };
+		DC12C36E1F479AFC00796C86 /* NewChat+ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */; };
+		DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */; };
 		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
 		DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3982091DD2BC88000CB51F /* UIScreenService.swift */; };
 		DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */; };
@@ -511,6 +513,8 @@
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
 		DC084A901DDCF969007DCC88 /* Recent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		DC0B09331F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickPhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
+		DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewChat+ShareViewController.swift"; sourceTree = "<group>"; };
+		DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewChatTableViewCell.swift; sourceTree = "<group>"; };
 		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
 		DC3982091DD2BC88000CB51F /* UIScreenService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScreenService.swift; sourceTree = "<group>"; };
 		DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEAlertController.swift; sourceTree = "<group>"; };
@@ -698,6 +702,7 @@
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
 				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
+				DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -730,6 +735,7 @@
 				DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */,
 				DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */,
 				DC3982091DD2BC88000CB51F /* UIScreenService.swift */,
+				DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */,
 			);
 			name = UIviewController;
 			sourceTree = "<group>";
@@ -1494,6 +1500,7 @@
 				506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
 				690452881F032A9900B58982 /* FaeGenderView.swift in Sources */,
+				DC12C36E1F479AFC00796C86 /* NewChat+ShareViewController.swift in Sources */,
 				B064EED41D6E0CEA00C078F5 /* PhotoPicker.swift in Sources */,
 				B0714E041D62527E00356705 /* RegisterPasswordViewController.swift in Sources */,
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
@@ -1554,6 +1561,7 @@
 				B89AB3F31E3D775F00C5116D /* FMMapFilter.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */,
 				B8B7AF541E728C2300BE92AB /* FMUpdatePlacePins.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */,
 				C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */,
