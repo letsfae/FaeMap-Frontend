@@ -2,7 +2,7 @@
 //  PlaceDetailCell.swift
 //  faeBeta
 //
-//  Created by Faevorite 2 on 2017-08-15.
+//  Created by Vicky on 2017-08-15.
 //  Copyright © 2017 fae. All rights reserved.
 //
 
@@ -14,18 +14,27 @@ class PlaceDetailCell: UITableViewCell {
     var imgDownArrow: UIImageView!
     var separatorView: UIView!
     var uiviewHiddenCell: UIView!
-    var mapView: MKMapView!
+    
     static var boolFold = true
     
     internal var cellConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
-//                print("removeConstraints")
                 removeConstraints(oldValue)
             }
             if cellConstraint.count != 0 {
-//                print("addConstraints")
                 addConstraints(cellConstraint)
+            }
+        }
+    }
+    
+    internal var hiddenViewConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                removeConstraints(oldValue)
+            }
+            if hiddenViewConstraint.count != 0 {
+                addConstraints(hiddenViewConstraint)
             }
         }
     }
@@ -63,18 +72,19 @@ class PlaceDetailCell: UITableViewCell {
         addSubview(uiviewHiddenCell)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewHiddenCell)
         
+        loadHiddenContent()
         setCellContraints()
     }
+    
+    func loadHiddenContent() {}
     
     func setCellContraints() {
         if PlaceDetailCell.boolFold {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_down")
-            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1(0)]-1-|", options: [], views: lblContent, uiviewHiddenCell)
-            uiviewHiddenCell.isHidden = true
+            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
         } else {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_up")
             cellConstraint = returnConstraintsWithFormat("V:|-18-[v0]-9-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
-            uiviewHiddenCell.isHidden = false
         }
     }
     
@@ -88,10 +98,10 @@ class PlaceDetailCell: UITableViewCell {
 }
 
 class PlaceDetailSection1Cell: PlaceDetailCell {
+    var mapView: MKMapView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        loadHiddenContent()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -106,21 +116,31 @@ class PlaceDetailSection1Cell: PlaceDetailCell {
         mapView.setRegion(coordinateRegion, animated: false)
     }
     
-    func loadHiddenContent() {
+    override func loadHiddenContent() {
         mapView = MKMapView()
         uiviewHiddenCell.addSubview(mapView)
-        uiviewHiddenCell.addConstraintsWithFormat("V:|-0-[v0(150)]-8-|", options: [], views: mapView)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
+    }
+    
+    override func setCellContraints() {
+        super.setCellContraints()
+        if PlaceDetailCell.boolFold {
+            hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(0)]-0-|", options: [], views: mapView)
+        } else {
+            hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(150)]-8-|", options: [], views: mapView)
+        }
     }
 }
 
 class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableViewDataSource {
+    var tblOpeningHours: UITableView!
+    var lblHint: UILabel!
+    
     var arrDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     var arrHour = ["10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "N.A", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "Not Open"]
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        loadHiddenContent()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -132,8 +152,8 @@ class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableView
         lblContent.text = "Open / 9:00 AM - 8:00 PM"
     }
     
-    func loadHiddenContent() {
-        let tblOpeningHours = UITableView()
+    override func loadHiddenContent() {
+        tblOpeningHours = UITableView()
         uiviewHiddenCell.addSubview(tblOpeningHours)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0]-38-|", options: [], views: tblOpeningHours)
         
@@ -148,13 +168,21 @@ class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableView
 //        let foldCell = UITapGestureRecognizer(target: self, action: #selector(actionFoldCell(_:)))
 //        tblOpeningHours.addGestureRecognizer(foldCell)
         
-        let lblHint = UILabel()
+        lblHint = UILabel()
         lblHint.text = "Holiday might affect these hours."
         lblHint.textColor = UIColor._182182182()
         lblHint.font = UIFont(name: "AvenirNext-MediumItalic", size: 15)
         uiviewHiddenCell.addSubview(lblHint)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(240)]", options: [], views: lblHint)
-        uiviewHiddenCell.addConstraintsWithFormat("V:|-2-[v0(\(28 * 7))]-11-[v1(20)]-16-|", options: [], views: tblOpeningHours, lblHint)
+    }
+    
+    override func setCellContraints() {
+        super.setCellContraints()
+        if PlaceDetailCell.boolFold {
+            hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(0)]-0-[v1(0)]-0-|", options: [], views: tblOpeningHours, lblHint)
+        } else {
+            hiddenViewConstraint = returnConstraintsWithFormat("V:|-2-[v0(\(28 * 7))]-11-[v1(20)]-16-|", options: [], views: tblOpeningHours, lblHint)
+        }
     }
     
 //    func actionFoldCell(_ sender: UITapGestureRecognizer) {
