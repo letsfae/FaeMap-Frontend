@@ -43,16 +43,17 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     var imgGhost: UIImageView!
     
     var isDeleting: Bool = false
-    var lastLength: Int = 0
+    var lastTextField: String = ""
     var readyToChat: Bool = false
     var readyToDel: Bool = false
     var toDelete: Bool = false
+    var lastToDelPos: Int = 0
+    var searchWord: String = ""
+    let AT_SELECTED_AREA: Int = 0
+    let AT_BORDER_POSITION: Int = 1
+    let AT_UNSELECTED_AREA: Int = 2
     
     let apiCalls = FaeContact()
-    
-    //    convenience init() {
-    //        self.init()
-    //    }
     
     init(chatOrShare: String) {
         self.chatOrShare = chatOrShare
@@ -71,18 +72,17 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
         loadNavBar()
         loadSearchBar()
         loadChatsList()
-        if chatOrShare == "share" && arrFriends.count == 0 {
-            loadNoFriends()
-        }
     }
     
     func loadFriends() {
         apiCalls.getFriends() {(status: Int, message: Any?) in
             let json = JSON(message!)
+            if json.count == 0 {
+                self.loadNoFriends()
+            }
             if json.count != 0 {
                 for i in 1...json.count {
                     self.arrFriends.append(cellFriendData(userName: json[i-1]["friend_user_name"].stringValue, nickName: json[i-1]["friend_user_nick_name"].stringValue,  userID: json[i-1]["friend_id"].stringValue, index: i - 1))
@@ -111,56 +111,98 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     }
     
     func navigationLeftItemTapped() {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func navigationRightItemTapped() {
-        //self.navigationController?.popViewController(animated: true)
+        chatUser(id: Int(arrFriends[arrSelected[0]].userID)!)
+        /*let chatVC = ChatViewController()
+        chatVC.hidesBottomBarWhenPushed = true
+        let selectedFriend = arrFriends[arrSelected[0]]
+        chatVC.chatRoomId = Key.shared.user_id < Int(selectedFriend.userID)! ? "\(Key.shared.user_id)-\(selectedFriend.userID)" : "\(selectedFriend.userID)-\(Key.shared.user_id)"
+        chatVC.chat_id = selectedFriend["chat_id"].number?.stringValue
+        let withUserUserId = selectedFriend["with_user_id"].number?.stringValue
+        let withUserName = selectedFriend["with_user_name"].string
+        let withUserNickName = selectedFriend["with_nick_name"].string
+        // Bryan
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userName = withUserName!
+        chatVC.realmWithUser!.userNickName = withUserNickName!
+        chatVC.realmWithUser!.userID = withUserUserId!
+        // EndBryan
+        //present(chatVC, animated: true, completion: nil)
+        navigationController?.pushViewController(chatVC, animated: true)*/
     }
+    
+    func chatUser(id: Int) {
+        // First get chatroom id
+        getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
+            var resultJson1 = JSON([])
+            if status / 100 == 2 {
+                resultJson1 = JSON(result!)
+            }
+            // then get with user name
+            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+                guard status / 100 == 2 else { return }
+                let resultJson2 = JSON(result!)
+                var chat_id: String?
+                if let id = resultJson1["chat_id"].number {
+                    chat_id = id.stringValue
+                }
+                if let nickName = resultJson2["nick_name"].string {
+                    self.startChat(chat_id, userId: id, nickName: nickName)
+                } else {
+                    self.startChat(chat_id, userId: id, nickName: nil)
+                }
+            }
+        }
+    }
+    
+    func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
+        let chatVC = ChatViewController()
+        chatVC.chatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
+        chatVC.chat_id = chat_id
+        // Bryan
+        let nickName = nickName ?? "Chat"
+        // ENDBryan
+        // chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
+        
+        // Bryan
+        // TODO: Tell nickname and username apart
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userNickName = nickName
+        chatVC.realmWithUser!.userID = "\(userId)"
+        // chatVC.realmWithUser?.userAvatar =
+        
+        // RealmChat.addWithUser(withUser: chatVC.realmWithUser!)
+        
+        // EndBryan
+        //self.present(chatVC, animated: true, completion: nil)
+        var arrViewControllers = navigationController?.viewControllers
+        arrViewControllers!.removeLast()
+        arrViewControllers!.append(chatVC)
+        navigationController?.setViewControllers(arrViewControllers!, animated: true)
+    }
+
     
     func loadSearchBar() {
         uiviewSchabr = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
         
-        schbarChatTo = FaeSearchBar(frame: CGRect(x: 8, y: 2, width: screenWidth  + 25, height: 50), font: UIFont(name: "AvenirNext-Medium", size: 18)!, textColor: UIColor._182182182())
-        schbarChatTo.backgroundImage = UIImage()
-        schbarChatTo.barTintColor = .white
-        //schbarChatTo.tintColor = UIColor.faeAppInputTextGrayColor()
-        schbarChatTo.tintColor = UIColor._2499090()
-        //schbarChatTo.placeholder = "Chat to"
-        //let imgBarIcon = UIImageView(frame: CGRect(x: 13, y: 17, width: 15, height: 15))
-        //imgBarIcon.backgroundColor = .white
-        //schbarChatTo.addSubview(imgBarIcon)
-        schbarChatTo.delegate = self
-        searchField = schbarChatTo.subviews[0].subviews[schbarChatTo.indexOfSearchFieldInSubviews()] as! UITextField
-        
-        /*        let topView: UIView = schbarChatTo.subviews[0] as UIView
-         
-         for subView in topView.subviews {
-         if subView is UITextField {
-         searchField = subView as! UITextField
-         break
-         }
-         }*/
-        //if ((searchField) != nil) {
-        //searchField.text = "testtest"
-        //let leftview = searchField.leftView as! UIImageView
-        let imageView  = UIImageView(frame: CGRect(x: schbarChatTo.frame.origin.x  , y:  10, width: 20, height: 20 ) )
-        searchField.leftView = UIView(frame: CGRect(x: 0 , y: 0, width: 20, height: 20) )
-        searchField.leftViewMode = .always
-        searchField.superview?.addSubview(imageView)
-        //}
-        
-        uiviewSchabr.addSubview(schbarChatTo)
-        
+        searchField = UITextField(frame: CGRect(x: 49, y: 2, width: screenWidth - 55, height: 50))
+        searchField.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        searchField.textColor = UIColor._898989()
+        searchField.tintColor = UIColor._2499090()
+        uiviewSchabr.addSubview(searchField)
+        searchField.delegate = self
+        searchField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         let lblChatTo = UILabel()
-        //lblChatTo.backgroundColor = .green
         lblChatTo.text = "To:"
         lblChatTo.textAlignment = .left
         lblChatTo.textColor = UIColor._182182182()
-        lblChatTo.font = UIFont(name: "AvenireNext-Bold", size: 18)
-        lblChatTo.font = UIFont.boldSystemFont(ofSize: 18)
+        lblChatTo.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         uiviewSchabr.addSubview(lblChatTo)
+        //uiviewSchabr.addConstraintsToView(child: lblChatTo, left: true, gapH: 15, width: 29, top: true, gapV: 13, height: 25)
         uiviewSchabr.addConstraintsWithFormat("H:|-15-[v0(29)]", options: [], views: lblChatTo)
         uiviewSchabr.addConstraintsWithFormat("V:|-13-[v0(25)]", options: [], views: lblChatTo)
         
@@ -183,8 +225,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         let lblHeader:UILabel = UILabel(frame: uiviewHeader.bounds)
         lblHeader.textColor = UIColor._155155155()
         lblHeader.backgroundColor = UIColor.clear
-        lblHeader.font = UIFont(name: "AvenireNext-Bold", size: 15)
-        lblHeader.font = UIFont.boldSystemFont(ofSize: 15)
+        lblHeader.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         lblHeader.text = "Friends"
         uiviewHeader.addSubview(lblHeader)
         uiviewHeader.addConstraintsWithFormat("H:|-15-[v0(100)]", options: [], views: lblHeader)
@@ -211,6 +252,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         view.addSubview(imgGhost)
     }
     
+    // UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrFiltered.count
     }
@@ -219,6 +261,9 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath as IndexPath) as! NewChatTableViewCell
         cell.lblNickName.text = arrFiltered[indexPath.row].nickName
         cell.lblUserName.text = arrFiltered[indexPath.row].userName
+        General.shared.avatar(userid: Int(arrFiltered[indexPath.row].userID)!, completion: { (avatarImage) in
+            cell.imgAvatar.image = avatarImage
+        })
         if arrSelected.contains(arrFiltered[indexPath.row].index) {
             cell.imgStatus.image = #imageLiteral(resourceName: "status_selected")
         }
@@ -229,196 +274,38 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print("select \(indexPath)")
         let currentCell = tableView.cellForRow(at: indexPath) as! NewChatTableViewCell
-        if (currentCell.statusSelected) {
-            //currentCell.statusSelected = false
-            //currentCell.imgStatus.image = #imageLiteral(resourceName: "status_unselected")
+        var currentIndex: Int = 0
+        for friend in arrFriends {
+            if friend.nickName == currentCell.lblNickName.text {
+                currentIndex = friend.index
+            }
+        }
+        if (arrSelected.contains(currentIndex)) {
+            searchWord = findCurrentSearchWord(searchField.text!)
+            if let i = arrSelected.index(of: currentIndex) {
+                arrSelected.remove(at: i)
+            }
+            loadTextInSearchBar(moreWord: searchWord)
         }
         else {
-            currentCell.statusSelected = true
-            currentCell.imgStatus.image = #imageLiteral(resourceName: "status_selected")
             uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .normal)
-            let currentFriend: cellFriendData = arrFiltered[indexPath.row]
-            arrSelected.append(currentFriend.index)
-            
-            //let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-            /*let currentContent : NSAttributedString = searchField.attributedText!
-             let currentSelected : NSAttributedString = NSAttributedString(string: currentCell.lblUserName.text! + ",", attributes: [NSForegroundColorAttributeName : UIColor.faeAppRedColor()])
-             let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor.faeAppInputTextGrayColor()])
-             attributedStrM.append(currentContent)
-             attributedStrM.append(currentSelected)
-             attributedStrM.append(changeColor)
-             searchField.attributedText = attributedStrM*/
-            
-            /*for index in 0 ..< arrSelected.count {
-             let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].name + ", ", attributes: [NSForegroundColorAttributeName : UIColor.faeAppRedColor()])
-             attributedStrM.append(textNS)
-             //print(index)
-             }
-             searchField.attributedText = attributedStrM*/
-            loadTextInSearchBar()
-            loadStatus()
-            lastLength = searchField.text!.characters.count
+            arrSelected.append(currentIndex)
+            loadTextInSearchBar(moreWord: "")
             filter("")
-            //print(searchField.attributedText!.index(ofAccessibilityElement: 1))
-            //print(searchField.attributedText)
-            
-            
         }
+        loadStatus()
+        searchField.becomeFirstResponder()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
     }
+    // end of UITableViewDelegate
     
-    // UISearchBarDelegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        detectDeleting(searchText)
-        if searchText == "" {
-            filter("")
-            return
-        }
-        print("isDeleting:\(isDeleting)")
-        print("readyToDel:\(readyToDel)")
-        print("toDelete:\(toDelete)")
-        let textArray = searchText.components(separatedBy: ", ")
-        //let lastWord = textArray[textArray.count - 1]
-        //let searchWord = findCurrentSearchWord(searchText)
-        //print(searchWord)
-        let lastChar = searchText.substring(from: searchText.index(searchText.endIndex, offsetBy: -1))
-        print(lastChar)
-        if textArray.count == arrSelected.count {
-            filter("")
-        }
-        else {
-            filter(findCurrentSearchWord(searchText))
-        }
-        if isDeleting {
-            let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-            //print(readyToDel)
-            if toDelete {
-                filter("")
-                /*                for index in 0 ..< arrSelected.count - 1 {
-                 let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].name + ", ", attributes: [NSForegroundColorAttributeName : UIColor.faeAppRedColor()])
-                 attributedStrM.append(textNS)
-                 //print(index)
-                 }
-                 searchField.attributedText = attributedStrM*/
-                toDelete = false
-                readyToDel = false
-                arrSelected.remove(at: arrSelected.count - 1)
-                loadTextInSearchBar()
-                
-            }
-            if readyToDel {
-                filter("")
-                for index in 0 ..< arrSelected.count - 1 {
-                    let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
-                    attributedStrM.append(textNS)
-                    //print(index)
-                }
-                let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor.blue])
-                attributedStrM.append(lastNS)
-                searchField.attributedText = attributedStrM
-                toDelete = true
-                
-            }
-            if lastChar == "," && textArray.count == arrSelected.count {
-                readyToDel = true
-            }
-            else {
-                readyToDel = false
-            }
-            
-            
-        }
-        else {
-            if toDelete {
-                toDelete = false
-                loadTextInSearchBar()
-            }
-        }
-        /*        else {
-         if textArray.count == arrSelected.count {
-         filter("")
-         }
-         else {
-         filter(lastWord)
-         }
-         
-         }*/
-        lastLength = searchField.text!.characters.count
-        loadStatus()
-        print("isDeleting:\(isDeleting)")
-        print("readyToDel:\(readyToDel)")
-        print("toDelete:\(toDelete)")
-        //print("editing")
-        //filter(searchText: searchText)
-        //print("search bar \(searchText)")
-        /*        if searchText.characters.count > 0 {
-         //print(searchText.index(after: searchText.characters.count - 1))
-         print(searchText.substring(from: searchText.index(searchText.endIndex, offsetBy: -1)))
-         }*/
-        /*let lastChar = searchText.substring(from: searchText.index(searchText.endIndex, offsetBy: -1))
-         print(lastChar)
-         
-         let textArray = searchText.components(separatedBy: " ")
-         let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-         
-         if readyToDel {
-         for index in 0 ..< textArray.count - 1 {
-         let textNS : NSAttributedString = NSAttributedString(string: textArray[index] + " ", attributes: [NSForegroundColorAttributeName : UIColor.faeAppRedColor()])
-         attributedStrM.append(textNS)
-         //print(index)
-         }
-         let lastNS : NSAttributedString = NSAttributedString(string: textArray[textArray.count - 1] + ",", attributes: [NSForegroundColorAttributeName : UIColor.blue])
-         attributedStrM.append(lastNS)
-         searchField.attributedText = attributedStrM
-         }
-         else {
-         
-         }
-         
-         if lastChar == "," {
-         readyToDel = true
-         }
-         else {
-         readyToDel = false
-         }*/
-        
-    }
-    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn: NSRange, replacementText: String) -> Bool {
-        print("search bar should change")
-        return true
-    }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        schbarChatTo.becomeFirstResponder()
-        //uitxDummy.becomeFirstResponder()
-        print("search bar 2")
-        
-    }
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        schbarChatTo.resignFirstResponder()
-        print("search bar 3")
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //schbarContacts.resignFirstResponder()
-        print("search bar 4")
-    }
-    // End of UISearchBarDelegate
-    
-    func detectDeleting(_ searchText: String) {
-        if searchText.characters.count > lastLength {
-            isDeleting = false
-        }
-        else {
-            isDeleting = true
-        }
-    }
-    
+    // deal with searching
     func filter(_ searchText: String) {
-        print("filter: \(searchText)")
+        //print("filter: \(searchText)")
         if searchText == "" {
             arrFiltered = arrFriends;
         }
@@ -428,28 +315,69 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         tblFriends.reloadData()
     }
     
-    /*    func deleteSelected(_ searchText: String) {
-     let lastChar = searchText.substring(from: searchText.index(searchText.endIndex, offsetBy: -1))
-     
-     }*/
-    
-    func loadTextInSearchBar() {
-        if arrSelected.count == 0 {
-            searchField.text = ""
-            searchField.textColor = UIColor._898989()
+    // callback when text field changes
+    func textFieldDidChange(_ textField: UITextField) {
+        if textField.text == "" {
+            filter("")
             return
         }
-        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-        for index in 0 ..< arrSelected.count - 1 {
-            let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
-            attributedStrM.append(textNS)
-            //print(index)
+        
+        isDeleting = detectDeleting(textField.text!)
+        let curCursorPos = detectCursorPosition(textField: textField)
+        //print("current section: \(curCursorPos)")
+        let textArray = (textField.text!.trimmingCharacters(in: .whitespaces)).components(separatedBy: ", ")
+        
+        if !isDeleting {
+            if [AT_BORDER_POSITION, AT_UNSELECTED_AREA].contains(curCursorPos) {
+                if toDelete {
+                    toDelete = false
+                    loadTextInSearchBar(moreWord: searchWord.trimmingCharacters(in: .whitespaces))
+                }
+                else {
+                    searchWord = findCurrentSearchWord(textField.text!)
+                    filter(searchWord.trimmingCharacters(in: .whitespaces))
+                    lastTextField = searchField.text!
+                }
+            }
+            else {
+                if toDelete {
+                    toDelete = false
+                }
+                if textArray.count == arrSelected.count {
+                    loadTextInSearchBar(moreWord: "")
+                }
+                else {
+                    searchWord = findCurrentSearchWord(textField.text!)
+                    filter(searchWord.trimmingCharacters(in: .whitespaces))
+                    loadTextInSearchBar(moreWord: searchWord.trimmingCharacters(in: .whitespaces))
+                }
+            }
         }
-        let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
-        attributedStrM.append(lastNS)
-        let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        attributedStrM.append(changeColor)
-        searchField.attributedText = attributedStrM
+        else {
+            if curCursorPos == AT_UNSELECTED_AREA {
+                searchWord = findCurrentSearchWord(textField.text!)
+                filter(searchWord.trimmingCharacters(in: .whitespaces))
+                lastTextField = searchField.text!
+            }
+            else {
+                let curToDelPos = detectToDelIndex(textField: textField)
+                if toDelete && (curToDelPos == lastToDelPos) {
+                    filter(searchWord.trimmingCharacters(in: .whitespaces))
+                    arrSelected.remove(at: curToDelPos)
+                    loadTextInSearchBar(moreWord: searchWord.trimmingCharacters(in: .whitespaces))
+                    toDelete = false
+                    readyToDel = false
+                }
+                else {
+                    lastToDelPos = curToDelPos
+                    loadTextInSearchBarWithDeleting(textField: textField, toDelIndex: lastToDelPos, moreWord: searchWord.trimmingCharacters(in: .whitespaces))
+                    loadStatus()
+                    return
+                }
+            }
+        }
+        loadStatus()
+        
     }
     
     // deal with the cells on current screen
@@ -476,6 +404,43 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         
     }
     
+    // helper functions for editing the list of selected friends
+    func detectDeleting(_ searchText: String) -> Bool {
+        if searchText.characters.count > lastTextField.characters.count {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+    
+    func detectCursorPosition(textField: UITextField) -> Int {
+        var selectedLength: Int = 0
+        for index in arrSelected {
+            let currentLength = arrFriends[index].nickName.characters.count + 2
+            selectedLength = selectedLength + currentLength
+        }
+        
+        if let selectedRange = textField.selectedTextRange {
+            var cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
+            if isDeleting {
+                cursorPosition = cursorPosition + 1
+            }
+            else if cursorPosition == selectedLength {
+                return AT_SELECTED_AREA
+            }
+            
+            if cursorPosition > selectedLength {
+                return AT_UNSELECTED_AREA
+            }
+            else if cursorPosition == selectedLength {
+                return AT_BORDER_POSITION
+            }
+        }
+        
+        return AT_SELECTED_AREA
+    }
+    
     func findCurrentSearchWord(_ searchText: String) -> String {
         var selectedLength: Int = 0
         for index in arrSelected {
@@ -484,5 +449,92 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         }
         return searchText.substring(from: searchText.index(searchText.startIndex, offsetBy: selectedLength))
     }
+    
+    func loadTextInSearchBar(moreWord: String) {
+        if arrSelected.count == 0 && searchWord == "" {
+            searchField.text = ""
+            searchField.textColor = UIColor._898989()
+            return
+        }
+        else if arrSelected.count == 0 {
+            searchField.text = searchWord.trimmingCharacters(in: .whitespaces)
+            searchField.textColor = UIColor._898989()
+            return
+        }
+        
+        lastTextField = ""
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        for index in 0 ..< arrSelected.count - 1 {
+            let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+            attributedStrM.append(textNS)
+            lastTextField = lastTextField + arrFriends[arrSelected[index]].nickName + ", "
+            //print(index)
+        }
+        
+        let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+        attributedStrM.append(lastNS)
+        lastTextField = lastTextField + arrFriends[arrSelected[arrSelected.count - 1]].nickName + ","
+        
+        let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(changeColor)
+        
+        let newSearchWord : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(newSearchWord)
+        lastTextField = lastTextField + moreWord
+        
+        searchField.attributedText = attributedStrM
+    }
+    
+    func loadTextInSearchBarWithDeleting(textField: UITextField, toDelIndex: Int, moreWord: String) {
+        toDelete = true
+        
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        for index in 0 ..< arrSelected.count {
+            if index == toDelIndex {
+                let delNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor.blue])
+                attributedStrM.append(delNS)
+            }
+            else {
+                let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+                attributedStrM.append(textNS)
+            }
+            //print(index)
+        }
+        
+        let lastNS : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(lastNS)
+        searchField.attributedText = attributedStrM
+        
+        // move the cursor to the end of word to be deleted
+        var targetPosition: Int = 0
+        for index in 0 ..< toDelIndex {
+            targetPosition = targetPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+        }
+        targetPosition = targetPosition + arrFriends[arrSelected[toDelIndex]].nickName.characters.count + 2
+        //print(targetPosition)
+        if let newPosition = textField.position(from: textField.beginningOfDocument, offset: targetPosition) {
+            textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        }
+    }
+    
+    func detectToDelIndex(textField: UITextField) -> Int {
+        var cursorPosition: Int = 0
+        if let selectedRange = textField.selectedTextRange {
+            cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
+        }
+        cursorPosition = cursorPosition + 1
+        var currentWordEndPosition: Int = 0
+        var lastWordEndPosition: Int = 0
+        for index in 0 ..< arrSelected.count {
+            if index != 0 {
+                lastWordEndPosition = currentWordEndPosition
+            }
+            currentWordEndPosition = currentWordEndPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+            if cursorPosition > lastWordEndPosition && cursorPosition <= currentWordEndPosition {
+                return index
+            }
+        }
+        return arrSelected.count - 1
+    }
+    
 }
-

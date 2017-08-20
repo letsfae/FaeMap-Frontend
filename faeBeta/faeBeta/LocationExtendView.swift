@@ -74,9 +74,9 @@ class LocationExtendView : UIView {
     }
     
     func setLabel(texts : [String]) {
-        LabelLine1.text = texts[0]
-        LabelLine2.text = texts[1]
-        LabelLine3.text = texts[2]
+        LabelLine1.text = texts[0].uppercased()
+        LabelLine2.text = texts[1].uppercased()
+        LabelLine3.text = texts[2].uppercased()
     }
     
     func addKeyWithValue(key : String, value : String) {
