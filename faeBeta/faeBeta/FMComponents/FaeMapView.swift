@@ -58,6 +58,13 @@ class FaeMapView: MKMapView {
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             }
+        } else {
+            var region = self.region
+            var span = self.region.span
+            span.latitudeDelta *= 0.5
+            span.longitudeDelta *= 0.5
+            region.span = span
+            self.setRegion(region, animated: true)
         }
         blockTap = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }

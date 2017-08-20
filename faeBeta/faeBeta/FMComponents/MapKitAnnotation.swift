@@ -28,6 +28,7 @@ class FaePinAnnotation: MKPointAnnotation {
     var type: String!
     var id: Int = -1
     var mapViewCluster: CCHMapClusterController?
+    var animatable = true
     
     // place pin & social pin
     var icon = UIImage()
