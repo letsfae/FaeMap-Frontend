@@ -50,8 +50,17 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             })
             break
         case .route:
-            guard let coor = selectedAnnView?.annotation?.coordinate else { return }
-            routeCalculator(destination: coor)
+            guard let placeData = selectedAnn?.pinInfo as? PlacePin else { return }
+            let pin = FaePinAnnotation(type: "place", cluster: mapClusterManager, data: placeData)
+            pin.animatable = false
+            tempFaePins.append(pin)
+            HIDE_AVATARS = true
+            PLACE_ENABLE = false
+            mapClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+                self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                self.routeCalculator(destination: pin.coordinate)
+            })
+            mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             break
         case .share:
             break
@@ -69,13 +78,18 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         anView.assignImage(first.icon)
         anView.delegate = self
-        let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-        DispatchQueue.main.async {
-            anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-            UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                anView.alpha = 1
-            }, completion: nil)
+        if first.animatable {
+            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+            DispatchQueue.main.async {
+                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+                    anView.alpha = 1
+                }, completion: nil)
+            }
+        } else {
+            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+            anView.alpha = 1
         }
         return anView
     }

@@ -41,6 +41,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
         imgDistIndicator.hide()
         uiviewChooseLocs.hide()
         animateMainItems(show: false)
+        mapClusterManager.removeAnnotations(tempFaePins) {
+            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
+            self.mapClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
+        }
+        HIDE_AVATARS = false
+        PLACE_ENABLE = true
     }
     
     func animateMainItems(show: Bool) {
@@ -87,9 +93,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
             var totalDistance: CLLocationDistance = 0
             for route in unwrappedResponse.routes {
                 self.mkOverLay.append(route.polyline)
-                self.faeMapView.add(route.polyline)
                 totalDistance += route.distance
             }
+            self.faeMapView.addOverlays(self.mkOverLay, level: MKOverlayLevel.aboveRoads)
             totalDistance /= 1000
             totalDistance *= 0.621371
             self.showRouteCalculatorComponents(distance: totalDistance)
