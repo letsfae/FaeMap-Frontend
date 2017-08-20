@@ -75,7 +75,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewChooseLocs: FMChooseLocs!
     
     var arrPlaceData = [PlacePin]()
-    var arrUserData = [UserPin]()
+    var tempFaePins = [FaePinAnnotation]()
     
     // System Functions
     override func viewDidLoad() {
