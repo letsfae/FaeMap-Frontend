@@ -109,7 +109,7 @@ class IncomingMessage {
             (placemarks, error) -> Void in
             if error == nil {
                 guard let addr = placemarks?[0] else { return }
-                mediaItem?.addressLine1.text = addr.subThoroughfare! + " " + addr.thoroughfare!
+                mediaItem?.addressLine1.text = (addr.subThoroughfare! + " " + addr.thoroughfare!).uppercased()
                 var cityText = addr.locality
                 if(addr.administrativeArea != nil) {
                     cityText = cityText! + ", " + addr.administrativeArea!
@@ -117,12 +117,12 @@ class IncomingMessage {
                 if(addr.postalCode != nil) {
                     cityText = cityText! + " " + addr.postalCode!
                 }
-                mediaItem?.addressLine2.text = cityText
-                mediaItem?.addressLine3.text = addr.country
+                mediaItem?.addressLine2.text = cityText?.uppercased()
+                mediaItem?.addressLine3.text = addr.country?.uppercased()
                 
-                mediaItem?.address1 = mediaItem?.addressLine1.text
-                mediaItem?.address2 = mediaItem?.addressLine2.text
-                mediaItem?.address3 = mediaItem?.addressLine3.text
+                mediaItem?.address1 = mediaItem?.addressLine1.text?.uppercased()
+                mediaItem?.address2 = mediaItem?.addressLine2.text?.uppercased()
+                mediaItem?.address3 = mediaItem?.addressLine3.text?.uppercased()
             }
             else {
                 print("error when fetching address")
