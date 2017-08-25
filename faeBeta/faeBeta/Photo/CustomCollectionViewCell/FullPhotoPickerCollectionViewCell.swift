@@ -46,7 +46,7 @@ class FullPhotoPickerCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         imgPhoto = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        imgPhoto.contentMode = .scaleToFill
+        imgPhoto.contentMode = .scaleAspectFill
         addSubview(imgPhoto)
         
         imgChosenIndicator = UIImageView(frame: CGRect(x: 100, y: 5, w: 31, h: 31))
