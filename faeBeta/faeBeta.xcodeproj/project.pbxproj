@@ -37,6 +37,7 @@
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
+		9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
@@ -300,6 +301,8 @@
 		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
 		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
 		8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleSizeCalculatingCustom.h; sourceTree = "<group>"; };
+		9F1D68C61F4E89100067EFF9 /* JSQPlaceMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceMediaItemCustom.h; sourceTree = "<group>"; };
+		9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceMediaItemCustom.m; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -865,6 +868,14 @@
 				DC4EC3621DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m */,
 				B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */,
 				B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */,
+				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
+				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
+				DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */,
+				DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */,
+				9F1D68C61F4E89100067EFF9 /* JSQPlaceMediaItemCustom.h */,
+				9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */,
+				DC084A8D1DDC4E84007DCC88 /* EmojiService.h */,
+				DC084A8E1DDC4E84007DCC88 /* EmojiService.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
 				B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */,
 				8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */,
@@ -896,12 +907,6 @@
 				B0BF35671D8DC8D600B0540B /* JSQMessagesViewControllerCustom.h */,
 				B0BF35681D8DC8D600B0540B /* JSQMessagesViewControllerCustom.m */,
 				B0BF35691D8DC8D600B0540B /* JSQMessagesViewControllerCustom.xib */,
-				B0BF356A1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.h */,
-				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
-				DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */,
-				DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */,
-				DC084A8D1DDC4E84007DCC88 /* EmojiService.h */,
-				DC084A8E1DDC4E84007DCC88 /* EmojiService.m */,
 			);
 			path = JSQExtension;
 			sourceTree = "<group>";
@@ -1447,8 +1452,8 @@
 				B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* MapKitAnnotation.swift in Sources */,
-				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
+				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */,
 				B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */,
@@ -1599,6 +1604,7 @@
 				B0714D551D5E435200356705 /* FMLoadMainItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */,
+				9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
 				B33F8A061F3ECB7D0033610D /* ChooseLocationViewController.swift in Sources */,

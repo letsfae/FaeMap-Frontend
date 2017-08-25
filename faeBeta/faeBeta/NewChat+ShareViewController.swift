@@ -55,6 +55,8 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     
     let apiCalls = FaeContact()
     
+    var placeDetail: PlacePin?
+    
     init(chatOrShare: String) {
         self.chatOrShare = chatOrShare
         super.init(nibName: nil, bundle: nil)
@@ -97,6 +99,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     func loadNavBar() {
         uiviewNavBar = FaeNavBar()
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
+        uiviewNavBar.rightBtn.isEnabled = false
         uiviewNavBar.loadBtnConstraints()
         if chatOrShare == "chat" {
             uiviewNavBar.lblTitle.text = "Start New Chat"
@@ -115,26 +118,16 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     }
     
     func navigationRightItemTapped() {
-        chatUser(id: Int(arrFriends[arrSelected[0]].userID)!)
-        /*let chatVC = ChatViewController()
-        chatVC.hidesBottomBarWhenPushed = true
-        let selectedFriend = arrFriends[arrSelected[0]]
-        chatVC.chatRoomId = Key.shared.user_id < Int(selectedFriend.userID)! ? "\(Key.shared.user_id)-\(selectedFriend.userID)" : "\(selectedFriend.userID)-\(Key.shared.user_id)"
-        chatVC.chat_id = selectedFriend["chat_id"].number?.stringValue
-        let withUserUserId = selectedFriend["with_user_id"].number?.stringValue
-        let withUserName = selectedFriend["with_user_name"].string
-        let withUserNickName = selectedFriend["with_nick_name"].string
-        // Bryan
-        chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userName = withUserName!
-        chatVC.realmWithUser!.userNickName = withUserNickName!
-        chatVC.realmWithUser!.userID = withUserUserId!
-        // EndBryan
-        //present(chatVC, animated: true, completion: nil)
-        navigationController?.pushViewController(chatVC, animated: true)*/
+        //if chatOrShare == "chat" {
+            chatWithUser(id: Int(arrFriends[arrSelected[0]].userID)!)
+        //}
+        //else if chatOrShare == "share" {
+            
+        //}
+        
     }
     
-    func chatUser(id: Int) {
+    func chatWithUser(id: Int) {
         // First get chatroom id
         getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])
@@ -162,6 +155,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         let chatVC = ChatViewController()
         chatVC.chatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
         chatVC.chat_id = chat_id
+        
         // Bryan
         let nickName = nickName ?? "Chat"
         // ENDBryan
@@ -178,10 +172,17 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         
         // EndBryan
         //self.present(chatVC, animated: true, completion: nil)
-        var arrViewControllers = navigationController?.viewControllers
-        arrViewControllers!.removeLast()
-        arrViewControllers!.append(chatVC)
-        navigationController?.setViewControllers(arrViewControllers!, animated: true)
+        if chatOrShare == "share" {
+            let snap = UIImagePNGRepresentation(UIImage(named:"locationExtendViewHolder")!) as Data!
+            chatVC.sendMessage(text: "", place: placeDetail, snapImage: snap,  date: Date())
+            navigationController?.popViewController(animated: true)
+        }
+        else if chatOrShare == "chat" {
+            var arrViewControllers = navigationController?.viewControllers
+            arrViewControllers!.removeLast()
+            arrViewControllers!.append(chatVC)
+            navigationController?.setViewControllers(arrViewControllers!, animated: true)
+        }
     }
 
     
@@ -290,6 +291,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         }
         else {
             uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .normal)
+            uiviewNavBar.rightBtn.isEnabled = true
             arrSelected.append(currentIndex)
             loadTextInSearchBar(moreWord: "")
             filter("")
@@ -384,6 +386,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     func loadStatus() {
         if arrSelected.count == 0 {
             uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
+            uiviewNavBar.rightBtn.isEnabled = false
             //return
         }
         for index in 0 ..< arrFiltered.count {
