@@ -15,7 +15,7 @@ import RealmSwift
 extension ChatViewController: OutgoingMessageProtocol {
     
     // MARK: - send message
-    func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
+    func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
         
         var outgoingMessage: OutgoingMessage?
         // Bryan
@@ -67,6 +67,30 @@ extension ChatViewController: OutgoingMessageProtocol {
             realmMessage.snapImage = snapImage! as NSData
             realmMessage.type = "location"
             // ENDBryan
+            
+        } else if let place = place {
+            //let jsonString = "{ \"place_id\": @number, \"name\": @string, \"categories\": { \"class1\": @string, \"class1_icon_id\": @number, \"class2\": @string, \"class2_icon_id\": @number, \"class3\": @string, \"class3_icon_id\": @number, \"class4\": @string, \"class4_icon_id\": @number }, \"geolocation\": { \"latitude\": @number, \"longitude\": @number }, \"location\": { \"city\": @string, \"country\": @string, \"state\": @string, \"address\": @string, \"zip_code\": @string } }"
+            let jsonString = "{" +
+                                "\"place_id\": \"\(place.id)\"," +
+                                "\"name\": \"\(place.name)\"," +
+                                "\"categories\": {" +
+                                    "\"class1\": \"\(place.class_1)\"," +
+                                    "\"class1_icon_id\": \"\(place.class_2_icon_id)\"," +
+                                "}," +
+                                "\"geolocation\": {" +
+                                    "\"latitude\": \"\(place.coordinate.latitude)\"," +
+                                    "\"longitude\": \"\(place.coordinate.longitude)\"" +
+                                "}," +
+                                "\"location\": {" +
+                                    "\"address1\": \"\(place.address1)\"," +
+                                    "\"address2\": \"\(place.address2)\"," +
+                                "}" +
+                            "}"
+            let comment = text == "" ? "[Place]" : text!
+            outgoingMessage = OutgoingMessage(message: comment, place: jsonString, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "place", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            realmMessage.message = "[Place]"
+            realmMessage.place = jsonString
+            realmMessage.type = "place"
             
         } else if let audio = audio {
             // create outgoing-message object
