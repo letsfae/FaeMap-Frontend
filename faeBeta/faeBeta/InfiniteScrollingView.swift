@@ -9,6 +9,7 @@
 import UIKit
 
 class InfiniteScrollingView: UIView {
+//    var placePhotos = [UIImage]()
     var placePhotos = [#imageLiteral(resourceName: "food_1"), #imageLiteral(resourceName: "food_2"), #imageLiteral(resourceName: "food_3"), #imageLiteral(resourceName: "food_4"), #imageLiteral(resourceName: "food_5"), #imageLiteral(resourceName: "food_6")]
     var imgPic_0: UIImageView!
     var imgPic_1: UIImageView!
@@ -20,10 +21,12 @@ class InfiniteScrollingView: UIView {
         super.init(frame: frame)
         loadContent()
         
-        let panGesture = UIPanGestureRecognizer()
-        panGesture.maximumNumberOfTouches = 1
-        panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
-        addGestureRecognizer(panGesture)
+        if placePhotos.count > 1 {
+            let panGesture = UIPanGestureRecognizer()
+            panGesture.maximumNumberOfTouches = 1
+            panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
+            addGestureRecognizer(panGesture)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -39,9 +42,15 @@ class InfiniteScrollingView: UIView {
         addSubview(imgPic_0)
         addSubview(imgPic_1)
         addSubview(imgPic_2)
-        imgPic_0.image = placePhotos[0]
-        imgPic_1.image = placePhotos[1]
-        imgPic_2.image = placePhotos[2]
+        if placePhotos.count == 0 {
+            imgPic_0.image = #imageLiteral(resourceName: "food_1")
+            imgPic_1.image = #imageLiteral(resourceName: "food_1")
+            imgPic_2.image = #imageLiteral(resourceName: "food_1")
+        } else {
+            imgPic_0.image = placePhotos[placePhotos.count - 1]
+            imgPic_1.image = placePhotos[0]
+            imgPic_2.image = placePhotos[1 % placePhotos.count]
+        }
         boolLeft = placePhotos.count > 1
         boolRight = placePhotos.count > 1
     }

@@ -90,7 +90,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         tblAddCollection.delegate = self
         tblAddCollection.dataSource = self
         tblAddCollection.showsVerticalScrollIndicator = false
-        tblAddCollection.register(CollectionsPlaceLocCell.self, forCellReuseIdentifier: "CollectionsPlaceLocCell")
+        tblAddCollection.register(CollectionsListCell.self, forCellReuseIdentifier: "CollectionsListCell")
         tblAddCollection.separatorStyle = .none
         addSubview(tblAddCollection)
     }
@@ -104,7 +104,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsPlaceLocCell", for: indexPath) as! CollectionsPlaceLocCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let arr = ["Favorite Place", "Saved Places", "Places to Go"]
         cell.lblListName.text = arr[indexPath.row]
         cell.lblListNum.text = "12 items"

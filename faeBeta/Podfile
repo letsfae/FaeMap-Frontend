@@ -3,18 +3,18 @@ platform :ios, ‘9.0’
 use_frameworks!
 
 target 'faeBeta' do
-	pod 'Alamofire’, '~> 4.1’
+    pod 'Alamofire’, '~> 4.1’
     pod 'SwiftyJSON'
-	pod 'SDWebImage', '~>3.8’
-	pod 'Firebase/Storage'
-	pod 'Firebase/AdMob'
-	pod 'Firebase/Auth'
-	pod 'Firebase/Crash'
-	pod 'Firebase/Database'
-	pod 'Firebase/RemoteConfig'
-	pod 'JSQMessagesViewController'
-	pod 'IDMPhotoBrowser'
-	pod 'RealmSwift'
+    pod 'SDWebImage', '~>3.8’
+    pod 'Firebase/Storage'
+    pod 'Firebase/AdMob'
+    pod 'Firebase/Auth'
+    pod 'Firebase/Crash'
+    pod 'Firebase/Database'
+    pod 'Firebase/RemoteConfig'
+    pod 'JSQMessagesViewController'
+    pod 'IDMPhotoBrowser'
+    pod 'RealmSwift'
     pod 'TTRangeSlider'
     pod 'Gifu'
     pod 'CCHMapClusterController'
@@ -24,7 +24,7 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
+      config.build_settings['SWIFT_VERSION'] = ‘3.2’
     end
   end
   puts("Update debug pod settings to speed up build time")
