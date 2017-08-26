@@ -11,7 +11,19 @@ import CoreLocation
 import SwiftyJSON
 import TTRangeSlider
 
-class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate {
+enum MapBoardTableMode: Int {
+    case social = 0
+    case people = 1
+    case places = 2
+    case talk = 3
+}
+
+enum PlaceTableMode: Int {
+    case recommend = 0
+    case search = 1
+}
+
+class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
     
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
@@ -74,6 +86,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var uiviewPlaceHedaderView2: UIView!
     var pageCtrlPlace: UIPageControl!
     var btnSearchAllPlaces: UIButton!
+    var lblSearchContent: UILabel!
+    var btnClearSearchRes: UIButton!
+    var arrAllPlaces = [PlacePin]()
+    var imgIcon: UIImageView!
+    var lblCurtLoc: UILabel!
     var window: UIWindow?
     
     var imgPlaces1: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
@@ -124,18 +141,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     let comment_valContent: Array = ["LOL what are you talking abouta???", "I understand perfectly O(∩_∩)O"]
     let comment_valVoteCount: Array = [90, 90]
     
-    enum MapBoardTableMode: Int {
-        case social = 0
-        case people = 1
-        case places = 2
-        case talk = 3
-    }
-    
-    enum PlaceTableMode: Int {
-        case recommend = 0
-        case search = 1
-    }
-    
     enum TalkTableMode: Int {
         case feed = 0
         case topic = 1
@@ -167,7 +172,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewBubbleHint.isHidden = true
         uiviewTalkTab.isHidden = true
 
-        getMBPlaceInfo()
+        getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
         uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
@@ -198,6 +203,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        automaticallyAdjustsScrollViewInsets = false
+        tblMapBoard.contentInset = .zero
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -324,13 +331,19 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         view.addSubview(uiviewAllCom)
         
         imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
+        imgIconBeforeAllCom.contentMode = .center
         lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
+        lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblAllCom.textColor = UIColor._107107107()
         btnPeopleLocDetail = UIButton()
         btnPeopleLocDetail.tag = 0
         uiviewAllCom.addSubview(btnPeopleLocDetail)
         uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: btnPeopleLocDetail)
         uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: btnPeopleLocDetail)
         btnPeopleLocDetail.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
+        
+        imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+        lblAllCom.text = "Current Location"
         
         setViewContent()
         
@@ -347,6 +360,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     
     // each time change the table mode (click the button in drop menu), call setViewContent()
     fileprivate func setViewContent() {
+        /*
         if tableMode == .social || tableMode == .talk {
             imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeAllCom")
             lblAllCom.text = "All Communities"
@@ -354,16 +368,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
             lblAllCom.text = "Current Location"
         }
-        
-        lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblAllCom.textColor = UIColor._107107107()
-        
-        if tableMode == .people {
-//            btnPeopleLocDetail.isHidden = false
-//            loadChooseNearbyPeopleView()
-        } else {
-//            btnPeopleLocDetail.isHidden = true
-        }
+        */
         
         if tableMode == .places {
             uiviewPlaceTab.isHidden = false
@@ -396,7 +401,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func loadTable() {
-        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 163), style: UITableViewStyle.plain)
+        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 163), style: .plain)
         view.addSubview(tblMapBoard)
         tblMapBoard.backgroundColor = .white
         tblMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
@@ -489,14 +494,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             updateNearbyPeople()
         } else if curtTitle == "Places" {
             tableMode = .places
-            getMBPlaceInfo()
+            getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         } else if curtTitle == "Talk Talk" {
             tableMode = .talk
         }
         getPeoplePage()
     }
     
-    fileprivate func reloadTableMapBoard() {
+    func reloadTableMapBoard() {
         tblMapBoard.reloadData()
         tblMapBoard.layoutIfNeeded()
         tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
@@ -506,55 +511,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         hideDropDownMenu()
     }
     
-    fileprivate func loadCannotFindPeople() {
-        uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
-        uiviewBubbleHint.backgroundColor = .white
-        view.addSubview(uiviewBubbleHint)
-        
-        imgBubbleHint = UIImageView(frame: CGRect(x: 82 * screenWidthFactor, y: 142 * screenHeightFactor, width: 252, height: 209))
-        imgBubbleHint.image = #imageLiteral(resourceName: "mb_bubbleHint")
-        uiviewBubbleHint.addSubview(imgBubbleHint)
-        
-        lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
-        lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblBubbleHint.textColor = UIColor._898989()
-        lblBubbleHint.lineBreakMode = .byWordWrapping
-        lblBubbleHint.numberOfLines = 0
-        imgBubbleHint.addSubview(lblBubbleHint)
-        lblBubbleHint.text = strBubbleHint
-    }
-    
-    fileprivate func getPeoplePage() {
-        vickyPrint("userStatus \(userStatus)")
-        if curtTitle == "People" && !boolUsrVisibleIsOn {
-            tblMapBoard.isHidden = true
-            uiviewBubbleHint.isHidden = false
-            strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
-            lblBubbleHint.text = strBubbleHint
-            btnPeopleLocDetail.isUserInteractionEnabled = false
-        } else {
-            tblMapBoard.isHidden = false
-            uiviewBubbleHint.isHidden = true
-            btnPeopleLocDetail.isUserInteractionEnabled = true
-        }
-    }
-    
-    // LeftSlidingMenuDelegate
-    func userInvisible(isOn: Bool) {
-        vickyPrint("isOn \(isOn)")
-        if (isOn) {
-            boolUsrVisibleIsOn = false
-        } else {
-            boolUsrVisibleIsOn = true
-        }
-        getPeoplePage()
-    }
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
     func jumpToCollections() {
-        let vcCollections = CollectionsBoardViewController()
+//        let vcCollections = CollectionsBoardViewController()
+        let vcCollections = CollectionsViewController()
         navigationController?.pushViewController(vcCollections, animated: true)
     }
     func jumpToContacts() {
@@ -580,326 +543,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
                     LeftSlidingMenuViewController.boolMapBoardIsOn = false
                 }
             }
-        }
-    }
-}
-
-// for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
-    fileprivate func loadPlaceSearchHeader() {
-        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20, width: screenWidth - 50, height: 43))
-        btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "searchBarIcon"), for: .normal)
-        btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
-        btnSearchAllPlaces.contentHorizontalAlignment = .left
-        uiviewNavBar.addSubview(btnSearchAllPlaces)
-        
-        let lblSearchAllPlaces = UILabel(frame: CGRect(x: 24, y: 10, width: 200, height: 25))
-        lblSearchAllPlaces.textColor = UIColor._898989()
-        lblSearchAllPlaces.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchAllPlaces.text = "All Places"
-        btnSearchAllPlaces.addSubview(lblSearchAllPlaces)
-        
-        btnSearchAllPlaces.isHidden = true
-    }
-    
-    fileprivate func loadPlaceHeader() {
-        uiviewPlaceHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 246))
-        uiviewPlaceHeader.backgroundColor = .white
-        
-        // draw two uiview of Map Options
-        uiviewPlaceHedaderView1 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 241))
-        uiviewPlaceHedaderView2 = UIView(frame: CGRect(x: screenWidth, y: 0, width: screenWidth, height: 241))
-        
-        scrollViewPlaceHeader = UIScrollView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 241))
-        scrollViewPlaceHeader.delegate = self
-        scrollViewPlaceHeader.isPagingEnabled = true
-        scrollViewPlaceHeader.showsHorizontalScrollIndicator = false
-        scrollViewPlaceHeader.addSubview(uiviewPlaceHedaderView1)
-        scrollViewPlaceHeader.addSubview(uiviewPlaceHedaderView2)
-        scrollViewPlaceHeader.contentSize = CGSize(width: screenWidth * 2, height: 241)
-        uiviewPlaceHeader.addSubview(scrollViewPlaceHeader)
-        
-        // draw two dots - page control
-        pageCtrlPlace = UIPageControl(frame: CGRect(x: 0, y: 212, width: screenWidth, height: 8))
-        pageCtrlPlace.numberOfPages = 2
-        pageCtrlPlace.currentPage = 0
-        pageCtrlPlace.pageIndicatorTintColor = UIColor._182182182()
-        pageCtrlPlace.currentPageIndicatorTintColor = UIColor._2499090()
-        pageCtrlPlace.addTarget(self, action: #selector(changePage(_:)), for: .valueChanged)
-        uiviewPlaceHeader.addSubview(pageCtrlPlace)
-        
-        let uiviewBottomSeparator = UIView(frame: CGRect(x: 0, y: 241, width: screenWidth, height: 5))
-        uiviewBottomSeparator.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
-        uiviewPlaceHeader.addSubview(uiviewBottomSeparator)
-        
-        loadPlaceHeaderView(uiview: uiviewPlaceHedaderView1, imgPlace: imgPlaces1, arrPlaceName: arrPlaceNames1, tag: 0)
-        loadPlaceHeaderView(uiview: uiviewPlaceHedaderView2, imgPlace: imgPlaces2, arrPlaceName: arrPlaceNames2, tag: 6)
-    }
-    
-    fileprivate func loadPlaceHeaderView(uiview: UIView, imgPlace: [UIImage], arrPlaceName: [String], tag: Int) {
-        var btnPlaces = [UIButton]()
-        var lblPlaces = [UILabel]()
-        
-        for _ in 0..<6 {
-            btnPlaces.append(UIButton(frame: CGRect(x: 60, y: 20, width: 58, height: 58)))
-            lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
-        }
-        
-        for i in 0..<6 {
-            if i >= 3 {
-                btnPlaces[i].frame.origin.y = 117
-            }
-            if i == 1 || i == 4 {
-                btnPlaces[i].frame.origin.x = (screenWidth - 58) / 2
-            } else if i == 2 || i == 5 {
-                btnPlaces[i].frame.origin.x = screenWidth - 118
-            }
-            
-            lblPlaces[i].center = CGPoint(x: btnPlaces[i].center.x, y: btnPlaces[i].center.y + 43)
-            
-            uiview.addSubview(btnPlaces[i])
-            uiview.addSubview(lblPlaces[i])
-            
-            btnPlaces[i].layer.borderColor = UIColor._225225225().cgColor
-            btnPlaces[i].layer.borderWidth = 2
-            btnPlaces[i].layer.cornerRadius = 8.0
-            btnPlaces[i].contentMode = .scaleAspectFit
-            btnPlaces[i].layer.masksToBounds = true
-            btnPlaces[i].setImage(imgPlace[i], for: .normal)
-            btnPlaces[i].tag = i + tag
-            btnPlaces[i].addTarget(self, action: #selector(searchByCategories(_:)), for: .touchUpInside)
-            
-            lblPlaces[i].text = arrPlaceName[i]
-            lblPlaces[i].textAlignment = .center
-            lblPlaces[i].textColor = UIColor._138138138()
-            lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
-        }
-    }
-    
-    fileprivate func loadPlaceTabView() {
-        uiviewPlaceTab = PlaceTabView()
-        uiviewPlaceTab.delegate = self
-        uiviewPlaceTab.addGestureRecognizer(setGestureRecognizer())
-        view.addSubview(uiviewPlaceTab)
-    }
-    
-    func changePage(_ sender: Any?) {
-        scrollViewPlaceHeader.contentOffset.x = screenWidth * CGFloat(pageCtrlPlace.currentPage)
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageCtrlPlace.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
-    }
-    
-    func searchByCategories(_ sender: UIButton) {
-        print(sender.tag)
-    }
-    
-    func searchAllPlaces(_ sender: UIButton) {
-        
-    }
-    
-    // SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: [PlacePin], title: String) {
-        let vc = AllPlacesViewController()
-        vc.places = places
-        vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func jumpToPlaceDetail(place: PlacePin) {
-        let vc = PlaceDetailViewController()
-        vc.place = place
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    // SeeAllPlacesDelegate End
-    
-    // MapBoardPlaceTabDelegate
-    func jumpToRecommendedPlaces() {
-        placeTableMode = .recommend
-        btnNavBarMenu.isHidden = false
-        btnSearchAllPlaces.isHidden = true
-        tblMapBoard.tableHeaderView = uiviewPlaceHeader
-        reloadTableMapBoard()
-    }
-    
-    func jumpToSearchPlaces() {
-        placeTableMode = .search
-        btnNavBarMenu.isHidden = true
-        btnSearchAllPlaces.isHidden = false
-        tblMapBoard.tableHeaderView = nil
-        reloadTableMapBoard()
-    }
-    // MapBoardPlaceTabDelegate End
-}
-
-// for TalkTalk page
-extension MapBoardViewController {
-    // function for loading talk post uiview and switch buttons
-    fileprivate func loadTalkPostHead() {
-        uiviewTalkPostHead = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 31))
-        view.addSubview(uiviewTalkPostHead)
-        uiviewTalkPostHead.backgroundColor = .white
-        uiviewTalkPostHead.isHidden = true
-        
-        btnMyTalks = UIButton()
-        uiviewTalkPostHead.addSubview(btnMyTalks)
-        uiviewTalkPostHead.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnMyTalks)
-        uiviewTalkPostHead.addConstraintsWithFormat("H:|-40-[v0(130)]", options: [], views: btnMyTalks)
-        
-        let uiviewGrayUnderLine = UIView(frame: CGRect(x: 0, y: uiviewTalkPostHead.frame.height - 1, width: screenWidth, height: 1))
-        uiviewGrayUnderLine.backgroundColor = UIColor._200199204()
-        uiviewTalkPostHead.addSubview(uiviewGrayUnderLine)
-        
-        btnMyTalks.setTitle("My Talks", for: .normal)
-        btnMyTalks.setTitleColor(UIColor._2499090(), for: .normal)
-        btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        btnMyTalks.tag = 0
-        btnMyTalks.addTarget(self, action: #selector(self.switchBetweenTalkAndComment(_:)), for: .touchUpInside)
-        
-        uiviewRedUnderLine = UIView(frame: CGRect(x: 40, y: uiviewTalkPostHead.frame.height - 2, width: 130, height: 2))
-        uiviewRedUnderLine.backgroundColor = UIColor._2499090()
-        uiviewTalkPostHead.addSubview(uiviewRedUnderLine)
-        
-        btnComments = UIButton()
-        uiviewTalkPostHead.addSubview(btnComments)
-        uiviewTalkPostHead.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnComments)
-        uiviewTalkPostHead.addConstraintsWithFormat("H:[v0(130)]-40-|", options: [], views: btnComments)
-        
-        btnComments.setTitle("Comments", for: .normal)
-        btnComments.setTitleColor(UIColor._146146146(), for: .normal)
-        btnComments.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-        btnComments.tag = 1
-        btnComments.addTarget(self, action: #selector(switchBetweenTalkAndComment(_:)), for: .touchUpInside)
-    }
-    
-    fileprivate func loadTalkTabView() {
-        uiviewTalkTab = UIView()
-        uiviewTalkTab.backgroundColor = UIColor._248248248()
-        view.addSubview(uiviewTalkTab)
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewTalkTab)
-        view.addConstraintsWithFormat("V:[v0(49)]-0-|", options: [], views: uiviewTalkTab)
-        
-        let tabLine = UIView()
-        tabLine.backgroundColor = UIColor._200199204()
-        uiviewTalkTab.addSubview(tabLine)
-        uiviewTalkTab.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tabLine)
-        uiviewTalkTab.addConstraintsWithFormat("V:|-0-[v0(1)]", options: [], views: tabLine)
-        
-        // add three buttons
-        btnTalkFeed = UIButton()
-        btnTalkFeed.setImage(#imageLiteral(resourceName: "mb_activeTalkFeed"), for: .selected)
-        btnTalkFeed.setImage(#imageLiteral(resourceName: "mb_inactiveTalkFeed"), for: .normal)
-        
-        btnTalkFeed.tag = 0
-        uiviewTalkTab.addSubview(btnTalkFeed)
-        uiviewTalkTab.addConstraintsWithFormat("H:|-67-[v0(47)]", options: [], views: btnTalkFeed)
-        uiviewTalkTab.addConstraintsWithFormat("V:[v0(37)]-6-|", options: [], views: btnTalkFeed)
-        
-        btnTalkTopic = UIButton()
-        btnTalkTopic.setImage(#imageLiteral(resourceName: "mb_activeTalkTopic"), for: .selected)
-        btnTalkTopic.setImage(#imageLiteral(resourceName: "mb_inactiveTalkTopic"), for: .normal)
-        btnTalkTopic.tag = 1
-        uiviewTalkTab.addSubview(btnTalkTopic)
-        let padding = (screenWidth - 47) / 2
-        uiviewTalkTab.addConstraintsWithFormat("H:|-\(padding)-[v0(47)]-\(padding)-|", options: [], views: btnTalkTopic)
-        uiviewTalkTab.addConstraintsWithFormat("V:[v0(37)]-6-|", options: [], views: btnTalkTopic)
-        
-        btnTalkMypost = UIButton()
-        btnTalkMypost.setImage(#imageLiteral(resourceName: "mb_activeTalkMypost"), for: .selected)
-        btnTalkMypost.setImage(#imageLiteral(resourceName: "mb_inactiveTalkMypost"), for: .normal)
-        btnTalkMypost.tag = 2
-        uiviewTalkTab.addSubview(btnTalkMypost)
-        uiviewTalkTab.addConstraintsWithFormat("H:[v0(47)]-67-|", options: [], views: btnTalkMypost)
-        uiviewTalkTab.addConstraintsWithFormat("V:[v0(37)]-6-|", options: [], views: btnTalkMypost)
-        
-        btnTalkFeed.addTarget(self, action: #selector(self.getTalkTableMode(_:)), for: .touchUpInside)
-        btnTalkTopic.addTarget(self, action: #selector(self.getTalkTableMode(_:)), for: .touchUpInside)
-        btnTalkMypost.addTarget(self, action: #selector(self.getTalkTableMode(_:)), for: .touchUpInside)
-    }
-    
-    func getTalkTableMode(_ sender: UIButton) {
-        if sender.tag == 0 {
-            talkTableMode = .feed
-        } else if sender.tag == 1 {
-            talkTableMode = .topic
-        } else if sender.tag == 2 {
-            talkTableMode = .post
-        }
-        switchTalkTabPage()
-        reloadTableMapBoard()
-    }
-    
-    // function for switch tab page in talk mode
-    fileprivate func switchTalkTabPage() {
-        if talkTableMode == .feed {
-            btnTalkFeed.isSelected = true
-            btnTalkTopic.isSelected = false
-            btnTalkMypost.isSelected = false
-            uiviewNavBar.rightBtn.isHidden = false
-        } else if talkTableMode == .topic {
-            btnTalkFeed.isSelected = false
-            btnTalkTopic.isSelected = true
-            btnTalkMypost.isSelected = false
-            uiviewNavBar.rightBtn.isHidden = true
-        } else if talkTableMode == .post {
-            btnTalkFeed.isSelected = false
-            btnTalkTopic.isSelected = false
-            btnTalkMypost.isSelected = true
-            uiviewNavBar.rightBtn.isHidden = true
-        }
-        
-        if talkTableMode == .post {
-//            tblMapBoard.frame = CGRect(x: 0, y: 95, width: screenWidth, height: screenHeight - 145)
-            uiviewAllCom.isHidden = true
-            uiviewNavBar.bottomLine.isHidden = true
-            uiviewTalkPostHead.isHidden = false
-        } else {
-//            tblMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 163)
-            uiviewAllCom.isHidden = false
-            uiviewNavBar.bottomLine.isHidden = false
-            uiviewTalkPostHead.isHidden = true
-        }
-    }
-    
-    // function for add talk feed when press upper right plus button in talk mode
-    func addTalkFeed(_ sender: UIButton) {
-        print("addTalkFeed")
-    }
-    
-    func switchBetweenTalkAndComment(_ sender: UIButton) {
-        var targetCenter: CGFloat = 0
-        if sender.tag == 0 {
-            talkPostTableMode = .talk
-            btnMyTalks.setTitleColor(UIColor._2499090(), for: .normal)
-            btnComments.setTitleColor(UIColor._146146146(), for: .normal)
-            btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-            btnComments.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            targetCenter = btnMyTalks.center.x
-        } else if sender.tag == 1 {
-            talkPostTableMode = .comment
-            btnComments.setTitleColor(UIColor._2499090(), for: .normal)
-            btnMyTalks.setTitleColor(UIColor._146146146(), for: .normal)
-            btnComments.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-            btnMyTalks.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
-            targetCenter = btnComments.center.x
-        }
-        
-        // Animation of the red sliding line (My Talks, Comments)
-        UIView.animate(withDuration: 0.25, animations: ({
-            self.uiviewRedUnderLine.center.x = targetCenter
-        }), completion: { _ in
-        })
-        
-        reloadTableMapBoard()
-    }
-    
-    func incDecVoteCount(_ sender: UIButton) {
-        if sender.tag == 0 {
-            print("0")
-        } else if sender.tag == 1 {
-            print("1")
         }
     }
 }

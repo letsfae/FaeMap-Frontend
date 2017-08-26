@@ -86,7 +86,8 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
     }
     
     func jumpToCollections() {
-        let vcCollections = CollectionsBoardViewController()
+//        let vcCollections = CollectionsBoardViewController()
+        let vcCollections = CollectionsViewController()
         self.navigationController?.pushViewController(vcCollections, animated: true)
     }
     

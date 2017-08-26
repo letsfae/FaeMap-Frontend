@@ -60,11 +60,11 @@ extension FaeMapViewController: MapSearchDelegate {
         faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: true)
     }
     
-    func backToMainMapFromMapSearch() {
-        lblSearchContent.text = "Search Fae Map"
-        lblSearchContent.textColor = UIColor._182182182()
-        btnClearSearchRes.isHidden = true
-    }
+//    func backToMainMapFromMapSearch() {
+//        lblSearchContent.text = "Search Fae Map"
+//        lblSearchContent.textColor = UIColor._182182182()
+//        btnClearSearchRes.isHidden = true
+//    }
     // MapSearchDelegate End
     
     func updateUI(searchText: String) {
