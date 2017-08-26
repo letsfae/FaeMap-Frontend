@@ -133,10 +133,10 @@ extension MapBoardViewController {
         }
     }
     
-    func getMBPlaceInfo() {
+    func getMBPlaceInfo(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         let mbPlacesList = FaeMap()
-        mbPlacesList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
-        mbPlacesList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
+        mbPlacesList.whereKey("geo_latitude", value: "\(latitude)")
+        mbPlacesList.whereKey("geo_longitude", value: "\(longitude)")
         mbPlacesList.whereKey("radius", value: "9999999")
         mbPlacesList.whereKey("type", value: "place")
         mbPlacesList.whereKey("max_count", value: "1000")
@@ -177,6 +177,7 @@ extension MapBoardViewController {
             self.testArrPlaces.append(self.testArrOutdoors)
             self.testArrPlaces.append(self.testArrRecreation)
             
+            self.arrAllPlaces = self.mbPlaces
             self.tblMapBoard.reloadData()
         }
     }
