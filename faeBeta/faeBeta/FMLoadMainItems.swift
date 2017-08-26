@@ -114,7 +114,7 @@ extension FaeMapViewController {
         btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
-        btnOpenChat = UIButton(frame: CGRect(x: 12, y: 646 * screenHeightFactor, width: 79, height: 79))
+        btnOpenChat = UIButton(frame: CGRect(x: 12, y: screenHeight - 90, width: 79, height: 79))
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
@@ -134,7 +134,7 @@ extension FaeMapViewController {
         btnOpenChat.addSubview(lblUnreadCount)
         
         // Create pin on main map
-        btnDiscovery = UIButton(frame: CGRect(x: 323 * screenWidthFactor, y: 646 * screenHeightFactor, width: 79, height: 79))
+        btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90, width: 79, height: 79))
         btnDiscovery.setImage(UIImage(named: "mainScreenDiscovery"), for: .normal)
         view.addSubview(btnDiscovery)
         btnDiscovery.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)

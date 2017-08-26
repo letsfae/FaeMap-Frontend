@@ -133,11 +133,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
         automaticallyAdjustsScrollViewInsets = false
-        
-        if screenHeight == 736 {
-            tblPlaceDetail.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-        }
-        
+                
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
         tblPlaceDetail.register(PlaceDetailSection1Cell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
