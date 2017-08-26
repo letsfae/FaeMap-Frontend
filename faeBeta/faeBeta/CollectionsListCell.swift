@@ -1,5 +1,5 @@
 //
-//  CollectionsPlaceLocCell.swift
+//  CollectionsListCell.swift
 //  faeBeta
 //
 //  Created by Faevorite 2 on 2017-08-08.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionsPlaceLocCell: UITableViewCell {
+class CollectionsListCell: UITableViewCell {
     var imgPic: UIImageView!
     var lblListName: UILabel!
     var lblListNum: UILabel!
@@ -29,7 +29,6 @@ class CollectionsPlaceLocCell: UITableViewCell {
     fileprivate func loadCellContent() {
         imgPic = UIImageView(frame: CGRect(x: 11, y: 15, width: 70, height: 70))
         imgPic.image = #imageLiteral(resourceName: "defaultPlaceIcon")
-//        imgPic.backgroundColor = .red
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 9
         addSubview(imgPic)
@@ -45,7 +44,39 @@ class CollectionsPlaceLocCell: UITableViewCell {
         addSubview(lblListNum)
     }
     
-    func setValueForCell() {
+    func setValueForCell(cellName: String) {
+        lblListName.text = cellName
+        lblListNum.text = "12 items"
+    }
+}
+
+class CollectionsEmptyListCell: UITableViewCell {
+    var imgPic: UIImageView!
+    var lblListName: UILabel!
+    var lblListNum: UILabel!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        let separatorView = UIView(frame: CGRect(x: 98, y: 99, width: screenWidth - 98, height: 1))
+        separatorView.backgroundColor = UIColor._225225225()
+        addSubview(separatorView)
+        selectionStyle = .none
+        loadCellContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadCellContent() {
+        imgPic = UIImageView(frame: CGRect(x: 11, y: 15, width: 70, height: 70))
+        imgPic.image = #imageLiteral(resourceName: "collection_emptyListIcon")
+        addSubview(imgPic)
         
+        lblListName = UILabel(frame: CGRect(x: 102, y: 40, width: screenWidth - 102 - 15, height: 25))
+        lblListName.textColor = UIColor._898989()
+        lblListName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblListName.text = "Create a New List..."
+        addSubview(lblListName)
     }
 }

@@ -11,6 +11,7 @@ import SwiftyJSON
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate {
     var place: PlacePin!
+    var allPlaces = [PlacePin]()
     var uiviewHeader: UIView!
     var uiviewSubHeader: FixedHeader!
     var uiviewFixedHeader: FixedHeader!
@@ -45,17 +46,19 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
             })
         })
         PlaceDetailCell.boolFold = true
-        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         UIApplication.shared.statusBarStyle = .lightContent
+        if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
+            UIApplication.shared.statusBarStyle = .default
+        }
     }
     
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
     }
     
@@ -126,17 +129,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func loadMidTable() {
-        
-        
-        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
+        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49), style: .plain)
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
-        automaticallyAdjustsScrollViewInsets = false
-        
-        if screenHeight == 736 {
-            tblPlaceDetail.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
-        }
+//        automaticallyAdjustsScrollViewInsets = false
+//        tblPlaceDetail.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
         
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
@@ -198,8 +196,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
+            UIApplication.shared.statusBarStyle = .default
         } else {
             uiviewFixedHeader.isHidden = true
+            UIApplication.shared.statusBarStyle = .lightContent
         }
     }
     
@@ -261,7 +261,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     // SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
-        vc.places = places
+        vc.recommendedPlaces = places
         vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -280,6 +280,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     
     func createColList() {
         let vc = CreateColListViewController()
+        vc.enterMode = .place
         present(vc, animated: true)
 //        navigationController?.pushViewController(vc, animated: true)
     }
@@ -333,101 +334,3 @@ class FixedHeader: UIView {
         lblPrice.text = "$$$"
     }
 }
-
-/*
-class InfiniteScrollingView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    var placePhotos = [#imageLiteral(resourceName: "defaultMen"), #imageLiteral(resourceName: "defaultWomen"), #imageLiteral(resourceName: "defaultCover"), #imageLiteral(resourceName: "defaultPlaceIcon")]
-    var carousePhotos = [#imageLiteral(resourceName: "defaultPlaceIcon"), #imageLiteral(resourceName: "defaultMen"), #imageLiteral(resourceName: "defaultWomen"), #imageLiteral(resourceName: "defaultCover"), #imageLiteral(resourceName: "defaultPlaceIcon"), #imageLiteral(resourceName: "defaultMen")]
-    var colViewScrolling: UICollectionView!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        loadContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadContent() {
-        let flowLayout = InfiniteScrollingLayout() // UICollectionViewFlowLayout()
-        flowLayout.itemSize = CGSize(width: frame.size.width, height: frame.size.height)
-        colViewScrolling = UICollectionView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), collectionViewLayout: flowLayout)
-        colViewScrolling.decelerationRate = UIScrollViewDecelerationRateFast
-        colViewScrolling.showsHorizontalScrollIndicator = false
-        colViewScrolling.delegate = self
-        colViewScrolling.dataSource = self
-        colViewScrolling.register(InfiniteScrollingCell.self, forCellWithReuseIdentifier: "InfiniteScrollingCell")
-        addSubview(colViewScrolling)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return placePhotos.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "InfiniteScrollingCell", for: indexPath) as! InfiniteScrollingCell
-        let photo = placePhotos[indexPath.row]
-        cell.setValueForCell(photo: photo)
-        
-        return cell
-    }
-}
-
-class InfiniteScrollingCell: UICollectionViewCell {
-    var imgPlacePhotos: UIImageView!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        loadCellContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadCellContent() {
-        imgPlacePhotos = UIImageView()//frame: CGRect(x: 0, y: 0, width: screenWidth, height: 208 * screenHeightFactor))
-        addSubview(imgPlacePhotos)
-        imgPlacePhotos.contentMode = .scaleToFill
-        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: imgPlacePhotos)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: imgPlacePhotos)
-    }
-    
-    func setValueForCell(photo: UIImage) {
-        imgPlacePhotos.image = photo
-    }
-}
-
-class InfiniteScrollingLayout: UICollectionViewFlowLayout {
-    override init() {
-        super.init()
-        scrollDirection = .horizontal
-        minimumLineSpacing = 0
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
-        var rect: CGRect = .zero
-        rect.origin.y = 0
-        rect.origin.x = proposedContentOffset.x
-        rect.size = (collectionView!.frame.size)
-
-        let originArray = super.layoutAttributesForElements(in: rect)
-        let attributes = NSArray(array: originArray!, copyItems: true) as? [UICollectionViewLayoutAttributes]
-
-        let centerX = proposedContentOffset.x + collectionView!.frame.size.width * 0.5
-
-        var minDelta: CGFloat = CGFloat(MAXFLOAT)
-        for attrs in attributes! {
-            if abs(minDelta) > abs(attrs.center.x - centerX) {
-                minDelta = attrs.center.x - centerX
-            }
-        }
-        return CGPoint(x: proposedContentOffset.x + minDelta, y: proposedContentOffset.y)
-    }
-}
-*/

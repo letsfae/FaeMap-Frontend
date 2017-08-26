@@ -8,6 +8,50 @@
 import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
+    func loadCannotFindPeople() {
+        uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
+        uiviewBubbleHint.backgroundColor = .white
+        view.addSubview(uiviewBubbleHint)
+        
+        imgBubbleHint = UIImageView(frame: CGRect(x: 82 * screenWidthFactor, y: 142 * screenHeightFactor, width: 252, height: 209))
+        imgBubbleHint.image = #imageLiteral(resourceName: "mb_bubbleHint")
+        uiviewBubbleHint.addSubview(imgBubbleHint)
+        
+        lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
+        lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblBubbleHint.textColor = UIColor._898989()
+        lblBubbleHint.lineBreakMode = .byWordWrapping
+        lblBubbleHint.numberOfLines = 0
+        imgBubbleHint.addSubview(lblBubbleHint)
+        lblBubbleHint.text = strBubbleHint
+    }
+    
+    func getPeoplePage() {
+        vickyPrint("userStatus \(userStatus)")
+        if curtTitle == "People" && !boolUsrVisibleIsOn {
+            tblMapBoard.isHidden = true
+            uiviewBubbleHint.isHidden = false
+            strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
+            lblBubbleHint.text = strBubbleHint
+            btnPeopleLocDetail.isUserInteractionEnabled = false
+        } else {
+            tblMapBoard.isHidden = false
+            uiviewBubbleHint.isHidden = true
+            btnPeopleLocDetail.isUserInteractionEnabled = true
+        }
+    }
+    
+    // LeftSlidingMenuDelegate
+    func userInvisible(isOn: Bool) {
+        vickyPrint("isOn \(isOn)")
+        if (isOn) {
+            boolUsrVisibleIsOn = false
+        } else {
+            boolUsrVisibleIsOn = true
+        }
+        getPeoplePage()
+    }
+    
     // function for button on upper right of People table mode
     func chooseNearbyPeopleInfo(_ sender: UIButton) {
         // in people page
@@ -24,7 +68,10 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             uiviewPeopleLocDetail.addGestureRecognizer(swipeGesture)
             swipeGesture.direction = .up
         } else { // in place page
-            let vc = ChooseLocationViewController()
+            let vc = BoardsSearchViewController()
+            vc.strPlaceholder = lblAllCom.text
+            vc.enterMode = .location
+            vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -87,9 +134,10 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         uiviewPeopleLocDetail.addSubview(uiviewThirdLine)
         
         // draw title
-        let imgIcon = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
+        imgIcon = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
         imgIcon.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        let lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
+        imgIcon.contentMode = .center
+        lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
         lblCurtLoc.text = "Current Location"
         lblCurtLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblCurtLoc.textColor = UIColor._107107107()
@@ -261,7 +309,10 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     }
     
     func searchLoc(_ sender: UIButton) {
-        let vc = ChooseLocationViewController()
+        let vc = BoardsSearchViewController()
+        vc.strPlaceholder = lblAllCom.text
+        vc.enterMode = .location
+        vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
 }
