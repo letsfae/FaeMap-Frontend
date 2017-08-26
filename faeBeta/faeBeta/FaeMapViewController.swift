@@ -101,7 +101,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapChat()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
-        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -115,6 +114,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
     
     func getUserStatus() {
@@ -206,16 +207,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
         navigationController?.pushViewController(welcomeVC, animated: true)
-    }
-    
-    // MARK: -- Load Navigation Items
-    fileprivate func loadTransparentNavBarItems() {
-        navigationController?.navigationBar.tintColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
-        navigationController?.navigationBar.isHidden = true
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-        navigationController?.navigationBar.isTranslucent = true
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
