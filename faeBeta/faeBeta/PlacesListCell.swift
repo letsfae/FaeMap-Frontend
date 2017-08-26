@@ -58,6 +58,4 @@ class PlacesListCell: UITableViewCell {
         addConstraintsWithFormat("H:|-\(62*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
-    
-
 }
