@@ -77,11 +77,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadTable() {
-        tblColListDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49), style: .plain)
+        tblColListDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
         view.addSubview(tblColListDetail)
         
-//        automaticallyAdjustsScrollViewInsets = false
-//        tblColListDetail.contentInset = UIEdgeInsets(top: -20, left: 0, bottom: 0, right: 0)
+        automaticallyAdjustsScrollViewInsets = false
+
         tblColListDetail.delegate = self
         tblColListDetail.dataSource = self
         tblColListDetail.separatorStyle = .none
