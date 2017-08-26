@@ -145,7 +145,6 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             if (indexPath.row == 0) {  // comments
                 let mbCommentsVC = MBComtsStoriesViewController()
                 mbCommentsVC.enterMode = .comment
-                
                 self.navigationController?.pushViewController(mbCommentsVC, animated: true)
             } else if (indexPath.row == 1) {  // chats
                 let mbChatsVC = MBChatsViewController()
@@ -153,16 +152,16 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             } else {  // stories
                 let mbStoriesVC = MBComtsStoriesViewController()
                 mbStoriesVC.enterMode = .media
-
                 self.navigationController?.pushViewController(mbStoriesVC, animated: true)
             }
-            
-//            self.renewSelfLocation()
-            
         } else if tableMode == .people {
             
         } else if tableMode == .places {
-            
+            if placeTableMode == .search {
+                let vc = PlaceDetailViewController()
+                vc.place = mbPlaces[indexPath.row]
+                navigationController?.pushViewController(vc, animated: true)
+            }
         } else if tableMode == .talk {
         }
     }
