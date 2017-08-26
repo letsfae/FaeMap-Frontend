@@ -34,14 +34,14 @@ class FaeAvatarView: UIImageView {
         self.image = nil
         
         if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
-            joshprint("[getAvatar - \(id)] already in cache")
+//            joshprint("[getAvatar - \(id)] already in cache")
             self.image = imageFromCache
             return
         }
         
         getAvatar(userID: self.userID, type: 2) { (status, etag, imageRawData) in
             guard imageRawData != nil else {
-                print("[getAvatar] fail, imageRawData is nil")
+//                print("[getAvatar] fail, imageRawData is nil")
                 return
             }
             guard status / 100 == 2 || status / 100 == 3 else { return }

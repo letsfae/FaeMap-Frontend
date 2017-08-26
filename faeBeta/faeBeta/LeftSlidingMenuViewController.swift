@@ -105,7 +105,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
         uiViewLeftWindow.addSubview(imageAvatar)
         imageAvatar.center.x = 145
-        imageAvatar.layer.cornerRadius = 45.5 * screenWidthFactor
+        imageAvatar.layer.cornerRadius = 45.5
         imageAvatar.layer.borderColor = UIColor.white.cgColor
         imageAvatar.layer.borderWidth = 5
         if let gender = userUserGender {
