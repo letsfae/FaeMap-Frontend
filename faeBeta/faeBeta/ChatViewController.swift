@@ -771,13 +771,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //jump to the get more image collection view, and deselect the image we select in photoes preview
         // TODO
         //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "FullAlbumCollectionViewController")as! FullAlbumCollectionViewController
-        let layout = UICollectionViewFlowLayout()
         //layout.scrollDirection = .vertical
         //layout.itemSize = CGSize(width: (screenWidth - 4) / 3, height: (screenWidth - 4) / 3)
         //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
-        let vc = FullAlbumCollectionViewController(collectionViewLayout: layout)
         //vc.collectionView?.register(PhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
+        let layout = UICollectionViewFlowLayout()
+        let vc = FullAlbumCollectionViewController(collectionViewLayout: layout)
         vc.imageDelegate = self
+        //let vc = HsuAssetGridViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     

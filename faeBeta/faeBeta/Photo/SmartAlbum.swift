@@ -12,9 +12,9 @@ import Photos
 class SmartAlbum {
     private(set) var albumName : String!
     private(set) var albumCount : Int!
-    private(set) var albumContent : PHFetchResult<AnyObject>!
+    private(set) var albumContent : PHFetchResult<PHAsset>!
     
-    init(albumName : String, albumCount: Int, albumContent : PHFetchResult<AnyObject>) {
+    init(albumName : String, albumCount: Int, albumContent : PHFetchResult<PHAsset>) {
         self.albumName = albumName
         self.albumCount = albumCount
         self.albumContent = albumContent
