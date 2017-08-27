@@ -498,12 +498,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             let cell = cell as! QuickPhotoPickerCollectionViewCell
             //get image from PHFetchResult
             if(self.photoPicker.cameraRoll != nil){
-                let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+                let asset : PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section]
                 if let duration = photoPicker.assetDurationDict[asset]{
                     cell.setVideoDurationLabel(withDuration: duration)
                 }
-                let resources = PHAssetResource.assetResources(for: asset)
-                let orgFilename = (resources[0]).originalFilename;
+                //let resources = PHAssetResource.assetResources(for: asset)
+                //let orgFilename = (resources[0]).originalFilename;
+                let orgFilename = asset.value(forKey: "filename") as! String
                 if orgFilename.lowercased().contains(".gif") {
                     cell.setGifLabel()
                 }
@@ -521,7 +522,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == photoQuickCollectionView && self.photoPicker.cameraRoll != nil {
             let cell = collectionView.cellForItem(at: indexPath) as! QuickPhotoPickerCollectionViewCell
-            let asset: PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section] as! PHAsset
+            let asset: PHAsset = self.photoPicker.cameraRoll.albumContent[indexPath.section]
             
             if !cell.photoSelected {
                 if photoPicker.indexAssetDict.count == maxPhotos {

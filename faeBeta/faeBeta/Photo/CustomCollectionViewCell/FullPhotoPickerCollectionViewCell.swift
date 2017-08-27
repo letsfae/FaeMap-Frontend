@@ -47,6 +47,7 @@ class FullPhotoPickerCollectionViewCell: UICollectionViewCell {
         
         imgPhoto = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         imgPhoto.contentMode = .scaleAspectFill
+        imgPhoto.clipsToBounds = true
         addSubview(imgPhoto)
         
         imgChosenIndicator = UIImageView(frame: CGRect(x: 100, y: 5, w: 31, h: 31))
@@ -81,6 +82,7 @@ class FullPhotoPickerCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         imgPhoto.image = nil
+        thumbnailImage = nil
         deselectCell()
         uiviewVideoIndicator.isHidden = true
         imgCameraIcon.isHidden = true
@@ -108,6 +110,13 @@ class FullPhotoPickerCollectionViewCell: UICollectionViewCell {
     }
     
     //MARK: - image related
+    var representedAssetIdentifier: String!
+    var thumbnailImage: UIImage! {
+        didSet {
+            imgPhoto.image = thumbnailImage
+        }
+    }
+    
     fileprivate func setImage(_ thumbnailImage : UIImage) {
         imgPhoto.image = thumbnailImage
     }
@@ -149,8 +158,8 @@ class FullPhotoPickerCollectionViewCell: UICollectionViewCell {
     }
     
     // given a PHAsset, request the image and populate the cell with the image
-    func loadImage(_ asset: PHAsset,requestOption option: PHImageRequestOptions){
-        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: self.frame.width - 1 / 3, height: self.frame.width - 1 / 3), contentMode: .aspectFill, options: option) { (result, info) in
+    func loadImage(PHCaching imageManager: PHCachingImageManager, selected asset: PHAsset, targetSize size: CGSize) {
+        imageManager.requestImage(for: asset, targetSize: size, contentMode: .aspectFill, options: nil) { (result, info) in
             self.setImage(result!)
         }
     }
