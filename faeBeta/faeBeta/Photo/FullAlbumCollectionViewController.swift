@@ -362,9 +362,19 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         }
         photoPicker.indexAssetDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
         photoPicker.indexImageDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
+        
+        /*UIView.setAnimationsEnabled(false)
         self.collectionView?.performBatchUpdates({
-            self.collectionView?.reloadSections(IndexSet(integer: 0) )
+            self.collectionView?.reloadSections(IndexSet(integer: 0))
+        }, completion: {(_ finished: Bool) -> Void in
+            UIView.setAnimationsEnabled(true)
+        })*/
+        
+        UIView.animate(withDuration: 0, animations: {
+            self.collectionView?.performBatchUpdates({
+                self.collectionView?.reloadData()
             }, completion: nil)
+        }, completion: nil)
 
     }
     
