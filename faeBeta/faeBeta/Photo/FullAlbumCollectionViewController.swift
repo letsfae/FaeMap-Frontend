@@ -44,6 +44,13 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc optional func cancel()
 }
 
+private extension UICollectionView {
+    func indexPathsForElements(in rect: CGRect) -> [IndexPath] {
+        let allLayoutAttributes = collectionViewLayout.layoutAttributesForElements(in: rect)!
+        return allLayoutAttributes.map { $0.indexPath }
+    }
+}
+
 // this view controller is used to show image from one album, it has a table view for you to switch albums
 
 class FullAlbumCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
@@ -51,7 +58,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     //MARK: - properties
     //var uiviewNavBar: FaeNavBar!
     
-    private var photoPicker : PhotoPicker!
+    var photoPicker : PhotoPicker!
     
     private let photoPickerCellIdentifier = "FullPhotoPickerCollectionViewCell"
     
@@ -96,11 +103,16 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     var isCSP = false // is creating story pin
     var isSelectAvatar = false  // is selecting avatar
     
+    fileprivate let imageManager = PHCachingImageManager()
+    fileprivate var thumbnailSize: CGSize!
+    fileprivate var previousPreheatRect = CGRect.zero
     
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        resetCachedAssets()
         photoPicker = PhotoPicker.shared
+        thumbnailSize = CGSize(width: view.frame.width / 3 - 1, height: view.frame.width / 3 - 1)
         self.automaticallyAdjustsScrollViewInsets = false
         collectionView?.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
         collectionView?.backgroundColor = .white
@@ -350,9 +362,19 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         }
         photoPicker.indexAssetDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
         photoPicker.indexImageDict.removeValue(forKey: photoPicker.indexImageDict.count - 1)
+        
+        /*UIView.setAnimationsEnabled(false)
         self.collectionView?.performBatchUpdates({
-            self.collectionView?.reloadSections(IndexSet(integer: 0) )
+            self.collectionView?.reloadSections(IndexSet(integer: 0))
+        }, completion: {(_ finished: Bool) -> Void in
+            UIView.setAnimationsEnabled(true)
+        })*/
+        
+        UIView.animate(withDuration: 0, animations: {
+            self.collectionView?.performBatchUpdates({
+                self.collectionView?.reloadData()
             }, completion: nil)
+        }, completion: nil)
 
     }
     
@@ -383,7 +405,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let cell = collectionView.cellForItem(at: indexPath) as! FullPhotoPickerCollectionViewCell
-        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row]
         
         if !cell.photoSelected {
             if photoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
@@ -498,13 +520,45 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! FullPhotoPickerCollectionViewCell
+        
+        //get image from PHFetchResult
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row]
+        //let asset : PHAsset = fetchAllPhotos.object(at: indexPath.row)
+        if let duration = photoPicker.assetDurationDict[asset]{
+            cell.setVideoDurationLabel(withDuration: duration)
+        }
+        //let resources = PHAssetResource.assetResources(for: asset)
+        //let orgFilename = (resources[0]).originalFilename;
+        let orgFilename = asset.value(forKey: "filename") as! String
+        if orgFilename.lowercased().contains(".gif") {
+            cell.setGifLabel()
+        }
+        DispatchQueue.main.async {
+            // Request an image for the asset from the PHCachingImageManager.
+            cell.representedAssetIdentifier = asset.localIdentifier
+            self.imageManager.requestImage(for: asset, targetSize: self.thumbnailSize, contentMode: .aspectFill, options: nil, resultHandler: { image, _ in
+                // The cell may have been recycled by the time this handler gets called;
+                // set the cell's thumbnail image only if it's still showing the same asset.
+                if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {
+                    cell.thumbnailImage = image
+                }
+            })
+        }
+        
+        
+        if photoPicker.assetIndexDict[asset] != nil {
+            cell.selectCell(photoPicker.assetIndexDict[asset]!)
+        }else{
+            cell.deselectCell()
+        }
+        
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    /*override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = cell as! FullPhotoPickerCollectionViewCell
         //get image from PHFetchResult
-        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row] as! PHAsset
+        let asset : PHAsset = self.photoPicker.currentAlbum.albumContent[indexPath.row]
         if let duration = photoPicker.assetDurationDict[asset]{
             cell.setVideoDurationLabel(withDuration: duration)
         }
@@ -520,7 +574,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         }else{
             cell.deselectCell()
         }
-    }
+    }*/
     //
     //    override func collectionView(collectionView: UICollectionView, didEndDisplayingCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
     //        let mycell = cell as! PhotoPickerCollectionViewCell
@@ -550,7 +604,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             currentCell = cell
         }
         //set thumbnail
-        let asset : PHAsset = self.photoPicker.selectedAlbum[indexPath.row].albumContent[0] as! PHAsset
+        let asset : PHAsset = self.photoPicker.selectedAlbum[indexPath.row].albumContent[0]
         
         PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: view.frame.width - 1 / 10, height: view.frame.width - 1 / 10), contentMode: .aspectFill, options: nil) { (result, info) in
             cell.imgTitle.image = result
@@ -605,5 +659,120 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         arrowAttachment.bounds = CGRect(x: 8, y: 1, width: 10, height: 6)
         attributedStrM.append(NSAttributedString(attachment: arrowAttachment))
         titleLabel.attributedText = attributedStrM
+    }
+    
+    // MARK: UIScrollView
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        //DispatchQueue.main.async(execute: {() -> Void in
+        self.updateCachedAssets()
+        //})
+    }
+    
+    // MARK: Asset Caching
+    
+    fileprivate func resetCachedAssets() {
+        imageManager.stopCachingImagesForAllAssets()
+        previousPreheatRect = .zero
+    }
+    
+    fileprivate func updateCachedAssets() {
+        // Update only if the view is visible.
+        guard isViewLoaded && view.window != nil else { return }
+        
+        // The preheat window is twice the height of the visible rect.
+        let visibleRect = CGRect(origin: collectionView!.contentOffset, size: collectionView!.bounds.size)
+        let preheatRect = visibleRect.insetBy(dx: 0, dy: -0.5 * visibleRect.height)
+        
+        // Update only if the visible area is significantly different from the last preheated area.
+        let delta = abs(preheatRect.midY - previousPreheatRect.midY)
+        guard delta > view.bounds.height / 3 else { return }
+        
+        // Compute the assets to start caching and to stop caching.
+        let (addedRects, removedRects) = differencesBetweenRects(previousPreheatRect, preheatRect)
+        let addedAssets = addedRects
+            .flatMap { rect in collectionView!.indexPathsForElements(in: rect) }
+            .map { indexPath in photoPicker.currentAlbum.albumContent.object(at: indexPath.item) }
+            //.map { indexPath in fetchAllPhotos.object(at: indexPath.item) }
+        let removedAssets = removedRects
+            .flatMap { rect in collectionView!.indexPathsForElements(in: rect) }
+            .map { indexPath in photoPicker.currentAlbum.albumContent.object(at: indexPath.item) }
+        
+        // Update the assets the PHCachingImageManager is caching.
+        imageManager.startCachingImages(for: addedAssets,
+                                        targetSize: thumbnailSize, contentMode: .aspectFill, options: nil)
+        imageManager.stopCachingImages(for: removedAssets,
+                                       targetSize: thumbnailSize, contentMode: .aspectFill, options: nil)
+        
+        // Store the preheat rect to compare against in the future.
+        previousPreheatRect = preheatRect
+    }
+    
+    fileprivate func differencesBetweenRects(_ old: CGRect, _ new: CGRect) -> (added: [CGRect], removed: [CGRect]) {
+        if old.intersects(new) {
+            var added = [CGRect]()
+            if new.maxY > old.maxY {
+                added += [CGRect(x: new.origin.x, y: old.maxY,
+                                 width: new.width, height: new.maxY - old.maxY)]
+            }
+            if old.minY > new.minY {
+                added += [CGRect(x: new.origin.x, y: new.minY,
+                                 width: new.width, height: old.minY - new.minY)]
+            }
+            var removed = [CGRect]()
+            if new.maxY < old.maxY {
+                removed += [CGRect(x: new.origin.x, y: new.maxY,
+                                   width: new.width, height: old.maxY - new.maxY)]
+            }
+            if old.minY < new.minY {
+                removed += [CGRect(x: new.origin.x, y: old.minY,
+                                   width: new.width, height: new.minY - old.minY)]
+            }
+            return (added, removed)
+        } else {
+            return ([new], [old])
+        }
+    }
+
+}
+
+// MARK: PHPhotoLibraryChangeObserver
+extension FullAlbumCollectionViewController: PHPhotoLibraryChangeObserver {
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        
+        guard let changes = changeInstance.changeDetails(for: photoPicker.currentAlbum.albumContent)
+            else { return }
+        
+        // Change notifications may be made on a background queue. Re-dispatch to the
+        // main queue before acting on the change as we'll be updating the UI.
+        DispatchQueue.main.sync {
+            // Hang on to the new fetch result.
+            photoPicker.currentAlbum = SmartAlbum(albumName: photoPicker.currentAlbum.albumName, albumCount: photoPicker.currentAlbum.albumCount, albumContent: changes.fetchResultAfterChanges)
+            if changes.hasIncrementalChanges {
+                // If we have incremental diffs, animate them in the collection view.
+                guard let collectionView = self.collectionView else { fatalError() }
+                collectionView.performBatchUpdates({
+                    // For indexes to make sense, updates must be in this order:
+                    // delete, insert, reload, move
+                    if let removed = changes.removedIndexes, !removed.isEmpty {
+                        collectionView.deleteItems(at: removed.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    if let inserted = changes.insertedIndexes, !inserted.isEmpty {
+                        collectionView.insertItems(at: inserted.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    if let changed = changes.changedIndexes, !changed.isEmpty {
+                        collectionView.reloadItems(at: changed.map({ IndexPath(item: $0, section: 0) }))
+                    }
+                    changes.enumerateMoves { fromIndex, toIndex in
+                        collectionView.moveItem(at: IndexPath(item: fromIndex, section: 0),
+                                                to: IndexPath(item: toIndex, section: 0))
+                    }
+                })
+            } else {
+                // Reload the collection view if incremental diffs are not available.
+                collectionView!.reloadData()
+            }
+            resetCachedAssets()
+        }
     }
 }

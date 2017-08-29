@@ -26,6 +26,7 @@ class RealmMessage: Object {
     dynamic var snapImage : NSData? = nil
     let longitude = RealmOptional<Float>()
     let latitude = RealmOptional<Float>()
+    dynamic var place: String = ""
     //dynamic var latitude : String? = nil
     
     // int cannot be optional

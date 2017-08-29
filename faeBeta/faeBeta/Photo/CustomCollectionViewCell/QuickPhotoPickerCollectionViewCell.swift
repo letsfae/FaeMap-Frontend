@@ -46,7 +46,8 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         imgPhoto = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        imgPhoto.contentMode = .scaleToFill
+        imgPhoto.contentMode = .scaleAspectFill
+        imgPhoto.clipsToBounds = true
         addSubview(imgPhoto)
         
         imgChosenIndicator = UIImageView(frame: CGRect(x: 183, y: 7, width: 31, height: 31))

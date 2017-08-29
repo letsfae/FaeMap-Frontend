@@ -112,6 +112,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(navigationRightItemTapped), for: .touchUpInside)
         
         uiviewNavBar.lblTitle.text = "Chats"
         
@@ -145,6 +146,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //backClosure!(5)
         //self.dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func navigationRightItemTapped() {
+        let vc = NewChatShareController(chatOrShare: "chat")
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - tableView delegate
@@ -212,6 +218,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let withUserUserId = recent["with_user_id"].number?.stringValue
         let withUserName = recent["with_user_name"].string
         let withUserNickName = recent["with_nick_name"].string
+        //chatVC.loadInitMessages()
+        //chatVC.loadNewMessages()
         // Bryan
         chatVC.realmWithUser = RealmUser()
         chatVC.realmWithUser!.userName = withUserName!
@@ -219,7 +227,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         chatVC.realmWithUser!.userID = withUserUserId!
         // EndBryan
         //present(chatVC, animated: true, completion: nil)
-        navigationController?.pushViewController(chatVC, animated: true)
+        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4) {
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        //}
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
