@@ -317,6 +317,12 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             }
             completionHandler()
         })
+        guard self.uiviewBackground != nil else { return }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.uiviewBackground.alpha = 0
+        }, completion: { _ in
+            self.uiviewBackground.removeFromSuperview()
+        })
     }
     
     private func loadContent() {
@@ -429,12 +435,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     func hideSelf() {
         self.hide {}
-        guard self.uiviewBackground != nil else { return }
-        UIView.animate(withDuration: 0.5, animations: {
-            self.uiviewBackground.alpha = 0
-        }, completion: { _ in
-            self.uiviewBackground.removeFromSuperview()
-        })
     }
     
     func getFriendStatus(id: Int) {
