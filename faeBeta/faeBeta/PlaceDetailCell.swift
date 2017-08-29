@@ -126,6 +126,13 @@ class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
     override func loadHiddenContent() {
         mapView = MKMapView()
         mapView.delegate = self
+        mapView.isZoomEnabled = false
+        mapView.isPitchEnabled = false
+        mapView.isRotateEnabled = false
+        mapView.isScrollEnabled = false
+        mapView.showsUserLocation = false
+        mapView.showsCompass = false
+        mapView.showsPointsOfInterest = false
         uiviewHiddenCell.addSubview(mapView)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
     }
