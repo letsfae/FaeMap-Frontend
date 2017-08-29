@@ -79,6 +79,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     var isAnimating = false
     
+    var uiviewBackground: UIButton!
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
@@ -197,12 +199,33 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         getFriendStatus(id: withUserId)
     }
     
-    func show(avatar: UIImage, completionHandler: @escaping () -> Void) {
+    func show(avatar: UIImage? = nil, completionHandler: @escaping () -> Void) {
         guard !isAnimating else { return }
         isAnimating = true
         boolCardOpened = true
         btnProfile.isHidden = self.userId == Key.shared.user_id
-        imgMoodAvatar.image = avatar
+        if avatar == nil {
+            let getMiniAvatar = FaeUser()
+            getMiniAvatar.getOthersProfile("\(userId)", completion: { (status, message) in
+                if status / 100 == 2 && message != nil {
+                    let messageJson = JSON(message!)
+                    let miniAvatarID = messageJson["mini_avatar"].intValue
+                    self.imgMoodAvatar.image = Mood.avatars[miniAvatarID] ?? UIImage()
+                }
+            })
+            uiviewBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            self.superview?.addSubview(uiviewBackground)
+            uiviewBackground.alpha = 0
+            uiviewBackground.backgroundColor = UIColor._115115115().withAlphaComponent(0.3)
+            uiviewBackground.layer.zPosition = 899
+            uiviewBackground.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
+            self.superview?.bringSubview(toFront: self)
+            UIView.animate(withDuration: 0.5, animations: {
+                self.uiviewBackground.alpha = 1
+            }, completion: nil)
+        } else {
+            imgMoodAvatar.image = avatar
+        }
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
@@ -404,8 +427,14 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         addSubview(btnBottomPart)
     }
     
-    @objc private func hideSelf() {
+    func hideSelf() {
         self.hide {}
+        guard self.uiviewBackground != nil else { return }
+        UIView.animate(withDuration: 0.5, animations: {
+            self.uiviewBackground.alpha = 0
+        }, completion: { _ in
+            self.uiviewBackground.removeFromSuperview()
+        })
     }
     
     func getFriendStatus(id: Int) {

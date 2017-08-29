@@ -148,7 +148,7 @@
 		B33FB2481F267CA600EC6655 /* FaeReceivedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2371F267C0500EC6655 /* FaeReceivedCell.swift */; };
 		B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */; };
 		B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2391F267C0500EC6655 /* FaeRequestedCell.swift */; };
-		B33FB24B1F267CA600EC6655 /* JustinHe.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23A1F267C0500EC6655 /* JustinHe.swift */; };
+		B33FB24B1F267CA600EC6655 /* ContactsLoading&TblCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */; };
 		B33FB24C1F267CA600EC6655 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */; };
 		B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */; };
 		B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23D1F267C0500EC6655 /* WenJia.swift */; };
@@ -424,7 +424,7 @@
 		B33FB2371F267C0500EC6655 /* FaeReceivedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeReceivedCell.swift; sourceTree = "<group>"; };
 		B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeRecommendedCell.swift; sourceTree = "<group>"; };
 		B33FB2391F267C0500EC6655 /* FaeRequestedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeRequestedCell.swift; sourceTree = "<group>"; };
-		B33FB23A1F267C0500EC6655 /* JustinHe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustinHe.swift; sourceTree = "<group>"; };
+		B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactsLoading&TblCtrl.swift"; sourceTree = "<group>"; };
 		B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
 		B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingIndicatorChange.swift; sourceTree = "<group>"; };
 		B33FB23D1F267C0500EC6655 /* WenJia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WenJia.swift; sourceTree = "<group>"; };
@@ -1054,7 +1054,7 @@
 				B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */,
 				B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */,
 				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
-				B33FB23A1F267C0500EC6655 /* JustinHe.swift */,
+				B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */,
 				B33FB23D1F267C0500EC6655 /* WenJia.swift */,
 				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
 			);
@@ -1489,7 +1489,7 @@
 				B33FB2481F267CA600EC6655 /* FaeReceivedCell.swift in Sources */,
 				B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */,
 				B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */,
-				B33FB24B1F267CA600EC6655 /* JustinHe.swift in Sources */,
+				B33FB24B1F267CA600EC6655 /* ContactsLoading&TblCtrl.swift in Sources */,
 				B33FB24C1F267CA600EC6655 /* NotificationExtension.swift in Sources */,
 				B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */,
 				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,

@@ -7,8 +7,10 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
+extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate {
+    
     func loadSearchBar() {
         uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
         view.addSubview(uiviewSchbar)
@@ -71,6 +73,71 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewBottomNav.addSubview(btnRR)
         uiviewBottomNav.addConstraintsWithFormat("H:|-\(screenWidth / 2)-[v0]-0-|", options: [], views: btnRR)
         uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnRR)
+    }
+    
+    func loadNameCard() {
+        view.addSubview(uiviewNameCard)
+        uiviewNameCard.delegate = self
+    }
+    
+    // NameCardDelegate
+    func openFaeUsrInfo() {
+        let fmUsrInfo = FMUserInfo()
+        fmUsrInfo.userId = uiviewNameCard.userId
+        uiviewNameCard.hideSelf()
+        navigationController?.pushViewController(fmUsrInfo, animated: true)
+    }
+    // NameCardDelegate
+    func chatUser(id: Int) {
+        uiviewNameCard.hideSelf()
+        // First get chatroom id
+        getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
+            var resultJson1 = JSON([])
+            if status / 100 == 2 {
+                resultJson1 = JSON(result!)
+            }
+            // then get with user name
+            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+                guard status / 100 == 2 else { return }
+                let resultJson2 = JSON(result!)
+                var chat_id: String?
+                if let id = resultJson1["chat_id"].number {
+                    chat_id = id.stringValue
+                }
+                if let nickName = resultJson2["nick_name"].string {
+                    self.startChat(chat_id, userId: id, nickName: nickName)
+                } else {
+                    self.startChat(chat_id, userId: id, nickName: nil)
+                }
+            }
+        }
+    }
+    // NameCardDelegate
+    func reportUser(id: Int) {
+        let reportPinVC = ReportViewController()
+        reportPinVC.reportType = 0
+        present(reportPinVC, animated: true, completion: nil)
+    }
+    // NameCardDelegate
+    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
+        let addFriendVC = AddFriendFromNameCardViewController()
+        addFriendVC.delegate = uiviewNameCard
+        addFriendVC.userId = userId
+        addFriendVC.requestId = requestId
+        addFriendVC.statusMode = status
+        addFriendVC.modalPresentationStyle = .overCurrentContext
+        present(addFriendVC, animated: false)
+    }
+    
+    func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
+        let chatVC = ChatViewController()
+        chatVC.chatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
+        chatVC.chat_id = chat_id
+        let nickName = nickName ?? "Chat"
+        chatVC.realmWithUser = RealmUser()
+        chatVC.realmWithUser!.userNickName = nickName
+        chatVC.realmWithUser!.userID = "\(userId)"
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
     // button press functionalities
@@ -307,7 +374,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row)")
+        if schbarContacts.txtSchField.text != "" {
+            uiviewNameCard.userId = filtered[indexPath.row].userId
+        } else {
+            uiviewNameCard.userId = arrFriends[indexPath.row].userId
+        }
+        uiviewNameCard.show {}
     }
     
     /* Comment from Joshua:
