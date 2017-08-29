@@ -146,10 +146,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
-            if let withNickName = rsltJSON["nick_name"].string {
-                joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
+            if let _ = rsltJSON["nick_name"].string {
+                // joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
             } else {
-                joshprint("[checkDisplayNameExisitency] display name did not setup")
+                // joshprint("[checkDisplayNameExisitency] display name did not setup")
                 self.loadFirstLoginVC()
             }
         }
