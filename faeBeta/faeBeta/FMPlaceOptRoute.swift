@@ -18,6 +18,17 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
         uiviewChooseLocs = FMChooseLocs()
         uiviewChooseLocs.delegate = self
         view.addSubview(uiviewChooseLocs)
+        
+        let tapGes_0 = UITapGestureRecognizer(target: self, action: #selector(handleRouterLableTap(_:)))
+        let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleRouterLableTap(_:)))
+        uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapGes_0)
+        uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
+    }
+    
+    func handleRouterLableTap(_ tap: UITapGestureRecognizer) {
+        let chooseLocsVC = BoardsSearchViewController()
+        chooseLocsVC.enterMode = .location
+        navigationController?.pushViewController(chooseLocsVC, animated: true)
     }
     
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
