@@ -116,7 +116,7 @@ class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
         imgIcon.image = #imageLiteral(resourceName: "place_location")
         lblContent.text = place.address1 + ", " + place.address2
         
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 1500, 1500)
         mapView.setRegion(coordinateRegion, animated: false)
         let placePin = FaePinAnnotation(type: "place", data: place)
         mapView.removeAnnotations(mapView.annotations)

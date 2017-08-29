@@ -9,11 +9,13 @@
 import UIKit
 import SwiftyJSON
 
-protocol BoardsSearchDelegate: class {
+@objc protocol BoardsSearchDelegate: class {
 //    func backToPlaceSearchView()
 //    func backToLocationSearchView()
-    func jumpToPlaceSearchResult(searchText: String, places: [PlacePin])    
-    func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
+    @objc optional func jumpToPlaceSearchResult(searchText: String, places: [PlacePin])
+    @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
+    @objc optional func chooseLocationOnMap()
+    @objc optional func sendLocationBack(destination: Bool, text: String)
 }
 enum EnterMode {
     case place
@@ -55,6 +57,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     var uiviewNoResults: UIView!
     var lblNoResults: UILabel!
+    
+    // Joshua: Send label text back to start point or destination
+    var boolToDestination = false
+    var boolCurtLocSelected = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -271,7 +277,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         
         switch enterMode {
         case .place:
-            delegate?.jumpToPlaceSearchResult(searchText: searchBar.txtSchField.text!, places: filteredPlaces)
+            delegate?.jumpToPlaceSearchResult?(searchText: searchBar.txtSchField.text!, places: filteredPlaces)
             navigationController?.popViewController(animated: false)
         case .location:
             break
@@ -318,7 +324,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             uiviewPics.isHidden = true
             uiviewNoResults.isHidden = true
             uiviewSchResBg.isHidden = false
-            uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
+            if boolCurtLocSelected {
+                uiviewSchResBg.frame.size.height = 48
+            } else {
+                uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
+            }
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
             if searchText == "" || filteredLocations.count == 0 {
@@ -349,6 +359,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MyFixedCell", for: indexPath as IndexPath) as! LocationListCell
+                if boolCurtLocSelected {
+                    cell.lblLocationName.text = arrCurtLocList[1]
+                    cell.bottomLine.isHidden = true
+                    return cell
+                }
                 cell.lblLocationName.text = arrCurtLocList[indexPath.row]
                 cell.bottomLine.isHidden = false
                 if indexPath.row == arrCurtLocList.count - 1 {
@@ -380,7 +395,22 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return enterMode == .place ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
+        // Joshua: 0829 Modified
+        if enterMode == .place {
+            return filteredPlaces.count
+        } else {
+            if tableView == tblLocationRes {
+                return filteredLocations.count
+            } else {
+                if boolCurtLocSelected {
+                    return 1
+                } else {
+                    return arrCurtLocList.count
+                }
+            }
+        }
+        // End of Joshua: 0829 Modified
+//        return enterMode == .place ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -392,15 +422,22 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             schBar.txtSchField.resignFirstResponder()
             if tableView == tblLocationRes {
-                delegate?.jumpToLocationSearchResult(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
-                navigationController?.popViewController(animated: true)
+                delegate?.sendLocationBack?(destination: boolToDestination, text: filteredLocations[indexPath.row])
+                delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
+                navigationController?.popViewController(animated: false)
             } else {  // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
-                    delegate?.jumpToLocationSearchResult(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "Current Location", location: LocManager.shared.curtLoc)
-                    navigationController?.popViewController(animated: true)
+                    if boolCurtLocSelected {
+                        delegate?.chooseLocationOnMap?()
+                        navigationController?.popViewController(animated: false)
+                        return
+                    }
+                    delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "Current Location", location: LocManager.shared.curtLoc)
+                    delegate?.sendLocationBack?(destination: boolToDestination, text: "Current Location")
+                    navigationController?.popViewController(animated: false)
                 } else {
-//                    let vc = ChooseLocOnMapViewController()
-//                    navigationController?.pushViewController(vc, animated: true)
+                    delegate?.chooseLocationOnMap?()
+                    navigationController?.popViewController(animated: false)
                 }
             }
         } else if enterMode == .place { // search places
@@ -424,7 +461,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
 //        } else {
 //            delegate?.backToLocationSearchView()
 //        }
-        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: false)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

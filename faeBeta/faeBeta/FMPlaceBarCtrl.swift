@@ -12,7 +12,7 @@ import CCHMapClusterController
 extension FaeMapViewController: PlaceViewDelegate {
     
     func loadPlaceDetail() {
-        view.addSubview(uiviewPlaceBar)
+        faeMapView.addSubview(uiviewPlaceBar)
         uiviewPlaceBar.delegate = self
         
         view.addSubview(placeResultTbl)
