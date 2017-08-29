@@ -58,7 +58,6 @@ struct Follows {
 
 class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, SomeDelegateRequested {
     
-
     // YingChen.swift variable declaration for UI objects
     var uiviewNavBar: FaeNavBar!
     var uiviewDropDownMenu: UIView!
@@ -122,6 +121,8 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     let IGNORE = 4
     let ACCEPT = 5
     
+    var uiviewNameCard = FMNameCardView()
+    
     internal var notiContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
@@ -141,6 +142,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
         loadTable()
         loadNavBar()
         loadTabView()
+        loadNameCard()
         setupViews()
         view.backgroundColor = .white
         definesPresentationContext = true

@@ -18,41 +18,40 @@ import SwiftyJSON
  // Notice the unwrapping given the NSData! optional
  // NSString! returned (optional)
  */
-class FaeUser : NSObject {
+class FaeUser: NSObject {
     
     var keyValue = [String: AnyObject]()
     
-    override init () {
-
+    override init() {
+        
     }
     
-    func whereKey(_ key: String, value: String) -> Void{
+    func whereKey(_ key: String, value: String) {
         keyValue[key] = value as AnyObject?
     }
     
-    func clearKeyValue() -> Void{
-        self.keyValue = [String: AnyObject]()
+    func clearKeyValue() {
+        keyValue = [String: AnyObject]()
     }
     
     /* faeuser sign up function
      Required parameters: password, email, user_name, first_name, last_name, birthday, gender
      Optional parameters: nil
      */
-    func signUpInBackground(_ completion:@escaping (Int, Any?) -> Void) {
+    func signUpInBackground(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("users", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             if status / 100 == 2 {
-                //success
+                // success
                 self.saveUserSignUpInfo()
+            } else {
+                // fail
             }
-            else{
-                //fail
-            }
-            //self.clearKeyValue()
+            // self.clearKeyValue()
             completion(status, message)
         }
     }
     
-    fileprivate func saveUserSignUpInfo(){
+    fileprivate func saveUserSignUpInfo() {
         let keyValueJSON = JSON(keyValue)
         userEmail = keyValueJSON["email"].stringValue
         userPassword = keyValueJSON["password"].stringValue
@@ -62,7 +61,7 @@ class FaeUser : NSObject {
         let gender = keyValueJSON["gender"].stringValue
         if gender == "male" {
             userGender = 0
-        }else {
+        } else {
             userGender = 1
         }
         LocalStorageManager.shared.saveString("userEmail", value: userEmail)
@@ -73,17 +72,16 @@ class FaeUser : NSObject {
         LocalStorageManager.shared.saveInt("userGender", value: userGender)
     }
     
-    
     /* faeuser log in function
      Required parameters: password, email or user_name
      Optional parameters: device_id, is_mobile
      */
     
-    func logInBackground(_ completion:@escaping (Int, Any?)->Void){
+    func logInBackground(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("authentication", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
-            if status / 100 == 2  {
+            if status / 100 == 2 {
                 self.processToken(message!)
-                self.getSelfProfile{(status: Int, message: Any?) in
+                self.getSelfProfile { (_: Int, message: Any?) in
                     guard let userInfo = message else {
                         print("[logInBackground] get log in info fail")
                         return
@@ -103,9 +101,8 @@ class FaeUser : NSObject {
                     userPhoneNumber = userInfoJSON["phone"].stringValue
                     LocalStorageManager.shared.getAccountStorage()
                 }
-            }
-            else {
-            
+            } else {
+                
             }
             self.clearKeyValue()
             completion(status, message)
@@ -113,7 +110,7 @@ class FaeUser : NSObject {
     }
     
     // process return information after logging in
-    func processToken(_ message: Any) -> Void {
+    func processToken(_ message: Any) {
         let messageJSON = JSON(message)
         
         let str = messageJSON["token"].stringValue
@@ -127,8 +124,8 @@ class FaeUser : NSObject {
         print(authentication)
         let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         print("Encoded:  \(base64Encoded)")
-        print("FAE "+base64Encoded)
-        let encode = "FAE "+base64Encoded
+        print("FAE " + base64Encoded)
+        let encode = "FAE " + base64Encoded
         userToken = str
         userTokenEncode = encode
         Key.shared.is_Login = 1
@@ -138,19 +135,17 @@ class FaeUser : NSObject {
         LocalStorageManager.shared.logInStorage()
     }
     
-    
     /* faeuser log out function
      Required parameters: nil
      Optional parameters: nil
      */
-    func logOut(_ completion:@escaping (Int, Any?) -> Void) {//clear the login token is enough
-        let headerToken = headerAuthentication()//this code may set is_Login to 1
-        self.clearLogInInfo()
-        deleteFromURL("authentication", parameter: [:], authentication: headerToken ) { (status: Int, message: Any?) in
+    func logOut(_ completion: @escaping (Int, Any?) -> Void) { // clear the login token is enough
+        let headerToken = headerAuthentication() //this code may set is_Login to 1
+        clearLogInInfo()
+        deleteFromURL("authentication", parameter: [:], authentication: headerToken) { (status: Int, message: Any?) in
             if status / 100 == 2 {
-                //success
-            }
-            else {
+                // success
+            } else {
                 
             }
             self.clearKeyValue()
@@ -158,7 +153,7 @@ class FaeUser : NSObject {
         }
     }
     
-    func clearLogInInfo(){
+    func clearLogInInfo() {
         userToken = ""
         userTokenEncode = ""
         session_id = -1
@@ -172,11 +167,11 @@ class FaeUser : NSObject {
      Required parameters: email
      Optional parameters: nil
      */
-    func checkEmailExistence(_ completion:@escaping (Int, Any?) -> Void){
-        if let email = keyValue["email"] as? String{
-            getFromURL("existence/email/"+email, parameter:keyValue, authentication: nil){ (status: Int, message: Any?) in
-                //self.clearKeyValue()
-                completion(status, message);
+    func checkEmailExistence(_ completion: @escaping (Int, Any?) -> Void) {
+        if let email = keyValue["email"] as? String {
+            getFromURL("existence/email/" + email, parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
+                // self.clearKeyValue()
+                completion(status, message)
             }
         }
     }
@@ -185,10 +180,10 @@ class FaeUser : NSObject {
      Required parameters: username
      Optional parameters: nil
      */
-    func checkUserExistence(_ completion:@escaping (Int, Any?) -> Void){
-        if let username = keyValue["user_name"] as? String{
-            getFromURL("existence/user_name/"+username, parameter: keyValue, authentication: nil){ (status: Int, message: Any?) in
-                completion(status, message);
+    func checkUserExistence(_ completion: @escaping (Int, Any?) -> Void) {
+        if let username = keyValue["user_name"] as? String {
+            getFromURL("existence/user_name/" + username, parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
+                completion(status, message)
             }
         }
     }
@@ -198,9 +193,9 @@ class FaeUser : NSObject {
      Required parameters: email
      Optional parameters: nil
      */
-    func sendCodeToEmail(_ completion:@escaping (Int, Any?)->Void){
+    func sendCodeToEmail(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
-//            print(message)
+            //            print(message)
             self.clearKeyValue()
             completion(status, message)
         }
@@ -210,12 +205,12 @@ class FaeUser : NSObject {
      Required parameters: email, code
      Optional parameters: nil
      */
-    func validateCode(_ completion:@escaping (Int, Any?)->Void){
-        postToURL("reset_login/code/verify", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
+    func validateCode(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("reset_login/code/verify", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             
-//            print(message)
+            //            print(message)
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     
@@ -223,8 +218,8 @@ class FaeUser : NSObject {
      Required parameters: email, code, password
      Optional parameters: nil
      */
-    func changePassword(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status:Int, message:Any?) in
+    func changePassword(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             
             if let password = self.keyValue["password"]?.string {
                 userPassword = password
@@ -232,7 +227,7 @@ class FaeUser : NSObject {
                 _ = LocalStorageManager.shared.savePassword()
             }
             self.clearKeyValue()
-            completion(status,message)
+            completion(status, message)
         }
     }
     
@@ -240,8 +235,8 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: nil
      */
-    func getAccountBasicInfo(_ completion:@escaping (Int, Any?) -> Void){
-        getFromURL("users/account", parameter: keyValue, authentication: headerAuthentication()){ (status: Int, message: Any?) in
+    func getAccountBasicInfo(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/account", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             if status / 100 == 2 {
                 guard let userInfo = message else {
@@ -265,7 +260,7 @@ class FaeUser : NSObject {
                 userPhoneVerified = userInfoJSON["phone_verified"].boolValue
                 LocalStorageManager.shared.getAccountStorage()
             }
-            completion(status,message);
+            completion(status, message)
         }
     }
     
@@ -273,8 +268,8 @@ class FaeUser : NSObject {
      Required parameters: nil
      Optional parameters: first_name, last_name, user_name, birthday, gender
      */
-    func updateAccountBasicInfo(_ completion:@escaping (Int, Any?) -> Void) {// update local storage
-        postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: {(status: Int, message: Any?) in
+    func updateAccountBasicInfo(_ completion: @escaping (Int, Any?) -> Void) { // update local storage
+        postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 guard let userInfo = message else {
                     print("[logInBackground] get log in info fail")
@@ -293,19 +288,18 @@ class FaeUser : NSObject {
                 userBirthday = userInfoJSON["birthday"].stringValue
                 LocalStorageManager.shared.getAccountStorage()
             }
-            completion(status,message)
+            completion(status, message)
             self.clearKeyValue()
         })
     }
-    
     
     /* faeuser verify password function
      Required parameters: password
      Optional parameters: nil
      */
-    func verifyPassword(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users/account/password/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
+    func verifyPassword(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/account/password/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
         }
     }
     
@@ -313,29 +307,26 @@ class FaeUser : NSObject {
      Required parameters: old_password, new_password
      Optional parameters: nil
      */
-    func updatePassword(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users/account/password", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            if(status/100==2){
-                //changed successfully
-                if let newPassword = self.keyValue["new_password"]{
+    func updatePassword(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/account/password", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                // changed successfully
+                if let newPassword = self.keyValue["new_password"] {
                     userPassword = newPassword as! String
                     _ = LocalStorageManager.shared.savePassword()
                 }
             }
-            completion(status,message)
+            completion(status, message)
         }
     }
-    
-    
-    
     
     /* faeuser update email function
      Required parameters: email
      Optional parameters: nil
      */
-    func updateEmail(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users/account/email", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
+    func updateEmail(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/account/email", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
         }
     }
     
@@ -343,19 +334,19 @@ class FaeUser : NSObject {
      Required parameters: email, code
      Optional parameters: nil
      */
-    func verifyEmail(_ completion:@escaping (Int,Any?)->Void){
+    func verifyEmail(_ completion: @escaping (Int, Any?) -> Void) {
         print(headerAuthentication())
-        postToURL("users/account/email/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            if(status/100==2){
+        postToURL("users/account/email/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
                 
-                if let newEmail = self.keyValue["email"]{
+                if let newEmail = self.keyValue["email"] {
                     userEmail = newEmail as! String
                     LocalStorageManager.shared.saveEmail()
                     print("new email")
                     print(userEmail)
                 }
             }
-            completion(status,message)
+            completion(status, message)
         }
     }
     
@@ -363,83 +354,81 @@ class FaeUser : NSObject {
      Required parameters: phone
      Optional parameters: nil
      */
-    func updatePhoneNumber(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users/account/phone", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
+    func updatePhoneNumber(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/account/phone", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
         }
     }
-    
     
     /* faeuser verify phone number function
      Required parameters: phone, code
      Optional parameters: nil
      */
-    func verifyPhoneNumber(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("users/account/phone/verify", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            if(status/100==2){
-                if let newPhoneNumber = self.keyValue["phone"]{
+    func verifyPhoneNumber(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/account/phone/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                if let newPhoneNumber = self.keyValue["phone"] {
                     userPhoneNumber = newPhoneNumber as? String
                     _ = LocalStorageManager.shared.savePhoneNumber()
                     print("new phone number")
-//                    print(userPhoneNumber)
+                    //                    print(userPhoneNumber)
                 }
             }
-            completion(status,message)
-        }
-    }
-    
-    func getSelfProfile(_ completion:@escaping (Int,Any?)->Void){
-        getFromURL("users/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            //print(self.keyValue)
-            //self.clearKeyValue()
-            //print(message)
-            completion(status,message);
-        }
-    }
-    
-    func getOthersProfile(_ otherUser: String, completion:@escaping (Int, Any?) -> Void) {
-        getFromURL("users/\(otherUser)/profile", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            //self.clearKeyValue()
-            completion(status, message);
-        }
-    }
-    
-    func updateProfile(_ completion:@escaping (Int, Any?) -> Void){
-        postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            //self.clearKeyValue()
             completion(status, message)
         }
     }
     
-    func getUserCard(_ otherUser: String, completion:@escaping (Int, Any?) -> Void){
-        getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+    func getSelfProfile(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            // print(self.keyValue)
+            // self.clearKeyValue()
+            // print(message)
             completion(status, message)
         }
     }
     
-    func getSelfNamecard(_ completion:@escaping (Int, Any?) -> Void){
-        getFromURL("users/name_card", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
+    func getOthersProfile(_ otherUser: String, completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/\(otherUser)/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            // self.clearKeyValue()
             completion(status, message)
         }
     }
-
-    func updateNameCard(_ completion:@escaping (Int,Any?)->Void){
-        postToURL("/users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            //self.clearKeyValue()
-            completion(status,message)
-        }
-    }
-
-    func getAllTags(_ completion:@escaping (Int,Any?)->Void){
-        getFromURL("users/name_card/tags", parameter:keyValue, authentication: headerAuthentication()){ (status:Int, message:Any?) in
-            completion(status,message)
-        }
-    }
-
     
-    func getSelfStatus(_ completion:@escaping (Int,Any?)->Void){//解包 //local storage
-        getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
+    func updateProfile(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            // self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getUserCard(_ otherUser: String, completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
+    func getSelfNamecard(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
+    func updateNameCard(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("/users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            // self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getAllTags(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/name_card/tags", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
+    func getSelfStatus(_ completion: @escaping (Int, Any?) -> Void) { // 解包 //local storage
+        getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
         }
     }
     
@@ -452,9 +441,9 @@ class FaeUser : NSObject {
      *         5:invisible
      */
     func setSelfStatus(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status:Int, message:Any?) in
-            completion(status,message)
+        postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
         }
     }
-  
+    
 }
