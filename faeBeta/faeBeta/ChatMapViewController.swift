@@ -93,6 +93,8 @@ class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         let camera = faeMapView.camera
         camera.centerCoordinate = CLLocationCoordinate2D(latitude: chatLatitude, longitude: chatLongitude)
         faeMapView.setCamera(camera, animated: false)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
+        faeMapView.setRegion(coordinateRegion, animated: false)
         
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters

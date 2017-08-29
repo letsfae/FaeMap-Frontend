@@ -30,6 +30,7 @@ enum CONTENT_TYPE {
     Picture,
     Sticker,
     Location,
+    Place,
     Audio,
     Video
 };

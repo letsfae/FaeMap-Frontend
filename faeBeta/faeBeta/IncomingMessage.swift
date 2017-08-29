@@ -8,6 +8,7 @@
 
 import Foundation
 import JSQMessagesViewController
+import SwiftyJSON
 
 // this class is used to create JSQMessage object from information in firebase, it can be message from current user
 // or the other user who current user are chatting with.
@@ -35,6 +36,10 @@ class IncomingMessage {
         if type == "location" {
             //create locaiton message
             message = createLocationMessage(dictionary)
+        }
+        
+        if type == "place" {
+            message = createPlaceMessage(dictionary)
         }
         
         if type == "picture" {
@@ -109,7 +114,7 @@ class IncomingMessage {
             (placemarks, error) -> Void in
             if error == nil {
                 guard let addr = placemarks?[0] else { return }
-                mediaItem?.addressLine1.text = addr.subThoroughfare! + " " + addr.thoroughfare!
+                mediaItem?.addressLine1.text = (addr.subThoroughfare! + " " + addr.thoroughfare!).uppercased()
                 var cityText = addr.locality
                 if(addr.administrativeArea != nil) {
                     cityText = cityText! + ", " + addr.administrativeArea!
@@ -117,12 +122,12 @@ class IncomingMessage {
                 if(addr.postalCode != nil) {
                     cityText = cityText! + " " + addr.postalCode!
                 }
-                mediaItem?.addressLine2.text = cityText
-                mediaItem?.addressLine3.text = addr.country
+                mediaItem?.addressLine2.text = cityText?.uppercased()
+                mediaItem?.addressLine3.text = addr.country?.uppercased()
                 
-                mediaItem?.address1 = mediaItem?.addressLine1.text
-                mediaItem?.address2 = mediaItem?.addressLine2.text
-                mediaItem?.address3 = mediaItem?.addressLine3.text
+                mediaItem?.address1 = mediaItem?.addressLine1.text?.uppercased()
+                mediaItem?.address2 = mediaItem?.addressLine2.text?.uppercased()
+                mediaItem?.address3 = mediaItem?.addressLine3.text?.uppercased()
             }
             else {
                 print("error when fetching address")
@@ -151,6 +156,27 @@ class IncomingMessage {
 
         self.snapShotFromData(item) { (image) in
             mediaItem?.cachedMapSnapshotImage = image
+        }
+        
+        return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
+    }
+    
+    private func createPlaceMessage(_ item : NSDictionary) -> JSQMessage {
+        let name = item["senderName"] as? String
+        let userId = item["senderId"] as? String
+        let date = dateFormatter().date(from: (item["date"] as? String)!)
+        
+        let placeString = item["place"] as? String
+        let place = PlacePin(string: placeString!.replacingOccurrences(of: "\\", with: ""))
+        
+        let comment = item["message"] as? String
+        
+        let mediaItem = JSQPlaceMediaItemCustom(place: place, snapImage: nil, text: comment)
+        //let mediaItem = JSQPhotoMediaItemCustom(image: nil)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
+        
+        self.snapShotFromData(item) { (image) in
+            mediaItem?.cachedPlaceSnapshotImage = image
         }
         
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
