@@ -31,7 +31,7 @@ extension FaeMapViewController: NameCardDelegate {
     func reportUser(id: Int) {
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
-        self.present(reportPinVC, animated: true, completion: nil)
+        present(reportPinVC, animated: true, completion: nil)
     }
     
     // NameCardDelegate
