@@ -177,7 +177,9 @@ extension ChatViewController: OutgoingMessageProtocol {
                     if isIncoming {
                         JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
                     }
-                    self.finishReceivingMessage(animated: false)
+                    DispatchQueue.main.async {
+                        self.finishReceivingMessage(animated: false)
+                    }
                 } else {
                     // add each dictionary to loaded array
                     self.loaded.append(item)
@@ -193,9 +195,11 @@ extension ChatViewController: OutgoingMessageProtocol {
             //this function will run only once
             print(snapshot.key)
             self.insertMessages()
-            self.finishReceivingMessage(animated: true)
+            DispatchQueue.main.async {
+                self.finishReceivingMessage(animated: true)
+            }
             self.initialLoadComplete = true
-            self.scrollToBottom(false)
+            //self.scrollToBottom(false)
         }
     }
     
