@@ -6,6 +6,7 @@
 //#import <Foundation/Foundation.h>
 //#import <SDWebImage/UIImageView+WebCache.h>
 #import "JSQLocationMediaItemCustom.h"
+#import "JSQPlaceMediaItemCustom.h"
 #import "JSQPhotoMediaItemCustom.h"
 #import "JSQMessagesViewControllerCustom.h"
 #import "JSQMessagesBubbleImageFactoryCustom.h"

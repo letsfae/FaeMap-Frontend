@@ -49,9 +49,9 @@ final class PhotoPicker {
             let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: allPhotosOptions)
             let numberOfAssets = assetsFetchResult.count
             if numberOfAssets != 0 {
-                self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult as! PHFetchResult<AnyObject>))
+                self.selectedAlbum.append(SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult))
                 if assetCollection.localizedTitle! == "Camera Roll" || assetCollection.localizedTitle! == "All Photos" {
-                    self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult as! PHFetchResult<AnyObject>)
+                    self.cameraRoll = SmartAlbum(albumName: assetCollection.localizedTitle!, albumCount: numberOfAssets, albumContent: assetsFetchResult)
                     self.currentAlbum = self.cameraRoll
                 }
             }
@@ -63,7 +63,7 @@ final class PhotoPicker {
     fileprivate func calculateVideoDuration(){
         if(cameraRoll != nil){
             for i in 0 ..< self.cameraRoll.albumCount {
-                let asset = self.cameraRoll.albumContent[i] as! PHAsset
+                let asset = self.cameraRoll.albumContent[i]
                 if asset.mediaType == .video && assetDurationDict[asset] == nil {
                     let lowQRequestOption = PHVideoRequestOptions()
                     lowQRequestOption.deliveryMode = .fastFormat //high pixel

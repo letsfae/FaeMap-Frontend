@@ -63,6 +63,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             break
         case .share:
+            guard let ann = selectedAnn else { return }
+            guard let placePin = ann.pinInfo as? PlacePin else { return }
+            let vcSharePlace = NewChatShareController(chatOrShare: "share")
+            vcSharePlace.placeDetail = placePin
+            navigationController?.pushViewController(vcSharePlace, animated: true)
             break
         }
     }

@@ -46,6 +46,9 @@ extension ChatViewController {
             case "location":
                 cell.contentType = Location
                 break
+            case "place":
+                cell.contentType = Place
+                break
             case "audio":
                 cell.contentType = Audio
                 break
@@ -183,7 +186,21 @@ extension ChatViewController {
                 vc.chatLatitude = mediaItem.coordinate.latitude
                 vc.chatLongitude = mediaItem.coordinate.longitude
                 
+                boolGoToFullContent = true
+                
                 self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+        
+        if object["type"] as! String == "place" {
+            let message = messages[indexPath.row]
+            if let mediaItem = message.media as? JSQPlaceMediaItemCustom {
+                let vc = PlaceDetailViewController()
+                vc.place = mediaItem.place
+                
+                boolGoToFullContent = true
+                
+                navigationController?.pushViewController(vc, animated: true)
             }
         }
         
