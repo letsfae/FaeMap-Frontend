@@ -9,7 +9,7 @@
 import UIKit
 import IVBezierPathRenderer
 
-extension FaeMapViewController: FMRouteCalculateDelegate {
+extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     func loadDistanceComponents() {
         imgDistIndicator = FMDistIndicator()
@@ -19,16 +19,41 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
         uiviewChooseLocs.delegate = self
         view.addSubview(uiviewChooseLocs)
         
-        let tapGes_0 = UITapGestureRecognizer(target: self, action: #selector(handleRouterLableTap(_:)))
-        let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleRouterLableTap(_:)))
+        let tapGes_0 = UITapGestureRecognizer(target: self, action: #selector(handleStartPointTap(_:)))
+        let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleDestinationTap(_:)))
         uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapGes_0)
         uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
     }
     
-    func handleRouterLableTap(_ tap: UITapGestureRecognizer) {
+    func handleStartPointTap(_ tap: UITapGestureRecognizer) {
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
-        navigationController?.pushViewController(chooseLocsVC, animated: true)
+        chooseLocsVC.boolToDestination = false
+        chooseLocsVC.delegate = self
+        chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
+        navigationController?.pushViewController(chooseLocsVC, animated: false)
+    }
+    
+    func handleDestinationTap(_ tap: UITapGestureRecognizer) {
+        let chooseLocsVC = BoardsSearchViewController()
+        chooseLocsVC.enterMode = .location
+        chooseLocsVC.boolToDestination = true
+        chooseLocsVC.delegate = self
+        chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
+        navigationController?.pushViewController(chooseLocsVC, animated: false)
+    }
+    
+    // BoardsSearchDelegate
+    func chooseLocationOnMap() {
+        
+    }
+    // BoardsSearchDelegate
+    func sendLocationBack(destination: Bool, text: String) {
+        if destination {
+            uiviewChooseLocs.lblDestination.text = text
+        } else {
+            uiviewChooseLocs.lblStartPoint.text = text
+        }
     }
     
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
@@ -42,7 +67,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
         }
         
         animateMainItems(show: true)
-        
         deselectAllAnnotations()
     }
     
@@ -110,9 +134,14 @@ extension FaeMapViewController: FMRouteCalculateDelegate {
             totalDistance /= 1000
             totalDistance *= 0.621371
             self.showRouteCalculatorComponents(distance: totalDistance)
+            // fit all route overlays
+            if let first = self.mkOverLay.first {
+                let rect = self.mkOverLay.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)})
+                self.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
+            }
         }
     }
-    
+
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = IVBezierPathRenderer(overlay: overlay)
         renderer.strokeColor = UIColor._174224255()
