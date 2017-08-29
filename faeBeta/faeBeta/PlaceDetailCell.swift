@@ -97,8 +97,11 @@ class PlaceDetailCell: UITableViewCell {
     func setValueForCell(place: PlacePin) {}
 }
 
-class PlaceDetailSection1Cell: PlaceDetailCell {
+class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
+    
     var mapView: MKMapView!
+    var placeData: PlacePin!
+    var boolPlaceAdded = false
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -109,15 +112,20 @@ class PlaceDetailSection1Cell: PlaceDetailCell {
     }
     
     override func setValueForCell(place: PlacePin) {
+        placeData = place
         imgIcon.image = #imageLiteral(resourceName: "place_location")
         lblContent.text = place.address1 + ", " + place.address2
-        mapView.camera.centerCoordinate = place.coordinate
+        
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
         mapView.setRegion(coordinateRegion, animated: false)
+        let placePin = FaePinAnnotation(type: "place", data: place)
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotation(placePin)
     }
     
     override func loadHiddenContent() {
         mapView = MKMapView()
+        mapView.delegate = self
         uiviewHiddenCell.addSubview(mapView)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
     }
@@ -130,6 +138,32 @@ class PlaceDetailSection1Cell: PlaceDetailCell {
             hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(150)]-8-|", options: [], views: mapView)
         }
     }
+    
+    // MKMapViewDelegate
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is FaePinAnnotation {
+            guard let firstAnn = annotation as? FaePinAnnotation else { return nil }
+            guard firstAnn.type == "place" else { return nil }
+            let identifier = "place"
+            var anView: PlacePinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.assignImage(firstAnn.icon)
+            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+            anView.alpha = 1
+            anView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            return anView
+        }
+        return nil
+    }
+    
+    // MKMapViewDelegate
+    
+    // MKMapViewDelegate
 }
 
 class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableViewDataSource {
