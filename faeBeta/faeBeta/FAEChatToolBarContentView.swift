@@ -449,7 +449,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             photoPicker.cleanup()
             // use main queue to reload data to avoid problem
             DispatchQueue.main.async(execute: {
-                self.photoQuickCollectionView.reloadData()
+                self.photoQuickCollectionView?.reloadData()
             })
         }
     }

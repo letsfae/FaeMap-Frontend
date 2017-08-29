@@ -208,7 +208,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewWillAppear(true)
         addObservers()
         loadUserDefault()
-        loadNewMessages()
+        //DispatchQueue.global(qos: .userInitiated).async {
+        
+            //DispatchQueue.main.async {
+                //self.collectionView.reloadData()
+                self.loadNewMessages()
+            //}
+        //}
+        
         if boolGoToFullContent {
             scrollToBottom(false)
             boolGoToFullContent = false

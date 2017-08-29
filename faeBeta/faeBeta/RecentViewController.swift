@@ -218,6 +218,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let withUserUserId = recent["with_user_id"].number?.stringValue
         let withUserName = recent["with_user_name"].string
         let withUserNickName = recent["with_nick_name"].string
+        //chatVC.loadInitMessages()
+        //chatVC.loadNewMessages()
         // Bryan
         chatVC.realmWithUser = RealmUser()
         chatVC.realmWithUser!.userName = withUserName!
@@ -225,7 +227,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         chatVC.realmWithUser!.userID = withUserUserId!
         // EndBryan
         //present(chatVC, animated: true, completion: nil)
-        navigationController?.pushViewController(chatVC, animated: true)
+        //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4) {
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        //}
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
