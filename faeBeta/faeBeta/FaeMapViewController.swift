@@ -77,6 +77,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrPlaceData = [PlacePin]()
     var tempFaePins = [FaePinAnnotation]()
     
+    var startPointAddr: RouteAddress!
+    var destinationAddr: RouteAddress!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,6 +97,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -9,7 +9,12 @@
 import UIKit
 import IVBezierPathRenderer
 
-extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
+struct RouteAddress {
+    var name: String
+    var coordinate: CLLocationCoordinate2D
+}
+
+extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, SelectLocationDelegate {
     
     func loadDistanceComponents() {
         imgDistIndicator = FMDistIndicator()
@@ -28,7 +33,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func handleStartPointTap(_ tap: UITapGestureRecognizer) {
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
-        chooseLocsVC.boolToDestination = false
+        BoardsSearchViewController.boolToDestination = false
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         navigationController?.pushViewController(chooseLocsVC, animated: false)
@@ -37,15 +42,37 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func handleDestinationTap(_ tap: UITapGestureRecognizer) {
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
-        chooseLocsVC.boolToDestination = true
+        BoardsSearchViewController.boolToDestination = true
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         navigationController?.pushViewController(chooseLocsVC, animated: false)
     }
     
+    // SelectLocationDelegate
+    func sendAddress(_ address: RouteAddress) {
+        if BoardsSearchViewController.boolToDestination {
+            destinationAddr = address
+            uiviewChooseLocs.lblDestination.text = address.name
+        } else {
+            startPointAddr = address
+            uiviewChooseLocs.lblStartPoint.text = address.name
+        }
+        if startPointAddr.name == "Current Location" {
+            routeCalculator(startPoint: LocManager.shared.curtLoc.coordinate, destination: destinationAddr.coordinate)
+        } else if destinationAddr.name == "Current Location" {
+            routeCalculator(startPoint: startPointAddr.coordinate, destination: LocManager.shared.curtLoc.coordinate)
+        } else {
+            routeCalculator(startPoint: startPointAddr.coordinate, destination: destinationAddr.coordinate)
+        }
+    }
+    
     // BoardsSearchDelegate
     func chooseLocationOnMap() {
-        
+        let selectLocVC = SelectLocationViewController()
+        selectLocVC.delegate = self
+        Key.shared.dblAltitude = faeMapView.camera.altitude
+        Key.shared.selectedLoc = faeMapView.camera.centerCoordinate
+        navigationController?.pushViewController(selectLocVC, animated: false)
     }
     // BoardsSearchDelegate
     func sendLocationBack(destination: Bool, text: String) {
@@ -62,9 +89,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         
         uiviewPlaceBar.hide()
         uiviewChooseLocs.show()
-        if let placeInfo = selectedAnn?.pinInfo as? PlacePin {
-            uiviewChooseLocs.updateDestination(name: placeInfo.name)
-        }
         
         animateMainItems(show: true)
         deselectAllAnnotations()
@@ -77,6 +101,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.hide()
         animateMainItems(show: false)
         mapClusterManager.removeAnnotations(tempFaePins) {
+            for user in self.faeUserPins {
+                user.isValid = true
+            }
             self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.mapClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
         }
@@ -111,12 +138,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         mkOverLay.removeAll()
     }
     
-    func routeCalculator(destination: CLLocationCoordinate2D) {
+    func routeCalculator(startPoint: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate, destination: CLLocationCoordinate2D) {
         
         removeAllRoutes()
         
         let request = MKDirectionsRequest()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: LocManager.shared.curtLoc.coordinate, addressDictionary: nil))
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: startPoint, addressDictionary: nil))
         request.destination = MKMapItem(placemark: MKPlacemark(coordinate: destination, addressDictionary: nil))
         request.requestsAlternateRoutes = false
         request.transportType = .automobile
@@ -130,7 +157,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 self.mkOverLay.append(route.polyline)
                 totalDistance += route.distance
             }
-            self.faeMapView.addOverlays(self.mkOverLay, level: MKOverlayLevel.aboveRoads)
             totalDistance /= 1000
             totalDistance *= 0.621371
             self.showRouteCalculatorComponents(distance: totalDistance)
@@ -139,6 +165,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 let rect = self.mkOverLay.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)})
                 self.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                self.faeMapView.addOverlays(self.mkOverLay, level: MKOverlayLevel.aboveRoads)
+            })
         }
     }
 

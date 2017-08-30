@@ -372,8 +372,6 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     weak var delegate: PlacePinAnnotationDelegate?
     
-    var prevZPosition: CGFloat = 0
-    
     var imgIcon: UIImageView!
     
     var btnDetail: UIButton!
@@ -439,10 +437,6 @@ class PlacePinAnnotationView: MKAnnotationView {
         btnCollect.layer.zPosition = 2
         btnRoute.layer.zPosition = 2
         btnShare.layer.zPosition = 2
-        if let zPos = self.superview?.superview?.layer.zPosition {
-            prevZPosition = zPos
-            self.superview?.superview?.layer.zPosition = 2000
-        }
         
         addSubview(btnDetail)
         addSubview(btnCollect)
@@ -497,7 +491,6 @@ class PlacePinAnnotationView: MKAnnotationView {
             self.imgIcon.frame.origin = CGPoint.zero
             self.imgIcon.layer.zPosition = 1
             self.layer.zPosition = 1
-            self.superview?.superview?.layer.zPosition = self.prevZPosition
             self.removeButtons()
         })
     }

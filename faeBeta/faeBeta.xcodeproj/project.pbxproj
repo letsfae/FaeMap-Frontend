@@ -168,11 +168,6 @@
 		B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */; };
 		B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */; };
 		B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81377051EB7C181002BD238 /* FaeNavBar.swift */; };
-		B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */; };
-		B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563961DDBF7E500BF85A1 /* SPLActions.swift */; };
-		B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */; };
-		B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */; };
-		B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */; };
 		B8158C5D1EFF977200218890 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8158C5C1EFF977200218890 /* CGRectExtension.swift */; };
 		B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */; };
 		B82767541DF5DD2F00CFB912 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82767531DF5DD2E00CFB912 /* Database.swift */; };
@@ -220,7 +215,7 @@
 		B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */; };
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportViewController.swift */; };
-		B894651B1F16D86F00561CFA /* MapKitAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */; };
+		B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B894651A1F16D86F00561CFA /* FMAnnotations.swift */; };
 		B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMMapFilterCtrl.swift */; };
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
@@ -448,11 +443,6 @@
 		B80D98EC1EFCA6B500AB27C4 /* PullToRefreshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PullToRefreshView.swift; sourceTree = "<group>"; };
 		B80D98ED1EFCA6B500AB27C4 /* UIScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScrollViewExtension.swift; sourceTree = "<group>"; };
 		B81377051EB7C181002BD238 /* FaeNavBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeNavBar.swift; sourceTree = "<group>"; };
-		B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLLoadItems.swift; sourceTree = "<group>"; };
-		B81563961DDBF7E500BF85A1 /* SPLActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLActions.swift; sourceTree = "<group>"; };
-		B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLMapMethods.swift; sourceTree = "<group>"; };
-		B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLSearchBarMethods.swift; sourceTree = "<group>"; };
-		B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPLTableViewMethods.swift; sourceTree = "<group>"; };
 		B8158C5C1EFF977200218890 /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeAvatarView.swift; sourceTree = "<group>"; };
 		B82767531DF5DD2E00CFB912 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
@@ -501,7 +491,7 @@
 		B889056F1E3608E100E68D58 /* DisconnectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisconnectionViewController.swift; sourceTree = "<group>"; };
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
-		B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapKitAnnotation.swift; sourceTree = "<group>"; };
+		B894651A1F16D86F00561CFA /* FMAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMAnnotations.swift; sourceTree = "<group>"; };
 		B89AB3F21E3D775F00C5116D /* FMMapFilterCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterCtrl.swift; sourceTree = "<group>"; };
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
@@ -590,14 +580,14 @@
 		50111C241F476063004EA00E /* FMComponents */ = {
 			isa = PBXGroup;
 			children = (
-				B894651A1F16D86F00561CFA /* MapKitAnnotation.swift */,
+				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
+				B894651A1F16D86F00561CFA /* FMAnnotations.swift */,
 				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
 				50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */,
 				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
 				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
-				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
 				50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */,
 				50111C251F476B4B004EA00E /* FMChooseLocs.swift */,
 			);
@@ -1076,21 +1066,8 @@
 			isa = PBXGroup;
 			children = (
 				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
-				B81563981DDBF7EA00BF85A1 /* SPLExtension */,
 			);
 			name = SelectPinLocation;
-			sourceTree = "<group>";
-		};
-		B81563981DDBF7EA00BF85A1 /* SPLExtension */ = {
-			isa = PBXGroup;
-			children = (
-				B81563941DDBF77400BF85A1 /* SPLLoadItems.swift */,
-				B81563961DDBF7E500BF85A1 /* SPLActions.swift */,
-				B81563991DDBF84000BF85A1 /* SPLMapMethods.swift */,
-				B815639B1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift */,
-				B815639D1DDBF90000BF85A1 /* SPLTableViewMethods.swift */,
-			);
-			name = SPLExtension;
 			sourceTree = "<group>";
 		};
 		B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */ = {
@@ -1506,17 +1483,14 @@
 				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,
 				B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
-				B894651B1F16D86F00561CFA /* MapKitAnnotation.swift in Sources */,
+				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
-				B815639A1DDBF84000BF85A1 /* SPLMapMethods.swift in Sources */,
 				B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
-				B81563951DDBF77400BF85A1 /* SPLLoadItems.swift in Sources */,
-				B815639C1DDBF8AD00BF85A1 /* SPLSearchBarMethods.swift in Sources */,
 				B8849E9E1EEB141A00D4588D /* MBSocialStruct.swift in Sources */,
 				B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */,
 				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
@@ -1585,7 +1559,6 @@
 				B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */,
 				B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */,
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
-				B81563971DDBF7E500BF85A1 /* SPLActions.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
 				B86AE0501ED4FC4400D1357D /* General.swift in Sources */,
@@ -1679,7 +1652,6 @@
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
-				B815639E1DDBF90000BF85A1 /* SPLTableViewMethods.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */,
