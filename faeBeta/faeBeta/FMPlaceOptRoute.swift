@@ -50,12 +50,20 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, 
     
     // SelectLocationDelegate
     func sendAddress(_ address: RouteAddress) {
+        faeMapView.removeAnnotations(addressAnnotations)
+        addressAnnotations.removeAll()
         if BoardsSearchViewController.boolToDestination {
             destinationAddr = address
             uiviewChooseLocs.lblDestination.text = address.name
+            let end = MKPointAnnotation()
+            end.coordinate = destinationAddr.coordinate
+            addressAnnotations.append(end)
         } else {
             startPointAddr = address
             uiviewChooseLocs.lblStartPoint.text = address.name
+            let start = MKPointAnnotation()
+            start.coordinate = startPointAddr.coordinate
+            addressAnnotations.append(start)
         }
         if startPointAddr.name == "Current Location" {
             routeCalculator(startPoint: LocManager.shared.curtLoc.coordinate, destination: destinationAddr.coordinate)
@@ -64,6 +72,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, 
         } else {
             routeCalculator(startPoint: startPointAddr.coordinate, destination: destinationAddr.coordinate)
         }
+        faeMapView.addAnnotations(addressAnnotations)
     }
     
     // BoardsSearchDelegate
@@ -100,6 +109,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, 
         imgDistIndicator.hide()
         uiviewChooseLocs.hide()
         animateMainItems(show: false)
+        faeMapView.removeAnnotations(addressAnnotations)
         mapClusterManager.removeAnnotations(tempFaePins) {
             for user in self.faeUserPins {
                 user.isValid = true

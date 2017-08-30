@@ -277,7 +277,6 @@
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
 		506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
-		507407BF1F57595400ABC1A7 /* imgLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = imgLaunchScreen.png; path = Assets.xcassets/FaeLaunchScreen/launchScreenNew.imageset/imgLaunchScreen.png; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMCompass+FMLocateSelf.swift"; sourceTree = "<group>"; };
@@ -847,7 +846,6 @@
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
-				507407BF1F57595400ABC1A7 /* imgLaunchScreen.png */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
 				B0A2ACA71CE3A3C7002E0C9D /* Info.plist */,
 				B0A2AC9F1CE3A3C7002E0C9D /* faeBeta.xcdatamodeld */,
