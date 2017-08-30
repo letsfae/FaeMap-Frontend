@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13156.6" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13137.5"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13165.3"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="AvenirNext.ttc">
-            <string>AvenirNext-Bold</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -27,34 +21,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="launchScreenNew" translatesAutoresizingMaskIntoConstraints="NO" id="ocZ-JO-vIT">
+                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgLaunchScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="ocZ-JO-vIT">
                                 <rect key="frame" x="0.0" y="20" width="414" height="716"/>
-                            </imageView>
-                            <imageView hidden="YES" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FaeHeart" translatesAutoresizingMaskIntoConstraints="NO" id="YLw-Ay-dtO">
-                                <rect key="frame" x="191" y="637" width="32" height="25"/>
-                            </imageView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="By Faevorite" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UZk-SA-SyN">
-                                <rect key="frame" x="152.66666666666669" y="665" width="109.00000000000006" height="25"/>
-                                <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="18"/>
-                                <color key="textColor" red="0.83912390470504761" green="0.83926850557327271" blue="0.83911478519439697" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView hidden="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="FaeMapLabelIcon" translatesAutoresizingMaskIntoConstraints="NO" id="wiN-uI-mAB">
-                                <rect key="frame" x="136.86314400081187" y="414" width="140" height="29.000000000000057"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="20" id="28k-34-R5e"/>
-                            <constraint firstItem="UZk-SA-SyN" firstAttribute="top" secondItem="YLw-Ay-dtO" secondAttribute="bottom" constant="3" id="2LW-rp-W2r"/>
-                            <constraint firstItem="UZk-SA-SyN" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottomMargin" priority="750" constant="-46" id="D7i-Sq-adP"/>
-                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="G8N-fC-boR"/>
-                            <constraint firstItem="UZk-SA-SyN" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Goy-ua-jyH"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="ocZ-JO-vIT" secondAttribute="bottom" id="T6e-Pk-FqO"/>
-                            <constraint firstItem="UZk-SA-SyN" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="bottom" constant="-71" id="WNU-rh-mGI"/>
-                            <constraint firstAttribute="trailing" secondItem="ocZ-JO-vIT" secondAttribute="trailing" id="bh3-EP-7UM"/>
-                            <constraint firstItem="YLw-Ay-dtO" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="uVe-mG-tcg"/>
+                            <constraint firstAttribute="trailing" secondItem="ocZ-JO-vIT" secondAttribute="trailing" id="OrZ-H0-tJ1"/>
+                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Xpw-Hq-hbj"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="ocZ-JO-vIT" secondAttribute="bottom" id="dnX-Se-rEb"/>
+                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="oFo-bS-yAa"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -64,8 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="FaeHeart" width="32" height="25"/>
-        <image name="FaeMapLabelIcon" width="120" height="26"/>
-        <image name="launchScreenNew" width="414" height="716"/>
+        <image name="imgLaunchScreen.png" width="1242" height="2148"/>
     </resources>
 </document>
