@@ -74,7 +74,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 return viewForSocial(annotation: annotation, first: firstAnn)
             }
-        } else if annotation is MKPointAnnotation {
+        } else if annotation is AddressAnnotation {
             let identifier = "address"
             var anView: AddressAnnotationView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? AddressAnnotationView {
