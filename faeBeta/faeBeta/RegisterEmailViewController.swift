@@ -42,6 +42,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var faeUser: FaeUser!
     var uiviewEmailExist: UIView!
     var imgError: UIImageView!
+    var lblCont: UILabel!
+    var lblAlreadyRegister: UILabel!
+    var btnLogin: UIButton!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -63,22 +66,32 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     // MARK: - Functions
     func thisEmailIsAlreadyView() -> UIView {
-        let uiviewEmailAlready = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
-        let lblAlreadyRegister = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 118, y: 0, width: 190, height: 25))
+        let uiviewEmailAlready = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont.numberOfLines = 2
+        lblCont.textAlignment = .center
+        lblCont.textColor = UIColor._138138138()
+        lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblCont.text = "You need to Verify your Email in Account \nSettings to use it for Log In and more."
+        uiviewEmailAlready.addSubview(lblCont)
+        
+        lblAlreadyRegister = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 118, y: 18, width: 190, height: 25))
         lblAlreadyRegister.attributedText = NSAttributedString(string: "This email is already registered! ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
             NSForegroundColorAttributeName: UIColor._2499090()]
         )
         uiviewEmailAlready.addSubview(lblAlreadyRegister)
         
-        let btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 0, width: 45, height: 25))
+        btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 18, width: 45, height: 25))
         let astrTitle = "Log In!"
         let attribute = [ NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor._2499090()]
         let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
         btnLogin.setAttributedTitle(attrLogin, for: UIControlState())
         btnLogin.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
         
+        lblAlreadyRegister.isHidden = true
+        btnLogin.isHidden = true
+        
         uiviewEmailAlready.addSubview(btnLogin)
-        uiviewEmailAlready.isHidden = true
         return uiviewEmailAlready
     }
     
@@ -116,10 +129,14 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     let value = (message as! NSDictionary).value(forKey: "existence")
                     if (value != nil) {
                         if value as! NSNumber == 0 {
-                            self.uiviewEmailExist.isHidden = true
+                            self.lblCont.isHidden = false
+                            self.lblAlreadyRegister.isHidden = true
+                            self.btnLogin.isHidden = true
                             self.checkForValidEmail(self.email!, completion: self.jumpToRegisterUsername)
                         } else {
-                            self.uiviewEmailExist.isHidden = false
+                            self.lblCont.isHidden = true
+                            self.lblAlreadyRegister.isHidden = false
+                            self.btnLogin.isHidden = false
                             self.hideActivityIndicator()
                         }
                     }
@@ -232,8 +249,10 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             email = text
-            uiviewEmailExist.isHidden = true
+            lblAlreadyRegister.isHidden = true
+            btnLogin.isHidden = true
             imgError.isHidden = true
+            lblCont.isHidden = false
             break
         default: break
         }
