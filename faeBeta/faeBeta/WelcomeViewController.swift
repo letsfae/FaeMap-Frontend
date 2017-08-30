@@ -108,7 +108,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // create account button
         btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
-        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Create Fae Account", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
+        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Join Faevorite", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
