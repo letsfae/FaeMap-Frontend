@@ -25,16 +25,16 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnBack.setImage(UIImage(named: "NavigationBackNew"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        let lblTitle = UILabel(frame: CGRect(x: 0, y: 98 * screenHeightFactor, width: screenWidth, height: 35))
-        lblTitle.textColor = UIColor._898989()
-        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 25)
-        lblTitle.textAlignment = .center
-        lblTitle.text = "All Finished!"
+//        let lblTitle = UILabel(frame: CGRect(x: 0, y: 98 * screenHeightFactor, width: screenWidth, height: 35))
+//        lblTitle.textColor = UIColor._898989()
+//        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 25)
+//        lblTitle.textAlignment = .center
+//        lblTitle.text = "All Finished!"
         
-        let imgFaePic = UIImageView(frame: CGRect(x: 32, y: 187, w: 351, h: 300))
+        let imgFaePic = UIImageView(frame: CGRect(x: 32, y: 160, w: 350, h: 300))
         imgFaePic.image = #imageLiteral(resourceName: "WelcomeFae")
         
-        let lblWelcome = UILabel(frame: CGRect(x: 0, y: 500 * screenHeightFactor, width: screenWidth, height: 34))
+        let lblWelcome = UILabel(frame: CGRect(x: 0, y: 480 * screenHeightFactor, width: screenWidth, height: 34))
         lblWelcome.text = "Welcome to Faevorite!"
         lblWelcome.textColor = UIColor._898989()
         lblWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25)
@@ -45,7 +45,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnFinish.layer.masksToBounds = true
         btnFinish.center.x = screenWidth / 2
         
-        btnFinish.setTitle("Let's Go!", for: UIControlState())
+        btnFinish.setTitle("Start Using Fae Map!", for: UIControlState())
         btnFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         
         btnFinish.backgroundColor = UIColor._2499090()
@@ -80,7 +80,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnPrivacyPolicy.addTarget(self, action: #selector(self.privacyPolicyButtonTapped(_:)), for: .touchUpInside)
         
         view.addSubview(btnBack)
-        view.addSubview(lblTitle)
+//        view.addSubview(lblTitle)
         view.addSubview(imgFaePic)
         view.addSubview(lblWelcome)
         view.addSubview(btnFinish)
