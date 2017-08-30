@@ -19,7 +19,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
         } else if section == 2 {
             return 2
         } else {
-        return arrRelatedPlaces.count
+            return 2  //arrRelatedPlaces.count
         }
     }
     
@@ -45,10 +45,12 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
             cell.setValueForCell(place: place)
             return cell
         case 3:   // similar / nearby places
-            let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
-            cell.delegate = self
-            let places = arrRelatedPlaces[indexPath.row]
-            cell.setValueForCell(title: arrTitle[indexPath.row], places: places)
+             let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
+            if arrRelatedPlaces.count != 0 {
+                cell.delegate = self
+                let places = arrRelatedPlaces[indexPath.row]
+                cell.setValueForCell(title: arrTitle[indexPath.row], places: places)
+            }
             return cell
         default:
             break
@@ -58,11 +60,10 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
-        
         if section == 0 || section == 1 {
             let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
             PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
-            tblPlaceDetail.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         } else if section == 2 {   // open place website / call place phone number
             let phoneNum = "2098299986"
             let strURL = indexPath.row == 0 ? "https://www.faemaps.com/" : "tel://\(phoneNum)"
