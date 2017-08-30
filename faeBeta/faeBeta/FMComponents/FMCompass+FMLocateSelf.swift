@@ -15,7 +15,7 @@ class FMCompass: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 22, y: screenHeight - 154, width: 59, height: 59))
+        super.init(frame: CGRect(x: 20, y: screenHeight - 156, width: 63, height: 63))
         loadContent()
     }
     
@@ -53,7 +53,7 @@ class FMLocateSelf: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: screenWidth - 81, y: screenHeight - 154, width: 59, height: 59))
+        super.init(frame: CGRect(x: screenWidth - 83, y: screenHeight - 156, width: 63, height: 63))
         loadContent()
     }
     
@@ -65,6 +65,8 @@ class FMLocateSelf: UIButton {
         setImage(#imageLiteral(resourceName: "mainScreenSelfCenter"), for: .normal)
         addTarget(self, action: #selector(actionLocateSelf(_:)), for: .touchUpInside)
         layer.zPosition = 500
+        joshprint("size")
+        joshprint(#imageLiteral(resourceName: "mainScreenSelfCenter").size)
     }
     
     func actionLocateSelf(_ sender: UIButton) {

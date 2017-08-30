@@ -10,87 +10,132 @@ import UIKit
 import MapKit
 import CoreLocation
 
-protocol SelectLocationViewControllerDelegate: class {
-    func sendAddress(_ value: String)
+protocol SelectLocationDelegate: class {
+    func sendAddress(_ address: RouteAddress)
 }
 
-class SelectLocationViewController: UIViewController, MKLocalSearchCompleterDelegate {
+class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     
-    weak var delegate: SelectLocationViewControllerDelegate?
+    weak var delegate: SelectLocationDelegate?
     
     var slMapView: MKMapView!
-
     var imgPinOnMap: UIImageView!
-
-    var willAppearFirstLoad = false
-    
     var btnCancel: UIButton!
-    var btnLocat: UIButton!
+    var btnLocat: FMLocateSelf!
     var buttonSetLocationOnMap: UIButton!
-    
-    // MARK: -- Search Bar
-    var uiviewTableSubview: UIView!
-    var tblSearchResults = UITableView()
-    var dataArray = [String]()
-    var filteredArray = [String]()
-    var shouldShowSearchResults = false
-    var searchController: UISearchController!
-    var faeSearchController: FaeSearchController!
-    var searchBarSubview: UIView!
-    var pinType = "comment"
-    var isCreatingMode = true
-    var searchCompleter = MKLocalSearchCompleter()
-    var searchResults = [MKLocalSearchCompletion]()
-    
-    var resultTableWidth: CGFloat {
-        if UIScreen.main.bounds.width == 414 { // 5.5
-            return 398
-        }
-        else if UIScreen.main.bounds.width == 320 { // 4.0
-            return 308
-        }
-        else if UIScreen.main.bounds.width == 375 { // 4.7
-            return 360.5
-        }
-        return 308
-    }
+    var btnSelect: FMDistIndicator!
+    var lblSearchContent: UILabel!
+    var routeAddress: RouteAddress!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadMapView()
+        loadSearchBar()
         loadButtons()
-        loadTableView()
-        loadFaeSearchController()
-        UIApplication.shared.statusBarStyle = .default
-        searchCompleter.delegate = self
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if isCreatingMode {
-            UIApplication.shared.statusBarStyle = .lightContent
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+        let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
+        let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
+        General.shared.getAddress(location: location) { (address) in
+            guard let addr = address as? String else { return }
+            DispatchQueue.main.async {
+                self.lblSearchContent.text = addr
+                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+            }
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    func loadMapView() {
+        slMapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        slMapView.showsUserLocation = true
+        slMapView.delegate = self
+        slMapView.showsPointsOfInterest = false
+        slMapView.showsCompass = false
+        view.addSubview(slMapView)
+        
+        let camera = slMapView.camera
+        camera.altitude = Key.shared.dblAltitude
+        camera.centerCoordinate = Key.shared.selectedLoc
+        slMapView.setCamera(camera, animated: false)
+        
+        imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
+        imgPinOnMap.image = #imageLiteral(resourceName: "selectLocOnMap")
+        view.addSubview(imgPinOnMap)
     }
     
-    override func viewWillAppear(_ animated: Bool) {   
-        willAppearFirstLoad = true
+    func loadSearchBar() {
+        let imgSchbarShadow = UIImageView()
+        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
+        imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
+        view.addSubview(imgSchbarShadow)
+        imgSchbarShadow.layer.zPosition = 500
+        imgSchbarShadow.isUserInteractionEnabled = true
+        
+        // Left window on main map to open account system
+        let btnLeftWindow = UIButton()
+        btnLeftWindow.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
+        imgSchbarShadow.addSubview(btnLeftWindow)
+        btnLeftWindow.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnLeftWindow)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnLeftWindow)
+        btnLeftWindow.adjustsImageWhenDisabled = false
+        
+        let imgSearchIcon = UIImageView()
+        imgSearchIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        imgSchbarShadow.addSubview(imgSearchIcon)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
+        
+        lblSearchContent = UILabel()
+        lblSearchContent.textAlignment = .left
+        lblSearchContent.lineBreakMode = .byTruncatingTail
+        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblSearchContent.textColor = UIColor._898989()
+        imgSchbarShadow.addSubview(lblSearchContent)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblSearchContent)
     }
     
-    func searchBarTableHideAnimation() {
-        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 0)
-            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 0)
-        }), completion: nil)
+    func loadButtons() {
+        btnCancel = UIButton()
+        btnCancel.setImage(#imageLiteral(resourceName: "cancelSelectLocation"), for: .normal)
+        view.addSubview(btnCancel)
+        btnCancel.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
+        view.addConstraintsWithFormat("H:|-20-[v0(63)]", options: [], views: btnCancel)
+        view.addConstraintsWithFormat("V:[v0(63)]-11-|", options: [], views: btnCancel)
+        
+        btnLocat = FMLocateSelf()
+        btnLocat.removeTarget(nil, action: nil, for: .touchUpInside)
+        btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
+        view.addSubview(btnLocat)
+        view.addConstraintsWithFormat("H:[v0(63)]-20-|", options: [], views: btnLocat)
+        view.addConstraintsWithFormat("V:[v0(63)]-11-|", options: [], views: btnLocat)
+        
+        btnSelect = FMDistIndicator()
+        btnSelect.frame.origin.y = screenHeight - 74
+        btnSelect.lblDistance.text = "Select"
+        btnSelect.isUserInteractionEnabled = true
+        view.addSubview(btnSelect)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        btnSelect.addGestureRecognizer(tapGesture)
     }
     
-    func searchBarTableShowAnimation() {
-        UIView.animate(withDuration: 0.25, delay: 0, options: UIViewAnimationOptions.transitionFlipFromBottom, animations: ({
-            self.tblSearchResults.frame = CGRect(x: 0, y: 0, width: self.resultTableWidth, height: 305*screenHeightFactor)
-            self.uiviewTableSubview.frame = CGRect(x: 8, y: 76, width: self.resultTableWidth, height: 305*screenHeightFactor)
-        }), completion: nil)
+    func handleTap(_ tap: UITapGestureRecognizer) {
+        guard routeAddress != nil else { return }
+        delegate?.sendAddress(routeAddress)
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func actionBack(_ sender: UIButton) {
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func actionSelfPosition(_ sender: UIButton!) {
+        let camera = slMapView.camera
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+        slMapView.setCamera(camera, animated: false)
     }
 }

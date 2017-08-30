@@ -59,7 +59,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var lblNoResults: UILabel!
     
     // Joshua: Send label text back to start point or destination
-    var boolToDestination = false
+    static var boolToDestination = false
     var boolCurtLocSelected = false
     
     override func viewDidLoad() {
@@ -422,22 +422,22 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             schBar.txtSchField.resignFirstResponder()
             if tableView == tblLocationRes {
-                delegate?.sendLocationBack?(destination: boolToDestination, text: filteredLocations[indexPath.row])
+                delegate?.sendLocationBack?(destination: BoardsSearchViewController.boolToDestination, text: filteredLocations[indexPath.row])
                 delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
                 navigationController?.popViewController(animated: false)
             } else {  // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
                     if boolCurtLocSelected {
-                        delegate?.chooseLocationOnMap?()
                         navigationController?.popViewController(animated: false)
+                        delegate?.chooseLocationOnMap?()
                         return
                     }
                     delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "Current Location", location: LocManager.shared.curtLoc)
-                    delegate?.sendLocationBack?(destination: boolToDestination, text: "Current Location")
+                    delegate?.sendLocationBack?(destination: BoardsSearchViewController.boolToDestination, text: "Current Location")
                     navigationController?.popViewController(animated: false)
                 } else {
-                    delegate?.chooseLocationOnMap?()
                     navigationController?.popViewController(animated: false)
+                    delegate?.chooseLocationOnMap?()
                 }
             }
         } else if enterMode == .place { // search places
