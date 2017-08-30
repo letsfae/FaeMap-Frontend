@@ -15,7 +15,7 @@ import SwiftyJSON
     @objc optional func jumpToPlaceSearchResult(searchText: String, places: [PlacePin])
     @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
     @objc optional func chooseLocationOnMap()
-    @objc optional func sendLocationBack(destination: Bool, text: String)
+    @objc optional func sendLocationBack(address: RouteAddress)
 }
 enum EnterMode {
     case place
@@ -422,7 +422,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             schBar.txtSchField.resignFirstResponder()
             if tableView == tblLocationRes {
-                delegate?.sendLocationBack?(destination: BoardsSearchViewController.boolToDestination, text: filteredLocations[indexPath.row])
+                let address = RouteAddress(name: filteredLocations[indexPath.row])
+                delegate?.sendLocationBack?(address: address)
                 delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
                 navigationController?.popViewController(animated: false)
             } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
@@ -433,7 +434,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                         return
                     }
                     delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "Current Location", location: LocManager.shared.curtLoc)
-                    delegate?.sendLocationBack?(destination: BoardsSearchViewController.boolToDestination, text: "Current Location")
+                    let address = RouteAddress(name: "Current Location")
+                    delegate?.sendLocationBack?(address: address)
                     navigationController?.popViewController(animated: false)
                 } else {
                     navigationController?.popViewController(animated: false)
