@@ -60,7 +60,15 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                 self.routeCalculator(destination: pin.coordinate)
             })
+            for user in self.faeUserPins {
+                user.isValid = false
+            }
             mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+            startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+            if let placeInfo = selectedAnn?.pinInfo as? PlacePin {
+                uiviewChooseLocs.updateDestination(name: placeInfo.name)
+                destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
+            }
             break
         case .share:
             guard let ann = selectedAnn else { return }
