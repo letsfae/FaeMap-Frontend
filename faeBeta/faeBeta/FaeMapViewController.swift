@@ -79,7 +79,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var startPointAddr: RouteAddress!
     var destinationAddr: RouteAddress!
-    var addressAnnotations = [MKPointAnnotation]() 
+    var addressAnnotations = [AddressAnnotation]() 
     
     // System Functions
     override func viewDidLoad() {
@@ -123,9 +123,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func getUserStatus() {
-        if let user_status = LocalStorageManager.shared.readByKey("userStatus") {
-            userStatus = user_status as! Int
-        }
+        guard let user_status = LocalStorageManager.shared.readByKey("userStatus") as? Int else { return }
+        userStatus = user_status
     }
     
     func jumpToMyFaeMainPage() {

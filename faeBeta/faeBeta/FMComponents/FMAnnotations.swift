@@ -13,7 +13,9 @@ import MapKit
 
 let mapAvatarWidth = 35
 
-class AddressAnnotation: MKPointAnnotation {}
+class AddressAnnotation: MKPointAnnotation {
+    var isStartPoint = false
+}
 class AddressAnnotationView: MKAnnotationView {
     
     var icon = UIImageView()

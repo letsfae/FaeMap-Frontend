@@ -10,13 +10,9 @@ import UIKit
 import MapKit
 import CoreLocation
 
-protocol SelectLocationDelegate: class {
-    func sendAddress(_ address: RouteAddress)
-}
-
 class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     
-    weak var delegate: SelectLocationDelegate?
+    weak var delegate: BoardsSearchDelegate?
     
     var slMapView: MKMapView!
     var imgPinOnMap: UIImageView!
@@ -126,7 +122,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     func handleTap(_ tap: UITapGestureRecognizer) {
         guard routeAddress != nil else { return }
         navigationController?.popViewController(animated: false)
-        delegate?.sendAddress(routeAddress)
+        delegate?.sendLocationBack?(address: routeAddress)
     }
     
     func actionBack(_ sender: UIButton) {

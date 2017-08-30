@@ -9,12 +9,16 @@
 import UIKit
 import IVBezierPathRenderer
 
-struct RouteAddress {
+class RouteAddress: NSObject {
     var name: String
     var coordinate: CLLocationCoordinate2D
+    init(name: String, coordinate: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate) {
+        self.name = name
+        self.coordinate = coordinate
+    }
 }
 
-extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, SelectLocationDelegate {
+extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     func loadDistanceComponents() {
         imgDistIndicator = FMDistIndicator()
@@ -48,33 +52,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, 
         navigationController?.pushViewController(chooseLocsVC, animated: false)
     }
     
-    // SelectLocationDelegate
-    func sendAddress(_ address: RouteAddress) {
-        faeMapView.removeAnnotations(addressAnnotations)
-        addressAnnotations.removeAll()
-        if BoardsSearchViewController.boolToDestination {
-            destinationAddr = address
-            uiviewChooseLocs.lblDestination.text = address.name
-            let end = MKPointAnnotation()
-            end.coordinate = destinationAddr.coordinate
-            addressAnnotations.append(end)
-        } else {
-            startPointAddr = address
-            uiviewChooseLocs.lblStartPoint.text = address.name
-            let start = MKPointAnnotation()
-            start.coordinate = startPointAddr.coordinate
-            addressAnnotations.append(start)
-        }
-        if startPointAddr.name == "Current Location" {
-            routeCalculator(startPoint: LocManager.shared.curtLoc.coordinate, destination: destinationAddr.coordinate)
-        } else if destinationAddr.name == "Current Location" {
-            routeCalculator(startPoint: startPointAddr.coordinate, destination: LocManager.shared.curtLoc.coordinate)
-        } else {
-            routeCalculator(startPoint: startPointAddr.coordinate, destination: destinationAddr.coordinate)
-        }
-        faeMapView.addAnnotations(addressAnnotations)
-    }
-    
     // BoardsSearchDelegate
     func chooseLocationOnMap() {
         let selectLocVC = SelectLocationViewController()
@@ -84,12 +61,58 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate, 
         navigationController?.pushViewController(selectLocVC, animated: false)
     }
     // BoardsSearchDelegate
-    func sendLocationBack(destination: Bool, text: String) {
-        if destination {
-            uiviewChooseLocs.lblDestination.text = text
+    func sendLocationBack(address: RouteAddress) {
+        faeMapView.removeAnnotations(addressAnnotations)
+        if BoardsSearchViewController.boolToDestination {
+            destinationAddr = address
+            uiviewChooseLocs.lblDestination.text = address.name
+            
+            if addressAnnotations.count > 0 {
+                var index = 0
+                for i in 0..<addressAnnotations.count {
+                    if !addressAnnotations[i].isStartPoint {
+                        index = i
+                        break
+                    }
+                }
+                addressAnnotations.remove(at: index)
+            }
+            if address.name != "Current Location" {
+                let end = AddressAnnotation()
+                end.isStartPoint = false
+                end.coordinate = destinationAddr.coordinate
+                addressAnnotations.append(end)
+            }
         } else {
-            uiviewChooseLocs.lblStartPoint.text = text
+            startPointAddr = address
+            uiviewChooseLocs.lblStartPoint.text = address.name
+            
+            if addressAnnotations.count > 0 {
+                var index = 0
+                for i in 0..<addressAnnotations.count {
+                    if !addressAnnotations[i].isStartPoint {
+                        index = i
+                        break
+                    }
+                }
+                addressAnnotations.remove(at: index)
+            }
+            
+            if address.name != "Current Location" {
+                let start = AddressAnnotation()
+                start.isStartPoint = true
+                start.coordinate = startPointAddr.coordinate
+                addressAnnotations.append(start)
+            }
         }
+        if startPointAddr.name == "Current Location" {
+            routeCalculator(startPoint: LocManager.shared.curtLoc.coordinate, destination: destinationAddr.coordinate)
+        } else if destinationAddr.name == "Current Location" {
+            routeCalculator(startPoint: startPointAddr.coordinate, destination: LocManager.shared.curtLoc.coordinate)
+        } else {
+            routeCalculator(startPoint: startPointAddr.coordinate, destination: destinationAddr.coordinate)
+        }
+        faeMapView.addAnnotations(addressAnnotations)
     }
     
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
