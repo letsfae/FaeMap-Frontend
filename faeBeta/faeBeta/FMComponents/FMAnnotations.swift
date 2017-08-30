@@ -13,6 +13,26 @@ import MapKit
 
 let mapAvatarWidth = 35
 
+class AddressAnnotation: MKPointAnnotation {}
+class AddressAnnotationView: MKAnnotationView {
+    
+    var icon = UIImageView()
+    
+    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
+        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
+        frame = CGRect(x: 0, y: 0, width: 48, height: 52)
+        layer.zPosition = 2
+        layer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
+        icon.image = #imageLiteral(resourceName: "selectLocOnMap")
+        addSubview(icon)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
@@ -121,7 +141,6 @@ class FaePinAnnotation: MKPointAnnotation {
             self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
         })
     }
-    
 }
 
 class SelfAnnotationView: MKAnnotationView {
@@ -133,7 +152,6 @@ class SelfAnnotationView: MKAnnotationView {
     let anchorPoint = CGPoint(x: mapAvatarWidth / 2, y: mapAvatarWidth / 2)
     
     var selfIcon_invisible: UIImageView!
-//    var outsideCircle_invisible: UIImageView!
     
     var boolInvisible = false
     
@@ -168,24 +186,13 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func invisibleMode() {
-//        if outsideCircle_1 != nil {
-//            outsideCircle_1.removeFromSuperview()
-//            outsideCircle_2.removeFromSuperview()
-//            outsideCircle_3.removeFromSuperview()
-//        }
         
         selfIcon.isHidden = true
         
         if selfIcon_invisible != nil {
             selfIcon_invisible.removeFromSuperview()
-//            outsideCircle_invisible.removeFromSuperview()
         }
-        
-//        let offset_1: CGFloat = CGFloat(mapAvatarWidth - 80) / 2.0
-//        outsideCircle_invisible = UIImageView(frame: CGRect(x: offset_1, y: offset_1, w: 80, h: 80))
-//        outsideCircle_invisible.image = #imageLiteral(resourceName: "invisible_mode_outside")
-//        addSubview(outsideCircle_invisible)
-        
+
         let offset_0: CGFloat = CGFloat(mapAvatarWidth - 27) / 2.0
         selfIcon_invisible = UIImageView(frame: CGRect(x: offset_0 - 0.25, y: offset_0 - 2, w: 27, h: 30))
         selfIcon_invisible.layer.zPosition = 3
@@ -199,22 +206,8 @@ class SelfAnnotationView: MKAnnotationView {
         
         timer?.invalidate()
         timer = nil
-        
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateHeading), userInfo: nil, repeats: true)
-        
-//        let line_0 = UIView()
-//        line_0.center = anchorPoint
-//        line_0.frame.size = CGSize(width: 60, height: 1)
-//        line_0.backgroundColor = .black
-//        addSubview(line_0)
-//        line_0.layer.zPosition = 10
-//
-//        let line_1 = UIView()
-//        line_1.center = anchorPoint
-//        line_1.frame.size = CGSize(width: 1, height: 60)
-//        line_1.backgroundColor = .black
-//        addSubview(line_1)
-//        line_1.layer.zPosition = 10
+
         selfMarkerAnimation()
     }
     
@@ -274,7 +267,6 @@ class SelfAnnotationView: MKAnnotationView {
         
         if selfIcon_invisible != nil {
             selfIcon_invisible.removeFromSuperview()
-//            outsideCircle_invisible.removeFromSuperview()
         }
     }
     

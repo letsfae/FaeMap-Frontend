@@ -79,6 +79,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var startPointAddr: RouteAddress!
     var destinationAddr: RouteAddress!
+    var addressAnnotations = [MKPointAnnotation]() 
     
     // System Functions
     override func viewDidLoad() {
@@ -97,8 +98,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -211,7 +210,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
-        navigationController?.pushViewController(welcomeVC, animated: true)
+        navigationController?.pushViewController(welcomeVC, animated: false)
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {

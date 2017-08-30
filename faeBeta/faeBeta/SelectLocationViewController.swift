@@ -125,8 +125,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     
     func handleTap(_ tap: UITapGestureRecognizer) {
         guard routeAddress != nil else { return }
-        delegate?.sendAddress(routeAddress)
         navigationController?.popViewController(animated: false)
+        delegate?.sendAddress(routeAddress)
     }
     
     func actionBack(_ sender: UIButton) {

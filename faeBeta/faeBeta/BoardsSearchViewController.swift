@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 @objc protocol BoardsSearchDelegate: class {
-//    func backToPlaceSearchView()
-//    func backToLocationSearchView()
+    //    func backToPlaceSearchView()
+    //    func backToLocationSearchView()
     @objc optional func jumpToPlaceSearchResult(searchText: String, places: [PlacePin])
     @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
     @objc optional func chooseLocationOnMap()
@@ -64,7 +64,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //navigationController?.isNavigationBarHidden = true
+        // navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor._241241241()
         loadSearchBar()
         loadPlaceBtns()
@@ -131,18 +131,18 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         
         btnBack = UIButton(frame: CGRect(x: 3, y: 0, width: 34.5, height: 48))
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
-        btnBack.addTarget(self, action: #selector(self.backToBoards(_:)), for: .touchUpInside)
+        btnBack.addTarget(self, action: #selector(backToBoards(_:)), for: .touchUpInside)
         uiviewSearch.addSubview(btnBack)
         
         schBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schBar.delegate = self
         schBar.txtSchField.placeholder = strPlaceholder
         if enterMode == .place {
-//            schBar.txtSchField.placeholder = "All Places"
-//            if strSearchedPlace != "All Places" {
-//                schBar.txtSchField.text = strSearchedPlace
-//                schBar.btnClose.isHidden = false
-//            }
+            //            schBar.txtSchField.placeholder = "All Places"
+            //            if strSearchedPlace != "All Places" {
+            //                schBar.txtSchField.text = strSearchedPlace
+            //                schBar.btnClose.isHidden = false
+            //            }
         } else if enterMode == .location {
             schBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
         }
@@ -163,7 +163,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         }
         
         for i in 0..<6 {
-            self.btnPlaces[i].alpha = 0
+            btnPlaces[i].alpha = 0
             if i >= 3 {
                 btnPlaces[i].frame.origin.y = 117 + 29
             }
@@ -186,7 +186,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             btnPlaces[i].layer.masksToBounds = true
             btnPlaces[i].setImage(imgPlaces[i], for: .normal)
             btnPlaces[i].tag = i
-            btnPlaces[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            btnPlaces[i].addTarget(self, action: #selector(searchByCategories(_:)), for: .touchUpInside)
             
             lblPlaces[i].text = arrPlaceNames[i]
             lblPlaces[i].textAlignment = .center
@@ -235,11 +235,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         case .place:
             break
         case .location:
-//            if searchBar.txtSchField.text == "Current Location" {
-//                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
-//                searchBar.txtSchField.text = ""
-//                searchBar.btnClose.isHidden = true
-//            }
+            //            if searchBar.txtSchField.text == "Current Location" {
+            //                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
+            //                searchBar.txtSchField.text = ""
+            //                searchBar.btnClose.isHidden = true
+            //            }
             break
         default:
             break
@@ -320,7 +320,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 uiviewNoResults.isHidden = true
             }
             tblPlacesRes.isScrollEnabled = true
-        } else {  // search location
+        } else { // search location
             uiviewPics.isHidden = true
             uiviewNoResults.isHidden = true
             uiviewSchResBg.isHidden = false
@@ -410,7 +410,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
         }
         // End of Joshua: 0829 Modified
-//        return enterMode == .place ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
+        //        return enterMode == .place ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -425,7 +425,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 delegate?.sendLocationBack?(destination: BoardsSearchViewController.boolToDestination, text: filteredLocations[indexPath.row])
                 delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
                 navigationController?.popViewController(animated: false)
-            } else {  // fixed cell - "Use my Current Location", "Choose Location on Map"
+            } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
                     if boolCurtLocSelected {
                         navigationController?.popViewController(animated: false)
@@ -456,18 +456,17 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     func backToBoards(_ sender: UIButton) {
-//        if enterMode == .place {
-//            delegate?.backToPlaceSearchView()
-//        } else {
-//            delegate?.backToLocationSearchView()
-//        }
+        //        if enterMode == .place {
+        //            delegate?.backToPlaceSearchView()
+        //        } else {
+        //            delegate?.backToLocationSearchView()
+        //        }
         navigationController?.popViewController(animated: false)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         schBar.txtSchField.resignFirstResponder()
     }
-    
     
     func getPlaceInfo() {
         let placesList = FaeMap()
@@ -523,4 +522,3 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         }
     }
 }
-

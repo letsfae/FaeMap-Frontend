@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina5_5" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -18,19 +18,19 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imgLaunchScreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="ocZ-JO-vIT">
-                                <rect key="frame" x="0.0" y="20" width="414" height="716"/>
+                            <imageView autoresizesSubviews="NO" opaque="NO" clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchScreenNew" translatesAutoresizingMaskIntoConstraints="NO" id="laj-5f-5cS">
+                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ocZ-JO-vIT" secondAttribute="trailing" id="OrZ-H0-tJ1"/>
-                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Xpw-Hq-hbj"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="ocZ-JO-vIT" secondAttribute="bottom" id="dnX-Se-rEb"/>
-                            <constraint firstItem="ocZ-JO-vIT" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="oFo-bS-yAa"/>
+                            <constraint firstItem="laj-5f-5cS" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="VX5-tL-D9d"/>
+                            <constraint firstItem="laj-5f-5cS" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" id="e1Z-Xt-Xrm"/>
+                            <constraint firstItem="laj-5f-5cS" firstAttribute="bottom" secondItem="xb3-aO-Qok" secondAttribute="top" id="enn-dz-8Q5"/>
+                            <constraint firstAttribute="trailing" secondItem="laj-5f-5cS" secondAttribute="trailing" id="nhs-l1-qsM"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="imgLaunchScreen.png" width="1242" height="2148"/>
+        <image name="launchScreenNew" width="414" height="716"/>
     </resources>
 </document>
