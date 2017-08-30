@@ -40,7 +40,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     var cellUsername: RegisterTextfieldTableViewCell!
     var username: String?
     var faeUser: FaeUser!
-    var lblUsernameExist: UILabel!
+    var lblError: UILabel!
     
     // MARK: View Lifecycle
     override func viewDidLoad() {
@@ -76,15 +76,13 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     func getErrorView() -> UIView {
         let uiviewError = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        let lblError = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        lblError.textColor = UIColor._2499090()
+        lblError = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
         lblError.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblError.numberOfLines = 2
         lblError.textAlignment = .center
-        lblError.text = "This Username is currently Unavailable. \n Choose Another One!"
-        lblError.isHidden = true
+        lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
+        lblError.textColor = UIColor._138138138()
         
-        lblUsernameExist = lblError
         uiviewError.addSubview(lblError)
         return uiviewError
     }
@@ -108,9 +106,11 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                     if let value = valueInfo["existence"].int {
                         if value == 0 {
                             self.jumpToRegisterPassword()
-                            self.lblUsernameExist.isHidden = true
+                            self.lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
+                            self.lblError.textColor = UIColor._138138138()
                         } else {
-                            self.lblUsernameExist.isHidden = false
+                            self.lblError.text = "This Username is currently Unavailable. \n Choose Another One!"
+                            self.lblError.textColor = UIColor._2499090()
                         }
                     }
                 }
@@ -196,7 +196,8 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             username = text
-            self.lblUsernameExist.isHidden = true
+            lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
+            lblError.textColor = UIColor._138138138()
             break
         default: break
         }

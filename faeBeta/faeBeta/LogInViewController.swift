@@ -73,8 +73,9 @@ class LogInViewController: UIViewController {
     
     fileprivate func setupInterface() {
         // icon
-        imgIcon = UIImageView(image: UIImage(named: "faeWingIcon"))
+        imgIcon = UIImageView()
         imgIcon.frame = CGRect(x: screenWidth / 2 - 30, y: 70 * screenHeightFactor, width: 60 * screenHeightFactor, height: 60 * screenHeightFactor)
+        imgIcon.image = #imageLiteral(resourceName: "Faevorite_icon")
         view.addSubview(imgIcon)
         
         // username textField

@@ -91,18 +91,18 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         labelTitle.font = UIFont(name: "AvenirNext-Medium",size: 16*screenWidthFactor)
         uiViewSetPicture.addSubview(labelTitle)
         
-        imageViewAvatar = UIImageView(frame: CGRect(x: 100*screenWidthFactor, y: 88*screenWidthFactor, width: 90*screenWidthFactor, height: 90*screenWidthFactor))
+        imageViewAvatar = UIImageView(frame: CGRect(x: 100, y: 88, w: 90, h: 90))
         self.updateDefaultProfilePic()
         imageViewAvatar.layer.cornerRadius = 45*screenWidthFactor
         imageViewAvatar.clipsToBounds = true
         imageViewAvatar.contentMode = .scaleAspectFill
         uiViewSetPicture.addSubview(imageViewAvatar)
         
-        buttonAvatar = UIButton(frame: CGRect(x: 100*screenWidthFactor, y: 88*screenWidthFactor, width: 90*screenWidthFactor, height: 90*screenWidthFactor))
+        buttonAvatar = UIButton(frame: CGRect(x: 100, y: 88, w: 90, h: 90))
         uiViewSetPicture.addSubview(buttonAvatar)
         buttonAvatar.addTarget(self, action: #selector(self.addProfileAvatar(_:)), for: .touchUpInside)
         
-        textFieldDisplayName = UITextField(frame: CGRect(x: 0*screenWidthFactor, y: 203*screenWidthFactor, width: 160*screenWidthFactor, height: 34*screenWidthFactor))
+        textFieldDisplayName = UITextField(frame: CGRect(x: 0, y: 203, w: 160, h: 34))
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
         textFieldDisplayName.placeholder = "Display Name"
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
@@ -114,9 +114,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         textFieldDisplayName.autocorrectionType = .no
         uiViewSetPicture.addSubview(textFieldDisplayName)
         
-        buttonFinish = UIButton(frame: CGRect(x: 40*screenWidthFactor, y: 269*screenWidthFactor, width: 210*screenWidthFactor, height: 40*screenWidthFactor))
-        buttonFinish.layer.cornerRadius = 20*screenWidthFactor
-        buttonFinish.setTitle("Finish!", for: .normal)
+        buttonFinish = UIButton(frame: CGRect(x: 40, y: 269, w: 210, h: 40))
+        buttonFinish.layer.cornerRadius = 20 * screenWidthFactor
+        buttonFinish.setTitle("Save", for: .normal)
         buttonFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16*screenWidthFactor)
         buttonFinish.backgroundColor = UIColor._255160160()
         uiViewSetPicture.addSubview(buttonFinish)
