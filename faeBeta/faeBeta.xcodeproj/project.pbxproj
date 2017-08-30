@@ -160,7 +160,6 @@
 		B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */; };
 		B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */; };
 		B39453E51F27DD990038EDAD /* FMFilterMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */; };
-		B3F422261F52386D00257E8C /* CollectionsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3F422251F52382C00257E8C /* CollectionsListCell.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManager.swift */; };
@@ -278,6 +277,7 @@
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
 		506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
+		507407BF1F57595400ABC1A7 /* imgLaunchScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = imgLaunchScreen.png; path = Assets.xcassets/FaeLaunchScreen/launchScreenNew.imageset/imgLaunchScreen.png; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMCompass+FMLocateSelf.swift"; sourceTree = "<group>"; };
@@ -604,6 +604,14 @@
 			name = Protocols;
 			sourceTree = "<group>";
 		};
+		507407BE1F57514300ABC1A7 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				B3F422251F52382C00257E8C /* CollectionsListCell.swift */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -806,6 +814,7 @@
 				B0A2AC961CE3A3C6002E0C9D /* Products */,
 				2467B7FA7A9B4FD0265C0924 /* Pods */,
 				8673DEF63225844B903B80F8 /* Frameworks */,
+				507407BE1F57514300ABC1A7 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -838,6 +847,7 @@
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
+				507407BF1F57595400ABC1A7 /* imgLaunchScreen.png */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
 				B0A2ACA71CE3A3C7002E0C9D /* Info.plist */,
 				B0A2AC9F1CE3A3C7002E0C9D /* faeBeta.xcdatamodeld */,
@@ -1460,7 +1470,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B3F422261F52386D00257E8C /* CollectionsListCell.swift in Sources */,
 				B39453E51F27DD990038EDAD /* FMFilterMenu.swift in Sources */,
 				B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */,
 				B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */,
