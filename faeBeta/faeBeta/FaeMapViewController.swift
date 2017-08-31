@@ -77,6 +77,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrPlaceData = [PlacePin]()
     var tempFaePins = [FaePinAnnotation]()
     
+    var startPointAddr: RouteAddress!
+    var destinationAddr: RouteAddress!
+    var addressAnnotations = [AddressAnnotation]() 
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,9 +123,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func getUserStatus() {
-        if let user_status = LocalStorageManager.shared.readByKey("userStatus") {
-            userStatus = user_status as! Int
-        }
+        guard let user_status = LocalStorageManager.shared.readByKey("userStatus") as? Int else { return }
+        userStatus = user_status
     }
     
     func jumpToMyFaeMainPage() {
@@ -146,10 +149,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
-            if let withNickName = rsltJSON["nick_name"].string {
-                joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
+            if let _ = rsltJSON["nick_name"].string {
+                // joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
             } else {
-                joshprint("[checkDisplayNameExisitency] display name did not setup")
+                // joshprint("[checkDisplayNameExisitency] display name did not setup")
                 self.loadFirstLoginVC()
             }
         }
@@ -206,7 +209,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func jumpToWelcomeView(animated: Bool) {
         let welcomeVC = WelcomeViewController()
-        navigationController?.pushViewController(welcomeVC, animated: true)
+        navigationController?.pushViewController(welcomeVC, animated: false)
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {

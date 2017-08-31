@@ -40,13 +40,13 @@ class WelcomeImageContainerViewController: UIViewController {
         var description: String = ""
         switch index {
         case 0:
-            title = " "
-            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
-            description = "Connecting People to Favorite \nPlaces and Communities"
+            title = "Faevorite Map"
+//            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
+            description = "Connecting People to Favorite \nPlaces and Communities."
             break
         case 1:
             title = "More of your City"
-            description = "Discover Great Places based \non your Points of Interest."
+            description = "Discover Great Places based on \nsurrounding Points of Interests."
             break
         case 2:
             title = "Interact with New People"
