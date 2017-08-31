@@ -62,8 +62,8 @@ extension ChatViewController: OutgoingMessageProtocol {
             outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = comment
-            realmMessage.latitude.value = lat as? Float
-            realmMessage.longitude.value = lon as? Float
+            realmMessage.latitude.value = lat as? Double
+            realmMessage.longitude.value = lon as? Double
             realmMessage.snapImage = snapImage! as NSData
             realmMessage.type = "location"
             // ENDBryan
@@ -157,11 +157,31 @@ extension ChatViewController: OutgoingMessageProtocol {
         self.sendMessage(snapImage: data, date: Date())
     }
     
+    func loadNewMessage() {
+        roomRef = ref.child(chatRoomId)
+        _refHandle = roomRef?.queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot: DataSnapshot) in
+            let item = (snapshot.value as? NSMutableDictionary)!
+            item["keyValue"] = snapshot.key
+            if self.messagesKey.contains(snapshot.key) {
+                return
+            }
+            let isIncoming = self.insertMessage(item)
+            if isIncoming {
+                JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
+            }
+            DispatchQueue.main.async {
+                self.finishReceivingMessage(animated: false)
+            }
+            self.numberOfMessagesLoaded += 1
+        })
+    }
+    
     // MARK: - Load Message
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     // TODO: Debug this
     func loadNewMessages() {
         roomRef = ref.child(chatRoomId)
+        roomRef?.keepSynced(true)
         _refHandle = roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded, with: { (snapshot: DataSnapshot) in
             if snapshot.exists() {
                 // because the type is ChildAdded so the snapshot is the new message
