@@ -9,6 +9,12 @@
 import Foundation
 import RealmSwift
 
+class RealmMessage_v2: Object {
+    dynamic var messageID : String = ""
+    dynamic var withUserID : String = ""
+    dynamic var date : String = ""
+    //dynamic var message: NSDictionary = [:]
+}
 
 class RealmMessage: Object {
     //messageID's format: senderID_date
@@ -24,13 +30,13 @@ class RealmMessage: Object {
     dynamic var type : String = ""
     dynamic var status: String = ""
     dynamic var snapImage : NSData? = nil
-    let longitude = RealmOptional<Float>()
-    let latitude = RealmOptional<Float>()
-    dynamic var place: String = ""
+    var longitude = RealmOptional<Double>()
+    var latitude = RealmOptional<Double>()
+    dynamic var place: String? = ""
     //dynamic var latitude : String? = nil
     
     // int cannot be optional
-    let videoDuration = RealmOptional<Int>()
+    var videoDuration = RealmOptional<Int>()
     dynamic var isHeartSticker : Bool = false
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()
@@ -97,6 +103,18 @@ class RealmChat {
             realm.add(message);
         }
     }
+    static func receiveMessage_v2(message : NSDictionary, withUserID: String) {
+        let realm = try! Realm()
+        let timeStr = message["date"]! as! String
+        let messageRealm = RealmMessage_v2()
+        messageRealm.messageID = withUserID + (message["messageId"]! as! String)
+        messageRealm.withUserID = withUserID
+        messageRealm.date = timeStr
+        try! realm.write {
+            realm.add(messageRealm)
+        }
+
+    }
     
     static func receiveMessage(message : NSDictionary, withUserID: String) {
         let realm = try! Realm()
@@ -104,19 +122,41 @@ class RealmChat {
         if(realm.objects(RealmMessage.self).filter("messageID = '\(withUserID)_\(timeStr)'").first != nil){
             return
         }
-        let message = RealmMessage()
-        message.withUserID = withUserID
-        message.date = timeStr
-        message.delivered = true
-        message.senderID = message["senderId"]! as! String
-        message.type = message["type"]! as! String
-        message.senderName = message["senderName"]! as! String
-        message.hasTimeStamp = message["hasTimeStamp"]! as! Bool
-        //message.hasTimeStamp =
-//        realm.objects(RealmMessage.self).filter(
-//        try! realm.write{
-//            realm.add();
-//        }
+        let messageRealm = RealmMessage()
+        messageRealm.messageID = withUserID + (message["messageId"]! as! String)
+        messageRealm.withUserID = withUserID
+        messageRealm.date = timeStr
+        messageRealm.delivered = true
+        messageRealm.senderID = message["senderId"]! as! String
+        messageRealm.type = message["type"]! as! String
+        messageRealm.senderName = message["senderName"]! as! String
+        messageRealm.hasTimeStamp = message["hasTimeStamp"]! as! Bool
+        messageRealm.message = message["message"]! as! String
+        if let data = message["data"] {
+            messageRealm.data = Data(base64Encoded: (data as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)) as NSData?
+        }
+        if let snapimage = message["snapImage"] {
+            messageRealm.snapImage = Data(base64Encoded: (snapimage as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)) as NSData?
+        }
+        if let videoDutation = message["videoDuration"] {
+            messageRealm.videoDuration.value = videoDutation as? Int
+        }
+        if let longitude = message["longitude"] {
+            messageRealm.longitude.value = longitude as? Double
+        }
+        if let latitude = message["latitude"] {
+            messageRealm.latitude.value = latitude as? Double
+        }
+        if let _ = message["isHeartSticker"] {
+            messageRealm.isHeartSticker = true
+        }
+        if let place = message["place"] {
+            messageRealm.place = place as? String
+        }
+        //realm.objects(RealmMessage.self).filter(
+        try! realm.write {
+            realm.add(messageRealm)
+        }
     }
     
     static func dateConverter(date: Date) -> String{
