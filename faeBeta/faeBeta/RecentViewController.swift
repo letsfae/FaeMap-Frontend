@@ -242,11 +242,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             }
             self.navigationController?.pushViewController(chatVC, animated: true)
         }*/
-        firebase.child(chatVC.chatRoomId).queryLimited(toLast: 15).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
-            let items = (snapshot.value as? NSMutableDictionary)!
+        firebase.child(chatVC.chatRoomId).queryLimited(toLast: UInt(15)).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            let items = (snapshot.value as? NSDictionary)!
             for item in items {
-                
-            }
+                let message = (item.value as? NSMutableDictionary)!
+                message["keyValue"] = item.key
+                chatVC.messagesInit.append(message)
+            }            
             self.navigationController?.pushViewController(chatVC, animated: true)
         }
     }
