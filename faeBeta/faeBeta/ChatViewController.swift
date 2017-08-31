@@ -14,6 +14,7 @@ import Photos
 import MobileCoreServices
 import CoreMedia
 import AVFoundation
+import RealmSwift
 
 public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
@@ -28,6 +29,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var messagesKey: [String] = []
     var objects: [NSDictionary] = [] //
     var loaded: [NSDictionary] = [] // load dict from firebase that this chat room all message
+    var messagesInit: [NSDictionary] = []
     
     var avatarImageDictionary: NSMutableDictionary? //not use anymore
     var avatarDictionary: NSMutableDictionary? //not use anymore
@@ -135,7 +137,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //closeToolbarContentView()
         closeLocExtendView()
         moveDownInputBar()
-        ref.removeObserver(withHandle: _refHandle!)
+        //ref.removeObserver(withHandle: _refHandle!)
         toolbarContentView.clearToolBarViews()
         
         //        messages = []
@@ -172,8 +174,25 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //ENDBryan
         inputToolbar.contentView.textView.delegate = self
         
+        /* /////////
+        let realm = try! Realm()
+        let messagesToLoad = realm.objects(RealmMessage.self).filter("withUserID == %@", withUserId!).sorted(byKeyPath: "date")
+        for i in (messagesToLoad.count - 10)..<messagesToLoad.count {
+            let message = messagesToLoad[i]
+            let item: NSDictionary = ["type": message.type, "senderName": message.senderName, "senderId": message.senderID, "message": message.message, "date": message.date, "latitude": message.latitude.value, "longitude": message.longitude.value, "place": message.place, "snapImage": message.snapImage?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "videoDuration": message.videoDuration.value, "isHeartSticker": message.isHeartSticker, "data": message.data?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "keyValue": message.messageID, "hasTimeStamp": message.hasTimeStamp, "status": message.status]
+            //print("_")
+            _ = insertMessage(item)
+        }
+        ///////// */
+        
+        for message in messagesInit.sorted(by: { ($0["index"] as! Int) < ($1["index"] as! Int) }) {
+            _ = insertMessage(message)
+            self.numberOfMessagesLoaded += 1
+        }
+        
         //load firebase messages
-        loadInitMessages()
+        //loadInitMessages()
+        //self.loadNewMessages()
         // Do any additional setup after loading the view.
         loadInputBarComponent()
         
@@ -200,6 +219,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
        
         view.addSubview(locExtendView)
         moveDownInputBar()
+        getAvatar()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -212,17 +232,23 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
             //DispatchQueue.main.async {
                 //self.collectionView.reloadData()
-                self.loadNewMessages()
+                //self.loadNewMessages()
             //}
         //}
+        
+        loadNewMessage()
         
         if boolGoToFullContent {
             scrollToBottom(false)
             boolGoToFullContent = false
         }
+        if !initialLoadComplete {
+            scrollToBottom(false)
+            initialLoadComplete = true
+        }
         // This line is to fix the collectionView messed up function
         //moveDownInputBar()
-        getAvatar()
+        //scrollToBottom(false)
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {

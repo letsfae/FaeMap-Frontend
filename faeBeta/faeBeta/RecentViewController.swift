@@ -218,6 +218,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let withUserUserId = recent["with_user_id"].number?.stringValue
         let withUserName = recent["with_user_name"].string
         let withUserNickName = recent["with_nick_name"].string
+        //loadInitMessages(chatin: chatVC.chatRoomId, chatWith: withUserUserId!)
+        
         //chatVC.loadInitMessages()
         //chatVC.loadNewMessages()
         // Bryan
@@ -225,11 +227,43 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         chatVC.realmWithUser!.userName = withUserName!
         chatVC.realmWithUser!.userNickName = withUserNickName!
         chatVC.realmWithUser!.userID = withUserUserId!
+        chatVC.withUserId = withUserUserId!
         // EndBryan
         //present(chatVC, animated: true, completion: nil)
         //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4) {
-            self.navigationController?.pushViewController(chatVC, animated: true)
+            //self.navigationController?.pushViewController(chatVC, animated: true)
         //}
+        /*firebase.child(chatVC.chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            //this function will run only once
+            let items = (snapshot.value as? NSMutableDictionary)!
+            print(snapshot.key)
+            for item in items {
+                RealmChat.receiveMessage(message: item.value as! NSDictionary, withUserID: withUserUserId!)
+            }
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        }*/
+        firebase.child(chatVC.chatRoomId).queryLimited(toLast: UInt(15)).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            let items = (snapshot.value as? NSDictionary)!
+            for item in items {
+                let message = (item.value as? NSMutableDictionary)!
+                message["keyValue"] = item.key
+                chatVC.messagesInit.append(message)
+            }            
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        }
+    }
+    
+    func loadInitMessages(chatin chatRoomId: String, chatWith user: String) {
+        //let roomRef = firebase.child(chatRoomId)
+        firebase.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            //this function will run only once
+            let items = (snapshot.value as? NSMutableDictionary)!
+            print(snapshot.key)
+            for item in items {
+                RealmChat.receiveMessage(message: item.value as! NSDictionary, withUserID: user)
+            }
+            
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
