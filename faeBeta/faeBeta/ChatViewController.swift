@@ -185,6 +185,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         ///////// */
         
+        for message in messagesInit.sorted(by: { ($0["index"] as! Int) < ($1["index"] as! Int) }) {
+            _ = insertMessage(message)
+            self.numberOfMessagesLoaded += 1
+        }
+        
         //load firebase messages
         //loadInitMessages()
         //self.loadNewMessages()
@@ -231,13 +236,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             //}
         //}
         
+        loadNewMessage()
+        
         if boolGoToFullContent {
             scrollToBottom(false)
             boolGoToFullContent = false
         }
+        if !initialLoadComplete {
+            scrollToBottom(false)
+            initialLoadComplete = true
+        }
         // This line is to fix the collectionView messed up function
         //moveDownInputBar()
-        scrollToBottom(false)
+        //scrollToBottom(false)
     }
     
     override func willMove(toParentViewController parent: UIViewController?) {

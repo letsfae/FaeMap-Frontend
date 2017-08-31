@@ -157,6 +157,25 @@ extension ChatViewController: OutgoingMessageProtocol {
         self.sendMessage(snapImage: data, date: Date())
     }
     
+    func loadNewMessage() {
+        roomRef = ref.child(chatRoomId)
+        _refHandle = roomRef?.queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot: DataSnapshot) in
+            let item = (snapshot.value as? NSMutableDictionary)!
+            item["keyValue"] = snapshot.key
+            if self.messagesKey.contains(snapshot.key) {
+                return
+            }
+            let isIncoming = self.insertMessage(item)
+            if isIncoming {
+                JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
+            }
+            DispatchQueue.main.async {
+                self.finishReceivingMessage(animated: false)
+            }
+            self.numberOfMessagesLoaded += 1
+        })
+    }
+    
     // MARK: - Load Message
     // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
     // TODO: Debug this
