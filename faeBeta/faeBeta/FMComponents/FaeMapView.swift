@@ -65,6 +65,7 @@ class FaeMapView: MKMapView {
             span.longitudeDelta *= 0.5
             region.span = span
             self.setRegion(region, animated: true)
+            faeMapCtrler?.mapGesture(isOn: true)
         }
         blockTap = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
@@ -100,6 +101,7 @@ class FaeMapView: MKMapView {
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             }
         } else {
+            faeMapCtrler?.mapGesture(isOn: true)
             faeMapCtrler?.uiviewPlaceBar.hide()
             faeMapCtrler?.deselectAllAnnotations()
         }
