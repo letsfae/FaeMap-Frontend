@@ -62,8 +62,8 @@ extension ChatViewController: OutgoingMessageProtocol {
             outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = comment
-            realmMessage.latitude.value = lat as? Float
-            realmMessage.longitude.value = lon as? Float
+            realmMessage.latitude.value = lat as? Double
+            realmMessage.longitude.value = lon as? Double
             realmMessage.snapImage = snapImage! as NSData
             realmMessage.type = "location"
             // ENDBryan
@@ -162,6 +162,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     // TODO: Debug this
     func loadNewMessages() {
         roomRef = ref.child(chatRoomId)
+        roomRef?.keepSynced(true)
         _refHandle = roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded, with: { (snapshot: DataSnapshot) in
             if snapshot.exists() {
                 // because the type is ChildAdded so the snapshot is the new message
