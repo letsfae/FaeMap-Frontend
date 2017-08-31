@@ -233,12 +233,19 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4) {
             //self.navigationController?.pushViewController(chatVC, animated: true)
         //}
-        firebase.child(chatVC.chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+        /*firebase.child(chatVC.chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
             //this function will run only once
             let items = (snapshot.value as? NSMutableDictionary)!
             print(snapshot.key)
             for item in items {
                 RealmChat.receiveMessage(message: item.value as! NSDictionary, withUserID: withUserUserId!)
+            }
+            self.navigationController?.pushViewController(chatVC, animated: true)
+        }*/
+        firebase.child(chatVC.chatRoomId).queryLimited(toLast: 15).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            let items = (snapshot.value as? NSMutableDictionary)!
+            for item in items {
+                
             }
             self.navigationController?.pushViewController(chatVC, animated: true)
         }
