@@ -116,7 +116,7 @@ class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
         imgIcon.image = #imageLiteral(resourceName: "place_location")
         lblContent.text = place.address1 + ", " + place.address2
         
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 1500, 1500)
         mapView.setRegion(coordinateRegion, animated: false)
         let placePin = FaePinAnnotation(type: "place", data: place)
         mapView.removeAnnotations(mapView.annotations)
@@ -126,6 +126,13 @@ class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
     override func loadHiddenContent() {
         mapView = MKMapView()
         mapView.delegate = self
+        mapView.isZoomEnabled = false
+        mapView.isPitchEnabled = false
+        mapView.isRotateEnabled = false
+        mapView.isScrollEnabled = false
+        mapView.showsUserLocation = false
+        mapView.showsCompass = false
+        mapView.showsPointsOfInterest = false
         uiviewHiddenCell.addSubview(mapView)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
     }

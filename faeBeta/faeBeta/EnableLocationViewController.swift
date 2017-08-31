@@ -27,6 +27,7 @@ class EnableLocationViewController: UIViewController {
         self.view.backgroundColor = .white
         imageView = UIImageView(frame: CGRect(x: 68, y: 159, w: 291, h: 255))
         imageView.image = #imageLiteral(resourceName: "EnableLocationImage")
+        imageView.contentMode = .center
         self.view.addSubview(imageView)
         
         titleLabel = UILabel(frame: CGRect(x: 15, y: 460 * screenHeightFactor, width: screenWidth - 30, height: 27))

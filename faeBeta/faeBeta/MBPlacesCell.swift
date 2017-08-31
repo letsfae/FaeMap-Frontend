@@ -14,13 +14,6 @@ protocol SeeAllPlacesDelegate: class {
 }
 
 class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    /*
-    var imgPlaceIcon: UIImageView!
-    var lblPlaceName: UILabel!
-    var lblPlaceAddr: UILabel!
-    var lblDistance: UILabel!
-    var distance: String!
-    */
     var lblTitle: UILabel!
     var btnSeeAll: UIButton!
     var colInfo: UICollectionView!
@@ -30,11 +23,6 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        /*
-        let separatorView = UIView(frame: CGRect(x: 89.5, y: 89, width: screenWidth - 89.5, height: 1))
-        separatorView.backgroundColor = UIColor._225225225()
-        addSubview(separatorView)
-        */
         selectionStyle = .none
         loadCellContent()
     }

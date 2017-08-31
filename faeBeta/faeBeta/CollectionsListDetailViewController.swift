@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-//import ReadMoreTextView
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate {
     var enterMode: EnterMode!

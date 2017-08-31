@@ -44,13 +44,13 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentSize = CGSize(width: screenWidth, height: 2000)
         
         let titleImageView = UIImageView(frame: CGRect(x: screenWidth / 2 - 23, y: 5, width: 46, height: 49))
-        titleImageView.image = #imageLiteral(resourceName: "faeWingIcon")
+        titleImageView.image = #imageLiteral(resourceName: "app_icon_new")
         scrollView.addSubview(titleImageView)
         
         let titleLabel = UILabel(frame: CGRect(x: screenWidth / 2 - 100, y: 67, width: 200, height: 36))
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
-        let astrTitle = NSMutableAttributedString(string: "TERMS OF SERVICE\nFae Interactive")
+        let astrTitle = NSMutableAttributedString(string: "TERMS OF SERVICE\nFaevorite Maps")
         
         let attrRange1 = NSRange(location: 0, length: 16)
         let attrRange2 = NSRange(location: 17, length: 15)
@@ -75,7 +75,8 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
-            indicator.backgroundColor = UIColor._2499090()
+//            indicator.backgroundColor = UIColor._2499090()
+            indicator.tintColor = UIColor._2499090()
         }
     }
     
