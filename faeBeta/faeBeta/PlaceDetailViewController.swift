@@ -234,6 +234,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         case 1:
             break
         case 2:
+            // TODO jichao
+            
             break
         default:
             break

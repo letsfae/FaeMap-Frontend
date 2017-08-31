@@ -63,6 +63,7 @@ class FMChooseLocs: UIView {
         lblStartPoint.textAlignment = .left
         lblStartPoint.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblStartPoint.text = "Current Location"
+        lblStartPoint.isUserInteractionEnabled = true
         addSubview(lblStartPoint)
         addConstraintsWithFormat("H:|-72-[v0]-68-|", options: [], views: lblStartPoint)
         addConstraintsWithFormat("V:|-18.5-[v0(43)]", options: [], views: lblStartPoint)
@@ -71,6 +72,7 @@ class FMChooseLocs: UIView {
         lblDestination.textColor = UIColor._898989()
         lblDestination.textAlignment = .left
         lblDestination.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblDestination.isUserInteractionEnabled = true
         addSubview(lblDestination)
         addConstraintsWithFormat("H:|-72-[v0]-68-|", options: [], views: lblDestination)
         addConstraintsWithFormat("V:|-69-[v0(43)]", options: [], views: lblDestination)
