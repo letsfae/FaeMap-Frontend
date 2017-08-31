@@ -14,6 +14,7 @@ import Photos
 import MobileCoreServices
 import CoreMedia
 import AVFoundation
+import RealmSwift
 
 public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
@@ -135,7 +136,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //closeToolbarContentView()
         closeLocExtendView()
         moveDownInputBar()
-        ref.removeObserver(withHandle: _refHandle!)
+        //ref.removeObserver(withHandle: _refHandle!)
         toolbarContentView.clearToolBarViews()
         
         //        messages = []
@@ -172,8 +173,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //ENDBryan
         inputToolbar.contentView.textView.delegate = self
         
+        //////////
+        let realm = try! Realm()
+        let messagesToLoad = realm.objects(RealmMessage.self).filter("withUserID == %@", withUserId!).sorted(byKeyPath: "date")
+        for i in 0..<10 {
+            let message = messagesToLoad[i]
+            let item: NSDictionary = ["type": message.type, "senderName": message.senderName, "senderId": message.senderID, "message": message.message, "date": message.date, "latitude": message.latitude.value, "longitude": message.longitude.value, "place": message.place, "snapImage": message.snapImage?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "videoDuration": message.videoDuration, "isHeartSticker": message.isHeartSticker, "data": message.data?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "keyValue": message.messageID]
+            //print("_")
+            _ = insertMessage(item)
+        }
+        //////////
+        
         //load firebase messages
-        loadInitMessages()
+        //loadInitMessages()
+        //self.loadNewMessages()
         // Do any additional setup after loading the view.
         loadInputBarComponent()
         
@@ -212,7 +225,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
             //DispatchQueue.main.async {
                 //self.collectionView.reloadData()
-                self.loadNewMessages()
+                //self.loadNewMessages()
             //}
         //}
         

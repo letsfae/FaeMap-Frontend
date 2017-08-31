@@ -194,7 +194,7 @@ class IncomingMessage {
         
         imageFromData(item) { (image) in
             mediaItem?.image = image
-            self.collectionView.reloadData()
+            //self.collectionView.reloadData()
         }
         
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
