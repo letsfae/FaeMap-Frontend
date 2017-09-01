@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import Firebase
+import FirebaseDatabase
 
 struct cellFriendData {
     var Image = UIImage()
@@ -176,8 +178,18 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         // EndBryan
         //self.present(chatVC, animated: true, completion: nil)
         if chatOrShare == "share" {
-            let snap = UIImagePNGRepresentation(UIImage(named:"locationExtendViewHolder")!) as Data!
-            chatVC.sendMessage(text: "", place: placeDetail, snapImage: snap,  date: Date())
+            chatVC.ref.child(chatVC.chatRoomId).queryLimited(toLast: 1).observeSingleEvent(of: .value, with: { (snapshot: DataSnapshot) in
+                if snapshot.exists() {
+                    let items = (snapshot.value as? NSDictionary)!
+                    for item in items {
+                        let message = (item.value as? NSDictionary)!
+                        chatVC.objects.append(message)
+                    }
+                }
+                let snap = UIImagePNGRepresentation(UIImage(named:"locationExtendViewHolder")!) as Data!
+                chatVC.sendMessage(text: "", place: self.placeDetail, snapImage: snap,  date: Date())
+            })
+            
             navigationController?.popViewController(animated: true)
         }
         else if chatOrShare == "chat" {
