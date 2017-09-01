@@ -26,6 +26,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         uiviewPlaceList = AddPlaceToCollectionView()
         uiviewPlaceList.delegate = self
         view.addSubview(uiviewPlaceList)
+        
+        uiviewAfterAdded = AfterAddedToListView()
+        view.addSubview(uiviewAfterAdded)
+        
+        uiviewPlaceList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     // PlacePinAnnotationDelegate

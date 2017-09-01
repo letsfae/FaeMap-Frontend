@@ -13,6 +13,40 @@ protocol AddPlacetoCollectionDelegate: class {
     func cancelAddPlace()
 }
 
+class AfterAddedToListView: UIView {
+    
+    var uiviewAfterAdded: UIView!
+    
+    override init(frame: CGRect = .zero) {
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
+        backgroundColor = .white
+        loadContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadContent() {
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        addSubview(blurEffectView)
+    }
+    
+    func show() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight - self.frame.size.height
+        }, completion: nil)
+    }
+    
+    func hide() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight
+        }, completion: nil)
+    }
+}
+
 class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: AddPlacetoCollectionDelegate?
     
@@ -20,6 +54,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var btnNew: UIButton!
     var btnCancel: UIButton!
     var tblAddCollection: UITableView!
+    var uiviewAfterAdded: AfterAddedToListView!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
