@@ -69,13 +69,15 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             
             if addressAnnotations.count > 0 {
                 var index = 0
+                var found = false
                 for i in 0..<addressAnnotations.count {
                     if !addressAnnotations[i].isStartPoint {
                         index = i
+                        found = true
                         break
                     }
                 }
-                addressAnnotations.remove(at: index)
+                if found { addressAnnotations.remove(at: index) }
             }
             if address.name != "Current Location" {
                 let end = AddressAnnotation()
@@ -89,13 +91,15 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             
             if addressAnnotations.count > 0 {
                 var index = 0
+                var found = false
                 for i in 0..<addressAnnotations.count {
-                    if !addressAnnotations[i].isStartPoint {
+                    if addressAnnotations[i].isStartPoint {
                         index = i
+                        found = true
                         break
                     }
                 }
-                addressAnnotations.remove(at: index)
+                if found { addressAnnotations.remove(at: index) }
             }
             
             if address.name != "Current Location" {
@@ -206,11 +210,11 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
 
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = IVBezierPathRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor._174224255()
+        renderer.strokeColor = UIColor._206184231()
         renderer.lineWidth = 8
         renderer.lineCap = .round
         renderer.lineJoin = .round
-        renderer.borderColor = UIColor._137200241()
+        renderer.borderColor = UIColor._182150210()
         renderer.borderMultiplier = 1.5
         return renderer
     }

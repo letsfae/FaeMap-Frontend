@@ -65,8 +65,6 @@ class FMLocateSelf: UIButton {
         setImage(#imageLiteral(resourceName: "mainScreenSelfCenter"), for: .normal)
         addTarget(self, action: #selector(actionLocateSelf(_:)), for: .touchUpInside)
         layer.zPosition = 500
-        joshprint("size")
-        joshprint(#imageLiteral(resourceName: "mainScreenSelfCenter").size)
     }
     
     func actionLocateSelf(_ sender: UIButton) {

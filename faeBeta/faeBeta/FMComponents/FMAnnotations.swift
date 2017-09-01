@@ -26,7 +26,6 @@ class AddressAnnotationView: MKAnnotationView {
         layer.zPosition = 2
         layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
-        icon.image = #imageLiteral(resourceName: "selectLocOnMap")
         addSubview(icon)
     }
     
@@ -155,8 +154,6 @@ class SelfAnnotationView: MKAnnotationView {
     
     var selfIcon_invisible: UIImageView!
     
-    var boolInvisible = false
-    
     var mapAvatar: Int = 1 {
         didSet {
             selfIcon.image = UIImage(named: "miniAvatar_\(mapAvatar)")
@@ -171,7 +168,13 @@ class SelfAnnotationView: MKAnnotationView {
         clipsToBounds = false
         layer.zPosition = 2
         loadSelfMarkerSubview()
-        getSelfAccountInfo()
+        if let identifier = reuseIdentifier {
+            if identifier == "self_selected_mode" {
+                invisibleMode()
+            } else {
+                getSelfAccountInfo()
+            }
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.invisibleMode), name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)

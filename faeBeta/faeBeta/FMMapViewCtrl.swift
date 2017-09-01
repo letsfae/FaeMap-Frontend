@@ -75,7 +75,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 return viewForSocial(annotation: annotation, first: firstAnn)
             }
         } else if annotation is AddressAnnotation {
-            let identifier = "address"
+            guard let addressAnno = annotation as? AddressAnnotation else { return nil }
+            let identifier = addressAnno.isStartPoint ? "start_point" : "destination"
             var anView: AddressAnnotationView
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? AddressAnnotationView {
                 dequeuedView.annotation = annotation
@@ -83,6 +84,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
+            anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
             return anView
         } else {
             return nil

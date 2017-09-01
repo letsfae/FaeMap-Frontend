@@ -30,6 +30,23 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
         loadButtons()
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let identifier = "self_selected_mode"
+            var anView: SelfAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.invisibleMode()
+            return anView
+        } else {
+            return nil
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -57,7 +74,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
         slMapView.setCamera(camera, animated: false)
         
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
-        imgPinOnMap.image = #imageLiteral(resourceName: "selectLocOnMap")
+        imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
         view.addSubview(imgPinOnMap)
     }
     
