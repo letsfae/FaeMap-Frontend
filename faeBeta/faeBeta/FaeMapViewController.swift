@@ -71,6 +71,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
     var uiviewPlaceList: AddPlaceToCollectionView!
+    var uiviewAfterAdded: AfterAddedToListView!
     var imgDistIndicator: FMDistIndicator!
     var uiviewChooseLocs: FMChooseLocs!
     
