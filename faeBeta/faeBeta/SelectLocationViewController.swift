@@ -66,12 +66,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
         slMapView.delegate = self
         slMapView.showsPointsOfInterest = false
         slMapView.showsCompass = false
+        slMapView.tintColor = UIColor._2499090()
         view.addSubview(slMapView)
         
         let camera = slMapView.camera
         camera.altitude = Key.shared.dblAltitude
         camera.centerCoordinate = Key.shared.selectedLoc
         slMapView.setCamera(camera, animated: false)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
+        slMapView.setRegion(coordinateRegion, animated: false)
         
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
         imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")

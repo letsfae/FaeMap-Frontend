@@ -123,7 +123,6 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
-        self.finishSendingMessage(animated: true, cleanTextView: text != nil)
         
         outgoingMessage!.delegate = self
         
@@ -132,6 +131,10 @@ extension ChatViewController: OutgoingMessageProtocol {
         outgoingMessage!.sendMessage(chatRoomId, withUser: realmWithUser!)
         
         RealmChat.sendMessage(message: realmMessage, completion: self.fakeCompletion)
+        
+        _ = insertMessage(sentMessage)
+        numberOfMessagesLoaded += 1
+        self.finishSendingMessage(animated: true, cleanTextView: text != nil)
     }
     
     func fakeCompletion() {}
@@ -160,8 +163,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     func loadNewMessage() {
         roomRef = ref.child(chatRoomId)
         _refHandle = roomRef?.queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot: DataSnapshot) in
-            let item = (snapshot.value as? NSMutableDictionary)!
-            item["keyValue"] = snapshot.key
+            let item = (snapshot.value as? NSDictionary)!
             if self.messagesKey.contains(snapshot.key) {
                 return
             }
@@ -277,7 +279,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         if let message = message {
             objects.append(item)
             messages.append(message)
-            messagesKey.append(item["keyValue"] as! String)
+            messagesKey.append(item["messageId"] as! String)
             return self.incoming(item)
         }
         return false
@@ -349,5 +351,9 @@ extension ChatViewController: OutgoingMessageProtocol {
     // MARK: - outgoingmessage delegate
     func updateChat_Id(_ newId: String) {
         chat_id = newId
+    }
+    
+    func getSentMessage(_ message: NSDictionary) {
+        sentMessage = message
     }
 }

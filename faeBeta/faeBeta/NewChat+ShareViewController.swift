@@ -8,18 +8,24 @@
 
 import UIKit
 import SwiftyJSON
+import Firebase
+import FirebaseDatabase
 
 struct cellFriendData {
     var Image = UIImage()
     var nickName: String
     var userName: String
     var userID: String
-    var index: Int
+    var index: Int = -1
     
-    init(userName: String, nickName: String, userID: String, index: Int) {
+    init(userName: String, nickName: String, userID: String) {
         self.nickName = nickName
         self.userName = userName
         self.userID = userID
+        //self.index = index
+    }
+    
+    mutating func setIndex(at index: Int) {
         self.index = index
     }
 }
@@ -66,14 +72,10 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadFriends()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        loadFriends()
         loadNavBar()
         loadSearchBar()
         loadChatsList()
@@ -87,11 +89,14 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
             }
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.arrFriends.append(cellFriendData(userName: json[i-1]["friend_user_name"].stringValue, nickName: json[i-1]["friend_user_nick_name"].stringValue,  userID: json[i-1]["friend_id"].stringValue, index: i - 1))
+                    self.arrFriends.append(cellFriendData(userName: json[i-1]["friend_user_name"].stringValue, nickName: json[i-1]["friend_user_nick_name"].stringValue,  userID: json[i-1]["friend_id"].stringValue))
                 }
             }
-            self.arrFiltered = self.arrFriends
             self.arrFriends.sort{ $0.nickName < $1.nickName }
+            for i in 0..<self.arrFriends.count {
+                self.arrFriends[i].setIndex(at: i)
+            }
+            self.arrFiltered = self.arrFriends
             self.tblFriends.reloadData()
         }
     }
@@ -173,8 +178,18 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         // EndBryan
         //self.present(chatVC, animated: true, completion: nil)
         if chatOrShare == "share" {
-            let snap = UIImagePNGRepresentation(UIImage(named:"locationExtendViewHolder")!) as Data!
-            chatVC.sendMessage(text: "", place: placeDetail, snapImage: snap,  date: Date())
+            chatVC.ref.child(chatVC.chatRoomId).queryLimited(toLast: 1).observeSingleEvent(of: .value, with: { (snapshot: DataSnapshot) in
+                if snapshot.exists() {
+                    let items = (snapshot.value as? NSDictionary)!
+                    for item in items {
+                        let message = (item.value as? NSDictionary)!
+                        chatVC.objects.append(message)
+                    }
+                }
+                let snap = UIImagePNGRepresentation(UIImage(named:"locationExtendViewHolder")!) as Data!
+                chatVC.sendMessage(text: "", place: self.placeDetail, snapImage: snap,  date: Date())
+            })
+            
             navigationController?.popViewController(animated: true)
         }
         else if chatOrShare == "chat" {
@@ -184,12 +199,11 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
             navigationController?.setViewControllers(arrViewControllers!, animated: true)
         }
     }
-
     
     func loadSearchBar() {
         uiviewSchabr = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
         
-        searchField = UITextField(frame: CGRect(x: 49, y: 2, width: screenWidth - 55, height: 50))
+        searchField = UITextField(frame: CGRect(x: 49, y: 0, width: screenWidth - 55, height: 49))
         searchField.font = UIFont(name: "AvenirNext-Medium", size: 18)
         searchField.textColor = UIColor._898989()
         searchField.tintColor = UIColor._2499090()
@@ -222,6 +236,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         separateLine2.layer.borderWidth = screenWidth
         separateLine2.layer.borderColor = UIColor._200199204cg()
         uiviewHeader.addSubview(separateLine2)
+        view.addSubview(uiviewHeader)
         
         let lblHeader:UILabel = UILabel(frame: uiviewHeader.bounds)
         lblHeader.textColor = UIColor._155155155()
@@ -233,10 +248,9 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         uiviewHeader.addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblHeader)
         uiviewHeader.backgroundColor = UIColor._248248248()
         
-        tblFriends = UITableView(frame: CGRect(x: 0, y: 113, width: screenWidth, height: screenHeight - 114))
+        tblFriends = UITableView(frame: CGRect(x: 0, y: 140, width: screenWidth, height: screenHeight - 140), style: .plain)
         tblFriends.dataSource = self
         tblFriends.delegate = self
-        tblFriends.tableHeaderView = uiviewHeader
         tblFriends.register(NewChatTableViewCell.self, forCellReuseIdentifier: "friendCell")
         tblFriends.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         tblFriends.separatorColor = UIColor._200199204()
