@@ -122,6 +122,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         requestOption.deliveryMode = .highQualityFormat
         self.collectionView?.decelerationRate = UIScrollViewDecelerationRateNormal
         NotificationCenter.default.addObserver(self, selector: #selector(self.appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
+        PHPhotoLibrary.shared().register(self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
