@@ -116,6 +116,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var toolbarLastY: CGFloat = screenHeight - 90
     var collectionViewLastBottomInset: CGFloat = 90
     var boolGoToFullContent:Bool = false
+    
+    var sentMessage: NSDictionary = [:]
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -185,7 +187,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         ///////// */
         
-        for message in messagesInit.sorted(by: { ($0["index"] as! Int) < ($1["index"] as! Int) }) {
+        for message in messagesInit {
             _ = insertMessage(message)
             self.numberOfMessagesLoaded += 1
         }

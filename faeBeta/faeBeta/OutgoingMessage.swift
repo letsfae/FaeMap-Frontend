@@ -13,6 +13,7 @@ import AVFoundation
 
 protocol OutgoingMessageProtocol {
     func updateChat_Id(_ newId: String)
+    func getSentMessage(_ message: NSDictionary)
 }
 
 // this class is used to box information of one message user sent and send them to firebase.
@@ -76,7 +77,7 @@ class OutgoingMessage {
         let reference = firebase.child(chatRoomId).childByAutoId()
         
         item["messageId"] = reference.key
-        
+        delegate.getSentMessage(item)
         reference.setValue(item) { (error, ref) -> Void in
             
             if error != nil {
