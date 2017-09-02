@@ -176,12 +176,14 @@ class SelfAnnotationView: MKAnnotationView {
             }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.getSelfAccountInfo), name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.invisibleMode), name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
     }
@@ -213,7 +215,7 @@ class SelfAnnotationView: MKAnnotationView {
         timer = nil
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateHeading), userInfo: nil, repeats: true)
 
-        selfMarkerAnimation()
+        outsideCircleAnimation()
     }
     
     func updateHeading() {
@@ -260,7 +262,7 @@ class SelfAnnotationView: MKAnnotationView {
     
     func reloadSelfMarker() {
         
-        selfMarkerAnimation()
+        outsideCircleAnimation()
         
         guard userStatus != 5 else { return }
         
@@ -275,7 +277,7 @@ class SelfAnnotationView: MKAnnotationView {
         }
     }
     
-    func selfMarkerAnimation() {
+    func outsideCircleAnimation() {
         
         if outsideCircle_1 != nil {
             outsideCircle_1.removeFromSuperview()
