@@ -96,6 +96,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
         self.navigationController?.pushViewController(vcContacts, animated: true)
     }
     
+    // LeftSlidingMenuDelegate
     func logOutInLeftMenu() {
         self.jumpToWelcomeView(animated: true)
     }
@@ -110,14 +111,11 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
     }
     
     func switchMapMode() {
-        if let vc = self.navigationController?.viewControllers.first {
-            if vc is InitialPageController {
-                if let vcRoot = vc as? InitialPageController {
-                    vcRoot.goToMapBoard()
-                    LeftSlidingMenuViewController.boolMapBoardIsOn = true
-                }
-            }
-        }
+        guard let vc = self.navigationController?.viewControllers.first else { return }
+        guard vc is InitialPageController else { return }
+        guard let vcRoot = vc as? InitialPageController else { return }
+        vcRoot.goToMapBoard()
+        LeftSlidingMenuViewController.boolMapBoardIsOn = true
     }
     
     fileprivate func reloadMainScreenButtons() {

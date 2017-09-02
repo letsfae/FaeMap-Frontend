@@ -106,6 +106,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapChat()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
+        updateTimerForAllPins()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -137,7 +139,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
             updateNickName.getSelfNamecard { (status: Int, message: Any?) in
-                guard status / 100 == 2 else { return }
+                guard status / 100 == 2 else {
+                    self.jumpToWelcomeView(animated: true)
+                    return
+                }
                 let nickNameInfo = JSON(message!)
                 if let str = nickNameInfo["nick_name"].string {
                     Key.shared.nickname = str
@@ -162,7 +167,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func isUserLoggedIn() {
         _ = LocalStorageManager.shared.readLogInfo()
         if Key.shared.is_Login == 0 {
-            jumpToWelcomeView(animated: false)
+            jumpToWelcomeView(animated: true)
         }
     }
     

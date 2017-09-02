@@ -139,7 +139,6 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                         firebaseWelcome()
                         print("[loginUser] is first time login!")
                     }
-                    
                     self.navigationController?.popToRootViewController(animated: false)
                     if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
                         if vcRoot is InitialPageController {
