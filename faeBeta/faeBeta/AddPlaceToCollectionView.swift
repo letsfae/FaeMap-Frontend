@@ -8,18 +8,12 @@
 
 import UIKit
 
-protocol AddPlacetoCollectionDelegate: class {
-    func createColList()
-    func cancelAddPlace()
-}
-
 class AfterAddedToListView: UIView {
     
     var uiviewAfterAdded: UIView!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
-        backgroundColor = .white
         loadContent()
     }
     
@@ -28,10 +22,35 @@ class AfterAddedToListView: UIView {
     }
     
     fileprivate func loadContent() {
+        
+        layer.zPosition = 1002
+        
         let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = self.bounds
         addSubview(blurEffectView)
+        
+        let lblCollected = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
+        lblCollected.text = "Collocted to List!"
+        addSubview(lblCollected)
+        
+        let btnUndo = UIButton()
+        btnUndo.setTitle("Undo", for: .normal)
+        btnUndo.setTitleColor(.white, for: .normal)
+        btnUndo.setTitleColor(.lightGray, for: .highlighted)
+        btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        addSubview(btnUndo)
+        addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
+        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
+        
+        let btnSeeList = UIButton()
+        btnSeeList.setTitle("See List", for: .normal)
+        btnSeeList.setTitleColor(.white, for: .normal)
+        btnSeeList.setTitleColor(.lightGray, for: .highlighted)
+        btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        addSubview(btnSeeList)
+        addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
+        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
     }
     
     func show() {
@@ -45,6 +64,11 @@ class AfterAddedToListView: UIView {
             self.frame.origin.y = screenHeight
         }, completion: nil)
     }
+}
+
+protocol AddPlacetoCollectionDelegate: class {
+    func createColList()
+    func cancelAddPlace()
 }
 
 class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
@@ -144,6 +168,14 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         cell.lblListName.text = arr[indexPath.row]
         cell.lblListNum.text = "12 items"
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.hide()
+        uiviewAfterAdded.show()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.uiviewAfterAdded.hide()
+        }
     }
     
     func actionCancel(_ sender: UIButton) {
