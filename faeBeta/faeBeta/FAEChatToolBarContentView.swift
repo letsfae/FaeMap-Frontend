@@ -439,7 +439,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     {
         if let photoPicker = photoPicker{
             photoPicker.getSmartAlbum()
-            self.photoQuickCollectionView.reloadData()
+            self.photoQuickCollectionView?.reloadData()
         }
     }
     
