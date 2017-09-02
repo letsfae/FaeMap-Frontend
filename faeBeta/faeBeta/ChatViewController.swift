@@ -20,7 +20,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate {
     //MARK: - properties
     var ref = Database.database().reference().child(fireBaseRef) // reference to all chat room
     var roomRef: DatabaseReference?
@@ -116,6 +116,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var toolbarLastY: CGFloat = screenHeight - 90
     var collectionViewLastBottomInset: CGFloat = 90
     var boolGoToFullContent:Bool = false
+    
+    var sentMessage: NSDictionary = [:]
     // MARK: - view life cycle
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -185,7 +187,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         ///////// */
         
-        for message in messagesInit.sorted(by: { ($0["index"] as! Int) < ($1["index"] as! Int) }) {
+        for message in messagesInit {
             _ = insertMessage(message)
             self.numberOfMessagesLoaded += 1
         }
@@ -994,9 +996,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //let vc = UIStoryboard.init(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "ChatSendLocationController") as! ChatSendLocationController
         closeToolbarContentView()
         boolGoToFullContent = true
-        let vc = ChatSendLocationController()
-        vc.locationDelegate = self
+        //let vc = ChatSendLocationController()
+        //vc.locationDelegate = self
+        let vc = SelectLocationViewController()
+        vc.delegate = self
+        Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func sendLocationBack(address: RouteAddress) {
+        //let selectedPlace = CLPlacemark(location: CLLocation(), name: "", postalAddress: nil)
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: {
+            (placemarks, error) -> Void in
+            guard let response = placemarks?[0] else { return }
+            self.addResponseToLocationExtend(response: response, withMini: false)
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+        })
     }
     
     func closeLocExtendView() {

@@ -155,11 +155,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: - tableView delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.loadingRecentTimer.invalidate()
         if self.cellsCurrentlyEditing.count == 0 {
             //tableView.deselectRow(at: indexPath, animated: true)
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
                     //performSegue(withIdentifier: "recentToChatSeg", sender: indexPath)
+                    let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+                    //cell.selectedBackgroundView = UIView()
+                    //cell.selectedBackgroundView?.backgroundColor = UIColor._107107107()
+                    //cell.isHighlighted = true
+                    cell.uiviewMain.backgroundColor = UIColor._225225225()
                     gotoChatFromRecent(selectedRowAt: indexPath)
                 }
             }
@@ -169,6 +175,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 cell.closeCell()
             }
         }
+    }
+    
+    public func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -192,7 +202,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! RecentTableViewCell
         cell.delegate = self
-        
+        cell.uiviewMain.backgroundColor = .white
         // Bryan
         // let recent = recents![indexPath.row]
         // cell.bindData(recent)
@@ -242,13 +252,13 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             }
             self.navigationController?.pushViewController(chatVC, animated: true)
         }*/
-        firebase.child(chatVC.chatRoomId).queryLimited(toLast: UInt(15)).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
-            let items = (snapshot.value as? NSDictionary)!
-            for item in items {
+        firebase.child(chatVC.chatRoomId).keepSynced(true)
+        firebase.child(chatVC.chatRoomId).queryLimited(toLast: UInt(15)).queryOrdered(byChild: "index").observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+            let items: NSEnumerator = snapshot.children
+            while let item = items.nextObject() as? DataSnapshot {
                 let message = (item.value as? NSMutableDictionary)!
-                message["keyValue"] = item.key
                 chatVC.messagesInit.append(message)
-            }            
+            }
             self.navigationController?.pushViewController(chatVC, animated: true)
         }
     }
