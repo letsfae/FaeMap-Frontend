@@ -120,6 +120,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
+        
+        mapMode = .routing
+        
         imgDistIndicator.show()
         imgDistIndicator.updateDistance(distance: distance)
         
@@ -132,6 +135,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     // FMRouteCalculateDelegate
     func hideRouteCalculatorComponents() {
+        
+        mapMode = .normal
+        
         removeAllRoutes()
         imgDistIndicator.hide()
         uiviewChooseLocs.hide()

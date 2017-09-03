@@ -11,6 +11,13 @@ import SwiftyJSON
 import MapKit
 import CCHMapClusterController
 
+enum MapMode {
+    case normal
+    case routing
+    case pinDetail
+    case selecting
+}
+
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var lblSearchContent: UILabel!
@@ -80,7 +87,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var startPointAddr: RouteAddress!
     var destinationAddr: RouteAddress!
-    var addressAnnotations = [AddressAnnotation]() 
+    var addressAnnotations = [AddressAnnotation]()
+    var mapMode: MapMode = .normal
     
     // System Functions
     override func viewDidLoad() {

@@ -15,17 +15,33 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var btnCreate: UIButton!
     var lblNameRemainChars: UILabel!
     var lblDespRemainChars: UILabel!
+    var lblDescription: UILabel!
     var nameRemainChars: Int = 60
     var despRemainChars: Int = 300
     var textviewListName: UITextView!
     var textviewDesp: UITextView!
     let placeholder = ["List Name", "Describe your list (Optional)"]
+    var keyboardHeight: CGFloat = 0
+    var numLinesName = 1 {
+        didSet {
+            guard textviewDesp != nil else { return }
+            var numLines = 4 - numLinesName
+            if screenWidth == 375 {
+                numLines = 6 - numLinesName
+            } else if screenWidth == 414 {
+                numLines = 8 - numLinesName
+            }
+            textviewDesp.frame.size.height = CGFloat(numLines * 30)
+        }
+    }
+    var numLinesDesp = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
     fileprivate func loadNavBar() {
@@ -41,14 +57,14 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         btnCancel.setTitle("Cancel", for: .normal)
         btnCancel.setTitleColor(UIColor._115115115(), for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        btnCancel.addTarget(self, action: #selector(self.actionCancel(_:)), for: .touchUpInside)
         
         btnCreate = UIButton(frame: CGRect(x: screenWidth - 85, y: 21, width: 85, height: 43))
         uiviewNavBar.addSubview(btnCreate)
         btnCreate.setTitle("Create", for: .normal)
         btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
         btnCreate.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnCreate.addTarget(self, action: #selector(actionCreateList(_:)), for: .touchUpInside)
+        btnCreate.addTarget(self, action: #selector(self.actionCreateList(_:)), for: .touchUpInside)
         btnCreate.isEnabled = false
         
         let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
@@ -69,7 +85,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblListName.text = "Enter a Name for your List"
         uiviewContent.addSubview(lblListName)
         
-        let lblDescription = UILabel(frame: CGRect(x: 20, y: 122, width: 195, height: 22))
+        lblDescription = UILabel(frame: CGRect(x: 20, y: 122, width: 195, height: 22))
         lblDescription.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblDescription.textColor = UIColor._138138138()
         lblDescription.text = "Enter a Description"
@@ -88,7 +104,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblDespRemainChars.text = String(despRemainChars)
         lblDespRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblDespRemainChars)
-        
         
         textviewListName = UITextView(frame: CGRect(x: 20, y: 57, width: screenWidth - 40, height: 40))
         textviewListName.delegate = self
@@ -109,13 +124,13 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         textviewListName.becomeFirstResponder()
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         textviewListName.resignFirstResponder()
         textviewDesp.resignFirstResponder()
         dismiss(animated: true)
     }
     
-    func actionCreateList(_ sender: UIButton) {
+    @objc func actionCreateList(_ sender: UIButton) {
         print("create list")
     }
     
@@ -131,12 +146,15 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-
+        
         if newText.isEmpty {
             btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
             btnCreate.isEnabled = false
-            lblNameRemainChars.text = "0"
-            lblDespRemainChars.text = "0"
+            if textView == textviewListName {
+                lblNameRemainChars.text = "60"
+            } else {
+                lblDespRemainChars.text = "300"
+            }
             textView.text = textView == textviewListName ? placeholder[0] : placeholder[1]
             textView.textColor = UIColor._155155155()
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -151,30 +169,35 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        var numlineOnDevice = 3
         if textView == textviewListName {
-            nameRemainChars = 60 - textView.text.characters.count;
+            nameRemainChars = 60 - textView.text.characters.count
             lblNameRemainChars.text = String(nameRemainChars)
+            if screenWidth >= 375 {
+                let txtHeight = ceil(textView.contentSize.height)
+                textView.frame.size.height = txtHeight
+                textView.setContentOffset(CGPoint.zero, animated: false)
+                let offset: CGFloat = 47
+                lblDescription.frame.origin.y = 122 - offset + txtHeight
+                lblDespRemainChars.frame.origin.y = 122 - offset + txtHeight
+                textviewDesp.frame.origin.y = 159 - offset + txtHeight
+                numLinesName = Int(textView.contentSize.height / textView.font!.lineHeight)
+            }
         } else {
+            numLinesDesp = 4 - numLinesName
+            if screenWidth == 375 {
+                numLinesDesp = 6 - numLinesName
+            } else if screenWidth == 414 {
+                numLinesDesp = 8 - numLinesName
+            }
             despRemainChars = 300 - textView.text.characters.count;
             lblDespRemainChars.text = String(despRemainChars)
-            
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
-            if screenWidth == 375 {
-                numlineOnDevice = 5
-            } else if screenWidth == 414 {
-                numlineOnDevice = 8
-            }
-            print("numLines \(numLines)")
-            if numLines <= numlineOnDevice {
-                let fixedWidth = textView.frame.size.width
-                textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-                var newFrame = textView.frame
-                newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-                textView.isScrollEnabled = false
+            if numLines >= numLinesDesp {
+                textView.frame.size.height = CGFloat(numLinesDesp * 30)
             } else {
-                textView.isScrollEnabled = true
+                let txtHeight = ceil(textView.contentSize.height)
+                textView.frame.size.height = txtHeight
+                textView.setContentOffset(CGPoint.zero, animated: false)
             }
         }
         
@@ -185,5 +208,12 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             textView.textColor = UIColor._155155155()
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         }
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        keyboardHeight = keyboardRectangle.height
     }
 }
