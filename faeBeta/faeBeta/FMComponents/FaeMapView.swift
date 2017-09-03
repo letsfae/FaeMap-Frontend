@@ -35,6 +35,7 @@ class FaeMapView: MKMapView {
     }
     
     func handleTap_2(_ tapGesture: UITapGestureRecognizer) {
+        
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
@@ -45,18 +46,20 @@ class FaeMapView: MKMapView {
         }
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView {
-            if let anView = v as? PlacePinAnnotationView {
-                if !anView.optionsOpened {
+            if faeMapCtrler?.mapMode != .routing {
+                if let anView = v as? PlacePinAnnotationView {
+                    if !anView.optionsOpened {
+                        faeMapCtrler?.deselectAllAnnotations()
+                        faeMapCtrler?.tapPlacePin(didSelect: anView)
+                        anView.showButtons()
+                        anView.optionsReady = true
+                        anView.optionsOpened = true
+                    }
+                } else if let anView = v as? UserPinAnnotationView {
                     faeMapCtrler?.deselectAllAnnotations()
-                    faeMapCtrler?.tapPlacePin(didSelect: anView)
-                    anView.showButtons()
-                    anView.optionsReady = true
-                    anView.optionsOpened = true
+                    faeMapCtrler?.uiviewPlaceBar.hide()
+                    faeMapCtrler?.tapUserPin(didSelect: anView)
                 }
-            } else if let anView = v as? UserPinAnnotationView {
-                faeMapCtrler?.deselectAllAnnotations()
-                faeMapCtrler?.uiviewPlaceBar.hide()
-                faeMapCtrler?.tapUserPin(didSelect: anView)
             }
         } else {
             var region = self.region
@@ -73,6 +76,9 @@ class FaeMapView: MKMapView {
     }
     
     func handleTap_1(_ tapGesture: UITapGestureRecognizer) {
+        
+        guard faeMapCtrler?.mapMode != .routing else { return }
+        
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
@@ -111,6 +117,9 @@ class FaeMapView: MKMapView {
     }
 
     func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+        
+        guard faeMapCtrler?.mapMode != .routing else { return }
+        
         blockTap = true
         let tapPoint = sender.location(in: self)
         let numberOfTouches = sender.numberOfTouches

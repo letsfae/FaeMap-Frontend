@@ -14,7 +14,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     
     // AddPlacetoCollectionDelegate
     func createColList() {
-        
+        let vc = CreateColListViewController()
+        vc.enterMode = .place
+        present(vc, animated: true)
     }
     
     // AddPlacetoCollectionDelegate
