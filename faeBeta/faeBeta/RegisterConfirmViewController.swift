@@ -132,21 +132,8 @@ class RegisterConfirmViewController: RegisterBaseViewController {
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
-                    print("login success")
-                    let messageJSON = JSON(message!)
-                    if let _ = messageJSON["last_login_at"].string {
-                    } else {
-                        firebaseWelcome()
-                        print("[loginUser] is first time login!")
-                    }
-                    self.navigationController?.popToRootViewController(animated: false)
-                    if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
-                        if vcRoot is InitialPageController {
-                            if let vc = vcRoot as? InitialPageController {
-                                vc.goToFaeMap()
-                            }
-                        }
-                    }
+                    let vcNext = InitialPageController()
+                    self.navigationController?.pushViewController(vcNext, animated: true)
                 }
             })
         })

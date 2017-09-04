@@ -14,7 +14,7 @@ protocol PlaceViewDelegate: class {
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
 }
 
-enum PlaceResultBarState: String {
+enum PlaceInfoBarState: String {
     case singleSearch
     case multipleSearch
     case map
@@ -38,7 +38,7 @@ class FMPlaceInfoBar: UIView {
     var prevAnnotation: CCHMapClusterAnnotation!
     var nextAnnotation: CCHMapClusterAnnotation!
     
-    var state: PlaceResultBarState = .map {
+    var state: PlaceInfoBarState = .map {
         didSet {
             boolLeft = annotations.count > 1 || places.count > 1
             boolRight = annotations.count > 1 || places.count > 1

@@ -64,8 +64,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-        let vcEmptyRoot = InitialPageController()
-        navMain.viewControllers = [vcEmptyRoot]
+        _ = LocalStorageManager.shared.readLogInfo()
+        
+        let vcRoot = Key.shared.is_Login == 0 ? WelcomeViewController() : InitialPageController()
+        Key.shared.navOpenMode = Key.shared.is_Login == 0 ? .welcomeFirst : .mapFirst
+        navMain.viewControllers = [vcRoot]
         navMain.navigationBar.isHidden = true
         
         window = UIWindow(frame: UIScreen.main.bounds)

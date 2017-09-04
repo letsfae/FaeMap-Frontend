@@ -72,7 +72,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var placeResultTbl = FMPlacesTable()
     var btnTapToShowResultTbl: UIButton!
     
-    var swipingState: PlaceResultBarState = .map
+    var swipingState: PlaceInfoBarState = .map
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var prevAltitude: CLLocationDistance = 0
     
@@ -111,20 +111,22 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         loadMapChat()
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
+        renewSelfLocation()
+        checkDisplayNameExisitency()
+        updateGenderAge()
         updateTimerForAllPins()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        renewSelfLocation()
-        checkDisplayNameExisitency()
-        updateGenderAge()
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
+        
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -148,7 +150,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             let updateNickName = FaeUser()
             updateNickName.getSelfNamecard { (status: Int, message: Any?) in
                 guard status / 100 == 2 else {
-                    self.jumpToWelcomeView(animated: true)
+                    self.jumpToWelcomeView(animated: false)
                     return
                 }
                 let nickNameInfo = JSON(message!)
@@ -164,10 +166,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {
-                // joshprint("[checkDisplayNameExisitency] display name: \(withNickName)")
             } else {
-                // joshprint("[checkDisplayNameExisitency] display name did not setup")
                 self.loadFirstLoginVC()
+                firebaseWelcome()
             }
         }
     }
@@ -175,11 +176,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func isUserLoggedIn() {
         _ = LocalStorageManager.shared.readLogInfo()
         if Key.shared.is_Login == 0 {
-            jumpToWelcomeView(animated: true)
+            jumpToWelcomeView(animated: false)
         }
     }
     
-    fileprivate func updateGenderAge() {
+    func updateGenderAge() {
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
@@ -195,7 +196,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
-        //        timerLoadRegionPlacePins = Timer.scheduledTimer(timeInterval: 600, target: self, selector: #selector(loadCurrentRegionPlacePins), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
@@ -209,7 +209,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    fileprivate func loadFirstLoginVC() {
+    func loadFirstLoginVC() {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)
@@ -222,8 +222,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func jumpToWelcomeView(animated: Bool) {
-        let welcomeVC = WelcomeViewController()
-        navigationController?.pushViewController(welcomeVC, animated: false)
+        if Key.shared.navOpenMode == .welcomeFirst {
+            navigationController?.popToRootViewController(animated: animated)
+        } else {
+            let welcomeVC = WelcomeViewController()
+            navigationController?.pushViewController(welcomeVC, animated: animated)
+            navigationController?.viewControllers = [welcomeVC]
+            Key.shared.navOpenMode = .welcomeFirst
+        }
     }
     
     func refreshMap(pins: Bool, users: Bool, places: Bool) {
