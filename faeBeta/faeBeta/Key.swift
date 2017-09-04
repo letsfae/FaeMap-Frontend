@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum NavOpenMode {
+    case mapFirst
+    case welcomeFirst
+}
+
 class Key: NSObject { //  singleton class
     
     static let shared = Key()
@@ -51,6 +56,7 @@ class Key: NSObject { //  singleton class
     var is_Login: Int = 0
     var userEmail = ""
     var userPassword = ""
+    var navOpenMode: NavOpenMode = .mapFirst
     
     var username: String = ""
     var nickname: String?

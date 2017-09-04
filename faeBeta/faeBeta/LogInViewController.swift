@@ -159,11 +159,8 @@ class LogInViewController: UIViewController {
         user.whereKey("is_mobile", value: "true")
         user.logInBackground { (status: Int, message: Any?) in
             if status / 100 == 2 {
-                self.navigationController?.popToRootViewController(animated: false)
-                guard let vcRoot = UIApplication.shared.keyWindow?.rootViewController else { return }
-                guard vcRoot is InitialPageController else { return }
-                guard let vc = vcRoot as? InitialPageController else { return }
-                vc.goToFaeMap()
+                let vcNext = InitialPageController()
+                self.navigationController?.pushViewController(vcNext, animated: true)
             } else {
                 // Vicky 07/12/2017  - 把使用error message的判断改为使用error code判断
                 print("[LOGIN STATUS]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
