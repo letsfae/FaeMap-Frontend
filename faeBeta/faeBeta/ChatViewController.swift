@@ -187,10 +187,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         ///////// */
         
-        for message in messagesInit {
-            _ = insertMessage(message)
-            self.numberOfMessagesLoaded += 1
-        }
         
         //load firebase messages
         //loadInitMessages()
@@ -222,6 +218,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(locExtendView)
         moveDownInputBar()
         getAvatar()
+        for message in messagesInit {
+            _ = insertMessage(message)
+            self.numberOfMessagesLoaded += 1
+        }
+        self.finishReceivingMessage(animated: false)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -756,8 +757,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private func getAvatar() {
         if showAvatar {
             createAvatars(avatarImageDictionary)
-            collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 35, height: 35)
-            collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 35, height: 35)
+            collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
+            collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
             if collectionView != nil {
                 collectionView.reloadData()
             }

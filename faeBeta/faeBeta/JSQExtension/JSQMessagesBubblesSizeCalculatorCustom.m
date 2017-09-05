@@ -61,7 +61,7 @@
 
         // this extra inset value is needed because `boundingRectWithSize:` is slightly off
         // see comment below
-        _additionalInset = 2;
+        _additionalInset = 3;
     }
     return self;
 }
@@ -109,7 +109,7 @@
         CGSize avatarSize = [self jsq_avatarSizeForMessageData:messageData withLayout:layout];
 
         //  from the cell xibs, there is a 2 point space between avatar and bubble
-        CGFloat spacingBetweenAvatarAndBubble = 2.0f;
+        CGFloat spacingBetweenAvatarAndBubble = 1.0f;
         CGFloat horizontalContainerInsets = layout.messageBubbleTextViewTextContainerInsets.left + layout.messageBubbleTextViewTextContainerInsets.right;
 //        CGFloat horizontalFrameInsets = layout.messageBubbleTextViewFrameInsets.left + layout.messageBubbleTextViewFrameInsets.right;
 
@@ -125,7 +125,7 @@
         CGRect stringRect =
         [ [EmojiService shrinkString:[messageData text]] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
                                                              options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
-                                                          attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:16.0]}
+                                                          attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]}
                              
                                                              context:nil];
 
