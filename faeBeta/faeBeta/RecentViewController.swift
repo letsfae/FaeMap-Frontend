@@ -26,14 +26,20 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: - properties
     var uiviewNavBar: FaeNavBar!
-    
-    //@IBOutlet private weak var tableView: UITableView!
     var tableView: UITableView!
+    var uiviewBackground: UIView!
+    var uiviewDeleteConfirm: UIView!
+    var btnDeleteConfirm: UIButton!
+    var lblConfirmLine1: UILabel!
+    var lblConfirmLine2: UILabel!
+    var btnDismiss: UIButton!
     
     private var recents: JSON? // an array of dic to store recent chatting informations
     private var realmRecents: Results<RealmRecent>?
     private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
     private var loadingRecentTimer: Timer!
+    
+    var indexToDelete = IndexPath()
     
     var backClosure: BackClosure?
     
@@ -54,8 +60,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //navigationController?.setNavigationBarHidden(false, animated: true)
         //self.tableView.tableFooterView = UIView()
         navigationBarSet()
+        loadDeleteConfirm()
         addGestureRecognizer()
-        // downloadCurrentUserAvatar()
+        self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        downloadCurrentUserAvatar()
+        
+        
         
         // Bryan
 //        let realm = try! Realm()
@@ -73,6 +83,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewWillDisappear(_ animated: Bool) {
         self.loadingRecentTimer.invalidate()
+        isDraggingRecentTableViewCell = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,8 +94,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //print("recent will appear")
         //startCheckingRecent()
         //self.tableView.reloadData()
-        self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
-        self.downloadCurrentUserAvatar()
+        //self.loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.startCheckingRecent), userInfo: nil, repeats: true)
+        //self.downloadCurrentUserAvatar()
     }
     
     /*
@@ -138,6 +149,57 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //self.tableView.separatorInset = UIEdgeInsets(top: 0, left: 89, bottom: 0, right: 0)
     }
     
+    func loadDeleteConfirm() {
+        uiviewBackground = UIView(frame: CGRect(x:0, y:0, width: screenWidth, height: screenHeight))
+        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        
+        uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewDeleteConfirm.center.x = screenWidth / 2
+        uiviewDeleteConfirm.backgroundColor = .white
+        uiviewDeleteConfirm.layer.cornerRadius = 20
+        uiviewBackground.addSubview(uiviewDeleteConfirm)
+        
+        lblConfirmLine1 = UILabel(frame: CGRect(x: 0, y: 30, w: 185, h: 50))
+        lblConfirmLine1.center.x = uiviewDeleteConfirm.frame.width / 2
+        lblConfirmLine1.textAlignment = .center
+        lblConfirmLine1.lineBreakMode = .byWordWrapping
+        lblConfirmLine1.numberOfLines = 2
+        lblConfirmLine1.text = "Are you sure you want to delete this Chat?"
+        lblConfirmLine1.textColor = UIColor._898989()
+        lblConfirmLine1.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewDeleteConfirm.addSubview(lblConfirmLine1)
+        
+        lblConfirmLine2 = UILabel(frame: CGRect(x: 0, y: 93, w: 185, h: 36))
+        lblConfirmLine2.center.x = uiviewDeleteConfirm.frame.width / 2
+        lblConfirmLine2.textAlignment = .center
+        lblConfirmLine2.lineBreakMode = .byWordWrapping
+        lblConfirmLine2.numberOfLines = 2
+        lblConfirmLine2.text = "All chat history and contents of this chat will also be Cleared."
+        lblConfirmLine2.textColor = UIColor._138138138()
+        lblConfirmLine2.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
+        uiviewDeleteConfirm.addSubview(lblConfirmLine2)
+        
+        btnDeleteConfirm = UIButton(frame: CGRect(x: 0, y: 149, w: 208, h: 39))
+        btnDeleteConfirm.center.x = uiviewDeleteConfirm.frame.width / 2
+        btnDeleteConfirm.setTitle("Yes", for: .normal)
+        btnDeleteConfirm.setTitleColor(UIColor.white, for: .normal)
+        btnDeleteConfirm.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnDeleteConfirm.backgroundColor = UIColor._2499090()
+        btnDeleteConfirm.addTarget(self, action: #selector(confirmDetele), for: .touchUpInside)
+        btnDeleteConfirm.layer.borderWidth = 2
+        btnDeleteConfirm.layer.borderColor = UIColor._2499090().cgColor
+        btnDeleteConfirm.layer.cornerRadius = 21 * screenWidthFactor
+        uiviewDeleteConfirm.addSubview(btnDeleteConfirm)
+        
+        btnDismiss = UIButton(frame: CGRect(x: 15, y: 15, w: 17, h: 17))
+        btnDismiss.setImage(UIImage.init(named: "btn_close"), for: .normal)
+        btnDismiss.addTarget(self, action: #selector(dismissDelete), for: .touchUpInside)
+        uiviewDeleteConfirm.addSubview(btnDismiss)
+        
+        view.addSubview(uiviewBackground)
+        uiviewBackground.isHidden = true
+    }
+    
     private func addGestureRecognizer() {
         self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(RecentViewController.closeAllCell)))
     }
@@ -155,8 +217,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: - tableView delegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.loadingRecentTimer.invalidate()
         if self.cellsCurrentlyEditing.count == 0 {
+            self.loadingRecentTimer.invalidate()
             //tableView.deselectRow(at: indexPath, animated: true)
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
@@ -379,18 +441,33 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func deleteButtonTapped(_ cell: UITableViewCell) {
-        let indexPath = tableView.indexPath(for: cell)!
-        let recent = recents![indexPath.row]
-        let realmRecent = realmRecents![indexPath.row]
-        RealmChat.removeRecentWith(recentItem: realmRecent)
-        
-        // remove recent form the array
-        DeleteRecentItem(recent, completion: { (statusCode, _) -> Void in
-            if statusCode / 100 == 2 {
-                self.loadRecents(true, removeIndexPaths: [indexPath])
-            }
-        })
-        
-        cellsCurrentlyEditing.remove(indexPath)
+        uiviewBackground.isHidden = false
+        indexToDelete = tableView.indexPath(for: cell)!
+    }
+    
+    func confirmDetele() {
+        //let indexPath = indexToDelete
+        uiviewBackground.isHidden = true
+        let cell = tableView.cellForRow(at: indexToDelete) as! RecentTableViewCell
+        cell.closeCell()
+        /*let indexPath = tableView.indexPath(for: cell)!
+         let recent = recents![indexPath.row]
+         let realmRecent = realmRecents![indexPath.row]
+         RealmChat.removeRecentWith(recentItem: realmRecent)
+         
+         // remove recent form the array
+         DeleteRecentItem(recent, completion: { (statusCode, _) -> Void in
+         if statusCode / 100 == 2 {
+         self.loadRecents(true, removeIndexPaths: [indexPath])
+         }
+         })
+         
+         cellsCurrentlyEditing.remove(indexPath)*/
+    }
+    
+    func dismissDelete() {
+        uiviewBackground.isHidden = true
+        let cell = tableView.cellForRow(at: indexToDelete) as! RecentTableViewCell
+        cell.closeCell()
     }
 }
