@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate {
+extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate, AddFriendFromNameCardDelegate {
     
     func loadSearchBar() {
         uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
@@ -122,6 +122,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
+        addFriendVC.contactsDelegate = self
         addFriendVC.userId = userId
         addFriendVC.requestId = requestId
         addFriendVC.statusMode = status
@@ -140,10 +141,35 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
+    // AddFriendFromNameCardDelegate
+    func changeContactsTable(action: Int, userId: Int, requestId: Int) {
+        print("changeContactsTable")
+        switch action {
+        case ACCEPT:
+            self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            break
+        case IGNORE:
+            self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            break
+        case WITHDRAW:
+            self.arrRequested.remove(at: self.indexPathGlobal.row)
+            break
+        case REMOVE:
+            self.arrFriends.remove(at: self.indexPathGlobal.row)
+            break
+        case BLOCK:
+            self.arrFriends.remove(at: self.indexPathGlobal.row)
+            break
+        default:
+            break
+        }
+        self.reloadAfterDelete()
+    }
+    
     // button press functionalities
     func pressbtnFFF(button: UIButton) {
-        print("FFF was pressed")
         if btnRR.isSelected {
+            getReceivedRequests()
             btnRR.isSelected = false
             btnFFF.isSelected = true
         }
@@ -160,8 +186,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func pressbtnRR(button: UIButton) {
-        print("RR was pressed")
         if btnFFF.isSelected {
+            getSentRequests()
             btnFFF.isSelected = false
             btnRR.isSelected = true
         }
@@ -234,6 +260,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     // SomeDelegateReceivedRequests
     func refuseRequest(requestId: Int, indexPath: IndexPath) {
+        btnYes.tag = IGNORE
         indexPathGlobal = indexPath
         idGlobal = requestId
         self.chooseAnAction()
@@ -242,12 +269,14 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func acceptRequest(requestId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
         idGlobal = requestId
+        indicatorView.startAnimating()
         animateWithdrawal(listType: ACCEPT)
     }
     // SomeDelegateReceivedRequests End
     
     // SomeDelegateRequested
     func withdrawRequest(requestId: Int, indexPath: IndexPath) {
+        btnYes.tag = WITHDRAW
         indexPathGlobal = indexPath
         idGlobal = requestId
         print("button has been executed cancel request")
@@ -256,6 +285,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     func resendRequest(userId: Int, indexPath: IndexPath) {
         print("button has been executed resend request")
+        btnYes.tag = RESEND
         indexPathGlobal = indexPath
         idGlobal = userId
         self.showNoti(type: RESEND)
@@ -298,16 +328,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                 General.shared.avatar(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
-                //                    cell.imgAvatar.userID = filtered[indexPath.row].userId
-                //                    cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
                 cell.lblUserName.text = filtered[indexPath.row].displayName
                 cell.lblUserSaying.text = filtered[indexPath.row].userName
             } else {
                 General.shared.avatar(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
-                //                    cell.imgAvatar.userID = testArrayFriends[indexPath.row].userId
-                //                    cell.imgAvatar.loadAvatar(id: testArrayFriends[indexPath.row].userId)
                 cell.lblUserName.text = arrFriends[indexPath.row].displayName
                 cell.lblUserSaying.text = arrFriends[indexPath.row].userName
             }
@@ -374,10 +400,18 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if schbarContacts.txtSchField.text != "" {
-            uiviewNameCard.userId = filtered[indexPath.row].userId
+        // received
+        indexPathGlobal = indexPath
+        if cellStatus == 1 {
+            uiviewNameCard.userId = arrReceivedRequests[indexPath.row].userId
+        } else if cellStatus == 2 {   // requested
+            uiviewNameCard.userId = arrRequested[indexPath.row].userId
         } else {
-            uiviewNameCard.userId = arrFriends[indexPath.row].userId
+            if schbarContacts.txtSchField.text != "" {
+                uiviewNameCard.userId = filtered[indexPath.row].userId
+            } else {
+                uiviewNameCard.userId = arrFriends[indexPath.row].userId
+            }
         }
         uiviewNameCard.show {}
     }
@@ -394,50 +428,72 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         case WITHDRAW:
             apiCalls.withdrawFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
+                    self.lblNotificationText.text = "Request Withdraw \nSuccessfully!"
                     self.arrRequested.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                 } else {
+                    self.lblNotificationText.text = "Request Withdraw \nFail!"
                     print("[Contacts Request Withdraw Fail] - \(status) \(message!)")
                 }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
             }
             break
         case BLOCK:
             apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
+                    self.lblNotificationText.text = "The user has been \nblocked successfully!"
                     self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                 } else {
+                    self.lblNotificationText.text = "Block user \nFail!"
                     print("[Contacts Block Fail] - \(status) \(message!)")
                 }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
             }
             break
         case IGNORE:
             apiCalls.ignoreFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
+                self.showNoti(type: self.IGNORE)
                 if status / 100 == 2 {
+                    self.lblNotificationText.text = "Ignore Request \nSuccessfully!"
                     self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                 } else {
+                    self.lblNotificationText.text = "Ignore Request \nFail!"
                     print("[Contacts Ignore Request Fail] - \(status) \(message!)")
                 }
+                self.indicatorView.stopAnimating()
             }
             break
         case ACCEPT:
             apiCalls.acceptFriendRequest(requestId: String(idGlobal)) { (status: Int, message: Any?) in
+                self.showNoti(type: self.ACCEPT)
                 if status / 100 == 2 {
+                    self.lblNotificationText.text = "Accept Request \nSuccessfully!"
                     self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                     print("[Contacts Accept Request Successfully]")
                 } else {
+                    self.lblNotificationText.text = "Accept Request \nFail!"
                     print("[Contacts Accept Request Fail] - \(status) \(message!)")
                 }
+                self.indicatorView.stopAnimating()
             }
         case RESEND:
             apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
                 if status / 100 == 2 {
-                    print("[Contacts resend friend request successfully]")
+                    self.lblNotificationText.text = "Request Resent \nSuccessfully!"
                 } else {
+                    self.lblNotificationText.text = "Request Resent \nFail!"
                     print("[Contacts resend friend request fail]")
                 }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
             }
         default:
             break

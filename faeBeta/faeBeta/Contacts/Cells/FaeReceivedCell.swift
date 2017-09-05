@@ -43,21 +43,18 @@ class FaeReceivedCell: UITableViewCell {
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-//        imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
         lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-//        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)
         
         lblUserSaying = UILabel()
         lblUserSaying.textAlignment = .left
         lblUserSaying.textColor = UIColor._155155155()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
-//        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
         
         btnAgreeRequest = UIButton()

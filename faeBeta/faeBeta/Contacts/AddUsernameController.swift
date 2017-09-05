@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
     
@@ -14,7 +15,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     var uiviewSchbar: UIView!
     var schbarUsernames: FaeSearchBarTest!
     var tblUsernames: UITableView!
-    var filtered: [String] = [] // for search bar results
     var lblMyUsername: UILabel!
     var lblMyUsernameField: UILabel!
     var lblMyScreenname: UILabel!
@@ -47,8 +47,11 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     var indicatorState: IndicatorState = .end
-    
-    var testArray = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
+    var filtered = [MBPeopleStruct]()
+    var arrUsers = [MBPeopleStruct]() //["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
+    var arrFriends = [Friends]()
+    var arrReceivedRequests = [Friends]()
+    var arrRequested = [Friends]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,12 +62,44 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         view.backgroundColor = .white
         
         // Vicky 07/28/17
-        schbarUsernames.becomeFirstResponder()
+        schbarUsernames.txtSchField.becomeFirstResponder()
         // Vicky 07/28/17 End
+        getUserList(nil)
         
         // Add pan gesture to custom indicator
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureIndicator(_:)))
         btnIndicator.addGestureRecognizer(panGesture)
+    }
+    
+    func getUserList(_ completion: ((Int) -> ())?) {
+        let userList = FaeMap()
+        
+        userList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        userList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
+        userList.whereKey("radius", value: "9999999")
+        userList.whereKey("type", value: "user")
+        userList.getMapInformation { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                print("[loadMBPeopleInfo] status/100 != 2")
+                return
+            }
+            let peopleInfoJSON = JSON(message!)
+            guard let peopleInfoJsonArray = peopleInfoJSON.array else {
+                print("[loadMBPeopleInfo] fail to parse mapboard people info")
+                return
+            }
+            if peopleInfoJsonArray.count <= 0 {
+                print("[loadMBPeopleInfo] array is nil")
+                return
+            }
+            
+            for res in peopleInfoJsonArray {
+                let user = MBPeopleStruct(json: res)
+                self.arrUsers.append(user)
+            }
+            self.arrUsers.sort{ $0.displayName < $1.displayName }
+            completion?(self.arrUsers.count)
+        }
     }
     
     func actionGoBack(_ sender: UIButton) {
@@ -110,7 +145,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         lblMyUsernameField = UILabel()
         lblMyUsernameField.textAlignment = .center
-        lblMyUsernameField.text = "placeholder1"
+        lblMyUsernameField.text = username
         lblMyUsernameField.textColor = UIColor._155155155()
         lblMyUsernameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         
@@ -122,7 +157,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         lblMyScreennameField = UILabel()
         lblMyScreennameField.textAlignment = .center
-        lblMyScreennameField.text = "placeholder2"
+        lblMyScreennameField.text = Key.shared.nickname ?? "Someone"
         lblMyScreennameField.textColor = UIColor._155155155()
         lblMyScreennameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         
@@ -193,14 +228,14 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
 //        schbarUsernames.txtSchField.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
-        schbarUsernames.txtSchField.resignFirstResponder()
+//        schbarUsernames.txtSchField.resignFirstResponder()
     }
     // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
-        filtered = testArray.filter { text in
+        filtered = arrUsers.filter { user in
             //(text.lowercased()).elementsEqual(searchText.lowercased())
-            (text.lowercased()).range(of: searchText.lowercased()) != nil
+            (user.userName.lowercased()).range(of: searchText.lowercased()) != nil
         }
         tblUsernames.reloadData()
     }
@@ -225,18 +260,50 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
+        let filteredUser = filtered[indexPath.row]
         if schbarUsernames.txtSchField.text != "" {
-            cell.lblUserName.text = filtered[indexPath.row]
-            cell.lblUserSaying.text = filtered[indexPath.row]
+            cell.userId = filteredUser.userId
+            var findRes = false
+            if !findRes {
+                for friend in arrFriends {
+                    if friend.userId == filteredUser.userId {
+                        cell.friendStatus = .accepted
+                        findRes = true
+                        break
+                    }
+                }
+            }
+            
+            if !findRes {
+                for friend in arrReceivedRequests {
+                    if friend.userId == filteredUser.userId {
+                        cell.friendStatus = .requested
+                        cell.requestId = friend.requestId
+                        findRes = true
+                        break
+                    }
+                }
+            }
+            
+            if !findRes {
+                for friend in arrRequested {
+                    if friend.userId == filteredUser.userId {
+                        cell.friendStatus = .pending
+                        cell.requestId = friend.requestId
+                        findRes = true
+                        break
+                    }
+                }
+            }
+            
+            cell.setValueForCell(user: filteredUser)
             cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.
-        } else {
-            cell.lblUserName.text = testArray[indexPath.row]
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row) and item \(testArray[indexPath.row])")
+        print("User selected table row \(indexPath.row) and item \(arrUsers[indexPath.row])")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -246,5 +313,4 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarUsernames.txtSchField.resignFirstResponder()
     }
-    
 }

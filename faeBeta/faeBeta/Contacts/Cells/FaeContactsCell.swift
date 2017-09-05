@@ -32,14 +32,12 @@ class FaeContactsCell: UITableViewCell {
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-//        imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
         lblUserName.textAlignment = .left
         lblUserName.textColor = UIColor._898989()
         lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-//        lblUserName.backgroundColor = .blue
         addSubview(lblUserName)
         addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserName)
         
@@ -47,7 +45,6 @@ class FaeContactsCell: UITableViewCell {
         lblUserSaying.textAlignment = .left
         lblUserSaying.textColor = UIColor._155155155()
         lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
-//        lblUserSaying.backgroundColor = .green
         addSubview(lblUserSaying)
         addConstraintsWithFormat("H:|-84-[v0]-58-|", options: [], views: lblUserSaying)
         addConstraintsWithFormat("V:|-17-[v0(20)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)

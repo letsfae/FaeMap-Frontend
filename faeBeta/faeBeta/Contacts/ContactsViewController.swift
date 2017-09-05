@@ -16,7 +16,6 @@ import SwiftyJSON
 */
 
 struct Friends {
-//    var Image = UIImage()
     var displayName: String
     var userName: String
     var saying: String?
@@ -98,6 +97,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var btnRequested: UIButton!
     var uiviewBottomLine: UIView!
     var uiviewRedBottomLine: UIView!
+    var indicatorView: UIActivityIndicatorView!
     
     // NotificationExtension.swift variable declaration for UI objects
     var uiviewChooseAction: UIView!
@@ -115,25 +115,27 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var indexPathGlobal: IndexPath!
     var idGlobal = -1
     
-    let BLOCK = 0
-    let WITHDRAW = 1
-    let RESEND = 2
-    let IGNORE = 4
-    let ACCEPT = 5
+    let OK = 0
+    let WITHDRAW = 3
+    let RESEND = 4
+    let REMOVE = 5
+    let BLOCK = 6
+    let REPORT = 7
+    let ACCEPT = 9
+    let IGNORE = 10
+    
+//    let ADD_FRIEND_ACT = 1
+//    let FOLLOW_ACT = 2
+//    let WITHDRAW_ACT = 3
+//    let RESEND_ACT = 4
+//    let REMOVE_FRIEND_ACT = 5
+//    let BLOCK_ACT = 6
+//    let REPORT_ACT = 7
+//    let UNFOLLOW_ACT = 8
+//    let ACCEPT_ACT = 9
+//    let IGNORE_ACT = 10
     
     var uiviewNameCard = FMNameCardView()
-    
-    internal var notiContraint = [NSLayoutConstraint]() {
-        didSet {
-            if oldValue.count != 0 {
-                self.view.removeConstraints(oldValue)
-            }
-            if notiContraint.count != 0 {
-                self.view.addConstraints(notiContraint)
-            }
-        }
-    }
-    
     // Basic viewDidLoad() implementation, needed for start of program
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,39 +151,9 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     }
     
     func getFriendStatus() {
-        apiCalls.getFriendRequests() {(status: Int, message: Any?) in
-            self.arrReceivedRequests = []
-            let json = JSON(message!)
-            if json.count != 0 {
-                for i in 1...json.count {
-                    self.arrReceivedRequests.append(Friends(displayName: json[i-1]["request_user_nick_name"].stringValue, userName: json[i-1]["request_user_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
-                }
-            }
-            self.tblContacts.reloadData()
-        }
-        
-        apiCalls.getFriendRequestsSent() {(status: Int, message: Any?) in
-            self.arrRequested = []
-            let json = JSON(message!)
-            if json.count != 0 {
-                for i in 1...json.count {
-                    self.arrRequested.append(Friends(displayName: json[i-1]["requested_user_nick_name"].stringValue, userName: json[i-1]["requested_user_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
-                }
-            }
-            self.tblContacts.reloadData()
-        }
-        
-        apiCalls.getFriends() {(status: Int, message: Any?) in
-            self.arrFriends = []
-            let json = JSON(message!)
-            if json.count != 0 {
-                for i in 1...json.count {
-                    self.arrFriends.append(Friends(displayName: json[i-1]["friend_user_nick_name"].stringValue, userName: json[i-1]["friend_user_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
-                }
-            }
-            self.arrFriends.sort{ $0.displayName < $1.displayName }
-            self.tblContacts.reloadData()
-        }
+        getFriendsList()
+        getSentRequests()
+        getReceivedRequests()
         
         apiCalls.getFollowees(userId: String(Key.shared.user_id)) {(status: Int, message: Any?) in
             self.arrFollowees = []
@@ -215,6 +187,46 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             } else {
                 print("[loadFollowerInfoFail] - \(status) \(message!)")
             }
+        }
+    }
+    
+    func getFriendsList() {
+        apiCalls.getFriends() {(status: Int, message: Any?) in
+            self.arrFriends = []
+            let json = JSON(message!)
+            if json.count != 0 {
+                for i in 1...json.count {
+                    self.arrFriends.append(Friends(displayName: json[i-1]["friend_user_nick_name"].stringValue, userName: json[i-1]["friend_user_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
+                }
+            }
+            self.arrFriends.sort{ $0.displayName < $1.displayName }
+            self.tblContacts.reloadData()
+        }
+    }
+    
+    func getSentRequests() {
+        apiCalls.getFriendRequestsSent() {(status: Int, message: Any?) in
+            self.arrRequested = []
+            let json = JSON(message!)
+            if json.count != 0 {
+                for i in 1...json.count {
+                    self.arrRequested.append(Friends(displayName: json[i-1]["requested_user_nick_name"].stringValue, userName: json[i-1]["requested_user_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                }
+            }
+            self.tblContacts.reloadData()
+        }
+    }
+    
+    func getReceivedRequests() {
+        apiCalls.getFriendRequests() {(status: Int, message: Any?) in
+            self.arrReceivedRequests = []
+            let json = JSON(message!)
+            if json.count != 0 {
+                for i in 1...json.count {
+                    self.arrReceivedRequests.append(Friends(displayName: json[i-1]["request_user_nick_name"].stringValue, userName: json[i-1]["request_user_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
+                }
+            }
+            self.tblContacts.reloadData()
         }
     }
 }

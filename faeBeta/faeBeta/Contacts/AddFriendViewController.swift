@@ -7,13 +7,22 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
 
 class AddFriendViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let optionsArray: [String] = ["Search Username", "From Contacts", "Scan Nearby", "Share Username"] // for testing.
+    let optionsArray: [String] = ["Add by Username", "From Contacts", "Scan Nearby", "Share Username"]
+    let recommendedFriendsArray: [Friends] = []
     let optionsImagesArray = [#imageLiteral(resourceName: "searchUsernamesIcon"), #imageLiteral(resourceName: "fromContactsIcon"), #imageLiteral(resourceName: "scanNearbyIcon"), #imageLiteral(resourceName: "shareUsernameIcon")]
     var tblOptions: UITableView!
+    var contactStore = CNContactStore()
     var uiviewNavBar: FaeNavBar!
+    var imgCity: UIImageView!
+//    static var boolAllowContact = false
+    var arrFriends = [Friends]()
+    var arrReceivedRequests = [Friends]()
+    var arrRequested = [Friends]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +42,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.lblTitle.text = "Add Friends"
+        uiviewNavBar.lblTitle.text = "New Friends"
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
     }
     
@@ -44,11 +53,20 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         tblOptions.dataSource = self
         tblOptions.delegate = self
         tblOptions.register(FaeAddFriendOptionsCell.self, forCellReuseIdentifier: "FaeAddFriendOptionsCell")
-        tblOptions.register(FaeRecommendedCell.self, forCellReuseIdentifier: "FaeRecommendedCell")
+        tblOptions.register(FaeRecommendedCell.self, forCellReuseIdentifier: "myRecommendedCell")
         view.addSubview(tblOptions)
+        
+        imgCity = UIImageView()
+        imgCity.frame = CGRect(x: 0, y: screenHeight - 256 * screenHeightFactor, width: screenWidth, height: 256 * screenHeightFactor)
+        imgCity.contentMode = .scaleToFill
+        imgCity.image = #imageLiteral(resourceName: "contact_city")
+        view.addSubview(imgCity)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 1 {
+            return recommendedFriendsArray.count
+        }
         return optionsArray.count
     }
     
@@ -62,40 +80,35 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             return cell
         } else if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FaeRecommendedCell", for: indexPath as IndexPath) as! FaeRecommendedCell
-            cell.lblUserName.text = optionsArray[indexPath.row]
-            cell.lblUserSaying.text = optionsArray[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "myRecommendedCell", for: indexPath as IndexPath) as! FaeRecommendedCell
+            cell.lblUserName.text = recommendedFriendsArray[indexPath.row].displayName
+            cell.lblUserSaying.text = recommendedFriendsArray[indexPath.row].userName
             cell.lblUserRecommendReason.text = "through Contacts."
+            cell.selectionStyle = .none
             return cell
         }
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row) and item \(optionsArray[indexPath.row])")
-        // Vicky 07/12/2017
         if indexPath.section == 0 {
-            if indexPath.row == 0 {     // "Search Username"
+            if indexPath.row == 0 {
                 let vc = AddUsernameController()
+                vc.arrFriends = arrFriends
+                vc.arrReceivedRequests = arrReceivedRequests
+                vc.arrRequested = arrRequested
                 self.navigationController?.pushViewController(vc, animated: true)
-                tableView.deselectRow(at: indexPath, animated: true)
-            } else if indexPath.row == 1 {   // "From Contacts"
-                let vc = AddFromContactsController()
-                self.navigationController?.pushViewController(vc, animated: true)
-                tableView.deselectRow(at: indexPath, animated: true)
-            } else if indexPath.row == 2 {   // "Scan Nearby"
+            } else if indexPath.row == 1 {
+                getContacts()
+            } else if indexPath.row == 2 {
                 let vc = AddNearbyController()
                 self.navigationController?.pushViewController(vc, animated: true)
-                tableView.deselectRow(at: indexPath, animated: true)
-            }
-            else {   // indexPath.row == 3  "Share Username"
-                tableView.deselectRow(at: indexPath, animated: true)
+            } else {
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: linlin https://www.xxx.com"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 self.present(activityVC, animated: true, completion: nil)
             }
         }
-        // Vicky 07/12/2017 End
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -104,7 +117,10 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            return 25
+            if (recommendedFriendsArray.count != 0) {
+                imgCity.isHidden = true;
+                return 25
+            }
         }
         return 0
     }
@@ -142,5 +158,38 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         return nil
     }
     
+    func getContacts() {
+        let entityType = CNEntityType.contacts
+        let authStatus = CNContactStore.authorizationStatus(for: entityType)
+        if (authStatus == CNAuthorizationStatus.notDetermined) {
+            contactStore.requestAccess(for: entityType, completionHandler: { (success, nil) in
+                if success {
+                    print("success")
+                    let vc = AddFromContactsController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    print("aftersuccess")
+                } else {
+                    print("unsuccess")
+                    let vc = ContactsNotAllowedController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    print("after unsuccess")
+                }
+            })
+        } else if (authStatus == CNAuthorizationStatus.denied) {
+            let vc = ContactsNotAllowedController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            // showAlert(title: "Denied Access to Contacts", message: "It seems that you have earlier denied FaeMap access to your Contacts. In order to grant this app access to your contacts, please go to your Settings > Privacy > Contacts and change accordingly.")
+        } else if authStatus == CNAuthorizationStatus.authorized {
+            let vc = AddFromContactsController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
     
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
+
