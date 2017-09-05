@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
 
 class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
     
@@ -15,10 +17,11 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     var schbarFromContacts: FaeSearchBarTest!
     var tblFromContacts: UITableView!
     var filtered: [String] = [] // for search bar results
-    var testArray = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
+    var testArray = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        openContacts()
         loadSearchTable()
         loadNavBar()
         tblFromContacts.separatorStyle = .none
@@ -107,8 +110,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             return filtered.count
         }
         else {
-            //return testArray.count
-            return 3
+            return testArray.count
         }
     }
     
@@ -129,8 +131,8 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         }
         else {
             let cell = FaeInviteCell(style: UITableViewCellStyle.default, reuseIdentifier: "myInviteCell")
-            cell.lblName.text = "Wenjia Liu"
-            cell.lblTel.text = "2132969405"
+            cell.lblName.text = testArray[indexPath.row]
+            cell.lblTel.text = testArray[indexPath.row]
             return cell
         }
     }
@@ -151,6 +153,17 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         return 2
     }
     
+    func openContacts() {
+        let req = CNContactFetchRequest(keysToFetch: [
+            CNContactFamilyNameKey as CNKeyDescriptor,
+            CNContactGivenNameKey as CNKeyDescriptor
+            ])
+        self.testArray = []
+        try! CNContactStore().enumerateContacts(with: req) {
+            contact, stop in
+            self.testArray.append(contact.givenName + " " + contact.familyName)
+        }
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
@@ -176,10 +189,10 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         headerView.addSubview(label)
         if section == 0 {
-            label.text = "Already on Fae"
+            label.text = "Already on Faevorite"
         }
         else {
-            label.text = "Invite to Fae"
+            label.text = "Invite to Faevorite"
         }
         headerView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: label)
         headerView.addConstraintsWithFormat("H:|-15-[v0]", options: [], views: label)

@@ -18,6 +18,7 @@ extension MBPeopleStruct: Equatable {
 
 struct MBPeopleStruct {
     let userId: Int
+    let userName : String
     let displayName: String
     let shortIntro: String
     let gender: String
@@ -28,6 +29,7 @@ struct MBPeopleStruct {
     
     init(json: JSON) {
         userId = json["user_id"].intValue
+        userName = json["user_name"].stringValue
         displayName = json["user_nick_name"].stringValue
         shortIntro = json["short_intro"].stringValue
         gender = json["user_gender"].stringValue

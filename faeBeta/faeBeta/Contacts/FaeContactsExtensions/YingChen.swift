@@ -34,12 +34,6 @@ extension ContactsViewController {
     
     func loadDropDownMenu() {
         uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 103))
-//        if #available(iOS 10.0, *) {
-//            uiviewDropDownMenu.effect = UIBlurEffect(style: .regular)
-//        } else {
-//            // Fallback on earlier versions
-//            uiviewDropDownMenu.effect = UIBlurEffect(style: .light)
-//        }
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -39 // 64 - 103
@@ -139,6 +133,9 @@ extension ContactsViewController {
     // function to move onto addFriendViewController swift scene
     func goToAddFriendView(_ sender: UIButton) {
         let vc = AddFriendViewController()
+        vc.arrFriends = arrFriends
+        vc.arrReceivedRequests = arrReceivedRequests
+        vc.arrRequested = arrRequested
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -147,6 +144,7 @@ extension ContactsViewController {
         curtTitle = titleArray[sender.tag]
         
         if sender.tag == 0 {
+            getFriendsList()
             imgTick.frame.origin.y = 20
             uiviewNavBar.rightBtn.isHidden = false
             uiviewBottomNav.isHidden = true

@@ -28,6 +28,18 @@ extension ContactsViewController {
         let gesture = UITapGestureRecognizer(target: self, action:  #selector (closeBoth))
         uiviewOverlayGrayOpaque.addGestureRecognizer(gesture)
         self.view.addSubview(uiviewOverlayGrayOpaque)
+        createActivityIndicator()
+    }
+    
+    fileprivate func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = view.center
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        
+        view.addSubview(indicatorView)
+        view.bringSubview(toFront: indicatorView)
     }
     
     // this function reveals the "noti" UI, and changes texts depending on the type needed/requested.
@@ -42,19 +54,23 @@ extension ContactsViewController {
             self.uiviewOverlayGrayOpaque.alpha = 0.7
         }, completion: nil)
         if type == BLOCK {
-            notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(208)]", options: [], views: uiviewNotification)
-            lblNotificationText.text = "Are you sure you want to block this person?"
+            btnYes.tag = type
+            uiviewNotification.frame.size.height = 208 * screenHeightFactor
+            lblNotificationText.text = "Are you sure you want \nto block this person?"
             lblBlockSetting.alpha = 1
-        } else if type == WITHDRAW {
+        } else {
+            btnYes.tag = type
             lblBlockSetting.alpha = 0
-            notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(161)]", options: [], views: uiviewNotification)
-            lblNotificationText.text = "Are you sure you want to withdraw this request?"
-        } else if type == RESEND {
-            lblBlockSetting.alpha = 0
-            notiContraint = view.returnConstraintsWithFormat("V:|-200-[v0(161)]", options: [], views: uiviewNotification)
-            lblNotificationText.text = "Are you sure you want to resend this request?"
+            uiviewNotification.frame.size.height = 161 * screenHeightFactor
+            if type == WITHDRAW {
+                lblNotificationText.text = "Are you sure you want \nto withdraw this request?"
+            } else if type == RESEND {
+                lblNotificationText.text = "Are you sure you want \nto resend this request?"
+            } else {
+                btnYes.tag = OK
+                btnYes.setTitle("OK", for: .normal)
+            }
         }
-        btnYes.tag = type
     }
     
     // this function stops revealing both the "noti" UI and the "chooseNoti" UI by calling both functions.
@@ -77,13 +93,12 @@ extension ContactsViewController {
     
     // this function configures the "noti" UI.
     func setupNoti() {
-        uiviewNotification = UIView()
+        uiviewNotification = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewNotification.center.x = screenWidth / 2
         uiviewNotification.backgroundColor = .white
         uiviewNotification.layer.cornerRadius = 19
         uiviewNotification.alpha = 0
         view.addSubview(uiviewNotification)
-        view.addConstraintsWithFormat("H:|-62-[v0(290)]|", options: [], views: uiviewNotification)
-        view.addConstraintsWithFormat("V:|-200-[v0(208)]", options: [], views: uiviewNotification)
         
         // For the close button.
         btnClose = UIButton()
@@ -99,37 +114,33 @@ extension ContactsViewController {
             for: .touchUpInside)
         
         // configuring the text/pop-up for "confirming you want to block this person"
-        lblNotificationText = UILabel()
-        lblNotificationText.text = "Are you sure you want to block this person?"
+        lblNotificationText = UILabel(frame: CGRect(x: 0, y: 30, w: 290, h: 50))
         lblNotificationText.textAlignment = .center
-        lblNotificationText.textColor = UIColor(r: 89, g: 89, b: 89, alpha: 100)
+        lblNotificationText.textColor = UIColor._898989()
         lblNotificationText.numberOfLines = 2
-        lblNotificationText.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblNotificationText.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         uiviewNotification.addSubview(lblNotificationText)
-        view.addConstraintsWithFormat("H:|-\(41 * screenWidthFactor)-[v0(210)]|", options: [], views: lblNotificationText)
-        view.addConstraintsWithFormat("V:|-\(30 * screenHeightFactor)-[v0(50)]", options: [], views: lblNotificationText)
         
         // configuring description for blocking mechanism
-        lblBlockSetting = UILabel()
-        lblBlockSetting.text = "He/She will be found in your Blocked List in Settings > AccountOptions."
+        lblBlockSetting = UILabel(frame: CGRect(x: 0, y: 93, w: 290, h: 36))
+        lblBlockSetting.text = "The User will be found in your \nBlocked List in Settings > Privacy."
         lblBlockSetting.textAlignment = .center
-        lblBlockSetting.textColor = UIColor(r: 138, g: 138, b: 138, alpha: 100)
+        lblBlockSetting.textColor = UIColor._138138138()
         lblBlockSetting.numberOfLines = 2
-        lblBlockSetting.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblBlockSetting.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
         uiviewNotification.addSubview(lblBlockSetting)
-        view.addConstraintsWithFormat("H:|-34.5-[v0(222)]|", options: [], views: lblBlockSetting)
-        view.addConstraintsWithFormat("V:|-93-[v0(36)]", options: [], views: lblBlockSetting)
         
         // the "yes" button
         btnYes = UIButton()
         uiviewNotification.addSubview(btnYes)
-        btnYes.layer.cornerRadius = 19
-        let titleAttrForBtnYes = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18), NSForegroundColorAttributeName: UIColor(red: 255 / 255, green: 255 / 255, blue: 255 / 255, alpha: 100)]
-        let attributedTitleForBtnYes = NSAttributedString(string: "Yes", attributes: titleAttrForBtnYes as Any as? [String : Any])
-        btnYes.setAttributedTitle(attributedTitleForBtnYes, for: .normal)
-        btnYes.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1)
-        view.addConstraintsWithFormat("H:|-41-[v0(209)]|", options: [], views: btnYes)
-        view.addConstraintsWithFormat("V:[v0(39)]-20-|", options: [], views: btnYes)
+        btnYes.layer.cornerRadius = 19 * screenWidthFactor
+        btnYes.setTitleColor(.white, for: .normal)
+        btnYes.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnYes.backgroundColor = UIColor._2499090()
+        btnYes.setTitle("Yes", for: .normal)
+        let padding = (290 - 208) / 2 * screenWidthFactor
+        uiviewNotification.addConstraintsWithFormat("H:|-\(padding)-[v0]-\(padding)-|", options: [], views: btnYes)
+        uiviewNotification.addConstraintsWithFormat("V:[v0(\(39 * screenHeightFactor))]-\(20 * screenHeightFactor)-|", options: [], views: btnYes)
         
         // adding trigger for btnYes (calls yesButtonFunction).
         btnYes.addTarget(
@@ -140,72 +151,54 @@ extension ContactsViewController {
     
     // this function configures the "choose an action" UI.
     func setupChooseAnActionAlert() {
-        uiviewChooseAction = UIView(frame: CGRect(x: 62, y: 200, width: 290, height: 302))
+        uiviewChooseAction = UIView(frame: CGRect(x: 62, y: 200, w: 290, h: 302))
         uiviewChooseAction.backgroundColor = .white
         uiviewChooseAction.layer.cornerRadius = 20
         uiviewChooseAction.alpha = 0
         view.addSubview(uiviewChooseAction)
         
         // For the title"choose an action"
-        lblTitleInActions = UILabel()
+        lblTitleInActions = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
         uiviewChooseAction.addSubview(lblTitleInActions)
         lblTitleInActions.textAlignment = .center
-        lblTitleInActions.text = "Choose an action"
-        lblTitleInActions.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        view.addConstraintsWithFormat("H:|-\(13 * screenWidthFactor)-[v0(263.5)]|", options: [], views: lblTitleInActions)
-        view.addConstraintsWithFormat("V:|-\(20 * screenHeightFactor)-[v0(25)]", options: [], views: lblTitleInActions)
+        lblTitleInActions.text = "Choose an Action"
+        lblTitleInActions.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         
-        // For the first action "Ignore"
-        btnForIgnore = UIButton()
-        uiviewChooseAction.addSubview(btnForIgnore)
-        btnForIgnore.layer.cornerRadius = 25
-        // we need the api request here to ignore the current request
-        btnForIgnore.addTarget(self, action: #selector(ignoreRequest), for: .touchUpInside)
-        let titleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18), NSForegroundColorAttributeName: UIColor._2499090()]
-        let attributedTitleForIgnore = NSAttributedString(string: "Ignore", attributes: titleAttr as Any as? [String : Any])
-        btnForIgnore.setAttributedTitle(attributedTitleForIgnore, for: .normal)
-        btnForIgnore.layer.borderWidth = 2
-        btnForIgnore.layer.borderColor = UIColor._2499090().cgColor
-        view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForIgnore)
-        view.addConstraintsWithFormat("V:|-65-[v0(50)]", options: [], views: btnForIgnore)
+        // For the three actions
+        btnForIgnore = UIButton(frame: CGRect(x: 41, y: 65, w: 208, h: 50))
+        btnForBlock = UIButton(frame: CGRect(x: 41, y: 130, w: 208, h: 50))
+        btnForReport = UIButton(frame: CGRect(x: 41, y: 195, w: 208, h: 50))
+        btnForIgnore.setTitle("Ignore", for: .normal)
+        btnForBlock.setTitle("Block", for: .normal)
+        btnForReport.setTitle("Report", for: .normal)
+        btnForIgnore.tag = IGNORE
+        btnForBlock.tag = BLOCK
+        btnForReport.tag = REPORT
         
-        //For the second action "Block"
-        btnForBlock = UIButton()
-        uiviewChooseAction.addSubview(btnForBlock)
-        btnForBlock.layer.cornerRadius = 25
-        btnForBlock.addTarget(self, action: #selector(confirmBlockRequest), for: .touchUpInside)
-        let attributedTitleForBlock = NSAttributedString(string: "Block", attributes: titleAttr as Any as? [String : Any])
-        btnForBlock.setAttributedTitle(attributedTitleForBlock, for: .normal)
-        btnForBlock.setTitleColor(UIColor._2499090(), for: .normal)
-        btnForBlock.layer.borderWidth = 2
-        btnForBlock.layer.borderColor = UIColor._2499090().cgColor
-        view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForBlock)
-        view.addConstraintsWithFormat("V:|-130-[v0(50)]", options: [], views: btnForBlock)
+        var btnActions = [UIButton]()
+        btnActions.append(btnForIgnore)
+        btnActions.append(btnForBlock)
+        btnActions.append(btnForReport)
         
-        //For the third action "Report"
-        btnForReport = UIButton()
-        uiviewChooseAction.addSubview(btnForReport)
-        btnForReport.layer.cornerRadius = 25
-        let attributedTitleForReport = NSAttributedString(string: "Report", attributes: titleAttr as Any as? [String : Any])
-        btnForReport.setAttributedTitle(attributedTitleForReport, for: .normal)
-        btnForReport.setTitleColor(UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1), for: .normal)
-        btnForReport.layer.borderWidth = 2
-        btnForReport.layer.borderColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1).cgColor
-        view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForReport)
-        view.addConstraintsWithFormat("V:|-195-[v0(50)]", options: [], views: btnForReport)
+        for i in 0..<btnActions.count {
+            btnActions[i].setTitleColor(UIColor._2499090(), for: .normal)
+            btnActions[i].titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+            btnActions[i].addTarget(self, action: #selector(sentActRequest(_:)), for: .touchUpInside)
+            btnActions[i].layer.borderWidth = 2
+            btnActions[i].layer.borderColor = UIColor._2499090().cgColor
+            btnActions[i].layer.cornerRadius = 26 * screenWidthFactor
+            uiviewChooseAction.addSubview(btnActions[i])
+        }
         
         //For the fourth action "Cancel"
         btnForCancel = UIButton()
+        btnForCancel.setTitle("Cancel", for: .normal)
+        btnForCancel.setTitleColor(UIColor._2499090(), for: .normal)
+        btnForCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        btnForCancel.addTarget(self, action: #selector(closeChooseNoti), for: .touchUpInside)
         uiviewChooseAction.addSubview(btnForCancel)
-        let attributedTitleForCancel = NSAttributedString(string: "Cancel", attributes: titleAttr as Any as? [String : Any])
-        btnForCancel.setAttributedTitle(attributedTitleForCancel, for: .normal)
-        btnForCancel.setTitleColor(UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1), for: .normal)
-        view.addConstraintsWithFormat("H:|-41-[v0(208)]|", options: [], views: btnForCancel)
-        view.addConstraintsWithFormat("V:|-262-[v0(50)]", options: [], views: btnForCancel)
-        btnForCancel.addTarget(
-            self,
-            action: #selector(self.closeChooseNoti),
-            for: .touchUpInside)
+        view.addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnForCancel)
+        view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnForCancel)
     }
     
     // this function shows the "choose an action" UI
@@ -221,53 +214,31 @@ extension ContactsViewController {
     // triggered when "yes" button is clicked.
     // 0 is for block, 1 is for withdrawing a request, and 2 is to resend a request.
     func yesButtonFunction(button: UIButton) {
-        closeNoti()
-        animateWithdrawal(listType: button.tag)
-//        switch button.tag {
-//        case BLOCK:
-////            blockRequest()
-//            animateWithdrawal(listType: BLOCK)
-//            break
-//        case WITHDRAW:
-////            withdrawRequest()
-//            animateWithdrawal(listType: WITHDRAW)
-//            break
-//        case RESEND:
-//            animateWithdrawal(listType: RESEND)
-//            break
-//        default:
-//            break
-//        }
+        if button.tag == OK {
+            closeNoti()
+        } else {
+            indicatorView.startAnimating()
+            animateWithdrawal(listType: button.tag)
+        }
     }
     
-    func ignoreRequest() {
-        //api request here
-        animateWithdrawal(listType: IGNORE)
-        closeChooseNoti()
+    func sentActRequest(_ sender: UIButton) {
+        switch sender.tag {
+        case IGNORE: // first button - IGNORE
+            indicatorView.startAnimating()
+            animateWithdrawal(listType: IGNORE)
+            break
+        case BLOCK: // second button - BLOCK
+            self.showNoti(type: BLOCK)
+            break
+        case REPORT: // third button - REPORT
+            let reportPinVC = ReportViewController()
+            reportPinVC.reportType = 0
+            reportPinVC.modalPresentationStyle = .overCurrentContext
+            self.present(reportPinVC, animated: true, completion: nil)
+            break
+        default:
+            break
+        }
     }
-    
-    func confirmBlockRequest() {
-        self.showNoti(type: BLOCK)
-    }
-    
-//    func withdrawRequest() {
-//        // call api to withdraw this request
-//        animateWithdrawal(listType: WITHDRAW)
-//    }
-    
-//    func blockRequest() {
-//        // api request
-//        animateWithdrawal(listType: BLOCK)
-//    }
-    
-//    func resendRequest() {
-////        let userId = testArrayRequested[indexPathGlobal.row].userId
-//        apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
-//            if status / 100 == 2 {
-//                print("[Contacts resend friend request successfully]")
-//            } else {
-//                print("[Contacts resend friend request fail]")
-//            }
-//        }
-//    }
 }
