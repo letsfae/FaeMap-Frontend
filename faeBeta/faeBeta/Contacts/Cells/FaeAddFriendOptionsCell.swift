@@ -40,7 +40,7 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         addSubview(lblOption)
         
         imgArrow = UIImageView()
-        imgArrow.frame = CGRect(x: 389, y: 19, width: 8.57, height: 15)
+        imgArrow.frame = CGRect(x: screenWidth - 25, y: 19, width: 8.57, height: 15)
         imgArrow.contentMode = .scaleAspectFit
         imgArrow.image = #imageLiteral(resourceName: "addFriendOptionArrowIcon")
         addSubview(imgArrow)
