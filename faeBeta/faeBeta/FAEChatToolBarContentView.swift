@@ -69,6 +69,7 @@ enum FAEChatToolBarContentType: UInt32 {
     case sticker = 1
     case photo = 2
     case audio = 4
+    case minimap = 5
 }
 
 /// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
@@ -113,6 +114,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     private var photoInitialized = false
     private var stickerInitialized = false
     private var audioInitialized = false
+    private var minimapInitialized = false
     
     var maxPhotos = 10
     
@@ -192,6 +194,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             
             miniLocation.isHidden = true
             self.addSubview(miniLocation)
+            minimapInitialized = true
         }
         
         //MARK: voice helper function
@@ -208,7 +211,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         
         self.backgroundColor = UIColor.white
         
-        initializeMiniLocation()
+        //initializeMiniLocation()
         
         if (type & FAEChatToolBarContentType.sticker.rawValue > 0) && !stickerInitialized{
             initializeStickerView()
@@ -218,6 +221,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
         if (type & FAEChatToolBarContentType.audio.rawValue > 0) && !audioInitialized{
             setupRecorder()
+        }
+        if (type & FAEChatToolBarContentType.minimap.rawValue > 0) && !minimapInitialized{
+            initializeMiniLocation()
         }
     }
     
@@ -429,6 +435,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         audioInitialized = false
         photoInitialized = false
         stickerInitialized = false
+        minimapInitialized = false
         print("clear tool bar views")
     }
     

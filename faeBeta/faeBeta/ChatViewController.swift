@@ -157,7 +157,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: collectionViewLastBottomInset, right: 0.0)
         //collectionView.isScrollEnabled = true
         
-        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue)
+        let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
         toolbarContentView.setup(initializeType)
         
         //boolIsDisappear = false
