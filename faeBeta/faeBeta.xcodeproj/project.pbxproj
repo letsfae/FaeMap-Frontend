@@ -163,6 +163,8 @@
 		B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */; };
 		B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */; };
 		B39453E51F27DD990038EDAD /* FMFilterMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */; };
+		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
+		B3B520201F5A46DA00A6B0DC /* ContactsNotAllowedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201F1F5A46DA00A6B0DC /* ContactsNotAllowedController.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManager.swift */; };
@@ -441,6 +443,8 @@
 		B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListDetailViewController.swift; sourceTree = "<group>"; };
 		B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterMenu.swift; sourceTree = "<group>"; };
+		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
+		B3B5201F1F5A46DA00A6B0DC /* ContactsNotAllowedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNotAllowedController.swift; sourceTree = "<group>"; };
 		B3F422251F52382C00257E8C /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
 		B806014B1E0CA5940051C702 /* FMGuestMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMGuestMode.swift; sourceTree = "<group>"; };
@@ -578,6 +582,7 @@
 				B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */,
 				B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */,
 				B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */,
+				B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */,
 				506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */,
 				B3170EA11F4560DF0072F9CD /* Temporarily unused */,
 			);
@@ -1051,6 +1056,13 @@
 			children = (
 				B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */,
 				B33FB22E1F267C0500EC6655 /* FaeContactsExtensions */,
+				B3B5201E1F5A41C900A6B0DC /* Cells */,
+				B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */,
+				B3B5201F1F5A46DA00A6B0DC /* ContactsNotAllowedController.swift */,
+				B33FB2321F267C0500EC6655 /* AddUsernameController.swift */,
+				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
+				B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */,
+				B33FB2311F267C0500EC6655 /* AddNearbyController.swift */,
 			);
 			path = Contacts;
 			sourceTree = "<group>";
@@ -1058,10 +1070,17 @@
 		B33FB22E1F267C0500EC6655 /* FaeContactsExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */,
-				B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */,
-				B33FB2311F267C0500EC6655 /* AddNearbyController.swift */,
-				B33FB2321F267C0500EC6655 /* AddUsernameController.swift */,
+				B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */,
+				B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */,
+				B33FB23D1F267C0500EC6655 /* WenJia.swift */,
+				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
+			);
+			path = FaeContactsExtensions;
+			sourceTree = "<group>";
+		};
+		B3B5201E1F5A41C900A6B0DC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
 				B33FB2331F267C0500EC6655 /* FaeAddFriendOptionsCell.swift */,
 				B33FB2341F267C0500EC6655 /* FaeAddUsernameCell.swift */,
 				B33FB2351F267C0500EC6655 /* FaeContactsCell.swift */,
@@ -1069,13 +1088,8 @@
 				B33FB2371F267C0500EC6655 /* FaeReceivedCell.swift */,
 				B33FB2391F267C0500EC6655 /* FaeRequestedCell.swift */,
 				B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */,
-				B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */,
-				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
-				B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */,
-				B33FB23D1F267C0500EC6655 /* WenJia.swift */,
-				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
 			);
-			path = FaeContactsExtensions;
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		B81563931DDBF74300BF85A1 /* SelectPinLocation */ = {
@@ -1573,6 +1587,7 @@
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */,
+				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
@@ -1704,6 +1719,7 @@
 				B83F8AED1E0353DB00F31CEF /* FMNameCardCtrl.swift in Sources */,
 				5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
+				B3B520201F5A46DA00A6B0DC /* ContactsNotAllowedController.swift in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */,

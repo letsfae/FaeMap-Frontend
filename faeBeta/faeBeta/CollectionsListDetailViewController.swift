@@ -128,11 +128,22 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func tabButtonPressed(_ sender: UIButton) {
-        
+        switch sender.tag {
+        case 0:  // map view
+            break
+        case 1:  // share
+            // TODO jichao
+            
+            break
+        default:
+            break
+        }
     }
     
     func moreButtonPressed(_ sender: UIButton) {
-        
+        let vc = ManageColListViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false, completion: nil)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

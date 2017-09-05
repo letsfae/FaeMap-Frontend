@@ -25,7 +25,7 @@ extension AddUsernameController: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
+        schbarUsernames.txtSchField.resignFirstResponder()
         // scrollView's last subview is the scrolling indicator
         // this indicator exists when table is initialized
         guard let indicator = tblUsernames.subviews.last as? UIImageView else { return }
