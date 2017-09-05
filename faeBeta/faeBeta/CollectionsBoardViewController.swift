@@ -159,9 +159,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         imgShadow.clipsToBounds = false
         imgShadow.addSubview(imgAvatar)
         
-        if let gender = userUserGender {
-            imgAvatar.image = gender == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
-        }
+        imgAvatar.image = Key.shared.gender  == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
         
         return imgShadow
     }

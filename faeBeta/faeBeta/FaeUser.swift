@@ -59,6 +59,7 @@ class FaeUser: NSObject {
         userLastname = keyValueJSON["last_name"].stringValue
         userBirthday = keyValueJSON["birthday"].stringValue
         let gender = keyValueJSON["gender"].stringValue
+        Key.shared.gender = gender
         if gender == "male" {
             userGender = 0
         } else {

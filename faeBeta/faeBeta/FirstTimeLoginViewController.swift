@@ -61,7 +61,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             }
             let selfUserInfoJSON = JSON(message!)
             if let gender = selfUserInfoJSON["gender"].string {
-                userUserGender = gender
+                Key.shared.gender = gender
                 if gender == "female" {
                     self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
                 }

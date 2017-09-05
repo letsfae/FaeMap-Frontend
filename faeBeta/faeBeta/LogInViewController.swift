@@ -107,7 +107,10 @@ class LogInViewController: UIViewController {
         btnSupport = UIButton(frame: CGRect(x: (screenWidth - 150) / 2, y: screenHeight - 50 * screenHeightFactor - 71, width: 150, height: 22))
         btnSupport.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 13)
-        btnSupport.setAttributedTitle(NSAttributedString(string: "Sign In Support", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
+        btnSupport.setTitle("Sign In Support", for: .normal)
+        btnSupport.setTitleColor(UIColor._2499090(), for: .normal)
+        btnSupport.setTitleColor(.lightGray, for: .highlighted)
+        btnSupport.titleLabel?.font = font!
         btnSupport.contentHorizontalAlignment = .center
         btnSupport.addTarget(self, action: #selector(LogInViewController.supportButtonTapped), for: .touchUpInside)
         view.insertSubview(btnSupport, at: 0)
@@ -116,7 +119,10 @@ class LogInViewController: UIViewController {
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
-        btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
+        btnLogin.setTitle("Log in", for: .normal)
+        btnLogin.setTitleColor(.white, for: .normal)
+        btnLogin.setTitleColor(.lightGray, for: .highlighted)
+        btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         btnLogin.backgroundColor = UIColor._255160160()
