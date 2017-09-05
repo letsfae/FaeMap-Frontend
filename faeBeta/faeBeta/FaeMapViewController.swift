@@ -111,7 +111,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         loadMapChat()
         renewSelfLocation()
         checkDisplayNameExisitency()
@@ -213,6 +212,26 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)
+        let updateMiniAvatar = FaeUser()
+        let males: [Int] = [1, 2, 3, 6, 7, 9, 14, 15, 16, 18]
+        var females = [Int]()
+        for i in males {
+            females.append(i + 18)
+        }
+        let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
+        userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
+        userAvatarMap = "miniAvatar_\(userMiniAvatar)"
+        LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
+        updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("Successfully update miniavatar")
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+            }
+            else {
+                print("Fail to update miniavatar")
+            }
+        })
     }
     
     func updateTimerForAllPins() {

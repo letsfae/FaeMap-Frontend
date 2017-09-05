@@ -108,13 +108,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         imageAvatar.layer.cornerRadius = 45.5
         imageAvatar.layer.borderColor = UIColor.white.cgColor
         imageAvatar.layer.borderWidth = 5
-        if let gender = userUserGender {
-            if gender == "male" {
-                imageAvatar.image = #imageLiteral(resourceName: "defaultMen")
-            } else {
-                imageAvatar.image = #imageLiteral(resourceName: "defaultWomen")
-            }
-        }
+        imageAvatar.image = Key.shared.gender == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
         imageAvatar.contentMode = .scaleAspectFill
         imageAvatar.layer.masksToBounds = true
         buttonImageOverlay = UIButton(frame: CGRect(x: 100, y: 40, width: 91, height: 91))

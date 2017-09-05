@@ -241,7 +241,7 @@ class SelfAnnotationView: MKAnnotationView {
             userFirstname = selfUserInfoJSON["first_name"].stringValue
             userLastname = selfUserInfoJSON["last_name"].stringValue
             userBirthday = selfUserInfoJSON["birthday"].stringValue
-            userUserGender = selfUserInfoJSON["gender"].stringValue
+            Key.shared.gender = selfUserInfoJSON["gender"].stringValue
             userUserName = selfUserInfoJSON["user_name"].stringValue
             userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
             LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)

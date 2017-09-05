@@ -98,7 +98,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 156 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
-        btnLogin.setAttributedTitle(NSAttributedString(string: "Log in", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
+        btnLogin.setTitle("Log in", for: .normal)
+        btnLogin.setTitleColor(.white, for: .normal)
+        btnLogin.setTitleColor(.lightGray, for: .highlighted)
+        btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor._2499090()
         btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
@@ -108,7 +111,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         // create account button
         btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
-        btnCreateAccount.setAttributedTitle(NSAttributedString(string: "Join Faevorite", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: font!]), for: UIControlState())
+        btnCreateAccount.setTitle("Join Faevorite", for: .normal)
+        btnCreateAccount.setTitleColor(UIColor._2499090(), for: .normal)
+        btnCreateAccount.setTitleColor(.lightGray, for: .highlighted)
+        btnCreateAccount.titleLabel?.font = font!
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
