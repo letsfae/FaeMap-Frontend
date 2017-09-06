@@ -102,6 +102,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             imgAddressIcon.isHidden = mapMode != .selecting
             btnCancelSelect.isHidden = mapMode != .selecting
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
+            if mapMode != .selecting { lblSearchContent.text = "Search Fae Map" }
             if mapMode == .selecting { btnDistIndicator.lblDistance.text = "Select" }
             else { btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance }
             imgPinOnMap.isHidden = mapMode != .selecting

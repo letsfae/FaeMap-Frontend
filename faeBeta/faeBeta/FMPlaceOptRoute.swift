@@ -41,15 +41,16 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     func handleStartPointTap(_ tap: UITapGestureRecognizer) {
+        BoardsSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
     func handleDestinationTap(_ tap: UITapGestureRecognizer) {
+        BoardsSearchViewController.boolToDestination = true
         routingHandleTap()
     }
     
     func routingHandleTap() {
-        BoardsSearchViewController.boolToDestination = true
         imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
