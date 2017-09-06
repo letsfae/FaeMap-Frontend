@@ -23,6 +23,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func loadDistanceComponents() {
         btnDistIndicator = FMDistIndicator()
         view.addSubview(btnDistIndicator)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSelectLocationTap(_:)))
+        btnDistIndicator.addGestureRecognizer(tapGesture)
         
         uiviewChooseLocs = FMChooseLocs()
         uiviewChooseLocs.delegate = self
@@ -34,7 +36,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
         
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
-        imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
         view.addSubview(imgPinOnMap)
         imgPinOnMap.isHidden = true
     }
@@ -48,12 +49,18 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     func routingHandleTap() {
+        BoardsSearchViewController.boolToDestination = true
+        imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
-        BoardsSearchViewController.boolToDestination = true
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         navigationController?.pushViewController(chooseLocsVC, animated: false)
+    }
+    
+    func handleSelectLocationTap(_ tap: UITapGestureRecognizer) {
+        guard routeAddress != nil else { return }
+        sendLocationBack(address: routeAddress)
     }
     
     // BoardsSearchDelegate
@@ -65,6 +72,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
 //        navigationController?.pushViewController(selectLocVC, animated: false)
         uiviewChooseLocs.hide(animated: false)
         mapMode = .selecting
+        mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
     // BoardsSearchDelegate

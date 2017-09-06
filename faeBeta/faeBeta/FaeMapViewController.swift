@@ -89,6 +89,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var addressAnnotations = [AddressAnnotation]()
     var btnDistIndicator: FMDistIndicator!
     var uiviewChooseLocs: FMChooseLocs!
+    var routeAddress: RouteAddress!
     
     // Selecting Location Mode
     var imgPinOnMap: UIImageView!
@@ -104,6 +105,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             if mapMode == .selecting { btnDistIndicator.lblDistance.text = "Select" }
             else { btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance }
             imgPinOnMap.isHidden = mapMode != .selecting
+            btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
         }
     }
     

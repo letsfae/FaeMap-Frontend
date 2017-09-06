@@ -134,5 +134,6 @@ extension FaeMapViewController {
     
     func actionCancelSelecting() {
         mapMode = .routing
+        uiviewChooseLocs.show()
     }
 }
