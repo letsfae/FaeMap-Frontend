@@ -135,8 +135,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
             let direction: CGFloat = CGFloat(self.prevBearing)
             let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
             self.btnCompass.transform = CGAffineTransform(rotationAngle: angle)
-        }, completion: { _ in
-        })
+        }, completion: nil)
     }
     
     // ButtonFinishClickedDelegate

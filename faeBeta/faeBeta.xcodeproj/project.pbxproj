@@ -981,8 +981,8 @@
 			isa = PBXGroup;
 			children = (
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
-				50111C241F476063004EA00E /* FMComponents */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
+				50111C241F476063004EA00E /* FMComponents */,
 				B33F89F51F3CDBEE0033610D /* AddFriend */,
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,

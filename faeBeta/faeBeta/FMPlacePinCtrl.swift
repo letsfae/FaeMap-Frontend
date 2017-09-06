@@ -21,43 +21,43 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
-        uiviewPlaceList.hide()
+        uiviewCollectedList.hide()
     }
     
     func loadPlaceListView() {
-        uiviewPlaceList = AddPlaceToCollectionView()
-        uiviewPlaceList.delegate = self
-        view.addSubview(uiviewPlaceList)
+        uiviewCollectedList = AddPlaceToCollectionView()
+        uiviewCollectedList.delegate = self
+        view.addSubview(uiviewCollectedList)
         
         uiviewAfterAdded = AfterAddedToListView()
         view.addSubview(uiviewAfterAdded)
         
-        uiviewPlaceList.uiviewAfterAdded = uiviewAfterAdded
+        uiviewCollectedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
         switch action {
         case .detail:
-            guard let ann = selectedAnn else { return }
+            guard let ann = selectedPlace else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let vcPlaceDetail = PlaceDetailViewController()
             vcPlaceDetail.place = placePin
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
             break
         case .collect:
-            uiviewPlaceList.show()
-            guard let ann = selectedAnn else { return }
+            uiviewCollectedList.show()
+            guard let ann = selectedPlace else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let pinId = placePin.id
             let collectPlace = FaePinAction()
             collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
                 guard status / 100 == 2 || status == 400 else { return }
-                self.selectedAnnView?.showCollectedNoti()
+                self.selectedPlaceView?.showCollectedNoti()
             })
             break
         case .route:
-            guard let placeData = selectedAnn?.pinInfo as? PlacePin else { return }
+            guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
             let pin = FaePinAnnotation(type: "place", cluster: mapClusterManager, data: placeData)
             pin.animatable = false
             tempFaePins.append(pin)
@@ -72,13 +72,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             }
             mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
-            if let placeInfo = selectedAnn?.pinInfo as? PlacePin {
+            if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
                 uiviewChooseLocs.updateDestination(name: placeInfo.name)
                 destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
             }
             break
         case .share:
-            guard let ann = selectedAnn else { return }
+            guard let ann = selectedPlace else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let vcSharePlace = NewChatShareController(chatOrShare: "share")
             vcSharePlace.placeDetail = placePin
@@ -143,8 +143,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             let idx = firstAnn.class_2_icon_id
             firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
             anView.assignImage(firstAnn.icon)
-            selectedAnnView = anView
-            selectedAnn = firstAnn
+            selectedPlaceView = anView
+            selectedPlace = firstAnn
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }

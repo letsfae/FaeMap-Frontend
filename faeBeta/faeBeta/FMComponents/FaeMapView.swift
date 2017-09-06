@@ -141,11 +141,11 @@ class FaeMapView: MKMapView {
                 }
                 anView.optionsReady = true
             } else {
-                faeMapCtrler?.selectedAnnView?.hideButtons()
+                faeMapCtrler?.selectedPlaceView?.hideButtons()
             }
-            if let anView = faeMapCtrler?.selectedAnnView {
+            if let anView = faeMapCtrler?.selectedPlaceView {
                 anView.chooseAction()
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.hide()
+                faeMapCtrler?.uiviewPinActionDisplay.hide()
             }
             let delayInSeconds: Double = 0.1
             let popTime = DispatchTime.now() + delayInSeconds
@@ -153,26 +153,26 @@ class FaeMapView: MKMapView {
                 self.blockTap = false
             }
         } else if sender.state == .changed {
-            guard let anView = faeMapCtrler?.selectedAnnView else { return }
+            guard let anView = faeMapCtrler?.selectedPlaceView else { return }
             let point = sender.location(in: anView)
             if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
                 anView.action(anView.btnDetail, animated: true)
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .detail)
+                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail)
             }
             else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
                 anView.action(anView.btnCollect, animated: true)
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .collect)
+                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect)
             }
             else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
                 anView.action(anView.btnRoute, animated: true)
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .route)
+                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route)
             }
             else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
                 anView.action(anView.btnShare, animated: true)
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.changeStyle(action: .share)
+                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share)
             } else {
                 anView.optionsToNormal()
-                faeMapCtrler?.btnPlacePinActionOnSrchBar.hide()
+                faeMapCtrler?.uiviewPinActionDisplay.hide()
             }
         }
     }

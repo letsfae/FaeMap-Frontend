@@ -20,75 +20,105 @@ enum MapMode {
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    var lblSearchContent: UILabel!
-    var btnOpenChat: UIButton!
-    var btnLeftWindow: UIButton!
-    var btnMainMapSearch: UIButton!
-    var btnDiscovery: UIButton!
-    var btnLocateSelf: FMLocateSelf!
-    var btnCompass: FMCompass!
-    var boolCanUpdateSocialPin = true
-    var readyUpdatePlacePin = true
-    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
-    var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    // MapView Data and Control
     var faeMapView: FaeMapView!
-    var faeUserPins = [FaePinAnnotation]()
-    var faePlacePins = [FaePinAnnotation]()
-    var lblUnreadCount: UILabel! // Unread Messages Label
-    var mapPins = [MapPin]()
-    var refreshPins = true
-    var refreshPlaces = true
-    var refreshUsers = true
-    var stringFilterValue = "comment,chat_room,media" // Class global variable to control the filter
-    var tempMarker: UIImageView! // temp marker, it is a UIImageView
-    var timerLoadRegionPins: Timer! // timer to renew map pins
-    var timerLoadRegionPlacePins: Timer! // timer to renew map places pin
-    var timerUserPin: Timer? // timer to renew update user pins
-    var prevBearing: Double = 0
     var mapClusterManager: CCHMapClusterController!
-    let FILTER_ENABLE = true
-    var PLACE_ENABLE = true
-    let USER_ENABLE = false
-    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
+    var faeUserPins = [FaePinAnnotation]()
+    var timerUserPin: Timer? // timer to renew update user pins
+    var faePlacePins = [FaePinAnnotation]()
+    var arrPlaceData = [PlacePin]()
+    
+    // Search Bar
+    var imgSchbarShadow: UIImageView!
+    var imgSearchIcon: UIImageView!
+    var imgAddressIcon: UIImageView!
+    var btnLeftWindow: UIButton!
+    var btnCancelSelect: UIButton!
+    var lblSearchContent: UILabel!
+    var btnMainMapSearch: UIButton!
+    var btnClearSearchRes: UIButton!
+    var uiviewPinActionDisplay: FMPinActionDisplay! // indicate which action is being pressing to release
+    
+    // Compass and Locating Self
+    var btnCompass: FMCompass!
+    var btnLocateSelf: FMLocateSelf!
+    
+    // Chat Button
+    var btnOpenChat: UIButton!
+    var lblUnreadCount: UILabel! // Unread Messages Label
+    
+    // Discovery Button
+    var btnDiscovery: UIButton!
+    
+    // Filter Hexagon and Menu
     var btnFilterIcon: FMFilterIcon! // Filter Button
     var uiviewFilterMenu: FMFilterMenu! // Filter Menu
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
-    var imgSchbarShadow: UIImageView!
-    var selectedAnnView: PlacePinAnnotationView?
-    var selectedAnn: FaePinAnnotation?
+    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
+    
+    // Selected Place Control
+    var selectedPlaceView: PlacePinAnnotationView?
+    var selectedPlace: FaePinAnnotation?
     var uiviewPlaceBar = FMPlaceInfoBar()
-    var boolPreventUserPinOpen = false
-    var btnClearSearchRes: UIButton!
+    var swipingState: PlaceInfoBarState = .map
+    
+    // Results from Search
+    var btnTapToShowResultTbl: UIButton!
+    var placeResultTbl = FMPlacesTable()
+    
+    // Name Card
     var uiviewNameCard: FMNameCardView!
-    var mkOverLay = [MKOverlay]()
+    
+    // MapView Offset Control
+    var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var prevAltitude: CLLocationDistance = 0
+    var prevBearing: Double = 0
+    
+    // Collecting Pin Control
+    var uiviewCollectedList: AddPlaceToCollectionView!
+    var uiviewAfterAdded: AfterAddedToListView!
+    
+    // Routes Calculator
+    var arrRoutes = [MKOverlay]()
+    var tempFaePins = [FaePinAnnotation]()
+    var startPointAddr: RouteAddress!
+    var destinationAddr: RouteAddress!
+    var addressAnnotations = [AddressAnnotation]()
+    var btnDistIndicator: FMDistIndicator!
+    var uiviewChooseLocs: FMChooseLocs!
+    
+    // Selecting Location Mode
+    var imgPinOnMap: UIImageView!
+    
+    var mapMode: MapMode = .normal {
+        didSet {
+            guard fullyLoaded else { return }
+            imgSearchIcon.isHidden = mapMode == .selecting
+            btnLeftWindow.isHidden = mapMode == .selecting
+            imgAddressIcon.isHidden = mapMode != .selecting
+            btnCancelSelect.isHidden = mapMode != .selecting
+            lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
+            if mapMode == .selecting { btnDistIndicator.lblDistance.text = "Select" }
+            else { btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance }
+            imgPinOnMap.isHidden = mapMode != .selecting
+        }
+    }
+    
+    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
+    var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
+    let FILTER_ENABLE = true
+    var PLACE_ENABLE = true
+    let USER_ENABLE = false
+    var boolPreventUserPinOpen = false
     var START_WAVE_ANIMATION = false
     var AUTO_REFRESH = true
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
     
-    var placeResultTbl = FMPlacesTable()
-    var btnTapToShowResultTbl: UIButton!
-    
-    var swipingState: PlaceInfoBarState = .map
-    var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    var prevAltitude: CLLocationDistance = 0
-    
-    var btnPlacePinActionOnSrchBar: FMPlaceActionBtn!
-    var uiviewPlaceList: AddPlaceToCollectionView!
-    var uiviewAfterAdded: AfterAddedToListView!
-    var imgDistIndicator: FMDistIndicator!
-    var uiviewChooseLocs: FMChooseLocs!
-    
-    var arrPlaceData = [PlacePin]()
-    var tempFaePins = [FaePinAnnotation]()
-    
-    var startPointAddr: RouteAddress!
-    var destinationAddr: RouteAddress!
-    var addressAnnotations = [AddressAnnotation]()
-    var mapMode: MapMode = .normal
+    var fullyLoaded = false
     
     // System Functions
     override func viewDidLoad() {
@@ -107,6 +137,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         timerSetup()
         updateSelfInfo()
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        
+        fullyLoaded = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -198,14 +230,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func invalidateAllTimer() {
-        if timerLoadRegionPins != nil {
-            timerLoadRegionPins.invalidate()
-        }
         timerUserPin?.invalidate()
         timerUserPin = nil
-        if timerLoadRegionPlacePins != nil {
-            timerLoadRegionPlacePins.invalidate()
-        }
     }
     
     func loadFirstLoginVC() {
@@ -222,13 +248,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
         userAvatarMap = "miniAvatar_\(userMiniAvatar)"
         LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
-        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
-        updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar - 1)")
+        updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
-            }
-            else {
+            } else {
                 print("Fail to update miniavatar")
             }
         })

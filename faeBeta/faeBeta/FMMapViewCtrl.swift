@@ -114,17 +114,17 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func deselectAllAnnotations() {
         
-        btnPlacePinActionOnSrchBar.hide()
+        uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
         
-        if let idx = selectedAnn?.class_2_icon_id {
-            selectedAnn?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
-            guard let img = selectedAnn?.icon else { return }
-            selectedAnnView?.assignImage(img)
-            selectedAnnView?.hideButtons()
-            selectedAnnView?.optionsReady = false
-            selectedAnnView?.optionsOpened = false
-            selectedAnnView = nil
+        if let idx = selectedPlace?.class_2_icon_id {
+            selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
+            guard let img = selectedPlace?.icon else { return }
+            selectedPlaceView?.assignImage(img)
+            selectedPlaceView?.hideButtons()
+            selectedPlaceView?.optionsReady = false
+            selectedPlaceView?.optionsOpened = false
+            selectedPlaceView = nil
         }
     }
     
@@ -158,6 +158,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if AUTO_REFRESH {
             calculateDistanceOffset()
         }
+        
         if btnCompass != nil { btnCompass.rotateCompass() }
         
         if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
@@ -175,11 +176,26 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 self.START_WAVE_ANIMATION = true
             }
         }
+        
+        self.prevBearing = mapView.camera.heading
+        
+        if mapMode == .selecting {
+            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+            let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
+            let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
+            General.shared.getAddress(location: location) { (address) in
+                guard let addr = address as? String else { return }
+                DispatchQueue.main.async {
+                    self.lblSearchContent.text = addr
+//                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                }
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        if btnPlacePinActionOnSrchBar != nil { btnPlacePinActionOnSrchBar.hide() }
-        selectedAnnView?.hideButtons()
+        if uiviewPinActionDisplay != nil { uiviewPinActionDisplay.hide() }
+        selectedPlaceView?.hideButtons()
     }
     
     func mapGesture(isOn: Bool) {

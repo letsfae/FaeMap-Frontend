@@ -90,10 +90,15 @@ class FMChooseLocs: UIView {
         delegate?.hideRouteCalculatorComponents()
     }
     
-    func hide() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+    func hide(animated: Bool = true) {
+        if !animated {
             self.frame.origin.y = -self.frame.size.height
-        })
+            return
+        } else {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                self.frame.origin.y = -self.frame.size.height
+            })
+        }
     }
     
     func show() {

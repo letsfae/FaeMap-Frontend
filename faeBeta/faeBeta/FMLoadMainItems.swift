@@ -59,13 +59,27 @@ extension FaeMapViewController {
         btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
         imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(48)]", options: [], views: btnLeftWindow)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnLeftWindow)
-        btnLeftWindow.adjustsImageWhenDisabled = false
         
-        let imgSearchIcon = UIImageView()
+        btnCancelSelect = UIButton()
+        btnCancelSelect.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
+        imgSchbarShadow.addSubview(btnCancelSelect)
+        btnCancelSelect.addTarget(self, action: #selector(self.actionCancelSelecting), for: .touchUpInside)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(48)]", options: [], views: btnCancelSelect)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnCancelSelect)
+        btnCancelSelect.isHidden = true
+        
+        imgSearchIcon = UIImageView()
         imgSearchIcon.image = #imageLiteral(resourceName: "searchBarIcon")
         imgSchbarShadow.addSubview(imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
+        
+        imgAddressIcon = UIImageView()
+        imgAddressIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        imgSchbarShadow.addSubview(imgAddressIcon)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgAddressIcon)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgAddressIcon)
+        imgAddressIcon.isHidden = true
         
         lblSearchContent = UILabel()
         lblSearchContent.text = "Search Fae Map"
@@ -94,10 +108,10 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
         
         // Click to take an action for place pin
-        btnPlacePinActionOnSrchBar = FMPlaceActionBtn()
-        imgSchbarShadow.addSubview(btnPlacePinActionOnSrchBar)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: btnPlacePinActionOnSrchBar)
+        uiviewPinActionDisplay = FMPinActionDisplay()
+        imgSchbarShadow.addSubview(uiviewPinActionDisplay)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
         
         // Click to back to north
         btnCompass = FMCompass()
