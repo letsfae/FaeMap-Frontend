@@ -64,7 +64,7 @@ extension FaeMapViewController {
         btnCancelSelect.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         imgSchbarShadow.addSubview(btnCancelSelect)
         btnCancelSelect.addTarget(self, action: #selector(self.actionCancelSelecting), for: .touchUpInside)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-15.5-[v0(48)]", options: [], views: btnCancelSelect)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnCancelSelect)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnCancelSelect)
         btnCancelSelect.isHidden = true
         

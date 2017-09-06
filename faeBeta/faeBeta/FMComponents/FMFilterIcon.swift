@@ -20,8 +20,6 @@ class FMFilterIcon: UIButton {
     
     var mapFilterArrow: UIImageView!
     
-    var isSpinning = false
-    
     var boolHideInsides: Bool = false {
         didSet {
             guard filterCircle_1 != nil else { return }
@@ -69,8 +67,6 @@ class FMFilterIcon: UIButton {
     }
     
     func animateInsideCircles() {
-        
-        guard !isSpinning else { return }
         
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = 22
@@ -141,14 +137,11 @@ class FMFilterIcon: UIButton {
                 self.polygonInside.removeFromSuperview()
             }
         }
-        
-        isSpinning = false
     }
     
     func startIconSpin() {
         guard self.center.y == screenHeight - 25 else { return }
         
-        self.isSpinning = true
         self.boolHideInsides = true
         self.isEnabled = false
         
