@@ -11,6 +11,7 @@ import UIKit
 class FMDistIndicator: UIImageView {
     
     var lblDistance: UILabel!
+    var strDistance = ""
     
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
@@ -47,7 +48,8 @@ class FMDistIndicator: UIImageView {
     }
     
     func updateDistance(distance: CLLocationDistance) {
-        lblDistance.text = distance.format(f: ".1") + " mi"
+        strDistance = distance.format(f: ".1") + " mi"
+        lblDistance.text = strDistance
         show()
     }
     
@@ -64,7 +66,7 @@ class FMDistIndicator: UIImageView {
     }
 }
 
-class FMPlaceActionBtn: UIButton {
+class FMPinActionDisplay: UIButton {
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)

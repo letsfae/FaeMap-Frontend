@@ -131,4 +131,8 @@ extension FaeMapViewController {
          self.present(pinMenuVC, animated: false, completion: nil)
          */
     }
+    
+    func actionCancelSelecting() {
+        mapMode = .routing
+    }
 }
