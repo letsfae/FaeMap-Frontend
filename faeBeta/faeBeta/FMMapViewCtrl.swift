@@ -187,7 +187,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
                     self.lblSearchContent.text = addr
-//                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
                 }
             }
         }
