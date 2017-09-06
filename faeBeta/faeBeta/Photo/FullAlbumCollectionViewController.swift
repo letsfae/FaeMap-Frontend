@@ -136,6 +136,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     //MARK: - Setup
     private func prepareTableView() {
         tableViewAlbum = UITableView()
+        tableViewAlbum.backgroundColor = UIColor.clear
         tableViewAlbum.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         tableViewAlbum.separatorColor = UIColor._200199204()
         tableViewAlbum.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0)
@@ -579,6 +580,15 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: albumReuseIdentifiler) as! AlbumTableViewCell
+        cell.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 80)
+        if indexPath.row == photoPicker.selectedAlbum.count - 1 {
+            let maskPath = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 5.0, height: 5.0))
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = cell.bounds
+            maskLayer.path = maskPath.cgPath
+            cell.layer.mask = maskLayer
+            //cell.layer.masksToBounds = true
+        }
         
         if let albumName = photoPicker.selectedAlbum[indexPath.row].albumName {
             cell.lblAlbumTitle.text = albumName

@@ -21,6 +21,8 @@ class AlbumTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         imgTitle = UIImageView(frame: CGRect(x: 10, y: 10, width: 60, height: 60))
+        imgTitle.contentMode = .scaleAspectFill
+        imgTitle.clipsToBounds = true
         addSubview(imgTitle)
         
         lblAlbumTitle = UILabel(frame: CGRect(x: 89, y: 19, w: 260, h: 22))
