@@ -51,15 +51,11 @@ class FaePinAnnotation: MKPointAnnotation {
     var mapViewCluster: CCHMapClusterController?
     var animatable = true
     
-    // place pin & social pin
+    // place pin
     var icon = UIImage()
     var class_2_icon_id: Int = 48
     var pinInfo: AnyObject!
-    
-    init(type: String) {
-        super.init()
-        self.type = type
-    }
+    var selected = false
     
     // user pin only
     var avatar = UIImage()
@@ -81,6 +77,9 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     var timer: Timer?
     
+    /// - parameter type: pin type, only 'place' and 'user' are available for now
+    ///             cluster: the cluster manager passed from FaeMapViewController, default is nil
+    ///             data: the data need to manage with, only PlacePin and UserPin are available for now
     init(type: String, cluster: CCHMapClusterController? = nil, data: AnyObject) {
         super.init()
         self.mapViewCluster = cluster

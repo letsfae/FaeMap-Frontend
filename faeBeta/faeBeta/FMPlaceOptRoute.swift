@@ -159,12 +159,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.hide()
         animateMainItems(show: false)
         faeMapView.removeAnnotations(addressAnnotations)
-        mapClusterManager.removeAnnotations(tempFaePins) {
+        placeClusterManager.removeAnnotations(tempFaePins) {
             for user in self.faeUserPins {
                 user.isValid = true
             }
-            self.mapClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
-            self.mapClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
+            self.userClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
+            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
         }
         HIDE_AVATARS = false
         PLACE_ENABLE = true

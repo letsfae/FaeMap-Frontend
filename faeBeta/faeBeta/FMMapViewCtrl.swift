@@ -11,7 +11,37 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate {
+extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator {
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        for annotationView in views {
+            guard let anView = annotationView as? PlacePinAnnotationView else { continue }
+            guard let annotation = anView.annotation as? FaePinAnnotation else { continue }
+            guard annotation.selected else { continue }
+            selectedPlaceView = anView
+            anView.optionsReady = true
+            anView.layer.zPosition = 500
+        }
+    }
+    
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
+        guard mapClusterController == placeClusterManager else { return }
+        for annotationView in annotationViews {
+            guard let anView = annotationView as? PlacePinAnnotationView else { continue }
+            anView.alpha = 1
+        }
+    }
+
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
+        guard mapClusterController == placeClusterManager else { return }
+        guard let mapView = mapClusterController.mapView else { return }
+        for annotation in annotations {
+            guard let ann = annotation as? CCHMapClusterAnnotation else { continue }
+            guard let anView = mapView.view(for: ann) else { continue }
+            anView.alpha = 0
+        }
+        if completionHandler != nil { completionHandler() }
+    }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
@@ -68,7 +98,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == "place" {
-                return viewForPlace(annotation: annotation, first: firstAnn)
+                return viewForPlace(annotation: annotation, first: firstAnn, animated: boolSelecting)
             } else if firstAnn.type == "user" {
                 return viewForUser(annotation: annotation, first: firstAnn)
             } else {
@@ -86,6 +116,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             }
             anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
             return anView
+        } else if annotation is FaePinAnnotation {
+            guard let firstAnn = annotation as? FaePinAnnotation else { return nil }
+            guard firstAnn.type == "place" else { return nil }
+            return viewForSelectedPlace(annotation: annotation, first: firstAnn)
         } else {
             return nil
         }
@@ -191,11 +225,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 }
             }
         }
-    }
-    
-    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        if uiviewPinActionDisplay != nil { uiviewPinActionDisplay.hide() }
-        selectedPlaceView?.hideButtons()
     }
     
     func mapGesture(isOn: Bool) {

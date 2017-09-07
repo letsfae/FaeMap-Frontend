@@ -85,7 +85,7 @@ extension FaeMapViewController {
                         continue
                     }
                     let userPin = UserPin(json: userJson)
-                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.mapClusterManager, data: userPin)
+                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.userClusterManager, data: userPin)
                     guard user != nil else { continue }
                     if self.faeUserPins.contains(user!) {
                         // joshprint("[updateUserPins] yes contains")
@@ -103,7 +103,7 @@ extension FaeMapViewController {
                     return
                 }
                 DispatchQueue.main.async {
-                    self.mapClusterManager.addAnnotations(userPins, withCompletionHandler: nil)
+                    self.userClusterManager.addAnnotations(userPins, withCompletionHandler: nil)
                     for user in userPins {
                         user.isValid = true
                     }

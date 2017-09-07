@@ -48,12 +48,12 @@ extension FaeMapViewController {
         btnTapToShowResultTbl.alpha = 0
         mapGesture(isOn: true)
         deselectAllAnnotations()
-        mapClusterManager.removeAnnotations(faePlacePins) {
+        placeClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
             self.updatePlacePins()
             self.updateUserPins()
         }
-        mapClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
     }
     
     func actionPlacePinAction(_ sender: UIButton) {
@@ -113,7 +113,7 @@ extension FaeMapViewController {
             for faeUser in faeUserPins {
                 faeUser.isValid = false
             }
-            mapClusterManager.removeAnnotations(faeUserPins) {
+            userClusterManager.removeAnnotations(faeUserPins) {
                 self.faeUserPins.removeAll()
             }
         }

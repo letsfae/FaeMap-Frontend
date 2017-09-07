@@ -110,6 +110,7 @@ class FaeMapView: MKMapView {
             faeMapCtrler?.mapGesture(isOn: true)
             faeMapCtrler?.uiviewPlaceBar.hide()
             faeMapCtrler?.deselectAllAnnotations()
+            faeMapCtrler?.selectedPlace = nil
         }
         blockTap = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }

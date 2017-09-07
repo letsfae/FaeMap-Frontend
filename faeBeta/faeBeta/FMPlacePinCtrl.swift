@@ -58,19 +58,19 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             break
         case .route:
             guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
-            let pin = FaePinAnnotation(type: "place", cluster: mapClusterManager, data: placeData)
+            let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeData)
             pin.animatable = false
             tempFaePins.append(pin)
             HIDE_AVATARS = true
             PLACE_ENABLE = false
-            mapClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
-                self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+            placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+                self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                 self.routeCalculator(destination: pin.coordinate)
             })
             for user in self.faeUserPins {
                 user.isValid = false
             }
-            mapClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+            userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
             if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
                 uiviewChooseLocs.updateDestination(name: placeInfo.name)
@@ -87,7 +87,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
     }
 
-    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation, animated: Bool = true) -> MKAnnotationView {
         let identifier = "place"
         var anView: PlacePinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
@@ -98,19 +98,41 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         anView.assignImage(first.icon)
         anView.delegate = self
-        if first.animatable {
-            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-            DispatchQueue.main.async {
-                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                    anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                    anView.alpha = 1
-                }, completion: nil)
+        if animated {
+            if first.animatable {
+                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+                DispatchQueue.main.async {
+                    anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+                        anView.alpha = 1
+                    }, completion: nil)
+                }
+            } else {
+                anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+                anView.alpha = 1
             }
         } else {
             anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
             anView.alpha = 1
         }
+        return anView
+    }
+    
+    func viewForSelectedPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "place_selected"
+        var anView: PlacePinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        anView.delegate = self
+        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+        anView.alpha = 1
+        anView.layer.zPosition = 7
         return anView
     }
     
@@ -138,13 +160,20 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         if let anView = view as? PlacePinAnnotationView {
-            anView.layer.zPosition = 2
+//            anView.layer.zPosition = 2
             anView.imgIcon.layer.zPosition = 2
             let idx = firstAnn.class_2_icon_id
             firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
             anView.assignImage(firstAnn.icon)
-            selectedPlaceView = anView
-            selectedPlace = firstAnn
+            if firstSelectPlace { self.selectedPlace = firstAnn }
+            if let slcAnno = selectedPlace {
+                faeMapView.removeAnnotation(slcAnno)
+                placeClusterManager.addAnnotations([slcAnno], withCompletionHandler: {
+                    self.selectedPlace = firstAnn
+                    firstAnn.selected = true
+                    self.faeMapView.addAnnotation(firstAnn)
+                })
+            }
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
@@ -229,7 +258,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                         continue
                     } else {
                         // MARK: - Bug Here, negative count and malloc problem
-                        let place = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: placeData)
+                        let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
                         self.arrPlaceData.append(placeData)
                         self.faePlacePins.append(place)
                         placePins.append(place)
@@ -237,7 +266,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 }
                 guard placePins.count > 0 else { return }
                 DispatchQueue.main.async {
-                    self.mapClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
+                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
                 }
             }
             stopIconSpin(delay: getDelay(prevTime: time_0))

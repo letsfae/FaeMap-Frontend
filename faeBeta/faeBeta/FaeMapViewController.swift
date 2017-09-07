@@ -22,7 +22,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MapView Data and Control
     var faeMapView: FaeMapView!
-    var mapClusterManager: CCHMapClusterController!
+    var placeClusterManager: CCHMapClusterController!
+    var userClusterManager: CCHMapClusterController!
     var faeUserPins = [FaePinAnnotation]()
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
@@ -64,6 +65,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var selectedPlace: FaePinAnnotation?
     var uiviewPlaceBar = FMPlaceInfoBar()
     var swipingState: PlaceInfoBarState = .map
+    var boolSelecting = false
+    var firstSelectPlace = true
     
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
@@ -120,8 +123,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var AUTO_REFRESH = true
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
-    
-    var fullyLoaded = false
+    var fullyLoaded = false // indicate if all components are fully loaded
     
     // System Functions
     override func viewDidLoad() {

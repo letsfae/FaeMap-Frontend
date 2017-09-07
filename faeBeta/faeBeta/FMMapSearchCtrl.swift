@@ -18,11 +18,11 @@ extension FaeMapViewController: MapSearchDelegate {
         let camera = faeMapView.camera
         camera.centerCoordinate = place.coordinate
         faeMapView.setCamera(camera, animated: false)
-        mapClusterManager.removeAnnotations(faePlacePins) {
+        placeClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
-            let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: place)
+            let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
             self.faePlacePins.append(pin)
-            self.mapClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }
     }
     
@@ -35,20 +35,20 @@ extension FaeMapViewController: MapSearchDelegate {
             uiviewPlaceBar.loading(current: firstPlacePin)
         }
         btnTapToShowResultTbl.alpha = 1
-        mapClusterManager.removeAnnotations(faePlacePins) {
+        placeClusterManager.removeAnnotations(faePlacePins) {
             self.faePlacePins.removeAll()
             for place in self.uiviewPlaceBar.places {
-                let pin = FaePinAnnotation(type: "place", cluster: self.mapClusterManager, data: place)
+                let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
                 self.faePlacePins.append(pin)
             }
-            self.mapClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
+            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
             self.zoomToFitAllAnnotations(annotations: self.faePlacePins)
         }
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
         guard let firstAnn = annotations.first else { return }
-        mapClusterManager.maxZoomLevelForClustering = 0
+        placeClusterManager.maxZoomLevelForClustering = 0
         let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {
