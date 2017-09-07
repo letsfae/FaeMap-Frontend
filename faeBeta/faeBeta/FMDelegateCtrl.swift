@@ -34,9 +34,9 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
          */
     }
     func reloadMapPins(_ coordinate: CLLocationCoordinate2D, pinID: String, annotation: FaePinAnnotation) {
-        
-        mapClusterManager.removeAnnotations([annotation]) {
-            self.mapClusterManager.addAnnotations([annotation], withCompletionHandler: nil)
+        /*
+        placeClusterManager.removeAnnotations([annotation]) {
+            self.placeClusterManager.addAnnotations([annotation], withCompletionHandler: nil)
         }
         
         let offset = 530 * screenHeightFactor - screenHeight / 2
@@ -46,6 +46,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
         let camera = faeMapView.camera
         camera.centerCoordinate = newCoor
         faeMapView.setCamera(camera, animated: false)
+         */
     }
     
     /*
