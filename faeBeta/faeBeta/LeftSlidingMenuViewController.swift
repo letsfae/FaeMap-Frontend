@@ -347,7 +347,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to invisible")
                     self.actionCloseMenu(self.btnBackground)
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
                 } else {
                     print("Fail to switch to invisible")
                 }
@@ -362,7 +362,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(userStatus, forKey: "userStatus")
                     print("Successfully switch to online")
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
                 } else {
                     print("Fail to switch to online")
                 }
