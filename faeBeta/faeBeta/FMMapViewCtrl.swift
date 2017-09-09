@@ -91,14 +91,15 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
             if userStatus == 5 {
-                anView.invisibleMode()
+                anView.invisibleOn()
             }
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == "place" {
-                return viewForPlace(annotation: annotation, first: firstAnn, animated: boolSelecting)
+                // return viewForPlace(annotation: annotation, first: firstAnn, animated: boolSelecting)
+                return viewForPlace(annotation: annotation, first: firstAnn)
             } else if firstAnn.type == "user" {
                 return viewForUser(annotation: annotation, first: firstAnn)
             } else {
@@ -203,7 +204,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 if self.START_WAVE_ANIMATION {
                     self.START_WAVE_ANIMATION = false
                     DispatchQueue.main.async {
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
                     }
                 }
             } else {

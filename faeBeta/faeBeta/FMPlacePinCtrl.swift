@@ -160,20 +160,22 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         if let anView = view as? PlacePinAnnotationView {
-//            anView.layer.zPosition = 2
+            anView.layer.zPosition = 2
             anView.imgIcon.layer.zPosition = 2
             let idx = firstAnn.class_2_icon_id
             firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
             anView.assignImage(firstAnn.icon)
-            if firstSelectPlace { self.selectedPlace = firstAnn }
-            if let slcAnno = selectedPlace {
-                faeMapView.removeAnnotation(slcAnno)
-                placeClusterManager.addAnnotations([slcAnno], withCompletionHandler: {
-                    self.selectedPlace = firstAnn
-                    firstAnn.selected = true
-                    self.faeMapView.addAnnotation(firstAnn)
-                })
-            }
+//            if firstSelectPlace { self.selectedPlace = firstAnn }
+//            if let slcAnno = selectedPlace {
+//                faeMapView.removeAnnotation(slcAnno)
+//                placeClusterManager.addAnnotations([slcAnno], withCompletionHandler: {
+//                    self.selectedPlace = firstAnn
+//                    firstAnn.selected = true
+//                    self.faeMapView.addAnnotation(firstAnn)
+//                })
+//            }
+            selectedPlace = firstAnn
+            selectedPlaceView = anView
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
@@ -229,7 +231,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getPlaceInfo.whereKey("radius", value: "500000")
         getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count", value: "200")
+        getPlaceInfo.whereKey("max_count", value: "100")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))

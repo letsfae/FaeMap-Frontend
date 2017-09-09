@@ -29,7 +29,7 @@ class PlacePin: NSObject {
         // self.imageURL = json["image_url"].stringValue
         name = json["name"].stringValue
         address1 = json["location"]["address"].stringValue
-        address2 = json["location"]["city"].stringValue + ", " + json["location"]["country"].stringValue + ", " + json["location"]["zip_code"].stringValue + ", " + json["location"]["state"].stringValue
+        address2 = json["location"]["city"].stringValue + ", " + json["location"]["state"].stringValue + ", " + json["location"]["zip_code"].stringValue + ", " + json["location"]["country"].stringValue
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         if let _3 = json["categories"]["class3"].string {
             class_2 = _3

@@ -40,7 +40,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.invisibleMode()
+            anView.invisibleOn()
             return anView
         } else {
             return nil

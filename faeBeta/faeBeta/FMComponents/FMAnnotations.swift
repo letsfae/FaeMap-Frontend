@@ -11,7 +11,7 @@ import SwiftyJSON
 import CCHMapClusterController
 import MapKit
 
-let mapAvatarWidth = 35
+let mapAvatarWidth: CGFloat = 35
 
 class AddressAnnotation: MKPointAnnotation {
     var isStartPoint = false
@@ -38,7 +38,7 @@ class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
         guard let rhs = object as? FaePinAnnotation else { return false }
-        return self.id == rhs.id && self.type == rhs.type
+        return id == rhs.id && type == rhs.type
     }
     
     static func ==(lhs: FaePinAnnotation, rhs: FaePinAnnotation) -> Bool {
@@ -82,30 +82,29 @@ class FaePinAnnotation: MKPointAnnotation {
     ///             data: the data need to manage with, only PlacePin and UserPin are available for now
     init(type: String, cluster: CCHMapClusterController? = nil, data: AnyObject) {
         super.init()
-        self.mapViewCluster = cluster
+        mapViewCluster = cluster
         self.type = type
         if type == "place" {
             guard let placePin = data as? PlacePin else { return }
-            self.pinInfo = data
-            self.id = placePin.id
-            self.class_2_icon_id = placePin.class_2_icon_id
-            self.icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
-            self.coordinate = placePin.coordinate
-        }
-        else if type == "user" {
+            pinInfo = data
+            id = placePin.id
+            class_2_icon_id = placePin.class_2_icon_id
+            icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
+            coordinate = placePin.coordinate
+        } else if type == "user" {
             guard let userPin = data as? UserPin else { return }
-            self.id = userPin.id
-            self.miniAvatar = userPin.miniAvatar
-            self.positions = userPin.positions
-            self.coordinate = self.positions[self.count]
-            self.count += 1
+            id = userPin.id
+            miniAvatar = userPin.miniAvatar
+            positions = userPin.positions
+            coordinate = positions[self.count]
+            count += 1
             guard Mood.avatars[miniAvatar] != nil else {
                 print("[init] map avatar image is nil")
                 return
             }
-            self.avatar = Mood.avatars[miniAvatar] ?? UIImage()
-            self.changePosition()
-            self.timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+            avatar = Mood.avatars[miniAvatar] ?? UIImage()
+            changePosition()
+            timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
         }
     }
     
@@ -119,11 +118,11 @@ class FaePinAnnotation: MKPointAnnotation {
     
     // change the position of user pin given the five fake coordinates from Fae-API
     func changePosition() {
-        guard self.isValid else { return }
-        if self.count >= 5 {
-            self.count = 0
+        guard isValid else { return }
+        if count >= 5 {
+            count = 0
         }
-        self.mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
+        mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
             guard self.isValid else { return }
             if self.positions.indices.contains(self.count) {
                 self.coordinate = self.positions[self.count]
@@ -145,13 +144,11 @@ class FaePinAnnotation: MKPointAnnotation {
 
 class SelfAnnotationView: MKAnnotationView {
     
-    var selfIcon = UIImageView()
-    var outsideCircle_1: UIImageView!
-    var outsideCircle_2: UIImageView!
-    var outsideCircle_3: UIImageView!
     let anchorPoint = CGPoint(x: mapAvatarWidth / 2, y: mapAvatarWidth / 2)
-    
-    var selfIcon_invisible: UIImageView!
+    var selfIcon = UIImageView()
+    var img: UIImageView!
+    var inner: UIImageView!
+    var red: UIImageView!
     
     var mapAvatar: Int = 1 {
         didSet {
@@ -166,60 +163,84 @@ class SelfAnnotationView: MKAnnotationView {
         frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
         clipsToBounds = false
         layer.zPosition = 2
-        loadSelfMarkerSubview()
+        loadBasic()
         if let identifier = reuseIdentifier {
             if identifier == "self_selected_mode" {
-                invisibleMode()
+                invisibleOn()
             } else {
                 getSelfAccountInfo()
             }
         }
-        NotificationCenter.default.addObserver(self, selector: #selector(self.reloadSelfMarker), name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.getSelfAccountInfo), name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.invisibleMode), name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(invisibleOff), name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(getSelfAccountInfo), name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(invisibleOn), name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func invisibleMode() {
+    func loadBasic() {
+        let offSet_0: CGFloat = CGFloat(mapAvatarWidth / 2)
         
-        selfIcon.isHidden = true
+        img = UIImageView(frame: CGRect(x: offSet_0, y: offSet_0, width: 0, height: 0))
+        img.image = #imageLiteral(resourceName: "outside_circle")
+        img.alpha = 0.8
+        addSubview(img)
         
-        if selfIcon_invisible != nil {
-            selfIcon_invisible.removeFromSuperview()
-        }
-
-        let offset_0: CGFloat = CGFloat(mapAvatarWidth - 27) / 2.0
-        selfIcon_invisible = UIImageView(frame: CGRect(x: offset_0 - 0.25, y: offset_0 - 2, w: 27, h: 30))
-        selfIcon_invisible.layer.zPosition = 3
-        selfIcon_invisible.image = #imageLiteral(resourceName: "invisible_mode_inside")
-        selfIcon_invisible.contentMode = .scaleAspectFit
-        selfIcon_invisible.clipsToBounds = false
-        selfIcon_invisible.layer.anchorPoint = CGPoint(x: 0.5, y: 0.57) // perfect
-        addSubview(selfIcon_invisible)
+        inner = UIImageView(frame: CGRect(x: 0, y: 0, width: 29, height: 34))
+        inner.center = CGPoint(x: offSet_0, y: offSet_0)
+        inner.image = #imageLiteral(resourceName: "inner_icon")
+        inner.layer.anchorPoint = CGPoint(x: 0.5, y: 0.60294)
+        addSubview(inner)
+        inner.isHidden = true
         
+        red = UIImageView(frame: CGRect(x: 0, y: 0, width: 12.5, height: 12.5))
+        red.center = CGPoint(x: offSet_0, y: offSet_0)
+        red.image = #imageLiteral(resourceName: "inside_circle")
+        red.alpha = 0.9
+        addSubview(red)
+        red.isHidden = true
+        
+        selfIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
+        selfIcon.layer.zPosition = 5
+        selfIcon.center = anchorPoint
+        addSubview(selfIcon)
+        
+        animations()
+    }
+    
+    func invisibleOn() {
         LocManager.shared.locManager.startUpdatingHeading()
-        
         timer?.invalidate()
         timer = nil
         timer = Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(updateHeading), userInfo: nil, repeats: true)
-
-        outsideCircleAnimation()
+        selfIcon.isHidden = true
+        inner.isHidden = false
+        red.isHidden = false
+    }
+    
+    func invisibleOff() {
+        guard userStatus != 5 else { return }
+        LocManager.shared.locManager.stopUpdatingHeading()
+        timer?.invalidate()
+        timer = nil
+        selfIcon.isHidden = false
+        inner.isHidden = true
+        red.isHidden = true
     }
     
     func updateHeading() {
         UIView.animate(withDuration: 0.5, animations: {
-            self.selfIcon_invisible.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * LocManager.shared.curtHeading) / 180.0)
+            self.inner.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * LocManager.shared.curtHeading) / 180.0)
         }, completion: nil)
     }
     
@@ -230,10 +251,10 @@ class SelfAnnotationView: MKAnnotationView {
     
     func getSelfAccountInfo() {
         let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+        getSelfInfo.getAccountBasicInfo({ (status: Int, message: Any?) in
             guard status / 100 == 2 else {
                 self.mapAvatar = 1
-                self.reloadSelfMarker()
+                self.invisibleOff()
                 return
             }
             let selfUserInfoJSON = JSON(message!)
@@ -248,33 +269,43 @@ class SelfAnnotationView: MKAnnotationView {
             if userStatus == 5 {
                 return
             }
-            self.reloadSelfMarker()
+            self.invisibleOff()
         })
     }
     
-    func loadSelfMarkerSubview() {
-        selfIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
-        selfIcon.layer.zPosition = 5
-        selfIcon.center = anchorPoint
-        addSubview(selfIcon)
-    }
-    
-    func reloadSelfMarker() {
+    func animations() {
+        let circleWidth: CGFloat = 120
+        let offSet: CGFloat = CGFloat(-(circleWidth - mapAvatarWidth) / 2)
+        let offSet_0: CGFloat = CGFloat(mapAvatarWidth / 2)
         
-        outsideCircleAnimation()
-        
-        guard userStatus != 5 else { return }
-        
-        timer?.invalidate()
-        timer = nil
-        LocManager.shared.locManager.stopUpdatingHeading()
-        
-        selfIcon.isHidden = false
-        
-        if selfIcon_invisible != nil {
-            selfIcon_invisible.removeFromSuperview()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            self.img.frame = CGRect(x: offSet_0, y: offSet_0, width: 0, height: 0)
+            self.img.alpha = 0.8
+            self.red.frame = CGRect(x: offSet_0 - 6.25, y: offSet_0 - 6.25, width: 12.5, height: 12.5)
+            self.red.alpha = 0.9
+            
+            UIView.animate(withDuration: 0.75, delay: 0, options: [.curveEaseOut], animations: {
+                self.red.frame = CGRect(x: offSet_0 - 7.5, y: offSet_0 - 7.5, width: 15, height: 15)
+                self.red.alpha = 1
+            }, completion: nil)
+            
+            UIView.animate(withDuration: 2.25, delay: 0.25, options: [.curveEaseOut], animations: {
+                self.img.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
+                self.img.alpha = 0
+            }, completion: { _ in
+                self.animations()
+            })
+            UIView.animate(withDuration: 1, delay: 2, options: [.curveEaseOut], animations: {
+                self.red.frame = CGRect(x: offSet_0 - 6.25, y: offSet_0 - 6.25, width: 12.5, height: 12.5)
+                self.red.alpha = 0.9
+            }, completion: nil)
         }
     }
+    
+    var selfIcon_invisible: UIImageView!
+    var outsideCircle_1: UIImageView!
+    var outsideCircle_2: UIImageView!
+    var outsideCircle_3: UIImageView!
     
     func outsideCircleAnimation() {
         
@@ -306,8 +337,8 @@ class SelfAnnotationView: MKAnnotationView {
         addSubview(outsideCircle_2)
         addSubview(outsideCircle_1)
         
-        let circleWidth = 100
-        let offSet = -(circleWidth - mapAvatarWidth) / 2
+        let circleWidth: CGFloat = 100
+        let offSet: CGFloat = -(circleWidth - mapAvatarWidth) / 2
         
         UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
             if self.outsideCircle_1 != nil {
@@ -429,7 +460,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share_s"), for: .selected)
         btnShare.alpha = 0
         
-        self.layer.zPosition = 2
+        layer.zPosition = 2
         imgIcon.layer.zPosition = 2
         btnDetail.layer.zPosition = 2
         btnCollect.layer.zPosition = 2
@@ -445,7 +476,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         bringSubview(toFront: btnRoute)
         bringSubview(toFront: btnShare)
         bringSubview(toFront: imgIcon)
-        self.superview?.bringSubview(toFront: self)
+        superview?.bringSubview(toFront: self)
         
         arrBtns.append(btnDetail)
         arrBtns.append(btnCollect)
@@ -458,13 +489,13 @@ class PlacePinAnnotationView: MKAnnotationView {
         optionsReady = true
         optionsOpeing = true
         loadButtons()
-        var point = self.frame.origin; point.x -= 59 ;point.y -= 56
+        var point = frame.origin; point.x -= 59; point.y -= 56
         frame = CGRect(x: point.x, y: point.y, width: 174, height: 112)
         imgIcon.center.x = 87; imgIcon.frame.origin.y = 56
         var delay: Double = 0
         for btn in arrBtns {
-            btn.addTarget(self, action: #selector(self.action(_:animated:)), for: .touchUpInside)
-            btn.center = self.imgIcon.center
+            btn.addTarget(self, action: #selector(action(_:animated:)), for: .touchUpInside)
+            btn.center = imgIcon.center
             UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: {
                 btn.alpha = 1
                 if btn == self.btnDetail { btn.frame.origin = CGPoint(x: 0, y: 43) }
@@ -525,7 +556,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     func action(_ sender: UIButton, animated: Bool = false) {
         
-        guard animated else { chooseAction(sender); return}
+        guard animated else { chooseAction(sender); return }
         
         btnDetail.isSelected = sender == btnDetail
         btnCollect.isSelected = sender == btnCollect
@@ -545,20 +576,17 @@ class PlacePinAnnotationView: MKAnnotationView {
                 self.btnCollect.frame.origin = CGPoint(x: 45, y: 0)
                 self.btnRoute.frame.origin = CGPoint(x: 103, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 53)
-            }
-            else if sender == self.btnCollect {
+            } else if sender == self.btnCollect {
                 sender.frame.origin = CGPoint(x: 32, y: -3)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 53)
                 self.btnRoute.frame.origin = CGPoint(x: 103, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 50)
-            }
-            else if sender == self.btnRoute {
+            } else if sender == self.btnRoute {
                 sender.frame.origin = CGPoint(x: 90, y: -3)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 50)
                 self.btnCollect.frame.origin = CGPoint(x: 28, y: 0)
                 self.btnShare.frame.origin = CGPoint(x: 128, y: 53)
-            }
-            else if sender == self.btnShare {
+            } else if sender == self.btnShare {
                 sender.frame.origin = CGPoint(x: 125, y: 40)
                 self.btnDetail.frame.origin = CGPoint(x: 0, y: 53)
                 self.btnCollect.frame.origin = CGPoint(x: 25, y: 0)
