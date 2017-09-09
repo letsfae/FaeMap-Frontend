@@ -1,7 +1,6 @@
 # FaeMap-Frontend
 
 * [Use of SwiftyJSON](#use-of-swiftyjson)
-* [Use of GoogleMaps API](#use-of-googlemaps-and-googleplaces-sdk-for-ios)
 * [Use of Delegate](#use-of-delegate-in-swift)
 * [Parameter for Chat](#parameter-for-chat)
 * [Code Style & Basic Rules (English)](#coding-style--basic-rules-english)
@@ -43,26 +42,6 @@ if let userName = json[0]["user"]["name"].string {
 }
 ```
 For more details, please check [SwiftyJSON on Github](https://github.com/SwiftyJSON/SwiftyJSON)
-
-## Use of GoogleMaps and GooglePlaces SDK for iOS
-[GoogleMaps](https://developers.google.com/maps/documentation/ios-sdk/) Maps Documents
-
-[GooglePlaces](https://developers.google.com/places/ios-api/) Places Document
-
-Initial Two API in AppDelegate.swift file
-```Swift
-import GoogleMaps
-import GooglePlaces
-
-func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        ...
-        GMSServices.provideAPIKey(GoogleMapKey)
-        GMSPlacesClient.provideAPIKey(GoogleMapKey)
-        ...
-}
-```
-
-Note that GoogleMapKey is the same with two APIs, which can be generated through [Google Console](https://console.cloud.google.com)
 
 ## Use of Delegate in Swift
 First, create a protocol and declare it in the class that will call delegate function.
