@@ -15,7 +15,7 @@ class FMCompass: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 20, y: screenHeight - 156, width: 63, height: 63))
+        super.init(frame: CGRect(x: 21.5, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
     }
     
@@ -24,7 +24,7 @@ class FMCompass: UIButton {
     }
     
     private func loadContent() {
-        setImage(#imageLiteral(resourceName: "mainScreenNorth"), for: .normal)
+        setImage(#imageLiteral(resourceName: "mainScreenNorth_new"), for: .normal)
         addTarget(self, action: #selector(actionToNorth(_:)), for: .touchUpInside)
         layer.zPosition = 500
     }
@@ -53,7 +53,7 @@ class FMLocateSelf: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: screenWidth - 83, y: screenHeight - 156, width: 63, height: 63))
+        super.init(frame: CGRect(x: screenWidth - 81.5, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
     }
     
@@ -62,7 +62,7 @@ class FMLocateSelf: UIButton {
     }
     
     private func loadContent() {
-        setImage(#imageLiteral(resourceName: "mainScreenSelfCenter"), for: .normal)
+        setImage(#imageLiteral(resourceName: "mainScreenLocateSelf"), for: .normal)
         addTarget(self, action: #selector(actionLocateSelf(_:)), for: .touchUpInside)
         layer.zPosition = 500
     }
