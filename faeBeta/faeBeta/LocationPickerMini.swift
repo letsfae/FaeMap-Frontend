@@ -11,7 +11,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class LocationPickerMini: UIView {
+class LocationPickerMini: UIView, MKMapViewDelegate {
     
     weak var locationDelegate: LocationSendDelegate!
     
@@ -43,6 +43,7 @@ class LocationPickerMini: UIView {
         mapView.showsPointsOfInterest = false
         mapView.showsCompass = false
         mapView.showsUserLocation = true
+        mapView.delegate = self
         mapView.tintColor = UIColor._2499090()
         addSubview(mapView)
         let selfLoc = CLLocationCoordinate2D(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
@@ -51,6 +52,24 @@ class LocationPickerMini: UIView {
         mapView.setCamera(camera, animated: false)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 800, 800)
         mapView.setRegion(coordinateRegion, animated: false)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            let identifier = "self_selected_mode"
+            var anView: SelfAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            return anView
+        }
+        
+        return nil
+        
     }
     
     func loadPin() {
