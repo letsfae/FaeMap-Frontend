@@ -195,6 +195,7 @@ class SelfAnnotationView: MKAnnotationView {
         img.image = #imageLiteral(resourceName: "outside_circle")
         img.alpha = 0.8
         addSubview(img)
+        img.isHidden = true
         
         inner = UIImageView(frame: CGRect(x: 0, y: 0, width: 29, height: 34))
         inner.center = CGPoint(x: offSet_0, y: offSet_0)
@@ -226,6 +227,7 @@ class SelfAnnotationView: MKAnnotationView {
         selfIcon.isHidden = true
         inner.isHidden = false
         red.isHidden = false
+        img.isHidden = false
     }
     
     func invisibleOff() {
@@ -236,6 +238,7 @@ class SelfAnnotationView: MKAnnotationView {
         selfIcon.isHidden = false
         inner.isHidden = true
         red.isHidden = true
+        img.isHidden = false
     }
     
     func updateHeading() {
