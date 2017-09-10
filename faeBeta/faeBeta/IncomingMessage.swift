@@ -128,29 +128,10 @@ class IncomingMessage {
                 mediaItem?.address1 = mediaItem?.addressLine1.text?.uppercased()
                 mediaItem?.address2 = mediaItem?.addressLine2.text?.uppercased()
                 mediaItem?.address3 = mediaItem?.addressLine3.text?.uppercased()
-            }
-            else {
+            } else {
                 print("error when fetching address")
             }
         })
-        /*General.shared.getAddress(location: loc, original: false) { (placeMark) in
-            guard let addr = placeMark as? CLPlacemark else { return }
-            mediaItem?.addressLine1.text = addr.thoroughfare
-            var cityText = addr.locality
-            print("city:\(cityText)")
-            if(addr.administrativeArea != nil) {
-                cityText = cityText! + ", " + addr.administrativeArea!
-            }
-            if(addr.postalCode != nil) {
-                cityText = cityText! + " " + addr.postalCode!
-            }
-            mediaItem?.addressLine2.text = cityText
-            mediaItem?.addressLine3.text = addr.country
-            
-            mediaItem?.address1 = mediaItem?.addressLine1.text
-            mediaItem?.address2 = mediaItem?.addressLine2.text
-            mediaItem?.address3 = mediaItem?.addressLine3.text
-        }*/
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
@@ -182,8 +163,7 @@ class IncomingMessage {
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
     }
     
-    private func createPictureMessage(_ item : NSDictionary) -> JSQMessage
-    {
+    private func createPictureMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().date(from: (item["date"] as? String)!)
@@ -200,8 +180,7 @@ class IncomingMessage {
         return JSQMessage(senderId: userId!, senderDisplayName: name!, date: date, media: mediaItem)
     }
     
-    private func createGifMessage(_ item : NSDictionary) -> JSQMessage
-    {
+    private func createGifMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().date(from: (item["date"] as? String)!)
@@ -231,14 +210,14 @@ class IncomingMessage {
             playButtonImage: UIImage(named: isOutGoingMessage ? "playButton_white.png" : "playButton_red.png")!,
             pauseButtonImage: UIImage(named: isOutGoingMessage ? "pauseButton_white.png" : "pauseButton_red.png")!,
             label: font!,
-            showFractionalSecodns:false,
+            showFractionalSecodns: false,
             backgroundColor: isOutGoingMessage ? UIColor._2499090() : UIColor.white,
             tintColor: isOutGoingMessage ? UIColor.white : UIColor._2499090(),
-            controlInsets:UIEdgeInsetsMake(7, 12, 3, 14),
-            controlPadding:5,
-            audioCategory:"AVAudioSessionCategoryPlayback",
+            controlInsets: UIEdgeInsetsMake(7, 12, 3, 14),
+            controlPadding: 5,
+            audioCategory: "AVAudioSessionCategoryPlayback",
             audioCategoryOptions: options)
-        let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes : attribute)
+        let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes: attribute)
         
         voiceFromData(item) { (voiceData) in
             mediaItem.audioData = voiceData
@@ -256,7 +235,7 @@ class IncomingMessage {
         if item["videoDuration"] != nil {
             duration = item["videoDuration"] as! Int
         }
-        let mediaItem = JSQVideoMediaItemCustom(fileURL:URL(string:""),snapImage:image, duration:Int32(duration), isReadyToPlay:true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL:URL(string:""), snapImage:image, duration:Int32(duration), isReadyToPlay:true)
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
 
         videoFromData(item) { (videoURL) in
@@ -279,9 +258,9 @@ class IncomingMessage {
         
         let mediaItem = JSQStickerMediaItem(image: nil)
         
-        if let isHeartSticker = item["isHeartSticker"] as? Bool{
-            if isHeartSticker{
-                mediaItem?.customizeSize = CGSize(width: 65, height: 44)
+        if let isHeartSticker = item["isHeartSticker"] as? Bool {
+            if isHeartSticker {
+                mediaItem?.sizeCustomize = CGSize(width: 65, height: 44)
             }
         }
         
@@ -300,7 +279,7 @@ class IncomingMessage {
     private func imageFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         
-        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)) {
         
             image = UIImage(data: decodedData)
             result(image)
@@ -310,7 +289,7 @@ class IncomingMessage {
     private func gifFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         
-        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)){
+        if let decodedData = Data(base64Encoded: (item["data"] as? String)!, options: NSData.Base64DecodingOptions(rawValue : 0)) {
             
             image = UIImage.gif(data: decodedData)
             result(image)
@@ -333,8 +312,8 @@ class IncomingMessage {
             let videoFileURL = URL(fileURLWithPath: filePath)
             result(videoFileURL)
         } else {
-            if let decodedData = Data(base64Encoded: str!, options: NSData.Base64DecodingOptions(rawValue : 0)){
-                if(str!.characters.count > 50){
+            if let decodedData = Data(base64Encoded: str!, options: NSData.Base64DecodingOptions(rawValue : 0)) {
+                if str!.characters.count > 50 {
                     try? decodedData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                     
                     let videoFileURL = URL(fileURLWithPath: filePath)

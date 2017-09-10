@@ -28,6 +28,7 @@ final class PhotoPicker {
     var assetIndexDict = [PHAsset : Int]() // a dictionary storing the selected photo's PHAsset file and its index between 0-9 (max 10 pics)
     var indexAssetDict = [Int : PHAsset]() // a reverse dictionary of assetIndexDict representing the order of the photos
     var indexImageDict = [Int: UIImage]() // a dic storing all the UIImages of photo selected. This will not be updated if user's selecting video
+    var assetIndexpath = [PHAsset : IndexPath]()
     
     var assetDurationDict = [PHAsset : Int]()// a dic store the duration for every video
     var gifAssetDict = [PHAsset: Data]()
@@ -68,7 +69,7 @@ final class PhotoPicker {
                     let lowQRequestOption = PHVideoRequestOptions()
                     lowQRequestOption.deliveryMode = .fastFormat //high pixel
                     PHCachingImageManager.default().requestAVAsset(forVideo: asset, options: lowQRequestOption) { (assetTwo, audioMix, info) in
-                        if(assetTwo != nil){
+                        if(assetTwo != nil){ // TODO error
                             let duration = Int(Int(assetTwo!.duration.value) / Int(assetTwo!.duration.timescale))
                             self.assetDurationDict[asset] =  duration
                         }

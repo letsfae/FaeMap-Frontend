@@ -220,7 +220,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
                     let imagePicker = FullAlbumCollectionViewController()
                     imagePicker.imageDelegate = self
-                    imagePicker.isCSP = false
+                    imagePicker.boolCreateStoryPin = false
                     imagePicker._maximumSelectedPhotoNum = 1
                     self.present(imagePicker, animated: true, completion: nil)
                 })
@@ -229,7 +229,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                 //let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
                 let albumPicker = FullAlbumCollectionViewController()
                 albumPicker.imageDelegate = self
-                albumPicker.isCSP = false
+                albumPicker.boolCreateStoryPin = false
                 albumPicker._maximumSelectedPhotoNum = 1
                 self.present(albumPicker, animated: true, completion: nil)
             }
