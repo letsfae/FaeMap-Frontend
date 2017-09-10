@@ -21,7 +21,7 @@ extension ChatViewController {
         
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCellCustom
         
-        let data = messages[indexPath.row]
+        let data = arrJSQMessages[indexPath.row]
         
         if data.senderId == "\(Key.shared.user_id)" {
             cell.textView?.textColor = UIColor.white
@@ -32,7 +32,7 @@ extension ChatViewController {
         cell.avatarImageView.layer.cornerRadius = 19.5
         cell.avatarImageView.contentMode = .scaleAspectFill
         cell.avatarImageView.layer.masksToBounds = true
-        let object = objects[indexPath.row]
+        let object = arrDictMessages[indexPath.row]
         switch (object["type"] as! String) {
             case "text":
                 cell.contentType = Text
@@ -63,9 +63,9 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if collectionView == self.collectionView && indexPath.row == messages.count - 1{
-            clearRecentCounter(chat_id)
-            let object = objects[indexPath.row]
+        if collectionView == self.collectionView && indexPath.row == arrJSQMessages.count - 1{
+            clearRecentCounter(strChatId)
+            let object = arrDictMessages[indexPath.row]
 
             //Do not allow user to send two heart continously
             let userId = object["senderId"] as? String
@@ -73,25 +73,25 @@ extension ChatViewController {
             
 
             if object["type"] as! String == "sticker" && object["isHeartSticker"] != nil && object["isHeartSticker"] as! Bool == true && isOutGoingMessage{
-                userJustSentHeart = true
+                boolJustSentHeart = true
             }else{
-                userJustSentHeart = false
+                boolJustSentHeart = false
             }
         }
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
-        return messages[indexPath.row]
+        return arrJSQMessages[indexPath.row]
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
+        return arrJSQMessages.count
     }
     
     //this delegate is used to tell which bubble image should be used on current message
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         
-        let data = messages[indexPath.row]
+        let data = arrJSQMessages[indexPath.row]
         
         if data.senderId == "\(Key.shared.user_id)" {
             if data.isMediaMessage {
@@ -105,9 +105,9 @@ extension ChatViewController {
     
     //this is used to edit top label of every cell
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
-        let object = objects[indexPath.row]
+        let object = arrDictMessages[indexPath.row]
         if object["hasTimeStamp"] as! Bool {
-            let message = messages[indexPath.item]
+            let message = arrJSQMessages[indexPath.item]
             return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
         }
         return nil
@@ -116,7 +116,7 @@ extension ChatViewController {
     
     //this is to modify the label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
-        let object = objects[indexPath.row]
+        let object = arrDictMessages[indexPath.row]
         if object["hasTimeStamp"] as! Bool  {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         }
@@ -130,11 +130,11 @@ extension ChatViewController {
     
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
         
-        let message = objects[indexPath.row]
+        let message = arrDictMessages[indexPath.row]
         
         let status = message["status"] as! String
         
-        if indexPath.row == messages.count - 1 {
+        if indexPath.row == arrJSQMessages.count - 1 {
             return NSAttributedString(string: status)
         } else {
             return NSAttributedString(string: "")
@@ -144,7 +144,7 @@ extension ChatViewController {
     // bind avatar image
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
         
-        let message = messages[indexPath.row]
+        let message = arrJSQMessages[indexPath.row]
         let avatar = avatarDictionary!.object(forKey: message.senderId) as! JSQMessageAvatarImageDataSource
         
         return avatar
@@ -157,11 +157,11 @@ extension ChatViewController {
         
         closeToolbarContentView()
         
-        let object = objects[indexPath.row]
+        let object = arrDictMessages[indexPath.row]
         
         if object["type"] as! String == "picture" || object["type"] as! String == "gif" {
             
-            let message = messages[indexPath.row]
+            let message = arrJSQMessages[indexPath.row]
             
             if let mediaItem = message.media as? JSQPhotoMediaItemCustom{
                 let photos = IDMPhoto.photos(withImages: [mediaItem.image])
@@ -173,7 +173,7 @@ extension ChatViewController {
         
         if object["type"] as! String == "location" {
             
-            let message = messages[indexPath.row]
+            let message = arrJSQMessages[indexPath.row]
             
             if let mediaItem = message.media as? JSQLocationMediaItemCustom {
                 
@@ -193,7 +193,7 @@ extension ChatViewController {
         }
         
         if object["type"] as! String == "place" {
-            let message = messages[indexPath.row]
+            let message = arrJSQMessages[indexPath.row]
             if let mediaItem = message.media as? JSQPlaceMediaItemCustom {
                 let vc = PlaceDetailViewController()
                 vc.place = mediaItem.place
@@ -205,7 +205,7 @@ extension ChatViewController {
         }
         
         if object["type"] as! String == "video" {
-            let message = messages[indexPath.row]
+            let message = arrJSQMessages[indexPath.row]
             
             if let mediaItem = message.media as? JSQVideoMediaItemCustom
             {
@@ -224,7 +224,7 @@ extension ChatViewController {
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         var returnValue = false
         
-        let object = objects[indexPath.row]
+        let object = arrDictMessages[indexPath.row]
         
         if object["type"] as! String == "picture" || object["type"] as! String == "text" || object["type"] as! String == "sticker"{
             returnValue = true

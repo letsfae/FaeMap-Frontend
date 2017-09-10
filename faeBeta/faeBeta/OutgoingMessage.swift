@@ -79,19 +79,15 @@ class OutgoingMessage {
         item["messageId"] = reference.key
         delegate.getSentMessage(item)
         reference.setValue(item) { (error, ref) -> Void in
-            
             if error != nil {
                 //Bryan
                 print("Error, couldn't send message: \(error!)")
                 //ENDBryan
-            }else{
+            } else {
                 //WARNING : I changed item["type"] to "text" here to make backend work
-                
-                //comment this api for now to avoid crash, it will make last message in first VC wrong. Will use it after negotiate with backend.
-                
                 postToURL("chats_v2", parameter: ["receiver_id": user.userID as AnyObject, "message": item["message"] as! String, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                    if(statusCode / 100 == 2){
-                        if let resultDic = result as? NSDictionary{
+                    if statusCode / 100 == 2 {
+                        if let resultDic = result as? NSDictionary {
                             self.delegate.updateChat_Id((resultDic["chat_id"] as! NSNumber).stringValue)
                         }
                     }
@@ -101,18 +97,8 @@ class OutgoingMessage {
     }
     
     func sendMessageWithWelcomeInformation(_ chatRoomId : String, withUser user: RealmUser) {
-        
         let item = self.messageDictionary
-        let reference = firebase.child(chatRoomId).childByAutoId()
-        
+        let reference = firebase.child(chatRoomId).childByAutoId()        
         item["messageId"] = reference.key
-        
-        /* reference.setValue(item) { (error, ref) -> Void in
-            
-            if error != nil {
-                print("Error, couldn't send message: \(error)")
-            }
-        } */
-
     }
 }

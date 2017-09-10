@@ -15,32 +15,11 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
     
     //MARK: - properties
     fileprivate(set) var photoSelected = false
-    
-    //    @IBOutlet weak fileprivate var photoImageView: UIImageView!
-    //    @IBOutlet weak fileprivate var chosenIndicatorImageView: UIImageView!
-    //
-    //    @IBOutlet weak private var videoDurationLabel: UILabel!
-    //    @IBOutlet weak fileprivate var videoIndicatorView: UIView!
-    //    @IBOutlet weak private var cameraIconImageView: UIImageView!
-    //    @IBOutlet weak fileprivate var videoDurationLabelLength: NSLayoutConstraint!
-    //    @IBOutlet weak fileprivate var videoDurationLabelDistanceToLeft: NSLayoutConstraint!
-    
-    // Felix
     var imgPhoto: UIImageView!
     var imgChosenIndicator: UIImageView!
     var uiviewVideoIndicator: UIView!
     var lblVideoDuration: UILabel!
     var imgCameraIcon: UIImageView!
-    // Felix - end
-    
-    
-    //MARK: - life cycle
-    /*override func awakeFromNib() {
-     super.awakeFromNib()
-     self.photoImageView.contentMode = .scaleAspectFill
-     deselectCell()
-     videoIndicatorView.alpha = 0
-     }*/
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -68,14 +47,9 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
         lblVideoDuration.textColor = .white
         lblVideoDuration.font = UIFont(name: "AvenirNext-DemiBold", size: 13)
         uiviewVideoIndicator.addSubview(lblVideoDuration)
-        
-        
         uiviewVideoIndicator.isHidden = true
         
-        
-        
         deselectCell()
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -90,13 +64,10 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
     }
     
     //MARK: - select & deselect cell
-    
-    
     /// Select this cell
     ///
     /// - Parameter indicatorNum: the number that appear's on the top right minus 1 (0 - 9)
-    func selectCell(_ indicatorNum: Int)
-    {
+    func selectCell(_ indicatorNum: Int) {
         assert(indicatorNum >= 0 && indicatorNum <= 9, "Invalid indicator number! The number should be between 0 - 9")
         let imageName = "chosenIndicatorIcon_selected\(indicatorNum+1)"
         imgChosenIndicator.image = UIImage(named:imageName)
@@ -104,8 +75,7 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
     }
     
     /// hide the indicator number and
-    func deselectCell()
-    {
+    func deselectCell() {
         imgChosenIndicator.image = UIImage(named:"chosenIndicatorIcon_unselected")
         photoSelected = false
     }
@@ -122,33 +92,18 @@ class QuickPhotoPickerCollectionViewCell: UICollectionViewCell {
         uiviewVideoIndicator.isHidden = false
         imgCameraIcon.isHidden = false
         lblVideoDuration.text =  "\(minString):\(secondString)"
-        //        if(minString / 10 == 0){
-        //            videoDurationLabelLength.constant = 35
-        //        }else{
-        //            videoDurationLabelLength.constant = 40
-        //        }
-        //        if let constraint = self.videoDurationLabelDistanceToLeft{
-        //            constraint.constant = 38
-        //        }
         self.setNeedsUpdateConstraints()
         
         self.layoutSubviews()
     }
     
-    func setGifLabel()
-    {
+    func setGifLabel() {
         uiviewVideoIndicator.isHidden = false
         imgCameraIcon.isHidden = true
         lblVideoDuration.text = "GIF"
         
         uiviewVideoIndicator.frame = CGRect(x: 10, y: 10, width: 48, height: 26 )
         lblVideoDuration.frame = CGRect(x: 13, y: 5, width: 22, height: 18)
-        //uiviewVideoIndicator.addConstraintsWithFormat("H:|-8-[v0(22)]", options: [], views: lblVideoDuration)
-        //addConstraintsWithFormat("H:|-10-[v0(48)]", options: [], views: uiviewVideoIndicator)
-        
-        //        if let constraint = self.videoDurationLabelDistanceToLeft{
-        //            constraint.constant = 8
-        //        }
         self.layoutSubviews()
         
     }
