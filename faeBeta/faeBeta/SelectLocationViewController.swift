@@ -40,11 +40,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.invisibleOn()
             return anView
-        } else {
-            return nil
         }
+        return nil
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {

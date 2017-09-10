@@ -8,7 +8,14 @@
 
 import UIKit
 
+protocol AfterAddedToListDelegate: class {
+    func seeList()
+    func undoCollect()
+}
+
 class AfterAddedToListView: UIView {
+    
+    weak var delegate: AfterAddedToListDelegate?
     
     var uiviewAfterAdded: UIView!
     
@@ -39,6 +46,7 @@ class AfterAddedToListView: UIView {
         btnUndo.setTitleColor(.white, for: .normal)
         btnUndo.setTitleColor(.lightGray, for: .highlighted)
         btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnUndo.addTarget(self, action: #selector(undoCollecting), for: .touchUpInside)
         addSubview(btnUndo)
         addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
@@ -48,9 +56,18 @@ class AfterAddedToListView: UIView {
         btnSeeList.setTitleColor(.white, for: .normal)
         btnSeeList.setTitleColor(.lightGray, for: .highlighted)
         btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnSeeList.addTarget(self, action: #selector(goToList), for: .touchUpInside)
         addSubview(btnSeeList)
         addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
+    }
+    
+    func undoCollecting() {
+        delegate?.undoCollect()
+    }
+    
+    func goToList() {
+        delegate?.seeList()
     }
     
     func show() {

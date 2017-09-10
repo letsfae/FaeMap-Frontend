@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate {
     
     // AddPlacetoCollectionDelegate
     func createColList() {
@@ -24,12 +24,25 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         uiviewCollectedList.hide()
     }
     
+    // AfterAddedToListDelegate
+    func undoCollect() {
+        uiviewAfterAdded.hide()
+    }
+    
+    // AfterAddedToListDelegate
+    func seeList() {
+        uiviewAfterAdded.hide()
+        let vcCollectedList = CollectionsViewController()
+        navigationController?.pushViewController(vcCollectedList, animated: true)
+    }
+    
     func loadPlaceListView() {
         uiviewCollectedList = AddPlaceToCollectionView()
         uiviewCollectedList.delegate = self
         view.addSubview(uiviewCollectedList)
         
         uiviewAfterAdded = AfterAddedToListView()
+        uiviewAfterAdded.delegate = self
         view.addSubview(uiviewAfterAdded)
         
         uiviewCollectedList.uiviewAfterAdded = uiviewAfterAdded

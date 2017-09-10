@@ -138,6 +138,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
         
         mapMode = .routing
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
         
         btnDistIndicator.show()
         btnDistIndicator.updateDistance(distance: distance)
@@ -153,6 +154,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func hideRouteCalculatorComponents() {
         
         mapMode = .normal
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
         
         removeAllRoutes()
         btnDistIndicator.hide()
