@@ -140,6 +140,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 @property (nonatomic) CGRect toolBarLastFrame;
 
+@property (nonatomic) BOOL isSwipping;
+
 @end
 
 
@@ -211,10 +213,10 @@ JSQMessagesKeyboardControllerDelegate>
 
     // Don't set keyboardController if client creates custom content view via -loadToolbarContentView
     if (self.inputToolbar.contentView.textView != nil) {
-        self.keyboardController = [[JSQMessagesKeyboardController alloc] initWithTextView:self.inputToolbar.contentView.textView
+        /*self.keyboardController = [[JSQMessagesKeyboardController alloc] initWithTextView:self.inputToolbar.contentView.textView
                                                                               contextView:self.view
                                                                      panGestureRecognizer:self.collectionView.panGestureRecognizer
-                                                                                 delegate:self];
+                                                                                 delegate:self];*/
     }
     
     UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1:)];
@@ -908,7 +910,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)keyboardController:(JSQMessagesKeyboardController *)keyboardController keyboardDidChangeFrame:(CGRect)keyboardFrame
 {
-    if (![self.inputToolbar.contentView.textView isFirstResponder] && self.toolbarBottomLayoutGuide.constant == 0.0) {
+    if ((![self.inputToolbar.contentView.textView isFirstResponder] && self.toolbarBottomLayoutGuide.constant == 0.0) || _isSwipping) {
         return;
     }
 
@@ -941,6 +943,7 @@ JSQMessagesKeyboardControllerDelegate>
         case UIGestureRecognizerStateBegan:
         {
             _toolBarLastFrame = self.inputToolbar.frame;
+            _isSwipping = YES;
             
             if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
                 [self.snapshotView removeFromSuperview];
@@ -948,7 +951,7 @@ JSQMessagesKeyboardControllerDelegate>
 
             self.textViewWasFirstResponderDuringInteractivePop = [self.inputToolbar.contentView.textView isFirstResponder];
 
-            [self.keyboardController endListeningForKeyboard];
+            //[self.keyboardController endListeningForKeyboard];
 
             if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
                 [self.inputToolbar.contentView.textView resignFirstResponder];
@@ -979,6 +982,7 @@ JSQMessagesKeyboardControllerDelegate>
             if ([UIDevice jsq_isCurrentDeviceBeforeiOS8]) {
                 [self.snapshotView removeFromSuperview];
             }
+            _isSwipping = NO;
             break;
         default:
             break;
@@ -1081,8 +1085,8 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)jsq_updateCollectionViewInsets
 {
-    //[self jsq_setCollectionViewInsetsTopValue:self.topLayoutGuide.length + self.topContentAdditionalInset
-                                  //bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(self.inputToolbar.frame)];
+    [self jsq_setCollectionViewInsetsTopValue:self.topLayoutGuide.length + self.topContentAdditionalInset
+                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(self.inputToolbar.frame)];
 }
 
 - (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
@@ -1173,9 +1177,9 @@ JSQMessagesKeyboardControllerDelegate>
     }
     
     if (addAction) {
-        [self.navigationController.interactivePopGestureRecognizer addTarget:self
+        /*[self.navigationController.interactivePopGestureRecognizer addTarget:self
                                                                       action:@selector(jsq_handleInteractivePopGestureRecognizer:)];
-        self.currentInteractivePopGestureRecognizer = self.navigationController.interactivePopGestureRecognizer;
+        self.currentInteractivePopGestureRecognizer = self.navigationController.interactivePopGestureRecognizer;*/
     }
 }
 

@@ -74,8 +74,8 @@ extension FaeMapViewController: NameCardDelegate {
     
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
         let chatVC = ChatViewController()
-        chatVC.chatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
-        chatVC.chat_id = chat_id
+        chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
+        chatVC.strChatId = chat_id
         // Bryan
         let nickName = nickName ?? "Chat"
         // ENDBryan

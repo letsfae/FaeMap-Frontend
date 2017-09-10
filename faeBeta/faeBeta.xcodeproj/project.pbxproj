@@ -43,6 +43,7 @@
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */; };
+		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
@@ -108,7 +109,6 @@
 		B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */; };
 		B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
 		B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
-		B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */; };
 		B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
 		B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
 		B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
@@ -312,6 +312,7 @@
 		8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleSizeCalculatingCustom.h; sourceTree = "<group>"; };
 		9F1D68C61F4E89100067EFF9 /* JSQPlaceMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceMediaItemCustom.h; sourceTree = "<group>"; };
 		9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceMediaItemCustom.m; sourceTree = "<group>"; };
+		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -379,7 +380,6 @@
 		B0A2ACA71CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeMainPageViewController.swift; sourceTree = "<group>"; };
 		B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQLocationMediaItemCustom.h; sourceTree = "<group>"; };
 		B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQLocationMediaItemCustom.m; sourceTree = "<group>"; };
 		B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleImageFactoryCustom.h; sourceTree = "<group>"; };
@@ -793,7 +793,7 @@
 			children = (
 				CE1EA5761E5CC21100205857 /* LocationExtendView.swift */,
 				B0714DC81D5E475500356705 /* ChatMapViewController.swift */,
-				B0BF35501D8DC80300B0540B /* ChatSendLocationController.swift */,
+				9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */,
 				CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */,
 			);
 			name = Location;
@@ -1568,6 +1568,7 @@
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
 				B8B7AF521E728BAF00BE92AB /* FMUserPinCtrl.swift in Sources */,
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
+				9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */,
 				B0CFC99E1CED342000EC356A /* Keys.swift in Sources */,
@@ -1605,7 +1606,6 @@
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */,
-				B0BF35511D8DC80300B0540B /* ChatSendLocationController.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,

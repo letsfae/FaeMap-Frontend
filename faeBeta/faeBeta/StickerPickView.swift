@@ -9,7 +9,6 @@
 import Foundation
 
 // this delegate is used to tell chatVC the name of sticker being send.
-
 protocol SendStickerDelegate: class {
     func sendStickerWithImageName(_ name : String)
     func appendEmojiWithImageName(_ name: String)
@@ -18,7 +17,6 @@ protocol SendStickerDelegate: class {
 
 // this class is used to show all content in sticker part. It has tab view to switch set of sticker,
 // scroll view to show set of sticker, page controller to show current page.
-
 class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, findStickerFromDictDelegate {
     
     private var pageControl : UIPageControl!
@@ -30,12 +28,12 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     weak var sendStickerDelegate : SendStickerDelegate!
     
-    private var historyDict : [String : Int]!
+    private var dictHistory: [String : Int]!
     //most recently stick sorted by frequently and show in the second stickTabView
     
-    private var isInEmojiOnlyMode: Bool = false
+    private var boolInEmojiOnlyMode: Bool = false
     
-    //MARK: - init
+    // MARK: init
     override init(frame : CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
@@ -50,11 +48,11 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
     }
     
-    init(frame : CGRect, emojiOnly : Bool){
+    init(frame : CGRect, emojiOnly : Bool) {
         super.init(frame: frame)
         self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
-        if(!emojiOnly){
-            isInEmojiOnlyMode = false
+        if !emojiOnly {
+            boolInEmojiOnlyMode = false
             configureHistoryPage()
             configureScrollView()
             configurePageController()
@@ -64,8 +62,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
             
             switchSticker(3)
             stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
-        }else{
-            isInEmojiOnlyMode = true
+        } else {
+            boolInEmojiOnlyMode = true
             configureScrollViewLite()
             configurePageController()
             configureTabView(emojiOnly: true)
@@ -78,7 +76,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - setup
+    // MARK: setup
     private func configureScrollView() {
         var index = 0
         let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
@@ -92,7 +90,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.addSubview(view)
     }
     
-    private func configureScrollViewLite(){
+    private func configureScrollViewLite() {
         let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
         prepareAlbum(view, name: "faeEmoji")
         attachButton(view)
@@ -106,7 +104,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     private func configurePageController() {
         self.pageControl = UIPageControl(frame: CGRect(x: 0, y: 209, width: self.frame.width, height: 8))
-        self.pageControl.numberOfPages = currentScrollView.currentAlbum.pageNumber
+        self.pageControl.numberOfPages = currentScrollView.currentAlbum.intPageNumber
         self.pageControl.currentPage = 0
         self.pageControl.pageIndicatorTintColor = UIColor._182182182()
         self.pageControl.currentPageIndicatorTintColor = UIColor._2499090()
@@ -123,45 +121,42 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.addSubview(stickerTabView)
     }
     
-    //create an ablum with the name and add images into it
+    // create an ablum with the name and add images into it
     private func prepareAlbum(_ view : StickerScrollView, name : String) {
-        if(name != "faeEmoji"){
+        if name != "faeEmoji" {
             view.createNewAlbums(name: name, row: 2, col: 4)
-        }else{
+        } else {
             view.createNewAlbums(name: name, row: 4, col: 7)
-            view.currentAlbum = view.currentAlbum ?? view.stickerAlbums.last!
+            view.currentAlbum = view.currentAlbum ?? view.arrStickerAlbums.last!
         }
         if let images = StickerInfoStrcut.stickerDictionary[name] {
             for image in images {
                 view.appendNewImage(image)
             }
         }
-        StickerInfoStrcut.pageNumDictionary[name] = max(view.stickerAlbums.last!.pageNumber , 1)
-        view.stickerAlbums.last!.findStickerDelegate = self
+        StickerInfoStrcut.pageNumDictionary[name] = max(view.arrStickerAlbums.last!.intPageNumber , 1)
+        view.arrStickerAlbums.last!.findStickerDelegate = self
     }
     
-    //call this method after all the album is created and populated
+    // call this method after all the album is created and populated
     private func attachButton(_ view : StickerScrollView) {
-        assert(view.stickerAlbums.count > 0, "call this method after all the album is created and populated")
+        assert(view.arrStickerAlbums.count > 0, "call this method after all the album is created and populated")
         view.attachButton()
     }
-
     
-    // MARK: - SwitchStickerDelegate
-    
+    // MARK: SwitchStickerDelegate
     /// switch to specific sticker
     ///
     /// - Parameter index: the index of the tab in all tabs
     func switchSticker(_ index: Int) {
-        if(index > 0 && index <= currentScrollView.stickerAlbums.count){
-            scrollToPage(currentScrollView.stickerAlbums[index - 1].basePages )
-            currentScrollView.currentAlbum = currentScrollView.stickerAlbums[index - 1]
+        if index > 0 && index <= currentScrollView.arrStickerAlbums.count {
+            scrollToPage(currentScrollView.arrStickerAlbums[index - 1].intBasePage )
+            currentScrollView.currentAlbum = currentScrollView.arrStickerAlbums[index - 1]
             updatePageControl()
         }
     }
 
-    // MARK: - findStickerFromDictDelegate
-    
+    // MARK: findStickerFromDictDelegate
     /// send the sticker selected out
     ///
     /// - Parameters:
@@ -169,9 +164,9 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     ///   - index: the index of the sticker in the album
     func sendSticker(album: String, index : Int) {
         if let albumSet = StickerInfoStrcut.stickerDictionary[album] {
-            if(album == "faeEmoji"){
+            if album == "faeEmoji" {
                 sendStickerDelegate?.appendEmojiWithImageName(albumSet[index])
-            }else{
+            } else {
                 print("the name of sticker is : \(albumSet[index])")
                 sendStickerDelegate?.sendStickerWithImageName(albumSet[index])
             }
@@ -184,44 +179,41 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         sendStickerDelegate.deleteEmoji()
     }
     
-    //MARK: - scroll
-    private func scrollToPage(_ index: Int)
-    {
+    // MARK: scroll
+    private func scrollToPage(_ index: Int) {
         currentScrollView.contentOffset.x = screenWidth * CGFloat(index)
     }
     
     // use this to check when the scrolling stop then adjust pagecontrol and tab
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pages = currentScrollView.currentAlbum.basePages
+        let pages = currentScrollView.currentAlbum.intBasePage
         let baseOffset = CGFloat(pages) * screenWidth
         let page = Int(round((currentScrollView.contentOffset.x - baseOffset) / currentScrollView.frame.size.width))
-        if(page < 0){
-            if(!isInEmojiOnlyMode){
-                let currentName = currentScrollView.currentAlbum.albumName
-                self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1]
+        if page < 0 {
+            if !boolInEmojiOnlyMode {
+                let currentName = currentScrollView.currentAlbum.strAlbumName
+                self.currentScrollView.currentAlbum = self.currentScrollView.arrStickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1]
                 updatePageControl()
                 stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)!])
-            }else{
+            } else {
                 pageControl.currentPage = 0
             }
-        }else if (page >= pageControl.numberOfPages){
-            if(!isInEmojiOnlyMode){
-                let currentName = currentScrollView.currentAlbum.albumName
-                self.currentScrollView.currentAlbum = self.currentScrollView.stickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1]
+        } else if page >= pageControl.numberOfPages {
+            if !boolInEmojiOnlyMode {
+                let currentName = currentScrollView.currentAlbum.strAlbumName
+                self.currentScrollView.currentAlbum = self.currentScrollView.arrStickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1]
                 updatePageControl()
                 stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 2])
-            }else{
+            } else {
                 pageControl.currentPage = pageControl.numberOfPages - 1
             }
-        }else{
+        } else {
             pageControl.currentPage = page
         }
     }
     
-    //MARK: sticker usage history related
-    
-    //make local storage to record history in map, to count the frequency.
-    
+    // MARK: sticker usage history related
+    // make local storage to record history in map, to count the frequency.
     private func loadHistoryFromStorage() {
         let defaults = UserDefaults.standard
         if defaults.object(forKey: "stickerHistory") == nil {
@@ -229,58 +221,56 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
             print("set a empty dictionary")
         }
         let stickerHistory = defaults.dictionary(forKey: "stickerHistory") as! [String : Int]
-        historyDict = stickerHistory
-        StickerInfoStrcut.stickerDictionary["stickerHistory"] = historyDict.keysSortedByValue(>)
+        dictHistory = stickerHistory
+        StickerInfoStrcut.stickerDictionary["stickerHistory"] = dictHistory.keysSortedByValue(>)
     }
     
     func updateStickerHistory(_ imageName : String) {
-        if (historyDict[imageName] != nil) {
-            historyDict[imageName] = historyDict[imageName]! + 1
+        if dictHistory[imageName] != nil {
+            dictHistory[imageName] = dictHistory[imageName]! + 1
         } else {
-            historyDict[imageName] = 1
+            dictHistory[imageName] = 1
         }
         let defaults = UserDefaults.standard
-        defaults.set(historyDict, forKey: "stickerHistory")
-        StickerInfoStrcut.stickerDictionary["stickerHistory"] = historyDict.keysSortedByValue(>)
+        defaults.set(dictHistory, forKey: "stickerHistory")
+        StickerInfoStrcut.stickerDictionary["stickerHistory"] = dictHistory.keysSortedByValue(>)
         reloadHistory()
     }
     
     private func reloadHistory() {
         let currentSize = currentScrollView.contentSize
-        let currentName = currentScrollView.currentAlbum.albumName
+        let currentName = currentScrollView.currentAlbum.strAlbumName
         currentScrollView.clearButton()
         for stickerName in StickerInfoStrcut.stickerIndex {
             prepareAlbum(currentScrollView, name: stickerName)
         }
         currentScrollView.currentAlbum = currentScrollView.getAlbum(withName: currentName)
         attachButton(currentScrollView)
-        if(currentScrollView.contentSize != currentSize){
+        if currentScrollView.contentSize != currentSize {
             currentScrollView.contentOffset.x += screenWidth
         }
     }
     
     //MARK: page control
-    private func updatePageControl()
-    {
-        if(pageControl != nil){
+    private func updatePageControl() {
+        if pageControl != nil {
             pageControl.removeFromSuperview()
         }
         pageControl = nil
         configurePageController()
-        let pages = currentScrollView.currentAlbum.basePages
+        let pages = currentScrollView.currentAlbum.intBasePage
         let baseOffset = CGFloat(pages) * screenWidth
         pageControl.currentPage = Int(round((currentScrollView.contentOffset.x - baseOffset) / currentScrollView.frame.size.width))
     }
     
     // TO CHANGE the page WHILE CLICKING ON PAGE CONTROL
     @objc private func changePage(_ sender: AnyObject) -> () {
-        let x = pageControl.currentPage + currentScrollView.currentAlbum.basePages
+        let x = pageControl.currentPage + currentScrollView.currentAlbum.intBasePage
         scrollToPage(_: x)
     }
 }
 
-
-//this extention is used to sort key value pair by value
+// this extention is used to sort key value pair by value
 extension Dictionary {
     func sortedKeys(_ isOrderedBefore:(Key,Key) -> Bool) -> [Key] {
         return Array(self.keys).sorted(by: isOrderedBefore)

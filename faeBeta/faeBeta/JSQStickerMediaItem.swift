@@ -13,34 +13,35 @@ import JSQMessagesViewController
 // it overrided the size of chat bubble
 class JSQStickerMediaItem: JSQPhotoMediaItem {
     //inheritance from JSQPhoto
-    var cachedImageView : UIImageView!
-    var customizeSize : CGSize!
-    var heartButtonTopOffset: CGFloat = 10
+    var imgCached: UIImageView!
+    var sizeCustomize : CGSize!
+    var floatHeartButtonTopOffset: CGFloat = 10
+    
     override func mediaView() -> UIView! {
         if self.image == nil {
             return nil
         }
-        if customizeSize != nil{
+        if sizeCustomize != nil {
             let imageSize = self.mediaViewDisplaySize()
             let view = UIImageView(frame: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
             let imageView = UIImageView(image: self.image)
-            imageView.frame = CGRect(x: 0, y: heartButtonTopOffset, width: imageSize.width, height: imageSize.height - heartButtonTopOffset * 2)
+            imageView.frame = CGRect(x: 0, y: floatHeartButtonTopOffset, width: imageSize.width, height: imageSize.height - floatHeartButtonTopOffset * 2)
             imageView.contentMode = .scaleAspectFit
             view.addSubview(imageView)
-            self.cachedImageView = view 
-        }else{
+            self.imgCached = view 
+        } else {
             let imageSize = self.mediaViewDisplaySize()
             let imageView = UIImageView(image: self.image)
             imageView.frame = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
             imageView.contentMode = .scaleAspectFit
-            self.cachedImageView = imageView
+            self.imgCached = imageView
         }
-        return cachedImageView
+        return imgCached
     }
     
-    //overridde the photo size to the stick size
+    // overridde the photo size to the stick size
     override func mediaViewDisplaySize() -> CGSize {
-        return customizeSize != nil ? CGSize(width: customizeSize.width, height: customizeSize.height + heartButtonTopOffset * 2) : CGSize(width: 120, height: 90)
+        return sizeCustomize != nil ? CGSize(width: sizeCustomize.width, height: sizeCustomize.height + floatHeartButtonTopOffset * 2) : CGSize(width: 120, height: 90)
     }
     
 }

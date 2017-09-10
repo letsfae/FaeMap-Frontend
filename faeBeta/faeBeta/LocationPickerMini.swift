@@ -13,23 +13,19 @@ import CoreLocation
 
 class LocationPickerMini: UIView {
     
-    let widthFactor: CGFloat = screenWidth / 414
-    let heightFactor: CGFloat = screenHeight / 736
-    
     weak var locationDelegate: LocationSendDelegate!
     
-    // MARK: -- Map main screen Objects
+    // MARK: properties
     var mapView: MKMapView!
-    var buttonSearch: UIButton!
-    var buttonShareLocation: UIButton!
-    var buttonSend: UIButton!
+    var btnSearch: UIButton!
+    var btnSend: UIButton!
     
-    // MARK: -- Coordinates to send
+    // Coordinates to send
     var latitudeForPin: CLLocationDegrees = 0.0
     var longitudeForPin: CLLocationDegrees = 0.0
     
+    // MARK: init
     init() {
-        // super.init(frame : CGRect(x: 0, y: screenHeight - 271 - 64, width: screenWidth, height: 271))
         super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
         loadMapView()
         loadButton()
@@ -40,6 +36,7 @@ class LocationPickerMini: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: setup
     func loadMapView() {
         mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
         mapView.layer.zPosition = 100
@@ -64,18 +61,14 @@ class LocationPickerMini: UIView {
     }
     
     func loadButton() {
-        buttonSearch = UIButton(frame: CGRect(x: 20, y: 204, width: 51, height: 51))
-        buttonSearch.setImage(UIImage(named: "locationSearch"), for: .normal)
-        buttonSearch.layer.zPosition = 101
-        addSubview(buttonSearch)
-        //buttonShareLocation = UIButton(frame: CGRect(x: 81, y: 204, width: 51, height: 51))
-        //buttonShareLocation.setImage(UIImage(named: "locationShare"), for: .normal)
-        //buttonShareLocation.layer.zPosition = 101
-        //addSubview(buttonShareLocation)
-        buttonSend = UIButton(frame: CGRect(x: screenWidth - 71, y: 204, width: 51, height: 51))
-        buttonSend.setImage(UIImage(named: "locationSend"), for: .normal)
-        buttonSend.layer.zPosition = 101
-        addSubview(buttonSend)
+        btnSearch = UIButton(frame: CGRect(x: 20, y: 204, width: 51, height: 51))
+        btnSearch.setImage(UIImage(named: "locationSearch"), for: .normal)
+        btnSearch.layer.zPosition = 101
+        addSubview(btnSearch)
+        btnSend = UIButton(frame: CGRect(x: screenWidth - 71, y: 204, width: 51, height: 51))
+        btnSend.setImage(UIImage(named: "locationSend"), for: .normal)
+        btnSend.layer.zPosition = 101
+        addSubview(btnSend)
     }
     
     func actionSelfPosition(_ sender: UIButton) {
