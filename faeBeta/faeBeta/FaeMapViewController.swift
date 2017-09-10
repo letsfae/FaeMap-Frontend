@@ -110,6 +110,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             else { btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance }
             imgPinOnMap.isHidden = mapMode != .selecting
             btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
+            btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
+            userStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
+            if mapMode == .routing || mapMode == .selecting {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+            } else {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+            }
         }
     }
     
