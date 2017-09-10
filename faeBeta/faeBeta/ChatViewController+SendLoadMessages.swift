@@ -19,7 +19,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         var outgoingMessage: OutgoingMessage?
         // Bryan
-        let shouldHaveTimeStamp = date.timeIntervalSince(lastMarkerDate as Date) > 300 && !isContinuallySending
+        let shouldHaveTimeStamp = date.timeIntervalSince(dateLastMarker as Date) > 300 && !boolSentInLast5s
         let realmMessage = RealmMessage()
         realmMessage.messageID = "\(Key.shared.user_id)_\(RealmChat.dateConverter(date: date)))"
         realmMessage.withUserID = realmWithUser!.userID
@@ -33,19 +33,19 @@ extension ChatViewController: OutgoingMessageProtocol {
         if let pic = picture {
             // send picture message
             if let imageData = compressImageToData(pic) {
-                outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "picture", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+                outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "picture", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
                 // Bryan
                 realmMessage.message = "[Picture]"
                 realmMessage.data = imageData as NSData
                 realmMessage.type = "picture"
                 // ENDBryan
-                isContinuallySending = true
+                boolSentInLast5s = true
                 Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.enableTimeStamp), userInfo: nil, repeats: false)
             }
         } else if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]" : "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "sticker", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]" : "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "sticker", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = isHeartSticker! ? "[Heart]" : "[Sticker]"
             realmMessage.data = imageData! as NSData
@@ -53,13 +53,13 @@ extension ChatViewController: OutgoingMessageProtocol {
             realmMessage.isHeartSticker = isHeartSticker!
             // ENDBryan
             
-            isContinuallySending = true
+            boolSentInLast5s = true
         } else if let loc = location {
             // send location message
             let lat: NSNumber = NSNumber(value: loc.coordinate.latitude as Double)
             let lon: NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
             let comment = text == "" ? "[Location]" : text!
-            outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "location", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "location", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = comment
             realmMessage.latitude.value = lat as? Double
@@ -87,32 +87,32 @@ extension ChatViewController: OutgoingMessageProtocol {
                                 "}" +
                             "}"
             let comment = text == "" ? "[Place]" : text!
-            outgoingMessage = OutgoingMessage(message: comment, place: jsonString, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "place", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: comment, place: jsonString, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "place", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[Place]"
             realmMessage.place = jsonString
             realmMessage.type = "place"
             
         } else if let audio = audio {
             // create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "audio", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "audio", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[Voice]"
             realmMessage.data = audio as NSData
             realmMessage.type = "audio"
             
         } else if let video = video {
-            outgoingMessage = OutgoingMessage(message: "[Video]", video: video, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "video", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
+            outgoingMessage = OutgoingMessage(message: "[Video]", video: video, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "video", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
             realmMessage.message = "[Video]"
             realmMessage.data = video as NSData
             realmMessage.type = "video"
             realmMessage.videoDuration.value = videoDuration
         } else if let snapImage = snapImage {
-            outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "gif", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "gif", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[GIF]"
             realmMessage.data = snapImage as NSData
             realmMessage.type = "gif"
         } else if let text = text {
             // send message
-            outgoingMessage = OutgoingMessage(message: text, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "text", index: totalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: text, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "text", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = text
             realmMessage.type = "text"
@@ -128,12 +128,12 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         // add this outgoing message under chatRoom with id and content
         // Bryan
-        outgoingMessage!.sendMessage(chatRoomId, withUser: realmWithUser!)
+        outgoingMessage!.sendMessage(strChatRoomId, withUser: realmWithUser!)
         
         RealmChat.sendMessage(message: realmMessage, completion: self.fakeCompletion)
         
-        _ = insertMessage(sentMessage)
-        numberOfMessagesLoaded += 1
+        _ = insertMessage(dictMessageSent)
+        intNumberOfMessagesLoaded += 1
         self.finishSendingMessage(animated: true, cleanTextView: text != nil)
     }
     
@@ -160,11 +160,13 @@ extension ChatViewController: OutgoingMessageProtocol {
         self.sendMessage(snapImage: data, date: Date())
     }
     
+    // MARK: handle messages
+    // open an observer on firebase to load new messages
     func loadNewMessage() {
-        roomRef = ref.child(chatRoomId)
-        _refHandle = roomRef?.queryLimited(toLast: 1).observe(.childAdded, with: { (snapshot: DataSnapshot) in
+        roomRef = ref.child(strChatRoomId)
+        _refHandle = roomRef?.queryLimited(toLast: 15).observe(.childAdded, with: { (snapshot: DataSnapshot) in
             let item = (snapshot.value as? NSDictionary)!
-            if self.messagesKey.contains(snapshot.key) {
+            if self.arrStrMessagesKey.contains(snapshot.key) {
                 return
             }
             let isIncoming = self.insertMessage(item)
@@ -174,66 +176,20 @@ extension ChatViewController: OutgoingMessageProtocol {
             DispatchQueue.main.async {
                 self.finishReceivingMessage(animated: false)
             }
-            self.numberOfMessagesLoaded += 1
+            self.intNumberOfMessagesLoaded += 1
         })
     }
     
-    // MARK: - Load Message
-    // this function open observer on firebase, update datesource of JSQMessage when any change happen on firebase
-    // TODO: Debug this
-    func loadNewMessages() {
-        roomRef = ref.child(chatRoomId)
-        roomRef?.keepSynced(true)
-        _refHandle = roomRef?.queryLimited(toLast: UInt(numberOfMessagesOneTime)).observe(.childAdded, with: { (snapshot: DataSnapshot) in
-            if snapshot.exists() {
-                // because the type is ChildAdded so the snapshot is the new message
-                let item = (snapshot.value as? NSMutableDictionary)!
-                item["keyValue"] = snapshot.key
-                
-                if self.messagesKey.contains(snapshot.key) {
-                    return
-                }
-                
-                if self.initialLoadComplete { // message has been downloaded from database but not load to collectionview yet.
-                    let isIncoming = self.insertMessage(item)
-                    if isIncoming {
-                        JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
-                    }
-                    DispatchQueue.main.async {
-                        self.finishReceivingMessage(animated: false)
-                    }
-                } else {
-                    // add each dictionary to loaded array
-                    self.loaded.append(item)
-                }
-                self.numberOfMessagesLoaded += 1
-            }
-        })
-    }
-    
-    func loadInitMessages() {
-        roomRef = ref.child(chatRoomId)
-        roomRef?.child(chatRoomId).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
-            //this function will run only once
-            print(snapshot.key)
-            self.insertMessages()
-            DispatchQueue.main.async {
-                self.finishReceivingMessage(animated: true)
-            }
-            self.initialLoadComplete = true
-            //self.scrollToBottom(false)
-        }
-    }
-    
+    // load new messages from firebase when scrolling to the top
     func loadPreviousMessages() {
-        self.isLoadingPreviousMessages = true
-        if totalNumberOfMessages > numberOfMessagesLoaded {
-            ref.child(chatRoomId).queryOrdered(byChild: "index").queryStarting(atValue: max(totalNumberOfMessages - numberOfMessagesLoaded - numberOfMessagesOneTime + 1, 1)).queryEnding(atValue: totalNumberOfMessages - numberOfMessagesLoaded).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
+        self.boolLoadingPreviousMessages = true
+        if intTotalNumberOfMessages > intNumberOfMessagesLoaded {
+            ref.child(strChatRoomId).queryOrdered(byChild: "index").queryStarting(atValue: max(intTotalNumberOfMessages - intNumberOfMessagesLoaded - intNumberOfMessagesOneTime + 1, 1)).queryEnding(atValue: intTotalNumberOfMessages - intNumberOfMessagesLoaded).observeSingleEvent(of: .value) { (snapshot: DataSnapshot) in
                 if snapshot.exists() {
                     let result = (snapshot.value! as AnyObject).allValues as! [NSDictionary]
                     for item in result.sorted(by: { ($0["index"] as! Int) > ($1["index"] as! Int) }) {
                         _ = self.insertMessage(item, atIndex: 0)
-                        self.numberOfMessagesLoaded += 1
+                        self.intNumberOfMessagesLoaded += 1
                         
                     }
                     let oldOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y
@@ -242,18 +198,10 @@ extension ChatViewController: OutgoingMessageProtocol {
                     self.collectionView.contentOffset = CGPoint(x: 0.0, y: self.collectionView.contentSize.height - oldOffset)
                     
                 }
-                self.isLoadingPreviousMessages = false
+                self.boolLoadingPreviousMessages = false
             }
         } else {
-            self.isLoadingPreviousMessages = false
-        }
-    }
-    
-    // parse information for firebase
-    func insertMessages() {
-        for item in loaded {
-            // create message
-            _ = self.insertMessage(item)
+            self.boolLoadingPreviousMessages = false
         }
     }
     
@@ -265,21 +213,15 @@ extension ChatViewController: OutgoingMessageProtocol {
         // unpack the message from data load to the JSQmessage
         let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
         
-        // filter for garbage information
-        
-//        if item.count < 9 {
-//            return false
-//        }
-        
         let message = incomingMessage.createMessage(item)
         if item["hasTimeStamp"] != nil && item["hasTimeStamp"] as! Bool {
             let date = dateFormatter().date(from: (item["date"] as? String)!)
-            lastMarkerDate = date
+            dateLastMarker = date
         }
         if let message = message {
-            objects.append(item)
-            messages.append(message)
-            messagesKey.append(item["messageId"] as! String)
+            arrDictMessages.append(item)
+            arrJSQMessages.append(message)
+            arrStrMessagesKey.append(item["messageId"] as! String)
             return self.incoming(item)
         }
         return false
@@ -297,8 +239,8 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         let message = incomingMessage.createMessage(item)
         
-        objects.insert(item, at: index)
-        messages.insert(message!, at: index)
+        arrDictMessages.insert(item, at: index)
+        arrJSQMessages.insert(message!, at: index)
         
         return self.incoming(item)
     }
@@ -330,12 +272,12 @@ extension ChatViewController: OutgoingMessageProtocol {
         return imageData
     }
     
-    // MARK: - locationSend Delegate
+    // MARK: locationSend Delegate
     func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: UIImage) {
         let location = CLLocation(latitude: lat, longitude: lon)
         General.shared.getAddress(location: location, original: true) { (placeMark) in
             guard let response = placeMark as? CLPlacemark else { return }
-            self.locExtendView.setAvator(image: screenShot)
+            self.uiviewLocationExtend.setAvator(image: screenShot)
             self.addResponseToLocationExtend(response: response, withMini: false)
         }
     }
@@ -348,12 +290,12 @@ extension ChatViewController: OutgoingMessageProtocol {
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
-    // MARK: - outgoingmessage delegate
+    // MARK: outgoingmessage delegate
     func updateChat_Id(_ newId: String) {
-        chat_id = newId
+        strChatId = newId
     }
     
     func getSentMessage(_ message: NSDictionary) {
-        sentMessage = message
+        dictMessageSent = message
     }
 }

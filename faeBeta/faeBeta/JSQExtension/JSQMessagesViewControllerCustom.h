@@ -44,6 +44,7 @@
  *  This view controller is the toolbar's delegate.
  */
 @property (weak, nonatomic, readonly) JSQMessagesInputToolbarCustom *inputToolbar;
+@property (weak, nonatomic, readonly) NSLayoutConstraint *toolbarBottomLayoutGuide;
 
 /**
  *  Returns the keyboard controller object used to manage the software keyboard.

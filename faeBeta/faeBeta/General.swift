@@ -15,6 +15,12 @@ class General: NSObject {
     
     func avatar(userid: Int, completion:@escaping (UIImage) -> Void) {
         
+        if userid == 1 {
+            guard let faeAvatar = Key.shared.imageFaeAvatar else { return }
+            completion(faeAvatar)
+            return
+        }
+        
         if userid <= 0 {
             guard let defaultImage = Key.shared.imageDefaultMale else { return }
             completion(defaultImage)

@@ -14,14 +14,13 @@ protocol SwitchStickerDelegate: class {
 }
 
 class StickerTabView: UIView {
-    
-    //MARK: - properties
-    private var cellWidth : CGFloat = 44.5
-    private var buttonLength : CGFloat = 28
-    private var headGroupImageName = [String]()
-    private var headView : UIView!
-    private var scrollView : UIScrollView!
-    private var tabIndicator : UIView!
+    // MARK: properties
+    private var floatCellWidth: CGFloat = 44.5
+    private var floatBtnLength: CGFloat = 28
+    private var arrStrHeadGroupImageName = [String]()
+    private var uiviewHead: UIView!
+    private var scrollView: UIScrollView!
+    private var tabIndicator: UIView!
     private var tabframe: CGRect!
     
     private(set) var tabButtons = [UIButton]()
@@ -36,7 +35,7 @@ class StickerTabView: UIView {
         configureTabIndicator()
         configureHeadGroupView()
         configureScrollView()
-        headView.addSubview(tabIndicator)
+        uiviewHead.addSubview(tabIndicator)
     }
     
     init (frame : CGRect, emojiOnly: Bool)
@@ -48,14 +47,14 @@ class StickerTabView: UIView {
             configureTabIndicator()
             configureHeadGroupView()
             configureScrollView()
-            headView.addSubview(tabIndicator)
+            uiviewHead.addSubview(tabIndicator)
         }else{
             tabframe = frame
             self.backgroundColor = UIColor.white
             configureTabIndicator()
             configureHeadGroupView()
             configureScrollViewLite()
-            headView.addSubview(tabIndicator)
+            uiviewHead.addSubview(tabIndicator)
         }
     }
     
@@ -63,60 +62,58 @@ class StickerTabView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - Setup
+    // MARK: setup
     private func configureHeadGroupView() {
-        headView = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: tabframe.height))
+        uiviewHead = UIView(frame: CGRect(x: 0, y: 0, width: 135, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
-        for name in headGroupImageName {
-            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+        for name in arrStrHeadGroupImageName {
+            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             imageView.image = UIImage(named: name)
             imageView.contentMode = .scaleAspectFit
-            let button = UIButton(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+            let button = UIButton(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             button.setTitle("", for: UIControlState())
 //            button.addTarget(self, action: #selector(groupButtonClicked), for: .touchUpInside)
-            headView.addSubview(imageView)
-            headView.addSubview(button)
-            x += cellWidth - 8
-            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: buttonLength))
+            uiviewHead.addSubview(imageView)
+            uiviewHead.addSubview(button)
+            x += floatCellWidth - 8
+            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: floatBtnLength))
             line.backgroundColor = UIColor(red: 230 / 255, green: 230 / 255, blue: 230 / 255, alpha: 1.0)
-            headView.addSubview(line)
-            x += (cellWidth - buttonLength) / 2
+            uiviewHead.addSubview(line)
+            x += (floatCellWidth - floatBtnLength) / 2
         }
-        self.addSubview(headView)
+        self.addSubview(uiviewHead)
     }
     
-    //Emoji Only
-    private func configureScrollViewLite()
-    {
+    // Emoji Only
+    private func configureScrollViewLite() {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
         var newStickerIndex = [String]()
         newStickerIndex.insert("faeEmoji", at: 0)
         for name in newStickerIndex {
-            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             imageView.image = UIImage(named: name)
             imageView.contentMode = .scaleAspectFit
-            let button = UIButton(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+            let button = UIButton(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             button.setTitle("", for: UIControlState())
             button.addTarget(self, action: #selector(scrollGroupClicked), for: .touchUpInside)
             scrollView.addSubview(imageView)
             scrollView.addSubview(button)
             tabButtons.append(button)
-            x += cellWidth - 8
-            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: buttonLength))
+            x += floatCellWidth - 8
+            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: floatBtnLength))
             line.backgroundColor = UIColor(red: 230 / 255, green: 230 / 255, blue: 230 / 255, alpha: 1.0)
             scrollView.addSubview(line)
-            x += (cellWidth - buttonLength) / 2
+            x += (floatCellWidth - floatBtnLength) / 2
         }
         scrollView.contentSize = CGSize(width: CGFloat(45 * StickerInfoStrcut.stickerIndex.count), height: scrollView.frame.height)
         scrollView.addSubview(tabIndicator)
         self.addSubview(scrollView)
     }
     
-    private func configureScrollView()
-    {
+    private func configureScrollView() {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
@@ -124,20 +121,20 @@ class StickerTabView: UIView {
         newStickerIndex.insert("stickerMore", at: 0)
         
         for name in newStickerIndex {
-            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+            let imageView = UIImageView(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             imageView.image = UIImage(named: name)
             imageView.contentMode = .scaleAspectFit
-            let button = UIButton(frame: CGRect(x: x, y: y, width: buttonLength, height: buttonLength))
+            let button = UIButton(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
             button.setTitle("", for: UIControlState())
             button.addTarget(self, action: #selector(scrollGroupClicked), for: .touchUpInside)
             scrollView.addSubview(imageView)
             scrollView.addSubview(button)
             tabButtons.append(button)
-            x += cellWidth - 8
-            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: buttonLength))
+            x += floatCellWidth - 8
+            let line = UIView(frame: CGRect(x: x, y: y, width: 1, height: floatBtnLength))
             line.backgroundColor = UIColor(red: 230 / 255, green: 230 / 255, blue: 230 / 255, alpha: 1.0)
             scrollView.addSubview(line)
-            x += (cellWidth - buttonLength) / 2
+            x += (floatCellWidth - floatBtnLength) / 2
         }
         scrollView.contentSize = CGSize(width: CGFloat(45 * StickerInfoStrcut.stickerIndex.count), height: scrollView.frame.height)
         scrollView.addSubview(tabIndicator)
@@ -149,20 +146,19 @@ class StickerTabView: UIView {
         tabIndicator.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
     }
     
-    // MARK: - helper
+    // MARK: helper
     /// When the tab button is clicked
     ///
     /// - Parameter sender: the tab clicked
     @objc private func scrollGroupClicked(_ sender : UIButton) {
         updateTabIndicator(sender)
         let xOffset = tabIndicator.frame.origin.x
-        switcher?.switchSticker(Int(xOffset / cellWidth))
+        switcher?.switchSticker(Int(xOffset / floatCellWidth))
     }
     
-    func updateTabIndicator(_ sender: UIButton)
-    {
+    func updateTabIndicator(_ sender: UIButton) {
         tabIndicator.removeFromSuperview()
-        tabIndicator.frame.origin = CGPoint(x: sender.frame.origin.x - (cellWidth - buttonLength) / 2, y: 37)
+        tabIndicator.frame.origin = CGPoint(x: sender.frame.origin.x - (floatCellWidth - floatBtnLength) / 2, y: 37)
         tabIndicator.isHidden = false
         scrollView.addSubview(tabIndicator)
     }

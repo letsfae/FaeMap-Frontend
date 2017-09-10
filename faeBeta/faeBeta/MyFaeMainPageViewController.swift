@@ -266,7 +266,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
             //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
             let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
             imagePicker.imageDelegate = self
-            imagePicker.isSelectAvatar = true
+            imagePicker.boolSelectingAvatar = true
             imagePicker._maximumSelectedPhotoNum = 1
             self.present(imagePicker, animated: true, completion: {
                 UIApplication.shared.statusBarStyle = .default
