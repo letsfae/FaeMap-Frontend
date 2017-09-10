@@ -314,8 +314,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func showKeyboard() {
         resetToolbarButtonIcon()
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-        toolbarContentView.showKeyboard()
         inputToolbar.contentView.textView.becomeFirstResponder()
+        toolbarContentView.showKeyboard()
         //scrollToBottom(false)
     }
     
@@ -442,11 +442,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
 
     func keyboardWillHide(_ notification: NSNotification) {
-        if toolbarContentView.mediaContentShow { // show toolbar, no keyboard
-            uiviewKeyboard.frame.origin.y = screenHeight
+        if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
             return
         }
-        if uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
+        if toolbarContentView.mediaContentShow { // show toolbar, no keyboard
+            uiviewKeyboard.frame.origin.y = screenHeight
             return
         }
         keyboardFrameChange(notification)
@@ -525,7 +525,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 && (toolbarContentView.mediaContentShow || toolbarContentView.boolKeyboardShow)
                 && !boolClosingToolbarContentView && scrollView.isScrollEnabled == true {
                 if toolbarContentView.boolKeyboardShow {
-                    if uiviewKeyboard.frame.origin.y >= screenHeight {
+                    if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight {
                         return
                     }
                     let keyboardHeight = uiviewKeyboard.frame.height
@@ -533,11 +533,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                         dragDistanceY = -keyboardHeight
                     }
                     setContraintsWhenInputBarMove(inputBarToBottom: keyboardHeight + dragDistanceY, keyboard: true, isScrolling: true)
-                    if uiviewKeyboard != nil {
-                        UIView.animate(withDuration: 0, delay: TimeInterval(0), options: [.beginFromCurrentState], animations: {
-                            self.uiviewKeyboard.frame.origin.y = screenHeight - keyboardHeight - dragDistanceY
-                        }, completion: nil)
-                    }
+                    UIView.animate(withDuration: 0, delay: TimeInterval(0), options: [.beginFromCurrentState], animations: {
+                        self.uiviewKeyboard.frame.origin.y = screenHeight - keyboardHeight - dragDistanceY
+                    }, completion: nil)
                 } else {
                     if -dragDistanceY > floatToolBarContentHeight {
                         dragDistanceY = -floatToolBarContentHeight
