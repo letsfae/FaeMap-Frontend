@@ -193,7 +193,7 @@ class SelfAnnotationView: MKAnnotationView {
         
         img = UIImageView(frame: CGRect(x: offSet_0, y: offSet_0, width: 0, height: 0))
         img.image = #imageLiteral(resourceName: "outside_circle")
-        img.alpha = 0.8
+        img.alpha = 0.6
         addSubview(img)
         img.isHidden = true
         

@@ -446,8 +446,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             uiviewKeyboard.frame.origin.y = screenHeight
             return
         }
-        if uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
-            return
+        if uiviewKeyboard != nil {
+            if uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
+                return
+            }
         }
         keyboardFrameChange(notification)
     }
