@@ -102,34 +102,25 @@ extension FaeMapViewController {
     }
     
     func actionCreatePin(_ sender: UIButton) {
-        uiviewNameCard.hide() {
-            self.mapGesture(isOn: true)
-        }
-        if faeUserPins.isEmpty {
-            updateTimerForUserPin()
-        } else {
-            timerUserPin?.invalidate()
-            timerUserPin = nil
-            for faeUser in faeUserPins {
-                faeUser.isValid = false
-            }
-            userClusterManager.removeAnnotations(faeUserPins) {
-                self.faeUserPins.removeAll()
-            }
-        }
+//        uiviewNameCard.hide() {
+//            self.mapGesture(isOn: true)
+//        }
+//        if faeUserPins.isEmpty {
+//            updateTimerForUserPin()
+//        } else {
+//            timerUserPin?.invalidate()
+//            timerUserPin = nil
+//            for faeUser in faeUserPins {
+//                faeUser.isValid = false
+//            }
+//            userClusterManager.removeAnnotations(faeUserPins) {
+//                self.faeUserPins.removeAll()
+//            }
+//        }
         
-        /*
-         uiviewNameCard.hide()
-         let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-         let mapCenter_coor = faeMapView.convert(mapCenter_point, toCoordinateFrom: nil)
-         invalidateAllTimer()
-         let pinMenuVC = PinMenuViewController()
-         pinMenuVC.modalPresentationStyle = .overCurrentContext
-         Key.shared.dblAltitude = faeMapView.camera.altitude
-         Key.shared.selectedLoc = mapCenter_coor
-         pinMenuVC.delegate = self
-         self.present(pinMenuVC, animated: false, completion: nil)
-         */
+        uiviewNameCard.hide {}
+         let vcExplore = ExploreViewController()
+         navigationController?.pushViewController(vcExplore, animated: true)
     }
     
     func actionCancelSelecting() {
