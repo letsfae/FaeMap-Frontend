@@ -212,7 +212,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         refreshPlacePins(radius: coorDistance)
     }
     
-    fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
+    fileprivate func refreshPlacePins(radius: Int) {
         
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
