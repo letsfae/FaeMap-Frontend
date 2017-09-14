@@ -96,6 +96,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tblRecents.tableFooterView = UIView()
         tblRecents.backgroundColor = UIColor.white
         view.addSubview(tblRecents)
+        
+        // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
+        //         whole table view and cell will automatically disable this
+        let uiview = UIView(frame: CGRect(x: 0, y: 65, width: 15, height: screenHeight - 65))
+        view.addSubview(uiview)
     }
     
     func loadDeleteConfirm() {
