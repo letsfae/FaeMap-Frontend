@@ -34,13 +34,10 @@ extension String {
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         let myDate = dateFormatter.date(from: self)
-        
         if myDate != nil {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
             let localTimeZone = NSTimeZone.local.abbreviation()
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            //            print("DEBUG TIMEE")
-            //            print(elapsed)
             if localTimeZone != nil {
                 dateFormatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
                 let normalFormat = dateFormatter.string(from: myDate!)

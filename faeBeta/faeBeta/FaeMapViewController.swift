@@ -175,6 +175,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewWillDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
     }
     
     func getUserStatus() {
