@@ -10,6 +10,8 @@ import UIKit
 
 class EXPMapViewController: UIViewController, MKMapViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    static let shared = EXPMapViewController()
+    
     var lblSearchContent: UILabel!
     var faeMapView: MKMapView!
     var clctViewMap: UICollectionView!
@@ -23,6 +25,29 @@ class EXPMapViewController: UIViewController, MKMapViewDelegate, UICollectionVie
         loadSearchBar()
         loadSmallClctView()
         setTitle(type: "Random")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        clctViewMap.reloadData()
+        let annotations = faeMapView.annotations
+        faeMapView.removeAnnotations(annotations)
+        faePlacePins = arrPlaceData.map { FaePinAnnotation(type: "place", cluster: nil, data: $0) }
+        faeMapView.addAnnotations(faePlacePins)
+        zoomToFitAllAnnotations(annotations: faePlacePins)
+    }
+    
+    func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
+        guard let firstAnn = annotations.first else { return }
+        let point = MKMapPointForCoordinate(firstAnn.coordinate)
+        var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
+        for annotation in annotations {
+            let annotationPoint = MKMapPointForCoordinate(annotation.coordinate)
+            let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
+            zoomRect = MKMapRectUnion(zoomRect, pointRect)
+        }
+        let edgePadding = UIEdgeInsetsMake(60, 40, 60, 40)
+        faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -137,8 +162,6 @@ class EXPMapViewController: UIViewController, MKMapViewDelegate, UICollectionVie
         camera.centerCoordinate = Key.shared.selectedLoc
         camera.altitude = 35000
         faeMapView.setCamera(camera, animated: false)
-        faePlacePins = arrPlaceData.map { FaePinAnnotation(type: "place", cluster: nil, data: $0) }
-        faeMapView.addAnnotations(faePlacePins)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

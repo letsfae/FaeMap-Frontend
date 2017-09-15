@@ -75,11 +75,13 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
-        let leftMenuVC = LeftSlidingMenuViewController()
-        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
-        leftMenuVC.delegate = self
-        leftMenuVC.modalPresentationStyle = .overCurrentContext
-        self.present(leftMenuVC, animated: false, completion: nil)
+//        let leftMenuVC = LeftSlidingMenuViewController()
+//        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
+//        leftMenuVC.delegate = self
+        LeftSlidingMenuViewController.shared.displayName = Key.shared.nickname ?? "someone"
+        LeftSlidingMenuViewController.shared.delegate = self
+        LeftSlidingMenuViewController.shared.modalPresentationStyle = .overCurrentContext
+        present(LeftSlidingMenuViewController.shared, animated: false, completion: nil)
     }
     
     func actionShowResultTbl(_ sender: UIButton) {
@@ -119,8 +121,8 @@ extension FaeMapViewController {
 //        }
         
         uiviewNameCard.hide {}
-         let vcExplore = ExploreViewController()
-         navigationController?.pushViewController(vcExplore, animated: true)
+//         let vcExplore = ExploreViewController()
+         navigationController?.pushViewController(ExploreViewController.shared, animated: true)
     }
     
     func actionCancelSelecting() {
