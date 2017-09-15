@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
     
@@ -36,6 +37,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var uiviewCollectedList: AddPlaceToCollectionView!
     var uiviewAfterAdded: AfterAddedToListView!
     
+    var arrPlaceData = [PlacePin]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadContent()
@@ -54,13 +57,20 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             })
         }
         uiviewAvatarWaveSub.tag = 1
+        arrPlaceData.removeAll(keepingCapacity: true)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            General.shared.getPlacePins(coordinate: LocManager.shared.curtLoc.coordinate, radius: 0, completion: { (status, placesJSON) in
+            General.shared.getPlacePins(coordinate: LocManager.shared.curtLoc.coordinate, radius: 0, count: 20, completion: { (status, placesJSON) in
+                guard status / 100 == 2 else { return }
+                guard let mapPlaceJsonArray = placesJSON.array else { return }
+                guard mapPlaceJsonArray.count > 0 else { return }
+                self.arrPlaceData = mapPlaceJsonArray.map { PlacePin(json: $0) }
+                self.clctViewPics.reloadData()
                 UIView.animate(withDuration: 0.3, animations: {
                     self.clctViewPics.alpha = 1
                     self.uiviewAvatarWaveSub.alpha = 0
                 })
             })
+            
         }
     }
     
@@ -120,6 +130,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         imgAvatar.layer.cornerRadius = 49
         imgAvatar.layer.borderColor = UIColor.white.cgColor
         imgAvatar.layer.borderWidth = 6
+        imgAvatar.contentMode = .scaleAspectFit
         imgAvatar.center = CGPoint(x: xAxis, y: xAxis)
         imgAvatar.isUserInteractionEnabled = false
         imgAvatar.clipsToBounds = true
@@ -183,6 +194,12 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         })
     }
     
+    func actionExpMap() {
+        let vc = EXPMapViewController()
+        vc.arrPlaceData = arrPlaceData
+        navigationController?.pushViewController(vc, animated: false)
+    }
+    
     func actionSave(_ sender: UIButton) {
         uiviewCollectedList.show()
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
@@ -199,8 +216,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             numPage += 1
         }
         if numPage < 0 {
-            numPage = 9
-        } else if numPage >= 10 {
+            numPage = 19
+        } else if numPage >= 20 {
             numPage = 0
         }
         clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
@@ -298,6 +315,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         btnMap = UIButton()
         btnMap.setImage(#imageLiteral(resourceName: "exp_map"), for: .normal)
+        btnMap.addTarget(self, action: #selector(actionExpMap), for: .touchUpInside)
         uiviewBtnSub.addSubview(btnMap)
         uiviewBtnSub.addConstraintsWithFormat("H:[v0(66)]-82-|", options: [], views: btnMap)
         uiviewBtnSub.addConstraintsWithFormat("V:|-6-[v0(66)]", options: [], views: btnMap)
@@ -379,7 +397,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == clctViewPics {
-            return 10
+            return arrPlaceData.count
         } else if collectionView == clctViewTypes {
             return testTypes.count
         }
@@ -389,6 +407,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == clctViewPics {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics", for: indexPath) as! EXPClctPicCell
+            cell.updateCell(placeData: arrPlaceData[indexPath.row])
             return cell
         } else if collectionView == clctViewTypes {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_types", for: indexPath) as! EXPClctTypeCell

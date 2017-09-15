@@ -121,13 +121,13 @@ class General: NSObject {
         }
     }
     
-    func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, completion: @escaping (Int, JSON) -> Void) {
+    func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
         let getPlaces = FaeMap()
         getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
         getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
         getPlaces.whereKey("radius", value: "500000")
         getPlaces.whereKey("type", value: "place")
-        getPlaces.whereKey("max_count", value: "100")
+        getPlaces.whereKey("max_count", value: "\(count)")
         getPlaces.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 completion(status, JSON())
