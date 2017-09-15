@@ -113,10 +113,9 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         
         uiviewSub = UIView()
         addSubview(uiviewSub)
-        uiviewSub.layer.borderWidth = 1
-        uiviewSub.layer.borderColor = UIColor._200199204().cgColor
         uiviewSub.layer.cornerRadius = 5
         uiviewSub.clipsToBounds = true
+        uiviewSub.backgroundColor = .clear
         addConstraintsWithFormat("H:|-17-[v0]-17-|", options: [], views: uiviewSub)
         addConstraintsWithFormat("V:|-17-[v0]-17-|", options: [], views: uiviewSub)
         
@@ -133,6 +132,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         clctViewImages.isPagingEnabled = true
         clctViewImages.backgroundColor = UIColor.clear
         clctViewImages.showsVerticalScrollIndicator = false
+        clctViewImages.backgroundColor = .clear
         uiviewSub.addSubview(clctViewImages)
         uiviewSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewImages)
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
@@ -302,6 +302,7 @@ class EXPClctImgCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .clear
         loadCellItems()
     }
     

@@ -241,11 +241,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
-        let leftMenuVC = LeftSlidingMenuViewController()
-        leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
-        leftMenuVC.delegate = self
-        leftMenuVC.modalPresentationStyle = .overCurrentContext
-        present(leftMenuVC, animated: false, completion: nil)
+//        let leftMenuVC = LeftSlidingMenuViewController()
+//        leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
+//        leftMenuVC.delegate = self
+//        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        LeftSlidingMenuViewController.shared.displayName = Key.shared.nickname ?? "someone"
+        LeftSlidingMenuViewController.shared.delegate = self
+        LeftSlidingMenuViewController.shared.modalPresentationStyle = .overCurrentContext
+        present(LeftSlidingMenuViewController.shared, animated: false, completion: nil)
     }
     
     fileprivate func btnNavBarSetTitle() {

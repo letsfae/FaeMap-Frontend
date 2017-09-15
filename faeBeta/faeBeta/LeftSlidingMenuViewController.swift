@@ -23,6 +23,8 @@ protocol LeftSlidingMenuDelegate: class {
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    static let shared = LeftSlidingMenuViewController()
+    
     weak var delegate: LeftSlidingMenuDelegate?
     
     var uiViewLeftWindow: UIView!
@@ -62,10 +64,16 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadLeftWindow()
+        DispatchQueue.main.async {
+            self.loadLeftWindow()
+            let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
+            self.view.addGestureRecognizer(draggingGesture)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadUserInfo()
-        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
-        view.addGestureRecognizer(draggingGesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {

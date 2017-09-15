@@ -11,6 +11,8 @@ import SwiftyJSON
 
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
     
+    static let shared = ExploreViewController()
+    
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
     var clctViewPics: UICollectionView!
@@ -41,12 +43,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadContent()
+        view.backgroundColor = .white
+        loadNavBar()
+        DispatchQueue.main.async {
+            self.loadContent()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         loadPlaces()
+        loadWaves()
     }
     
     func loadPlaces() {
@@ -75,13 +82,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadContent() {
-        view.backgroundColor = .white
-        loadNavBar()
+        loadAvatarWave()
         loadTopTypesCollection()
         loadPicCollections()
         loadButtons()
         loadBottomLocation()
-        loadAvatarWave()
         loadPlaceListView()
     }
     
@@ -137,8 +142,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewAvatarWaveSub.addSubview(imgAvatar)
         imgAvatar.userID = Key.shared.user_id
         imgAvatar.loadAvatar(id: Key.shared.user_id)
-        
-        loadWaves()
     }
     
     func loadWaves() {
@@ -195,9 +198,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func actionExpMap() {
-        let vc = EXPMapViewController()
-        vc.arrPlaceData = arrPlaceData
-        navigationController?.pushViewController(vc, animated: false)
+//        let vc = EXPMapViewController()
+        EXPMapViewController.shared.arrPlaceData = arrPlaceData
+        navigationController?.pushViewController(EXPMapViewController.shared, animated: false)
     }
     
     func actionSave(_ sender: UIButton) {
