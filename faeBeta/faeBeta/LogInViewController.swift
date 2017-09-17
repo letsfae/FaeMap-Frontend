@@ -45,6 +45,13 @@ class LogInViewController: UIViewController {
     fileprivate var txtPassword: FAETextField!
     fileprivate var indicatorActivity: UIActivityIndicatorView!
     
+    var uiviewGrayBg: UIView!
+    var uiviewChooseMethod: UIView!
+    var lblChoose: UILabel!
+    var btnPhone: UIButton!
+    var btnEmail: UIButton!
+    var btnCancel: UIButton!
+    
     // Mark: - View did/will ..
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +60,7 @@ class LogInViewController: UIViewController {
         setupInterface()
         addObservers()
         createActivityIndicator()
+        loadResetPassword()
         // Do any additional setup after loading the view.
     }
     
@@ -197,8 +205,11 @@ class LogInViewController: UIViewController {
     }
     
     func supportButtonTapped() {
-        let vc = SignInSupportViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        animationShowSelf()
+//        let vc = SignInSupportViewController()
+//        vc.modalPresentationStyle = .overCurrentContext
+//        present(vc, animated: false)
+//        navigationController?.pushViewController(vc, animated: true)
     }
     
     // MARK: - Navigation
@@ -256,4 +267,98 @@ extension LogInViewController: UITextFieldDelegate {
         let newLength = currentCharacterCount + string.characters.count - range.length
         return newLength <= 16
     }
+}
+
+// load choose reset password page
+extension LogInViewController {
+    func loadResetPassword() {
+        uiviewGrayBg = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        view.addSubview(uiviewGrayBg)
+        uiviewGrayBg.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        loadContent()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
+        uiviewGrayBg.addGestureRecognizer(tapGesture)
+        uiviewGrayBg.isHidden = true
+    }
+    
+    fileprivate func loadContent() {
+        uiviewChooseMethod = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 262))
+        uiviewChooseMethod.center.x = screenWidth / 2
+        uiviewChooseMethod.backgroundColor = .white
+        uiviewChooseMethod.layer.cornerRadius = 20
+        uiviewGrayBg.addSubview(uiviewChooseMethod)
+        
+        lblChoose = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 50))
+        lblChoose.textAlignment = .center
+        lblChoose.numberOfLines = 0
+        lblChoose.text = "How do you want to \nReset your Password?"
+        lblChoose.textColor = UIColor._898989()
+        lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewChooseMethod.addSubview(lblChoose)
+        
+        btnPhone = UIButton(frame: CGRect(x: 41, y: 90, w: 208, h: 50))
+        btnPhone.setTitle("Use Phone", for: .normal)
+        btnEmail = UIButton(frame: CGRect(x: 41, y: 155, w: 208, h: 50))
+        btnEmail.setTitle("Use Email", for: .normal)
+        
+        var btnActions = [UIButton]()
+        btnActions.append(btnPhone)
+        btnActions.append(btnEmail)
+        
+        for i in 0..<btnActions.count {
+            btnActions[i].tag = i
+            btnActions[i].setTitleColor(UIColor._2499090(), for: .normal)
+            btnActions[i].titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+            btnActions[i].addTarget(self, action: #selector(actionChooseMethod(_:)), for: .touchUpInside)
+            btnActions[i].layer.borderWidth = 2
+            btnActions[i].layer.borderColor = UIColor._2499090().cgColor
+            btnActions[i].layer.cornerRadius = 26 * screenWidthFactor
+            uiviewChooseMethod.addSubview(btnActions[i])
+        }
+        
+        btnCancel = UIButton()
+        btnCancel.setTitle("Cancel", for: .normal)
+        btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
+        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        uiviewChooseMethod.addSubview(btnCancel)
+        view.addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnCancel)
+        view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
+    }
+    
+    func actionCancel(_ sender: Any?) {
+        animationHideSelf()
+    }
+    
+    func actionChooseMethod(_ sender: UIButton) {
+        if sender.tag == 0 {  // use phone
+            let vc = SignInPhoneViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        } else {  // use email
+            let vc = SignInEmailViewController()
+            navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    // animations
+    func animationShowSelf() {
+        uiviewGrayBg.isHidden = false
+        uiviewGrayBg.alpha = 0
+        uiviewChooseMethod.alpha = 0
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewGrayBg.alpha = 1
+            self.uiviewChooseMethod.alpha = 1
+        }, completion: nil)
+    }
+    
+    func animationHideSelf() {
+        uiviewGrayBg.alpha = 1
+        uiviewChooseMethod.alpha = 1
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewChooseMethod.alpha = 0
+            self.uiviewGrayBg.alpha = 0
+        }, completion: nil)
+    }
+    // animations end
 }

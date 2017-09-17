@@ -8,6 +8,8 @@
 
 import UIKit
 import SwiftyJSON
+import Contacts
+import ContactsUI
 /* Contacts View Controller
  
  This is the view controller for the very first UI of the contacts_faemap build.
@@ -69,6 +71,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var curtTitle: String = "Friends"
     var titleArray: [String] = ["Friends", "Requests"] //["Following", "Followers"]
     var btnNavBarMenu: UIButton!
+    var contactStore = CNContactStore()
     
     // JustinHe.swift variable declaration for UI objects
     var arrFriends: [Friends] = []
