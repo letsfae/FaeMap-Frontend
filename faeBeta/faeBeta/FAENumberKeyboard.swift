@@ -51,7 +51,7 @@ class FAENumberKeyboard: UIView {
             button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
         }
         let imgDeleteIcon = UIImageView(frame: CGRect(x: screenWidth / 6 - 20, y: 20 * screenHeightFactor * screenHeightFactor, width: 31, height: 22))
-        imgDeleteIcon.image = UIImage(named: "erase")
+        imgDeleteIcon.image = #imageLiteral(resourceName: "erase")
         deleteButton.addSubview(imgDeleteIcon)
         deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
     }

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
+
 extension ContactsViewController {
     
     func loadNavBar() {
@@ -89,10 +92,6 @@ extension ContactsViewController {
         uiviewDropDownMenu.addSubview(imgTick)
     }
     
-    func setBtnTopTitle() {
-//        btnTop.setAttributedTitle(, for: .normal)
-    }
-    
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
         var tapRecognizer = UITapGestureRecognizer()
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
@@ -137,6 +136,15 @@ extension ContactsViewController {
         vc.arrReceivedRequests = arrReceivedRequests
         vc.arrRequested = arrRequested
         self.navigationController?.pushViewController(vc, animated: true)
+        getContacts()
+    }
+    
+    fileprivate func getContacts() {
+        let entityType = CNEntityType.contacts
+        let authStatus = CNContactStore.authorizationStatus(for: entityType)
+        if (authStatus == CNAuthorizationStatus.notDetermined) {
+            contactStore.requestAccess(for: entityType, completionHandler: {_,_ in })
+        }
     }
     
     // function for buttons in drop down menu

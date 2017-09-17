@@ -1,5 +1,5 @@
 //
-//  SignInSupportViewController.swift
+//  SignInEmailViewController.swift
 //  faeBeta
 //
 //  Created by blesssecret on 8/15/16.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
+class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
     
     //MARK: - Interface
     fileprivate var lblTitle: UILabel!
@@ -75,7 +75,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         lblTitle.text = "Enter your Email\nto Reset Password"
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-//        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        //        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         lblTitle.textAlignment = .center
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
@@ -90,7 +90,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         
         // set up the "We can’t find an account with this Email!" label
         btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67 , width: screenWidth - 175, height: 18))
-        btnInfo.setAttributedTitle(NSAttributedString(string: "We can’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnInfo.contentHorizontalAlignment = .center
         btnInfo.sizeToFit()
         btnInfo.center.x = screenWidth / 2
@@ -110,10 +110,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     }
     
     func setupEnteringVerificationCode() {
-        lblTitle.text = "Enter the Code we just\nsent to your Email to continue"
-//        lblTitle.attributedText = NSAttributedString(string: "Enter the Code we just\nsent to your Email to continue", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
-//        lblTitle.sizeToFit()
-//        lblTitle.center.x = screenWidth / 2
+        lblTitle.text = "Enter the Code we just sent \nto your Email to Continue"
         self.view.endEditing(true)
         
         // setup the fake keyboard for numbers input
@@ -137,7 +134,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
             
             self.btnInfo.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
             self.btnInfo.alpha = 1
-
+            
             self.btnSendCode.frame = CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor)
             self.btnSendCode.center.x = screenWidth / 2
             
@@ -146,9 +143,9 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
             self.verificationCodeView.alpha = 1
             
             self.view.layoutIfNeeded()
-            }, completion: {(Bool) in
-                self.txtEmail.isHidden = true
-                self.startTimer()
+        }, completion: {(Bool) in
+            self.txtEmail.isHidden = true
+            self.startTimer()
         })
         statePage = .enteringCode
     }
@@ -180,20 +177,20 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         }
         else {
             postToURL("reset_login/code/verify", parameter: ["email": txtEmail.text! as AnyObject, "code": verificationCodeView.displayValue as AnyObject], authentication: nil, completion: { (statusCode, result) in
-                    if(statusCode / 100 == 2) {
-                        let controller = SignInSupportNewPassViewController()
-                        controller.email = self.txtEmail.text!
-                        controller.code = self.verificationCodeView.displayValue
-                        self.navigationController?.pushViewController(controller, animated: true)
-                    } else {
-                        for _ in 0..<6 {
-                            _ = self.verificationCodeView.addDigit(-1)
-                        }
-                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                        self.btnSendCode.isEnabled = false
-                        self.btnSendCode.backgroundColor = UIColor._255160160()
+                if(statusCode / 100 == 2) {
+                    let controller = SignInSupportNewPassViewController()
+                    controller.email = self.txtEmail.text!
+                    controller.code = self.verificationCodeView.displayValue
+                    self.navigationController?.pushViewController(controller, animated: true)
+                } else {
+                    for _ in 0..<6 {
+                        _ = self.verificationCodeView.addDigit(-1)
                     }
-                    self.indicatorView.stopAnimating()
+                    self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                    self.btnSendCode.isEnabled = false
+                    self.btnSendCode.backgroundColor = UIColor._255160160()
+                }
+                self.indicatorView.stopAnimating()
             })
         }
     }
@@ -223,7 +220,7 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
     //MARK: helper
     func startTimer() {
         btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(SignInSupportViewController.updateTime), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
     func updateTime()
@@ -237,14 +234,14 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
             timer.invalidate()
             timer = nil
             self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
-            self.btnInfo.addTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), for: .touchUpInside )
+            self.btnInfo.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside )
         }
     }
     
     func resendVerificationCode() {
         postToURL("reset_login/code", parameter: ["email": txtEmail.text! as AnyObject], authentication: nil, completion: {(statusCode, result) in })
         startTimer()
-        btnInfo.removeTarget(self, action: #selector(SignInSupportViewController.resendVerificationCode), for: .touchUpInside)
+        btnInfo.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
     }
     
     func navBarLeftButtonTapped() {
@@ -293,3 +290,4 @@ class SignInSupportViewController: UIViewController, FAENumberKeyboardDelegate {
         }
     }
 }
+
