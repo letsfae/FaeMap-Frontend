@@ -12,6 +12,8 @@ import CoreLocation
 import Firebase
 import FirebaseDatabase
 import RealmSwift
+import Contacts
+import ContactsUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -239,7 +241,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func checkNotificationStatus() {
+    fileprivate func checkNotificationStatus() {
         //        let center = UNUserNotificationCenter.current()
         //        center.getNotificationSettings { (settings) in
         //            if settings.authorizationStatus == .authorized {

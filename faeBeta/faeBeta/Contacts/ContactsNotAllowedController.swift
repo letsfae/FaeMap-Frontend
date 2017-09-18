@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Contacts
-import ContactsUI
 
 class ContactsNotAllowedController: UIViewController {
     
@@ -18,7 +16,7 @@ class ContactsNotAllowedController: UIViewController {
     var lblPrompt: UILabel!
     var lblInstructions: UILabel!
     var btnAllowAccess: UIButton!
-    var contactStore = CNContactStore()
+    static var boolAllowAccess = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +24,17 @@ class ContactsNotAllowedController: UIViewController {
         loadMain()
         definesPresentationContext = true
         view.backgroundColor = .white
+        ContactsNotAllowedController.boolAllowAccess = true
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("viewWillAppear")
+        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        print("viewDidDisappear")
+        super.viewDidDisappear(animated)
+        ContactsNotAllowedController.boolAllowAccess = false
     }
     
     func loadNavBar() {
@@ -83,27 +92,28 @@ class ContactsNotAllowedController: UIViewController {
     }
     
     func actionAllowAccess(_ sender: UIButton) {
-        let entityType = CNEntityType.contacts
-        let authStatus = CNContactStore.authorizationStatus(for: entityType)
-        print(authStatus)
-        if (authStatus == CNAuthorizationStatus.notDetermined) {
-            contactStore.requestAccess(for: entityType, completionHandler: { (success, nil) in
-                if success {
-                    print("success")
-                    let vc = AddFromContactsController()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                } else {
-                    let vc = ContactsNotAllowedController()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                }
-            })
-        } else if (authStatus == CNAuthorizationStatus.denied) {
-            let vc = ContactsNotAllowedController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        } else if authStatus == CNAuthorizationStatus.authorized {
-            let vc = AddFromContactsController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+//        let entityType = CNEntityType.contacts
+//        let authStatus = CNContactStore.authorizationStatus(for: entityType)
+//        print(authStatus)
+//        if (authStatus == CNAuthorizationStatus.notDetermined) {
+//            contactStore.requestAccess(for: entityType, completionHandler: { (success, nil) in
+//                if success {
+//                    print("success")
+//                    let vc = AddFromContactsController()
+//                    self.navigationController?.pushViewController(vc, animated: true)
+//                } else {
+//                    let vc = ContactsNotAllowedController()
+//                    self.navigationController?.pushViewController(vc, animated: true)
+//                }
+//            })
+//        } else if (authStatus == CNAuthorizationStatus.denied) {
+//            let vc = ContactsNotAllowedController()
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        } else if authStatus == CNAuthorizationStatus.authorized {
+//            let vc = AddFromContactsController()
+//            self.navigationController?.pushViewController(vc, animated: true)
+//        }
     }
 }
 

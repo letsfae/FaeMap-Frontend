@@ -55,7 +55,7 @@ class FaeSearchController: UISearchController, UISearchBarDelegate {
         faeSearchBar.tintColor = textColor
         faeSearchBar.showsBookmarkButton = false
         faeSearchBar.showsCancelButton = false
-        faeSearchBar.setImage(UIImage(named: "searchBarIcon"), for: UISearchBarIcon.search, state: UIControlState())
+        faeSearchBar.setImage(#imageLiteral(resourceName: "searchBarIcon"), for: UISearchBarIcon.search, state: UIControlState())
         faeSearchBar.delegate = self
     }
     
