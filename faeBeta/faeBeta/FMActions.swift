@@ -104,29 +104,23 @@ extension FaeMapViewController {
     }
     
     func actionCreatePin(_ sender: UIButton) {
-//        uiviewNameCard.hide() {
-//            self.mapGesture(isOn: true)
-//        }
-//        if faeUserPins.isEmpty {
-//            updateTimerForUserPin()
-//        } else {
-//            timerUserPin?.invalidate()
-//            timerUserPin = nil
-//            for faeUser in faeUserPins {
-//                faeUser.isValid = false
-//            }
-//            userClusterManager.removeAnnotations(faeUserPins) {
-//                self.faeUserPins.removeAll()
-//            }
-//        }
-        
         uiviewNameCard.hide {}
-//         let vcExplore = ExploreViewController()
-         navigationController?.pushViewController(ExploreViewController.shared, animated: true)
+        ExploreViewController.shared.delegate = self
+        navigationController?.pushViewController(ExploreViewController.shared, animated: true)
     }
     
     func actionCancelSelecting() {
         mapMode = .routing
         uiviewChooseLocs.show()
+    }
+    
+    func actionBackToExp(_ sender: UIButton) {
+        navigationController?.pushViewController(ExploreViewController.shared, animated: false)
+        mapMode = .normal
+        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+        userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
+        placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
+        arrExpPlace.removeAll(keepingCapacity: true)
+        clctViewMap.reloadData()
     }
 }

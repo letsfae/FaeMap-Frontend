@@ -27,14 +27,14 @@ extension FaeMapViewController {
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
         placeClusterManager.cellSize = 60
-         placeClusterManager.marginFactor = 0.15
+        placeClusterManager.marginFactor = 0.15
         placeClusterManager.clusterer = CCHNearCenterMapClusterer()
 //        placeClusterManager.animator = self
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self
-         userClusterManager.cellSize = 100
-         userClusterManager.marginFactor = 0.15
+        userClusterManager.cellSize = 100
+        userClusterManager.marginFactor = 0.15
         // userClusterManager.clusterer = CCHNearCenterMapClusterer()
         
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
@@ -160,5 +160,45 @@ extension FaeMapViewController {
         view.addSubview(btnDiscovery)
         btnDiscovery.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
         btnDiscovery.layer.zPosition = 500
+    }
+    
+    func loadExploreBar() {
+        imgExpbarShadow = UIImageView()
+        imgExpbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
+        imgExpbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
+        view.addSubview(imgExpbarShadow)
+        imgExpbarShadow.layer.zPosition = 500
+        imgExpbarShadow.isUserInteractionEnabled = true
+        imgExpbarShadow.isHidden = true
+        
+        // Left window on main map to open account system
+        let btnBackToExp = UIButton()
+        btnBackToExp.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
+        imgExpbarShadow.addSubview(btnBackToExp)
+        btnBackToExp.addTarget(self, action: #selector(self.actionBackToExp(_:)), for: .touchUpInside)
+        imgExpbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnBackToExp)
+        imgExpbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnBackToExp)
+        btnBackToExp.adjustsImageWhenDisabled = false
+        
+        lblExpContent = UILabel()
+        lblExpContent.textAlignment = .center
+        lblExpContent.numberOfLines = 1
+        lblExpContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblExpContent.textColor = UIColor._898989()
+        imgExpbarShadow.addSubview(lblExpContent)
+        imgExpbarShadow.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblExpContent)
+        imgExpbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblExpContent)
+    }
+    
+    func setTitle(type: String) {
+        let title_0 = type
+        let title_1 = " Around Me"
+        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let attrs_1 = [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
+        let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
+        title_0_attr.append(title_1_attr)
+        
+        lblExpContent.attributedText = title_0_attr
     }
 }

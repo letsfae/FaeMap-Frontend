@@ -8,10 +8,13 @@
 
 import UIKit
 import SwiftyJSON
+import CoreLocation
 
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
     
     static let shared = ExploreViewController()
+    
+    weak var delegate: MapSearchDelegate?
     
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
@@ -56,7 +59,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadWaves()
     }
     
+    func buttonEnable(on: Bool) {
+        btnGoLeft.isEnabled = on
+        btnSave.isEnabled = on
+        btnRefresh.isEnabled = on
+        btnMap.isEnabled = on
+        btnGoRight.isEnabled = on
+        lblBottomLocation.isUserInteractionEnabled = on
+    }
+    
     func loadPlaces() {
+        buttonEnable(on: false)
         if uiviewAvatarWaveSub.tag != 0 {
             UIView.animate(withDuration: 0.5, animations: {
                 self.clctViewPics.alpha = 0
@@ -72,6 +85,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 guard mapPlaceJsonArray.count > 0 else { return }
                 self.arrPlaceData = mapPlaceJsonArray.map { PlacePin(json: $0) }
                 self.clctViewPics.reloadData()
+                self.buttonEnable(on: true)
                 UIView.animate(withDuration: 0.3, animations: {
                     self.clctViewPics.alpha = 1
                     self.uiviewAvatarWaveSub.alpha = 0
@@ -198,9 +212,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func actionExpMap() {
-//        let vc = EXPMapViewController()
-        EXPMapViewController.shared.arrPlaceData = arrPlaceData
-        navigationController?.pushViewController(EXPMapViewController.shared, animated: false)
+        let loc = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+        delegate?.jumpToPlaces?(searchText: "fromEXP", places: arrPlaceData, selectedLoc: loc)
+        navigationController?.popViewController(animated: false)
     }
     
     func actionSave(_ sender: UIButton) {

@@ -46,7 +46,7 @@ class EXPMapViewController: UIViewController, MKMapViewDelegate, UICollectionVie
             let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
             zoomRect = MKMapRectUnion(zoomRect, pointRect)
         }
-        let edgePadding = UIEdgeInsetsMake(60, 40, 60, 40)
+        let edgePadding = UIEdgeInsetsMake(100, 40, 100, 40)
         faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: true)
     }
     

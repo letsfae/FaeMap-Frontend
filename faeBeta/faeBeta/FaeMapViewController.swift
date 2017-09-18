@@ -16,6 +16,7 @@ enum MapMode {
     case routing
     case pinDetail
     case selecting
+    case explore
 }
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
@@ -39,6 +40,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnMainMapSearch: UIButton!
     var btnClearSearchRes: UIButton!
     var uiviewPinActionDisplay: FMPinActionDisplay! // indicate which action is being pressing to release
+    
+    // Explore Button
+    var clctViewMap: UICollectionView!
+    var imgExpbarShadow: UIImageView!
+    var lblExpContent: UILabel!
+    var arrExpPlace = [PlacePin]()
     
     // Compass and Locating Self
     var btnCompass: FMCompass!
@@ -101,9 +108,17 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             imgSearchIcon.isHidden = mapMode == .selecting
-            btnLeftWindow.isHidden = mapMode == .selecting
-            imgAddressIcon.isHidden = mapMode != .selecting
-            btnCancelSelect.isHidden = mapMode != .selecting
+            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore
+            imgExpbarShadow.isHidden = mapMode != .explore
+            imgSchbarShadow.isHidden = mapMode == .explore
+            btnCompass.isHidden = mapMode == .explore
+            btnLocateSelf.isHidden = mapMode == .explore
+            btnOpenChat.isHidden = mapMode == .explore
+            btnFilterIcon.isHidden = mapMode == .explore
+            btnDiscovery.isHidden = mapMode == .explore
+            clctViewMap.isHidden = mapMode != .explore
+            imgAddressIcon.isHidden = mapMode == .selecting || mapMode == .normal
+            btnCancelSelect.isHidden = mapMode == .selecting || mapMode == .normal
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
             if mapMode != .selecting { lblSearchContent.text = "Search Fae Map" }
             if mapMode == .selecting { btnDistIndicator.lblDistance.text = "Select" }
@@ -117,6 +132,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
             }
+            faeMapView.showsUserLocation = mapMode != .explore
         }
     }
     
@@ -142,9 +158,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadMapView()
         loadButton()
+        loadExploreBar()
         loadPlaceDetail()
         loadPlaceListView()
         loadDistanceComponents()
+        loadSmallClctView()
         
         timerSetup()
         updateSelfInfo()
