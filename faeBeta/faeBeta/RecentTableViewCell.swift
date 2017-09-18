@@ -181,11 +181,11 @@ class RecentTableViewCell: UITableViewCell {
         lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
         lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
-        guard let userid = Int(recent.withUserID) else { return }
-        guard avatarDic[userid] == nil else { return }
-        General.shared.avatar(userid: userid) { (avatarImage) in
-            avatarDic[userid] = avatarImage
-        }
+//        guard let userid = Int(recent.withUserID) else { return }
+//        guard avatarDic[userid] == nil else { return }
+//        General.shared.avatar(userid: userid) { (avatarImage) in
+//            avatarDic[userid] = avatarImage
+//        }
     }
 
     

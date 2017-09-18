@@ -48,8 +48,8 @@ extension FaeMapViewController {
         
         // Bryan
         chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userID = withUserId.stringValue
-        chatVC.realmWithUser!.userName = withUserName
+        chatVC.realmWithUser!.id = withUserId.stringValue
+        chatVC.realmWithUser!.user_name = withUserName
         
         // EndBryan
         self.present(chatVC, animated: true, completion: nil)

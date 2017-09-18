@@ -17,10 +17,106 @@ class IncomingMessage {
     
     //MARK: - properties
     private var collectionView : JSQMessagesCollectionViewCustom
+    private var senderName: String = ""
+    private var senderId: String = ""
+    private var createdAt: Date = Date()
     
     //MARK: - init
     init(collectionView_ : JSQMessagesCollectionViewCustom) {
         collectionView = collectionView_
+    }
+    
+    func createJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        var message: JSQMessage!
+        senderName = (reamlMessage.sender?.display_name)!
+        senderId = (reamlMessage.sender?.id)!
+        createdAt = dateFormatter().date(from: reamlMessage.created_at)!
+        switch reamlMessage.type {
+        case "text":
+            message = textJSQMessage(reamlMessage)
+            break;
+        case "picture":
+            message = pictureJSQMessage(reamlMessage)
+            break;
+        case "video":
+            message = videoJSQMessage(reamlMessage)
+            break;
+        case "audio":
+            message = audioJSQMessage(reamlMessage)
+            break;
+        case "sticker":
+            message = stickerJSQMessage(reamlMessage)
+            break;
+        case "gif":
+            message = gifJSQMessage(reamlMessage)
+            break;
+        case "location":
+            message = locationJSQMessage(reamlMessage)
+            break;
+        case "place":
+            message = placeJSQMessage(reamlMessage)
+            break;
+        case "collection":
+            message = collectionJSQMessage(reamlMessage)
+            break;
+        default:
+            message = textJSQMessage(reamlMessage)
+            break;
+        }
+        return message
+    }
+    
+    fileprivate func textJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func pictureJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let mediaItem = JSQPhotoMediaItemCustom(image: nil)
+        
+        mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
+        
+        imageFromData_v2(reamlMessage) { (image) in
+            mediaItem?.image = image
+        }
+        
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
+    }
+    
+    fileprivate func videoJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        //let duration = reamlMessage.text
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func audioJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func stickerJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func gifJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func locationJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func placeJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    }
+    
+    fileprivate func collectionJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+        let content = reamlMessage.text
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
     }
     
     //MARK: - create messages
@@ -276,6 +372,14 @@ class IncomingMessage {
     }
     
     //MARK: - abstract media from data
+    fileprivate func imageFromData_v2(_ reamlMessage: RealmMessage_v2, result: (_ image : UIImage?) -> Void) {
+        var image : UIImage?
+        if let decodedData = reamlMessage.media {
+            image = UIImage(data: decodedData as Data)
+            result(image)
+        }
+    }
+    
     private func imageFromData(_ item : NSDictionary, result : (_ image : UIImage?) -> Void) {
         var image : UIImage?
         

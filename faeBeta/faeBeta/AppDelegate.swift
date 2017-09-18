@@ -58,9 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         )
         // Delete all realm swift database data
-        do {
-            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-        } catch {}
+        //do {
+            //try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
+        //} catch {}
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         

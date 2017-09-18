@@ -10,10 +10,47 @@ import Foundation
 import RealmSwift
 
 class RealmMessage_v2: Object {
-    dynamic var messageID : String = ""
-    dynamic var withUserID : String = ""
-    dynamic var date : String = ""
-    //dynamic var message: NSDictionary = [:]
+    dynamic var loginUserID_chatID_index: String = ""
+    dynamic var login_user_id: String = ""
+    dynamic var chat_id: String = ""
+    dynamic var index: Int = -1
+    dynamic var sender: RealmUser? = nil
+    let members = List<RealmUser>()
+    dynamic var created_at: String = ""
+    dynamic var type: String = ""
+    dynamic var text: String = ""
+    dynamic var media: NSData? = nil
+    dynamic var upload_to_server: Bool = false
+    dynamic var delivered_to_user: Bool = false
+    dynamic var unread_count: Int = 0
+    
+    override static func primaryKey() -> String? {
+        return "loginUserID_chatID_index"
+    }
+}
+
+extension Object {
+    func toDictionary() -> NSMutableDictionary {
+        let properties = self.objectSchema.properties.map { $0.name }
+        let dictionary = self.dictionaryWithValues(forKeys: properties)
+        let mutabledic = NSMutableDictionary()
+        mutabledic.setValuesForKeys(dictionary)
+        
+        for prop in self.objectSchema.properties as [Property]! {
+            // find lists
+            if let nestedObject = self[prop.name] as? Object {
+                mutabledic.setValue(nestedObject.toDictionary(), forKey: prop.name)
+            } else if let nestedListObject = self[prop.name] as? ListBase {
+                var objects = [AnyObject]()
+                for index in 0..<nestedListObject._rlmArray.count  {
+                    let object = nestedListObject._rlmArray[index] as AnyObject
+                    objects.append(object.toDictionary())
+                }
+                mutabledic.setObject(objects, forKey: prop.name as NSCopying)
+            }
+        }
+        return mutabledic
+    }
 }
 
 class RealmMessage: Object {
@@ -102,18 +139,6 @@ class RealmChat {
         try! realm.write{
             realm.add(message);
         }
-    }
-    static func receiveMessage_v2(message : NSDictionary, withUserID: String) {
-        let realm = try! Realm()
-        let timeStr = message["date"]! as! String
-        let messageRealm = RealmMessage_v2()
-        messageRealm.messageID = withUserID + (message["messageId"]! as! String)
-        messageRealm.withUserID = withUserID
-        messageRealm.date = timeStr
-        try! realm.write {
-            realm.add(messageRealm)
-        }
-
     }
     
     static func receiveMessage(message : NSDictionary, withUserID: String) {
