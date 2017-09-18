@@ -33,6 +33,7 @@
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
 		50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */; };
 		5087686A1F47AC6A009922BA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508768691F47AC6A009922BA /* UserPin.swift */; };
+		508E2C581F6FA233004F423D /* FMLoadCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E2C571F6FA233004F423D /* FMLoadCollection.swift */; };
 		50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F541F2BB530002553F1 /* MapSearchViewController.swift */; };
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
@@ -297,6 +298,7 @@
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMCompass+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		508768691F47AC6A009922BA /* UserPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
+		508E2C571F6FA233004F423D /* FMLoadCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLoadCollection.swift; sourceTree = "<group>"; };
 		50902F541F2BB530002553F1 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
@@ -726,6 +728,7 @@
 				5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
+				508E2C571F6FA233004F423D /* FMLoadCollection.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -1555,6 +1558,7 @@
 				50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */,
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
+				508E2C581F6FA233004F423D /* FMLoadCollection.swift in Sources */,
 				B8849EB51EEB147A00D4588D /* MBSocialCell.swift in Sources */,
 				B84663D91E942E8F0010259B /* DoubleExtension.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
