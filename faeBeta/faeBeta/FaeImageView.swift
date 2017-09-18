@@ -68,7 +68,7 @@ class FaeImageView: UIImageView {
     func openThisMedia(_ sender: UIGestureRecognizer) {
         let realm = try! Realm()
         // If previous avatar does exist in realm
-        if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(self.fileID)'").first {
+        if let avatarRealm = realm.objects(RealmUser.self).filter("id == '\(self.fileID)'").first {
             if avatarRealm.largeAvatarEtag == nil {
                 // Get full size avatar if there is none of it, type => 0
                 getImage(fileID: self.fileID, type: 0, isChatRoom: isChatRoom) { (status, etag, imageRawData) in

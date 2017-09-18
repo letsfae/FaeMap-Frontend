@@ -227,7 +227,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
     var avatarInRealm: Data?
     
     let realm = try! Realm()
-    if let avatarRealm = realm.objects(RealmUser.self).filter("userID == '\(userID)'").first {
+    if let avatarRealm = realm.objects(RealmUser.self).filter("id == '\(userID)'").first {
         if let etag = type == 2 ? avatarRealm.smallAvatarEtag : avatarRealm.largeAvatarEtag {
             urlRequest.setValue(etag, forHTTPHeaderField: "If-None-Match")
 //            joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
@@ -259,7 +259,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
                     return
                 }
 //                joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
-                if let reamlUser = realm.objects(RealmUser.self).filter("userID == '\(userID)'").first {
+                if let reamlUser = realm.objects(RealmUser.self).filter("id == '\(userID)'").first {
                     try! realm.write {
                         if type == 0 {
                             reamlUser.largeAvatarEtag = etag
@@ -272,7 +272,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
                     }
                 } else {
                     let reamlUser = RealmUser()
-                    reamlUser.userID = "\(userID)"
+                    reamlUser.id = "\(userID)"
                     if type == 0 {
                         reamlUser.largeAvatarEtag = etag
                         reamlUser.userLargeAvatar = response.data as NSData?

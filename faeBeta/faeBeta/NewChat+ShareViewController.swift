@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import Firebase
 import FirebaseDatabase
+import RealmSwift
 
 struct cellFriendData {
     var Image = UIImage()
@@ -89,7 +90,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
             }
             if json.count != 0 {
                 for i in 1...json.count {
-                    self.arrFriends.append(cellFriendData(userName: json[i-1]["friend_user_name"].stringValue, nickName: json[i-1]["friend_user_nick_name"].stringValue,  userID: json[i-1]["friend_id"].stringValue))
+                    self.arrFriends.append(cellFriendData(userName: json[i-1]["friend_user_name"].stringValue, nickName: json[i-1]["friend_user_nick_name"].stringValue, userID: json[i-1]["friend_id"].stringValue))
                 }
             }
             self.arrFriends.sort{ $0.nickName < $1.nickName }
@@ -124,7 +125,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     
     func navigationRightItemTapped() {
         //if chatOrShare == "chat" {
-            chatWithUser(id: Int(arrFriends[arrSelected[0]].userID)!)
+            chatWithUsers(IDs: [arrFriends[arrSelected[0]].userID])
         //}
         //else if chatOrShare == "share" {
             
@@ -132,9 +133,34 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         
     }
     
-    func chatWithUser(id: Int) {
+    func chatWithUsers(IDs: [String]) {
+        let vcChat = ChatViewController()
+        if IDs.count == 1 {
+            let realm = try! Realm()
+            let chatSelf = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(Key.shared.user_id)'").first!
+            vcChat.arrRealmUsers.append(chatSelf)
+            let chatWithUser = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(IDs[0])'").first!
+            vcChat.arrRealmUsers.append(chatWithUser)
+            vcChat.realmWithUser = chatWithUser
+            //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
+            if let message = chatWithUser.message {
+                vcChat.strChatId = message.chat_id
+                startChat_v2(vcChat)
+            }
+            else {
+                postToURL("chats_v2", parameter: ["receiver_id": IDs[0] as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                    if statusCode / 100 == 2 {
+                        if let resultDic = result as? NSDictionary {
+                            vcChat.strChatId = (resultDic["chat_id"] as! NSNumber).stringValue
+                            self.startChat_v2(vcChat)
+                        }
+                    }
+                })
+            }
+            
+        }
         // First get chatroom id
-        getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
+        /*getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])
             if status / 100 == 2 {
                 resultJson1 = JSON(result!)
@@ -153,7 +179,14 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
                     self.startChat(chat_id, userId: id, nickName: nil)
                 }
             }
-        }
+        }*/
+    }
+    
+    func startChat_v2(_ vc: UIViewController) {
+        var arrViewControllers = navigationController?.viewControllers
+        arrViewControllers!.removeLast()
+        arrViewControllers!.append(vc)
+        navigationController?.setViewControllers(arrViewControllers!, animated: true)
     }
     
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
@@ -169,8 +202,8 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         // Bryan
         // TODO: Tell nickname and username apart
         chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userNickName = nickName
-        chatVC.realmWithUser!.userID = "\(userId)"
+        chatVC.realmWithUser!.display_name = nickName
+        chatVC.realmWithUser!.id = "\(userId)"
         // chatVC.realmWithUser?.userAvatar =
         
         // RealmChat.addWithUser(withUser: chatVC.realmWithUser!)

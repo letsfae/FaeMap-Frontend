@@ -61,7 +61,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var realmWithUser: RealmUser? // info of the other user of chatting
     var avatarDictionary: NSMutableDictionary? // avatars of users in this chatting
     var strChatRoomId: String! // chatRoomId in the firebase
-    var strChatId: String? // the chat Id returned by our server
+    var strChatId: String! = "" // the chat Id returned by our server
     
     // the message bubble of mine
     var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImage(with: UIColor._2499090())
@@ -89,6 +89,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let floatInputBarHeight: CGFloat = 90
     let floatToolBarContentHeight: CGFloat = 271
   
+    let realm = try! Realm()
+    var arrRealmMessages: [RealmMessage_v2] = []
+    var arrRealmUsers: [RealmUser] = []
+    var notificationToken: NotificationToken?
     // not used now
     let userDefaults = UserDefaults.standard
     var showAvatar: Bool = true //false not show avatar, true show avatar
@@ -97,6 +101,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        /*let realm = try! Realm()
+        let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
+        notificationToken = messages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                print("initial")
+                break;
+            case .update:
+                print("update")
+            case .error:
+                print("error")
+            }
+        }*/
         
         navigationBarSet()
         loadInputBarComponent()
@@ -108,14 +126,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         collectionView.backgroundColor = UIColor._241241241()
         senderId = "\(Key.shared.user_id)"
-        senderDisplayName = realmWithUser!.userNickName
+        senderDisplayName = realmWithUser!.display_name
         setAvatar()
         
-        for message in dictArrInitMessages {
+        if strChatId != "" {
+            loadMessagesFromRealm()
+        }
+        /*for message in dictArrInitMessages {
             _ = insertMessage(message)
             self.intNumberOfMessagesLoaded += 1
         }
-        self.finishReceivingMessage(animated: false)
+        self.finishReceivingMessage(animated: false)*/
         /* ///////// Felix
          let realm = try! Realm()
          let messagesToLoad = realm.objects(RealmMessage.self).filter("withUserID == %@", withUserId!).sorted(byKeyPath: "date")
@@ -132,7 +153,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewWillAppear(animated)
         addObservers()
         loadUserDefault()
-        loadNewMessage()
+        //loadNewMessage()
         
         if boolGoToFullContent {
             scrollToBottom(false)
@@ -159,7 +180,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        ref.removeObserver(withHandle: _refHandle!)
+        //ref.removeObserver(withHandle: _refHandle!)
         closeLocExtendView()
         moveDownInputBar()
         toolbarContentView.clearToolBarViews()
@@ -175,7 +196,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)        
-        uiviewNavBar.lblTitle.text = realmWithUser!.userNickName
+        uiviewNavBar.lblTitle.text = realmWithUser!.display_name
     }
     
     func loadInputBarComponent() {
@@ -379,9 +400,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func sendMessageButtonTapped() {
         if uiviewLocationExtend.isHidden {
-            sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
+            sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
+            //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
         } else {
-            sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
+            //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
         if uiviewLocationExtend.isHidden == false {
             uiviewLocationExtend.isHidden = true
@@ -429,6 +451,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         showKeyboard()
         btnSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0 || !uiviewLocationExtend.isHidden
+    }
+    
+    override func becomeFirstResponder() -> Bool {
+        return super.becomeFirstResponder()
+    }
+    
+    override func resignFirstResponder() -> Bool {
+        return super.resignFirstResponder()
     }
     
     // MARK: keyboard delegate
@@ -812,8 +842,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     private func createAvatars() {
         let currentUserAvatar = avatarDic[Key.shared.user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Key.shared.user_id], highlightedImage: avatarDic[Key.shared.user_id], placeholderImage: avatarDic[Key.shared.user_id]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        let withUserAvatar = avatarDic[Int(realmWithUser!.userID)!] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Int(realmWithUser!.userID)!], highlightedImage: avatarDic[Int(realmWithUser!.userID)!], placeholderImage: avatarDic[Int(realmWithUser!.userID)!]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = ["\(Key.shared.user_id)": currentUserAvatar!, realmWithUser!.userID: withUserAvatar!]
+        let withUserAvatar = avatarDic[Int(realmWithUser!.id)!] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Int(realmWithUser!.id)!], highlightedImage: avatarDic[Int(realmWithUser!.id)!], placeholderImage: avatarDic[Int(realmWithUser!.id)!]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        avatarDictionary = ["\(Key.shared.user_id)": currentUserAvatar!, realmWithUser!.id: withUserAvatar!]
     }
     
     // scroll to the bottom of all messages

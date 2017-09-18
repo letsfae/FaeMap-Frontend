@@ -44,6 +44,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        FaeChat().updateFriendsList()
+        FaeChat().observeMessageChange()
         navigationBarSet()
         loadRecentTable()
         loadDeleteConfirm()
@@ -237,8 +239,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         cell.delegate = self
         cell.uiviewMain.backgroundColor = .white
         
-        let realmRecent = realmRecents![indexPath.row]
-        cell.bindData(realmRecent)
+        //let realmRecent = realmRecents![indexPath.row]
+        //cell.bindData(realmRecent)
         
         if cellsCurrentlyEditing.contains(indexPath) {
             cell.openCell()
@@ -257,9 +259,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let withUserName = recent["with_user_name"].string
         let withUserNickName = recent["with_nick_name"].string
         vcChat.realmWithUser = RealmUser()
-        vcChat.realmWithUser!.userName = withUserName!
-        vcChat.realmWithUser!.userNickName = withUserNickName!
-        vcChat.realmWithUser!.userID = withUserUserId!
+        vcChat.realmWithUser!.user_name = withUserName!
+        vcChat.realmWithUser!.display_name = withUserNickName!
+        vcChat.realmWithUser!.id = withUserUserId!
         //vcChat.withUserId = withUserUserId!
         
         //firebase.child(vcChat.chatRoomId).keepSynced(true)
@@ -299,7 +301,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
                 self.recents = json
-                RealmChat.updateRecent(recents: cacheRecent)
+                //RealmChat.updateRecent(recents: cacheRecent)
                 for item in cacheRecent {
                     let recent: NSDictionary = item as! NSDictionary
                     let chatRoomId = Key.shared.user_id < recent["with_user_id"] as! Int ? "\(Key.shared.user_id)-\(recent["with_user_id"] ?? "")" : "\(recent["with_user_id"] ?? "")-\(Key.shared.user_id)"

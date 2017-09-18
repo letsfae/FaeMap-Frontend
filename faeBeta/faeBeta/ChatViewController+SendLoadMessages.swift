@@ -13,7 +13,34 @@ import FirebaseDatabase
 import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
-    
+    func sendMeaages_v2(type: String, text: String, media: NSData? = nil) {
+        let newMessage = RealmMessage_v2()
+        let login_user_id = String(Key.shared.user_id)
+        newMessage.login_user_id = login_user_id
+        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, login_user_id).sorted(byKeyPath: "index")
+        var newIndex = 0
+        if messagesInThisChat.count > 0 {
+            newIndex = (messagesInThisChat.last?.index)! + 1
+        }
+        newMessage.index = newIndex
+        let primaryKey = "\(login_user_id)_\(strChatId!)_\(newIndex)"
+        newMessage.loginUserID_chatID_index = primaryKey
+        newMessage.chat_id = strChatId!
+        for user in arrRealmUsers {
+            newMessage.members.append(user)
+            if user.loginUserID_id == "\(login_user_id)_\(login_user_id)" {
+                newMessage.sender = user
+            }
+        }
+        newMessage.created_at = RealmChat.dateConverter(date: Date())
+        newMessage.type = type
+        newMessage.text = text
+        newMessage.media = media
+        try! realm.write {
+            realm.add(newMessage)
+        }
+        
+    }
     // MARK: - send message
     func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
         
@@ -22,7 +49,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         let shouldHaveTimeStamp = date.timeIntervalSince(dateLastMarker as Date) > 300 && !boolSentInLast5s
         let realmMessage = RealmMessage()
         realmMessage.messageID = "\(Key.shared.user_id)_\(RealmChat.dateConverter(date: date)))"
-        realmMessage.withUserID = realmWithUser!.userID
+        realmMessage.withUserID = realmWithUser!.id
         realmMessage.senderID = "\(Key.shared.user_id)"
         realmMessage.senderName = username
         realmMessage.hasTimeStamp = shouldHaveTimeStamp
@@ -160,6 +187,19 @@ extension ChatViewController: OutgoingMessageProtocol {
         self.sendMessage(snapImage: data, date: Date())
     }
     
+    func loadMessagesFromRealm() {
+        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        let count = messagesInThisChat.count
+        for i in (count - intNumberOfMessagesOneTime)..<count {
+            if i < 0 {
+                continue
+            } else {
+                arrRealmMessages.append(messagesInThisChat[i])
+            }
+        }
+    }
+    
+    
     // MARK: handle messages
     // open an observer on firebase to load new messages
     func loadNewMessage() {
@@ -203,6 +243,11 @@ extension ChatViewController: OutgoingMessageProtocol {
         } else {
             self.boolLoadingPreviousMessages = false
         }
+    }
+    
+    func insertMessage_v2(_ message: RealmMessage_v2) -> Bool {
+        let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
+        return false
     }
     
     /// append message to then end
