@@ -24,7 +24,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         realmMessage.messageID = "\(Key.shared.user_id)_\(RealmChat.dateConverter(date: date)))"
         realmMessage.withUserID = realmWithUser!.userID
         realmMessage.senderID = "\(Key.shared.user_id)"
-        realmMessage.senderName = username
+        realmMessage.senderName = Key.shared.username
         realmMessage.hasTimeStamp = shouldHaveTimeStamp
         realmMessage.delivered = true
         realmMessage.date = RealmChat.dateConverter(date: date)
@@ -33,7 +33,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         if let pic = picture {
             // send picture message
             if let imageData = compressImageToData(pic) {
-                outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "picture", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+                outgoingMessage = OutgoingMessage(message: "[Picture]", picture: imageData, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "picture", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
                 // Bryan
                 realmMessage.message = "[Picture]"
                 realmMessage.data = imageData as NSData
@@ -45,7 +45,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         } else if let sti = sticker {
             // send sticker
             let imageData = UIImagePNGRepresentation(sti)
-            outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]" : "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "sticker", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: isHeartSticker! ? "[Heart]" : "[Sticker]", sticker: imageData!, isHeartSticker: isHeartSticker!, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "sticker", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = isHeartSticker! ? "[Heart]" : "[Sticker]"
             realmMessage.data = imageData! as NSData
@@ -59,7 +59,7 @@ extension ChatViewController: OutgoingMessageProtocol {
             let lat: NSNumber = NSNumber(value: loc.coordinate.latitude as Double)
             let lon: NSNumber = NSNumber(value: loc.coordinate.longitude as Double)
             let comment = text == "" ? "[Location]" : text!
-            outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "location", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: comment, latitude: lat, longitude: lon, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "location", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = comment
             realmMessage.latitude.value = lat as? Double
@@ -87,32 +87,32 @@ extension ChatViewController: OutgoingMessageProtocol {
                                 "}" +
                             "}"
             let comment = text == "" ? "[Place]" : text!
-            outgoingMessage = OutgoingMessage(message: comment, place: jsonString, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "place", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: comment, place: jsonString, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "place", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[Place]"
             realmMessage.place = jsonString
             realmMessage.type = "place"
             
         } else if let audio = audio {
             // create outgoing-message object
-            outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "audio", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[Voice]", audio: audio, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "audio", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[Voice]"
             realmMessage.data = audio as NSData
             realmMessage.type = "audio"
             
         } else if let video = video {
-            outgoingMessage = OutgoingMessage(message: "[Video]", video: video, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "video", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
+            outgoingMessage = OutgoingMessage(message: "[Video]", video: video, snapImage: snapImage!, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "video", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp, videoDuration: videoDuration)
             realmMessage.message = "[Video]"
             realmMessage.data = video as NSData
             realmMessage.type = "video"
             realmMessage.videoDuration.value = videoDuration
         } else if let snapImage = snapImage {
-            outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "gif", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: "[GIF]", picture: snapImage, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "gif", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             realmMessage.message = "[GIF]"
             realmMessage.data = snapImage as NSData
             realmMessage.type = "gif"
         } else if let text = text {
             // send message
-            outgoingMessage = OutgoingMessage(message: text, senderId: "\(Key.shared.user_id)", senderName: username, date: date, status: "Delivered", type: "text", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
+            outgoingMessage = OutgoingMessage(message: text, senderId: "\(Key.shared.user_id)", senderName: Key.shared.username, date: date, status: "Delivered", type: "text", index: intTotalNumberOfMessages + 1, hasTimeStamp: shouldHaveTimeStamp)
             // Bryan
             realmMessage.message = text
             realmMessage.type = "text"

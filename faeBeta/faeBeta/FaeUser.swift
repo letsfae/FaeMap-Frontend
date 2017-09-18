@@ -89,7 +89,7 @@ class FaeUser: NSObject {
                     }
                     let userInfoJSON = JSON(userInfo)
                     userEmail = userInfoJSON["email"].stringValue
-                    username = userInfoJSON["user_name"].stringValue
+                    Key.shared.username = userInfoJSON["user_name"].stringValue
                     userFirstname = userInfoJSON["first_name"].stringValue
                     userLastname = userInfoJSON["last_name"].stringValue
                     let gender = userInfoJSON["gender"].stringValue
@@ -247,7 +247,7 @@ class FaeUser: NSObject {
                 let userInfoJSON = JSON(userInfo)
                 userEmail = userInfoJSON["email"].stringValue
                 userEmailVerified = userInfoJSON["email_verified"].boolValue
-                username = userInfoJSON["user_name"].stringValue
+                Key.shared.username = userInfoJSON["user_name"].stringValue
                 userFirstname = userInfoJSON["first_name"].stringValue
                 userLastname = userInfoJSON["last_name"].stringValue
                 let gender = userInfoJSON["gender"].stringValue
@@ -277,7 +277,7 @@ class FaeUser: NSObject {
                     return
                 }
                 let userInfoJSON = JSON(userInfo)
-                username = userInfoJSON["user_name"].stringValue
+                Key.shared.username = userInfoJSON["user_name"].stringValue
                 userFirstname = userInfoJSON["first_name"].stringValue
                 userLastname = userInfoJSON["last_name"].stringValue
                 let gender = userInfoJSON["gender"].stringValue
