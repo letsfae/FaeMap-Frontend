@@ -162,7 +162,7 @@ class SelfAnnotationView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
         clipsToBounds = false
-        layer.zPosition = 2
+        layer.zPosition = 10
         loadBasic()
         if let identifier = reuseIdentifier {
             if identifier == "self_selected_mode" {

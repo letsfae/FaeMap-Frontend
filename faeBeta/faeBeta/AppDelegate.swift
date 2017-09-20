@@ -12,8 +12,6 @@ import CoreLocation
 import Firebase
 import FirebaseDatabase
 import RealmSwift
-import Contacts
-import ContactsUI
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

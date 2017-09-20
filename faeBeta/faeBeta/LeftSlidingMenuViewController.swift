@@ -158,7 +158,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         if indexPath.row < 4 {
             cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         } else {
-           cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
+            cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
         }
         cell.lblMiddle.text = array[indexPath.row]
         cell.switchRight.tag = indexPath.row
