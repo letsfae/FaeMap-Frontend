@@ -41,29 +41,34 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private var indexToDelete = IndexPath() // index of cell whose delete button is tapped
     var backClosure: BackClosure? // used to pass current # of unread messages to main map view
     
+    private var arrRecentsRealm: [RealmMessage_v2] = []
+    let realm = try! Realm()
+    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         FaeChat().updateFriendsList()
         FaeChat().observeMessageChange()
+        FaeChat().getMessageFromServer()
         navigationBarSet()
         loadRecentTable()
         loadDeleteConfirm()
         addGestureRecognizer()        
         downloadCurrentUserAvatar()
         //firebase.keepSynced(true)
+        loadRecentsFromRealm()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        startCheckingRecent()
-        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCheckingRecent), userInfo: nil, repeats: true)
-        let realm = try! Realm()
-        realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
-        tblRecents.reloadData()
+        //startCheckingRecent()
+        //loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCheckingRecent), userInfo: nil, repeats: true)
+        //let realm = try! Realm()
+        //realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
+        //tblRecents.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        loadingRecentTimer.invalidate()
+        //loadingRecentTimer.invalidate()
         isDraggingRecentTableViewCell = false
     }
 
@@ -230,7 +235,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.recents == nil ? 0 : self.recents!.count
+        return arrRecentsRealm.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -241,6 +246,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         
         //let realmRecent = realmRecents![indexPath.row]
         //cell.bindData(realmRecent)
+        let recentRealm = arrRecentsRealm[indexPath.row]
+        cell.bindData_v2(recentRealm)
         
         if cellsCurrentlyEditing.contains(indexPath) {
             cell.openCell()
@@ -292,6 +299,16 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: load recent messages from the server
+    private func loadRecentsFromRealm() {
+        let allChatID = Set(realm.objects(RealmMessage_v2.self).filter("login_user_id == %@", String(Key.shared.user_id)).value(forKey: "chat_id") as! [String])
+        for chatID in allChatID {
+            let lastMessage = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), chatID).sorted(byKeyPath: "index").last
+            arrRecentsRealm.append(lastMessage!)
+        }
+        arrRecentsRealm.sort { $0.created_at > $1.created_at }
+    }
+    
+    
     /// load recent list from server, also used to reload the recent list after deletion
     /// - Parameters:
     ///   - animated: update the table with/without animation

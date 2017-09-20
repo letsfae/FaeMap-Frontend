@@ -111,7 +111,84 @@ class FaeChat {
         catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func keepFetchMessages() {
         
-        print("")
+    }
+    
+    func getMessageFromServer() {
+        getFromURL("chats_v2/unread", parameter: nil, authentication: headerAuthentication()) {_, result in
+            if let unreadList = result as? NSArray {
+                for item in unreadList {
+                    let dictItem: NSDictionary = item as! NSDictionary
+                    let chat_id = dictItem["chat_id"] as! Int
+                    let unread_count = dictItem["unread_count"] as! Int
+                    let callGroup = DispatchGroup()
+                    for _ in 0..<unread_count {
+                        callGroup.enter()
+                        getFromURL("chats_v2/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
+                            if let unreadMessages = result as? NSDictionary {
+                                let message = unreadMessages["message"] as! String
+                                self.storeMessageToRealm(message)
+                                callGroup.leave()
+                            } else {
+                                print("no more new message")
+                            }
+                        }
+                    }
+                    callGroup.notify(queue: .main) {
+                        print("finish reading")
+                        postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                            print("\(statusCode)")
+                        })
+                    }
+                }
+            }
+        }
+    }
+    
+    func storeMessageToRealm(_ message: String) {
+        print("\(message)")
+        guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
+        let messageJSON = JSON(data: messageData)
+        let messageRealm = RealmMessage_v2()
+        let login_user_id = "\(Key.shared.user_id)"
+        messageRealm.login_user_id = login_user_id
+        let chat_id = messageJSON["chat_id"].string!
+        messageRealm.chat_id = chat_id
+        let realm = try! Realm()
+        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", chat_id, login_user_id).sorted(byKeyPath: "index")
+        var newIndex = 0
+        var unread_count = 0
+        if messagesInThisChat.count > 0 {
+            newIndex = (messagesInThisChat.last?.index)! + 1
+            unread_count = (messagesInThisChat.last?.unread_count)! + 1
+        }
+        messageRealm.index = newIndex
+        let primaryKey = "\(login_user_id)_\(chat_id)_\(newIndex)"
+        messageRealm.loginUserID_chatID_index = primaryKey
+        for user in messageJSON["members"].arrayValue {
+            if let userRealm = realm.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
+                messageRealm.members.append(userRealm)
+                if userRealm.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
+                    messageRealm.sender = userRealm
+                }
+            } else {
+                
+            }
+        }
+        messageRealm.created_at = messageJSON["created_at"].string!
+        messageRealm.type = messageJSON["type"].string!
+        messageRealm.text = messageJSON["text"].string!
+        if let media = messageJSON["media"].string {
+            if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue : 0)) {
+                messageRealm.media = decodeData as NSData
+            }
+        }
+        messageRealm.unread_count = unread_count
+        try! realm.write {
+            realm.add(messageRealm, update: false)
+        }
     }
 }
