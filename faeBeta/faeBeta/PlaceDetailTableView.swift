@@ -8,7 +8,8 @@
 
 import UIKit
 
-extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate {
+extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate, PlaceDetailSmallMapCellDelegate {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -33,6 +34,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
         switch indexPath.section {
         case 0:   // place address
             let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailSection1Cell", for: indexPath) as! PlaceDetailSection1Cell
+            cell.delegate = self
             cell.setValueForCell(place: place)
             return cell
         case 1:   // place opening hour
@@ -75,5 +77,10 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate 
                 }
             }
         }
+    }
+    
+    func jumpToMainMapWithPlace() {
+        delegate?.jumpToOnePlace?(searchText: "fromPlaceDetail", place: self.place)
+        navigationController?.popViewController(animated: false)
     }
 }

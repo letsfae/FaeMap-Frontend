@@ -172,23 +172,39 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         PLACE_ENABLE = true
     }
     
-    func animateMainItems(show: Bool) {
+    func animateMainItems(show: Bool, animated: Bool = true) {
         if show {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnCompass.frame.origin.y = 664 * screenHeightFactor
+                    self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
+                    self.btnOpenChat.frame.origin.y = screenHeight + 10
+                    self.btnDiscovery.frame.origin.y = screenHeight + 10
+                    self.btnFilterIcon.frame.origin.y = screenHeight + 10
+                })
+            } else {
                 self.btnCompass.frame.origin.y = 664 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = screenHeight + 10
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
                 self.btnFilterIcon.frame.origin.y = screenHeight + 10
-            })
+            }
         } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnCompass.frame.origin.y = 582 * screenHeightFactor
+                    self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
+                    self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
+                    self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
+                    self.btnFilterIcon.center.y = screenHeight - 25
+                })
+            } else {
                 self.btnCompass.frame.origin.y = 582 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
                 self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                 self.btnFilterIcon.center.y = screenHeight - 25
-            })
+            }
         }
     }
     

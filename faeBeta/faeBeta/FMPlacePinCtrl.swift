@@ -54,9 +54,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         case .detail:
             guard let ann = selectedPlace else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let vcPlaceDetail = PlaceDetailViewController()
-            vcPlaceDetail.place = placePin
-            navigationController?.pushViewController(vcPlaceDetail, animated: true)
+            selectedPlaceView?.hideButtons()
+            PlaceDetailViewController.shared.place = placePin
+            PlaceDetailViewController.shared.delegate = self
+            navigationController?.pushViewController(PlaceDetailViewController.shared, animated: true)
             break
         case .collect:
             uiviewCollectedList.show()

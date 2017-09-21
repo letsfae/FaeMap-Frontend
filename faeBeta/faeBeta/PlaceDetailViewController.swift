@@ -10,6 +10,11 @@ import UIKit
 import SwiftyJSON
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate {
+    
+    static let shared = PlaceDetailViewController()
+    
+    weak var delegate: MapSearchDelegate?
+    
     var place: PlacePin!
     var allPlaces = [PlacePin]()
     var uiviewHeader: UIView!
@@ -33,12 +38,20 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        loadFooter()
         loadHeader()
         loadMidTable()
         loadFixedHeader()
-        loadFooter()
+        automaticallyAdjustsScrollViewInsets = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        uiviewSubHeader.setValue(place: place)
+        uiviewFixedHeader.setValue(place: place)
+        tblPlaceDetail.reloadData()
         checkSavedStatus()
-        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 9999999, isSimilar: true, completion: { (arrPlaces) in
+        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 500000, isSimilar: true, completion: { (arrPlaces) in
             self.arrRelatedPlaces.append(arrPlaces)
             self.getRelatedPlaces(lat: String(self.place.coordinate.latitude), long: String(self.place.coordinate.longitude), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
                 self.arrRelatedPlaces.append(arrPlaces)
@@ -143,6 +156,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
         tblPlaceDetail.separatorStyle = .none
         tblPlaceDetail.showsVerticalScrollIndicator = false
+        if #available(iOS 11.0, *) {
+            tblPlaceDetail.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     func loadFooter() {
@@ -263,9 +281,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
-        let vc = PlaceDetailViewController()
-        vc.place = place
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = PlaceDetailViewController()
+        PlaceDetailViewController.shared.place = place
+        navigationController?.pushViewController(PlaceDetailViewController.shared, animated: true)
     }
     // SeeAllPlacesDelegate End
     
