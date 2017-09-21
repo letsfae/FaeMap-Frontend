@@ -371,7 +371,7 @@ class IncomingMessage {
         
     }
     
-    //MARK: - abstract media from data
+    //MARK: - abstract m	edia from data
     fileprivate func imageFromData_v2(_ reamlMessage: RealmMessage_v2, result: (_ image : UIImage?) -> Void) {
         var image : UIImage?
         if let decodedData = reamlMessage.media {

@@ -18,7 +18,7 @@ class FaeChat {
     var notificationRunLoop: CFRunLoop? = nil
     
     func updateFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", Key.shared.nickname!, true, "", Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", "", true, "", Key.shared.gender])
         let realm = try! Realm()
         try! realm.write {
             realm.add(realmUser, update: true)
@@ -133,7 +133,7 @@ class FaeChat {
                                 self.storeMessageToRealm(message)
                                 callGroup.leave()
                             } else {
-                                print("no more new message")
+                                //print("no more new message")
                             }
                         }
                     }
@@ -149,6 +149,7 @@ class FaeChat {
     }
     
     func storeMessageToRealm(_ message: String) {
+        if message == "[GET_CHAT_ID]" { return }
         print("\(message)")
         guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
         let messageJSON = JSON(data: messageData)
@@ -158,7 +159,7 @@ class FaeChat {
         let chat_id = messageJSON["chat_id"].string!
         messageRealm.chat_id = chat_id
         let realm = try! Realm()
-        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", chat_id, login_user_id).sorted(byKeyPath: "index")
+        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
         var newIndex = 0
         var unread_count = 0
         if messagesInThisChat.count > 0 {
@@ -187,8 +188,16 @@ class FaeChat {
             }
         }
         messageRealm.unread_count = unread_count
+        
+        let recentRealm = RealmRecent_v2()
+        recentRealm.login_user_id = login_user_id
+        recentRealm.chat_id = chat_id
+        recentRealm.created_at = messageJSON["created_at"].string!
+        recentRealm.unread_count = unread_count
+        recentRealm.loginUserID_chatID = "\(login_user_id)_\(chat_id)"
         try! realm.write {
             realm.add(messageRealm, update: false)
+            realm.add(recentRealm, update: true)
         }
     }
 }

@@ -108,7 +108,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             switch changes {
             case .initial:
                 print("initial")
-                break;
+                break
             case .update:
                 print("update")
             case .error:
