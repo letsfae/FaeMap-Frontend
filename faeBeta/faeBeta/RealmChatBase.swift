@@ -29,6 +29,24 @@ class RealmMessage_v2: Object {
     }
 }
 
+class RealmRecent_v2: Object {
+    dynamic var loginUserID_chatID: String = ""
+    dynamic var login_user_id: String = ""
+    dynamic var chat_id: String = ""
+    dynamic var chat_name: String = ""
+    //dynamic var latest_message: String = ""
+    dynamic var created_at: String = ""
+    dynamic var unread_count: Int = 0
+    
+    var latest_message: RealmMessage_v2? {
+        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), self.chat_id).sorted(byKeyPath: "index").last
+    }
+    
+    override static func primaryKey() -> String? {
+        return "loginUserID_chatID"
+    }
+}
+
 extension Object {
     func toDictionary() -> NSMutableDictionary {
         let properties = self.objectSchema.properties.map { $0.name }

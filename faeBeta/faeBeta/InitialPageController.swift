@@ -12,6 +12,7 @@ import Firebase
 class InitialPageController: UIPageViewController {
     
     let firebase = Database.database().reference().child(fireBaseRef)
+    var timerLoadMessages: Timer!
     
     lazy var arrViewCtrl: [UIViewController] = {
         let faeMap = FaeMapViewController()
@@ -24,7 +25,10 @@ class InitialPageController: UIPageViewController {
         if let faeMap = arrViewCtrl.first {
             self.setViewControllers([faeMap], direction: .forward, animated: false, completion: nil)
         }
-        loadRecents()
+        //loadRecents()
+        FaeChat().updateFriendsList()
+        FaeChat().observeMessageChange()
+        timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateMessages), userInfo: nil, repeats: true)
     }
     
     func goToFaeMap() {
@@ -37,6 +41,10 @@ class InitialPageController: UIPageViewController {
         if let mapBoard = arrViewCtrl.last {
             self.setViewControllers([mapBoard], direction: .forward, animated: true, completion: nil)
         }
+    }
+    
+    func updateMessages() {
+        FaeChat().getMessageFromServer()
     }
     
     func loadRecents() {
