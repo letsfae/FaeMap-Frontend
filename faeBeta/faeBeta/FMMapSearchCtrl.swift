@@ -12,26 +12,37 @@ extension FaeMapViewController: MapSearchDelegate {
     
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
-        updateUI(searchText: searchText)
+        let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
+        if searchText == "fromPlaceDetail" {
+            mapMode = .pinDetail
+            let pin_self = FaePinAnnotation(type: "place", data: place)
+            pin_self.coordinate = LocManager.shared.curtLoc.coordinate
+            zoomToFitAllAnnotations(annotations: [pin, pin_self])
+            animateMainItems(show: true, animated: false)
+            lblExpContent.text = "Map View"
+        } else {
+            updateUI(searchText: searchText)
+            let camera = faeMapView.camera
+            camera.centerCoordinate = place.coordinate
+            faeMapView.setCamera(camera, animated: false)
+        }
         uiviewPlaceBar.load(for: place)
         PLACE_ENABLE = false
-        let camera = faeMapView.camera
-        camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: false)
         placeClusterManager.removeAnnotations(faePlacePins) {
-            self.faePlacePins.removeAll()
-            let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
-            self.faePlacePins.append(pin)
             self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
         if searchText == "fromEXP" {
             mapMode = .explore
             setTitle(type: "Random")
+            let pins = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
             placeClusterManager.removeAnnotations(faePlacePins) {
-                let pins = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
                 self.placeClusterManager.addAnnotations(pins, withCompletionHandler: nil)
                 self.zoomToFitAllAnnotations(annotations: pins)
             }
@@ -50,7 +61,7 @@ extension FaeMapViewController: MapSearchDelegate {
             }
             btnTapToShowResultTbl.alpha = 1
             placeClusterManager.removeAnnotations(faePlacePins) {
-                self.faePlacePins.removeAll()
+                self.faePlacePins.removeAll(keepingCapacity: true)
                 self.uiviewPlaceBar.places = places
                 self.faePlacePins = self.uiviewPlaceBar.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
                 self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
@@ -73,6 +84,8 @@ extension FaeMapViewController: MapSearchDelegate {
         var edgePadding = UIEdgeInsetsMake(120, 40, 100, 40)
         if mapMode == .explore {
             edgePadding = UIEdgeInsetsMake(120, 40, 300, 40)
+        } else if mapMode == .pinDetail {
+            edgePadding = UIEdgeInsetsMake(220, 80, 120, 80)
         }
         faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
     }

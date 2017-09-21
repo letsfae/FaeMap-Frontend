@@ -108,9 +108,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             imgSearchIcon.isHidden = mapMode == .selecting
-            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore
-            imgExpbarShadow.isHidden = mapMode != .explore
-            imgSchbarShadow.isHidden = mapMode == .explore
+            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
+            imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail
+            imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail
             btnCompass.isHidden = mapMode == .explore
             btnLocateSelf.isHidden = mapMode == .explore
             btnOpenChat.isHidden = mapMode == .explore
@@ -132,7 +132,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
             }
-            faeMapView.showsUserLocation = mapMode != .explore
         }
     }
     

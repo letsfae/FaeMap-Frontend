@@ -115,7 +115,13 @@ extension FaeMapViewController {
     }
     
     func actionBackToExp(_ sender: UIButton) {
-        navigationController?.pushViewController(ExploreViewController.shared, animated: false)
+        if mapMode == .explore {
+            navigationController?.pushViewController(ExploreViewController.shared, animated: false)
+        } else if mapMode == .pinDetail {
+            navigationController?.pushViewController(PlaceDetailViewController.shared, animated: false)
+            animateMainItems(show: false, animated: false)
+            uiviewPlaceBar.hide()
+        }
         mapMode = .normal
         placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
