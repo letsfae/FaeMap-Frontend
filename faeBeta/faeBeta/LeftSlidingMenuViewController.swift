@@ -23,8 +23,6 @@ protocol LeftSlidingMenuDelegate: class {
 
 class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    static let shared = LeftSlidingMenuViewController()
-    
     weak var delegate: LeftSlidingMenuDelegate?
     
     var uiViewLeftWindow: UIView!

@@ -12,13 +12,16 @@ extension FaeMapViewController: MapSearchDelegate {
     
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
+        PLACE_ENABLE = false
         let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
+        placesFromSearch.append(pin)
         if searchText == "fromPlaceDetail" {
             mapMode = .pinDetail
             let pin_self = FaePinAnnotation(type: "place", data: place)
             pin_self.coordinate = LocManager.shared.curtLoc.coordinate
             zoomToFitAllAnnotations(annotations: [pin, pin_self])
             animateMainItems(show: true, animated: false)
+            faeMapView.blockTap = true
             lblExpContent.text = "Map View"
         } else {
             updateUI(searchText: searchText)
@@ -27,7 +30,6 @@ extension FaeMapViewController: MapSearchDelegate {
             faeMapView.setCamera(camera, animated: false)
         }
         uiviewPlaceBar.load(for: place)
-        PLACE_ENABLE = false
         placeClusterManager.removeAnnotations(faePlacePins) {
             self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }
@@ -38,42 +40,36 @@ extension FaeMapViewController: MapSearchDelegate {
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
+        PLACE_ENABLE = false
+        placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+        placeClusterManager.removeAnnotations(faePlacePins) {
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+        }
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
         if searchText == "fromEXP" {
             mapMode = .explore
             setTitle(type: "Random")
-            let pins = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
-            placeClusterManager.removeAnnotations(faePlacePins) {
-                self.placeClusterManager.addAnnotations(pins, withCompletionHandler: nil)
-                self.zoomToFitAllAnnotations(annotations: pins)
-            }
-            for user in faeUserPins {
-                user.isValid = false
-            }
-            userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             arrExpPlace = places
             clctViewMap.reloadData()
         } else {
             updateUI(searchText: searchText)
             swipingState = .multipleSearch
-            uiviewPlaceBar.places = placeResultTbl.updatePlacesArray(places: places)
+            uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
             if let firstPlacePin = places.first {
                 uiviewPlaceBar.loading(current: firstPlacePin)
             }
             btnTapToShowResultTbl.alpha = 1
-            placeClusterManager.removeAnnotations(faePlacePins) {
-                self.faePlacePins.removeAll(keepingCapacity: true)
-                self.uiviewPlaceBar.places = places
-                self.faePlacePins = self.uiviewPlaceBar.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
-                self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
-                self.zoomToFitAllAnnotations(annotations: self.faePlacePins)
-            }
+            uiviewPlaceBar.places = places
         }
-        PLACE_ENABLE = false
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
         guard let firstAnn = annotations.first else { return }
-        placeClusterManager.maxZoomLevelForClustering = 0
+//        placeClusterManager.maxZoomLevelForClustering = 0
         let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {

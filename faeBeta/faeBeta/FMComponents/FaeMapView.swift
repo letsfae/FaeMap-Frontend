@@ -10,8 +10,9 @@ import UIKit
 
 class FaeMapView: MKMapView {
 
-    private var blockTap = false
+    private var block = false
     var faeMapCtrler: FaeMapViewController?
+    var blockTap = false
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,18 +35,24 @@ class FaeMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func cancelCreatingLocationPin() {
+        if faeMapCtrler?.createLocation == .create {
+            faeMapCtrler?.createLocation = .cancel
+        }
+    }
+    
     func handleTap_2(_ tapGesture: UITapGestureRecognizer) {
         
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
-        guard !blockTap else { return }
-        blockTap = true
+        guard !block else { return }
+        block = true
         faeMapCtrler?.uiviewNameCard.hide() {
             self.faeMapCtrler?.mapGesture(isOn: true)
         }
         let v: Any? = hitTest(tapPoint, with: nil)
-        if v is MKAnnotationView {
+        if v is MKAnnotationView && blockTap == false {
             if faeMapCtrler?.mapMode != .routing {
                 if let anView = v as? PlacePinAnnotationView {
                     if !anView.optionsOpened {
@@ -70,7 +77,7 @@ class FaeMapView: MKMapView {
             self.setRegion(region, animated: true)
             faeMapCtrler?.mapGesture(isOn: true)
         }
-        blockTap = false
+        block = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
         faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
@@ -82,14 +89,15 @@ class FaeMapView: MKMapView {
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
-        guard !blockTap else { return }
-        blockTap = true
+        guard !block else { return }
+        block = true
         faeMapCtrler?.uiviewNameCard.hide() {
             self.faeMapCtrler?.mapGesture(isOn: true)
         }
         let v: Any? = hitTest(tapPoint, with: nil)
-        if v is MKAnnotationView {
+        if v is MKAnnotationView && blockTap == false {
             if let anView = v as? PlacePinAnnotationView {
+                cancelCreatingLocationPin()
                 if anView.optionsReady == false {
                     faeMapCtrler?.deselectAllAnnotations()
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
@@ -103,16 +111,32 @@ class FaeMapView: MKMapView {
                     anView.optionsOpened = false
                 }
             } else if let anView = v as? UserPinAnnotationView {
+                cancelCreatingLocationPin()
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
+                
+            } else if let anView = v as? LocPinAnnotationView {
+                if anView.optionsReady == false {
+                    faeMapCtrler?.deselectAllAnnotations()
+                    anView.optionsReady = true
+                } else if anView.optionsReady && !anView.optionsOpened {
+                    anView.showButtons()
+                    anView.optionsOpened = true
+                } else if anView.optionsReady && anView.optionsOpened {
+                    anView.hideButtons()
+                    anView.optionsOpened = false
+                }
             }
         } else {
+            cancelCreatingLocationPin()
             faeMapCtrler?.mapGesture(isOn: true)
-            faeMapCtrler?.uiviewPlaceBar.hide()
+            if faeMapCtrler?.mapMode != .pinDetail {
+                faeMapCtrler?.uiviewPlaceBar.hide()
+            }
             faeMapCtrler?.deselectAllAnnotations()
             faeMapCtrler?.selectedPlace = nil
         }
-        blockTap = false
+        block = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
         faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
@@ -120,23 +144,38 @@ class FaeMapView: MKMapView {
     func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard faeMapCtrler?.mapMode != .routing else { return }
-        
-        blockTap = true
+        guard blockTap == false else { return }
+        block = true
         let tapPoint = sender.location(in: self)
         let numberOfTouches = sender.numberOfTouches
         guard numberOfTouches == 1 else { return }
         if sender.state == .began {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
+                cancelCreatingLocationPin()
                 if anView.arrBtns.count == 0 {
                     faeMapCtrler?.deselectAllAnnotations()
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
                     anView.showButtons()
                 }
+            } else if let _ = v as? UserPinAnnotationView {
+                cancelCreatingLocationPin()
+            } else if let anView = v as? LocPinAnnotationView {
+                if anView.arrBtns.count == 0 {
+                    faeMapCtrler?.deselectAllAnnotations()
+                    anView.showButtons()
+                }
+            } else {
+                faeMapCtrler?.createLocationPin(point: tapPoint)
             }
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
+                if !anView.optionsOpened {
+                    anView.hideButtons()
+                }
+                anView.optionsReady = true
+            } else if let anView = v as? LocPinAnnotationView {
                 if !anView.optionsOpened {
                     anView.hideButtons()
                 }
@@ -151,31 +190,54 @@ class FaeMapView: MKMapView {
             let delayInSeconds: Double = 0.1
             let popTime = DispatchTime.now() + delayInSeconds
             DispatchQueue.main.asyncAfter(deadline: popTime) {
-                self.blockTap = false
+                self.block = false
             }
         } else if sender.state == .changed {
-            guard let anView = faeMapCtrler?.selectedPlaceView else { return }
-            let point = sender.location(in: anView)
-            if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
-                anView.action(anView.btnDetail, animated: true)
-                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail)
+            if let anView = faeMapCtrler?.selectedPlaceView {
+                let point = sender.location(in: anView)
+                if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
+                    anView.action(anView.btnDetail, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail)
+                }
+                else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
+                    anView.action(anView.btnCollect, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect)
+                }
+                else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
+                    anView.action(anView.btnRoute, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route)
+                }
+                else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
+                    anView.action(anView.btnShare, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share)
+                } else {
+                    anView.optionsToNormal()
+                    faeMapCtrler?.uiviewPinActionDisplay.hide()
+                }
+            } else if let anView = faeMapCtrler?.locAnnoView {
+                guard anView.arrBtns.count == 4 else { return }
+                let point = sender.location(in: anView)
+                if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
+                    anView.action(anView.btnDetail, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail, .create)
+                }
+                else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
+                    anView.action(anView.btnCollect, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect, .create)
+                }
+                else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
+                    anView.action(anView.btnRoute, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route, .create)
+                }
+                else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
+                    anView.action(anView.btnShare, animated: true)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share, .create)
+                } else {
+                    anView.optionsToNormal()
+                    faeMapCtrler?.uiviewPinActionDisplay.hide()
+                }
             }
-            else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
-                anView.action(anView.btnCollect, animated: true)
-                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect)
-            }
-            else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
-                anView.action(anView.btnRoute, animated: true)
-                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route)
-            }
-            else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
-                anView.action(anView.btnShare, animated: true)
-                faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share)
-            } else {
-                anView.optionsToNormal()
-                faeMapCtrler?.uiviewPinActionDisplay.hide()
-            }
+            
         }
     }
-
 }

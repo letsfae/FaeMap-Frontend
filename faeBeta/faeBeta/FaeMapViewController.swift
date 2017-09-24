@@ -19,6 +19,11 @@ enum MapMode {
     case explore
 }
 
+enum CreateLocation {
+    case cancel
+    case create
+}
+
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MapView Data and Control
@@ -71,13 +76,19 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var selectedPlaceView: PlacePinAnnotationView?
     var selectedPlace: FaePinAnnotation?
     var uiviewPlaceBar = FMPlaceInfoBar()
-    var swipingState: PlaceInfoBarState = .map
+    var swipingState: PlaceInfoBarState = .map {
+        didSet {
+            guard fullyLoaded else { return }
+//            placeClusterManager.maxZoomLevelForClustering = swipingState == .multipleSearch ? 0 : Double.greatestFiniteMagnitude
+        }
+    }
     var boolSelecting = false
     var firstSelectPlace = true
     
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
-    var placeResultTbl = FMPlacesTable()
+    var tblPlaceResult = FMPlacesTable()
+    var placesFromSearch = [FaePinAnnotation]()
     
     // Name Card
     var uiviewNameCard: FMNameCardView!
@@ -103,6 +114,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Selecting Location Mode
     var imgPinOnMap: UIImageView!
+    
+    // Location Pin Control
+    var locationPin: FaePinAnnotation?
+    var imgLocationBar: LocationView!
+    var locAnnoView: LocPinAnnotationView?
     
     var mapMode: MapMode = .normal {
         didSet {
@@ -135,6 +151,22 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    var createLocation: CreateLocation = .cancel {
+        didSet {
+            guard fullyLoaded else { return }
+            lblSearchContent.textColor = createLocation == .create ? UIColor._898989() : UIColor._182182182()
+            btnClearSearchRes.isHidden = createLocation == .cancel
+            if createLocation == .cancel {
+                lblSearchContent.text = "Search Fae Map"
+                imgLocationBar.alpha = 0
+                if locationPin != nil {
+                    faeMapView.removeAnnotation(locationPin!)
+                    locationPin = nil
+                }
+            }
+        }
+    }
+    
     var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     let FILTER_ENABLE = true
@@ -162,6 +194,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadPlaceListView()
         loadDistanceComponents()
         loadSmallClctView()
+        loadLocationView()
         
         timerSetup()
         updateSelfInfo()
