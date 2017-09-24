@@ -161,7 +161,7 @@ class FaeChat {
         let realm = try! Realm()
         let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
         var newIndex = 0
-        var unread_count = 0
+        var unread_count = 1
         if messagesInThisChat.count > 0 {
             newIndex = (messagesInThisChat.last?.index)! + 1
             unread_count = (messagesInThisChat.last?.unread_count)! + 1

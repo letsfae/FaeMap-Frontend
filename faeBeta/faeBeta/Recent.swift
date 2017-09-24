@@ -51,6 +51,6 @@ func clearRecentCounter(_ chatRoomId : String?) {
 /// - Returns: a DateFormatter
 func dateFormatter() -> DateFormatter {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyyMMddHHmmss"
+    dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
     return dateFormatter
 }

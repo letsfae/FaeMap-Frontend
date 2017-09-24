@@ -190,7 +190,7 @@ class RecentTableViewCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
         let date = dateFormatter.date(from: latest.created_at)
         let seconds = Date().timeIntervalSince(date!)
         lblDate.text = TimeElipsed(seconds, lastMessageTime: date!)
