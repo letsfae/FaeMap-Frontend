@@ -158,7 +158,7 @@ extension FaeMapViewController {
         btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90, width: 79, height: 79))
         btnDiscovery.setImage(UIImage(named: "mainScreenDiscovery"), for: .normal)
         view.addSubview(btnDiscovery)
-        btnDiscovery.addTarget(self, action: #selector(self.actionCreatePin(_:)), for: .touchUpInside)
+        btnDiscovery.addTarget(self, action: #selector(self.actionOpenExplore(_:)), for: .touchUpInside)
         btnDiscovery.layer.zPosition = 500
     }
     

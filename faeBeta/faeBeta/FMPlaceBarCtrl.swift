@@ -15,7 +15,7 @@ extension FaeMapViewController: PlaceViewDelegate {
         view.addSubview(uiviewPlaceBar)
         uiviewPlaceBar.delegate = self
         
-        view.addSubview(placeResultTbl)
+        view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = UIButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)

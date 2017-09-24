@@ -38,22 +38,29 @@ extension FaeMapViewController {
     }
     
     func actionClearSearchResults(_ sender: UIButton) {
+        if createLocation == .create {
+            createLocation = .cancel
+            
+            return
+        }
+        PLACE_ENABLE = true
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
-        PLACE_ENABLE = true
         uiviewPlaceBar.alpha = 0
         uiviewPlaceBar.state = .map
-        placeResultTbl.alpha = 0
+        tblPlaceResult.alpha = 0
         btnTapToShowResultTbl.alpha = 0
+        btnLocateSelf.isHidden = false
+        btnCompass.isHidden = false
+        btnTapToShowResultTbl.center.y = 181
         mapGesture(isOn: true)
         deselectAllAnnotations()
-        placeClusterManager.removeAnnotations(faePlacePins) {
-            self.faePlacePins.removeAll()
+        placeClusterManager.removeAnnotations(placesFromSearch) {
+            self.placesFromSearch.removeAll(keepingCapacity: true)
             self.updatePlacePins()
             self.updateUserPins()
         }
-        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
     }
     
     func actionPlacePinAction(_ sender: UIButton) {
@@ -75,17 +82,30 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
-//        let leftMenuVC = LeftSlidingMenuViewController()
-//        leftMenuVC.displayName = Key.shared.nickname ?? "someone"
-//        leftMenuVC.delegate = self
-        LeftSlidingMenuViewController.shared.displayName = Key.shared.nickname ?? "someone"
-        LeftSlidingMenuViewController.shared.delegate = self
-        LeftSlidingMenuViewController.shared.modalPresentationStyle = .overCurrentContext
-        present(LeftSlidingMenuViewController.shared, animated: false, completion: nil)
+        let leftMenuVC = LeftSlidingMenuViewController()
+        leftMenuVC.delegate = self
+        leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
+        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        present(leftMenuVC, animated: false, completion: nil)
     }
     
     func actionShowResultTbl(_ sender: UIButton) {
-        placeResultTbl.show()
+        if sender.tag == 0 {
+            sender.tag = 1
+            tblPlaceResult.show {
+                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68
+            }
+            btnCompass.isHidden = true
+            btnLocateSelf.isHidden = true
+            btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+        } else {
+            sender.tag = 0
+            tblPlaceResult.hide()
+            btnCompass.isHidden = false
+            btnLocateSelf.isHidden = false
+            btnTapToShowResultTbl.center.y = 181
+            btnTapToShowResultTbl.transform = CGAffineTransform.identity
+        }
     }
     
     func actionChatWindowShow(_ sender: UIButton) {
@@ -103,10 +123,11 @@ extension FaeMapViewController {
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func actionCreatePin(_ sender: UIButton) {
+    func actionOpenExplore(_ sender: UIButton) {
         uiviewNameCard.hide {}
-        ExploreViewController.shared.delegate = self
-        navigationController?.pushViewController(ExploreViewController.shared, animated: true)
+        let vcExp = ExploreViewController()
+        vcExp.delegate = self
+        navigationController?.pushViewController(vcExp, animated: true)
     }
     
     func actionCancelSelecting() {
@@ -116,14 +137,17 @@ extension FaeMapViewController {
     
     func actionBackToExp(_ sender: UIButton) {
         if mapMode == .explore {
-            navigationController?.pushViewController(ExploreViewController.shared, animated: false)
+            let vcExp = ExploreViewController()
+            vcExp.delegate = self
+            navigationController?.pushViewController(vcExp, animated: false)
         } else if mapMode == .pinDetail {
             navigationController?.pushViewController(PlaceDetailViewController.shared, animated: false)
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
         }
         mapMode = .normal
-        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+        faeMapView.blockTap = false
+//        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll(keepingCapacity: true)

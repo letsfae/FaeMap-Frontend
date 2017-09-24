@@ -44,13 +44,22 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var arrPlaceData = [PlacePin]()
     
+    var fullyLoaded = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         DispatchQueue.main.async {
             self.loadContent()
+            self.buttonEnable(on: false)
+            self.fullyLoaded = true
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if fullyLoaded { buttonEnable(on: false) }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -69,7 +78,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadPlaces() {
-        buttonEnable(on: false)
+        // use uiview.tag as a Bool like value to indicate whether we should
+        // animate the alpha value between clctView and Wave sub view
         if uiviewAvatarWaveSub.tag != 0 {
             UIView.animate(withDuration: 0.5, animations: {
                 self.clctViewPics.alpha = 0
@@ -145,11 +155,15 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
         view.addSubview(uiviewAvatarWaveSub)
         
-        imgAvatar = FaeAvatarView(frame: CGRect(x: 0, y: 0, width: 98, height: 98))
-        imgAvatar.layer.cornerRadius = 49
-        imgAvatar.layer.borderColor = UIColor.white.cgColor
-        imgAvatar.layer.borderWidth = 6
-        imgAvatar.contentMode = .scaleAspectFit
+        let imgAvatarSub = UIImageView(frame: CGRect(x: 0, y: 0, width: 98, height: 98))
+        imgAvatarSub.contentMode = .scaleAspectFill
+        imgAvatarSub.image = #imageLiteral(resourceName: "exp_avatar_border")
+        imgAvatarSub.center = CGPoint(x: xAxis, y: xAxis)
+        uiviewAvatarWaveSub.addSubview(imgAvatarSub)
+        
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 0, y: 0, width: 86, height: 86))
+        imgAvatar.layer.cornerRadius = 43
+        imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.center = CGPoint(x: xAxis, y: xAxis)
         imgAvatar.isUserInteractionEnabled = false
         imgAvatar.clipsToBounds = true
@@ -203,12 +217,14 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         circle.center = CGPoint(x: xAxis, y: xAxis)
         circle.alpha = 1
         
-        UIView.animate(withDuration: animateTime, delay: delay, options: [.curveEaseOut], animations: ({
-            circle.alpha = 0.0
-            circle.frame = newFrame
-        }), completion: { _ in
-            self.animation(circle: circle, delay: 0.75)
-        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            UIView.animate(withDuration: animateTime, delay: 0, options: [.curveEaseOut], animations: ({
+                circle.alpha = 0.0
+                circle.frame = newFrame
+            }), completion: { _ in
+                self.animation(circle: circle, delay: 0.75)
+            })
+        }
     }
     
     func actionExpMap() {

@@ -119,8 +119,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             return anView
         } else if annotation is FaePinAnnotation {
             guard let firstAnn = annotation as? FaePinAnnotation else { return nil }
-            guard firstAnn.type == "place" else { return nil }
-            return viewForSelectedPlace(annotation: annotation, first: firstAnn)
+            if firstAnn.type == "place" {
+                return viewForSelectedPlace(annotation: annotation, first: firstAnn)
+            } else if firstAnn.type == "location" {
+                return viewForLocation(annotation: annotation, first: firstAnn)
+            } else {
+                return nil
+            }
         } else {
             return nil
         }
