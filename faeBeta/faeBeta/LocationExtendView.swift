@@ -11,11 +11,11 @@ import Foundation
 class LocationExtendView : UIView {
     
     private var dataDic : [String : String] = [:]
-    private var imageView : UIImageView!
+    var imageView : UIImageView!
     var buttonCancel : UIButton!
-    private var LabelLine1 : UILabel!
-    private var LabelLine2 : UILabel!
-    private var LabelLine3 : UILabel!
+    var LabelLine1 : UILabel!
+    var LabelLine2 : UILabel!
+    var LabelLine3 : UILabel!
     var location : CLLocation!
     
     init() {

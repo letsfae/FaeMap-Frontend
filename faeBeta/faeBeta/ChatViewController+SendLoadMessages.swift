@@ -13,7 +13,7 @@ import FirebaseDatabase
 import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
-    func sendMeaages_v2(type: String, text: String, media: NSData? = nil) {
+    func sendMeaages_v2(type: String, text: String, media: Data? = nil) {
         let newMessage = RealmMessage_v2()
         let login_user_id = String(Key.shared.user_id)
         newMessage.login_user_id = login_user_id
@@ -35,7 +35,9 @@ extension ChatViewController: OutgoingMessageProtocol {
         newMessage.created_at = RealmChat.dateConverter(date: Date())
         newMessage.type = type
         newMessage.text = text
-        newMessage.media = media
+        if media != nil {
+            newMessage.media = media! as NSData
+        }
         try! realm.write {
             realm.add(newMessage)
         }
@@ -170,33 +172,50 @@ extension ChatViewController: OutgoingMessageProtocol {
     // send image delegate function
     func sendImages(_ images: [UIImage]) {
         for i in 0 ..< images.count {
-            self.sendMessage(picture: images[i], date: Date())
+            //self.sendMessage(picture: images[i], date: Date())
+            sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(images[i]))
         }
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(_ name: String) {
-        self.sendMessage(sticker: UIImage(named: name), date: Date())
+        //self.sendMessage(sticker: UIImage(named: name), date: Date())
+        sendMeaages_v2(type: "[Sticker]", text: "name")
     }
     
     func sendAudioData(_ data: Data) {
-        self.sendMessage(audio: data, date: Date())
+        //self.sendMessage(audio: data, date: Date())
+        sendMeaages_v2(type: "[Audio]", text: "[Audio]", media: data)
     }
     
     func sendGifData(_ data: Data) {
-        self.sendMessage(snapImage: data, date: Date())
+        //self.sendMessage(snapImage: data, date: Date())
+        sendMeaages_v2(type: "[Gif]", text: "[Gif]", media: data)
     }
     
     func loadMessagesFromRealm() {
-        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
-        let count = messagesInThisChat.count
+        resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        let count = resultRealmMessages.count
         for i in (count - intNumberOfMessagesOneTime)..<count {
             if i < 0 {
                 continue
             } else {
-                arrRealmMessages.append(messagesInThisChat[i])
+                let incomingMessage = IncomingMessage(collectionView_: collectionView!)
+                let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
+                arrJSQMessages.append(messageJSQ)
+                arrRealmMessages.append(resultRealmMessages[i])
             }
         }
+    }
+    
+    func loadPrevMessagesFromRealm() {
+        boolLoadingPreviousMessages = true
+        if resultRealmMessages.count > arrRealmMessages.count {
+            
+        } else {
+            boolLoadingPreviousMessages = false
+        }
+        
     }
     
     
@@ -328,10 +347,11 @@ extension ChatViewController: OutgoingMessageProtocol {
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
-        var imageData = UIImageJPEGRepresentation(snapImage, 1)
-        let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
-        imageData = UIImageJPEGRepresentation(snapImage, factor)
-        sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
+        //var imageData = UIImageJPEGRepresentation(snapImage, 1)
+        //let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+        //imageData = UIImageJPEGRepresentation(snapImage, factor)
+        //sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
+        sendMeaages_v2(type: "[Video]", text: "[Video]", media: video)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

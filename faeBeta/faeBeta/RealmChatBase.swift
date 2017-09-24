@@ -204,13 +204,15 @@ class RealmChat {
     
     static func dateConverter(date: Date) -> String{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
         return dateFormatter.string(from: date)
     }
     
     static func dateConverter(str: String) -> Date{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        dateFormatter.dateFormat = "yyyyMMddhhmmssSSS"
         return dateFormatter.date(from: str)!
     }
     
@@ -240,6 +242,13 @@ class RealmChat {
             realm.add(withUser)
             print("add user")
         }
+    }
+    
+    static func compressImageToData(_ image: UIImage) -> Data? {
+        var imageData = UIImageJPEGRepresentation(image, 1)
+        let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+        imageData = UIImageJPEGRepresentation(image, factor)
+        return imageData
     }
     
 }

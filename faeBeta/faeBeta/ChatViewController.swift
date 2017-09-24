@@ -59,7 +59,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     var realmWithUser: RealmUser? // info of the other user of chatting
-    var avatarDictionary: NSMutableDictionary? // avatars of users in this chatting
+    var avatarDictionary: NSMutableDictionary! = [:] // avatars of users in this chatting
     var strChatRoomId: String! // chatRoomId in the firebase
     var strChatId: String! = "" // the chat Id returned by our server
     
@@ -92,6 +92,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let realm = try! Realm()
     var arrRealmMessages: [RealmMessage_v2] = []
     var arrRealmUsers: [RealmUser] = []
+    var resultRealmMessages: Results<RealmMessage_v2>!
     var notificationToken: NotificationToken?
     // not used now
     let userDefaults = UserDefaults.standard
@@ -115,7 +116,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 print("error")
             }
         }*/
-        
+        setAvatar()
+        loadMessagesFromRealm()
         navigationBarSet()
         loadInputBarComponent()
         setupToolbarContentView()
@@ -126,12 +128,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         collectionView.backgroundColor = UIColor._241241241()
         senderId = "\(Key.shared.user_id)"
-        senderDisplayName = realmWithUser!.display_name
-        setAvatar()
+        //senderDisplayName = realmWithUser!.display_name
+        senderDisplayName = "[]"
         
-        if strChatId != "" {
-            loadMessagesFromRealm()
-        }
+        
         /*for message in dictArrInitMessages {
             _ = insertMessage(message)
             self.intNumberOfMessagesLoaded += 1
@@ -196,7 +196,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)        
-        uiviewNavBar.lblTitle.text = realmWithUser!.display_name
+        //uiviewNavBar.lblTitle.text = realmWithUser!.display_name
     }
     
     func loadInputBarComponent() {
@@ -403,6 +403,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
             //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
         } else {
+            let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\""
+            sendMeaages_v2(type: "[Location]", text: locDetail, media:uiviewLocationExtend.getImageDate())
             //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
         if uiviewLocationExtend.isHidden == false {
@@ -628,15 +630,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         switch type {
         case (kUTTypeImage as String as String):
             let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
-            
-            sendMessage(picture: picture, date: Date())
+            sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(picture))
+            //sendMessage(picture: picture, date: Date())
             
             UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
         case (kUTTypeMovie as String as String):
             let movieURL = info[UIImagePickerControllerMediaURL] as! URL
             
             //get duration of the video
-            let asset = AVURLAsset(url: movieURL)
+            /*let asset = AVURLAsset(url: movieURL)
             let duration = CMTimeGetSeconds(asset.duration)
             let seconds = Int(ceil(duration))
             
@@ -655,11 +657,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             
             var imageData = UIImageJPEGRepresentation(snapImage, 1)
             let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
-            imageData = UIImageJPEGRepresentation(snapImage, factor)
+            imageData = UIImageJPEGRepresentation(snapImage, factor)*/
             
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
-            sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
+            //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
+            sendMeaages_v2(type: "[Video]", text: "[Video]", media: data)
             break
         default:
             break
@@ -755,7 +758,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         //animateHeart()
         if !boolJustSentHeart {
-            sendMessage(sticker: #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true, date: Date())
+            //sendMessage(sticker: #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true, date: Date())
+            sendMeaages_v2(type: "[Heart]", text: "[Heart]")
             boolJustSentHeart = true
         }
     }
@@ -841,9 +845,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     private func createAvatars() {
-        let currentUserAvatar = avatarDic[Key.shared.user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Key.shared.user_id], highlightedImage: avatarDic[Key.shared.user_id], placeholderImage: avatarDic[Key.shared.user_id]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        for user in arrRealmUsers {
+            var avatarJSQ: JSQMessagesAvatarImage
+            if let avatarData = user.avatar?.userSmallAvatar {
+                let avatarImg = UIImage(data: avatarData as Data)
+                avatarJSQ = JSQMessagesAvatarImage(avatarImage: avatarImg, highlightedImage: avatarImg, placeholderImage: avatarImg)
+            } else {
+                avatarJSQ = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+            }
+            avatarDictionary.addEntries(from: [user.id : avatarJSQ])
+        }
+        /*let currentUserAvatar = avatarDic[Key.shared.user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Key.shared.user_id], highlightedImage: avatarDic[Key.shared.user_id], placeholderImage: avatarDic[Key.shared.user_id]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
         let withUserAvatar = avatarDic[Int(realmWithUser!.id)!] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Int(realmWithUser!.id)!], highlightedImage: avatarDic[Int(realmWithUser!.id)!], placeholderImage: avatarDic[Int(realmWithUser!.id)!]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = ["\(Key.shared.user_id)": currentUserAvatar!, realmWithUser!.id: withUserAvatar!]
+        avatarDictionary = ["\(Key.shared.user_id)": currentUserAvatar!, realmWithUser!.id: withUserAvatar!]*/
     }
     
     // scroll to the bottom of all messages

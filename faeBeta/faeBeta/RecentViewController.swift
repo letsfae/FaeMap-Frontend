@@ -45,6 +45,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     let realm = try! Realm()
     var notificationToken: NotificationToken? = nil
     private var resultRealmRecents: Results<RealmRecent_v2>!
+    private var timerUpdateTimestamp: Timer!
     
     // MARK: lifecycle
     override func viewDidLoad() {
@@ -69,6 +70,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //let realm = try! Realm()
         //realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
         //tblRecents.reloadData()
+        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateTimestamp), userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -205,14 +207,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO double click bug
         if self.cellsCurrentlyEditing.count == 0 {
-            self.loadingRecentTimer.invalidate()
+            /*self.loadingRecentTimer.invalidate()
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
                     let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
                     cell.uiviewMain.backgroundColor = UIColor._225225225()
                     gotoChatFromRecent(selectedRowAt: indexPath)
                 }
-            }
+            }*/
+            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            cell.uiviewMain.backgroundColor = UIColor._225225225()
+            gotoChatFromRecent_v2(selectedRowAt: indexPath)
         } else {
             for indexP in self.cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
@@ -262,6 +267,16 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: helpers
+    func gotoChatFromRecent_v2(selectedRowAt indexPath: IndexPath) {
+        let vcChat = ChatViewController()
+        let latestMessage = resultRealmRecents[indexPath.row].latest_message!
+        for user in latestMessage.members {
+            vcChat.arrRealmUsers.append(user)
+        }
+        vcChat.strChatId = latestMessage.chat_id
+        navigationController?.pushViewController(vcChat, animated: true)
+    }
+    
     func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
         let vcChat = ChatViewController()
         vcChat.hidesBottomBarWhenPushed = true
@@ -301,6 +316,19 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private func downloadCurrentUserAvatar() {
         General.shared.avatar(userid: Key.shared.user_id) { (avatarImage) in
             avatarDic[Key.shared.user_id] = avatarImage
+        }
+    }
+    
+    @objc private func updateTimestamp() {
+        for index in 0..<resultRealmRecents.count {
+            let cell = tblRecents.cellForRow(at: IndexPath(row: index, section: 0)) as! RecentTableViewCell
+            if cell.lblDate.text == "Just Now" || cell.lblDate.text == "Yesterday" {
+                UIView.setAnimationsEnabled(false)
+                tblRecents.beginUpdates()
+                tblRecents.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                tblRecents.endUpdates()
+                UIView.setAnimationsEnabled(true)
+            }
         }
     }
     
