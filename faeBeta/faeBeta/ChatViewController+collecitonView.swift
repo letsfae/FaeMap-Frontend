@@ -51,6 +51,9 @@ extension ChatViewController {
             case "[Place]":
                 cell.contentType = Place
                 break
+            case "[Collection]":
+                cell.contentType = Collection
+                break
             case "[Audio]":
                 cell.contentType = Audio
                 break

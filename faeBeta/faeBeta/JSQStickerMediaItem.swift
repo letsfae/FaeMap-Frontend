@@ -15,7 +15,7 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
     //inheritance from JSQPhoto
     var imgCached: UIImageView!
     var sizeCustomize : CGSize!
-    var floatHeartButtonTopOffset: CGFloat = 10
+    var floatHeartButtonTopOffset: CGFloat = 5
     
     override func mediaView() -> UIView! {
         if self.image == nil {
