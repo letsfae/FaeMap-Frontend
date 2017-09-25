@@ -50,7 +50,8 @@ extension ChatViewController: OutgoingMessageProtocol {
             realm.add(newMessage)
             realm.add(recentRealm, update: true)
         }
-        
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        //finishSendingMessage()
     }
     // MARK: - send message
     func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
@@ -225,12 +226,14 @@ extension ChatViewController: OutgoingMessageProtocol {
                 break
             case .update(_, let deletions, let insertions, let modifications):
                 print("update")
-                let insertMessage = self!.resultRealmMessages[insertions[0]]
-                let incomingMessage = IncomingMessage(collectionView_: collectionView)
-                let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
-                self!.arrJSQMessages.append(messageJSQ)
-                self!.arrRealmMessages.append(insertMessage)
-                self!.finishReceivingMessage(animated: false)
+                if insertions.count > 0 {
+                    let insertMessage = self!.resultRealmMessages[insertions[0]]
+                    let incomingMessage = IncomingMessage(collectionView_: collectionView)
+                    let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
+                    self!.arrJSQMessages.append(messageJSQ)
+                    self!.arrRealmMessages.append(insertMessage)
+                    self!.finishReceivingMessage(animated: false)                    
+                }
                 break
             case .error:
                 print("error")
@@ -240,8 +243,25 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     func loadPrevMessagesFromRealm() {
         boolLoadingPreviousMessages = true
-        if resultRealmMessages.count > arrRealmMessages.count {
-            
+        let countAll = resultRealmMessages.count
+        if countAll > arrRealmMessages.count {
+            let intEndIndex = countAll - arrRealmMessages.count
+            let intStartIndex = intEndIndex - intNumberOfMessagesOneTime
+            for i in (intStartIndex..<intEndIndex).reversed() {
+                if i < 0 {
+                    continue
+                } else {
+                    let incomingMessage = IncomingMessage(collectionView_: collectionView!)
+                    let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
+                    arrJSQMessages.insert(messageJSQ, at: 0)
+                    arrRealmMessages.insert(resultRealmMessages[i], at: 0)
+                }
+            }
+            let oldOffset = collectionView.contentSize.height - collectionView.contentOffset.y
+            collectionView.reloadData()
+            collectionView.layoutIfNeeded()
+            collectionView.contentOffset = CGPoint(x: 0.0, y: collectionView.contentSize.height - oldOffset)
+            boolLoadingPreviousMessages = false
         } else {
             boolLoadingPreviousMessages = false
         }
@@ -381,7 +401,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         //let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
         //imageData = UIImageJPEGRepresentation(snapImage, factor)
         //sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
-        sendMeaages_v2(type: "[Video]", text: "[Video]", media: video)
+        sendMeaages_v2(type: "[Video]", text: "[\"\(duration)\"]", media: video)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

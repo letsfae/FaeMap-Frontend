@@ -85,7 +85,10 @@ class IncomingMessage {
     }
     
     fileprivate func videoJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let boolLocalized: Bool = reamlMessage.text != "[Video]"
+        let strLocDetail = reamlMessage.text.replacingOccurrences(of: "\\", with: "")
+        let data = strLocDetail.data(using: .utf8)
+        let jsonVideo = JSON(data: data!)
+        let boolLocalized: Bool = jsonVideo.count == 2
         var fileURL = ""
         let realm = try! Realm()
         if !boolLocalized {
@@ -94,22 +97,22 @@ class IncomingMessage {
             do {
                 try reamlMessage.media?.write(to: URL(fileURLWithPath: fileURL), options: [.atomic])
                 realm.beginWrite()
-                reamlMessage.text = fileURL
+                reamlMessage.text = "[\"\(jsonVideo[0].stringValue)\", \"\(fileURL)\"]"
             } catch {
                 // fail to write to document folder
                 // local disk is full
             }
         } else {
-            fileURL = reamlMessage.text
+            fileURL = jsonVideo[1].stringValue
         }
         let asset = AVURLAsset(url: URL(fileURLWithPath: fileURL))
-        let duration = CMTimeGetSeconds(asset.duration)
-        var time = asset.duration
-        time.value = 0
+        let duration = jsonVideo[0].intValue
+        //var time = asset.duration
+        //time.value = 0
         var snapImage = UIImage()
         if !boolLocalized {
             do {
-                let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: time, actualTime: nil)
+                let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: CMTime(seconds: 0.0, preferredTimescale: 1), actualTime: nil)
                 snapImage = UIImage(cgImage: imgRef)
                 reamlMessage.media = RealmChat.compressImageToData(snapImage)! as NSData
                 try! realm.commitWrite()
@@ -149,22 +152,16 @@ class IncomingMessage {
         let imgSticker = UIImage(named: reamlMessage.text)
         let mediaItem = JSQStickerMediaItem(image: imgSticker)
         if reamlMessage.type == "[Heart]" {
-            mediaItem?.sizeCustomize = CGSize(width: 65, height: 44)
+            mediaItem?.sizeCustomize = CGSize(width: 61, height: 50)
         }
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
-    }
-    
-    fileprivate func gifJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let content = reamlMessage.text
-        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
     }
     
     fileprivate func locationJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
         let strLocDetail = reamlMessage.text.replacingOccurrences(of: "\\", with: "")
         var mediaItem: JSQLocationMediaItemCustom
         let data = strLocDetail.data(using: .utf8)
-        //if let dataFromStr = strLocDetail.data(using: .utf8, allowLossyConversion: false) {
         let jsonLoc = JSON(data: data!)
         let clLoc = CLLocation(latitude: Double(jsonLoc["latitude"].stringValue)!, longitude: Double(jsonLoc["longitude"].stringValue)!)
         let snapImage = UIImage(data: reamlMessage.media! as Data)
@@ -178,8 +175,6 @@ class IncomingMessage {
         mediaItem.address3 = jsonLoc["address3"].stringValue
         mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
-        //}
-        //return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: reamlMessage.type)
     }
     
     fileprivate func placeJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {

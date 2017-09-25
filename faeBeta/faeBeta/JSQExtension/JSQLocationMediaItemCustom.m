@@ -161,7 +161,8 @@
     
     CGFloat height = 0;
     //BRYAN: Not empty and not location
-    if(![_text isEqualToString:@""] && ![_text isEqualToString:@"[Location]"]) {
+    //if(![_text isEqualToString:@""] && ![_text isEqualToString:@"[Location]"]) {
+    if (![_text isEqualToString:@""]) {
         height = [_text boundingRectWithSize:CGSizeMake(273, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading | NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"Avenir Next" size:17.5]} context:nil].size.height;
     }
     //UIView *locationView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 92)];
@@ -170,7 +171,7 @@
     
     locationView.backgroundColor = [UIColor whiteColor];
     
-    if(height != 0) {
+    if (height != 0) {
         _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 96, 271, height)];
         _textLabel.font = [UIFont fontWithName:@"Avenir Next" size : 17.5];
         _textLabel.text = _text;

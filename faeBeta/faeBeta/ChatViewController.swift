@@ -582,7 +582,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 }
             }
             if scrollViewCurrentOffset < 1 && !boolLoadingPreviousMessages {
-                loadPreviousMessages()
+                //loadPreviousMessages()
+                loadPrevMessagesFromRealm()
             }
         }
     }
@@ -644,11 +645,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let movieURL = info[UIImagePickerControllerMediaURL] as! URL
             
             //get duration of the video
-            /*let asset = AVURLAsset(url: movieURL)
+            let asset = AVURLAsset(url: movieURL)
             let duration = CMTimeGetSeconds(asset.duration)
             let seconds = Int(ceil(duration))
             
-            let imageGenerator = AVAssetImageGenerator(asset: asset)
+            /*let imageGenerator = AVAssetImageGenerator(asset: asset)
             var time = asset.duration
             time.value = 0
             
@@ -668,7 +669,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            sendMeaages_v2(type: "[Video]", text: "[Video]", media: data)
+            sendMeaages_v2(type: "[Video]", text: "[\"\(seconds)\"]", media: data)
             break
         default:
             break
