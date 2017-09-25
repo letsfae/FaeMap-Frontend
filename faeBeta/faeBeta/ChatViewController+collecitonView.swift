@@ -39,22 +39,22 @@ extension ChatViewController {
             case "text":
                 cell.contentType = Text
                 break
-            case "picture":
+            case "[Picture]":
                 cell.contentType = Picture
                 break
-            case "sticker":
+            case "[Sticker]":
                 cell.contentType = Sticker
                 break
-            case "location":
+            case "[Location]":
                 cell.contentType = Location
                 break
-            case "place":
+            case "[Place]":
                 cell.contentType = Place
                 break
-            case "audio":
+            case "[Audio]":
                 cell.contentType = Audio
                 break
-            case "video":
+            case "[Video]":
                 cell.contentType = Video
             // if it's a unknow message type, display a unknow message type
             default:

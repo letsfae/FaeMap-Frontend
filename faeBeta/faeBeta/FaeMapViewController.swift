@@ -28,6 +28,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
     var arrPlaceData = [PlacePin]()
+    var timerLoadMessages: Timer?
     
     // Search Bar
     var imgSchbarShadow: UIImageView!
@@ -231,11 +232,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
+        timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateMessages), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
         timerUserPin?.invalidate()
         timerUserPin = nil
+        timerLoadMessages?.invalidate()
+        timerLoadMessages = nil
     }
     
     func loadFirstLoginVC() {

@@ -89,9 +89,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let floatInputBarHeight: CGFloat = 90
     let floatToolBarContentHeight: CGFloat = 271
   
-    let realm = try! Realm()
+    //let realm = try! Realm()
     var arrRealmMessages: [RealmMessage_v2] = []
     var arrRealmUsers: [RealmUser] = []
+    var arrUserIDs: [String] = []
     var resultRealmMessages: Results<RealmMessage_v2>!
     var notificationToken: NotificationToken?
     // not used now
@@ -102,7 +103,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        collectionView.backgroundColor = UIColor._241241241()
+        senderId = "\(Key.shared.user_id)"
+        //senderDisplayName = realmWithUser!.display_name
+        senderDisplayName = "[]"
         /*let realm = try! Realm()
         let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
         notificationToken = messages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
@@ -116,6 +120,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 print("error")
             }
         }*/
+        let realm = try! Realm()
+        for user_id in arrUserIDs {
+            let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
+            arrRealmUsers.append(user)
+        }
         setAvatar()
         loadMessagesFromRealm()
         navigationBarSet()
@@ -126,10 +135,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(uiviewLocationExtend)
         moveDownInputBar()
         
-        collectionView.backgroundColor = UIColor._241241241()
-        senderId = "\(Key.shared.user_id)"
-        //senderDisplayName = realmWithUser!.display_name
-        senderDisplayName = "[]"
+        
         
         
         /*for message in dictArrInitMessages {
@@ -403,7 +409,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
             //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
         } else {
-            let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\""
+            let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
             sendMeaages_v2(type: "[Location]", text: locDetail, media:uiviewLocationExtend.getImageDate())
             //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
@@ -759,7 +765,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //animateHeart()
         if !boolJustSentHeart {
             //sendMessage(sticker: #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true, date: Date())
-            sendMeaages_v2(type: "[Heart]", text: "[Heart]")
+            sendMeaages_v2(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
             boolJustSentHeart = true
         }
     }

@@ -271,7 +271,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let vcChat = ChatViewController()
         let latestMessage = resultRealmRecents[indexPath.row].latest_message!
         for user in latestMessage.members {
-            vcChat.arrRealmUsers.append(user)
+            vcChat.arrUserIDs.append(user.id)
         }
         vcChat.strChatId = latestMessage.chat_id
         navigationController?.pushViewController(vcChat, animated: true)

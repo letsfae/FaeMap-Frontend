@@ -71,7 +71,7 @@
 - (void)setAppliesMediaViewMaskAsOutgoing:(BOOL)appliesMediaViewMaskAsOutgoing
 {
     [super setAppliesMediaViewMaskAsOutgoing:appliesMediaViewMaskAsOutgoing];
-    _cachedMapSnapshotImage = nil;
+    //_cachedMapSnapshotImage = nil;
     _cachedMapImageView = nil;
 }
 

@@ -170,7 +170,7 @@ class RecentTableViewCell: UITableViewCell {
         if latest.type == "text" {
             lblLastMessage.text = latest.text
         } else {
-            lblLastMessage.text = "[\(latest.text.uppercased())]"
+            lblLastMessage.text = latest.type
         }        
         
         if latest.unread_count > 0 {

@@ -17,16 +17,18 @@ extension ChatViewController: OutgoingMessageProtocol {
         let newMessage = RealmMessage_v2()
         let login_user_id = String(Key.shared.user_id)
         newMessage.login_user_id = login_user_id
-        let messagesInThisChat = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, login_user_id).sorted(byKeyPath: "index")
+        let realm = try! Realm()
+        let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
         var newIndex = 0
-        if messagesInThisChat.count > 0 {
-            newIndex = (messagesInThisChat.last?.index)! + 1
+        if messages.count > 0 {
+            newIndex = (messages.last?.index)! + 1
         }
         newMessage.index = newIndex
         let primaryKey = "\(login_user_id)_\(strChatId!)_\(newIndex)"
         newMessage.loginUserID_chatID_index = primaryKey
         newMessage.chat_id = strChatId!
-        for user in arrRealmUsers {
+        for user_id in arrUserIDs {
+            let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
             newMessage.members.append(user)
             if user.loginUserID_id == "\(login_user_id)_\(login_user_id)" {
                 newMessage.sender = user
@@ -38,8 +40,15 @@ extension ChatViewController: OutgoingMessageProtocol {
         if media != nil {
             newMessage.media = media! as NSData
         }
+        let recentRealm = RealmRecent_v2()
+        recentRealm.login_user_id = login_user_id
+        recentRealm.chat_id = strChatId!
+        recentRealm.created_at = newMessage.created_at
+        recentRealm.unread_count = 0
+        recentRealm.loginUserID_chatID = "\(login_user_id)_\(strChatId!)"
         try! realm.write {
             realm.add(newMessage)
+            realm.add(recentRealm, update: true)
         }
         
     }
@@ -180,7 +189,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     func sendStickerWithImageName(_ name: String) {
         //self.sendMessage(sticker: UIImage(named: name), date: Date())
-        sendMeaages_v2(type: "[Sticker]", text: "name")
+        sendMeaages_v2(type: "[Sticker]", text: name)
     }
     
     func sendAudioData(_ data: Data) {
@@ -194,6 +203,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     }
     
     func loadMessagesFromRealm() {
+        let realm = try! Realm()
         resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
         let count = resultRealmMessages.count
         for i in (count - intNumberOfMessagesOneTime)..<count {
@@ -204,6 +214,26 @@ extension ChatViewController: OutgoingMessageProtocol {
                 let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
                 arrJSQMessages.append(messageJSQ)
                 arrRealmMessages.append(resultRealmMessages[i])
+            }
+        }
+        finishReceivingMessage(animated: false)
+        guard let collectionView = self.collectionView else { return }
+        notificationToken = resultRealmMessages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                print("initial")
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+                print("update")
+                let insertMessage = self!.resultRealmMessages[insertions[0]]
+                let incomingMessage = IncomingMessage(collectionView_: collectionView)
+                let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
+                self!.arrJSQMessages.append(messageJSQ)
+                self!.arrRealmMessages.append(insertMessage)
+                self!.finishReceivingMessage(animated: false)
+                break
+            case .error:
+                print("error")
             }
         }
     }
