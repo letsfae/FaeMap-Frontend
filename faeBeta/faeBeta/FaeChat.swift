@@ -25,7 +25,7 @@ class FaeChat {
         }
         apiCalls.getFriends() {(status: Int, message: Any?) in
             let json = JSON(message!)
-            if json.count == 0 {
+            if status / 100 != 2 {
                 return
             }
             if json.count != 0 {
@@ -100,11 +100,14 @@ class FaeChat {
         message["sender"] = String(Key.shared.user_id)
         do {
             let json = try JSONSerialization.data(withJSONObject: message, options: [])
-            postToURL("chats_v2", parameter: ["receiver_id": members[1] as AnyObject, "message": String(data: json, encoding: .utf8)!, "type": newMessage.type], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            postToURL("chats_v2", parameter: ["receiver_id": members[1] as AnyObject, "message": String(data: json, encoding: .utf8)!, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                 if statusCode / 100 == 2 {
+                    
                     if let resultDic = result as? NSDictionary {
-                        print(" ")
+                        print(statusCode)
                     }
+                } else {
+                    print("failed")
                 }
             })
         }
@@ -150,7 +153,7 @@ class FaeChat {
     
     func storeMessageToRealm(_ message: String) {
         if message == "[GET_CHAT_ID]" { return }
-        print("\(message)")
+        //print("\(message)")
         guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
         let messageJSON = JSON(data: messageData)
         let messageRealm = RealmMessage_v2()
@@ -171,7 +174,11 @@ class FaeChat {
         messageRealm.loginUserID_chatID_index = primaryKey
         for user in messageJSON["members"].arrayValue {
             if let userRealm = realm.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
-                messageRealm.members.append(userRealm)
+                if user.string! == login_user_id {
+                    messageRealm.members.insert(userRealm, at: 0)
+                } else {
+                    messageRealm.members.append(userRealm)
+                }
                 if userRealm.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
                     messageRealm.sender = userRealm
                 }

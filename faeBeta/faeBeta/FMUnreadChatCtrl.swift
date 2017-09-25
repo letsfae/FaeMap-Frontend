@@ -15,6 +15,14 @@ extension FaeMapViewController {
     func loadMapChat() {
         lblUnreadCount.isHidden = true
         updateUnreadChatIndicator()
+        if Key.shared.user_id != -1 {
+            FaeChat().updateFriendsList()
+        }
+        FaeChat().observeMessageChange()
+    }
+    
+    func updateMessages() {
+        FaeChat().getMessageFromServer()
     }
     
     func updateUnreadChatIndicator() {
