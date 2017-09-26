@@ -30,6 +30,7 @@ extension FaeMapViewController {
         anView.delegate = self
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
+        anView.optionsReady = true
         return anView
     }
     
@@ -40,6 +41,12 @@ extension FaeMapViewController {
         if locationPin != nil {
             faeMapView.removeAnnotation(locationPin!)
             locationPin = nil
+        }
+        if locAnnoView != nil {
+            locAnnoView?.hideButtons()
+            locAnnoView?.optionsReady = false
+            locAnnoView?.optionsOpened = false
+            locAnnoView?.optionsOpeing = false
         }
         locationPin = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
         faeMapView.addAnnotation(locationPin!)

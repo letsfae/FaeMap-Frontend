@@ -41,7 +41,9 @@
 		50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F5A1F2BB736002553F1 /* PlacesListCell.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
+		50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
+		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
@@ -311,7 +313,9 @@
 		50902F5A1F2BB736002553F1 /* PlacesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListCell.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
+		50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailClctView.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
+		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		690452871F032A9900B58982 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeGenderView.swift; sourceTree = "<group>"; };
 		82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -652,6 +656,15 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		50E940821F79B37000269945 /* LocationDetail */ = {
+			isa = PBXGroup;
+			children = (
+				50E940831F79B39500269945 /* LocDetailViewController.swift */,
+				50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */,
+			);
+			name = LocationDetail;
+			sourceTree = "<group>";
+		};
 		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -886,6 +899,7 @@
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B33FB22C1F267C0500EC6655 /* Contacts */,
 				B33F8A021F3EC4520033610D /* PlaceDetail */,
+				50E940821F79B37000269945 /* LocationDetail */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				504CE4D01F67BF3400070284 /* Explore */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
@@ -1633,6 +1647,7 @@
 				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
+				50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */,
 				B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */,
@@ -1652,6 +1667,7 @@
 				B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */,
 				B0714DF51D62513300356705 /* PasswordAgainTextField.swift in Sources */,
 				B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */,
+				50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */,
 				5018565E1F33E39100ADD0F3 /* FMPlaceOptRoute.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,

@@ -444,9 +444,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
         } else if enterMode == .place { // search places
             let selectedPlace = filteredPlaces[indexPath.row]
-//            let vc = PlaceDetailViewController()
-            PlaceDetailViewController.shared.place = selectedPlace
-            navigationController?.pushViewController(PlaceDetailViewController.shared, animated: true)
+            let vcPlaceDetail = PlaceDetailViewController()
+            vcPlaceDetail.place = selectedPlace
+            navigationController?.pushViewController(vcPlaceDetail, animated: true)
         }
     }
     
