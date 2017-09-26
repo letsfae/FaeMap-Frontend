@@ -27,6 +27,7 @@ class AddressAnnotationView: MKAnnotationView {
         layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
         addSubview(icon)
+        icon.contentMode = .scaleAspectFit
     }
     
     required init?(coder aDecoder: NSCoder) {

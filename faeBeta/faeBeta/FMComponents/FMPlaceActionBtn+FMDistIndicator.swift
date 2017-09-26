@@ -85,24 +85,25 @@ class FMPinActionDisplay: UIButton {
         isUserInteractionEnabled = false
     }
     
-    func changeStyle(action style: PlacePinAction) {
+    func changeStyle(action style: PlacePinAction, _ createLocation: CreateLocation = .cancel) {
+        let strType = createLocation == .create ? "Location" : "Place"
         show()
         switch style {
         case .detail:
             backgroundColor = UIColor._2559180()
-            setTitle("View Place Details", for: .normal)
+            setTitle("View \(strType) Details", for: .normal)
             break
         case .collect:
             backgroundColor = UIColor._202144214()
-            setTitle("Collect this Place", for: .normal)
+            setTitle("Collect this \(strType)", for: .normal)
             break
         case .route:
             backgroundColor = UIColor._144162242()
-            setTitle("Draw Route to this Place", for: .normal)
+            setTitle("Draw Route to this \(strType)", for: .normal)
             break
         case .share:
             backgroundColor = UIColor._35197143()
-            setTitle("Share this Place", for: .normal)
+            setTitle("Share this \(strType)", for: .normal)
             break
         }
     }

@@ -161,6 +161,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 imgLocationBar.alpha = 0
                 if locationPin != nil {
                     faeMapView.removeAnnotation(locationPin!)
+                    if locAnnoView != nil {
+                        locAnnoView?.hideButtons()
+                        locAnnoView?.optionsReady = false
+                        locAnnoView?.optionsOpened = false
+                        locAnnoView?.optionsOpeing = false
+                    }
                     locationPin = nil
                 }
             }

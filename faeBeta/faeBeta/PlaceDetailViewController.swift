@@ -139,6 +139,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
+        uiviewFixedHeader.uiviewTopLine.isHidden = true
     }
     
     func loadMidTable() {
@@ -281,9 +282,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
-//        let vc = PlaceDetailViewController()
-        PlaceDetailViewController.shared.place = place
-        navigationController?.pushViewController(PlaceDetailViewController.shared, animated: true)
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = place
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     // SeeAllPlacesDelegate End
     
@@ -305,6 +306,7 @@ class FixedHeader: UIView {
     var lblName: UILabel!
     var lblCategory: UILabel!
     var lblPrice: UILabel!
+    var uiviewTopLine: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -340,6 +342,10 @@ class FixedHeader: UIView {
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
+        
+        uiviewTopLine = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 1))
+        uiviewTopLine.backgroundColor = UIColor._241241241()
+        addSubview(uiviewTopLine)
     }
     
     func setValue(place: PlacePin) {

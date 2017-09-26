@@ -15,7 +15,7 @@ import Foundation
 struct StickerInfoStrcut {
     
     // a dictionary storing all the sticker's name
-    static var stickerDictionary = [
+    static var stickerDictionary: [String: [String]] = [
     "stickerHistory" : [],
     "stickerLike" : [],
     "faeGuy" :

@@ -141,7 +141,14 @@ extension FaeMapViewController {
             vcExp.delegate = self
             navigationController?.pushViewController(vcExp, animated: false)
         } else if mapMode == .pinDetail {
-            navigationController?.pushViewController(PlaceDetailViewController.shared, animated: false)
+            if let ann = selectedPlace {
+                guard let placePin = ann.pinInfo as? PlacePin else { return }
+                selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = placePin
+                vcPlaceDetail.delegate = self
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+            }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
         }

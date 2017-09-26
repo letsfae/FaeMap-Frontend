@@ -153,10 +153,10 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
-//        let vc = PlaceDetailViewController()
-        PlaceDetailViewController.shared.place = place
-        PlaceDetailViewController.shared.allPlaces = mbPlaces
-        navigationController?.pushViewController(PlaceDetailViewController.shared, animated: true)
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = place
+        vcPlaceDetail.allPlaces = mbPlaces
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
     // SeeAllPlacesDelegate End
