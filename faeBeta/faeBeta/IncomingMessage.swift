@@ -305,7 +305,7 @@ class IncomingMessage {
     
     private func videoFromData(_ item : NSDictionary, result : (_ videoData : URL?) -> Void) {
         let str = item["data"] as? String
-        let filePath = self.documentsPathForFileName("/\(str!.substring(with: str!.characters.index(str!.endIndex, offsetBy: -33) ..< str!.characters.index(str!.endIndex, offsetBy: -1)))).mov")
+        let filePath = self.documentsPathForFileName("/\(str!.substring(with: str!.index(str!.endIndex, offsetBy: -33) ..< str!.index(str!.endIndex, offsetBy: -1)))).mov")
 
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: filePath) {
@@ -313,7 +313,7 @@ class IncomingMessage {
             result(videoFileURL)
         } else {
             if let decodedData = Data(base64Encoded: str!, options: NSData.Base64DecodingOptions(rawValue : 0)) {
-                if str!.characters.count > 50 {
+                if str!.count > 50 {
                     try? decodedData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
                     
                     let videoFileURL = URL(fileURLWithPath: filePath)

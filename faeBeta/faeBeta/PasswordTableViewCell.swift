@@ -88,7 +88,7 @@ class PasswordTableViewCell: UITableViewCell {
             let attributedStringWithImage = NSMutableAttributedString()
             let attrStringWithImage = NSAttributedString(attachment: textAttachment)
             
-            for _ in 0..<textEntered.characters.count {
+            for _ in 0..<textEntered.count {
                 attributedStringWithImage.append(attrStringWithImage)
                 attributedStringWithImage.append(NSAttributedString(string: " "))
             }
@@ -107,7 +107,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
-        if textEntered.characters.count > 16 && text != "" {
+        if textEntered.count > 16 && text != "" {
             return false
         }
         if text == "\n" {
@@ -117,7 +117,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         if text != "" {
             textEntered = "\(textEntered)\(text)"
         } else {
-            textEntered = String(textEntered.characters.dropLast())
+            textEntered = String(textEntered.dropLast())
         }
         delegate?.textViewDidChange(textEntered, indexPath: indexPath)
         changeColorOFImage(textEntered)
@@ -139,7 +139,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         let attributedStringWithImage = NSMutableAttributedString()
         let attrStringWithImage = NSAttributedString(attachment: textAttachment)
         
-        for _ in 0..<textEntered.characters.count {
+        for _ in 0..<textEntered.count {
             attributedStringWithImage.append(attrStringWithImage)
             attributedStringWithImage.append(NSAttributedString(string: " "))
         }
@@ -163,7 +163,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
         var uppercase = 0
         var symbol = 0
         var digit = 0
-        for i in testStr.characters {
+        for i in testStr {
             if i <= "9" && i >= "0" {
                 digit = 1
             } else if i <= "z" && i >= "a" {

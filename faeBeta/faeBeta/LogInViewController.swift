@@ -248,7 +248,7 @@ class LogInViewController: UIViewController {
     
     // MARK: - textfield
     func textfieldDidChange(_ textfield: UITextField) {
-        if txtUsername.text!.characters.count > 0 && txtPassword.text?.characters.count >= 8 {
+        if txtUsername.text!.count > 0 && txtPassword.text?.count >= 8 {
             btnLogin.backgroundColor = UIColor._2499090()
             btnLogin.isEnabled = true
         } else {
@@ -260,11 +260,11 @@ class LogInViewController: UIViewController {
 
 extension LogInViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentCharacterCount = textField.text?.characters.count ?? 0
+        let currentCharacterCount = textField.text?.count ?? 0
         if range.length + range.location > currentCharacterCount {
             return false
         }
-        let newLength = currentCharacterCount + string.characters.count - range.length
+        let newLength = currentCharacterCount + string.count - range.length
         return newLength <= 16
     }
 }

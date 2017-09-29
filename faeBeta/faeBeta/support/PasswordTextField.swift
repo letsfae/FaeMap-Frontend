@@ -68,7 +68,7 @@ class PasswordTexField: UITextField {
     }
     
     func decideButtonImage() {
-        if self.text?.characters.count < 8 {
+        if self.text?.count < 8 {
             if self.isSecureTextEntry {
                 btnRight.setImage(UIImage(named: "check_eye_close_yellow")!, for: UIControlState())
                 imageName = "check_eye_close_yellow"
@@ -99,7 +99,7 @@ class PasswordTexField: UITextField {
         var uppercase = 0
         var symbol = 0
         var digit = 0
-        for i in testStr.characters {
+        for i in testStr {
             if i <= "9" && i >= "0" {
                 digit = 1
             } else if i <= "z" && i >= "a" {

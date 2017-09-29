@@ -92,7 +92,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         let userNameRegEx = ".*[^a-zA-Z0-9_-.].*"
         let range = username!.range(of: userNameRegEx, options: .regularExpression)
         let result = range != nil ? false : true
-        boolIsValid = username != nil && username?.characters.count > 2 && result
+        boolIsValid = username != nil && username?.count > 2 && result
         self.enableContinueButton(boolIsValid)
     }
     

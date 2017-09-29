@@ -285,7 +285,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if textView == inputToolbar.contentView.textView && keyPath! == "text" {
             
             let newString = (change![NSKeyValueChangeKey.newKey]! as! String)
-            btnSend.isEnabled = newString.characters.count > 0
+            btnSend.isEnabled = newString.count > 0
         }
     }
     
@@ -414,7 +414,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: input text field delegate
     override func textViewDidChange(_ textView: UITextView) {
-        if textView.text.characters.count == 0 {
+        if textView.text.count == 0 {
             // when text has no char, cannot send message
             btnSend.isEnabled = false
         } else {
@@ -428,7 +428,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func textViewDidBeginEditing(_ textView: UITextView) {
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         showKeyboard()
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0 || !uiviewLocationExtend.isHidden
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0 || !uiviewLocationExtend.isHidden
     }
     
     // MARK: keyboard delegate
@@ -674,7 +674,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let insets = UIEdgeInsetsMake(0.0, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
         self.collectionView.contentInset = insets
         self.collectionView.scrollIndicatorInsets = insets
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
     func sendLocationMessageFromMini(_ sender: UIButton) {

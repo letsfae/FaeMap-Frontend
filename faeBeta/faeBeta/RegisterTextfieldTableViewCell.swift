@@ -72,7 +72,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
             return;
         }
         var count = 0
-        for c in text.characters {
+        for c in text {
             if c < "a" || c > "z" {
                 count += 1
             }
@@ -128,11 +128,11 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
                 return false
             }
         }
-        let currentCharacterCount = textField.text?.characters.count ?? 0
+        let currentCharacterCount = textField.text?.count ?? 0
         if range.length + range.location > currentCharacterCount {
             return false
         }
-        let newLength = currentCharacterCount + string.characters.count - range.length
+        let newLength = currentCharacterCount + string.count - range.length
         return (newLength <= limitNumber) || (!isCharacterLimit)
     }
 }

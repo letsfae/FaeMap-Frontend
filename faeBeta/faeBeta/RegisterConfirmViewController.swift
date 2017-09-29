@@ -58,7 +58,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let strTermofService = "To use Fae Maps, you agree to its Terms of Service\nand Privacy Policy."
         let attrTermofService = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
         let attrAgreeString = NSMutableAttributedString(string: strTermofService, attributes: attrTermofService)
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor._138138138(), range: NSRange(location: 0, length: strTermofService.characters.count))
+        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor._138138138(), range: NSRange(location: 0, length: strTermofService.count))
         
         let rangeAttr1 = NSRange(location: 34, length: 16)
         let rangeAttr2 = NSRange(location: 55, length: 15)
