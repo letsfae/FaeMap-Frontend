@@ -150,9 +150,9 @@ class RegisterInfoViewController: RegisterBaseViewController {
         dateFormatter.dateFormat = "MM/dd/yyyy"
         
         let date = dateFormatter.date(from: dateOfBirth!)
-        boolIsValid = date != nil && dateOfBirth!.characters.count == 10
+        boolIsValid = date != nil && dateOfBirth!.count == 10
         
-        if date == nil && dateOfBirth!.characters.count == 10 {
+        if date == nil && dateOfBirth!.count == 10 {
             imgExclamationMark.isHidden = false
         }
         
@@ -194,20 +194,20 @@ class RegisterInfoViewController: RegisterBaseViewController {
 extension RegisterInfoViewController: FAENumberKeyboardDelegate {
     func keyboardButtonTapped(_ num: Int) {
         if num != -1 {
-            if dateOfBirth?.characters.count < 10 {
+            if dateOfBirth?.count < 10 {
                 dateOfBirth = "\(dateOfBirth!)\(num)"
             }
             
-            let numOfCharacters = dateOfBirth?.characters.count
+            let numOfCharacters = dateOfBirth?.count
             if numOfCharacters == 2 || numOfCharacters == 5 {
                 dateOfBirth = "\(dateOfBirth!)/"
             }
         } else {
-            if dateOfBirth?.characters.count >= 0 {
-                dateOfBirth = String(dateOfBirth!.characters.dropLast())
-                let numOfCharacters = dateOfBirth?.characters.count
+            if dateOfBirth?.count >= 0 {
+                dateOfBirth = String(dateOfBirth!.dropLast())
+                let numOfCharacters = dateOfBirth?.count
                 if numOfCharacters == 2 || numOfCharacters == 5 {
-                    dateOfBirth = String(dateOfBirth!.characters.dropLast())
+                    dateOfBirth = String(dateOfBirth!.dropLast())
                 }
             }
             imgExclamationMark.isHidden = true
