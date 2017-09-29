@@ -84,7 +84,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     func validation() {
         var boolIsValid = false
-        boolIsValid = password != nil && password?.characters.count > 7
+        boolIsValid = password != nil && password?.count > 7
         enableContinueButton(boolIsValid)
     }
     

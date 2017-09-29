@@ -423,7 +423,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     
     // helper functions for editing the list of selected friends
     func detectDeleting(_ searchText: String) -> Bool {
-        if searchText.characters.count > strLastTextField.characters.count {
+        if searchText.count > strLastTextField.count {
             return false
         }
         else {
@@ -434,7 +434,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     func detectCursorPosition(textField: UITextField) -> Int {
         var selectedLength: Int = 0
         for index in arrSelected {
-            let currentLength = arrFriends[index].nickName.characters.count + 2
+            let currentLength = arrFriends[index].nickName.count + 2
             selectedLength = selectedLength + currentLength
         }
         
@@ -461,7 +461,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
     func findCurrentSearchWord(_ searchText: String) -> String {
         var selectedLength: Int = 0
         for index in arrSelected {
-            let currentLength = arrFriends[index].nickName.characters.count + 2
+            let currentLength = arrFriends[index].nickName.count + 2
             selectedLength = selectedLength + currentLength
         }
         return searchText.substring(from: searchText.index(searchText.startIndex, offsetBy: selectedLength))
@@ -525,9 +525,9 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
         // move the cursor to the end of word to be deleted
         var targetPosition: Int = 0
         for index in 0 ..< toDelIndex {
-            targetPosition = targetPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+            targetPosition = targetPosition + arrFriends[arrSelected[index]].nickName.count + 2
         }
-        targetPosition = targetPosition + arrFriends[arrSelected[toDelIndex]].nickName.characters.count + 2
+        targetPosition = targetPosition + arrFriends[arrSelected[toDelIndex]].nickName.count + 2
         //print(targetPosition)
         if let newPosition = textField.position(from: textField.beginningOfDocument, offset: targetPosition) {
             textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
@@ -546,7 +546,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
             if index != 0 {
                 lastWordEndPosition = currentWordEndPosition
             }
-            currentWordEndPosition = currentWordEndPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+            currentWordEndPosition = currentWordEndPosition + arrFriends[arrSelected[index]].nickName.count + 2
             if cursorPosition > lastWordEndPosition && cursorPosition <= currentWordEndPosition {
                 return index
             }

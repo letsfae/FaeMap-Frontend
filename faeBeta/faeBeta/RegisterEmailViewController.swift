@@ -117,7 +117,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     func validation() {
         var boolIsValid = false
-        boolIsValid = email != nil && email?.characters.count > 0 && isValidEmail(email!)
+        boolIsValid = email != nil && email?.count > 0 && isValidEmail(email!)
         enableContinueButton(boolIsValid)
     }
     

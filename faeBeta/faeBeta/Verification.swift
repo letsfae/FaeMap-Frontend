@@ -18,7 +18,7 @@ func passwordVerification(_ password:String)->Bool{
     var uppercase = 0
     var symbol = 0
     var digit = 0
-    for i in password.characters {
+    for i in password {
         if(i <= "9" && i >= "0") {
             digit = 1
         } else if (i <= "z" && i >= "a") {

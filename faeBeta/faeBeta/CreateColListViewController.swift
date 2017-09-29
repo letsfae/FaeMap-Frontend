@@ -165,12 +165,12 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             textView.text = nil
             textView.textColor = UIColor._898989()
         }
-        return textView == textviewListName ? newText.characters.count <= 60 : newText.characters.count <= 300
+        return textView == textviewListName ? newText.count <= 60 : newText.count <= 300
     }
     
     func textViewDidChange(_ textView: UITextView) {
         if textView == textviewListName {
-            nameRemainChars = 60 - textView.text.characters.count
+            nameRemainChars = 60 - textView.text.count
             lblNameRemainChars.text = String(nameRemainChars)
             if screenWidth >= 375 {
                 let txtHeight = ceil(textView.contentSize.height)
@@ -189,7 +189,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             } else if screenWidth == 414 {
                 numLinesDesp = 8 - numLinesName
             }
-            despRemainChars = 300 - textView.text.characters.count;
+            despRemainChars = 300 - textView.text.count;
             lblDespRemainChars.text = String(despRemainChars)
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             if numLines >= numLinesDesp {
@@ -201,7 +201,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             }
         }
         
-        if textView.text.characters.count == 0 {
+        if textView.text.count == 0 {
             btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
             btnCreate.isEnabled = false
             textView.text = textView == textviewListName ? placeholder[0] : placeholder[1]

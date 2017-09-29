@@ -164,7 +164,7 @@ class RecentTableViewCell: UITableViewCell {
         if recent.unread > 0 {
             lblCounter.isHidden = false
             lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
-            if lblCounter.text?.characters.count >= 2 {
+            if lblCounter.text?.count >= 2 {
                 uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             } else {

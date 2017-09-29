@@ -111,8 +111,8 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     func validation() {
         var boolIsValid = false
-        boolIsValid = firstName != nil && firstName?.characters.count > 0
-        boolIsValid = boolIsValid && lastName != nil && lastName?.characters.count > 0
+        boolIsValid = firstName != nil && firstName?.count > 0
+        boolIsValid = boolIsValid && lastName != nil && lastName?.count > 0
         
         enableContinueButton(boolIsValid)
     }

@@ -53,19 +53,19 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         DispatchQueue.main.async {
             self.loadContent()
             self.buttonEnable(on: false)
+            self.loadPlaces()
+            self.loadWaves()
             self.fullyLoaded = true
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if fullyLoaded { buttonEnable(on: false) }
+//        if fullyLoaded { buttonEnable(on: false) }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        loadPlaces()
-        loadWaves()
     }
     
     func buttonEnable(on: Bool) {
