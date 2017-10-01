@@ -334,6 +334,7 @@ extension LogInViewController {
     func actionChooseMethod(_ sender: UIButton) {
         if sender.tag == 0 {  // use phone
             let vc = SignInPhoneViewController()
+            vc.enterMode = .signInSupport
             navigationController?.pushViewController(vc, animated: true)
         } else {  // use email
             let vc = SignInEmailViewController()

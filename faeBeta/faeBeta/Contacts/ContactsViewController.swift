@@ -117,6 +117,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var uiviewOverlayGrayOpaque: UIView!
     var indexPathGlobal: IndexPath!
     var idGlobal = -1
+    var countFriends = 0
     
     let OK = 0
     let WITHDRAW = 3
@@ -126,17 +127,6 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     let REPORT = 7
     let ACCEPT = 9
     let IGNORE = 10
-    
-//    let ADD_FRIEND_ACT = 1
-//    let FOLLOW_ACT = 2
-//    let WITHDRAW_ACT = 3
-//    let RESEND_ACT = 4
-//    let REMOVE_FRIEND_ACT = 5
-//    let BLOCK_ACT = 6
-//    let REPORT_ACT = 7
-//    let UNFOLLOW_ACT = 8
-//    let ACCEPT_ACT = 9
-//    let IGNORE_ACT = 10
     
     var uiviewNameCard = FMNameCardView()
     // Basic viewDidLoad() implementation, needed for start of program
@@ -203,6 +193,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 }
             }
             self.arrFriends.sort{ $0.displayName < $1.displayName }
+            self.countFriends = self.arrFriends.count
             self.tblContacts.reloadData()
         }
     }
