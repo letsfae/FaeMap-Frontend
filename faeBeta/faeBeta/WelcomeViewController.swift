@@ -92,6 +92,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLookAround.setTitle("Look Around", for: .normal)
         btnLookAround.setTitleColor(UIColor._2499090(), for: .normal)
         btnLookAround.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16)
+        btnLookAround.addTarget(self, action: #selector(actionLookAround(_:)), for: .touchUpInside)
         view.insertSubview(btnLookAround, at: 0)
         
         // log in button
@@ -182,5 +183,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     func jumpToSignUp() {
         let boardRegister = RegisterNameViewController()
         navigationController?.pushViewController(boardRegister, animated: true)
+    }
+    
+    func actionLookAround(_ sender: UIButton) {
+//        let vc = ()
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }

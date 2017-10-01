@@ -9,8 +9,8 @@
 
 import Foundation
 extension NSMutableAttributedString {
-    func appendDefaultString(_ string: String, bold: Bool) {
-        let astrContent = NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
+    func appendDefaultString(_ string: String, bold: Bool = false, red: Bool = false) {
+        let astrContent = NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: red ? UIColor._2499090() : UIColor._898989(), NSFontAttributeName: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
         self.append(astrContent)
     }
     
@@ -46,7 +46,7 @@ extension NSMutableAttributedString {
         self.append(title)
     }
     
-    func appendDotBullet(_ string: String, attributes: [String:Any]? = nil, level: Int, oneLine: Bool = false) {
+    func appendDotBullet(_ string: String, attributes: [String:Any]? = nil, level: Int, oneLine: Bool = false, boldFirstSentence: Bool = false) {
         let bulletPoints  = "  •    "
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
@@ -61,6 +61,21 @@ extension NSMutableAttributedString {
         attr[NSParagraphStyleAttributeName] = paragraphStyle
         let changeLineSymbol = oneLine ? "\n" : "\n\n"
         let title = NSMutableAttributedString(string: "\(bulletPoints)\(string)\(changeLineSymbol)", attributes: attr)
+        
+        if boldFirstSentence {
+            var length = 0
+            let startIndex = title.string.characters.index(title.string.startIndex, offsetBy: 0)
+            
+            for c in title.string.substring(from: startIndex).characters {
+                if c != "."{
+                    length += 1
+                } else {
+                    break
+                }
+            }
+            let range = NSRange(location: 0, length: length)
+            title.addAttributes([NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
+        }
         self.append(title)
     }
     
