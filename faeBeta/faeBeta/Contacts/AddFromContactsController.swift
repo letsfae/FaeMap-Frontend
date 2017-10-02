@@ -9,9 +9,9 @@
 import UIKit
 import Contacts
 import ContactsUI
+import SwiftyJSON
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
-    
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate {
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarFromContacts: FaeSearchBarTest!
@@ -32,10 +32,29 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         definesPresentationContext = true
         view.backgroundColor = .white
         loadSearchTable()
-        tblFromContacts.separatorStyle = .none
-        
         loadNotAllowedView()
-        showView()
+        self.showView()
+        linkPhoneNumber()
+    }
+    
+    func linkPhoneNumber() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
+            let selfUserInfoJSON = JSON(message!)
+            let phone = selfUserInfoJSON["phone_verified"].boolValue
+            if phone == false {
+                self.uiviewNotAllowed.isHidden = true
+                self.uiviewSchbar.isHidden = true
+                self.tblFromContacts.isHidden = true
+                let vc = SignInPhoneViewController()
+                vc.delegate = self
+                vc.enterMode = .contacts
+                self.present(vc, animated: true)
+            }
+        })
     }
     
     func showView() {
@@ -93,6 +112,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
         tblFromContacts.isHidden = false
         tblFromContacts.indicatorStyle = .white
+        tblFromContacts.separatorStyle = .none
         view.addSubview(tblFromContacts)
     }
     
@@ -264,5 +284,14 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         if authStatus == .denied {
             UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
         }
+    }
+    
+    // SignInPhoneDelegate
+    func backToContacts() {
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func verifyPhoneSucceed() {
+        showView()
     }
 }

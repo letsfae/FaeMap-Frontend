@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol CreateColListDelegate: class {
+    func saveSettings(name: String, desp: String)
+}
+
 class CreateColListViewController: UIViewController, UITextViewDelegate {
     var enterMode: EnterMode!
     var uiviewNavBar: UIView!
@@ -16,12 +20,16 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var lblNameRemainChars: UILabel!
     var lblDespRemainChars: UILabel!
     var lblDescription: UILabel!
-    var nameRemainChars: Int = 60
-    var despRemainChars: Int = 300
+    var nameRemainChars: Int!
+    var despRemainChars: Int!
     var textviewListName: UITextView!
     var textviewDesp: UITextView!
     let placeholder = ["List Name", "Describe your list (Optional)"]
     var keyboardHeight: CGFloat = 0
+    var txtListName: String = ""
+    var txtListDesp: String = ""
+    weak var delegate: CreateColListDelegate?
+    
     var numLinesName = 1 {
         didSet {
             guard textviewDesp != nil else { return }
@@ -61,18 +69,27 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         
         btnCreate = UIButton(frame: CGRect(x: screenWidth - 85, y: 21, width: 85, height: 43))
         uiviewNavBar.addSubview(btnCreate)
-        btnCreate.setTitle("Create", for: .normal)
-        btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
         btnCreate.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnCreate.addTarget(self, action: #selector(self.actionCreateList(_:)), for: .touchUpInside)
-        btnCreate.isEnabled = false
         
         let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
         uiviewNavBar.addSubview(lblTitle)
         lblTitle.textAlignment = .center
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        lblTitle.text = "Create New List"
+        if txtListName == "" {
+            lblTitle.text =  "Create New List"
+            btnCreate.setTitle("Create", for: .normal)
+            btnCreate.tag = 0
+            btnCreate.isEnabled = false
+            btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
+        } else {
+            lblTitle.text =  "List Settings"
+            btnCreate.setTitle("Save", for: .normal)
+            btnCreate.tag = 1
+            btnCreate.isEnabled = true
+            btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
+        }
     }
     
     func loadContent() {
@@ -94,6 +111,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblNameRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 20, width: 30, height: 22))
         lblNameRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblNameRemainChars.textColor = UIColor._155155155()
+        nameRemainChars = 60 - txtListName.characters.count
         lblNameRemainChars.text = String(nameRemainChars)
         lblNameRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblNameRemainChars)
@@ -101,24 +119,25 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblDespRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 122, width: 30, height: 22))
         lblDespRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblDespRemainChars.textColor = UIColor._155155155()
+        despRemainChars = 300 - txtListDesp.characters.count
         lblDespRemainChars.text = String(despRemainChars)
         lblDespRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblDespRemainChars)
         
         textviewListName = UITextView(frame: CGRect(x: 20, y: 57, width: screenWidth - 40, height: 40))
         textviewListName.delegate = self
-        textviewListName.font = UIFont(name: "AvenirNext-Regular", size: 22 )
-        textviewListName.textColor = UIColor._155155155()
+        textviewListName.font = UIFont(name: "AvenirNext-Regular", size: 22)
+        textviewListName.textColor = txtListName == "" ? UIColor._155155155() : UIColor._898989()
         textviewListName.tintColor = UIColor._2499090()
-        textviewListName.text = placeholder[0]
+        textviewListName.text = txtListName == "" ? placeholder[0] : txtListName
         uiviewContent.addSubview(textviewListName)
         
         textviewDesp = UITextView(frame: CGRect(x: 20, y: 159, width: screenWidth - 40, height: screenHeight - 159 - 65))
         textviewDesp.delegate = self
-        textviewDesp.font = UIFont(name: "AvenirNext-Regular", size: 22 )
-        textviewDesp.textColor = UIColor._155155155()
+        textviewDesp.font = UIFont(name: "AvenirNext-Regular", size: 22)
+        textviewDesp.textColor = txtListDesp == "" ? UIColor._155155155() : UIColor._898989()
         textviewDesp.tintColor = UIColor._2499090()
-        textviewDesp.text = placeholder[1]
+        textviewDesp.text = txtListDesp == "" ? placeholder[1] : txtListDesp
         uiviewContent.addSubview(textviewDesp)
         
         textviewListName.becomeFirstResponder()
@@ -131,11 +150,21 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func actionCreateList(_ sender: UIButton) {
-        print("create list")
+        if sender.tag == 0 {  // create
+            
+        } else {  // save
+            txtListName = textviewListName.textColor == UIColor._155155155() ? "" : textviewListName.text
+            txtListDesp = textviewDesp.textColor == UIColor._155155155() ? "" : textviewDesp.text
+            delegate?.saveSettings(name: txtListName, desp: txtListDesp)
+            textviewDesp.resignFirstResponder()
+            dismiss(animated: true)
+        }
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+        if (textView == textviewListName && txtListName == "") || (textView == textviewDesp && txtListDesp == "") {
+            textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
+        }
     }
     
     func textViewDidChangeSelection(_ textView: UITextView) {
