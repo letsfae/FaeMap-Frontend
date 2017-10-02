@@ -27,14 +27,16 @@ extension FaeMapViewController {
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
         placeClusterManager.cellSize = 60
-        placeClusterManager.marginFactor = 0.15
-        placeClusterManager.clusterer = CCHNearCenterMapClusterer()
-//        placeClusterManager.animator = self
+//        placeClusterManager.marginFactor = 0.5
+        placeClusterManager.minUniqueLocationsForClustering = 3
+        placeClusterManager.clusterer = self
+//        placeClusterManager.isDebuggingEnabled = true
+        placeClusterManager.animator = self
         
-        userClusterManager = CCHMapClusterController(mapView: faeMapView)
-        userClusterManager.delegate = self
-        userClusterManager.cellSize = 100
-        userClusterManager.marginFactor = 0.15
+//        userClusterManager = CCHMapClusterController(mapView: faeMapView)
+//        userClusterManager.delegate = self
+//        userClusterManager.cellSize = 100
+//        userClusterManager.marginFactor = 0.15
         // userClusterManager.clusterer = CCHNearCenterMapClusterer()
         
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)

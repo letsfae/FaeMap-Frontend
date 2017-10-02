@@ -84,7 +84,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             for faeUser in faeUserPins {
                 faeUser.isValid = false
             }
-            userClusterManager.removeAnnotations(faeUserPins) {
+            placeClusterManager.removeAnnotations(faeUserPins) {
                 self.faeUserPins.removeAll()
             }
         } else {

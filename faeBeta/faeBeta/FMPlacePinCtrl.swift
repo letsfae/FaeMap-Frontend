@@ -95,7 +95,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             for user in self.faeUserPins {
                 user.isValid = false
             }
-            userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+            placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
             startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
             if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
                 uiviewChooseLocs.updateDestination(name: placeInfo.name)
@@ -112,7 +112,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
     }
 
-    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation, animated: Bool = true) -> MKAnnotationView {
+    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "place"
         var anView: PlacePinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
@@ -123,24 +123,19 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         anView.assignImage(first.icon)
         anView.delegate = self
-        if animated {
-            if first.animatable {
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                        anView.alpha = 1
-                    }, completion: nil)
-                }
-            } else {
-                anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                anView.alpha = 1
-            }
-        } else {
-            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-            anView.alpha = 1
-        }
+//        if first.animatable {
+//            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+//            DispatchQueue.main.async {
+//                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+//                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+//                    anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+//                    anView.alpha = 1
+//                }, completion: nil)
+//            }
+//        } else {
+//            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+//            anView.alpha = 1
+//        }
         return anView
     }
     

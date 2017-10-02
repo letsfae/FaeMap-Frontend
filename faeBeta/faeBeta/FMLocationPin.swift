@@ -57,47 +57,58 @@ extension FaeMapViewController {
             var name = ""
             var subThoroughfare = ""
             var thoroughfare = ""
-            var locality = ""
-            var administrativeArea = ""
-            var postalCode = ""
-            var country = ""
+            
+            var address_1 = ""
+            var address_2 = ""
             
             if let n = first.name {
                 name = n
+                address_1 += n
             }
             if let s = first.subThoroughfare {
                 subThoroughfare = s
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += s
             }
             if let t = first.thoroughfare {
                 thoroughfare = t
-            }
-            if let l = first.locality {
-                locality = l
-            }
-            if let a = first.administrativeArea {
-                administrativeArea = a
-            }
-            if let s = first.postalCode {
-                postalCode = s
-            }
-            if let c = first.country {
-                country = c
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += t
             }
             
             if name == subThoroughfare + " " + thoroughfare {
-                self.locationPin?.address_1 = name
-                self.locationPin?.address_2 = locality + ", " + administrativeArea + postalCode + ", " + country
-                DispatchQueue.main.async {
-                    self.imgLocationBar.updateLocationBar(name: name, address: locality + ", " + administrativeArea + postalCode + ", " + country)
-                    self.lblSearchContent.text = name
+                address_1 = name
+            }
+            
+            if let l = first.locality {
+                address_2 += l
+            }
+            if let a = first.administrativeArea {
+                if address_2 != "" {
+                    address_2 += ", "
                 }
-            } else {
-                self.locationPin?.address_1 = name + ", " + subThoroughfare + " " + thoroughfare
-                self.locationPin?.address_2 = locality + ", " + administrativeArea + postalCode + ", " + country
-                DispatchQueue.main.async {
-                    self.imgLocationBar.updateLocationBar(name: name + ", " + subThoroughfare + " " + thoroughfare, address: locality + ", " + administrativeArea + postalCode + ", " + country)
-                    self.lblSearchContent.text = name + ", " + subThoroughfare + " " + thoroughfare
+                address_2 += a
+            }
+            if let p = first.postalCode {
+                address_2 += p
+            }
+            if let c = first.country {
+                if address_2 != "" {
+                    address_2 += ", "
                 }
+                address_2 += c
+            }
+            
+            self.locationPin?.address_1 = address_1
+            self.locationPin?.address_2 = address_2
+            DispatchQueue.main.async {
+                self.imgLocationBar.updateLocationBar(name: address_1, address: address_2)
+                self.lblSearchContent.text = address_1
+                self.lblSearchContent.textColor = UIColor._898989()
             }
         }
     }
