@@ -36,7 +36,7 @@ extension FaeMapViewController: MapSearchDelegate {
         for user in faeUserPins {
             user.isValid = false
         }
-        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
@@ -49,7 +49,7 @@ extension FaeMapViewController: MapSearchDelegate {
         for user in faeUserPins {
             user.isValid = false
         }
-        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
         if searchText == "fromEXP" {
             mapMode = .explore
             setTitle(type: "Random")

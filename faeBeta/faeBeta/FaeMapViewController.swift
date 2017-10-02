@@ -29,7 +29,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // MapView Data and Control
     var faeMapView: FaeMapView!
     var placeClusterManager: CCHMapClusterController!
-    var userClusterManager: CCHMapClusterController!
+//    var userClusterManager: CCHMapClusterController!
     var faeUserPins = [FaePinAnnotation]()
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
@@ -154,9 +154,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var createLocation: CreateLocation = .cancel {
         didSet {
             guard fullyLoaded else { return }
-            lblSearchContent.textColor = createLocation == .create ? UIColor._898989() : UIColor._182182182()
             btnClearSearchRes.isHidden = createLocation == .cancel
             if createLocation == .cancel {
+                lblSearchContent.textColor = UIColor._182182182()
                 lblSearchContent.text = "Search Fae Map"
                 imgLocationBar.alpha = 0
                 if locationPin != nil {
@@ -179,7 +179,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var PLACE_ENABLE = true
     let USER_ENABLE = false
     var boolPreventUserPinOpen = false
-    var START_WAVE_ANIMATION = false
     var AUTO_REFRESH = true
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false

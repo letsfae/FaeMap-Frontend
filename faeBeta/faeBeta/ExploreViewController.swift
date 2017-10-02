@@ -378,7 +378,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     // BoardsSearchDelegate

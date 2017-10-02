@@ -165,7 +165,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             for user in self.faeUserPins {
                 user.isValid = true
             }
-            self.userClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
+            self.placeClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
         }
         HIDE_AVATARS = false

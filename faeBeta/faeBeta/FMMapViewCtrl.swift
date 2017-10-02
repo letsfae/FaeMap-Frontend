@@ -11,7 +11,14 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator {
+extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer {
+    
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> CLLocationCoordinate2D {
+        guard let firstAnn = annotations.first as? FaePinAnnotation else {
+            return CLLocationCoordinate2DMake(0, 0)
+        }
+        return firstAnn.coordinate
+    }
     
     func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         for annotationView in views {
@@ -25,22 +32,68 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
-        guard mapClusterController == placeClusterManager else { return }
+        
         for annotationView in annotationViews {
-            guard let anView = annotationView as? PlacePinAnnotationView else { continue }
-            anView.alpha = 1
+            if let anView = annotationView as? PlacePinAnnotationView {
+                anView.alpha = 0
+                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+            } else if let anView = annotationView as? UserPinAnnotationView {
+                anView.alpha = 0
+            } else if let anView = annotationView as? MKAnnotationView {
+                anView.alpha = 0
+            }
         }
+        
+        for annotationView in annotationViews {
+            if let anView = annotationView as? PlacePinAnnotationView {
+                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+                        anView.alpha = 1
+                    }, completion: nil)
+                }
+            } else if let anView = annotationView as? UserPinAnnotationView {
+                UIView.animate(withDuration: 0.4, animations: {
+                    anView.alpha = 1
+                })
+            } else if let anView = annotationView as? MKAnnotationView {
+                UIView.animate(withDuration: 0.4, animations: {
+                    anView.alpha = 1
+                })
+            }
+        }
+        
+//        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+//
+//            for annotationView in annotationViews {
+//                if let anView = annotationView as? PlacePinAnnotationView {
+//                    anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+//                    anView.alpha = 1
+//                } else if let anView = annotationView as? UserPinAnnotationView {
+//                    anView.alpha = 1
+//                } else if let anView = annotationView as? MKAnnotationView {
+//                    anView.alpha = 1
+//                }
+//            }
+//
+//        }, completion: nil)
     }
 
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
-        guard mapClusterController == placeClusterManager else { return }
-        guard let mapView = mapClusterController.mapView else { return }
-        for annotation in annotations {
-            guard let ann = annotation as? CCHMapClusterAnnotation else { continue }
-            guard let anView = mapView.view(for: ann) else { continue }
-            anView.alpha = 0
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            for annotation in annotations {
+                if let anno = annotation as? MKAnnotation {
+                    if let anView = self.faeMapView.view(for: anno) {
+                        anView.alpha = 0
+                    }
+                }
+            }
+        }) { _ in
+            if completionHandler != nil { completionHandler() }
         }
-        if completionHandler != nil { completionHandler() }
+        
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
@@ -98,7 +151,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == "place" {
-                // return viewForPlace(annotation: annotation, first: firstAnn, animated: boolSelecting)
                 return viewForPlace(annotation: annotation, first: firstAnn)
             } else if firstAnn.type == "user" {
                 return viewForUser(annotation: annotation, first: firstAnn)
@@ -202,20 +254,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if btnCompass != nil { btnCompass.rotateCompass() }
         
         if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
-        
-        // re-start wave animation of self avatar annotation view
-        DispatchQueue.global(qos: .userInitiated).async {
-            if MKMapRectContainsPoint(self.faeMapView.visibleMapRect, MKMapPointForCoordinate(LocManager.shared.curtLoc.coordinate)) {
-                if self.START_WAVE_ANIMATION {
-                    self.START_WAVE_ANIMATION = false
-                    DispatchQueue.main.async {
-//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
-                    }
-                }
-            } else {
-                self.START_WAVE_ANIMATION = true
-            }
-        }
         
         self.prevBearing = mapView.camera.heading
         
