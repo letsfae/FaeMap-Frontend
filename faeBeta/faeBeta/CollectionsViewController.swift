@@ -13,7 +13,7 @@ enum CollectionTableMode {
     case location
 }
 
-class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, CollectionsListDetailDelegate {
     var btnNavBarMenu: UIButton!
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
@@ -236,6 +236,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             present(vc, animated: true)
         } else {
             let vc = CollectionsListDetailViewController()
+            vc.delegate = self
+            vc.indexPath = indexPath
             vc.enterMode = tableMode == .place ? .place : .location
             navigationController?.pushViewController(vc, animated: true)
         }
@@ -243,5 +245,23 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
+    }
+    
+    // CollectionsListDetailDelegate
+    func deleteColList(indexPath: IndexPath) {
+        if tableMode == .place {
+            arrPlaceListName.remove(at: indexPath.row)
+        } else {
+            arrLocationListName.remove(at: indexPath.row)
+        }
+        reloadAfterDelete(indexPath: indexPath)
+    }
+    
+    func reloadAfterDelete(indexPath: IndexPath) {
+        tblCollections.performUpdate({
+            self.tblCollections.deleteRows(at: [indexPath], with: UITableViewRowAnimation.right)
+        }) {
+            self.tblCollections.reloadData()
+        }
     }
 }
