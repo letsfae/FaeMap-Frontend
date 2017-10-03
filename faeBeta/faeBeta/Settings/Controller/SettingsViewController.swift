@@ -134,7 +134,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         btnLogout.setTitle("Log Out", for: .normal)
         btnLogout.backgroundColor = UIColor._2499090()
         btnLogout.layer.cornerRadius = 19
-        btnLogout.addTarget(self, action: #selector(Logout(_:)), for: .touchUpInside)
+        btnLogout.addTarget(self, action: #selector(logout(_:)), for: .touchUpInside)
 
         btnDelete = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 15/736*screenHeight, width: 17, height: 17))
         uiviewLogout.addSubview(btnDelete)
@@ -143,8 +143,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
-    func Logout(_ sender: UIButton) {
-        
+    func logout(_ sender: UIButton) {
+        if Key.shared.navOpenMode == .welcomeFirst {
+            navigationController?.popToRootViewController(animated: true)
+        } else {
+            let welcomeVC = WelcomeViewController()
+            navigationController?.pushViewController(welcomeVC, animated: true)
+            navigationController?.viewControllers = [welcomeVC]
+            Key.shared.navOpenMode = .welcomeFirst
+        }
     }
     
     func showMainView(_ sender: UIButton) {

@@ -524,9 +524,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         let vcContacts = ContactsViewController()
         self.navigationController?.pushViewController(vcContacts, animated: true)
     }
-    func logOutInLeftMenu() {
-        let welcomeVC = WelcomeViewController()
-        navigationController?.pushViewController(welcomeVC, animated: true)
+    func jumpToSettings() {
+        let vcSettings = SettingsViewController()
+        navigationController?.pushViewController(vcSettings, animated: true)
     }
     func jumpToFaeUserMainPage() {
         let vc = MyFaeMainPageViewController()
