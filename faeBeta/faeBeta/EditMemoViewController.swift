@@ -23,29 +23,23 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     let placeholder = "Type a short memo..."
     var indexPath: IndexPath!
     var txtMemo: String = ""
+    var keyboardHeight: CGFloat = 0
     weak var delegate: EditMemoDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(r: 115, g: 115, b: 115, alpha: 30)
         loadMemoView()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
     
     func loadMemoView() {
 //        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
 //        view.addGestureRecognizer(tapGesture)
         
-        uiviewEditMemo = UIView()
+        uiviewEditMemo = UIView(frame: CGRect(x: 0, y: screenHeight - 180 - keyboardHeight, width: screenWidth, height: 180))
         uiviewEditMemo.backgroundColor = .white
         view.addSubview(uiviewEditMemo)
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewEditMemo)
-        view.addConstraintsWithFormat("V:[v0(180)]-\(286*screenHeightFactor)-|", options: [], views: uiviewEditMemo)
-        
-        let uiviewBlank = UIView()
-        uiviewBlank.backgroundColor = .white
-        view.addSubview(uiviewBlank)
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewBlank)
-        view.addConstraintsWithFormat("V:[v0(\(286*screenHeightFactor))]-0-|", options: [], views: uiviewBlank)
         
         btnCancelMemo = UIButton(frame: CGRect(x: 0, y: 5, width: 87, height: 42))
         uiviewEditMemo.addSubview(btnCancelMemo)
@@ -70,7 +64,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         uiviewEditMemo.addSubview(textviewMemo)
         textviewMemo.becomeFirstResponder()
         
-        txtCount = 75 - txtMemo.characters.count
+        txtCount = 75 - txtMemo.count
         lblRemainTxt = FaeLabel(CGRect.zero, .right, .medium, 16, UIColor._155155155())
         lblRemainTxt.text = String(txtCount)
         uiviewEditMemo.addSubview(lblRemainTxt)
@@ -119,17 +113,27 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
             textView.text = nil
             textView.textColor = UIColor._898989()
         }
-        return newText.characters.count <= 75
+        return newText.count <= 75
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        txtCount = 75 - textView.text.characters.count
+        txtCount = 75 - textView.text.count
         lblRemainTxt.text = String(txtCount)
         
-        if textView.text.characters.count == 0 {
+        if textView.text.count == 0 {
             textView.text = placeholder
             textView.textColor = UIColor._182182182()
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         }
+    }
+    
+    func keyboardWillShow(_ notification: Notification) {
+        let userInfo: NSDictionary = notification.userInfo! as NSDictionary
+        let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
+        let keyboardRectangle = keyboardFrame.cgRectValue
+        keyboardHeight = keyboardRectangle.height
+        
+        uiviewEditMemo.frame.origin.y = screenHeight - keyboardHeight - 180
+        uiviewEditMemo.frame.size.height = 180
     }
 }

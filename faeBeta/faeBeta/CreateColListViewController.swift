@@ -111,7 +111,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblNameRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 20, width: 30, height: 22))
         lblNameRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblNameRemainChars.textColor = UIColor._155155155()
-        nameRemainChars = 60 - txtListName.characters.count
+        nameRemainChars = 60 - txtListName.count
         lblNameRemainChars.text = String(nameRemainChars)
         lblNameRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblNameRemainChars)
@@ -119,7 +119,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblDespRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 122, width: 30, height: 22))
         lblDespRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblDespRemainChars.textColor = UIColor._155155155()
-        despRemainChars = 300 - txtListDesp.characters.count
+        despRemainChars = 300 - txtListDesp.count
         lblDespRemainChars.text = String(despRemainChars)
         lblDespRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblDespRemainChars)
