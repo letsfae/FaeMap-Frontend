@@ -175,6 +175,7 @@ class LogInViewController: UIViewController {
             if status / 100 == 2 {
                 let vcNext = InitialPageController()
                 self.navigationController?.pushViewController(vcNext, animated: true)
+                self.navigationController?.viewControllers = [vcNext]
             } else {
                 // Vicky 07/12/2017  - 把使用error message的判断改为使用error code判断
                 print("[LOGIN STATUS]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")

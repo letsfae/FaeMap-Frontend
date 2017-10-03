@@ -134,6 +134,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
                 if status / 100 == 2 {
                     let vcNext = InitialPageController()
                     self.navigationController?.pushViewController(vcNext, animated: true)
+                    self.navigationController?.viewControllers = [vcNext]
                 }
             })
         })
