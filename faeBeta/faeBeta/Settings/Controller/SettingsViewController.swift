@@ -42,8 +42,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     
     func actionBack(_ sender: UIButton) {
-        // 暂时不需要这个方法，之后需要加上去
-//        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func setupFaeNav() {
@@ -134,7 +133,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         btnLogout.setTitle("Log Out", for: .normal)
         btnLogout.backgroundColor = UIColor._2499090()
         btnLogout.layer.cornerRadius = 19
-        btnLogout.addTarget(self, action: #selector(logout(_:)), for: .touchUpInside)
+        btnLogout.addTarget(self, action: #selector(logOut(_:)), for: .touchUpInside)
 
         btnDelete = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 15/736*screenHeight, width: 17, height: 17))
         uiviewLogout.addSubview(btnDelete)
@@ -143,12 +142,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
-    func logout(_ sender: UIButton) {
+    func logOut(_ sender: UIButton) {
+        let logOut = FaeUser()
+        logOut.logOut { (status: Int?, _: Any?) in
+            self.jumpToWelcomeView(animated: true)
+        }
+    }
+    
+    func jumpToWelcomeView(animated: Bool) {
         if Key.shared.navOpenMode == .welcomeFirst {
-            navigationController?.popToRootViewController(animated: true)
+            navigationController?.popToRootViewController(animated: animated)
         } else {
             let welcomeVC = WelcomeViewController()
-            navigationController?.pushViewController(welcomeVC, animated: true)
+            navigationController?.pushViewController(welcomeVC, animated: animated)
             navigationController?.viewControllers = [welcomeVC]
             Key.shared.navOpenMode = .welcomeFirst
         }
