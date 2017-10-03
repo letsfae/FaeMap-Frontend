@@ -200,18 +200,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         } else if indexPath.row == 5 {
             tableSelections = .settings
             actionCloseMenu(btnBackground)
-            let logOut = FaeUser()
-            logOut.logOut { (status: Int?, _: Any?) in
-                if status! / 100 == 2 {
-                    print("[LeftMenu-LogOut] Success")
-                    self.tableSelections = .settings
-                    self.actionCloseMenu(self.btnBackground)
-                } else {
-                    print("[LeftMenu-LogOut] Failure")
-                    self.tableSelections = .settings
-                    self.actionCloseMenu(self.btnBackground)
-                }
-            }
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
