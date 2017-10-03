@@ -46,7 +46,7 @@ class ManageColListCell: UITableViewCell {
         addSubview(lblColAddr)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColAddr)
         
-        lblColMemo =  FaeLabel(CGRect.zero, .left, .bold, 12, UIColor._107105105())
+        lblColMemo =  FaeLabel(CGRect.zero, .left, .demiBoldItalic, 12, UIColor._107105105())
         lblColMemo.numberOfLines = 0
         addSubview(lblColMemo)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColMemo)

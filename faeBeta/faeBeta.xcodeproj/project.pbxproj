@@ -169,6 +169,27 @@
 		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
 		B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D341F46519500DE3107 /* MBTalkTalk.swift */; };
 		B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */; };
+		B37E5DA11F831019008A6B4B /* GeneralCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9E1F831019008A6B4B /* GeneralCells.swift */; };
+		B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9F1F831019008A6B4B /* SettingsCell.swift */; };
+		B37E5DA31F831019008A6B4B /* SetAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA01F831019008A6B4B /* SetAccountCell.swift */; };
+		B37E5DB71F831040008A6B4B /* SetAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */; };
+		B37E5DB81F831040008A6B4B /* SetFaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */; };
+		B37E5DB91F831040008A6B4B /* SetAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */; };
+		B37E5DBA1F831040008A6B4B /* SetEnterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */; };
+		B37E5DBB1F831040008A6B4B /* SetMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */; };
+		B37E5DBC1F831040008A6B4B /* SetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */; };
+		B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */; };
+		B37E5DBE1F831040008A6B4B /* SetContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAB1F83103F008A6B4B /* SetContactViewController.swift */; };
+		B37E5DBF1F831040008A6B4B /* SetFaeInc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAC1F83103F008A6B4B /* SetFaeInc.swift */; };
+		B37E5DC01F831040008A6B4B /* SetPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAD1F83103F008A6B4B /* SetPrivacyViewController.swift */; };
+		B37E5DC11F831040008A6B4B /* SetShortIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAE1F83103F008A6B4B /* SetShortIntro.swift */; };
+		B37E5DC31F831040008A6B4B /* SetDisplayName.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB01F83103F008A6B4B /* SetDisplayName.swift */; };
+		B37E5DC41F831040008A6B4B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */; };
+		B37E5DC51F831040008A6B4B /* SetSpreadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */; };
+		B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */; };
+		B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB41F831040008A6B4B /* SetAlertController.swift */; };
+		B37E5DC81F831040008A6B4B /* SetGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */; };
+		B37E5DC91F831040008A6B4B /* SetInfoNamecard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */; };
 		B38FE86E1F679C4000F3C83E /* SignInPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */; };
 		B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */; };
 		B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */; };
@@ -462,6 +483,27 @@
 		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
 		B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsSearchViewController.swift; sourceTree = "<group>"; };
+		B37E5D9E1F831019008A6B4B /* GeneralCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralCells.swift; sourceTree = "<group>"; };
+		B37E5D9F1F831019008A6B4B /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		B37E5DA01F831019008A6B4B /* SetAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAccountCell.swift; sourceTree = "<group>"; };
+		B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAccountViewController.swift; sourceTree = "<group>"; };
+		B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetFaeMap.swift; sourceTree = "<group>"; };
+		B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAboutViewController.swift; sourceTree = "<group>"; };
+		B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetEnterPasswordViewController.swift; sourceTree = "<group>"; };
+		B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetMapsViewController.swift; sourceTree = "<group>"; };
+		B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInfoViewController.swift; sourceTree = "<group>"; };
+		B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetCloseViewController.swift; sourceTree = "<group>"; };
+		B37E5DAB1F83103F008A6B4B /* SetContactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetContactViewController.swift; sourceTree = "<group>"; };
+		B37E5DAC1F83103F008A6B4B /* SetFaeInc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetFaeInc.swift; sourceTree = "<group>"; };
+		B37E5DAD1F83103F008A6B4B /* SetPrivacyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetPrivacyViewController.swift; sourceTree = "<group>"; };
+		B37E5DAE1F83103F008A6B4B /* SetShortIntro.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetShortIntro.swift; sourceTree = "<group>"; };
+		B37E5DB01F83103F008A6B4B /* SetDisplayName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetDisplayName.swift; sourceTree = "<group>"; };
+		B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetSpreadViewController.swift; sourceTree = "<group>"; };
+		B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetDeactiveViewController.swift; sourceTree = "<group>"; };
+		B37E5DB41F831040008A6B4B /* SetAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAlertController.swift; sourceTree = "<group>"; };
+		B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGeneralViewController.swift; sourceTree = "<group>"; };
+		B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInfoNamecard.swift; sourceTree = "<group>"; };
 		B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPhoneViewController.swift; sourceTree = "<group>"; };
 		B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListDetailViewController.swift; sourceTree = "<group>"; };
@@ -907,6 +949,7 @@
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				504CE4D01F67BF3400070284 /* Explore */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
+				B37E5D921F830F0E008A6B4B /* Settings */,
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
 				B0CFC9981CED2CE700EC356A /* Model */,
 				B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */,
@@ -1129,6 +1172,50 @@
 				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
 			);
 			path = FaeContactsExtensions;
+			sourceTree = "<group>";
+		};
+		B37E5D921F830F0E008A6B4B /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B37E5D9D1F830FFD008A6B4B /* Controller */,
+				B37E5D9C1F830FEE008A6B4B /* Cell */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		B37E5D9C1F830FEE008A6B4B /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				B37E5D9E1F831019008A6B4B /* GeneralCells.swift */,
+				B37E5DA01F831019008A6B4B /* SetAccountCell.swift */,
+				B37E5D9F1F831019008A6B4B /* SettingsCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		B37E5D9D1F830FFD008A6B4B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */,
+				B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */,
+				B37E5DB41F831040008A6B4B /* SetAlertController.swift */,
+				B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */,
+				B37E5DAB1F83103F008A6B4B /* SetContactViewController.swift */,
+				B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */,
+				B37E5DB01F83103F008A6B4B /* SetDisplayName.swift */,
+				B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */,
+				B37E5DAC1F83103F008A6B4B /* SetFaeInc.swift */,
+				B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */,
+				B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */,
+				B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */,
+				B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */,
+				B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */,
+				B37E5DAD1F83103F008A6B4B /* SetPrivacyViewController.swift */,
+				B37E5DAE1F83103F008A6B4B /* SetShortIntro.swift */,
+				B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */,
+				B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		B3B5201E1F5A41C900A6B0DC /* Cells */ = {
@@ -1552,6 +1639,7 @@
 				B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */,
 				B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */,
 				50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */,
+				B37E5DC91F831040008A6B4B /* SetInfoNamecard.swift in Sources */,
 				B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */,
 				B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */,
 				B33FB2421F267CA600EC6655 /* AddNearbyController.swift in Sources */,
@@ -1561,6 +1649,7 @@
 				B33FB2441F267CA600EC6655 /* FaeAddFriendOptionsCell.swift in Sources */,
 				B33FB2451F267CA600EC6655 /* FaeAddUsernameCell.swift in Sources */,
 				B33FB2461F267CA600EC6655 /* FaeContactsCell.swift in Sources */,
+				B37E5DC81F831040008A6B4B /* SetGeneralViewController.swift in Sources */,
 				B33FB2471F267CA600EC6655 /* FaeInviteCell.swift in Sources */,
 				50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */,
 				B33FB2481F267CA600EC6655 /* FaeReceivedCell.swift in Sources */,
@@ -1568,6 +1657,7 @@
 				B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */,
 				B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */,
 				B33FB24B1F267CA600EC6655 /* ContactsLoading&TblCtrl.swift in Sources */,
+				B37E5DBC1F831040008A6B4B /* SetInfoViewController.swift in Sources */,
 				B33FB24C1F267CA600EC6655 /* NotificationExtension.swift in Sources */,
 				B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */,
 				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,
@@ -1579,6 +1669,7 @@
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */,
+				B37E5DC41F831040008A6B4B /* SettingsViewController.swift in Sources */,
 				DC084A911DDCF969007DCC88 /* Recent.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				B8849E9E1EEB141A00D4588D /* MBSocialStruct.swift in Sources */,
@@ -1586,6 +1677,7 @@
 				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
+				B37E5DBE1F831040008A6B4B /* SetContactViewController.swift in Sources */,
 				50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */,
 				B85FFE951EA84CEB0079D1A7 /* CreatedPinsTableViewCell.swift in Sources */,
 				50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */,
@@ -1600,6 +1692,7 @@
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
+				B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
 				C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */,
@@ -1613,6 +1706,7 @@
 				B8849F571EF355E500D4588D /* MBComtsStoriesViewController.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
 				B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */,
+				B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
@@ -1621,7 +1715,10 @@
 				B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */,
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
+				B37E5DA11F831019008A6B4B /* GeneralCells.swift in Sources */,
+				B37E5DC51F831040008A6B4B /* SetSpreadViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
+				B37E5DB71F831040008A6B4B /* SetAccountViewController.swift in Sources */,
 				B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
@@ -1657,6 +1754,7 @@
 				B064EF321D74ECDF00C078F5 /* UIColor+faeColor.swift in Sources */,
 				B0714E101D6252FC00356705 /* EnableLocationViewController.swift in Sources */,
 				B064EED71D6E0CEA00C078F5 /* SmartAlbum.swift in Sources */,
+				B37E5DB81F831040008A6B4B /* SetFaeMap.swift in Sources */,
 				B86AE0501ED4FC4400D1357D /* General.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */,
@@ -1703,6 +1801,7 @@
 				B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */,
 				B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */,
 				B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */,
+				B37E5DC01F831040008A6B4B /* SetPrivacyViewController.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
 				DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */,
@@ -1717,7 +1816,9 @@
 				CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
 				B064EEBF1D6E0CEA00C078F5 /* FullPhotoPickerCollectionViewCell.swift in Sources */,
+				B37E5DB91F831040008A6B4B /* SetAboutViewController.swift in Sources */,
 				B820B1A51EBE91D100F2C28C /* FaeAvatarView.swift in Sources */,
+				B37E5DBF1F831040008A6B4B /* SetFaeInc.swift in Sources */,
 				B8849EBF1EEB147A00D4588D /* MBTalkFeedCell.swift in Sources */,
 				B8CAA03B1DDD913F00DEC329 /* FMMapViewCtrl.swift in Sources */,
 				B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */,
@@ -1735,8 +1836,10 @@
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
 				50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */,
 				B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */,
+				B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */,
 				9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
+				B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
@@ -1753,12 +1856,15 @@
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
+				B37E5DBA1F831040008A6B4B /* SetEnterPasswordViewController.swift in Sources */,
+				B37E5DA31F831019008A6B4B /* SetAccountCell.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */,
 				B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B8849EBA1EEB147A00D4588D /* MBChatBubblesCell.swift in Sources */,
 				B31437AA1F310B1E007AE884 /* FMMapSearchCtrl.swift in Sources */,
+				B37E5DC11F831040008A6B4B /* SetShortIntro.swift in Sources */,
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */,
@@ -1772,6 +1878,7 @@
 				B8849EA51EEB143800D4588D /* MBPeople.swift in Sources */,
 				B8849EBE1EEB147A00D4588D /* MBPlacesCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
+				B37E5DBB1F831040008A6B4B /* SetMapsViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */,
 				B30B87861F7F0F3400B52027 /* ManageColListCell.swift in Sources */,
 				B8849EBD1EEB147A00D4588D /* MBPeopleCell.swift in Sources */,
@@ -1780,6 +1887,7 @@
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				500DB27E1F6B085400DB8798 /* EXPMapViewController.swift in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
+				B37E5DC31F831040008A6B4B /* SetDisplayName.swift in Sources */,
 				50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,

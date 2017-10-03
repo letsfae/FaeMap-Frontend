@@ -13,6 +13,8 @@ enum FaeLabelFontType: String {
     case medium = "Medium"
     case demiBold = "DemiBold"
     case bold = "Bold"
+    case mediumItalic = "MediumItalic"
+    case demiBoldItalic = "DemiBoldItalic"
 }
 
 func FaeFont(fontType: FaeLabelFontType, size: CGFloat) -> UIFont {

@@ -64,9 +64,9 @@ extension NSMutableAttributedString {
         
         if boldFirstSentence {
             var length = 0
-            let startIndex = title.string.characters.index(title.string.startIndex, offsetBy: 0)
+            let startIndex = title.string.index(title.string.startIndex, offsetBy: 0)
             
-            for c in title.string.substring(from: startIndex).characters {
+            for c in title.string.substring(from: startIndex) {
                 if c != "."{
                     length += 1
                 } else {
