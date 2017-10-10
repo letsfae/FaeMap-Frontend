@@ -112,6 +112,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     func loadNavBar() {
         uiviewNavBar = FaeNavBar()
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
+        uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .selected)
         uiviewNavBar.rightBtn.isEnabled = false
         uiviewNavBar.loadBtnConstraints()
         if chatOrShare == "chat" {
@@ -243,10 +244,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func loadSearchBar() {
-        lblTo = UILabel(frame: CGRect(x: 0, y: 65, width: 65, height: 50))
+        lblTo = UILabel(frame: CGRect(x: 15, y: 78, width: 29, height: 25))
         lblTo.text = "To:"
-        lblTo.textAlignment = .center
+        lblTo.textAlignment = .left
         lblTo.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblTo.textColor = UIColor._182182182()
         view.addSubview(lblTo)
         
         let layout = CPCollectionViewLayout()
@@ -262,36 +264,14 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func loadChatsList() {
-        let uiviewHeader:UIView = UIView(frame: CGRect(x: 0, y: 113, width: screenWidth, height: 27))
-        
-        let separateLine1 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        separateLine1.layer.borderWidth = screenWidth
-        separateLine1.layer.borderColor = UIColor._200199204cg()
-        uiviewHeader.addSubview(separateLine1)
-        
-        let separateLine2 = UIView(frame: CGRect(x: 0, y: 26, width: screenWidth, height: 1))
-        separateLine2.layer.borderWidth = screenWidth
-        separateLine2.layer.borderColor = UIColor._200199204cg()
-        uiviewHeader.addSubview(separateLine2)
-        view.addSubview(uiviewHeader)
-        
-        let lblHeader:UILabel = UILabel(frame: uiviewHeader.bounds)
-        lblHeader.textColor = UIColor._155155155()
-        lblHeader.backgroundColor = UIColor.clear
-        lblHeader.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
-        lblHeader.text = "Friends"
-        uiviewHeader.addSubview(lblHeader)
-        uiviewHeader.addConstraintsWithFormat("H:|-15-[v0(100)]", options: [], views: lblHeader)
-        uiviewHeader.addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblHeader)
-        uiviewHeader.backgroundColor = UIColor._248248248()
-        
-        tblFriends = UITableView(frame: CGRect(x: 0, y: 140, width: screenWidth, height: screenHeight - 140), style: .plain)
+        tblFriends = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: .plain)
         tblFriends.dataSource = self
         tblFriends.delegate = self
         tblFriends.register(NewChatTableViewCell.self, forCellReuseIdentifier: "friendCell")
         tblFriends.separatorStyle = UITableViewCellSeparatorStyle.singleLine
         tblFriends.separatorColor = UIColor._200199204()
         tblFriends.separatorInset = UIEdgeInsetsMake(0, 74, 0, 0)
+        //tblFriends.tableHeaderView = uiviewHeader
         tblFriends.tableFooterView = UIView()
         view.addSubview(tblFriends)
     }
@@ -318,14 +298,6 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         if indexPath.row == arrIntSelected.count {
             let inputCell = collectionView.dequeueReusableCell(withReuseIdentifier: "input", for: indexPath) as! TextFieldCollectionViewCell
             inputCell.tfInput.customDelegate = self
-            /*if boolIsClick {
-             inputCell.tfInput.becomeFirstResponder()
-             let res = inputCell.tfInput.isEditing
-             let res2 = inputCell.tfInput.isUserInteractionEnabled
-             print(res)
-             print(res2)
-             }
-             boolIsFirst = false*/
             cell = inputCell
         } else {
             let selectedCell = collectionView.dequeueReusableCell(withReuseIdentifier: "select", for: indexPath) as! SelectedFriendCollectionViewCell
@@ -349,6 +321,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             selectedCell.becomeFirstResponder()
             intSelectedIndex = indexPath.row
         }
+        cleanTextField()
         //boolIsClick = true
     }
     
@@ -383,10 +356,41 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(14, 1, 11, 1)
+        return UIEdgeInsetsMake(13, 1, 11, 1)
     }
     
     // UITableViewDelegate
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let uiviewHeader:UIView = UIView(frame: CGRect(x: 0, y: 113, width: screenWidth, height: 25))
+        
+        let separateLine1 = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        separateLine1.layer.borderWidth = screenWidth
+        separateLine1.layer.borderColor = UIColor._200199204cg()
+        uiviewHeader.addSubview(separateLine1)
+        
+        let separateLine2 = UIView(frame: CGRect(x: 0, y: 24, width: screenWidth, height: 1))
+        separateLine2.layer.borderWidth = screenWidth
+        separateLine2.layer.borderColor = UIColor._200199204cg()
+        uiviewHeader.addSubview(separateLine2)
+        //view.addSubview(uiviewHeader)
+        
+        let lblHeader:UILabel = UILabel(frame: uiviewHeader.bounds)
+        lblHeader.textColor = UIColor._155155155()
+        lblHeader.backgroundColor = UIColor.clear
+        lblHeader.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
+        lblHeader.text = "Friends"
+        uiviewHeader.addSubview(lblHeader)
+        uiviewHeader.addConstraintsWithFormat("H:|-15-[v0(100)]", options: [], views: lblHeader)
+        uiviewHeader.addConstraintsWithFormat("V:|-3-[v0(20)]", options: [], views: lblHeader)
+        uiviewHeader.backgroundColor = UIColor._248248248()
+        
+        return uiviewHeader
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 25
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrFiltered.count
     }
@@ -400,8 +404,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         })
         if arrIntSelected.contains(arrFiltered[indexPath.row].index) {
             cell.imgStatus.image = #imageLiteral(resourceName: "status_selected")
-        }
-        else {
+        } else {
             cell.imgStatus.image = #imageLiteral(resourceName: "status_unselected")
         }
         return cell
@@ -409,28 +412,24 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentCell = tableView.cellForRow(at: indexPath) as! NewChatTableViewCell
-        var currentIndex: Int = 0
-        for friend in arrFriends {
-            if friend.nickName == currentCell.lblNickName.text {
-                currentIndex = friend.index
-            }
+        let currentIndex = arrFiltered[indexPath.row].index
+        if arrIntSelected.contains(currentIndex) {
+            let indexInCollection = arrIntSelected.index(of: currentIndex)!
+            arrIntSelected.remove(at: indexInCollection)
+            UIView.setAnimationsEnabled(false)
+            cllcSelected.deleteItems(at: [IndexPath(row: indexInCollection, section: 0)])
+            UIView.setAnimationsEnabled(true)
+        } else {
+            arrIntSelected.append(indexPath.row)
+            UIView.setAnimationsEnabled(false)
+            cllcSelected.insertItems(at: [IndexPath(row: arrIntSelected.count - 1, section: 0)])
+            UIView.setAnimationsEnabled(true)
+            deselectCell()
         }
-        if (arrIntSelected.contains(currentIndex)) {
-            /*strSearchWord = findCurrentSearchWord(searchField.text!)
-            if let i = arrSelected.index(of: currentIndex) {
-                arrSelected.remove(at: i)
-            }
-            loadTextInSearchBar(moreWord: strSearchWord)*/
-        }
-        else {
-            uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .normal)
-            uiviewNavBar.rightBtn.isEnabled = true
-            arrIntSelected.append(currentIndex)
-            //loadTextInSearchBar(moreWord: "")
-            filter("")
-        }
+        setSelectedBoxHeight()
         loadStatus()
-        searchField.becomeFirstResponder()
+        cleanTextField()
+        filter("")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -441,10 +440,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     // deal with searching
     func filter(_ searchText: String) {
         //print("filter: \(searchText)")
-        if searchText == "" {
+        if searchText.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             arrFiltered = arrFriends;
-        }
-        else {
+        } else {
             arrFiltered = arrFriends.filter({(($0.nickName).lowercased()).range(of: searchText.lowercased()) != nil})
         }
         tblFriends.reloadData()
@@ -455,9 +453,13 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     // deal with the cells on current screen
     func loadStatus() {
         if arrIntSelected.count == 0 {
-            uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
+            //uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
+            uiviewNavBar.rightBtn.isSelected = false
             uiviewNavBar.rightBtn.isEnabled = false
             //return
+        } else {
+            uiviewNavBar.rightBtn.isSelected = true
+            uiviewNavBar.rightBtn.isEnabled = true
         }
         for index in 0 ..< arrFiltered.count {
             if tblFriends.cellForRow(at: IndexPath(row: index, section: 0)) == nil {
@@ -479,7 +481,8 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     
     // helper functions for editing the list of selected friends
     func textFieldDidChange(_ textField: UITextField) {
-        print("[\(textField.text ?? "")]")
+        //print("[\(textField.text ?? "")]")
+        filter(textField.text!)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -495,7 +498,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         let lastSelected = cllcSelected.cellForItem(at: IndexPath(row: arrIntSelected.count - 1, section: 0)) as! SelectedFriendCollectionViewCell
         if lastSelected.boolSelected {
             arrIntSelected.remove(at: arrIntSelected.count - 1)
+            UIView.setAnimationsEnabled(false)
             cllcSelected.deleteItems(at: [IndexPath(row: arrIntSelected.count, section: 0)])
+            UIView.setAnimationsEnabled(true)
             cllcSelected.layoutIfNeeded()
             intSelectedIndex = -1
         } else {
@@ -504,9 +509,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         }
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+    /*func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
         print("end editing")
-    }
+    }*/
     
     // MyCellDelegate
     func deleteIsTapped() {
@@ -523,6 +528,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         setSelectedBoxHeight()
         boolIsClick = true
         setTextFieldFirstResponder()
+        loadStatus()
     }
     
     // scroll
@@ -551,11 +557,12 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     
     func setSelectedBoxHeight() {
         var currentHeight = cllcSelected.collectionViewLayout.collectionViewContentSize.height
-        if currentHeight > 100 {
-            currentHeight = 100
+        if currentHeight > 99 {
+            cllcSelected.setContentOffset(CGPoint(x: 0, y: currentHeight - 99), animated: false)
+            currentHeight = 99
         }
-        if currentHeight < 50 {
-            currentHeight = 50
+        if currentHeight < 49 {
+            currentHeight = 49
         }
         cllcSelected.frame = CGRect(x: 47, y: 65, width: screenWidth - 47, height: currentHeight)
         tblFriends.frame = CGRect(x: 0, y: 65 + currentHeight, width: screenWidth, height: screenHeight - 65 - currentHeight)
@@ -567,5 +574,10 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             prevSelected.setCellSelected(false)
             intSelectedIndex = -1
         }
+    }
+    
+    func cleanTextField() {
+        let inputCell = cllcSelected.cellForItem(at: IndexPath(row: arrIntSelected.count, section: 0)) as! TextFieldCollectionViewCell
+        inputCell.tfInput.text = ""
     }
 }
