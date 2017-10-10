@@ -47,7 +47,7 @@ class SelectedFriendCollectionViewCell: UICollectionViewCell, UIKeyInput {
     override init(frame: CGRect) {
         super.init(frame: frame)
         lblSelected = UILabel(frame: frame)
-        lblSelected.textColor = .red
+        lblSelected.textColor = UIColor._2499090()
         lblSelected.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSelected.textAlignment = .center
         lblSelected.translatesAutoresizingMaskIntoConstraints = false
@@ -68,9 +68,9 @@ class SelectedFriendCollectionViewCell: UICollectionViewCell, UIKeyInput {
     func setCellSelected(_ selected: Bool) {
         boolSelected = selected
         if selected {
-            lblSelected.textColor = .blue
+            lblSelected.textColor = UIColor._95181245()
         } else {
-            lblSelected.textColor = .red
+            lblSelected.textColor = UIColor._2499090()
         }
     }
 }
@@ -82,6 +82,9 @@ class TextFieldCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         tfInput = CustomUITextField(frame: frame)
         tfInput.text = ""
+        tfInput.tintColor = UIColor._2499090()
+        tfInput.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        tfInput.textColor = UIColor._898989()
         tfInput.backgroundColor = .white
         addSubview(tfInput)
         addConstraintsWithFormat("H:|-2-[v0]-2-|", options: [], views: tfInput)

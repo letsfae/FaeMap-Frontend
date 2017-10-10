@@ -1910,7 +1910,7 @@
 					"DISABLE_PUSH_NOTIFICATIONS=1",
 				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1950,7 +1950,7 @@
 					"DISABLE_PUSH_NOTIFICATIONS=1",
 				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
