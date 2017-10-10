@@ -1,4 +1,14 @@
 //
+//  NSVC_backup.swift
+//  faeBeta
+//
+//  Created by Jichao Zhong on 10/9/17.
+//  Copyright © 2017 fae. All rights reserved.
+//
+
+import Foundation
+/*
+//
 //  NewChat+ShareViewController.swift
 //  faeBeta
 //
@@ -31,18 +41,16 @@ struct cellFriendData {
     }
 }
 
-class NewChatShareController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, CustomTextFieldDelegate, DeleteCellDelegate, UIScrollViewDelegate, UISearchBarDelegate  {
+class NewChatShareController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate  {
     
     var chatOrShare: String!
     
     //var arrFriends: [cellFriendData] = [cellFriendData(name: "friendsOne", index: 0), cellFriendData(name: "friendsTwo", index: 1), cellFriendData(name: "friendsThree", index: 2), cellFriendData(name: "friendsFour", index: 3)]
     var arrFriends: [cellFriendData] = []
     var arrFiltered: [cellFriendData] = []
-    var arrIntSelected: [Int] = []
+    var arrSelected: [Int] = []
     
     var uiviewNavBar: FaeNavBar!
-    var lblTo: UILabel!
-    var cllcSelected: UICollectionView!
     var uiviewSchabr: UIView!
     var schbarChatTo: FaeSearchBar!
     var searchField: UITextField!
@@ -50,11 +58,6 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     
     var tblFriends: UITableView!
     var imgGhost: UIImageView!
-    
-    var intSelectedIndex: Int = -1
-    var boolIsFirst: Bool = true
-    var boolIsClick: Bool = false
-    var floatScrollViewOriginOffset: CGFloat = 0
     
     var boolDeleting: Bool = false
     var strLastTextField: String = ""
@@ -132,10 +135,10 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     
     func navigationRightItemTapped() {
         //if chatOrShare == "chat" {
-            chatWithUsers(IDs: [arrFriends[arrIntSelected[0]].userID])
+        chatWithUsers(IDs: [arrFriends[arrSelected[0]].userID])
         //}
         //else if chatOrShare == "share" {
-            
+        
         //}
         
     }
@@ -170,25 +173,25 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         }
         // First get chatroom id
         /*getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
-            var resultJson1 = JSON([])
-            if status / 100 == 2 {
-                resultJson1 = JSON(result!)
-            }
-            // then get with user name
-            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
-                guard status / 100 == 2 else { return }
-                let resultJson2 = JSON(result!)
-                var chat_id: String?
-                if let id = resultJson1["chat_id"].number {
-                    chat_id = id.stringValue
-                }
-                if let nickName = resultJson2["nick_name"].string {
-                    self.startChat(chat_id, userId: id, nickName: nickName)
-                } else {
-                    self.startChat(chat_id, userId: id, nickName: nil)
-                }
-            }
-        }*/
+         var resultJson1 = JSON([])
+         if status / 100 == 2 {
+         resultJson1 = JSON(result!)
+         }
+         // then get with user name
+         getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+         guard status / 100 == 2 else { return }
+         let resultJson2 = JSON(result!)
+         var chat_id: String?
+         if let id = resultJson1["chat_id"].number {
+         chat_id = id.stringValue
+         }
+         if let nickName = resultJson2["nick_name"].string {
+         self.startChat(chat_id, userId: id, nickName: nickName)
+         } else {
+         self.startChat(chat_id, userId: id, nickName: nil)
+         }
+         }
+         }*/
     }
     
     func startChat_v2(_ vc: UIViewController) {
@@ -243,22 +246,27 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func loadSearchBar() {
-        lblTo = UILabel(frame: CGRect(x: 0, y: 65, width: 65, height: 50))
-        lblTo.text = "To:"
-        lblTo.textAlignment = .center
-        lblTo.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        view.addSubview(lblTo)
+        uiviewSchabr = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
         
-        let layout = CPCollectionViewLayout()
-        layout.minimumLineSpacing = 0
+        searchField = UITextField(frame: CGRect(x: 49, y: 0, width: screenWidth - 55, height: 49))
+        searchField.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        searchField.textColor = UIColor._898989()
+        searchField.tintColor = UIColor._2499090()
+        uiviewSchabr.addSubview(searchField)
+        searchField.delegate = self
+        searchField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
-        cllcSelected = UICollectionView(frame: CGRect(x: 47, y: 65, width: screenWidth - 47, height: 50), collectionViewLayout: layout)
-        cllcSelected.backgroundColor = .white
-        cllcSelected.delegate = self
-        cllcSelected.dataSource = self
-        cllcSelected.register(SelectedFriendCollectionViewCell.self, forCellWithReuseIdentifier: "select")
-        cllcSelected.register(TextFieldCollectionViewCell.self, forCellWithReuseIdentifier: "input")
-        view.addSubview(cllcSelected)
+        let lblChatTo = UILabel()
+        lblChatTo.text = "To:"
+        lblChatTo.textAlignment = .left
+        lblChatTo.textColor = UIColor._182182182()
+        lblChatTo.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        uiviewSchabr.addSubview(lblChatTo)
+        //uiviewSchabr.addConstraintsToView(child: lblChatTo, left: true, gapH: 15, width: 29, top: true, gapV: 13, height: 25)
+        uiviewSchabr.addConstraintsWithFormat("H:|-15-[v0(29)]", options: [], views: lblChatTo)
+        uiviewSchabr.addConstraintsWithFormat("V:|-13-[v0(25)]", options: [], views: lblChatTo)
+        
+        view.addSubview(uiviewSchabr)
     }
     
     func loadChatsList() {
@@ -304,88 +312,6 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         view.addSubview(imgGhost)
     }
     
-    // MARK: CollectionViewDataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrIntSelected.count + 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell: UICollectionViewCell
-        if indexPath.row == arrIntSelected.count {
-            let inputCell = collectionView.dequeueReusableCell(withReuseIdentifier: "input", for: indexPath) as! TextFieldCollectionViewCell
-            inputCell.tfInput.customDelegate = self
-            /*if boolIsClick {
-             inputCell.tfInput.becomeFirstResponder()
-             let res = inputCell.tfInput.isEditing
-             let res2 = inputCell.tfInput.isUserInteractionEnabled
-             print(res)
-             print(res2)
-             }
-             boolIsFirst = false*/
-            cell = inputCell
-        } else {
-            let selectedCell = collectionView.dequeueReusableCell(withReuseIdentifier: "select", for: indexPath) as! SelectedFriendCollectionViewCell
-            selectedCell.lblSelected.text = arrFriends[arrIntSelected[indexPath.row]].nickName + ","
-            selectedCell.setCellSelected(false)
-            selectedCell.deleteDelegate = self
-            cell = selectedCell
-        }
-        return cell
-    }
-    
-    // MARK: CollectionViewDelegate
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let selectedCell = collectionView.cellForItem(at: indexPath) as! SelectedFriendCollectionViewCell
-        if selectedCell.boolSelected {
-            selectedCell.setCellSelected(false)
-            intSelectedIndex = -1
-        } else {
-            deselectCell()
-            selectedCell.setCellSelected(true)
-            selectedCell.becomeFirstResponder()
-            intSelectedIndex = indexPath.row
-        }
-        //boolIsClick = true
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    // MARK: UICollectionViewDelegateFlowLayout
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        var width: CGFloat = 0
-        if indexPath.row < arrIntSelected.count {
-            width = getLabelWidth(text: arrFriends[arrIntSelected[indexPath.row]].nickName)
-        } else if arrIntSelected.count > 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "select", for: IndexPath(row: indexPath.row - 1, section: 0)) as! SelectedFriendCollectionViewCell
-            var inputWidth = screenWidth - 47 - cell.frame.width - cell.frame.minX - 10
-            if inputWidth <= 50 {
-                inputWidth = screenWidth - 47 - 2
-            }
-            return CGSize(width: inputWidth, height: 25)
-        } else {
-            return CGSize(width: screenWidth - 47 - 10, height: 25)
-        }
-        if width >= screenWidth - 40 {
-            width = screenWidth - 40
-        }
-        //print(width)
-        return CGSize(width: width + 10, height: 25)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(14, 1, 11, 1)
-    }
-    
     // UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrFiltered.count
@@ -398,7 +324,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         General.shared.avatar(userid: Int(arrFiltered[indexPath.row].userID)!, completion: { (avatarImage) in
             cell.imgAvatar.image = avatarImage
         })
-        if arrIntSelected.contains(arrFiltered[indexPath.row].index) {
+        if arrSelected.contains(arrFiltered[indexPath.row].index) {
             cell.imgStatus.image = #imageLiteral(resourceName: "status_selected")
         }
         else {
@@ -415,18 +341,18 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 currentIndex = friend.index
             }
         }
-        if (arrIntSelected.contains(currentIndex)) {
-            /*strSearchWord = findCurrentSearchWord(searchField.text!)
+        if (arrSelected.contains(currentIndex)) {
+            strSearchWord = findCurrentSearchWord(searchField.text!)
             if let i = arrSelected.index(of: currentIndex) {
                 arrSelected.remove(at: i)
             }
-            loadTextInSearchBar(moreWord: strSearchWord)*/
+            loadTextInSearchBar(moreWord: strSearchWord)
         }
         else {
             uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .normal)
             uiviewNavBar.rightBtn.isEnabled = true
-            arrIntSelected.append(currentIndex)
-            //loadTextInSearchBar(moreWord: "")
+            arrSelected.append(currentIndex)
+            loadTextInSearchBar(moreWord: "")
             filter("")
         }
         loadStatus()
@@ -450,11 +376,74 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         tblFriends.reloadData()
     }
     
-   
+    // callback when text field changes
+    func textFieldDidChange(_ textField: UITextField) {
+        if textField.text == "" {
+            filter("")
+            return
+        }
+        
+        boolDeleting = detectDeleting(textField.text!)
+        let curCursorPos = detectCursorPosition(textField: textField)
+        //print("current section: \(curCursorPos)")
+        let textArray = (textField.text!.trimmingCharacters(in: .whitespaces)).components(separatedBy: ", ")
+        
+        if !boolDeleting {
+            if [AT_BORDER_POSITION, AT_UNSELECTED_AREA].contains(curCursorPos) {
+                if boolToDelete {
+                    boolToDelete = false
+                    loadTextInSearchBar(moreWord: strSearchWord.trimmingCharacters(in: .whitespaces))
+                }
+                else {
+                    strSearchWord = findCurrentSearchWord(textField.text!)
+                    filter(strSearchWord.trimmingCharacters(in: .whitespaces))
+                    strLastTextField = searchField.text!
+                }
+            }
+            else {
+                if boolToDelete {
+                    boolToDelete = false
+                }
+                if textArray.count == arrSelected.count {
+                    loadTextInSearchBar(moreWord: "")
+                }
+                else {
+                    strSearchWord = findCurrentSearchWord(textField.text!)
+                    filter(strSearchWord.trimmingCharacters(in: .whitespaces))
+                    loadTextInSearchBar(moreWord: strSearchWord.trimmingCharacters(in: .whitespaces))
+                }
+            }
+        }
+        else {
+            if curCursorPos == AT_UNSELECTED_AREA {
+                strSearchWord = findCurrentSearchWord(textField.text!)
+                filter(strSearchWord.trimmingCharacters(in: .whitespaces))
+                strLastTextField = searchField.text!
+            }
+            else {
+                let curToDelPos = detectToDelIndex(textField: textField)
+                if boolToDelete && (curToDelPos == intLastToDelPos) {
+                    filter(strSearchWord.trimmingCharacters(in: .whitespaces))
+                    arrSelected.remove(at: curToDelPos)
+                    loadTextInSearchBar(moreWord: strSearchWord.trimmingCharacters(in: .whitespaces))
+                    boolToDelete = false
+                    boolReadyToDel = false
+                }
+                else {
+                    intLastToDelPos = curToDelPos
+                    loadTextInSearchBarWithDeleting(textField: textField, toDelIndex: intLastToDelPos, moreWord: strSearchWord.trimmingCharacters(in: .whitespaces))
+                    loadStatus()
+                    return
+                }
+            }
+        }
+        loadStatus()
+        
+    }
     
     // deal with the cells on current screen
     func loadStatus() {
-        if arrIntSelected.count == 0 {
+        if arrSelected.count == 0 {
             uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "cannotSendMessage"), for: .normal)
             uiviewNavBar.rightBtn.isEnabled = false
             //return
@@ -465,7 +454,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             }
             let currentCell = tblFriends.cellForRow(at: IndexPath(row: index, section: 0)) as! NewChatTableViewCell
             let currentFriend: cellFriendData = arrFiltered[index]
-            if arrIntSelected.contains(currentFriend.index) {
+            if arrSelected.contains(currentFriend.index) {
                 currentCell.imgStatus.image = #imageLiteral(resourceName: "status_selected")
                 currentCell.statusSelected = true
             }
@@ -478,94 +467,137 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     // helper functions for editing the list of selected friends
-    func textFieldDidChange(_ textField: UITextField) {
-        print("[\(textField.text ?? "")]")
+    func detectDeleting(_ searchText: String) -> Bool {
+        if searchText.characters.count > strLastTextField.characters.count {
+            return false
+        }
+        else {
+            return true
+        }
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("begin")
-        boolIsClick = true
-        deselectCell()
+    func detectCursorPosition(textField: UITextField) -> Int {
+        var selectedLength: Int = 0
+        for index in arrSelected {
+            let currentLength = arrFriends[index].nickName.characters.count + 2
+            selectedLength = selectedLength + currentLength
+        }
+        
+        if let selectedRange = textField.selectedTextRange {
+            var cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
+            if boolDeleting {
+                cursorPosition = cursorPosition + 1
+            }
+            else if cursorPosition == selectedLength {
+                return AT_SELECTED_AREA
+            }
+            
+            if cursorPosition > selectedLength {
+                return AT_UNSELECTED_AREA
+            }
+            else if cursorPosition == selectedLength {
+                return AT_BORDER_POSITION
+            }
+        }
+        
+        return AT_SELECTED_AREA
     }
     
-    func textFieldDidDelete(_ textField: UITextField) {
-        if textField.text != "" || arrIntSelected.count == 0 {
+    func findCurrentSearchWord(_ searchText: String) -> String {
+        var selectedLength: Int = 0
+        for index in arrSelected {
+            let currentLength = arrFriends[index].nickName.characters.count + 2
+            selectedLength = selectedLength + currentLength
+        }
+        return searchText.substring(from: searchText.index(searchText.startIndex, offsetBy: selectedLength))
+    }
+    
+    func loadTextInSearchBar(moreWord: String) {
+        if arrSelected.count == 0 && strSearchWord == "" {
+            searchField.text = ""
+            searchField.textColor = UIColor._898989()
             return
         }
-        let lastSelected = cllcSelected.cellForItem(at: IndexPath(row: arrIntSelected.count - 1, section: 0)) as! SelectedFriendCollectionViewCell
-        if lastSelected.boolSelected {
-            arrIntSelected.remove(at: arrIntSelected.count - 1)
-            cllcSelected.deleteItems(at: [IndexPath(row: arrIntSelected.count, section: 0)])
-            cllcSelected.layoutIfNeeded()
-            intSelectedIndex = -1
-        } else {
-            lastSelected.setCellSelected(true)
-            intSelectedIndex = arrIntSelected.count - 1
-        }
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        print("end editing")
-    }
-    
-    // MyCellDelegate
-    func deleteIsTapped() {
-        print("delete in vc")
-        if intSelectedIndex < 0 {
+        else if arrSelected.count == 0 {
+            searchField.text = strSearchWord.trimmingCharacters(in: .whitespaces)
+            searchField.textColor = UIColor._898989()
             return
         }
-        let selectedCell = cllcSelected.dequeueReusableCell(withReuseIdentifier: "select", for: IndexPath(row: intSelectedIndex, section: 0)) as! SelectedFriendCollectionViewCell
-        selectedCell.resignFirstResponder()
-        let selectedIndex = arrIntSelected[intSelectedIndex]
-        arrIntSelected = arrIntSelected.filter { $0 != selectedIndex }
-        cllcSelected.deleteItems(at: [IndexPath(row: intSelectedIndex, section: 0)])
-        intSelectedIndex = -1
-        setSelectedBoxHeight()
-        boolIsClick = true
-        setTextFieldFirstResponder()
+        
+        strLastTextField = ""
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        for index in 0 ..< arrSelected.count - 1 {
+            let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+            attributedStrM.append(textNS)
+            strLastTextField = strLastTextField + arrFriends[arrSelected[index]].nickName + ", "
+            //print(index)
+        }
+        
+        let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+        attributedStrM.append(lastNS)
+        strLastTextField = strLastTextField + arrFriends[arrSelected[arrSelected.count - 1]].nickName + ","
+        
+        let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(changeColor)
+        
+        let newSearchWord : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(newSearchWord)
+        strLastTextField = strLastTextField + moreWord
+        
+        searchField.attributedText = attributedStrM
     }
     
-    // scroll
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        if scrollView == tblFriends {
-            view.endEditing(true)
-            boolIsClick = false
+    func loadTextInSearchBarWithDeleting(textField: UITextField, toDelIndex: Int, moreWord: String) {
+        boolToDelete = true
+        
+        let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
+        for index in 0 ..< arrSelected.count {
+            if index == toDelIndex {
+                let delNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor.blue])
+                attributedStrM.append(delNS)
+            }
+            else {
+                let textNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[index]].nickName + ", ", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+                attributedStrM.append(textNS)
+            }
+            //print(index)
+        }
+        
+        let lastNS : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        attributedStrM.append(lastNS)
+        searchField.attributedText = attributedStrM
+        
+        // move the cursor to the end of word to be deleted
+        var targetPosition: Int = 0
+        for index in 0 ..< toDelIndex {
+            targetPosition = targetPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+        }
+        targetPosition = targetPosition + arrFriends[arrSelected[toDelIndex]].nickName.characters.count + 2
+        //print(targetPosition)
+        if let newPosition = textField.position(from: textField.beginningOfDocument, offset: targetPosition) {
+            textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
         }
     }
     
-    func getLabelWidth(text: String) -> CGFloat {
-        let size = text.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT)), options: [], attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size
-        return size.width
+    func detectToDelIndex(textField: UITextField) -> Int {
+        var cursorPosition: Int = 0
+        if let selectedRange = textField.selectedTextRange {
+            cursorPosition = textField.offset(from: textField.beginningOfDocument, to: selectedRange.start)
+        }
+        cursorPosition = cursorPosition + 1
+        var currentWordEndPosition: Int = 0
+        var lastWordEndPosition: Int = 0
+        for index in 0 ..< arrSelected.count {
+            if index != 0 {
+                lastWordEndPosition = currentWordEndPosition
+            }
+            currentWordEndPosition = currentWordEndPosition + arrFriends[arrSelected[index]].nickName.characters.count + 2
+            if cursorPosition > lastWordEndPosition && cursorPosition <= currentWordEndPosition {
+                return index
+            }
+        }
+        return arrSelected.count - 1
     }
     
-    func setTextFieldFirstResponder() {
-        if boolIsClick {
-            //cllcSelected.reloadItems(at: [IndexPath(row: arrIntSelected.count, section: 0)])
-            //cllcSelected.reloadData()
-            let inputCell = cllcSelected.cellForItem(at: IndexPath(row: arrIntSelected.count, section: 0)) as! TextFieldCollectionViewCell
-            inputCell.tfInput.becomeFirstResponder()
-            let res = inputCell.tfInput.isEditing
-            print(res)
-        }
-    }
-    
-    func setSelectedBoxHeight() {
-        var currentHeight = cllcSelected.collectionViewLayout.collectionViewContentSize.height
-        if currentHeight > 100 {
-            currentHeight = 100
-        }
-        if currentHeight < 50 {
-            currentHeight = 50
-        }
-        cllcSelected.frame = CGRect(x: 47, y: 65, width: screenWidth - 47, height: currentHeight)
-        tblFriends.frame = CGRect(x: 0, y: 65 + currentHeight, width: screenWidth, height: screenHeight - 65 - currentHeight)
-    }
-    
-    func deselectCell() {
-        if intSelectedIndex >= 0 {
-            let prevSelected = cllcSelected.cellForItem(at: IndexPath(row: intSelectedIndex, section: 0)) as! SelectedFriendCollectionViewCell
-            prevSelected.setCellSelected(false)
-            intSelectedIndex = -1
-        }
-    }
 }
+*/
