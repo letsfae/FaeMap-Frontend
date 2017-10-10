@@ -25,6 +25,8 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     var txtMemo: String = ""
     var keyboardHeight: CGFloat = 0
     weak var delegate: EditMemoDelegate?
+    var enterMode: CollectionTableMode!
+    var pinId: Int = -1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +52,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         
         btnSaveMemo = UIButton(frame: CGRect(x: screenWidth - 66, y: 5, width: 66, height: 42))
         uiviewEditMemo.addSubview(btnSaveMemo)
-        btnSaveMemo.setTitle("Create", for: .normal)
+        btnSaveMemo.setTitle("Save", for: .normal)
         btnSaveMemo.setTitleColor(UIColor._2499090(), for: .normal)
         btnSaveMemo.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 16)
         btnSaveMemo.addTarget(self, action: #selector(self.actionSave(_:)), for: .touchUpInside)
@@ -79,6 +81,16 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     
     func actionSave(_ sender: UIButton) {
         txtMemo = textviewMemo.textColor == UIColor._182182182() ? "" : textviewMemo.text
+//        let faeCollection = FaeCollection()
+//        faeCollection.whereKey("content", value: txtMemo)
+//        faeCollection.createMemo(enterMode.rawValue, pinID: String(pinId)) {(status: Int, message: Any?) in
+//            if status / 100 == 2 {
+//                delegate?.saveMemo(memo: txtMemo)
+//                hideMemoView()
+//            } else {
+//                print("[Create Memo] Fail to Create \(status) \(message!)")
+//            }
+//        }
         delegate?.saveMemo(memo: txtMemo)
         hideMemoView()
     }
@@ -134,6 +146,5 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         keyboardHeight = keyboardRectangle.height
         
         uiviewEditMemo.frame.origin.y = screenHeight - keyboardHeight - 180
-        uiviewEditMemo.frame.size.height = 180
     }
 }

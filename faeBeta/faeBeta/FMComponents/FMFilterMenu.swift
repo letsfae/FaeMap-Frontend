@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol MapFilterMenuDelegate: class {
     func autoReresh(isOn: Bool)
@@ -36,14 +37,43 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var curtTitle: String = "Places"
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
+    var arrCollection = [PinCollection]()
+    let faeCollection = FaeCollection()
+    var tableMode: CollectionTableMode = .place
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
+        loadCollectionData()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadCollectionData() {
+        faeCollection.getCollections {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let collections = JSON(message!)
+                // 后端数据改好后，改为collections.array
+                guard let colArray = collections.arrayValue[0].array else {
+                    print("[loadCollectionData] fail to parse collections info")
+                    return
+                }
+                
+                self.arrCollection.removeAll()
+                for col in colArray {
+                    let data = PinCollection(json: col)
+                    if data.colType == self.tableMode.rawValue {
+                        self.arrCollection.append(data)
+                    }
+                }
+                
+                self.tblPlaceLoc.reloadData()
+            } else {
+                print("[Get Collections] Fail to Get \(status) \(message!)")
+            }
+        }
     }
     
     fileprivate func setUpUI() {
@@ -65,10 +95,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         
         // draw two uiview of Map Options
         uiviewMapOpt = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 405))
-//        uiviewMapOpt1.backgroundColor = .white
         
         uiviewPlaceLoc = UIView(frame: CGRect(x: 414, y: 0, w: 414, h: 405))
-//        uiviewPlaceLoc.backgroundColor = .blue
         
         scrollViewFilterMenu = UIScrollView(frame: CGRect(x: 0, y: 28, w: 414, h: 405))
         scrollViewFilterMenu.delegate = self
@@ -186,6 +214,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, w: 150, h: 27))
         btnPlaceLoc.center.x = screenWidth / 2
         uiviewPlaceLoc.addSubview(btnPlaceLoc)
+        btnPlaceLoc.addTarget(self, action: #selector(dropDownMenuAct(_:)), for: .touchUpInside)
         setView2CurtTitle()
         
         let uiviewMyList = UIView(frame: CGRect(x: 0, y: 36, w: 414, h: 27))
@@ -247,6 +276,24 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnPlaceLoc.setAttributedTitle(curtTitlePlusImg, for: .normal)
     }
     
+    // function for buttons in drop down menu
+    func dropDownMenuAct(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            curtTitle = "Places"
+            tableMode = .place
+            break
+        case 1:
+            curtTitle = "Locations"
+            tableMode = .location
+            break
+        default:
+            return
+        }
+        setView2CurtTitle()
+        loadCollectionData()
+    }
+    
     func changePage(_ sender: Any?) {
         scrollViewFilterMenu.contentOffset.x = screenWidth * CGFloat(pageMapOptions.currentPage)
     }
@@ -302,13 +349,17 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         return 100
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return arrCollection.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-        cell.lblListName.text = "My Favorite Place"
-        cell.lblListNum.text = "12 items"
+        let collection = arrCollection[indexPath.row]
+        cell.setValueForCell(cols: collection)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
     }
 }

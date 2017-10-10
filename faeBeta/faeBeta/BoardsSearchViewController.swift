@@ -17,9 +17,9 @@ import SwiftyJSON
     @objc optional func chooseLocationOnMap()
     @objc optional func sendLocationBack(address: RouteAddress)
 }
-enum EnterMode {
-    case place
-    case location
+enum EnterMode: String {
+    case place = "place"
+    case location = "location"
 }
 
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource {

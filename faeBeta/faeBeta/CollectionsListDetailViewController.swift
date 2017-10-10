@@ -11,11 +11,12 @@ import SwiftyJSON
 
 protocol CollectionsListDetailDelegate: class {
     func deleteColList(indexPath: IndexPath)
+    func updateColName(indexPath: IndexPath, name: String, numItems: Int)
 }
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate {
     
-    var enterMode: EnterMode!
+    var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
     var uiviewFixedSectionHeader: UIView!
     var lblListName: UILabel!
@@ -41,9 +42,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var uiviewMsgHint: UIView!
     var btnCrossCancel: UIButton!
     var btnYes: UIButton!
-    var txtName: String = "Vancouver Best Foods"
-    var txtDesp: String = "Vancouver Best Foods, cakes waffles, wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww test list list list list list list list list list"
+    
+    var txtName: String = ""
+    var txtDesp: String = ""
     var txtTime: String = "09/2017"
+    
+    var arrColDetails: CollectionList!
+    var colId: Int = -1
+    let faeCollection = FaeCollection()
     
     var indexPath: IndexPath!
     weak var delegate: CollectionsListDetailDelegate?
@@ -57,11 +63,31 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         loadHiddenHeader()
         loadChooseOption()
         ColListDetailHeader.boolExpandMore = false
+        loadColItems()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         ColListDetailHeader.boolExpandMore = false
+    }
+    
+    fileprivate func loadColItems() {
+        faeCollection.getOneCollection(String(colId)) {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let list = JSON(message!).arrayValue[0]
+                self.arrColDetails = CollectionList(json: list)
+                
+                self.lblListName.text = self.arrColDetails.colName
+                self.txtName = self.arrColDetails.colName
+                self.txtDesp = self.arrColDetails.colDesp
+//                self.txtTime = self.arrColDetails.colTime
+                
+                self.tblColListDetail.reloadData()
+                print("[Get Collection items] Get Successfully")
+            } else {
+                print("[Get Collection items] Fail to Get \(status) \(message!)")
+            }
+        }
     }
     
     fileprivate func loadHiddenHeader() {
@@ -86,7 +112,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 34))
         uiviewFixedSectionHeader.backgroundColor = .white
         view.addSubview(uiviewFixedSectionHeader)
-        numItems = savedItems.count
         let lblNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
@@ -154,6 +179,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func actionBack(_ sender: UIButton) {
+        print("txtName \(txtName)")
+        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: 0)
         navigationController?.popViewController(animated: true)
     }
     
@@ -186,7 +213,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 1 {
             let uiviewSectionHeader = UIView()
             uiviewSectionHeader.backgroundColor = .white
-            numItems = savedItems.count
             lblItemsNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
             uiviewSectionHeader.addSubview(lblItemsNum)
             lblItemsNum.textColor = UIColor._146146146()
@@ -292,7 +318,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     // ColListDetailHeaderDelegate
     func readMore() {
-        print("readmore")
         let section = IndexSet(integer: 0)
         tblColListDetail.reloadSections(section, with: .none)
     }
@@ -305,7 +330,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtDesp = desp
         txtTime = "09/2017"
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-//        tblColListDetail.reloadData()
     }
     // CreateColListDelegate End
 }
@@ -429,8 +453,8 @@ class ColListDetailHeader: UITableViewCell {
         //        print("charSize: \(charSize)")
         //        print("No of lines: \(lineCount)")
         
-        print(lineCount)
-        print(ColListDetailHeader.boolExpandMore)
+//        print(lineCount)
+//        print(ColListDetailHeader.boolExpandMore)
         if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
             btnReadMore.isHidden = true
             lblDesp.numberOfLines = 0
@@ -580,6 +604,7 @@ extension CollectionsListDetailViewController {
         case 0: // manage
             animationHideOptions()
             let vc = ManageColListViewController()
+            vc.enterMode = enterMode
             present(vc, animated: true)
             break
         case 1: // settings
@@ -588,6 +613,7 @@ extension CollectionsListDetailViewController {
             vc.delegate = self
             vc.txtListName = txtName
             vc.txtListDesp = txtDesp
+            vc.colId = colId
             present(vc, animated: true)
             break
         case 2: // delete
@@ -599,9 +625,16 @@ extension CollectionsListDetailViewController {
     }
     
     func actionYes(_ sender: UIButton) {
-        animationHideOptions()
-        navigationController?.popViewController(animated: true)
-        delegate?.deleteColList(indexPath: indexPath)
+        let faeCollection = FaeCollection()
+        faeCollection.deleteOneCollection(String(colId)) {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                self.animationHideOptions()
+                self.navigationController?.popViewController(animated: true)
+                self.delegate?.deleteColList(indexPath: self.indexPath)
+            } else {
+                print("[Collections] Fail to Delete \(status) \(message!)")
+            }
+        }
     }
     
     // animations
