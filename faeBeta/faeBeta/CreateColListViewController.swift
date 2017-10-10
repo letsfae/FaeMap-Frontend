@@ -8,12 +8,13 @@
 
 import UIKit
 
-protocol CreateColListDelegate: class {
-    func saveSettings(name: String, desp: String)
+@objc protocol CreateColListDelegate: class {
+    @objc optional func saveSettings(name: String, desp: String)
+    @objc optional func updateCols()
 }
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
-    var enterMode: EnterMode!
+    var enterMode: CollectionTableMode!
     var uiviewNavBar: UIView!
     var btnCancel: UIButton!
     var btnCreate: UIButton!
@@ -24,11 +25,13 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var despRemainChars: Int!
     var textviewListName: UITextView!
     var textviewDesp: UITextView!
-    let placeholder = ["List Name", "Describe your list (Optional)"]
+    let placeholder = ["List Name", "Describe your list"]
     var keyboardHeight: CGFloat = 0
     var txtListName: String = ""
     var txtListDesp: String = ""
     weak var delegate: CreateColListDelegate?
+    var colId: Int = -1
+    let faeCollection = FaeCollection()
     
     var numLinesName = 1 {
         didSet {
@@ -150,14 +153,38 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func actionCreateList(_ sender: UIButton) {
+        txtListName = self.textviewListName.textColor == UIColor._155155155() ? "" : self.textviewListName.text
+        txtListDesp = self.textviewDesp.textColor == UIColor._155155155() ? "" : self.textviewDesp.text
         if sender.tag == 0 {  // create
-            
+            faeCollection.whereKey("type", value: enterMode.rawValue)
+            faeCollection.whereKey("name", value: txtListName)
+            faeCollection.whereKey("description", value: txtListDesp)
+            faeCollection.whereKey("is_private", value: "true")
+            faeCollection.createCollection {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.delegate?.updateCols!()
+                    self.textviewListName.resignFirstResponder()
+                    self.textviewDesp.resignFirstResponder()
+                    self.dismiss(animated: true)
+                    print("[Create Collection] Create Successfully \(status) \(message!)")
+                } else {
+                    print("[Create Collection] Fail to Create \(status) \(message!)")
+                }
+            }
         } else {  // save
-            txtListName = textviewListName.textColor == UIColor._155155155() ? "" : textviewListName.text
-            txtListDesp = textviewDesp.textColor == UIColor._155155155() ? "" : textviewDesp.text
-            delegate?.saveSettings(name: txtListName, desp: txtListDesp)
-            textviewDesp.resignFirstResponder()
-            dismiss(animated: true)
+            faeCollection.whereKey("name", value: txtListName)
+            faeCollection.whereKey("description", value: txtListDesp)
+            faeCollection.whereKey("is_private", value: "true")
+            faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.delegate?.saveSettings!(name: self.txtListName, desp: self.txtListDesp)
+                    self.textviewListName.resignFirstResponder()
+                    self.textviewDesp.resignFirstResponder()
+                    self.dismiss(animated: true)
+                } else {
+                    print("[Create Collection] Fail to Create \(status) \(message!)")
+                }
+            }
         }
     }
     

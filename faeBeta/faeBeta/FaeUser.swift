@@ -245,20 +245,21 @@ class FaeUser: NSObject {
                     return
                 }
                 let userInfoJSON = JSON(userInfo)
-                userEmail = userInfoJSON["email"].stringValue
-                userEmailVerified = userInfoJSON["email_verified"].boolValue
+                Key.shared.userEmail = userInfoJSON["email"].stringValue
+                Key.shared.userEmailVerified = userInfoJSON["email_verified"].boolValue
                 Key.shared.username = userInfoJSON["user_name"].stringValue
-                userFirstname = userInfoJSON["first_name"].stringValue
-                userLastname = userInfoJSON["last_name"].stringValue
+                Key.shared.userFirstname = userInfoJSON["first_name"].stringValue
+                Key.shared.userLastname = userInfoJSON["last_name"].stringValue
                 let gender = userInfoJSON["gender"].stringValue
+                Key.shared.gender = gender
                 if gender == "male" {
                     userGender = 0
                 } else {
                     userGender = 1
                 }
-                userBirthday = userInfoJSON["birthday"].stringValue
-                userPhoneNumber = userInfoJSON["phone"].stringValue
-                userPhoneVerified = userInfoJSON["phone_verified"].boolValue
+                Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
+                Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
+                Key.shared.userPhoneVerified = userInfoJSON["phone_verified"].boolValue
                 LocalStorageManager.shared.getAccountStorage()
             }
             completion(status, message)
@@ -278,15 +279,16 @@ class FaeUser: NSObject {
                 }
                 let userInfoJSON = JSON(userInfo)
                 Key.shared.username = userInfoJSON["user_name"].stringValue
-                userFirstname = userInfoJSON["first_name"].stringValue
-                userLastname = userInfoJSON["last_name"].stringValue
+                Key.shared.userFirstname = userInfoJSON["first_name"].stringValue
+                Key.shared.userLastname = userInfoJSON["last_name"].stringValue
                 let gender = userInfoJSON["gender"].stringValue
+                Key.shared.gender = gender
                 if gender == "male" {
                     userGender = 0
                 } else {
                     userGender = 1
                 }
-                userBirthday = userInfoJSON["birthday"].stringValue
+                Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                 LocalStorageManager.shared.getAccountStorage()
             }
             completion(status, message)

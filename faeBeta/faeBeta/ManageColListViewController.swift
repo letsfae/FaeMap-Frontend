@@ -17,6 +17,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     var btnMemo: UIButton!
     var btnRemove: UIButton!
     var selectedIdx = [IndexPath]()
+    var enterMode: CollectionTableMode!
     
     let SHARE = 0
     let MEMO = 1
@@ -121,6 +122,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         case MEMO:
             let vc = EditMemoViewController()
             vc.delegate = self
+            vc.enterMode = enterMode
             vc.indexPath = selectedIdx[0]
             let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
             vc.txtMemo = cell.lblColMemo.text!

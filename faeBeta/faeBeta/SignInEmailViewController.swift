@@ -8,8 +8,17 @@
 
 import UIKit
 
+protocol VerifyEmailDelegate: class {
+    func verifyEmailSucceed()
+}
+
 class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
+    enum EnterEmailMode {
+        case signInSupport
+        case settings
+    }
     
+    var enterMode: EnterEmailMode!
     //MARK: - Interface
     fileprivate var lblTitle: UILabel!
     fileprivate var txtEmail: FAETextField!
@@ -29,6 +38,8 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
     fileprivate var remainingTime = 59
     
     fileprivate var indicatorView: UIActivityIndicatorView!
+    var faeUser = FaeUser()
+    weak var delegate: VerifyEmailDelegate?
     
     //MARK: - View did/will ...
     override func viewDidLoad() {
@@ -40,12 +51,18 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         addObservers()
         createActivityIndicator()
         // Do any additional setup after loading the view.
+//        if enterMode == .signInSupport {
+//            addObservers()
+//        }
+        if enterMode == .settings {
+            setupEnteringVerificationCode()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //if it's back from set password
-        if numberKeyboard != nil {
+        if numberKeyboard != nil || enterMode == .settings {
             self.btnInfo.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
             self.btnInfo.alpha = 1
             self.btnSendCode.frame = CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor)
@@ -75,7 +92,6 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         lblTitle.text = "Enter your Email\nto Reset Password"
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        //        lblTitle.attributedText = NSAttributedString(string: "Enter your Email\nto Reset Password", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
         lblTitle.textAlignment = .center
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
@@ -85,7 +101,9 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         txtEmail = FAETextField(frame: CGRect(x: 15, y: 171, width: screenWidth - 30, height: 30))
         txtEmail.placeholder = "Email Address"
         txtEmail.adjustsFontSizeToFitWidth = true
-        txtEmail.becomeFirstResponder()
+        if enterMode == .signInSupport {
+            txtEmail.becomeFirstResponder()
+        }
         self.view.addSubview(txtEmail)
         
         // set up the "We can’t find an account with this Email!" label
@@ -100,7 +118,9 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         // set up the send button
         btnSendCode = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnSendCode.center.x = screenWidth / 2
-        btnSendCode.setAttributedTitle(NSAttributedString(string: "Send Code", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
+        btnSendCode.setTitleColor(.white, for: .normal)
+        btnSendCode.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        btnSendCode.setTitle("Send Code", for: .normal)
         btnSendCode.layer.cornerRadius = 25 * screenHeightFactor
         btnSendCode.isEnabled = false
         btnSendCode.backgroundColor = UIColor._255160160()
@@ -110,7 +130,11 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
     }
     
     func setupEnteringVerificationCode() {
-        lblTitle.text = "Enter the Code we just sent \nto your Email to Continue"
+        if enterMode == .signInSupport {
+            lblTitle.text = "Enter the Code we just sent \nto your Email to Continue"
+        } else {
+            lblTitle.text = "Enter the Code we just sent \nto your Email to Verify"
+        }
         self.view.endEditing(true)
         
         // setup the fake keyboard for numbers input
@@ -130,8 +154,11 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         // start transaction animation
         UIView.animate(withDuration: 0.3, delay: 0, options: UIViewAnimationOptions(), animations: {
             self.btnInfo.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
-            self.btnSendCode.setAttributedTitle(NSAttributedString(string: "Continue", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
-            
+            if self.enterMode == .signInSupport {
+                self.btnSendCode.setTitle("Continue", for: .normal)
+            } else {
+                self.btnSendCode.setTitle("Verify", for: .normal)
+            }
             self.btnInfo.frame = CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36, width: screenWidth - 175, height: 18)
             self.btnInfo.alpha = 1
             
@@ -165,7 +192,9 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         indicatorView.startAnimating()
         if(statePage == .enteringUserName) {
             self.view.endEditing(true)
-            postToURL("reset_login/code", parameter: ["email": txtEmail.text! as AnyObject], authentication: nil, completion: { (statusCode, result) in
+
+            faeUser.whereKey("email", value: txtEmail.text!)
+            faeUser.sendCodeToEmail{ (statusCode, result) in
                 if(statusCode / 100 == 2 ) {
                     self.setupEnteringVerificationCode()
                 }
@@ -173,25 +202,55 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
                     self.btnInfo.alpha = 1
                 }
                 self.indicatorView.stopAnimating()
-            })
+            }
         }
         else {
-            postToURL("reset_login/code/verify", parameter: ["email": txtEmail.text! as AnyObject, "code": verificationCodeView.displayValue as AnyObject], authentication: nil, completion: { (statusCode, result) in
-                if(statusCode / 100 == 2) {
-                    let controller = SignInSupportNewPassViewController()
-                    controller.email = self.txtEmail.text!
-                    controller.code = self.verificationCodeView.displayValue
-                    self.navigationController?.pushViewController(controller, animated: true)
-                } else {
-                    for _ in 0..<6 {
-                        _ = self.verificationCodeView.addDigit(-1)
+            if self.enterMode == .signInSupport {
+                faeUser.whereKey("email", value: txtEmail.text!)
+                faeUser.whereKey("code", value: verificationCodeView.displayValue)
+                faeUser.validateCode{ (statusCode, result) in
+                    if(statusCode / 100 == 2) {
+                        let controller = SignInSupportNewPassViewController()
+                        controller.email = self.txtEmail.text!
+                        controller.code = self.verificationCodeView.displayValue
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    } else {
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
+                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnSendCode.isEnabled = false
+                        self.btnSendCode.backgroundColor = UIColor._255160160()
                     }
-                    self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                    self.btnSendCode.isEnabled = false
-                    self.btnSendCode.backgroundColor = UIColor._255160160()
+                    self.indicatorView.stopAnimating()
                 }
-                self.indicatorView.stopAnimating()
-            })
+            } else {   // settings - verify email
+                faeUser.whereKey("email", value: Key.shared.userEmail)
+                faeUser.whereKey("code", value: verificationCodeView.displayValue)
+                faeUser.verifyEmail{ (statusCode: Int, result: Any?) in
+                    if(statusCode / 100 == 2) {
+                        self.faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
+                            if(statusCode / 100 == 2) {
+                                print("Successfully get account info \(statusCode) \(result!)")
+                                Key.shared.userEmailVerified = true
+                                self.delegate?.verifyEmailSucceed()
+                                self.navigationController?.popViewController(animated: true)
+                            } else {
+                                print("Fail to get account info \(statusCode) \(result!)")
+                            }
+                        }
+                    } else {
+                        print("\(statusCode) \(result!)")
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
+                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnSendCode.isEnabled = false
+                        self.btnSendCode.backgroundColor = UIColor._255160160()
+                    }
+                    self.indicatorView.stopAnimating()
+                }
+            }
         }
     }
     
