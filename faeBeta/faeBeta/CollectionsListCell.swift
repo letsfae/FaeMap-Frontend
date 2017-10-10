@@ -44,9 +44,9 @@ class CollectionsListCell: UITableViewCell {
         addSubview(lblListNum)
     }
     
-    func setValueForCell(cellName: String) {
-        lblListName.text = cellName
-        lblListNum.text = "12 items"
+    func setValueForCell(cols: PinCollection) {
+        lblListName.text = cols.colName
+        lblListNum.text = "12 items"  // cols.itemCount
     }
 }
 

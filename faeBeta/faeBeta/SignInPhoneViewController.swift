@@ -290,9 +290,10 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
 //                user.verifyPhoneNumber {(status, message) in
 //                    if(status / 100 == 2 ) {
                         if self.enterMode == .settings {
-//                            let vc = LinkPhoneSuccessViewController()
-//                            vc.phone = self.lblPhone.text!
-//                            self.navigationController?.pushViewController(vc, animated: true)
+                            let vc = UpdateUsrnameEmailViewController()
+                            vc.strCountry = self.btnCountryCode.currentTitle
+                            vc.strPhone = self.lblPhone.text!
+                            self.navigationController?.pushViewController(vc, animated: true)
                         } else {
                             self.delegate?.verifyPhoneSucceed()
                             self.dismiss(animated: true)

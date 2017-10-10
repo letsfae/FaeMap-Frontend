@@ -14,6 +14,7 @@ class FAETextField: UITextField {
     fileprivate var contentInset: CGFloat! = 30
     fileprivate var lblLeft: UILabel!
     fileprivate var btnRight: UIButton!
+    var fontSize: CGFloat = 22
     var uiviewRightPlaceHolder: UIView!
     var uiviewLeftPlaceHolderView: UIView!
     
@@ -55,7 +56,7 @@ class FAETextField: UITextField {
     override var placeholder: String? {
         set {
             _placeholder = newValue!
-            let font = UIFont(name: "AvenirNext-Regular", size: 22)
+            let font = UIFont(name: "AvenirNext-Regular", size: fontSize)
             self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
         }
         get {
@@ -81,7 +82,7 @@ class FAETextField: UITextField {
     fileprivate func setup() {
         self.autocorrectionType = .no
         self.textColor = UIColor._898989()
-        self.font = UIFont(name: "AvenirNext-Regular", size: 22.0)
+        self.font = UIFont(name: "AvenirNext-Regular", size: fontSize)
         self.clearButtonMode = UITextFieldViewMode.never
         self.contentHorizontalAlignment = .center
         self.textAlignment = .center

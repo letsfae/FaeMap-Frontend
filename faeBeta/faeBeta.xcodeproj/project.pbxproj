@@ -144,6 +144,8 @@
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
 		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
 		B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */; };
+		B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3273E661F8C220700CFEC8E /* FaeCollection.swift */; };
+		B3273E691F8C28FE00CFEC8E /* PinCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3273E681F8C28FE00CFEC8E /* PinCollection.swift */; };
 		B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */; };
 		B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */; };
 		B33F89FE1F3EA3870033610D /* AllPlacesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */; };
@@ -197,7 +199,9 @@
 		B39C1E3F1F6DCE600075CF59 /* CountryCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */; };
 		B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */; };
 		B39C1E451F6DE2EE0075CF59 /* CountryCode.json in Resources */ = {isa = PBXBuildFile; fileRef = B39C1E441F6DE2EE0075CF59 /* CountryCode.json */; };
+		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
+		B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */; };
 		B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */; };
 		B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B80601491E0CA5610051C702 /* FMInvisibleMode.swift */; };
 		B806014C1E0CA5940051C702 /* FMGuestMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B806014B1E0CA5940051C702 /* FMGuestMode.swift */; };
@@ -459,6 +463,8 @@
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
 		B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailTableView.swift; sourceTree = "<group>"; };
+		B3273E661F8C220700CFEC8E /* FaeCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeCollection.swift; sourceTree = "<group>"; };
+		B3273E681F8C28FE00CFEC8E /* PinCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCollection.swift; sourceTree = "<group>"; };
 		B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendFromNameCardViewController.swift; sourceTree = "<group>"; };
 		B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesViewController.swift; sourceTree = "<group>"; };
 		B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesCell.swift; sourceTree = "<group>"; };
@@ -511,7 +517,9 @@
 		B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeViewController.swift; sourceTree = "<group>"; };
 		B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeCell.swift; sourceTree = "<group>"; };
 		B39C1E441F6DE2EE0075CF59 /* CountryCode.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CountryCode.json; sourceTree = "<group>"; };
+		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailViewController.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
+		B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNameViewController.swift; sourceTree = "<group>"; };
 		B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailViewController.swift; sourceTree = "<group>"; };
 		B3F422251F52382C00257E8C /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
 		B80601491E0CA5610051C702 /* FMInvisibleMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMInvisibleMode.swift; sourceTree = "<group>"; };
@@ -1044,6 +1052,7 @@
 				B05DAFE51D1320F700082A71 /* FaeMap.swift */,
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				1873C4C71F214261007669DD /* FaeContact.swift */,
+				B3273E661F8C220700CFEC8E /* FaeCollection.swift */,
 				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
 			name = Model;
@@ -1196,6 +1205,7 @@
 		B37E5D9D1F830FFD008A6B4B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B3D106DC1F88916200A1725A /* SetAccount */,
 				B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */,
 				B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */,
 				B37E5DB41F831040008A6B4B /* SetAlertController.swift */,
@@ -1230,6 +1240,15 @@
 				B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		B3D106DC1F88916200A1725A /* SetAccount */ = {
+			isa = PBXGroup;
+			children = (
+				B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */,
+				B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */,
+			);
+			path = SetAccount;
 			sourceTree = "<group>";
 		};
 		B81563931DDBF74300BF85A1 /* SelectPinLocation */ = {
@@ -1355,6 +1374,7 @@
 				B8C46DBD1E63786B00FD7E27 /* PinComment.swift */,
 				B8C46DBF1E64152500FD7E27 /* PinDetailUser.swift */,
 				50234AF81F2865FD00055748 /* PlacePin.swift */,
+				B3273E681F8C28FE00CFEC8E /* PinCollection.swift */,
 				508768691F47AC6A009922BA /* UserPin.swift */,
 				503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */,
 				507BE10B1F5A4ABD0077A959 /* FaeFont.swift */,
@@ -1724,6 +1744,7 @@
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
 				B8B7AF521E728BAF00BE92AB /* FMUserPinCtrl.swift in Sources */,
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
+				B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */,
 				9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */,
@@ -1758,6 +1779,7 @@
 				B86AE0501ED4FC4400D1357D /* General.swift in Sources */,
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */,
+				B3273E691F8C28FE00CFEC8E /* PinCollection.swift in Sources */,
 				500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */,
 				5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
@@ -1847,11 +1869,13 @@
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
+				B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */,
+				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,

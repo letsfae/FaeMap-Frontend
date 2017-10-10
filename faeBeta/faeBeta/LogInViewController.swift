@@ -129,7 +129,7 @@ class LogInViewController: UIViewController {
         btnLogin.center.x = screenWidth / 2
         btnLogin.setTitle("Log in", for: .normal)
         btnLogin.setTitleColor(.white, for: .normal)
-        btnLogin.setTitleColor(.lightGray, for: .highlighted)
+//        btnLogin.setTitleColor(.lightGray, for: .highlighted)
         btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
@@ -339,6 +339,7 @@ extension LogInViewController {
             navigationController?.pushViewController(vc, animated: true)
         } else {  // use email
             let vc = SignInEmailViewController()
+            vc.enterMode = .signInSupport
             navigationController?.pushViewController(vc, animated: true)
         }
     }
