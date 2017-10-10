@@ -263,6 +263,9 @@
 		DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */; };
 		DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
+		DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */; };
+		DCC59D141F8C334E00B2A27F /* CPCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */; };
+		DCC59D161F8C38D400B2A27F /* NSVC_backup.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 /* End PBXBuildFile section */
@@ -553,6 +556,9 @@
 		DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+bullet.swift"; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFriendCollectionViewCell.swift; sourceTree = "<group>"; };
+		DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPCollectionViewLayout.swift; sourceTree = "<group>"; };
+		DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSVC_backup.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -728,6 +734,7 @@
 		B0714D7F1D5E463B00356705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				DCC59D101F8C279A00B2A27F /* ContactsPicker */,
 				C1DE0DE71E9F00C6003188BE /* Realm */,
 				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
@@ -739,7 +746,6 @@
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
 				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
-				DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -773,6 +779,7 @@
 				DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */,
 				DC3982091DD2BC88000CB51F /* UIScreenService.swift */,
 				DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */,
+				DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */,
 			);
 			name = UIviewController;
 			sourceTree = "<group>";
@@ -1300,6 +1307,16 @@
 			name = Audio;
 			sourceTree = "<group>";
 		};
+		DCC59D101F8C279A00B2A27F /* ContactsPicker */ = {
+			isa = PBXGroup;
+			children = (
+				DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */,
+				DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */,
+				DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */,
+			);
+			name = ContactsPicker;
+			sourceTree = "<group>";
+		};
 		DCEB8CA01DEFBE5A00B516E9 /* Support */ = {
 			isa = PBXGroup;
 			children = (
@@ -1519,6 +1536,7 @@
 				B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */,
 				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,
 				B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */,
+				DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
@@ -1566,6 +1584,7 @@
 				B064EECB1D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift in Sources */,
 				B0714E0C1D6252D400356705 /* RegisterConfirmViewController.swift in Sources */,
 				B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */,
+				DCC59D161F8C38D400B2A27F /* NSVC_backup.swift in Sources */,
 				B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
@@ -1644,6 +1663,7 @@
 				B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				DCC59D141F8C334E00B2A27F /* CPCollectionViewLayout.swift in Sources */,
 				DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */,
 				B8B7AF541E728C2300BE92AB /* FMPlacePinCtrl.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */,
@@ -1890,7 +1910,7 @@
 					"DISABLE_PUSH_NOTIFICATIONS=1",
 				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1930,7 +1950,7 @@
 					"DISABLE_PUSH_NOTIFICATIONS=1",
 				);
 				INFOPLIST_FILE = faeBeta/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = fae.ios.faeMap;
 				PRODUCT_NAME = "$(TARGET_NAME)";
