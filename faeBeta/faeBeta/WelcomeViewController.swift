@@ -101,7 +101,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLogin.center.x = screenWidth / 2
         btnLogin.setTitle("Log in", for: .normal)
         btnLogin.setTitleColor(.white, for: .normal)
-        btnLogin.setTitleColor(.lightGray, for: .highlighted)
+//        btnLogin.setTitleColor(.lightGray, for: .highlighted)
         btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor._2499090()
@@ -114,7 +114,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnCreateAccount.center.x = screenWidth / 2
         btnCreateAccount.setTitle("Join Faevorite", for: .normal)
         btnCreateAccount.setTitleColor(UIColor._2499090(), for: .normal)
-        btnCreateAccount.setTitleColor(.lightGray, for: .highlighted)
+//        btnCreateAccount.setTitleColor(.lightGray, for: .highlighted)
         btnCreateAccount.titleLabel?.font = font!
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor

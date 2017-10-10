@@ -8,11 +8,12 @@
 
 import UIKit
 
-class SetAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SetNameBirthGenderDelegate, UpdateUsrnameEmailDelegate {
     
     var uiviewNavBar: FaeNavBar!
     var arrTitle: [String] = ["Name", "Birthday", "Gender", "Email", "Username", "Phone", "Change Password", "Deactivate Account", "Close Account"]
     var tblAccount: UITableView!
+    let faeUser = FaeUser()
     
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -47,14 +48,126 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell", for: indexPath as IndexPath) as!SetAccountCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell", for: indexPath as IndexPath) as! SetAccountCell
         cell.lblTitle.text = arrTitle[indexPath.row]
-        cell.lblContent.text = arrTitle[indexPath.row]
+        
+        let excla = InlineTextAttachment()
+        excla.fontDescender = 1
+        excla.image = #imageLiteral(resourceName: "exclamation_red_new")
+        
+        let attr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        
+        switch indexPath.row {
+        case 0:
+            cell.lblContent.text = Key.shared.userFirstname + " " + Key.shared.userLastname
+            break
+        case 1:
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            
+            let date = dateFormatter.date(from: Key.shared.userBirthday)
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            let dateString = dateFormatter.string(from: date!)
+            
+            cell.lblContent.text = dateString
+            break
+        case 2:
+            cell.lblContent.text = Key.shared.gender
+            break
+        case 3:
+            cell.lblContent.text = Key.shared.userEmail
+            if !Key.shared.userEmailVerified {
+                let txt = NSMutableAttributedString()
+                txt.append(NSAttributedString(attachment: excla))
+                let str = NSAttributedString(string: " \(Key.shared.userEmail)", attributes: attr)
+                txt.append(NSAttributedString(attributedString: str))
+                
+                cell.lblContent.attributedText = txt
+            }
+            break
+        case 4:
+            cell.lblContent.text = Key.shared.username
+            break
+        case 5:
+            if !Key.shared.userPhoneVerified { //Key.shared.userPhoneNumber == "" {
+                let txt = NSMutableAttributedString()
+                txt.append(NSAttributedString(attachment: excla))
+                let str = NSAttributedString(string: " Link", attributes: attr)
+                txt.append(NSAttributedString(attributedString: str))
+                
+                cell.lblContent.attributedText = txt
+            } else {
+                cell.lblContent.text = Key.shared.userPhoneNumber
+            }
+            break
+        default:
+            cell.lblContent.text = ""
+            break
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! SetAccountCell
         switch indexPath.row {
+        case 0:
+            let vc = SetNameViewController()
+            vc.delegate = self
+            vc.enterMode = .name
+            vc.fName = Key.shared.userFirstname
+            vc.lName = Key.shared.userLastname
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 1:
+            let vc = SetNameViewController()
+            vc.delegate = self
+            vc.enterMode = .birth
+            vc.dateOfBirth = cell.lblContent.text
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 2:
+            let vc = SetNameViewController()
+            vc.delegate = self
+            vc.enterMode = .gender
+            vc.gender = Key.shared.gender
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 3:
+            let vc = UpdateUsrnameEmailViewController()
+            vc.delegate = self
+            vc.strEmail = Key.shared.userEmail
+            vc.enterMode = .email
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 4:
+            let vc = UpdateUsrnameEmailViewController()
+            //            vc.delegate = self
+            vc.strUsername = cell.lblContent.text
+            vc.enterMode = .usrname
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 5:
+            if !Key.shared.userPhoneVerified {
+                let vc = SignInPhoneViewController()
+                //            vc.delegate = self
+                
+                vc.enterMode = .settings
+                navigationController?.pushViewController(vc, animated: true)
+                break
+            } else {
+                let vc = UpdateUsrnameEmailViewController()
+                //            vc.delegate = self
+                vc.strPhone = cell.lblContent.text
+                vc.enterMode = .phone
+                navigationController?.pushViewController(vc, animated: true)
+            }
+            break
+        case 6:
+            let vc = SetNameViewController()
+            vc.enterMode = .password
+            vc.pswdEnterMode = .password
+            navigationController?.pushViewController(vc, animated: true)
+            break
         case 7:
             navigationController?.pushViewController(SetDeactiveViewController(), animated: true)
             break
@@ -64,5 +177,24 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         default:
             break
         }
+    }
+    
+    // SetNameBirthGenderDelegate
+    func updateInfo() {
+        faeUser.getAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                print("Successfully get basic info")
+                print(message!)
+                self.tblAccount.reloadData()
+            }
+            else {
+                print("Fail to get basic info")
+            }
+        })
+    }
+    
+    // UpdateUsrnameEmailDelegate
+    func updateEmail() {
+        tblAccount.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
     }
 }

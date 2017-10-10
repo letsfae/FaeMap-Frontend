@@ -16,10 +16,7 @@ class SetAccountCell: UITableViewCell {
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        // Vicky 09/17/17
         selectionStyle = .none
-        // Vicky 09/17/17 End
-        
         lblTitle = UILabel()
         addSubview(lblTitle)
         lblTitle.textAlignment = .left
@@ -31,9 +28,10 @@ class SetAccountCell: UITableViewCell {
         lblContent = UILabel()
         addSubview(lblContent)
         lblContent.textAlignment = .right
+        lblContent.lineBreakMode = .byTruncatingTail
         lblContent.textColor = UIColor._155155155()
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("V:|-23-[v0(20)]", options: [], views: lblContent)
+        addConstraintsWithFormat("V:|-19-[v0(28)]", options: [], views: lblContent)
         
         imgviewNext = UIImageView()
         addSubview(imgviewNext)

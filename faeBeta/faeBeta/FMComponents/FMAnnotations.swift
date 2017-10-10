@@ -272,9 +272,13 @@ class SelfAnnotationView: MKAnnotationView {
             let selfUserInfoJSON = JSON(message!)
             userFirstname = selfUserInfoJSON["first_name"].stringValue
             userLastname = selfUserInfoJSON["last_name"].stringValue
-            userBirthday = selfUserInfoJSON["birthday"].stringValue
+            Key.shared.userBirthday = selfUserInfoJSON["birthday"].stringValue
             Key.shared.gender = selfUserInfoJSON["gender"].stringValue
             Key.shared.username = selfUserInfoJSON["user_name"].stringValue
+            Key.shared.userEmail = selfUserInfoJSON["email"].stringValue
+            Key.shared.userEmailVerified = selfUserInfoJSON["email_verified"].boolValue
+            Key.shared.userPhoneNumber = selfUserInfoJSON["phone"].stringValue
+            Key.shared.userPhoneVerified = selfUserInfoJSON["phone_verified"].boolValue
             userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
             LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
             self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
