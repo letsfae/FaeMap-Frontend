@@ -53,6 +53,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         switch action {
         case .detail:
             if createLocation == .create {
+                locAnnoView?.optionsToNormal()
                 locAnnoView?.hideButtons()
                 let vcLocDetail = LocDetailViewController()
                 vcLocDetail.coordinate = locationPin?.coordinate
@@ -73,6 +74,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             break
         case .collect:
             uiviewCollectedList.show()
+            locAnnoView?.optionsToNormal()
             guard let ann = selectedPlace else { return }
             guard let placePin = ann.pinInfo as? PlacePin else { return }
             let pinId = placePin.id
@@ -89,6 +91,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 }
                 uiviewLocationBar.hide()
                 locAnnoView?.hideButtons()
+                locAnnoView?.optionsToNormal()
                 HIDE_AVATARS = true
                 PLACE_ENABLE = false
                 // remove place pins but don't delete them
@@ -128,6 +131,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             }
             break
         case .share:
+            locAnnoView?.optionsToNormal()
             if let placeData = selectedPlace?.pinInfo as? PlacePin {
                 let vcSharePlace = NewChatShareController(chatOrShare: "share")
                 vcSharePlace.placeDetail = placeData
@@ -148,19 +152,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         anView.assignImage(first.icon)
         anView.delegate = self
-//        if first.animatable {
-//            let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-//            DispatchQueue.main.async {
-//                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-//                UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-//                    anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-//                    anView.alpha = 1
-//                }, completion: nil)
-//            }
-//        } else {
-//            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-//            anView.alpha = 1
-//        }
         return anView
     }
     
