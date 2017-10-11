@@ -501,7 +501,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             UIView.setAnimationsEnabled(false)
             cllcSelected.deleteItems(at: [IndexPath(row: arrIntSelected.count, section: 0)])
             UIView.setAnimationsEnabled(true)
-            cllcSelected.layoutIfNeeded()
+            //cllcSelected.layoutIfNeeded()
+            setSelectedBoxHeight()
+            loadStatus()
             intSelectedIndex = -1
         } else {
             lastSelected.setCellSelected(true)
@@ -523,7 +525,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         selectedCell.resignFirstResponder()
         let selectedIndex = arrIntSelected[intSelectedIndex]
         arrIntSelected = arrIntSelected.filter { $0 != selectedIndex }
+        UIView.setAnimationsEnabled(false)
         cllcSelected.deleteItems(at: [IndexPath(row: intSelectedIndex, section: 0)])
+        UIView.setAnimationsEnabled(true)
         intSelectedIndex = -1
         setSelectedBoxHeight()
         boolIsClick = true
