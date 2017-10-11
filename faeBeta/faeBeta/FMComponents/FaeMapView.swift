@@ -171,7 +171,9 @@ class FaeMapView: MKMapView {
                     anView.showButtons()
                 }
             } else {
-                faeMapCtrler?.createLocationPin(point: tapPoint)
+                if !(v is UIButton) {
+                    faeMapCtrler?.createLocationPin(point: tapPoint)
+                }
             }
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)

@@ -50,6 +50,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                         anView.alpha = 1
                     })
                 }
+            } else if let anView = annotationView as? LocPinAnnotationView {
+                DispatchQueue.main.async {
+                    anView.alpha = 0
+                    UIView.animate(withDuration: 0.2, animations: {
+                        anView.alpha = 1
+                    })
+                }
             } else if let anView = annotationView as? MKAnnotationView {
                 DispatchQueue.main.async {
                     anView.alpha = 0
@@ -140,6 +147,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 return viewForPlace(annotation: annotation, first: firstAnn)
             } else if firstAnn.type == "user" {
                 return viewForUser(annotation: annotation, first: firstAnn)
+            } else if firstAnn.type == "location" {
+                return viewForLocation(annotation: annotation, first: firstAnn)
             } else {
                 return viewForSocial(annotation: annotation, first: firstAnn)
             }

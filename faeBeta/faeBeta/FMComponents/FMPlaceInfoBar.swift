@@ -167,13 +167,13 @@ class FMPlaceInfoBar: UIView {
     }
     
     func show() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
         }, completion: nil)
     }
     
     func hide() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
         }, completion: nil)
     }
@@ -370,13 +370,13 @@ class LocationView: UIView {
     }
     
     func show() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
         }, completion: nil)
     }
     
     func hide() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
         }, completion: { _ in
             self.imgType.alpha = 0
