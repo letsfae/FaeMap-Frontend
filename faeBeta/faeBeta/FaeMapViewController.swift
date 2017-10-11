@@ -117,8 +117,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Location Pin Control
     var locationPin: FaePinAnnotation?
-    var imgLocationBar: LocationView!
+    var uiviewLocationBar: LocationView!
     var locAnnoView: LocPinAnnotationView?
+    var activityIndicator: UIActivityIndicatorView!
     
     var mapMode: MapMode = .normal {
         didSet {
@@ -158,7 +159,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             if createLocation == .cancel {
                 lblSearchContent.textColor = UIColor._182182182()
                 lblSearchContent.text = "Search Fae Map"
-                imgLocationBar.alpha = 0
+                uiviewLocationBar.hide()
+                activityIndicator.stopAnimating()
                 if locationPin != nil {
                     faeMapView.removeAnnotation(locationPin!)
                     if locAnnoView != nil {

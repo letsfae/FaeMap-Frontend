@@ -314,14 +314,14 @@ class PlaceView: UIImageView {
     }
 }
 
-class LocationView: UIImageView {
+class LocationView: UIView {
     
     var imgType: UIImageView!
     var lblName: UILabel!
     var lblAddr: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 2, y: 70, width: 410 * screenWidthFactor, height: 80))
+        super.init(frame: CGRect(x: 0, y: 70, width: 414 * screenWidthFactor, height: 80))
         loadContent()
     }
     
@@ -330,13 +330,18 @@ class LocationView: UIImageView {
     }
     
     private func loadContent() {
-        contentMode = .scaleAspectFit
-        image = #imageLiteral(resourceName: "location_bar_shadow")
+        layer.zPosition = 605
+        
+        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410, height: 80))
+        imgBack.contentMode = .scaleAspectFit
+        imgBack.image = #imageLiteral(resourceName: "location_bar_shadow")
+        addSubview(imgBack)
         
         imgType = UIImageView()
         imgType.clipsToBounds = true
         imgType.image = #imageLiteral(resourceName: "location_bar_type")
         imgType.contentMode = .scaleAspectFit
+        imgType.alpha = 0
         addSubview(imgType)
         addConstraintsWithFormat("H:|-15-[v0(58)]", options: [], views: imgType)
         addConstraintsWithFormat("V:|-11-[v0(58)]", options: [], views: imgType)
@@ -361,6 +366,7 @@ class LocationView: UIImageView {
     func updateLocationBar(name: String, address: String) {
         lblName.text = name
         lblAddr.text = address
+        imgType.alpha = 1
     }
     
     func show() {
@@ -372,6 +378,8 @@ class LocationView: UIImageView {
     func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
-        }, completion: nil)
+        }, completion: { _ in
+            self.imgType.alpha = 0
+        })
     }
 }

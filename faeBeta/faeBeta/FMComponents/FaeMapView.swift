@@ -128,13 +128,17 @@ class FaeMapView: MKMapView {
                 }
             }
         } else {
-            cancelCreatingLocationPin()
-            faeMapCtrler?.mapGesture(isOn: true)
-            if faeMapCtrler?.mapMode != .pinDetail {
-                faeMapCtrler?.uiviewPlaceBar.hide()
+            if v is LocationView {
+                
+            } else {
+                cancelCreatingLocationPin()
+                faeMapCtrler?.mapGesture(isOn: true)
+                if faeMapCtrler?.mapMode != .pinDetail {
+                    faeMapCtrler?.uiviewPlaceBar.hide()
+                }
+                faeMapCtrler?.deselectAllAnnotations()
+                faeMapCtrler?.selectedPlace = nil
             }
-            faeMapCtrler?.deselectAllAnnotations()
-            faeMapCtrler?.selectedPlace = nil
         }
         block = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }

@@ -11,8 +11,6 @@ import SwiftyJSON
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate {
     
-    static let shared = PlaceDetailViewController()
-    
     weak var delegate: MapSearchDelegate?
     
     var place: PlacePin!
