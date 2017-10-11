@@ -64,17 +64,17 @@ extension FaeMapViewController {
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if locationPin != nil {
-            faeMapView.removeAnnotation(locationPin!)
+            locationPinClusterManager.removeAnnotations([locationPin!], withCompletionHandler: nil)
+//            faeMapView.removeAnnotation(locationPin!)
             locationPin = nil
         }
-        if locAnnoView != nil {
-            locAnnoView?.hideButtons()
-            locAnnoView?.optionsReady = false
-            locAnnoView?.optionsOpened = false
-            locAnnoView?.optionsOpeing = false
-        }
+        locAnnoView?.hideButtons()
+        locAnnoView?.optionsReady = false
+        locAnnoView?.optionsOpened = false
+        locAnnoView?.optionsOpeing = false
         locationPin = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
-        faeMapView.addAnnotation(locationPin!)
+        locationPinClusterManager.addAnnotations([locationPin!], withCompletionHandler: nil)
+//        faeMapView.addAnnotation(locationPin!)
         uiviewLocationBar.show()
         view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
@@ -137,6 +137,8 @@ extension FaeMapViewController {
                 self.activityIndicator.stopAnimating()
                 self.lblSearchContent.text = address_1
                 self.lblSearchContent.textColor = UIColor._898989()
+                self.uiviewChooseLocs.updateDestination(name: address_1)
+                self.destinationAddr = RouteAddress(name: address_1, coordinate: coordinate)
             }
         }
     }

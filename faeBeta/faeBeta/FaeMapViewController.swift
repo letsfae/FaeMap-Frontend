@@ -120,6 +120,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewLocationBar: LocationView!
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
+    var locationPinClusterManager: CCHMapClusterController!
     
     var mapMode: MapMode = .normal {
         didSet {
@@ -162,7 +163,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if locationPin != nil {
-                    faeMapView.removeAnnotation(locationPin!)
+                    locationPinClusterManager.removeAnnotations([locationPin!], withCompletionHandler: nil)
                     if locAnnoView != nil {
                         locAnnoView?.hideButtons()
                         locAnnoView?.optionsReady = false
