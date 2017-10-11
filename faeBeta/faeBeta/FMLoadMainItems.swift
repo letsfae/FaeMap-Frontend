@@ -39,6 +39,11 @@ extension FaeMapViewController {
 //        userClusterManager.marginFactor = 0.15
         // userClusterManager.clusterer = CCHNearCenterMapClusterer()
         
+        locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
+        locationPinClusterManager.delegate = self
+        locationPinClusterManager.cellSize = 200
+        locationPinClusterManager.animator = self
+        
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
         prevMapCenter = LocManager.shared.curtLoc.coordinate

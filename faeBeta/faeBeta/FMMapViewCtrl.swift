@@ -87,7 +87,12 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? UserPinAnnotationView {
                 anView.assignImage(firstAnn.avatar)
             }
-        } else {
+        } else if firstAnn.type == "location" {
+            if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
+                anView.assignImage(firstAnn.icon)
+            }
+        }
+        else {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
