@@ -52,22 +52,24 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     func placePinAction(action: PlacePinAction) {
         switch action {
         case .detail:
-            if let ann = selectedPlace {
-                guard let placePin = ann.pinInfo as? PlacePin else { return }
-                selectedPlaceView?.hideButtons()
-                let vcPlaceDetail = PlaceDetailViewController()
-                vcPlaceDetail.place = placePin
-                vcPlaceDetail.delegate = self
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
-            }
             if createLocation == .create {
                 locAnnoView?.hideButtons()
                 let vcLocDetail = LocDetailViewController()
                 vcLocDetail.coordinate = locationPin?.coordinate
                 vcLocDetail.delegate = self
-                vcLocDetail.strLocName = imgLocationBar.lblName.text ?? "Invalid Name"
-                vcLocDetail.strLocAddr = imgLocationBar.lblAddr.text ?? "Invalid Address"
+                vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
+                vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
                 navigationController?.pushViewController(vcLocDetail, animated: true)
+            }
+            else {
+                if let ann = selectedPlace {
+                    guard let placePin = ann.pinInfo as? PlacePin else { return }
+                    selectedPlaceView?.hideButtons()
+                    let vcPlaceDetail = PlaceDetailViewController()
+                    vcPlaceDetail.place = placePin
+                    vcPlaceDetail.delegate = self
+                    navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                }
             }
             break
         case .collect:
