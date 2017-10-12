@@ -44,6 +44,7 @@ class LogInViewController: UIViewController {
     fileprivate var txtUsername: FAETextField!
     fileprivate var txtPassword: FAETextField!
     fileprivate var indicatorActivity: UIActivityIndicatorView!
+    fileprivate var boolWillDisappear = false
     
     var uiviewGrayBg: UIView!
     var uiviewChooseMethod: UIView!
@@ -64,9 +65,25 @@ class LogInViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        uiviewChooseMethod.alpha = 0
+        uiviewGrayBg.alpha = 0
+        boolWillDisappear = false
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         txtUsername.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        boolWillDisappear = true
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
     }
     
     fileprivate func setupNavigationBar() {
@@ -91,6 +108,8 @@ class LogInViewController: UIViewController {
         txtUsername.placeholder = "Username/Email"
         txtUsername.adjustsFontSizeToFitWidth = true
         txtUsername.keyboardType = .emailAddress
+        txtUsername.tag = 1
+        txtUsername.delegate = self
         view.addSubview(txtUsername)
         
         // result label
@@ -108,6 +127,7 @@ class LogInViewController: UIViewController {
         txtPassword = FAETextField(frame: CGRect(x: 15, y: 243 * screenHeightFactor, width: screenWidth - 30, height: 34))
         txtPassword.placeholder = "Password"
         txtPassword.isSecureTextEntry = true
+        txtPassword.tag = 2
         txtPassword.delegate = self
         view.addSubview(txtPassword)
         
@@ -206,6 +226,7 @@ class LogInViewController: UIViewController {
     }
     
     func supportButtonTapped() {
+        view.endEditing(true)
         animationShowSelf()
 //        let vc = SignInSupportViewController()
 //        vc.modalPresentationStyle = .overCurrentContext
@@ -221,6 +242,9 @@ class LogInViewController: UIViewController {
     // MARK: - keyboard
     // This is just a temporary method to make the login button clickable
     func keyboardWillShow(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
@@ -231,6 +255,9 @@ class LogInViewController: UIViewController {
     }
     
     func keyboardWillHide(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.btnLogin.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
             self.btnSupport.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71
@@ -261,12 +288,28 @@ class LogInViewController: UIViewController {
 
 extension LogInViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentCharacterCount = textField.text?.count ?? 0
-        if range.length + range.location > currentCharacterCount {
-            return false
+        if textField.tag == 2 {
+            let currentCharacterCount = textField.text?.count ?? 0
+            if range.length + range.location > currentCharacterCount {
+                return false
+            }
+            let newLength = currentCharacterCount + string.count - range.length
+            return newLength <= 50
         }
-        let newLength = currentCharacterCount + string.count - range.length
-        return newLength <= 16
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.tag == 1 { // username/email
+            txtPassword.becomeFirstResponder()
+            return false
+        } else { // password
+            if txtUsername.text!.count > 0 && txtPassword.text?.count >= 8 {
+                loginButtonTapped()
+                return false
+            }
+            return true
+        }
     }
 }
 

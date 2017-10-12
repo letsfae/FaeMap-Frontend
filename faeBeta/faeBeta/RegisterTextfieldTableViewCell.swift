@@ -33,7 +33,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     }
     
     func loadContent() {
-        textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 44))
         addSubview(textfield)
         textfield.delegate = self
         textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged )
