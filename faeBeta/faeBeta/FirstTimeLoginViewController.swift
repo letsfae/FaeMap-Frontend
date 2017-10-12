@@ -206,7 +206,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func addProfileAvatar(_ sender: UIButton) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .camera
+        //imagePicker.sourceType = .camera
+        imagePicker.sourceType = .photoLibrary // prevent simulator crashing
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
@@ -218,17 +219,13 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                         self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
                         return
                     }
-                    //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                    //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-                    let imagePicker = FullAlbumCollectionViewController()
+                    let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                     imagePicker.imageDelegate = self
                     imagePicker.boolCreateStoryPin = false
                     imagePicker._maximumSelectedPhotoNum = 1
                     self.present(imagePicker, animated: true, completion: nil)
                 })
             } else {
-                //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                //let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
                 let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 albumPicker.imageDelegate = self
                 albumPicker.boolCreateStoryPin = false

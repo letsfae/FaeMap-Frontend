@@ -161,6 +161,7 @@ class LogInViewController: UIViewController {
     func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appBecomeActive), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
         txtUsername.addTarget(self, action: #selector(self.textfieldDidChange(_:)), for: .editingChanged)
@@ -263,6 +264,11 @@ class LogInViewController: UIViewController {
             self.btnSupport.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71
             self.lblLoginResult.alpha = 1
         })
+    }
+    
+    // deal with button position when entering foreground
+    func appBecomeActive() {
+        txtUsername.becomeFirstResponder()
     }
     // MARK: - helper
     func handleTap() {
