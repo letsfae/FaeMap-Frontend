@@ -36,6 +36,7 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
     
     fileprivate var timer: Timer!
     fileprivate var remainingTime = 59
+    fileprivate var boolWillDisappear = false
     
     fileprivate var indicatorView: UIActivityIndicatorView!
     var faeUser = FaeUser()
@@ -68,6 +69,20 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
             self.btnSendCode.frame = CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor)
             self.btnSendCode.center.x = screenWidth / 2
         }
+        boolWillDisappear = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if enterMode == .signInSupport {
+            txtEmail.becomeFirstResponder()
+        }
+
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        boolWillDisappear = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -101,9 +116,9 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
         txtEmail = FAETextField(frame: CGRect(x: 15, y: 171, width: screenWidth - 30, height: 30))
         txtEmail.placeholder = "Email Address"
         txtEmail.adjustsFontSizeToFitWidth = true
-        if enterMode == .signInSupport {
-            txtEmail.becomeFirstResponder()
-        }
+//        if enterMode == .signInSupport {
+//            txtEmail.becomeFirstResponder()
+//        }
         self.view.addSubview(txtEmail)
         
         // set up the "We can’t find an account with this Email!" label
@@ -320,6 +335,9 @@ class SignInEmailViewController: UIViewController, FAENumberKeyboardDelegate {
     }
     
     func keyboardWillHide(_ notification:Notification) {
+        if boolWillDisappear {
+            return
+        }
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
             self.btnSendCode.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
             self.btnInfo.frame.origin.y = screenHeight - 50 * screenHeightFactor - 67

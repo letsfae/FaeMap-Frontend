@@ -127,7 +127,7 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
                 cellPassword.setPlaceholderLabelText("New Password", indexPath: indexPath)
                 cellPassword.setRightPlaceHolderDisplay(true)
                 cellPassword.delegate = self
-                cellPassword.setCharacterLimit(16)
+                cellPassword.setCharacterLimit(50)
                 cellPassword.makeFirstResponder()
             }
             return cellPassword
