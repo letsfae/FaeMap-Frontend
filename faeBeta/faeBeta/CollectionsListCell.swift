@@ -46,7 +46,7 @@ class CollectionsListCell: UITableViewCell {
     
     func setValueForCell(cols: PinCollection) {
         lblListName.text = cols.colName
-        lblListNum.text = "12 items"  // cols.itemCount
+        lblListNum.text = cols.itemsCount == 0 ? "0 item" : "\(cols.itemsCount) items"
     }
 }
 

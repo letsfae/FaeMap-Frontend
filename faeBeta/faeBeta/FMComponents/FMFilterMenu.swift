@@ -51,7 +51,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func loadCollectionData() {
+    func loadCollectionData() {
         faeCollection.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
@@ -360,6 +360,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        joshprint(arrCollection[indexPath.row])
     }
 }

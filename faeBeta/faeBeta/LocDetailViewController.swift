@@ -9,6 +9,17 @@
 import UIKit
 import SwiftyJSON
 
+/*
+    Logics:
+        When make a save to this location
+        1. create location pin in back-end
+        2. when success, front end now has the pin id
+        3. use the pin id to save this location pin
+    Notice:
+        1. when trainsitioning from a new location pin, saved_status will be always false
+        2. when trainsitioning from collections, saved_status will be always true
+        So, no need to check saved_status in back end
+*/
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate, MKMapViewDelegate {
     
     weak var delegate: MapSearchDelegate?
@@ -58,7 +69,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // checkSavedStatus()
         getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
             self.arrNearbyPlaces = arrPlaces
             self.clctNearby.reloadData()
@@ -87,7 +97,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     func loadMap() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352))
+        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 40))
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isPitchEnabled = false
@@ -111,25 +121,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     
     func handleMapTap() {
         
-    }
-    
-    func checkSavedStatus() {
-        faeMap.whereKey("is_place", value: "true")
-        faeMap.getSavedPins() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let savedPinsJSON = JSON(message!)
-                for i in 0..<savedPinsJSON.count {
-                    if savedPinsJSON[i]["pin_id"].intValue == self.place.id {
-                        self.boolSaved = true
-                        self.imgSaved.isHidden = false
-                        break
-                    }
-                }
-            }
-            else {
-                print("Fail to get saved pins!")
-            }
-        }
     }
     
     func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
@@ -227,16 +218,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
                 }
             } else {
                 showAddCollectionView()
-                /*
-                 faePinAction.saveThisPin("place", pinID: String(place.id)) { (status: Int, message: Any?) in
-                 if status / 100 == 2 {
-                 self.boolSaved = true
-                 self.imgSaved.isHidden = false
-                 } else {
-                 print("[PlaceDetail-Save Pin] Save Place Pin Fail \(status) \(message!)")
-                 }
-                 }
-                 */
             }
             break
         case 1:
