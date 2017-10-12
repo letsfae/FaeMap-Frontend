@@ -653,10 +653,15 @@ class LocPinAnnotationView: MKAnnotationView {
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
+        NotificationCenter.default.addObserver(self, selector: #selector(showCollectedNoti), name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
     }
     
     func assignImage(_ image: UIImage) {

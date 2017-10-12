@@ -360,6 +360,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        joshprint(arrCollection[indexPath.row])
+
     }
 }
