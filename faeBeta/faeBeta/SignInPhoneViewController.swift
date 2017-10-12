@@ -238,8 +238,21 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         if statePage == .enteringPhoneNo {
             self.view.endEditing(true)
             
-            self.setupEnteringVerificationCode()
-            self.indicatorView.stopAnimating()
+            checkPhoneNumExist(phone: "(\(phoneCode))\(phoneNumber)") {(status, message) in
+                if status / 100 == 2 {
+                    if let numbers = message as? NSArray {
+                        if numbers.count == 0 {
+                            // this number has no linked account
+                            self.lblCannotFind.alpha = 1
+                        } else {
+                            self.setupEnteringVerificationCode()
+                        }
+                        self.indicatorView.stopAnimating()
+                    }
+                } else {
+                    print("checkPhoneNumExist failed")
+                }
+            }
             
             /*  API OK后用
             if enterMode == .signInSupport {
@@ -266,7 +279,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                     self.indicatorView.stopAnimating()
                 }
             }
-             */
+            */
+ 
         } else {
             if enterMode == .signInSupport {
                 postToURL("reset_login/code/verify", parameter: ["email": lblPhone.text! as AnyObject, "code": verificationCodeView.displayValue as AnyObject], authentication: nil, completion: { (statusCode, result) in
@@ -410,5 +424,13 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         phoneCode = country.phoneCode
         curtTitle = country.countryName + " +" + country.phoneCode
         setCountryName()
+    }
+    
+    // TODO: need to be moved to somewhere else
+    // this API may be changed later, pay attention to the modification
+    func checkPhoneNumExist(phone num: String, _ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("/existence/phone/_batch", parameter: ["phone": num], authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
     }
 }
