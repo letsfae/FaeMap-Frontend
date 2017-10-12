@@ -9,7 +9,7 @@
 import UIKit
 import CCHMapClusterController
 
-extension FaeMapViewController: MapFilterMenuDelegate {
+extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
@@ -90,6 +90,16 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         } else {
             updateTimerForUserPin()
         }
+    }
+    
+    // CollectionsListDetailDelegate
+    func deleteColList(indexPath: IndexPath) {
+        
+    }
+    
+    // CollectionsListDetailDelegate
+    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
+        
     }
     
     func actionHideFilterMenu(_ sender: UIButton) {

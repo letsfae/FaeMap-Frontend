@@ -63,26 +63,36 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 navigationController?.pushViewController(vcLocDetail, animated: true)
             }
             else {
-                if let placeData = selectedPlace?.pinInfo as? PlacePin {
-                    selectedPlaceView?.hideButtons()
-                    let vcPlaceDetail = PlaceDetailViewController()
-                    vcPlaceDetail.place = placeData
-                    vcPlaceDetail.delegate = self
-                    navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
+                    return
                 }
+                selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = placeData
+                vcPlaceDetail.delegate = self
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
             break
         case .collect:
             uiviewCollectedList.show()
             locAnnoView?.optionsToNormal()
-            guard let ann = selectedPlace else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let pinId = placePin.id
-            let collectPlace = FaePinAction()
-            collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
-                guard status / 100 == 2 || status == 400 else { return }
-                self.selectedPlaceView?.showCollectedNoti()
-            })
+            if createLocation == .create {
+                uiviewCollectedList.tableMode = .location
+                uiviewCollectedList.loadCollectionData()
+                guard let locPin = locationPin else { return }
+                uiviewCollectedList.locationPin = locPin
+            } else {
+                uiviewCollectedList.tableMode = .place
+                uiviewCollectedList.loadCollectionData()
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+                let pinId = placeData.id
+                let collectPlace = FaePinAction()
+                collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
+                    guard status / 100 == 2 || status == 400 else { return }
+                    self.selectedPlaceView?.showCollectedNoti()
+                })
+            }
+            
             break
         case .route:
             if createLocation == .create {
