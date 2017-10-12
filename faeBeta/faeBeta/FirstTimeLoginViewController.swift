@@ -104,7 +104,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         
         textFieldDisplayName = UITextField(frame: CGRect(x: 0, y: 203, w: 160, h: 34))
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
-        textFieldDisplayName.placeholder = "Display Name"
+        //textFieldDisplayName.placeholder = "Display Name"
+        textFieldDisplayName.attributedPlaceholder = NSAttributedString(string: "Display Name", attributes: [NSForegroundColorAttributeName: UIColor._155155155()])
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
         textFieldDisplayName.tintColor = UIColor._2499090()
         textFieldDisplayName.textColor = UIColor._2499090()
@@ -170,7 +171,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                         self.dimBackground.alpha = 0
                     }) {_ in
                         self.dismiss(animated: false, completion: {_ in
-                            self.delegate?.jumpToEnableNotification()
+                            //self.delegate?.jumpToEnableNotification()
+                            // move to RegisterConfirmViewController.swift
                         })
                     }
                 } else {
@@ -227,7 +229,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             } else {
                 //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
                 //let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-                let albumPicker = FullAlbumCollectionViewController()
+                let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 albumPicker.imageDelegate = self
                 albumPicker.boolCreateStoryPin = false
                 albumPicker._maximumSelectedPhotoNum = 1

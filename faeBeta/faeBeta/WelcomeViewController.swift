@@ -105,6 +105,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor._2499090()
+        btnLogin.adjustsImageWhenHighlighted = false
         btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         view.insertSubview(btnLogin, at: 0)
         view.bringSubview(toFront: btnLogin)
@@ -120,6 +121,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
         btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
+        btnCreateAccount.adjustsImageWhenHighlighted = false
         btnCreateAccount.addTarget(self, action: #selector(jumpToSignUp), for: .touchUpInside)
         view.insertSubview(btnCreateAccount, at: 0)
         view.bringSubview(toFront: btnCreateAccount)

@@ -132,11 +132,20 @@ class RegisterConfirmViewController: RegisterBaseViewController {
             DispatchQueue.main.async(execute: {
                 self.hideActivityIndicator()
                 if status / 100 == 2 {
+                    self.jumpToEnableNotification()
                     let vcNext = InitialPageController()
                     self.navigationController?.pushViewController(vcNext, animated: true)
-                    self.navigationController?.viewControllers = [vcNext]
+                    //self.navigationController?.viewControllers = [vcNext]
                 }
             })
         })
+    }
+    
+    func jumpToEnableNotification() {
+        let notificationType = UIApplication.shared.currentUserNotificationSettings
+        if notificationType?.types == UIUserNotificationType() {
+            let vc = EnableNotificationViewController()
+            present(vc, animated: true)
+        }
     }
 }
