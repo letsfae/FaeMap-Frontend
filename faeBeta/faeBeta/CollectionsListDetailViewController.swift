@@ -74,7 +74,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     fileprivate func loadColItems() {
         faeCollection.getOneCollection(String(colId)) {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                let list = JSON(message!).arrayValue[0]
+                let list = JSON(message!)
                 self.arrColDetails = CollectionList(json: list)
                 
                 self.lblListName.text = self.arrColDetails.colName
