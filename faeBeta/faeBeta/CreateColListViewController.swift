@@ -202,10 +202,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        
+        btnCreate.isEnabled = textviewListName.text.count > 0
         if newText.isEmpty {
             btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
-            btnCreate.isEnabled = false
             if textView == textviewListName {
                 lblNameRemainChars.text = "60"
             } else {
@@ -217,7 +216,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             return false
         } else if textView.textColor == UIColor._155155155() && !text.isEmpty {
             btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
-            btnCreate.isEnabled = true
             textView.text = nil
             textView.textColor = UIColor._898989()
         }
@@ -238,6 +236,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 textviewDesp.frame.origin.y = 159 - offset + txtHeight
                 numLinesName = Int(textView.contentSize.height / textView.font!.lineHeight)
             }
+            btnCreate.isEnabled = textView.text.count > 0
         } else {
             numLinesDesp = 4 - numLinesName
             if screenWidth == 375 {
@@ -259,7 +258,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         
         if textView.text.count == 0 {
             btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
-            btnCreate.isEnabled = false
             textView.text = textView == textviewListName ? placeholder[0] : placeholder[1]
             textView.textColor = UIColor._155155155()
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)

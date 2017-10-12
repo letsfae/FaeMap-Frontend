@@ -123,6 +123,10 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                 resumeTime = 0.3
             }
             if percent > 0.1 {
+                // reload collection data
+                if uiviewFilterMenu.frame.origin.y <= screenHeight {
+                    uiviewFilterMenu.loadCollectionData()
+                }
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeTo
                     self.btnFilterIcon.center.y = self.sizeTo - 25
@@ -143,5 +147,4 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             pan.setTranslation(CGPoint.zero, in: view)
         }
     }
-    
 }
