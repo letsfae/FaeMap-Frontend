@@ -237,7 +237,11 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         indicatorView.startAnimating()
         if statePage == .enteringPhoneNo {
             self.view.endEditing(true)
-            
+            if enterMode == .contacts {
+                self.setupEnteringVerificationCode()
+                self.indicatorView.stopAnimating()
+                return
+            }
             checkPhoneNumExist(phone: "(\(phoneCode))\(phoneNumber)") {(status, message) in
                 if status / 100 == 2 {
                     if let numbers = message as? NSArray {
