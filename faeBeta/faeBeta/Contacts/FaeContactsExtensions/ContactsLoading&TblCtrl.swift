@@ -156,9 +156,11 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             break
         case REMOVE:
             self.arrFriends.remove(at: self.indexPathGlobal.row)
+            self.uiviewNameCard.hide { }
             break
         case BLOCK:
             self.arrFriends.remove(at: self.indexPathGlobal.row)
+            self.uiviewNameCard.hide { }
             break
         default:
             break
@@ -505,6 +507,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
         }) {
             self.tblContacts.reloadData()
+            self.imgDot.isHidden = self.arrReceivedRequests.count == 0
         }
     }
 }
