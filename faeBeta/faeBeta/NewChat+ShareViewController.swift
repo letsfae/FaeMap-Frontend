@@ -149,7 +149,8 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             vcChat.arrUserIDs.append("\(IDs[0])")
             //let chatSelf = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(Key.shared.user_id)'").first!
             //vcChat.arrRealmUsers.append(chatSelf)
-            let chatWithUser = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(IDs[0])'").first!
+            //let chatWithUser = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(IDs[0])'").first!
+            let chatWithUser = realm.filterUser("\(Key.shared.user_id)", id: "\(IDs[0])")!
             //vcChat.arrRealmUsers.append(chatWithUser)
             //vcChat.realmWithUser = chatWithUser
             //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {

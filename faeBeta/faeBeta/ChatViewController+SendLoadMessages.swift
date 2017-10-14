@@ -16,19 +16,22 @@ extension ChatViewController: OutgoingMessageProtocol {
     func sendMeaages_v2(type: String, text: String, media: Data? = nil) {
         let newMessage = RealmMessage_v2()
         let login_user_id = String(Key.shared.user_id)
-        newMessage.login_user_id = login_user_id
+        //newMessage.login_user_id = login_user_id
         let realm = try! Realm()
-        let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        //let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        let messages = realm.filterAllMessages(login_user_id, intIsGroup, strChatId!)
         var newIndex = 0
         if messages.count > 0 {
             newIndex = (messages.last?.index)! + 1
         }
-        newMessage.index = newIndex
-        let primaryKey = "\(login_user_id)_\(strChatId!)_\(newIndex)"
-        newMessage.loginUserID_chatID_index = primaryKey
-        newMessage.chat_id = strChatId!
+        //newMessage.index = newIndex
+        //let primaryKey = "\(login_user_id)_\(strChatId!)_\(newIndex)"
+        //newMessage.loginUserID_chatID_index = primaryKey
+        //newMessage.chat_id = strChatId!
+        newMessage.setPrimaryKeyInfo(login_user_id, intIsGroup, strChatId!, newIndex)
         for user_id in arrUserIDs {
-            let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
+            //let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
+            let user = realm.filterUser(login_user_id, id: user_id)!
             newMessage.members.append(user)
             if user.loginUserID_id == "\(login_user_id)_\(login_user_id)" {
                 newMessage.sender = user
@@ -41,16 +44,17 @@ extension ChatViewController: OutgoingMessageProtocol {
             newMessage.media = media! as NSData
         }
         let recentRealm = RealmRecent_v2()
-        recentRealm.login_user_id = login_user_id
-        recentRealm.chat_id = strChatId!
+        //recentRealm.login_user_id = login_user_id
+        //recentRealm.chat_id = strChatId!
         recentRealm.created_at = newMessage.created_at
         recentRealm.unread_count = 0
-        recentRealm.loginUserID_chatID = "\(login_user_id)_\(strChatId!)"
+        //recentRealm.loginUserID_chatID = "\(login_user_id)_\(strChatId!)"
+        recentRealm.setPrimaryKeyInfo(login_user_id, intIsGroup, strChatId!)
         try! realm.write {
             realm.add(newMessage)
             realm.add(recentRealm, update: true)
         }
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        //JSQSystemSoundPlayer.jsq_playMessageSentSound()
         //finishSendingMessage()
     }
     // MARK: - send message
@@ -205,7 +209,8 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     func loadMessagesFromRealm() {
         let realm = try! Realm()
-        resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        //resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        resultRealmMessages = realm.filterAllMessages(String(Key.shared.user_id), intIsGroup, strChatId)
         let count = resultRealmMessages.count
         for i in (count - intNumberOfMessagesOneTime)..<count {
             if i < 0 {

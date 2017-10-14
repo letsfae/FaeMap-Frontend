@@ -10,8 +10,9 @@ import Foundation
 import RealmSwift
 
 class RealmMessage_v2: Object {
-    dynamic var loginUserID_chatID_index: String = ""
+    dynamic var primary_key: String = "" // login_user_id, is_group, chat_id, index
     dynamic var login_user_id: String = ""
+    dynamic var is_group: Int = 0
     dynamic var chat_id: String = ""
     dynamic var index: Int = -1
     dynamic var sender: RealmUser? = nil
@@ -25,13 +26,22 @@ class RealmMessage_v2: Object {
     dynamic var unread_count: Int = 0
     
     override static func primaryKey() -> String? {
-        return "loginUserID_chatID_index"
+        return "primary_key"
+    }
+    
+    func setPrimaryKeyInfo(_ login_user_id: String, _ is_group: Int, _ chat_id: String, _ index: Int) {
+        self.login_user_id = login_user_id
+        self.is_group = is_group
+        self.chat_id = chat_id
+        self.index = index
+        self.primary_key = "\(login_user_id)_\(is_group)_\(chat_id)_\(index)"
     }
 }
 
 class RealmRecent_v2: Object {
-    dynamic var loginUserID_chatID: String = ""
+    dynamic var primary_key: String = "" //loginUserID_chatID
     dynamic var login_user_id: String = ""
+    dynamic var is_group: Int = 0
     dynamic var chat_id: String = ""
     dynamic var chat_name: String = ""
     //dynamic var latest_message: String = ""
@@ -39,11 +49,18 @@ class RealmRecent_v2: Object {
     dynamic var unread_count: Int = 0
     
     var latest_message: RealmMessage_v2? {
-        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), self.chat_id).sorted(byKeyPath: "index").last
+        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", String(Key.shared.user_id), String(is_group), self.chat_id).sorted(byKeyPath: "index").last
     }
     
     override static func primaryKey() -> String? {
-        return "loginUserID_chatID"
+        return "primary_key"
+    }
+    
+    func setPrimaryKeyInfo(_ login_user_id: String, _ is_group: Int, _ chat_id: String) {
+        self.login_user_id = login_user_id
+        self.is_group = is_group
+        self.chat_id = chat_id
+        self.primary_key = "\(login_user_id)_\(is_group)_\(chat_id)"
     }
 }
 
@@ -68,6 +85,16 @@ extension Object {
             }
         }
         return mutabledic
+    }
+}
+
+extension Realm {
+    func filterAllMessages(_ login_user_id: String, _ is_group: Int, _ chat_id: String) -> Results<RealmMessage_v2> {
+        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", login_user_id, String(is_group), chat_id).sorted(byKeyPath: "index")
+    }
+    
+    func filterUser(_ login_user_id: String, id: String) -> RealmUser? {
+        return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, id).first
     }
 }
 

@@ -93,7 +93,7 @@ class IncomingMessage {
         let realm = try! Realm()
         if !boolLocalized {
             let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            fileURL = documentPath + "/" + reamlMessage.loginUserID_chatID_index + ".mov"
+            fileURL = documentPath + "/" + reamlMessage.primary_key + ".mov"
             do {
                 try reamlMessage.media?.write(to: URL(fileURLWithPath: fileURL), options: [.atomic])
                 realm.beginWrite()
