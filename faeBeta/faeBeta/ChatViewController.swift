@@ -95,6 +95,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var arrUserIDs: [String] = []
     var resultRealmMessages: Results<RealmMessage_v2>!
     var notificationToken: NotificationToken?
+    var intIsGroup: Int = 0
     // not used now
     let userDefaults = UserDefaults.standard
     var showAvatar: Bool = true //false not show avatar, true show avatar
@@ -312,7 +313,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if textView == inputToolbar.contentView.textView && keyPath! == "text" {
             
             let newString = (change![NSKeyValueChangeKey.newKey]! as! String)
-            btnSend.isEnabled = newString.characters.count > 0
+            btnSend.isEnabled = newString.count > 0
         }
     }
     
@@ -444,7 +445,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: input text field delegate
     override func textViewDidChange(_ textView: UITextView) {
-        if textView.text.characters.count == 0 {
+        if textView.text.count == 0 {
             // when text has no char, cannot send message
             btnSend.isEnabled = false
         } else {
@@ -458,7 +459,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func textViewDidBeginEditing(_ textView: UITextView) {
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         showKeyboard()
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0 || !uiviewLocationExtend.isHidden
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0 || !uiviewLocationExtend.isHidden
     }
     
     override func becomeFirstResponder() -> Bool {
@@ -710,7 +711,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let insets = UIEdgeInsetsMake(0.0, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
         self.collectionView.contentInset = insets
         self.collectionView.scrollIndicatorInsets = insets
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.characters.count > 0
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
     func sendLocationMessageFromMini(_ sender: UIButton) {
