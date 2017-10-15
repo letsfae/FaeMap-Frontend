@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate {
     
     // AddPlacetoCollectionDelegate
     func createColList() {
@@ -24,12 +24,25 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         uiviewCollectedList.hide()
     }
     
+    // AfterAddedToListDelegate
+    func undoCollect() {
+        uiviewAfterAdded.hide()
+    }
+    
+    // AfterAddedToListDelegate
+    func seeList() {
+        uiviewAfterAdded.hide()
+        let vcCollectedList = CollectionsViewController()
+        navigationController?.pushViewController(vcCollectedList, animated: true)
+    }
+    
     func loadPlaceListView() {
         uiviewCollectedList = AddPlaceToCollectionView()
         uiviewCollectedList.delegate = self
         view.addSubview(uiviewCollectedList)
         
         uiviewAfterAdded = AfterAddedToListView()
+        uiviewAfterAdded.delegate = self
         view.addSubview(uiviewAfterAdded)
         
         uiviewCollectedList.uiviewAfterAdded = uiviewAfterAdded
@@ -39,55 +52,106 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     func placePinAction(action: PlacePinAction) {
         switch action {
         case .detail:
-            guard let ann = selectedPlace else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let vcPlaceDetail = PlaceDetailViewController()
-            vcPlaceDetail.place = placePin
-            navigationController?.pushViewController(vcPlaceDetail, animated: true)
+            if createLocation == .create {
+                locAnnoView?.optionsToNormal()
+                locAnnoView?.hideButtons()
+                let vcLocDetail = LocDetailViewController()
+                vcLocDetail.coordinate = locationPin?.coordinate
+                vcLocDetail.delegate = self
+                vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
+                vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
+                navigationController?.pushViewController(vcLocDetail, animated: true)
+            }
+            else {
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
+                    return
+                }
+                selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = placeData
+                vcPlaceDetail.delegate = self
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+            }
             break
         case .collect:
             uiviewCollectedList.show()
-            guard let ann = selectedPlace else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let pinId = placePin.id
-            let collectPlace = FaePinAction()
-            collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
-                guard status / 100 == 2 || status == 400 else { return }
-                self.selectedPlaceView?.showCollectedNoti()
-            })
+            locAnnoView?.optionsToNormal()
+            if createLocation == .create {
+                uiviewCollectedList.tableMode = .location
+                uiviewCollectedList.loadCollectionData()
+                guard let locPin = locationPin else { return }
+                uiviewCollectedList.locationPin = locPin
+            } else {
+                uiviewCollectedList.tableMode = .place
+                uiviewCollectedList.loadCollectionData()
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+                let pinId = placeData.id
+                let collectPlace = FaePinAction()
+                collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
+                    guard status / 100 == 2 || status == 400 else { return }
+                    self.selectedPlaceView?.showCollectedNoti()
+                })
+            }
+            
             break
         case .route:
-            guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
-            let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeData)
-            pin.animatable = false
-            tempFaePins.append(pin)
-            HIDE_AVATARS = true
-            PLACE_ENABLE = false
-            placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
-                self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-                self.routeCalculator(destination: pin.coordinate)
-            })
-            for user in self.faeUserPins {
-                user.isValid = false
+            if createLocation == .create {
+                guard let coordinate = self.locationPin?.coordinate else {
+                    return
+                }
+                uiviewLocationBar.hide()
+                locAnnoView?.hideButtons()
+                locAnnoView?.optionsToNormal()
+                HIDE_AVATARS = true
+                PLACE_ENABLE = false
+                // remove place pins but don't delete them
+                placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+                    self.routeCalculator(destination: coordinate)
+                })
+                // stop user pins changing location and popping up
+                for user in self.faeUserPins {
+                    user.isValid = false
+                }
+                // remove user pins but don't delete them
+                placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+                startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
             }
-            userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
-            startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
-            if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
-                uiviewChooseLocs.updateDestination(name: placeInfo.name)
-                destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
+            if let placeData = selectedPlace?.pinInfo as? PlacePin {
+                let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeData)
+                pin.animatable = false
+                tempFaePins.append(pin)
+                HIDE_AVATARS = true
+                PLACE_ENABLE = false
+                // remove place pins but don't delete them
+                placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+                    self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                    self.routeCalculator(destination: pin.coordinate)
+                })
+                // stop user pins changing location and popping up
+                for user in self.faeUserPins {
+                    user.isValid = false
+                }
+                // remove user pins but don't delete them
+                placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+                startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+                if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
+                    uiviewChooseLocs.updateDestination(name: placeInfo.name)
+                    destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
+                }
             }
             break
         case .share:
-            guard let ann = selectedPlace else { return }
-            guard let placePin = ann.pinInfo as? PlacePin else { return }
-            let vcSharePlace = NewChatShareController(chatOrShare: "share")
-            vcSharePlace.placeDetail = placePin
-            navigationController?.pushViewController(vcSharePlace, animated: true)
+            locAnnoView?.optionsToNormal()
+            if let placeData = selectedPlace?.pinInfo as? PlacePin {
+                let vcSharePlace = NewChatShareController(chatOrShare: "share")
+                vcSharePlace.placeDetail = placeData
+                navigationController?.pushViewController(vcSharePlace, animated: true)
+            }
             break
         }
     }
 
-    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation, animated: Bool = true) -> MKAnnotationView {
+    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "place"
         var anView: PlacePinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
@@ -98,24 +162,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         anView.assignImage(first.icon)
         anView.delegate = self
-        if animated {
-            if first.animatable {
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                        anView.alpha = 1
-                    }, completion: nil)
-                }
-            } else {
-                anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                anView.alpha = 1
-            }
-        } else {
-            anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-            anView.alpha = 1
-        }
         return anView
     }
     
@@ -199,7 +245,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         refreshPlacePins(radius: coorDistance)
     }
     
-    fileprivate func refreshPlacePins(radius: Int, all: Bool = true) {
+    fileprivate func refreshPlacePins(radius: Int) {
         
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1

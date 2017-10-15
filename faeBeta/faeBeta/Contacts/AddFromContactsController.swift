@@ -9,24 +9,65 @@
 import UIKit
 import Contacts
 import ContactsUI
+import SwiftyJSON
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
-    
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate {
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarFromContacts: FaeSearchBarTest!
     var tblFromContacts: UITableView!
     var filtered: [String] = [] // for search bar results
     var testArray = [String]()
-
+    var uiviewNotAllowed: UIView!
+    var imgGhost: UIImageView!
+    var lblPrompt: UILabel!
+    var lblInstructions: UILabel!
+    var btnAllowAccess: UIButton!
+    var boolAllowAccess = false
+    var contactStore = CNContactStore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        openContacts()
-        loadSearchTable()
         loadNavBar()
-        tblFromContacts.separatorStyle = .none
         definesPresentationContext = true
         view.backgroundColor = .white
+        loadSearchTable()
+        loadNotAllowedView()
+        self.showView()
+        linkPhoneNumber()
+    }
+    
+    func linkPhoneNumber() {
+        let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+            if status / 100 != 2 {
+                return
+            }
+            let selfUserInfoJSON = JSON(message!)
+            let phone = selfUserInfoJSON["phone_verified"].boolValue
+            if phone == false {
+                self.uiviewNotAllowed.isHidden = true
+                self.uiviewSchbar.isHidden = true
+                self.tblFromContacts.isHidden = true
+                let vc = SignInPhoneViewController()
+                vc.delegate = self
+                vc.enterMode = .contacts
+                self.present(vc, animated: true)
+            }
+        })
+    }
+    
+    func showView() {
+        if boolAllowAccess {
+            openContacts()
+            uiviewNotAllowed.isHidden = true
+            uiviewSchbar.isHidden = false
+            tblFromContacts.isHidden = false
+        } else {
+            uiviewSchbar.isHidden = true
+            tblFromContacts.isHidden = true
+            uiviewNotAllowed.isHidden = false
+        }
     }
     
     func loadNavBar() {
@@ -43,18 +84,12 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func loadSearchTable() {
-        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
+        uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
         schbarFromContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
         schbarFromContacts.txtSchField.placeholder = "Search Contacts"
         schbarFromContacts.delegate = self
         uiviewSchbar.addSubview(schbarFromContacts)
-        
-        // Vicky 07/28/17 这段代码在干嘛？
-//        let schBarTopLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-//        schBarTopLine.layer.borderWidth = 1
-//        schBarTopLine.layer.borderColor = UIColor.white.cgColor
-//        schbarFromContacts.addSubview(schBarTopLine)
-        
+
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         topLine.layer.borderWidth = 1
         topLine.layer.borderColor = UIColor._200199204cg()
@@ -66,11 +101,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         uiviewSchbar.addSubview(bottomLine)
         
         view.addSubview(uiviewSchbar)
-        
-        /* Joshua 06/16/17
-         y should be 114 not 113
-         tblFromContacts' height should be screenHeight - 65 - height of schbar
-         */
+
         tblFromContacts = UITableView()
         tblFromContacts.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 65 - 50)
         tblFromContacts.dataSource = self
@@ -81,8 +112,10 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
         tblFromContacts.isHidden = false
         tblFromContacts.indicatorStyle = .white
+        tblFromContacts.separatorStyle = .none
         view.addSubview(tblFromContacts)
     }
+    
     // FaeSearchBarTestDelegate
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         filter(searchText: searchText)
@@ -108,8 +141,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if schbarFromContacts.txtSchField.text != "" {
             return filtered.count
-        }
-        else {
+        } else {
             return testArray.count
         }
     }
@@ -190,8 +222,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         headerView.addSubview(label)
         if section == 0 {
             label.text = "Already on Faevorite"
-        }
-        else {
+        } else {
             label.text = "Invite to Faevorite"
         }
         headerView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: label)
@@ -203,4 +234,64 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         schbarFromContacts.txtSchField.resignFirstResponder()
     }
 
+    func loadNotAllowedView() {
+        uiviewNotAllowed = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        imgGhost = UIImageView()
+        imgGhost.frame = CGRect(x: (screenWidth - 252) / 2, y: 119 * screenHeightFactor, width: 252, height: 209)
+        imgGhost.contentMode = .scaleAspectFit
+        imgGhost.image = #imageLiteral(resourceName: "ghostContacts")
+        uiviewNotAllowed.addSubview(imgGhost)
+        
+        lblPrompt = UILabel()
+        lblPrompt.textAlignment = .center
+        lblPrompt.numberOfLines = 2
+        lblPrompt.text = "Start adding your Friends \nfrom your contacts!"
+        lblPrompt.textColor = UIColor._898989()
+        lblPrompt.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        
+        lblInstructions = UILabel()
+        lblInstructions.textAlignment = .center
+        lblInstructions.numberOfLines = 2
+        lblInstructions.text = "Find Fae Maps in Settings and toggle \non Contacts Access, that's it!"
+        lblInstructions.textColor = UIColor._155155155()
+        lblInstructions.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        
+        btnAllowAccess = UIButton()
+        btnAllowAccess.backgroundColor = UIColor._2499090()
+        btnAllowAccess.layer.cornerRadius = 25
+        btnAllowAccess.setTitle("Allow Access", for: .normal)
+        btnAllowAccess.setTitleColor(.white, for: .normal)
+        btnAllowAccess.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        btnAllowAccess.addTarget(self, action: #selector(actionAllowAccess(_:)), for: .touchUpInside)
+        
+        uiviewNotAllowed.addSubview(lblPrompt)
+        uiviewNotAllowed.addSubview(lblInstructions)
+        uiviewNotAllowed.addSubview(btnAllowAccess)
+        
+        uiviewNotAllowed.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblPrompt)
+        uiviewNotAllowed.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblInstructions)
+        let padding = (screenWidth - 300 * screenWidthFactor) / 2
+        uiviewNotAllowed.addConstraintsWithFormat("H:|-\(padding)-[v0(\(300 * screenWidthFactor))]", options: [], views: btnAllowAccess)
+        
+        uiviewNotAllowed.addConstraintsWithFormat("V:[v0(56)]-23-[v1(44)]-59-[v2(50)]-36-|", options: [], views: lblPrompt, lblInstructions, btnAllowAccess)
+        
+        view.addSubview(uiviewNotAllowed)
+    }
+    
+    func actionAllowAccess(_ sender: UIButton) {
+        let entityType = CNEntityType.contacts
+        let authStatus = CNContactStore.authorizationStatus(for: entityType)
+        if authStatus == .denied {
+            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+        }
+    }
+    
+    // SignInPhoneDelegate
+    func backToContacts() {
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func verifyPhoneSucceed() {
+        showView()
+    }
 }

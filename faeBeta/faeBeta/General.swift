@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import RealmSwift
 
 class General: NSObject {
@@ -55,7 +56,7 @@ class General: NSObject {
         }
     }
     
-    func getAddress(location: CLLocation, original: Bool = false, completion: @escaping (AnyObject) -> Void) {
+    func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, completion: @escaping (AnyObject) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             
@@ -100,6 +101,12 @@ class General: NSObject {
                 
                 var address = ""
                 
+                if full == false {
+                    address = locality + ", " + administrativeArea + ", " + country
+                    completion(address as AnyObject)
+                    return
+                }
+                
                 if name == subThoroughfare + " " + thoroughfare {
                     address = name + ", " + locality + ", " + administrativeArea + postalCode + ", " + country
                 } else {
@@ -120,6 +127,31 @@ class General: NSObject {
                 guard let first = results.first else { joshprint("[CLGeocoder] first != results.first"); return }
                 completion(first.location?.coordinate)
             }
+        }
+    }
+    
+    func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
+        let getPlaces = FaeMap()
+        getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
+        getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
+        getPlaces.whereKey("radius", value: "500000")
+        getPlaces.whereKey("type", value: "place")
+        getPlaces.whereKey("max_count", value: "\(count)")
+        getPlaces.getMapInformation { (status: Int, message: Any?) in
+            guard status / 100 == 2 && message != nil else {
+                completion(status, JSON())
+                return
+            }
+            let mapPlaceJSON = JSON(message!)
+            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
+                completion(status, JSON())
+                return
+            }
+            guard mapPlaceJsonArray.count > 0 else {
+                completion(status, JSON())
+                return
+            }
+            completion(status, mapPlaceJSON)
         }
     }
 }

@@ -103,7 +103,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll.addSubview(lblNickname)
         
         lblUsrame = UILabel(frame: CGRect(x: (screenWidth - 280) / 2, y: 190, width: 280, height: 25))
-        lblUsrame.text = username
+        lblUsrame.text = Key.shared.username
         lblUsrame.textAlignment = .center
         lblUsrame.font = UIFont(name: "AvenirNext-Regular", size: 18)
         lblUsrame.textColor = UIColor._898989()

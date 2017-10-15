@@ -7,9 +7,16 @@
 //
 
 import UIKit
+import SwiftyJSON
+
+protocol AfterAddedToListDelegate: class {
+    func seeList()
+    func undoCollect()
+}
 
 class AfterAddedToListView: UIView {
     
+    weak var delegate: AfterAddedToListDelegate?
     var uiviewAfterAdded: UIView!
     
     override init(frame: CGRect = .zero) {
@@ -39,6 +46,7 @@ class AfterAddedToListView: UIView {
         btnUndo.setTitleColor(.white, for: .normal)
         btnUndo.setTitleColor(.lightGray, for: .highlighted)
         btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnUndo.addTarget(self, action: #selector(undoCollecting), for: .touchUpInside)
         addSubview(btnUndo)
         addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
@@ -48,9 +56,18 @@ class AfterAddedToListView: UIView {
         btnSeeList.setTitleColor(.white, for: .normal)
         btnSeeList.setTitleColor(.lightGray, for: .highlighted)
         btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnSeeList.addTarget(self, action: #selector(goToList), for: .touchUpInside)
         addSubview(btnSeeList)
         addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
+    }
+    
+    func undoCollecting() {
+        delegate?.undoCollect()
+    }
+    
+    func goToList() {
+        delegate?.seeList()
     }
     
     func show() {
@@ -79,6 +96,10 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var btnCancel: UIButton!
     var tblAddCollection: UITableView!
     var uiviewAfterAdded: AfterAddedToListView!
+    let faeCollection = FaeCollection()
+    var arrCollection = [PinCollection]()
+    var tableMode: CollectionTableMode = .place
+    var locationPin: FaePinAnnotation!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
@@ -88,6 +109,30 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func loadCollectionData() {
+        faeCollection.getCollections {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let collections = JSON(message!)
+                guard let colArray = collections.array else {
+                    print("[loadCollectionData] fail to parse collections info")
+                    return
+                }
+                
+                self.arrCollection.removeAll()
+                for col in colArray {
+                    let data = PinCollection(json: col)
+                    if data.colType == self.tableMode.rawValue {
+                        self.arrCollection.append(data)
+                    }
+                }
+                
+                self.tblAddCollection.reloadData()
+            } else {
+                print("[Get Collections] Fail to Get \(status) \(message!)")
+            }
+        }
     }
     
     func show() {
@@ -159,23 +204,39 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return arrCollection.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-        let arr = ["Favorite Place", "Saved Places", "Places to Go"]
-        cell.lblListName.text = arr[indexPath.row]
-        cell.lblListNum.text = "12 items"
+        let cell = tblAddCollection.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
+        let collection = arrCollection[indexPath.row]
+        cell.setValueForCell(cols: collection)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.hide()
-        uiviewAfterAdded.show()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            self.uiviewAfterAdded.hide()
-        }
+        joshprint(arrCollection[indexPath.row])
+        let colInfo = arrCollection[indexPath.row]
+        FaeMap.shared.whereKey("content", value: "test_ys")
+        FaeMap.shared.whereKey("geo_latitude", value: "\(locationPin.coordinate.latitude)")
+        FaeMap.shared.whereKey("geo_longitude", value: "\(locationPin.coordinate.longitude)")
+        FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let idJSON = JSON(message!)
+            let locationId = idJSON["location_id"].intValue
+            joshprint(locationId)
+            FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
+                guard code / 100 == 2 else { return }
+//                guard result != nil else { return }
+                self.hide()
+                self.uiviewAfterAdded.show()
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self.uiviewAfterAdded.hide()
+                }
+            })
+        })
     }
     
     func actionCancel(_ sender: UIButton) {

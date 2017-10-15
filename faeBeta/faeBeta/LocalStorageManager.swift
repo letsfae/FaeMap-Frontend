@@ -31,16 +31,16 @@ class LocalStorageManager: NSObject {
         return nil
     }
     func saveUsername() -> Bool {
-        if username != "" {
-            saveString("username", value: username)
+        if Key.shared.username != "" {
+            saveString("username", value: Key.shared.username)
             return true
         }
         return false
     }
     func readUsername() -> Bool {
-        if username == "" {
+        if Key.shared.username == "" {
             if let usernames = readByKey("username") {
-                username = usernames as! String
+                Key.shared.username = usernames as! String
                 return true
             }
             // should we need to read from internet
@@ -112,7 +112,7 @@ class LocalStorageManager: NSObject {
     func getAccountStorage() {
         
         saveString("userEmail", value: userEmail)
-        saveString("username", value: username)
+        saveString("username", value: Key.shared.username)
         saveString("userFirstname", value: userFirstname)
         saveString("userLastname", value: userLastname)
         saveString("userBirthday", value: userBirthday)

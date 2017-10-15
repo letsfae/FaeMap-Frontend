@@ -50,7 +50,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
     // override textViewDidChange function to limit the length of chars
     func textViewDidChange(_ textView: UITextView) {
         lblPlaceholder.isHidden = !textView.text.isEmpty
-        let leftcharscount = 50 - textView.text.characters.count
+        let leftcharscount = 50 - textView.text.count
         if leftcharscount < 0 {
             lblWordsCount.textColor = UIColor._2499090()
             btnSave.isEnabled = false

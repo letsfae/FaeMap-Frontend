@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-enum CollectionTableMode {
-    case place
-    case location
+enum CollectionTableMode: String {
+    case place = "place"
+    case location = "location"
 }
 
-class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, CollectionsListDetailDelegate, CreateColListDelegate {
     var btnNavBarMenu: UIButton!
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
@@ -25,6 +26,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var navBarMenuBtnClicked: Bool = false
     var arrPlaceListName = ["Favorite Places", "Saved Places", "Places to Go"]
     var arrLocationListName = ["Favorite Locations", "Saved Locations"]
+    var arrCollection = [PinCollection]()
+    let faeCollection = FaeCollection()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,33 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         loadTable()
         loadDropDownMenu()
         loadNavBar()
+        loadCollectionData()
+    }
+    
+    fileprivate func loadCollectionData() {
+        faeCollection.getCollections {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let collections = JSON(message!)
+                // 后端数据改好后，改为collections.array
+                guard let colArray = collections.array else {
+                    print("[loadCollectionData] fail to parse collections info")
+                    return
+                }
+                
+                self.arrCollection.removeAll()
+                for col in colArray {
+                    let data = PinCollection(json: col)
+                    if data.colType == self.tableMode.rawValue {
+                        self.arrCollection.append(data)
+                    }
+                }
+                
+                self.tblCollections.reloadData()
+                print("[Get Collections] Get Successfully")
+            } else {
+                print("[Get Collections] Fail to Get \(status) \(message!)")
+            }
+        }
     }
     
     fileprivate func loadNavBar() {
@@ -195,7 +225,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         btnNavBarSetTitle()
         hideDropDownMenu()
         
-        tblCollections.reloadData()
+        loadCollectionData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -210,7 +240,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         if section == 1 {
             return 1
         } else {
-            return tableMode == .place ? arrPlaceListName.count : arrLocationListName.count
+            return arrCollection.count
         }
     }
     
@@ -220,11 +250,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-            if tableMode == .place {
-                cell.setValueForCell(cellName: arrPlaceListName[indexPath.row])
-            } else {
-                cell.setValueForCell(cellName: arrLocationListName[indexPath.row])
-            }
+            let collection = arrCollection[indexPath.row]
+            cell.setValueForCell(cols: collection)
             return cell
         }
     }
@@ -232,16 +259,45 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             let vc = CreateColListViewController()
-            vc.enterMode = tableMode == .place ? .place : .location
+            vc.delegate = self
+            vc.enterMode = tableMode
             present(vc, animated: true)
         } else {
             let vc = CollectionsListDetailViewController()
-            vc.enterMode = tableMode == .place ? .place : .location
+            vc.delegate = self
+            vc.indexPath = indexPath
+            vc.enterMode = tableMode
+            vc.colId = arrCollection[indexPath.row].colId
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
+    }
+    
+    // CollectionsListDetailDelegate
+    func deleteColList(indexPath: IndexPath) {
+        arrCollection.remove(at: indexPath.row)
+        reloadAfterDelete(indexPath: indexPath)
+    }
+    
+    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
+        arrCollection[indexPath.row].colName = name
+        arrCollection[indexPath.row].itemsCount = numItems
+        tblCollections.reloadRows(at: [indexPath], with: .none)
+    }
+    
+    func reloadAfterDelete(indexPath: IndexPath) {
+        tblCollections.performUpdate({
+            self.tblCollections.deleteRows(at: [indexPath], with: .right)
+        }) {
+            self.tblCollections.reloadData()
+        }
+    }
+    
+    // CreateColListDelegate
+    func updateCols() {
+        loadCollectionData()
     }
 }

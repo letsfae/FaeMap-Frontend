@@ -228,11 +228,11 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         }
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
-            self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
+            self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
             self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
-            self.imgMoodAvatar.frame = CGRect(x: 169, y: 173, w: 35, h: 33)
+            self.imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
             self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
             self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
             self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
@@ -331,6 +331,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         imgBackShadow = UIImageView(frame: initialFrame)
         imgBackShadow.layer.anchorPoint = nameCardAnchor
         imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new")
+//        imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new_sm")
         imgBackShadow.contentMode = .scaleAspectFit
         imgBackShadow.clipsToBounds = true
         addSubview(imgBackShadow)

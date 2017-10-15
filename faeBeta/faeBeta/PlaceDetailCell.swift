@@ -97,11 +97,16 @@ class PlaceDetailCell: UITableViewCell {
     func setValueForCell(place: PlacePin) {}
 }
 
+protocol PlaceDetailSmallMapCellDelegate: class {
+    func jumpToMainMapWithPlace()
+}
+
 class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
     
     var mapView: MKMapView!
     var placeData: PlacePin!
     var boolPlaceAdded = false
+    weak var delegate: PlaceDetailSmallMapCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -135,6 +140,12 @@ class PlaceDetailSection1Cell: PlaceDetailCell, MKMapViewDelegate {
         mapView.showsPointsOfInterest = false
         uiviewHiddenCell.addSubview(mapView)
         uiviewHiddenCell.addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: mapView)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
+        mapView.addGestureRecognizer(tapGesture)
+    }
+    
+    func handleMapTap() {
+        delegate?.jumpToMainMapWithPlace()
     }
     
     override func setCellContraints() {

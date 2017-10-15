@@ -10,6 +10,11 @@ import UIKit
 import MapKit
 import CoreLocation
 
+enum SelectLoctionMode {
+    case full
+    case part
+}
+
 class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     
     weak var delegate: BoardsSearchDelegate?
@@ -22,6 +27,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
     var btnSelect: FMDistIndicator!
     var lblSearchContent: UILabel!
     var routeAddress: RouteAddress!
+    var mode: SelectLoctionMode = .full
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,22 +46,30 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.invisibleOn()
             return anView
-        } else {
-            return nil
         }
+        return nil
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        General.shared.getAddress(location: location) { (address) in
-            guard let addr = address as? String else { return }
-            DispatchQueue.main.async {
-                self.lblSearchContent.text = addr
-                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+        if mode == .full {
+            General.shared.getAddress(location: location) { (address) in
+                guard let addr = address as? String else { return }
+                DispatchQueue.main.async {
+                    self.lblSearchContent.text = addr
+                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                }
+            }
+        } else {
+            General.shared.getAddress(location: location, full: false) { (address) in
+                guard let addr = address as? String else { return }
+                DispatchQueue.main.async {
+                    self.lblSearchContent.text = addr
+                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                }
             }
         }
     }
@@ -72,12 +86,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate {
         let camera = slMapView.camera
         camera.altitude = Key.shared.dblAltitude
         camera.centerCoordinate = Key.shared.selectedLoc
+        if mode == .part { camera.altitude = 35000 }
         slMapView.setCamera(camera, animated: false)
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
-        slMapView.setRegion(coordinateRegion, animated: false)
         
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
         imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
+        if mode == .part { imgPinOnMap.image = #imageLiteral(resourceName: "icon_destination") }
         view.addSubview(imgPinOnMap)
     }
     

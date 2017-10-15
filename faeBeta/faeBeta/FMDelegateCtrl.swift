@@ -98,8 +98,9 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
     }
     
     // LeftSlidingMenuDelegate
-    func logOutInLeftMenu() {
-        self.jumpToWelcomeView(animated: true)
+    func jumpToSettings() {
+        let vcSettings = SettingsViewController()
+        navigationController?.pushViewController(vcSettings, animated: true)
     }
     
     func jumpToFaeUserMainPage() {

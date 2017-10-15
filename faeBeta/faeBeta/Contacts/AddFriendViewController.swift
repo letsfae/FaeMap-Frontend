@@ -19,7 +19,6 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     var contactStore = CNContactStore()
     var uiviewNavBar: FaeNavBar!
     var imgCity: UIImageView!
-//    static var boolAllowContact = false
     var arrFriends = [Friends]()
     var arrReceivedRequests = [Friends]()
     var arrRequested = [Friends]()
@@ -161,26 +160,14 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     func getContacts() {
         let entityType = CNEntityType.contacts
         let authStatus = CNContactStore.authorizationStatus(for: entityType)
-        if (authStatus == CNAuthorizationStatus.notDetermined) {
-            contactStore.requestAccess(for: entityType, completionHandler: { (success, nil) in
-                if success {
-                    print("success")
-                    let vc = AddFromContactsController()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    print("aftersuccess")
-                } else {
-                    print("unsuccess")
-                    let vc = ContactsNotAllowedController()
-                    self.navigationController?.pushViewController(vc, animated: true)
-                    print("after unsuccess")
-                }
-            })
-        } else if (authStatus == CNAuthorizationStatus.denied) {
-            let vc = ContactsNotAllowedController()
+
+        let vc = AddFromContactsController()
+        if authStatus == .denied {
+            vc.boolAllowAccess = false
             self.navigationController?.pushViewController(vc, animated: true)
             // showAlert(title: "Denied Access to Contacts", message: "It seems that you have earlier denied FaeMap access to your Contacts. In order to grant this app access to your contacts, please go to your Settings > Privacy > Contacts and change accordingly.")
-        } else if authStatus == CNAuthorizationStatus.authorized {
-            let vc = AddFromContactsController()
+        } else if authStatus == .authorized {
+            vc.boolAllowAccess = true
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }

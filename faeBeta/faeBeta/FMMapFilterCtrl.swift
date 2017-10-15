@@ -9,7 +9,7 @@
 import UIKit
 import CCHMapClusterController
 
-extension FaeMapViewController: MapFilterMenuDelegate {
+extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
@@ -84,12 +84,22 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             for faeUser in faeUserPins {
                 faeUser.isValid = false
             }
-            userClusterManager.removeAnnotations(faeUserPins) {
+            placeClusterManager.removeAnnotations(faeUserPins) {
                 self.faeUserPins.removeAll()
             }
         } else {
             updateTimerForUserPin()
         }
+    }
+    
+    // CollectionsListDetailDelegate
+    func deleteColList(indexPath: IndexPath) {
+        
+    }
+    
+    // CollectionsListDetailDelegate
+    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
+        
     }
     
     func actionHideFilterMenu(_ sender: UIButton) {
@@ -123,6 +133,10 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                 resumeTime = 0.3
             }
             if percent > 0.1 {
+                // reload collection data
+                if uiviewFilterMenu.frame.origin.y <= screenHeight {
+                    uiviewFilterMenu.loadCollectionData()
+                }
                 UIView.animate(withDuration: resumeTime, animations: {
                     self.uiviewFilterMenu.frame.origin.y = self.sizeTo
                     self.btnFilterIcon.center.y = self.sizeTo - 25
@@ -143,5 +157,4 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             pan.setTranslation(CGPoint.zero, in: view)
         }
     }
-    
 }

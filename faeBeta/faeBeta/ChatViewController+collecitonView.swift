@@ -199,12 +199,10 @@ extension ChatViewController {
         if object["type"] as! String == "place" {
             let message = arrJSQMessages[indexPath.row]
             if let mediaItem = message.media as? JSQPlaceMediaItemCustom {
-                let vc = PlaceDetailViewController()
-                vc.place = mediaItem.place
-                
                 boolGoToFullContent = true
-                
-                navigationController?.pushViewController(vc, animated: true)
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = mediaItem.place
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
         }
         

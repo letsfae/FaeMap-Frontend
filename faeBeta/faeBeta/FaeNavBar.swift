@@ -53,9 +53,13 @@ class FaeNavBar: UIView {
         addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: rightBtn)
     }
     
+    func setBtnTitle() {
+        leftBtn.setTitle("Cancel", for: .normal)
+        leftBtn.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        leftBtn.setTitleColor(UIColor._155155155(), for: .normal)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
- 
-
 }

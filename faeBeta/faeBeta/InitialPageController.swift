@@ -19,6 +19,15 @@ class InitialPageController: UIPageViewController {
         return [faeMap, mapBoard]
     }()
     
+    override init(transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]? = nil) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        automaticallyAdjustsScrollViewInsets = false
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let faeMap = arrViewCtrl.first {

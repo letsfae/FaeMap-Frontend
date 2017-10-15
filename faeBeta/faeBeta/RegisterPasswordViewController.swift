@@ -84,7 +84,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     
     func validation() {
         var boolIsValid = false
-        boolIsValid = password != nil && password?.characters.count > 7
+        boolIsValid = password != nil && password?.count > 7
         enableContinueButton(boolIsValid)
     }
     
@@ -127,7 +127,7 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
                 cellPassword.setPlaceholderLabelText("New Password", indexPath: indexPath)
                 cellPassword.setRightPlaceHolderDisplay(true)
                 cellPassword.delegate = self
-                cellPassword.setCharacterLimit(16)
+                cellPassword.setCharacterLimit(50)
                 cellPassword.makeFirstResponder()
             }
             return cellPassword

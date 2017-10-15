@@ -50,9 +50,24 @@ extension AddUsernameController: UIScrollViewDelegate {
         
         // serveral times of adjustment, the following is the best match
         // every time scrolling, the custom indicator's position is set
-        // mapping algorithm: Y = (X-A)/(B-A) * (D-C) + C
-        btnIndicator.center.y = ((indicator.center.y)/(tblUsernames.contentSize.height + 115)) * (screenHeight-115) + 115
         
+        // indicator is the original one come with table view,
+        // and its position goes with table view's content, not its frame
+        // so here, I used an absolute value 'percentage' to get the percentage the indicator should be
+        // since btnIndicator is added on view rather than table view (if on table view, the UI is weird)
+        // btnIndicator's position.y is calculate by the percentage of the table view frame.size.height
+        var percentage = (indicator.frame.origin.y) / tblUsernames.contentSize.height
+        // sometimes the percentage will pass beyond 1.0 or below 0.0, force it to be within 0.0-1.0
+        if percentage > 1.0 { percentage = 1.0 }
+        else if percentage < 0.0 { percentage = 0.0 }
+        // 118.0 is the start point of the btnIndicator's origin.y
+        // (for here, composes of 65 of navbar, 49 of schbar, and 4 of offset for aesthetic)
+        btnIndicator.frame.origin.y = tblUsernames.frame.size.height * percentage + 118.0
+        // if btnIndicator is beyond the end of table view's frame, force it to be within table view
+        // 30 is the btnIndicator's height, and 4 of offset for aesthetic
+        if btnIndicator.frame.origin.y > screenHeight - 30 - 4 {
+            btnIndicator.frame.origin.y = screenHeight - 30 - 4
+        }
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -90,33 +105,38 @@ extension AddUsernameController: UIScrollViewDelegate {
                 tblUsernames.scrollToRow(at: IndexPath(row: filtered.count - 1, section: 0), at: .bottom, animated: true)
             }
         } else {
-            guard let indicator = tblUsernames.subviews.last as? UIImageView else { return }
+            // when pan gesture recognized changing state
             
+            // loc_y is the pan's y on view, the view of the viewController
+            // here, for aesthetic, we use loc_y to control btnIndicator.center.y
             var loc_y = pan.location(in: view).y
-            
-            if loc_y < 115 {
-                loc_y = 115
-            } else if loc_y > screenHeight - 15 {
-                loc_y = screenHeight - 15
+            // why is 133 here?
+            // 133 is 118 + 15, in func scrollViewDidScroll, we know about 118
+            // and 15 is half of 30, the height of btnIndicator,
+            // so 15 is the distance from origin.y to center.y
+            if loc_y < 133 {
+                loc_y = 133
+            }
+            // some thing here, we got 4 of offset for aesthetic at the bottom
+            // and 15 for the bottom of btnIndicator to its center
+            else if loc_y > screenHeight - 19 {
+                loc_y = screenHeight - 19
             }
             
-            var point_y: CGFloat = (((loc_y)) / (screenHeight)) * (tblUsernames.contentSize.height - 115) - 380
-            print(point_y)
+            // use loc_y to control btnIndicator.center.y
+            btnIndicator.center.y = loc_y
             
-            if point_y < 0 {
-                point_y = 0
-            } else if point_y > tblUsernames.contentSize.height {
-                point_y = tblUsernames.contentSize.height
-            }
-            
+            // reverse what we've got in func scrollViewDidScroll
+            let percent = (btnIndicator.frame.origin.y - 118.0) / tblUsernames.frame.size.height
+            let indicator_y = tblUsernames.contentSize.height * percent
+            // why is 0.85?
+            // by research on the relationship between scrollView's indicator and its contentOffset
+            // we found a value varies from 0.83 to 0.87, I chose a mid one, 0.85
+            // the value is indicator.center.y / table.contentOffset.y
+            let point_y = 0.85 * indicator_y
             let point = CGPoint(x: 0, y: point_y)
+            
             tblUsernames.setContentOffset(point, animated: false)
-            if ((indicator.center.y)/(tblUsernames.contentSize.height + 115)) * (screenHeight-115) + 115 > screenHeight {
-                btnIndicator.center.y = screenHeight
-            }
-            else {
-                btnIndicator.center.y = ((indicator.center.y)/(tblUsernames.contentSize.height + 115)) * (screenHeight-115) + 115
-            }
         }
     }
     

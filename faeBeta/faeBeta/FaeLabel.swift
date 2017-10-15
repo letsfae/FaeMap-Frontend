@@ -8,13 +8,6 @@
 
 import UIKit
 
-enum FaeLabelFontType: String {
-    case regular = "Regular"
-    case medium = "Medium"
-    case demiBold = "DemiBold"
-    case bold = "Bold"
-}
-
 class FaeLabel: UILabel {
     
     init(_ frame: CGRect = .zero, _ align: NSTextAlignment = .left, _ fontType: FaeLabelFontType = .regular, _ size: CGFloat, _ color: UIColor = UIColor._898989()) {

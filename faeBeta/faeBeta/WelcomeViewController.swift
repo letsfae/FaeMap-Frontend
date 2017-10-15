@@ -92,6 +92,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLookAround.setTitle("Look Around", for: .normal)
         btnLookAround.setTitleColor(UIColor._2499090(), for: .normal)
         btnLookAround.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16)
+        btnLookAround.addTarget(self, action: #selector(actionLookAround(_:)), for: .touchUpInside)
         view.insertSubview(btnLookAround, at: 0)
         
         // log in button
@@ -100,10 +101,11 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLogin.center.x = screenWidth / 2
         btnLogin.setTitle("Log in", for: .normal)
         btnLogin.setTitleColor(.white, for: .normal)
-        btnLogin.setTitleColor(.lightGray, for: .highlighted)
+//        btnLogin.setTitleColor(.lightGray, for: .highlighted)
         btnLogin.titleLabel?.font = font!
         btnLogin.layer.cornerRadius = 25 * screenHeightFactor
         btnLogin.backgroundColor = UIColor._2499090()
+        btnLogin.adjustsImageWhenHighlighted = false
         btnLogin.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         view.insertSubview(btnLogin, at: 0)
         view.bringSubview(toFront: btnLogin)
@@ -113,12 +115,13 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnCreateAccount.center.x = screenWidth / 2
         btnCreateAccount.setTitle("Join Faevorite", for: .normal)
         btnCreateAccount.setTitleColor(UIColor._2499090(), for: .normal)
-        btnCreateAccount.setTitleColor(.lightGray, for: .highlighted)
+//        btnCreateAccount.setTitleColor(.lightGray, for: .highlighted)
         btnCreateAccount.titleLabel?.font = font!
         btnCreateAccount.backgroundColor = UIColor.white
         btnCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnCreateAccount.layer.borderWidth = 3
         btnCreateAccount.layer.cornerRadius = 25 * screenHeightFactor
+        btnCreateAccount.adjustsImageWhenHighlighted = false
         btnCreateAccount.addTarget(self, action: #selector(jumpToSignUp), for: .touchUpInside)
         view.insertSubview(btnCreateAccount, at: 0)
         view.bringSubview(toFront: btnCreateAccount)
@@ -182,5 +185,10 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     func jumpToSignUp() {
         let boardRegister = RegisterNameViewController()
         navigationController?.pushViewController(boardRegister, animated: true)
+    }
+    
+    func actionLookAround(_ sender: UIButton) {
+//        let vc = ()
+//        navigationController?.pushViewController(vc, animated: true)
     }
 }

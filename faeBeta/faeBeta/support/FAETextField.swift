@@ -14,6 +14,7 @@ class FAETextField: UITextField {
     fileprivate var contentInset: CGFloat! = 30
     fileprivate var lblLeft: UILabel!
     fileprivate var btnRight: UIButton!
+    var fontSize: CGFloat = 22
     var uiviewRightPlaceHolder: UIView!
     var uiviewLeftPlaceHolderView: UIView!
     
@@ -55,7 +56,7 @@ class FAETextField: UITextField {
     override var placeholder: String? {
         set {
             _placeholder = newValue!
-            let font = UIFont(name: "AvenirNext-Regular", size: 22)
+            let font = UIFont(name: "AvenirNext-Regular", size: fontSize)
             self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
         }
         get {
@@ -81,14 +82,14 @@ class FAETextField: UITextField {
     fileprivate func setup() {
         self.autocorrectionType = .no
         self.textColor = UIColor._898989()
-        self.font = UIFont(name: "AvenirNext-Regular", size: 22.0)
+        self.font = UIFont(name: "AvenirNext-Regular", size: fontSize)
         self.clearButtonMode = UITextFieldViewMode.never
         self.contentHorizontalAlignment = .center
         self.textAlignment = .center
         self.tintColor = UIColor._2499090()
         self.autocapitalizationType = .none
-        uiviewRightPlaceHolder = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
-        uiviewLeftPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 30))
+        uiviewRightPlaceHolder = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 40))
+        uiviewLeftPlaceHolderView = UIView(frame: CGRect(x: 0, y: 0, width: contentInset, height: 40))
         self.rightView = uiviewRightPlaceHolder
         self.rightViewMode = .whileEditing
         self.leftView = uiviewLeftPlaceHolderView
@@ -99,7 +100,7 @@ class FAETextField: UITextField {
     
     fileprivate func setupPasswordTextField() {
         self.textColor = UIColor._2499090()
-        btnRight = UIButton(frame: CGRect(x: contentInset - 25, y: 0, width: 30, height: 30))
+        btnRight = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 40))
         btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
         uiviewRightPlaceHolder.addSubview(btnRight)
         btnRight.addTarget(self, action: #selector(FAETextField.rightButtonTapped), for: UIControlEvents.touchUpInside)

@@ -86,10 +86,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         view.addSubview(uiviewNavBar)
         //uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: uiviewNavBar.leftBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-32-[v0(18)]", options: [], views: uiviewNavBar.leftBtn)
-        uiviewNavBar.addConstraintsWithFormat("H:[v0(24)]-12-|", options: [], views: uiviewNavBar.rightBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-29-[v0(24)]", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
         //uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "locationPin"), for: .normal)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
@@ -109,6 +109,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tblRecents.tableFooterView = UIView()
         tblRecents.backgroundColor = UIColor.white
         view.addSubview(tblRecents)
+        
+        // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
+        //         whole table view and cell will automatically disable this
+        let uiview = UIView(frame: CGRect(x: 0, y: 65, width: 15, height: screenHeight - 65))
+        view.addSubview(uiview)
     }
     
     func loadDeleteConfirm() {
