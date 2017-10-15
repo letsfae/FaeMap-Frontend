@@ -46,9 +46,9 @@ extension FaeMapViewController: NameCardDelegate {
     
     // NameCardDelegate
     func chatUser(id: Int) {
-        uiviewNameCard.hide() {
-            self.mapGesture(isOn: true)
-        }
+//        uiviewNameCard.hide() {
+//            self.mapGesture(isOn: true)
+//        }
         // First get chatroom id
         getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])

@@ -91,12 +91,12 @@ class FaeMapView: MKMapView {
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
         guard !block else { return }
         block = true
-        faeMapCtrler?.uiviewNameCard.hide() {
-            self.faeMapCtrler?.mapGesture(isOn: true)
-        }
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView && blockTap == false {
             if let anView = v as? PlacePinAnnotationView {
+                faeMapCtrler?.uiviewNameCard.hide() {
+                    self.faeMapCtrler?.mapGesture(isOn: true)
+                }
                 cancelCreatingLocationPin()
                 if anView.optionsReady == false {
                     faeMapCtrler?.deselectAllAnnotations()
@@ -114,8 +114,10 @@ class FaeMapView: MKMapView {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
-                
             } else if let anView = v as? LocPinAnnotationView {
+                faeMapCtrler?.uiviewNameCard.hide() {
+                    self.faeMapCtrler?.mapGesture(isOn: true)
+                }
                 if anView.optionsReady == false {
 //                    faeMapCtrler?.deselectAllAnnotations()
                     anView.optionsReady = true
@@ -128,6 +130,9 @@ class FaeMapView: MKMapView {
                 }
             }
         } else {
+            faeMapCtrler?.uiviewNameCard.hide() {
+                self.faeMapCtrler?.mapGesture(isOn: true)
+            }
             if v is LocationView {
                 
             } else {
