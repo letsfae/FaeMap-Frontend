@@ -9,10 +9,17 @@
 import UIKit
 import SwiftyJSON
 
-class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate {
-    var enterMode: EnterMode!
+protocol CollectionsListDetailDelegate: class {
+    func deleteColList(indexPath: IndexPath)
+    func updateColName(indexPath: IndexPath, name: String, numItems: Int)
+}
+
+class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate {
+    
+    var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
     var uiviewFixedSectionHeader: UIView!
+    var lblListName: UILabel!
     var lblItemsNum: UILabel!
     var numItems: Int = 0
     var tblColListDetail: UITableView!
@@ -24,6 +31,29 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var faeMap = FaeMap()
     var savedItems = [PlacePin]()
     
+    // variables in extension file
+    var uiviewShadowBG: UIView!
+    var uiviewChooseAction: UIView!
+    var lblChoose: UILabel!
+    var btnActFirst: UIButton!
+    var btnActSecond: UIButton!
+    var btnActThird: UIButton!
+    var btnCancel: UIButton!
+    var uiviewMsgHint: UIView!
+    var btnCrossCancel: UIButton!
+    var btnYes: UIButton!
+    
+    var txtName: String = ""
+    var txtDesp: String = ""
+    var txtTime: String = "09/2017"
+    
+    var arrColDetails: CollectionList!
+    var colId: Int = -1
+    let faeCollection = FaeCollection()
+    
+    var indexPath: IndexPath!
+    weak var delegate: CollectionsListDetailDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -31,7 +61,33 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         loadTable()
         loadFooter()
         loadHiddenHeader()
+        loadChooseOption()
         ColListDetailHeader.boolExpandMore = false
+        loadColItems()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        ColListDetailHeader.boolExpandMore = false
+    }
+    
+    fileprivate func loadColItems() {
+        faeCollection.getOneCollection(String(colId)) {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let list = JSON(message!)
+                self.arrColDetails = CollectionList(json: list)
+                
+                self.lblListName.text = self.arrColDetails.colName
+                self.txtName = self.arrColDetails.colName
+                self.txtDesp = self.arrColDetails.colDesp
+//                self.txtTime = self.arrColDetails.colTime
+                
+                self.tblColListDetail.reloadData()
+                print("[Get Collection items] Get Successfully")
+            } else {
+                print("[Get Collection items] Fail to Get \(status) \(message!)")
+            }
+        }
     }
     
     fileprivate func loadHiddenHeader() {
@@ -39,10 +95,10 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedHeader.backgroundColor = .white
         view.addSubview(uiviewFixedHeader)
         
-        let lblListName = UILabel(frame: CGRect(x: 20, y: 28, width: screenWidth - 40, height: 27))
+        lblListName = UILabel(frame: CGRect(x: 20, y: 28, width: screenWidth - 40, height: 27))
         lblListName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblListName.textColor = UIColor._898989()
-        lblListName.text = "Vancouver Best Foods"
+        lblListName.text = txtName
         lblListName.lineBreakMode = .byTruncatingTail
         uiviewFixedHeader.addSubview(lblListName)
         
@@ -56,7 +112,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 34))
         uiviewFixedSectionHeader.backgroundColor = .white
         view.addSubview(uiviewFixedSectionHeader)
-        numItems = savedItems.count
         let lblNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
@@ -124,6 +179,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func actionBack(_ sender: UIButton) {
+        print("txtName \(txtName)")
+        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: 0)
         navigationController?.popViewController(animated: true)
     }
     
@@ -141,9 +198,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func moreButtonPressed(_ sender: UIButton) {
-        let vc = ManageColListViewController()
-        vc.modalPresentationStyle = .overCurrentContext
-        present(vc, animated: false, completion: nil)
+        animationShowOptions()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -158,7 +213,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 1 {
             let uiviewSectionHeader = UIView()
             uiviewSectionHeader.backgroundColor = .white
-            numItems = savedItems.count
             lblItemsNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
             uiviewSectionHeader.addSubview(lblItemsNum)
             lblItemsNum.textColor = UIColor._146146146()
@@ -203,6 +257,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             cell.delegate = self
             let img = enterMode == .place ? #imageLiteral(resourceName: "collection_placeHeader") : #imageLiteral(resourceName: "collection_locationHeader")
             cell.setValueForCell(img: img)
+            cell.updateValueForCell(name: txtName, desp: txtDesp, time: txtTime)
             return cell
         } else {
             if savedItems.count == 0 {
@@ -263,11 +318,20 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     // ColListDetailHeaderDelegate
     func readMore() {
-        print("readmore")
         let section = IndexSet(integer: 0)
-        tblColListDetail.reloadSections(section, with: UITableViewRowAnimation.none)
+        tblColListDetail.reloadSections(section, with: .none)
     }
     // ColListDetailHeaderDelegate End
+    
+    // CreateColListDelegate
+    func saveSettings(name: String, desp: String) {
+        lblListName.text = name
+        txtName = name
+        txtDesp = desp
+        txtTime = "09/2017"
+        tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+    }
+    // CreateColListDelegate End
 }
 
 protocol ColListDetailHeaderDelegate: class {
@@ -323,34 +387,21 @@ class ColListDetailHeader: UITableViewCell {
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblName.textColor = UIColor._898989()
         addSubview(lblName)
-        lblName.text = "Vancouver Best Foods"
         addConstraintsWithFormat("H:|-25-[v0]-25-|", options: [], views: lblName)
         
         lblTime = UILabel()
         addSubview(lblTime)
         
-        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._146146146()]
-        let nameAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSForegroundColorAttributeName: UIColor._2499090()]
-        let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
-        let nameStr = NSMutableAttributedString(string: "\(Key.shared.nickname ?? "Someone")", attributes: nameAttr)
-        let updateStr = NSMutableAttributedString(string: " ::: Updated 09/2017", attributes: attribute)
-        
-        curtStr.append(nameStr)
-        curtStr.append(updateStr)
-        
-        lblTime.attributedText = curtStr
         addConstraintsWithFormat("H:|-25-[v0]-25-|", options: [], views: lblTime)
         
-        let content = "Vancouver Best Foods, cakes waffles, wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww test list list list list list list list list list"
         lblDesp = UILabel()
         lblDesp.numberOfLines = 0
-        let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
-        lblDesp.attributedText = NSAttributedString(string: content, attributes: despAttr)
         addSubview(lblDesp)
         addConstraintsWithFormat("H:|-25-[v0]-25-|", options: [], views: lblDesp)
         
         btnReadMore = UIButton()
         btnReadMore.backgroundColor = .white
+        let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
         let moreAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._2499090()]
         let strReadMore = NSMutableAttributedString(string: "... ", attributes: despAttr)
         let more = NSMutableAttributedString(string: "Read More", attributes: moreAttr)
@@ -367,24 +418,6 @@ class ColListDetailHeader: UITableViewCell {
         addSubview(line)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: line)
         addConstraintsWithFormat("V:|-212-[v0]-5-[v1(22)]-10-[v2]-20-[v3(5)]-0-|", options: [], views: lblName, lblTime, lblDesp, line)
-        
-        var lineCount: Int = 0
-        let textSize = CGSize(width: screenWidth - 50, height: CGFloat(MAXFLOAT))
-        let rHeight = Float(lblDesp.sizeThatFits(textSize).height)
-        let charSize = Float(lblDesp.font.lineHeight)
-        lineCount = lroundf(rHeight / charSize)
-//        print("textsize: \(textSize)")
-//        print("rHeight: \(rHeight)")
-//        print("charSize: \(charSize)")
-//        print("No of lines: \(lineCount)")
-        
-        if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
-            btnReadMore.isHidden = true
-            lblDesp.numberOfLines = 0
-        } else {
-            btnReadMore.isHidden = false
-            lblDesp.numberOfLines = 3
-        }
     }
     
     func setValueForCell(img: UIImage) {
@@ -392,6 +425,44 @@ class ColListDetailHeader: UITableViewCell {
         General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
         })
+    }
+    
+    func updateValueForCell(name: String, desp: String, time: String) {
+        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._146146146()]
+        let nameAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
+        let nameStr = NSMutableAttributedString(string: "\(Key.shared.nickname ?? "Someone")", attributes: nameAttr)
+        let updateStr = NSMutableAttributedString(string: " ::: Updated \(time)", attributes: attribute)
+        
+        curtStr.append(nameStr)
+        curtStr.append(updateStr)
+        
+        lblTime.attributedText = curtStr
+        lblName.text = name
+        
+        let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
+        lblDesp.attributedText = NSAttributedString(string: desp, attributes: despAttr)
+        
+        var lineCount: Int = 0
+        let textSize = CGSize(width: screenWidth - 50, height: CGFloat(MAXFLOAT))
+        let rHeight = Float(lblDesp.sizeThatFits(textSize).height)
+        let charSize = Float(lblDesp.font.lineHeight)
+        lineCount = lroundf(rHeight / charSize)
+        //        print("textsize: \(textSize)")
+        //        print("rHeight: \(rHeight)")
+        //        print("charSize: \(charSize)")
+        //        print("No of lines: \(lineCount)")
+        
+//        print(lineCount)
+//        print(ColListDetailHeader.boolExpandMore)
+        if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
+            btnReadMore.isHidden = true
+            lblDesp.numberOfLines = 0
+        } else {
+            lblDesp.numberOfLines = 3
+            btnReadMore.backgroundColor = .white
+            btnReadMore.isHidden = false
+        }
     }
     
     func getFullDesp(_ sender: UIButton) {
@@ -422,4 +493,182 @@ class ColListEmptyCell: UITableViewCell {
     func setValueForCell(img: UIImage) {
         imgEmpty.image = img
     }
+}
+
+extension CollectionsListDetailViewController {
+    fileprivate func loadChooseOption() {
+        uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        uiviewShadowBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        view.addSubview(uiviewShadowBG)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
+        uiviewShadowBG.addGestureRecognizer(tapGesture)
+        
+        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 302))
+        uiviewChooseAction.center.x = screenWidth / 2
+        uiviewChooseAction.backgroundColor = .white
+        uiviewChooseAction.layer.cornerRadius = 20
+        uiviewShadowBG.addSubview(uiviewChooseAction)
+        
+        uiviewShadowBG.alpha = 0
+        uiviewChooseAction.alpha = 0
+        
+        lblChoose = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
+        lblChoose.textAlignment = .center
+        lblChoose.text = "Choose an Option"
+        lblChoose.textColor = UIColor._898989()
+        lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewChooseAction.addSubview(lblChoose)
+        
+        btnActFirst = UIButton(frame: CGRect(x: 41, y: 65, w: 208, h: 50))
+        btnActSecond = UIButton(frame: CGRect(x: 41, y: 130, w: 208, h: 50))
+        btnActThird = UIButton(frame: CGRect(x: 41, y: 195, w: 208, h: 50))
+        btnActFirst.setTitle("Manage", for: .normal)
+        btnActSecond.setTitle("Settings", for: .normal)
+        btnActThird.setTitle("Delete", for: .normal)
+        
+        var btnActions = [UIButton]()
+        btnActions.append(btnActFirst)
+        btnActions.append(btnActSecond)
+        btnActions.append(btnActThird)
+        
+        for i in 0..<btnActions.count {
+            btnActions[i].tag = i
+            btnActions[i].setTitleColor(UIColor._2499090(), for: .normal)
+            btnActions[i].titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+            btnActions[i].addTarget(self, action: #selector(actionChooseOption(_:)), for: .touchUpInside)
+            btnActions[i].layer.borderWidth = 2
+            btnActions[i].layer.borderColor = UIColor._2499090().cgColor
+            btnActions[i].layer.cornerRadius = 26 * screenWidthFactor
+            uiviewChooseAction.addSubview(btnActions[i])
+        }
+        
+        btnCancel = UIButton()
+        btnCancel.setTitle("Cancel", for: .normal)
+        btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
+        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        uiviewChooseAction.addSubview(btnCancel)
+        view.addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnCancel)
+        view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
+        
+        loadDeleteConfirm()
+    }
+    
+    fileprivate func loadDeleteConfirm() {
+        uiviewMsgHint = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewMsgHint.backgroundColor = .white
+        uiviewMsgHint.center.x = screenWidth / 2
+        uiviewMsgHint.layer.cornerRadius = 20 * screenWidthFactor
+        uiviewMsgHint.isHidden = true
+        
+        btnCrossCancel = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
+        btnCrossCancel.tag = 0
+        btnCrossCancel.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
+        btnCrossCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        
+        let lblMsgSent = UILabel(frame: CGRect(x: 0, y: 30, w: 290, h: 50))
+        lblMsgSent.numberOfLines = 2
+        lblMsgSent.textAlignment = .center
+        lblMsgSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        lblMsgSent.textColor = UIColor._898989()
+        lblMsgSent.text = "Are you sure you want \nto delete this list?"
+        
+        let lblMsg = UILabel(frame: CGRect(x: 0, y: 93, w: 290, h: 36))
+        lblMsg.numberOfLines = 2
+        lblMsg.textAlignment = .center
+        lblMsg.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
+        lblMsg.textColor = UIColor._138138138()
+        lblMsg.text = "This list cannot be recovered and all \nitems in this list will be removed."
+        
+        btnYes = UIButton(frame: CGRect(x: 41, y: 149, w: 208, h: 39))
+        btnYes.setTitle("Yes", for: .normal)
+        btnYes.setTitleColor(UIColor.white, for: .normal)
+        btnYes.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnYes.backgroundColor = UIColor._2499090()
+        btnYes.layer.cornerRadius = 19 * screenWidthFactor
+        btnYes.addTarget(self, action: #selector(actionYes(_:)), for: .touchUpInside)
+        
+        uiviewMsgHint.addSubview(lblMsgSent)
+        uiviewMsgHint.addSubview(lblMsg)
+        uiviewMsgHint.addSubview(btnCrossCancel)
+        uiviewMsgHint.addSubview(btnYes)
+        view.addSubview(uiviewMsgHint)
+    }
+    
+    func actionCancel(_ sender: Any) {
+        animationHideOptions()
+    }
+    
+    func actionChooseOption(_ sender: UIButton) {
+        switch sender.tag {
+        case 0: // manage
+            animationHideOptions()
+            let vc = ManageColListViewController()
+            vc.enterMode = enterMode
+            present(vc, animated: true)
+            break
+        case 1: // settings
+            animationHideOptions()
+            let vc = CreateColListViewController()
+            vc.delegate = self
+            vc.txtListName = txtName
+            vc.txtListDesp = txtDesp
+            vc.colId = colId
+            present(vc, animated: true)
+            break
+        case 2: // delete
+            animationActionView()
+            break
+        default:
+            break
+        }
+    }
+    
+    func actionYes(_ sender: UIButton) {
+        let faeCollection = FaeCollection()
+        faeCollection.deleteOneCollection(String(colId)) {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                self.animationHideOptions()
+                self.navigationController?.popViewController(animated: true)
+                self.delegate?.deleteColList(indexPath: self.indexPath)
+            } else {
+                print("[Collections] Fail to Delete \(status) \(message!)")
+            }
+        }
+    }
+    
+    // animations
+    func animationActionView() {
+        uiviewChooseAction.isHidden = true
+        uiviewMsgHint.isHidden = false
+        uiviewChooseAction.alpha = 0
+        uiviewMsgHint.alpha = 0
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewMsgHint.alpha = 1
+        }, completion: nil)
+    }
+    
+    func animationShowOptions() {
+        uiviewShadowBG.alpha = 0
+        uiviewChooseAction.alpha = 0
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewShadowBG.alpha = 1
+            self.uiviewChooseAction.alpha = 1
+        }, completion: nil)
+    }
+    
+    func animationHideOptions() {
+        uiviewShadowBG.alpha = 1
+        uiviewChooseAction.alpha = 1
+        uiviewMsgHint.alpha = 1
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewChooseAction.alpha = 0
+            self.uiviewMsgHint.alpha = 0
+            self.uiviewShadowBG.alpha = 0
+        }, completion: { _ in
+            self.uiviewChooseAction.isHidden = false
+            self.uiviewMsgHint.isHidden = true
+        })
+    }
+    // animations end
 }

@@ -39,20 +39,18 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         return arrPlaces
     }
     
-    func show() {
+    func show(_ completion: @escaping () -> Void) {
         self.frame.size.height = 102
         self.alpha = 1
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.frame.size.height = screenHeight - 164 * screenHeightFactor
-        })
+            completion()
+        }, completion: nil)
     }
     
     func hide() {
         self.frame.size.height = 102
-        UIView.animate(withDuration: 0.3, animations: {
-            self.frame.size.height = 102
-            self.alpha = 0
-        })
+        self.alpha = 0
     }
     
     fileprivate func loadContent() {

@@ -211,13 +211,13 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = PlaceDetailViewController()
+        let vcPlaceDetail = PlaceDetailViewController()
         if placeTableMode == .recommend {
-            vc.place = recommendedPlaces[indexPath.row]
+            vcPlaceDetail.place = recommendedPlaces[indexPath.row]
         } else {
-            vc.place = searchedPlaces[indexPath.row]
+            vcPlaceDetail.place = searchedPlaces[indexPath.row]
         }
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
     func getPlaceInfo() {

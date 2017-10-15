@@ -62,7 +62,7 @@ class FMLocateSelf: UIButton {
     }
     
     private func loadContent() {
-        setImage(#imageLiteral(resourceName: "mainScreenLocateSelf"), for: .normal)
+        setImage(#imageLiteral(resourceName: "mainScreenLocateSelf_new"), for: .normal)
         addTarget(self, action: #selector(actionLocateSelf(_:)), for: .touchUpInside)
         layer.zPosition = 500
     }

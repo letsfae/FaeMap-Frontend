@@ -104,7 +104,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         
         textFieldDisplayName = UITextField(frame: CGRect(x: 0, y: 203, w: 160, h: 34))
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
-        textFieldDisplayName.placeholder = "Display Name"
+        //textFieldDisplayName.placeholder = "Display Name"
+        textFieldDisplayName.attributedPlaceholder = NSAttributedString(string: "Display Name", attributes: [NSForegroundColorAttributeName: UIColor._155155155()])
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
         textFieldDisplayName.tintColor = UIColor._2499090()
         textFieldDisplayName.textColor = UIColor._2499090()
@@ -170,7 +171,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                         self.dimBackground.alpha = 0
                     }) {_ in
                         self.dismiss(animated: false, completion: {_ in
-                            self.delegate?.jumpToEnableNotification()
+                            //self.delegate?.jumpToEnableNotification()
+                            // move to RegisterConfirmViewController.swift
                         })
                     }
                 } else {
@@ -204,7 +206,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func addProfileAvatar(_ sender: UIButton) {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
-        imagePicker.sourceType = .camera
+        //imagePicker.sourceType = .camera
+        imagePicker.sourceType = .photoLibrary // prevent simulator crashing
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
@@ -216,18 +219,14 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                         self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
                         return
                     }
-                    //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                    //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-                    let imagePicker = FullAlbumCollectionViewController()
+                    let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                     imagePicker.imageDelegate = self
                     imagePicker.boolCreateStoryPin = false
                     imagePicker._maximumSelectedPhotoNum = 1
                     self.present(imagePicker, animated: true, completion: nil)
                 })
             } else {
-                //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
-                //let albumPicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
-                let albumPicker = FullAlbumCollectionViewController()
+                let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 albumPicker.imageDelegate = self
                 albumPicker.boolCreateStoryPin = false
                 albumPicker._maximumSelectedPhotoNum = 1

@@ -8,172 +8,209 @@
 
 import UIKit
 
-class ManageColListViewController: UIViewController {
-    var uiviewChooseAction: UIView!
-    var lblChoose: UILabel!
-    var btnActFirst: UIButton!
-    var btnActSecond: UIButton!
-    var btnActThird: UIButton!
-    var btnCancel: UIButton!
-    var uiviewMsgHint: UIView!
-    var btnCrossCancel: UIButton!
-    var btnYes: UIButton!
+class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
+    var uiviewNavBar: UIView!
+    var btnDone: UIButton!
+    var tblManageList: UITableView!
+    var uiviewTabBar: UIView!
+    var btnShare: UIButton!
+    var btnMemo: UIButton!
+    var btnRemove: UIButton!
+    var selectedIdx = [IndexPath]()
+    var enterMode: CollectionTableMode!
+    
+    let SHARE = 0
+    let MEMO = 1
+    let REMOVE = 2
+    
+    var arrColList: [[String]] = [["Monster Trio Burger", "888 No.3 Road, Richmond",""],
+                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""],
+                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", "WOWOWOWOWOWOWOWOWOWOWOWOWWOWOWOWOWOWOWOWOWOWOWOWOW"],
+                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""],
+                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        view.backgroundColor = .white
+        loadNavBar()
         loadContent()
-        // Do any additional setup after loading the view.
+        loadTab()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        animationShowSelf()
+    fileprivate func loadNavBar() {
+        uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        view.addSubview(uiviewNavBar)
+        
+        let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        line.backgroundColor = UIColor._200199204()
+        uiviewNavBar.addSubview(line)
+        
+        btnDone = UIButton(frame: CGRect(x: screenWidth - 85, y: 21, width: 85, height: 43))
+        uiviewNavBar.addSubview(btnDone)
+        btnDone.setTitle("Done", for: .normal)
+        btnDone.setTitleColor(UIColor._2499090(), for: .normal)
+        btnDone.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        btnDone.addTarget(self, action: #selector(self.actionDone(_:)), for: .touchUpInside)
+        
+        let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
+        uiviewNavBar.addSubview(lblTitle)
+        lblTitle.textAlignment = .center
+        lblTitle.textColor = UIColor._898989()
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        lblTitle.text = "Manage List"
     }
     
     fileprivate func loadContent() {
-        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 302))
-        uiviewChooseAction.center.x = screenWidth / 2
-        uiviewChooseAction.backgroundColor = .white
-        uiviewChooseAction.layer.cornerRadius = 20
-        view.addSubview(uiviewChooseAction)
+        tblManageList = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65 - 56), style: .plain)
+        view.addSubview(tblManageList)
+        tblManageList.backgroundColor = .white
         
-        lblChoose = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
-        lblChoose.textAlignment = .center
-        lblChoose.text = "Choose an Option"
-        lblChoose.textColor = UIColor._898989()
-        lblChoose.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        uiviewChooseAction.addSubview(lblChoose)
-        
-        btnActFirst = UIButton(frame: CGRect(x: 41, y: 65, w: 208, h: 50))
-        btnActSecond = UIButton(frame: CGRect(x: 41, y: 130, w: 208, h: 50))
-        btnActThird = UIButton(frame: CGRect(x: 41, y: 195, w: 208, h: 50))
-        btnActFirst.setTitle("Manage", for: .normal)
-        btnActSecond.setTitle("Settings", for: .normal)
-        btnActThird.setTitle("Delete", for: .normal)
-        
-        var btnActions = [UIButton]()
-        btnActions.append(btnActFirst)
-        btnActions.append(btnActSecond)
-        btnActions.append(btnActThird)
-        
-        for i in 0..<btnActions.count {
-            btnActions[i].tag = i
-            btnActions[i].setTitleColor(UIColor._2499090(), for: .normal)
-            btnActions[i].titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-            btnActions[i].addTarget(self, action: #selector(actionChooseOption(_:)), for: .touchUpInside)
-            btnActions[i].layer.borderWidth = 2
-            btnActions[i].layer.borderColor = UIColor._2499090().cgColor
-            btnActions[i].layer.cornerRadius = 26 * screenWidthFactor
-            uiviewChooseAction.addSubview(btnActions[i])
-        }
-        
-        btnCancel = UIButton()
-        btnCancel.setTitle("Cancel", for: .normal)
-        btnCancel.setTitleColor(UIColor._2499090(), for: .normal)
-        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
-        uiviewChooseAction.addSubview(btnCancel)
-        view.addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnCancel)
-        view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
-        
-        loadDeleteConfirm()
+        tblManageList.dataSource = self
+        tblManageList.delegate = self
+        tblManageList.separatorStyle = .none
+        tblManageList.estimatedRowHeight = 90
+        tblManageList.register(ManageColListCell.self, forCellReuseIdentifier: "ManageColListCell")
     }
     
-    fileprivate func loadDeleteConfirm() {
-        uiviewMsgHint = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
-        uiviewMsgHint.backgroundColor = .white
-        uiviewMsgHint.center.x = screenWidth / 2
-        uiviewMsgHint.layer.cornerRadius = 20 * screenWidthFactor
-        uiviewMsgHint.isHidden = true
+    fileprivate func loadTab() {
+        uiviewTabBar = UIView(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 56))
+        uiviewTabBar.backgroundColor = UIColor._241241241()
+        view.addSubview(uiviewTabBar)
         
-        btnCrossCancel = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
-        btnCrossCancel.tag = 0
-        btnCrossCancel.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
-        btnCrossCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        let btnWidth = (screenWidth - 36) / 3
+        btnShare = UIButton(frame: CGRect(x: 10, y: 9, width: btnWidth, height: 38))
+        btnShare.backgroundColor = UIColor._174226118_a60()
+        btnShare.setTitle("Share", for: .normal)
+        btnShare.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        btnShare.setTitleColor(.white, for: .normal)
+        btnShare.layer.cornerRadius = 8
+        btnShare.addTarget(self, action: #selector(actionOperateList(_:)), for: .touchUpInside)
+        btnShare.tag = SHARE
         
-        let lblMsgSent = UILabel(frame: CGRect(x: 0, y: 30, w: 290, h: 50))
-        lblMsgSent.numberOfLines = 2
-        lblMsgSent.textAlignment = .center
-        lblMsgSent.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
-        lblMsgSent.textColor = UIColor._898989()
-        lblMsgSent.text = "Are you sure you want \nto delete this list?"
+        btnMemo = UIButton(frame: CGRect(x: 18 + btnWidth, y: 9, width: btnWidth, height: 38))
+        btnMemo.backgroundColor = UIColor._194166217_a60()
+        btnMemo.setTitle("Memo", for: .normal)
+        btnMemo.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        btnMemo.setTitleColor(.white, for: .normal)
+        btnMemo.layer.cornerRadius = 8
+        btnMemo.addTarget(self, action: #selector(actionOperateList(_:)), for: .touchUpInside)
+        btnMemo.tag = MEMO
         
-        let lblMsg = UILabel(frame: CGRect(x: 0, y: 93, w: 290, h: 36))
-        lblMsg.numberOfLines = 2
-        lblMsg.textAlignment = .center
-        lblMsg.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
-        lblMsg.textColor = UIColor._138138138()
-        lblMsg.text = "This list cannot be recovered and all \nitems in this list will be removed."
+        btnRemove = UIButton(frame: CGRect(x: screenWidth - 10 - btnWidth, y: 9, width: btnWidth, height: 38))
+        btnRemove.backgroundColor = UIColor._2499090_a60()
+        btnRemove.setTitle("Remove", for: .normal)
+        btnRemove.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
+        btnRemove.setTitleColor(.white, for: .normal)
+        btnRemove.layer.cornerRadius = 8
+        btnRemove.addTarget(self, action: #selector(actionOperateList(_:)), for: .touchUpInside)
+        btnRemove.tag = REMOVE
         
-        btnYes = UIButton(frame: CGRect(x: 41, y: 149, w: 208, h: 39))
-        btnYes.setTitle("Yes", for: .normal)
-        btnYes.setTitleColor(UIColor.white, for: .normal)
-        btnYes.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-        btnYes.backgroundColor = UIColor._2499090()
-        btnYes.layer.cornerRadius = 19 * screenWidthFactor
-        btnYes.addTarget(self, action: #selector(actionYes(_:)), for: .touchUpInside)
-        
-        uiviewMsgHint.addSubview(lblMsgSent)
-        uiviewMsgHint.addSubview(lblMsg)
-        uiviewMsgHint.addSubview(btnCrossCancel)
-        uiviewMsgHint.addSubview(btnYes)
-        view.addSubview(uiviewMsgHint)
+        uiviewTabBar.addSubview(btnShare)
+        uiviewTabBar.addSubview(btnMemo)
+        uiviewTabBar.addSubview(btnRemove)
     }
     
-    func actionCancel(_ sender: UIButton) {
-        dismiss(animated: false, completion: nil)
+    func actionDone(_ sender: UIButton) {
+        dismiss(animated: true)
     }
     
-    func actionChooseOption(_ sender: UIButton) {
+    func actionOperateList(_ sender: UIButton) {
         switch sender.tag {
-        case 0: // manage
+        case SHARE:
+            // TODO jichao
             break
-        case 1: // settings
+        case MEMO:
+            let vc = EditMemoViewController()
+            vc.delegate = self
+            vc.enterMode = enterMode
+            vc.indexPath = selectedIdx[0]
+            let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
+            vc.txtMemo = cell.lblColMemo.text!
+            vc.modalPresentationStyle = .overCurrentContext
+            present(vc, animated: false)
             break
-        case 2: // delete
-            animationActionView()
+        case REMOVE:
+            for idxPath in selectedIdx {
+                let cell = tblManageList.cellForRow(at: idxPath) as! ManageColListCell
+                cell.btnSelect.isSelected = false
+                let idx = idxPath.row
+                arrColList.remove(at: idx)
+            }
+            reloadAfterDelete()
+            selectedIdx.removeAll()
+            updateTabBarBtnColor(selectedCount: 0)
             break
         default:
             break
         }
     }
     
-    func actionYes(_ sender: UIButton) {
-        animationHideSelf()
+    func updateTabBarBtnColor(selectedCount: Int) {
+        if selectedCount == 0 {
+            btnShare.backgroundColor = UIColor._174226118_a60()
+            btnMemo.backgroundColor = UIColor._194166217_a60()
+            btnRemove.backgroundColor = UIColor._2499090_a60()
+            btnShare.isEnabled = false
+            btnMemo.isEnabled = false
+            btnRemove.isEnabled = false
+        } else if selectedCount == 1 {
+            btnShare.backgroundColor = UIColor._174226118()
+            btnMemo.backgroundColor = UIColor._194166217()
+            btnRemove.backgroundColor = UIColor._2499090()
+            btnShare.isEnabled = true
+            btnMemo.isEnabled = true
+            btnRemove.isEnabled = true
+        } else {
+            btnShare.backgroundColor = UIColor._174226118_a60()
+            btnMemo.backgroundColor = UIColor._194166217_a60()
+            btnRemove.backgroundColor = UIColor._2499090()
+            btnShare.isEnabled = false
+            btnMemo.isEnabled = false
+            btnRemove.isEnabled = true
+        }
     }
     
-    // animations
-    func animationActionView() {
-        uiviewChooseAction.isHidden = true
-        uiviewMsgHint.isHidden = false
-        uiviewChooseAction.alpha = 0
-        uiviewMsgHint.alpha = 0
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewMsgHint.alpha = 1
-        }, completion: nil)
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return arrColList.count
     }
     
-    func animationShowSelf() {
-        view.alpha = 0
-        uiviewChooseAction.alpha = 0
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.view.alpha = 1
-            self.uiviewChooseAction.alpha = 1
-        }, completion: nil)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColListCell", for: indexPath) as! ManageColListCell
+        let arrName = arrColList[indexPath.row][0]
+        let arrAddr = arrColList[indexPath.row][1]
+        let arrMemo = arrColList[indexPath.row][2]
+        cell.setValueForCell(name: arrName, addr: arrAddr, memo: arrMemo)
+        return cell
     }
     
-    func animationHideSelf() {
-        view.alpha = 1
-        uiviewChooseAction.alpha = 1
-        uiviewMsgHint.alpha = 1
-        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
-            self.uiviewChooseAction.alpha = 0
-            self.uiviewMsgHint.alpha = 0
-            self.view.alpha = 0
-        }, completion: { _ in
-            self.dismiss(animated: false)
-        })
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ManageColListCell
+        if !cell.btnSelect.isSelected {
+            cell.btnSelect.isSelected = true
+            selectedIdx.append(indexPath)
+        } else {
+            cell.btnSelect.isSelected = false
+            guard let idx = selectedIdx.index(of: indexPath) else {
+                return;
+            }
+            selectedIdx.remove(at: idx)
+        }
+        updateTabBarBtnColor(selectedCount: selectedIdx.count)
+        selectedIdx.sort{$0.row > $1.row}
     }
-    // animations end
+    
+    func reloadAfterDelete() {
+        tblManageList.performUpdate({
+            self.tblManageList.deleteRows(at: selectedIdx, with: UITableViewRowAnimation.right)
+        }) {
+            self.tblManageList.reloadData()
+        }
+    }
+    
+    // EditMemoDelegate
+    func saveMemo(memo: String) {
+        let idx = selectedIdx[0].row
+        arrColList[idx][2] = memo
+        tblManageList.reloadData()
+    }
 }

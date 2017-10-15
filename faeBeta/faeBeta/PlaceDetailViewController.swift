@@ -10,6 +10,9 @@ import UIKit
 import SwiftyJSON
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate {
+    
+    weak var delegate: MapSearchDelegate?
+    
     var place: PlacePin!
     var allPlaces = [PlacePin]()
     var uiviewHeader: UIView!
@@ -33,12 +36,20 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        loadFooter()
         loadHeader()
         loadMidTable()
         loadFixedHeader()
-        loadFooter()
+        automaticallyAdjustsScrollViewInsets = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        uiviewSubHeader.setValue(place: place)
+        uiviewFixedHeader.setValue(place: place)
+        tblPlaceDetail.reloadData()
         checkSavedStatus()
-        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 9999999, isSimilar: true, completion: { (arrPlaces) in
+        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 500000, isSimilar: true, completion: { (arrPlaces) in
             self.arrRelatedPlaces.append(arrPlaces)
             self.getRelatedPlaces(lat: String(self.place.coordinate.latitude), long: String(self.place.coordinate.longitude), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
                 self.arrRelatedPlaces.append(arrPlaces)
@@ -126,6 +137,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
+        uiviewFixedHeader.uiviewTopLine.isHidden = true
     }
     
     func loadMidTable() {
@@ -143,6 +155,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
         tblPlaceDetail.separatorStyle = .none
         tblPlaceDetail.showsVerticalScrollIndicator = false
+        if #available(iOS 11.0, *) {
+            tblPlaceDetail.contentInsetAdjustmentBehavior = .never
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     func loadFooter() {
@@ -263,9 +280,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
-        let vc = PlaceDetailViewController()
-        vc.place = place
-        navigationController?.pushViewController(vc, animated: true)
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = place
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     // SeeAllPlacesDelegate End
     
@@ -287,6 +304,7 @@ class FixedHeader: UIView {
     var lblName: UILabel!
     var lblCategory: UILabel!
     var lblPrice: UILabel!
+    var uiviewTopLine: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -322,6 +340,10 @@ class FixedHeader: UIView {
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
+        
+        uiviewTopLine = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 1))
+        uiviewTopLine.backgroundColor = UIColor._241241241()
+        addSubview(uiviewTopLine)
     }
     
     func setValue(place: PlacePin) {

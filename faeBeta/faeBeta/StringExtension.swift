@@ -11,8 +11,8 @@ import Foundation
 extension String {
     
     func removeSpecialChars() -> String {
-        let okayChars: Set<Character> = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890".characters)
-        return String(self.characters.filter { okayChars.contains($0) })
+        let okayChars: Set<Character> = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890")
+        return String(self.filter { okayChars.contains($0) })
     }
     
     // Trim newline in the beginning and ending of string
@@ -34,13 +34,10 @@ extension String {
         dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         let myDate = dateFormatter.date(from: self)
-        
         if myDate != nil {
             dateFormatter.dateFormat = "MMMM dd, YYYY"
             let localTimeZone = NSTimeZone.local.abbreviation()
             let elapsed = Int(Date().timeIntervalSince(myDate!))
-            //            print("DEBUG TIMEE")
-            //            print(elapsed)
             if localTimeZone != nil {
                 dateFormatter.timeZone = TimeZone(abbreviation: "\(localTimeZone!)")
                 let normalFormat = dateFormatter.string(from: myDate!)
@@ -143,7 +140,7 @@ extension String {
         
         if let match = self.range(of: "(?<=<a>@)[^.]+(?=</a>)", options: .regularExpression) {
             username = "@\(self.substring(with: match))"
-            endIndex = username.characters.count + 8
+            endIndex = username.count + 8
         }
         //        else {
         //            print("parse formatPinCommentsContent fails")
@@ -176,18 +173,18 @@ extension String {
     }
     
     func stringByDeletingLastEmoji() -> String {
-        var previous = self
+        let previous = self
         var finalString = ""
         
-        if previous.characters.count > 0 && previous.characters.last != "]" {
-            finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1))
-        } else if previous.characters.count > 0 && previous.characters.last == "]" {
+        if previous.count > 0 && previous.last != "]" {
+            finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -1))
+        } else if previous.count > 0 && previous.last == "]" {
             var i = 1
             var findEmoji = false
-            while i <= previous.characters.count {
-                if previous.characters[previous.characters.index(previous.endIndex, offsetBy: -i)] == "[" {
+            while i <= previous.count {
+                if previous[previous.index(previous.endIndex, offsetBy: -i)] == "[" {
                     let between = previous.substring(with:
-                        previous.characters.index(previous.endIndex, offsetBy: -(i - 1)) ..< previous.characters.index(previous.endIndex, offsetBy: -1))
+                        previous.index(previous.endIndex, offsetBy: -(i - 1)) ..< previous.index(previous.endIndex, offsetBy: -1))
                     if (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between))! {
                         findEmoji = true
                         break
@@ -197,9 +194,9 @@ extension String {
             }
             
             if findEmoji {
-                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -i))
+                finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -i))
             } else {
-                finalString = previous.substring(to: previous.characters.index(previous.endIndex, offsetBy: -1))
+                finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -1))
             }
         }
         return finalString
@@ -230,7 +227,7 @@ extension String {
                 let tmpContent = content
                 emojiText = "\(content.substring(with: match))"
                 //                print("Target: \(emojiText)")
-                endIndex = emojiText.characters.count + 2
+                endIndex = emojiText.count + 2
                 let index = tmpContent.index(tmpContent.startIndex, offsetBy: endIndex)
                 content = "\(tmpContent.substring(from: index))"
                 //                print("  Rest: \(content)")

@@ -59,8 +59,6 @@ var userFirstname: String = ""
 var userLastname: String = ""
 var userBirthday: String = "" // yyyy-MM-dd
 var userGender: Int = -1 // 0 means male 1 means female
-var userUserGender: String?
-var userUserName: String = "Fae User"
 var userMiniAvatar: Int = 0
 var userPhoneNumber: String?
 

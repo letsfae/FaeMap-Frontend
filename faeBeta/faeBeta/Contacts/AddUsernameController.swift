@@ -145,7 +145,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         lblMyUsernameField = UILabel()
         lblMyUsernameField.textAlignment = .center
-        lblMyUsernameField.text = username
+        lblMyUsernameField.text = Key.shared.username
         lblMyUsernameField.textColor = UIColor._155155155()
         lblMyUsernameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         

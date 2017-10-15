@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.0.7.1</string>
+	<string>1.0.0.7.3</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -38,11 +38,11 @@
 	<key>NSContactsUsageDescription</key>
 	<string>This app needs your permission to access the contacts</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Fae Map is a Social Map Platform, it needs to use Location to work.</string>
+	<string>Fae Map is a Map Based Platform, it needs to use Location to work.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Fae Map is a Social Map Platform, it needs to use Location to work.</string>
+	<string>Fae Map is a Map Based Platform, it needs to use Location to work.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Fae Map is a Social Map Platform, it needs to use Location to work.</string>
+	<string>Fae Map is a Map Based Platform, it needs to use Location to work.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app needs your permission to use the microphone</string>
 	<key>NSPhotoLibraryUsageDescription</key>

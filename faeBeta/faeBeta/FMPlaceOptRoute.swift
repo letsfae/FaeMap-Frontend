@@ -138,6 +138,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
         
         mapMode = .routing
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
         
         btnDistIndicator.show()
         btnDistIndicator.updateDistance(distance: distance)
@@ -153,40 +154,57 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     func hideRouteCalculatorComponents() {
         
         mapMode = .normal
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
         
         removeAllRoutes()
         btnDistIndicator.hide()
         uiviewChooseLocs.hide()
         animateMainItems(show: false)
         faeMapView.removeAnnotations(addressAnnotations)
-        placeClusterManager.removeAnnotations(tempFaePins) {
+        locationPinClusterManager.removeAnnotations(tempFaePins) {
             for user in self.faeUserPins {
                 user.isValid = true
             }
-            self.userClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
+            self.placeClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
         }
         HIDE_AVATARS = false
         PLACE_ENABLE = true
     }
     
-    func animateMainItems(show: Bool) {
+    func animateMainItems(show: Bool, animated: Bool = true) {
         if show {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnCompass.frame.origin.y = 664 * screenHeightFactor
+                    self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
+                    self.btnOpenChat.frame.origin.y = screenHeight + 10
+                    self.btnDiscovery.frame.origin.y = screenHeight + 10
+                    self.btnFilterIcon.frame.origin.y = screenHeight + 10
+                })
+            } else {
                 self.btnCompass.frame.origin.y = 664 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = screenHeight + 10
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
                 self.btnFilterIcon.frame.origin.y = screenHeight + 10
-            })
+            }
         } else {
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnCompass.frame.origin.y = 582 * screenHeightFactor
+                    self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
+                    self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
+                    self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
+                    self.btnFilterIcon.center.y = screenHeight - 25
+                })
+            } else {
                 self.btnCompass.frame.origin.y = 582 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
                 self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                 self.btnFilterIcon.center.y = screenHeight - 25
-            })
+            }
         }
     }
     

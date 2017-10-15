@@ -10,7 +10,8 @@
 import UIKit
 
 class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
-
+    var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -24,7 +25,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     
     private func setup() {
         let btnBack = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
-        btnBack.setImage(UIImage(named: "Fill 1"), for: UIControlState())
+        btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonTapped(_:)), for: .touchUpInside)
         self.view.addSubview(btnBack)
         
@@ -39,43 +40,53 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     private func generateScrollView() {
     
         let scrollView = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
-        scrollView.backgroundColor = UIColor.white
+        scrollView.backgroundColor = .white
         self.view.addSubview(scrollView)
         scrollView.contentSize = CGSize(width: screenWidth, height: 2000)
         
-        let titleImageView = UIImageView(frame: CGRect(x: screenWidth / 2 - 23, y: 5, width: 46, height: 49))
+        let titleImageView = UIImageView(frame: CGRect(x: screenWidth / 2 - 25, y: 5, width: 50, height: 50))
         titleImageView.image = #imageLiteral(resourceName: "app_icon_new")
+        titleImageView.contentMode = .scaleToFill
+        titleImageView.backgroundColor = .white
         scrollView.addSubview(titleImageView)
         
         let titleLabel = UILabel(frame: CGRect(x: screenWidth / 2 - 100, y: 67, width: 200, height: 36))
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 2
-        let astrTitle = NSMutableAttributedString(string: "TERMS OF SERVICE\nFaevorite Maps")
-        
+        let astrTitle = NSMutableAttributedString(string: "TERMS OF SERVICE\nFae Maps")
+
         let attrRange1 = NSRange(location: 0, length: 16)
-        let attrRange2 = NSRange(location: 17, length: 15)
-        
+        let attrRange2 = NSRange(location: 17, length: 8)
+
         astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._898989(), range: attrRange1)
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._107107107(), range: attrRange2)
+        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._115115115(), range: attrRange2)
         astrTitle.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
         astrTitle.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
         titleLabel.attributedText = astrTitle
         scrollView.addSubview(titleLabel)
-        let textView = UITextView(frame: CGRect(x: 27, y: 113, width: screenWidth - 54, height: 500))
+
+        textView = UITextView(frame: CGRect(x: 27, y: 113, width: screenWidth - 54, height: 500))
         textView.attributedText = astrContent()
         textView.sizeToFit()
         textView.isEditable = false
         textView.tintColor = UIColor._2499090()
         textView.isScrollEnabled = false
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(jumpToPrivacyPolicy(_:)))
+        textView.addGestureRecognizer(tapGesture)
+
         scrollView.addSubview(textView)
         scrollView.contentSize.height = CGFloat(123) + textView.frame.size.height
         scrollView.indicatorStyle = .white
         scrollView.delegate = self
     }
-    
+    func jumpToPrivacyPolicy(_ sender: Any) {
+        if textView.textColor == UIColor._2499090() {
+            print("jumpToPrivacyPolicy")
+        }
+    }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
-//            indicator.backgroundColor = UIColor._2499090()
+            indicator.backgroundColor = .red//UIColor._2499090()
             indicator.tintColor = UIColor._2499090()
         }
     }
@@ -86,38 +97,50 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         }
         
         let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
-        astrContent.appendDefaultString("Effective: ", bold: true)
-        astrContent.appendDefaultString("November 11, 2016.\n\nWelcome to Fae Interactive! We are focused on building real-time interactions to enrich our online experiences with the wonderful things we do in life and to power our lives with the connections from the online world.\n\nWe drafted these Terms of Service (the “Terms”) for our first product Fae Map, an interactive, real-time social map (the “Software”) provided by Fae Interactive (“Fae”), a branch of Faevorite Inc., a Delaware Corporation (“Faevorite” is intentionally spelled that way).  These Terms and our Privacy Policy [www.faemaps.com/legal/privacy] govern your access to and use of our services (the “Services”) and any content, videos, information, texts, graphics, photos or other materials uploaded, downloaded, or appearing in the Software (the “Content”).\n\nYour access to and use of our Services is conditioned on your acceptance of and compliance with these Terms and Privacy Policy; therefore it is recommended that you read these Terms and Privacy Policy carefully.\n\n", bold: false)
+        astrContent.appendDefaultString("Last Updated: Dec 6, 2017", bold: true)
+        astrContent.appendDefaultString("\n\nWelcome to Fae Maps! We drafted these Terms of Service (the “Terms”) for Fae Map (the “Software”) a product of Faevorite Inc., a Delaware Corporation (“Faevorite” is intentionally spelled that way).  These Terms and our ")
+
+        astrContent.appendDefaultString("Privacy Policy", bold: true, red: true)
+        astrContent.appendDefaultString(" [www.faemaps.com/legal/privacy] govern your access to and use of our services (the “Services”) and any content, videos, information, texts, graphics, photos or other materials uploaded, downloaded, or appearing in the Software (the “Content”).\n\n")
         
-        astrContent.appendDefaultString("About Fae Map:\n\n", bold: true)
-        astrContent.appendDotBullet("Fae Map is an interactive, live social map that uses location based technologies to provide a novel social media platform for discovering people, new things and events all in true real-time.", level: 1)
+        astrContent.appendDefaultString("The Terms applies to persons anywhere in the world who use Fae Map and its Services. Your access to and use of our Services is conditioned on your acceptance of and compliance with these Terms and Privacy Policy; therefore it is recommended that you read these Terms and Privacy Policy carefully.\n\n")
+        
+        astrContent.appendDefaultString("Introduction of Fae Map:\n\n", bold: true)
+        astrContent.appendDotBullet("Fae Map is an user friendly interactive map with the goal to make exploration  and discovery of places fun, easy, and convenient.", level: 1)
+        astrContent.appendDotBullet("With a focus on Points of Interests, the map displays a variety of representative icons in user selected locations to bring diversity to its greatest extent.", level: 1)
+        astrContent.appendDotBullet("Having a social foundation, the map allows users to connect and interact with local communities in getting recommendations or making new friends. ", level: 1)
         
         astrContent.appendDefaultString("Who Can Use Fae Map:\n\n", bold: true)
-        astrContent.appendDotBullet("You may only use Fae Map: (i) You can form a binding contract (that is, you are at least 18 years of age), for younger users, parent’s discretion is advised, you must have a parent/guardian agreement/consent; (ii) are not a person barred from receiving the Services under the laws of the United States or other applicable jurisdiction; and (iii) are in compliance with these Terms, Privacy Policy, and all applicable laws.", level: 1)
-        astrContent.appendDotBullet("If you are using the Services on behalf of a business or entity, you state that you are authorized to grant all licenses set forth in these Terms and to agree to these Terms on behalf of the business or entity.  ", level: 1)
+        astrContent.appendDotBullet("You may only use Fae Map if:", level: 1)
+        astrContent.appendLetterBullet("You can form a binding contract (that is, you are at least 18 years of age), for younger users, parent’s discretion is advised (more info in Privacy Policy), you must have a parent/guardian agreement/consent;", letter: "A", level: 2)
+        astrContent.appendLetterBullet("You are not a person barred from receiving the Services under the laws of the United States, Canada, or other applicable jurisdiction;", letter: "B", level: 2)
+        astrContent.appendLetterBullet("You are in compliance with these Terms and all applicable local, state, national, and international laws, rules, and regulations.", letter: "C", level: 2)
+        
+        astrContent.appendDotBullet("If you are using the Services on behalf of a business or entity, you state that you are authorized to grant all licenses set forth in these Terms and to agree to these Terms on behalf of the business or entity.", level: 1)
         
         astrContent.appendDefaultString("Privacy and Safety\n\n", bold: true)
-        astrContent.appendDotBullet("Your privacy and safety are very important to us.  Due to the interactive, live, location based nature of the Service, we developed a robust privacy and safety system that masks your true location by default.  You have the option to choose who to share your actual location and reveal your true identity, but please be careful, only share your location to those you want to and you are sharing at your own risk.", level: 1)
+        astrContent.appendDotBullet("Your privacy and safety are very important to us. Due to the interactive, live, location based nature of the Service, we developed a robust privacy and safety system that masks your true location by default. You have the option to choose who to share your actual location and reveal your true identity, but please be careful, only share your location to those you want to and you are sharing at your own risk.", level: 1)
         astrContent.appendDotBullet("For more information on safety measures and community guidelines, please see the sections below.  For more information about our data collection methods and privacy rights in general, please see our Privacy Policy [www.faemaps.com/legal/privacy].", level: 1)
         
         astrContent.appendDefaultString("Rights You Grant Us\n\n", bold: true)
-        astrContent.appendDotBullet("Our Services let you to create, upload, post, send, receive, and store Content.  When you do that, you retain the ownership rights in the Content you had to begin with, but, by doing so, you grant us a personal, worldwide, royalty-free, sub-licensable, and transferable right to host, store, use, display, reproduce, modify, edit, publish, and distribute that Content.", level: 1)
-        astrContent.appendDotBullet("Because our Services are inherently public and chronicle matters of public interest, the license you grant us for such Content is universally broad, and includes a perpetual license to create derivative works from, promote, exhibit, broadcast, syndicate, sublicense, publicly perform, and publicly display content submitted to our Services in any form and in any and all media or distribution methods (now known or later developed).", level: 1)
-        astrContent.appendDotBullet("To the extent it’s necessary, when you appear in, create, upload, post, or send Content, you also grant us and our business partners the unrestricted, worldwide, perpetual right and license to use your name, likeness, and voice. In other words, this means that you will not be entitled to any compensation from Faevorite or our business partners if your name, likeness, or voice is conveyed through our Services, either on Fae Map or on another platform.", level: 1)
+        astrContent.appendDotBullet("Our Services let you to discover, collect, upload, create, post, send, receive, and store Content. You understand that you cannot own, resell, or by any means use for commercial purposes any Content that’s on our platform belonging to or created by Faevorite, our business partners, any third party publishers or advertisers, and any other users, unless you have been granted a specific right through us. You retain the ownership rights in the Content you had to begin with, but, by doing so, you grant us a personal, worldwide, royalty-free, sub-licensable, and transferable right to host, store, use, display, reproduce, modify, edit, publish, and distribute that Content.", level: 1)
+        astrContent.appendDotBullet("Your actions on the platform will result in data that will be used for continuous improvements and internal operations. These data will create content for us to analyze and be used internally for developments of more individualized features. By using the Services, you grant us the right to use your data for private analytics and other operations to make improvements to our Services. We will give our most efforts to protect and ensure that all data collected from you stay private and secure. Please refer to our Privacy Policy to learn more information on how we use and protect data. ", level: 1)
+        astrContent.appendDotBullet("Because our Services are inherently public and chronicle matters of public interest, the license you grant us for such Content is universally broad, and includes a perpetual license to create derivative works from, promote, exhibit, broadcast, syndicate, sublicense, publicly perform, and publicly display content submitted to our Services in any form and in any and all media or distribution methods (now known or later developed). ", level: 1)
+        astrContent.appendDotBullet("To the extent it’s necessary, when you appear in any public or shareable Content, you also grant us and in some cases our partners the unrestricted, worldwide, perpetual right and license to use your name, likeness, and voice. In other words, this means that you will not be entitled to any compensation from Faevorite or our partners if your name, likeness, or voice is conveyed through our Services, either on Fae Map or on another platform.", level: 1)
         
         astrContent.appendDefaultString("Rights We Grant You\n\n", bold: true)
-        astrContent.appendDotBullet("Subject to your compliance with these Terms, Faevorite grants you a limited, non-exclusive, revocable, non-transferrable license to: (i) download, install, use a copy of Fae Map on your device solely in connection with your use of the Services; (ii) access and use any content, information and related materials that may be made available through the Services, in each case solely for your personal, noncommercial use.  Any rights not expressly granted herein are reserved by Faevorite and our affiliates and licensors.", level: 1)
+        astrContent.appendDotBullet("Subject to your compliance with these Terms, Faevorite grants you a limited, non-exclusive, revocable, non-transferrable license to: (i) download, install, use a copy of Fae Map on your device solely in connection with your use of the Services; (ii) access and use any content, information and related materials that may be made available through the Services, in each case solely for your personal, noncommercial use. Any rights not expressly granted herein are reserved by Faevorite and our affiliates and licensors.", level: 1)
         
         astrContent.appendDefaultString("Use and Content Restrictions\n\n", bold: true)
-        astrContent.appendDotBullet("You are solely responsible for any Content that you share on Fae Map.  While we are not required to do so, we reserve the right to modify, screen, view, or delete your Content at any time and for any reason, including for violating these Terms.  You alone are responsible for your Content used on the Services, and we are merely acting as a passive conduit for publishing or using such Content.", level: 1)
-        astrContent.appendDotBullet("Treat your community and fellow humans with respect and dignity.  These restrictions will be the absolute minimum standards of decency that users must follow in order to continue accessing the Services:", level: 1)
+        astrContent.appendDotBullet("You are solely responsible for any Content that you create, upload, post, publish, send, and share on Fae Map. While we are not required to do so, we reserve the right to modify, screen, view, or delete your Content at any time and for any reason, including for violating these Terms. You alone are responsible for your Content used on the Services, and we are merely acting as a passive conduit for publishing or using such Content.", level: 1)
+        astrContent.appendDotBullet("Treat your community and fellow users with respect and dignity. These restrictions will be the absolute minimum standards of decency that users must follow in order to continue accessing the Services and keeping the shared space a safe and enjoyable place for everyone:", level: 1)
         
-        astrContent.appendIndexBullet("Don’t be a creep or stalker.  Do not defame, attempt to stalk with Fae Map, bully, abuse, harass, threaten, hack, impersonate or intimidate others.  No one enjoys having fun with jerks and creeps. When in doubt, follow the Golden Rule.  We want to ensure everyone to have a great time.", index: 1, level: 2, underlineFirstSentence: true)
-        astrContent.appendIndexBullet("We have a strict, “No Doxing” policy.  Do not post confidential or personally identifiable information about people, including their email addresses, phone numbers, credit card numbers, social security or national identity numbers. Please respect yourself and others’ information.", index: 2, level: 2, underlineFirstSentence: true)
-        astrContent.appendIndexBullet("Hide your keys, hide your passwords.  Please be responsible with your Fae Account. Those credentials will be used to access all our Services.  We encourage you to use strong passwords (a combination of upper and lower case letters, numbers and symbols).  We cannot and will not be liable for any loss or damage arising from your failure to protect your account.", index: 3, level: 2, underlineFirstSentence: true)
-        astrContent.appendIndexBullet("No Drugs.  Do not use Fae Map for any illegal or improper purposes.  That means no illegal drug dealing through our Services.  You need to comply with all laws, rules and regulations concerning the Content you post and your use of the Services.", index: 4, level: 2, underlineFirstSentence: true)
-        astrContent.appendIndexBullet("No Spam.  You must not post or submit spam or other forms of commercial communications to people or the communities in Fae Map.  We have specific Business/VIP Services if you want to promote your organization, business, or yourself and they are much more effective than Spam. ", index: 5, level: 2, underlineFirstSentence: true)
-        astrContent.appendIndexBullet("No Black Hats, Please. Please do not interfere or disrupt our Services, security systems, servers, networks connected to the Services, including by transmitting any worms, viruses, spyware, malware or any other code of a destructive or disruptive nature.  Use your hacking powers for good.", index: 6, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("Respect Other Users.  Do not defame, attempt to stalk with Fae Map, bully, abuse, harass, threaten, hack, impersonate or intimidate others.  No one enjoys sharing with jerks and creeps. When in doubt, follow the Golden Rule.  We want to ensure everyone to have a great time.", index: 1, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("We have a strict, “No Doxing” Policy.  Do not post confidential or personally identifiable information about people, including their email addresses, phone numbers, credit card numbers, social security or national identity numbers. Please respect yourself and others’ information.", index: 2, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("Hide your Keys, Hide your Passwords.  Please be responsible with your Fae Account. Those credentials will be used to access all our Services. We encourage you to use strong passwords (such as a combination of upper and lower case letters, numbers and symbols). We cannot and will not be liable for any loss or damage arising from your failure to protect your account.", index: 3, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("Keep it Legal.  Do not use Fae Map for any illegal or improper purposes. You need to comply with all laws, rules and regulations concerning the Content you are responsible with and your use of the Services.", index: 4, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("No Spam.  You must not post or submit spam or other forms of commercial communications to people or the communities in Fae Map.  We have specific Business/VIP Services if you want to promote your organization, business, or yourself, and they are much more effective than Spam.", index: 5, level: 2, underlineFirstSentence: true)
+        astrContent.appendIndexBullet("No Black Hats, Please. Please do not interfere or disrupt our Services, security systems, servers, networks connected to the Services, including by transmitting any worms, viruses, spyware, malware or any other code of a destructive or disruptive nature.  Become a hero and use your hacking powers for good.", index: 6, level: 2, underlineFirstSentence: true)
         
         astrContent.appendDotBullet("Content is prohibited if it:", level: 1)
         astrContent.appendIndexBullet("Is illegal;", index: 1, level: 2)
@@ -145,17 +168,15 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         astrContent.appendDotBullet("Faevorite is not responsible for, and does not endorse, support, represent or guarantee the completeness, truthfulness, accuracy or reliability of any Content or communications posted within the Services.", level: 1)
         
         astrContent.appendDefaultString("Copyright Policy\n\n", bold: true)
-        astrContent.appendDefaultString("Faevorite respects the intellectual property rights of others. We therefore take reasonable steps to expeditiously remove from our Services any infringing material that we become aware of.  You can help us in ensuring a safe and fun community on Fae Map by reporting any infringing material you come across.\n\n", bold: false)
-        astrContent.appendDefaultString("You should report to us any suspected claim if you believe that your Content has been copied in a way that constitutes copyright infringement.  Please provide our copyright agent with the information required by the Digital Millennium Copyright Act (DMCA).  If you file a notice with our Copyright Agent, it must comply with the requirements set forth at 17 U.S.C. § 512(c)(3) [http://www.copyright.gov/title17/92chap5.html]. That means the notice must:\n\n", bold: false)
+        astrContent.appendDotBullet("Faevorite respects the intellectual property rights of others. We therefore take reasonable steps to expeditiously remove from our Services any infringing material that we become aware of.  You can help us in ensuring a safe and fun community on Fae Map by reporting any infringing material you come across.\n\n", level: 1)
+        astrContent.appendDotBullet("You should report to us any suspected claim if you believe that your Content has been copied in a way that constitutes copyright infringement.  Please provide our copyright agent with the information required by the Digital Millennium Copyright Act (DMCA).  If you file a notice with our Copyright Agent, it must comply with the requirements set forth at 17 U.S.C. § 512(c)(3) [http://www.copyright.gov/title17/92chap5.html]. That means the notice must:\n\n", level: 1)
         
-        astrContent.appendDotBullet("contain the physical or electronic signature of a person authorized to act on behalf of the copyright owner.", level: 2)
-        astrContent.appendDotBullet("identify the copyrighted work claimed to have been infringed.", level: 2)
-        astrContent.appendDotBullet("identify the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed, or access to which is to be disabled, and information reasonably sufficient to let us locate the material.", level: 2)
-        astrContent.appendDotBullet("provide your contact information, including your address, telephone number, and an email address.", level: 2)
-        astrContent.appendDotBullet("provide a personal statement that you have a good-faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.", level: 2)
-        astrContent.appendDotBullet("provide a statement that the information in the notification is accurate and, under penalty of perjury, that you are authorized to act on behalf of the copyright owner.", level: 2)
+        astrContent.appendIndexBullet("Contain the physical or electronic signature of a person authorized to act on behalf of the copyright owner.", index:1, level: 2)
+        astrContent.appendIndexBullet("Identify the copyrighted work claimed to have been infringed and identify the material that is claimed to be infringing or to be the subject of infringing activity and that is to be removed or access to which is to be disabled, and additional information reasonably sufficient to let us locate the material.", index:2, level: 2)
+        astrContent.appendIndexBullet("Provide your contact information, including your address, telephone number, and an email address.", index:3, level: 2)
+        astrContent.appendIndexBullet("Provide a personal statement that you have a good-faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law, and provide a statement that the information in the notification is accurate and, under penalty of perjury, that you are authorized to act on behalf of the copyright owner.", index:4, level: 2)
         
-        astrContent.appendDefaultString("Our designated copyright agent for notice of alleged copyright infringement or other legal notices regarding Content appearing on the Services is:\n\n", bold: false)
+        astrContent.appendDotBullet("Our designated copyright agent for notice of alleged copyright infringement or other legal notices regarding Content appearing on the Services is:\n\n", level: 1)
         astrContent.appendRegularBullet("Faevorite, Inc.", level: 5)
         astrContent.appendRegularBullet("Attn: Copyright Agent", level: 5)
         astrContent.appendRegularBullet("Email: legal@letsfae.com\n", level: 5)

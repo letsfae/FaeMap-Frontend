@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Contacts
+import ContactsUI
+
 extension ContactsViewController {
     
     func loadNavBar() {
@@ -68,11 +71,9 @@ extension ContactsViewController {
         btnBottom.addSubview(imgBottom)
         
         lblTop = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
-        lblTop.textColor = UIColor._898989()
         lblTop.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        let strTop = "Friends"
-        lblTop.text = strTop
         btnTop.addSubview(lblTop)
+        updateFriendCount()
         
         lblBottom = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
         lblBottom.textColor = UIColor._898989()
@@ -89,8 +90,28 @@ extension ContactsViewController {
         uiviewDropDownMenu.addSubview(imgTick)
     }
     
-    func setBtnTopTitle() {
-//        btnTop.setAttributedTitle(, for: .normal)
+    fileprivate func updateFriendCount() {
+        let attributedStr = NSMutableAttributedString()
+        let strFriends = NSAttributedString(string: "Friends ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        let count = NSAttributedString(string: "(\(countFriends))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        attributedStr.append(strFriends)
+        attributedStr.append(count)
+        
+        lblTop.attributedText = attributedStr
+        
+        
+//        let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
+//        attributedStrM.append(lastNS)
+//        strLastTextField = strLastTextField + arrFriends[arrSelected[arrSelected.count - 1]].nickName + ","
+//
+//        let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+//        attributedStrM.append(changeColor)
+//
+//        let newSearchWord : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+//        attributedStrM.append(newSearchWord)
+//        strLastTextField = strLastTextField + moreWord
+//
+//        searchField.attributedText = attributedStrM
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
@@ -116,6 +137,7 @@ extension ContactsViewController {
                 self.uiviewDropDownMenu.frame.origin.y = 64
             })
             btnNavBarSetTitle()
+            updateFriendCount()
             navBarMenuBtnClicked = true
         } else {
             UIView.animate(withDuration: 0.2, animations: {
@@ -137,6 +159,15 @@ extension ContactsViewController {
         vc.arrReceivedRequests = arrReceivedRequests
         vc.arrRequested = arrRequested
         self.navigationController?.pushViewController(vc, animated: true)
+        getContacts()
+    }
+    
+    fileprivate func getContacts() {
+        let entityType = CNEntityType.contacts
+        let authStatus = CNContactStore.authorizationStatus(for: entityType)
+        if (authStatus == CNAuthorizationStatus.notDetermined) {
+            contactStore.requestAccess(for: entityType, completionHandler: {_,_ in })
+        }
     }
     
     // function for buttons in drop down menu

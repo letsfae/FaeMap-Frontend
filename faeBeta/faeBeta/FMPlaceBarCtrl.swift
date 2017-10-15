@@ -14,8 +14,10 @@ extension FaeMapViewController: PlaceViewDelegate {
     func loadPlaceDetail() {
         view.addSubview(uiviewPlaceBar)
         uiviewPlaceBar.delegate = self
+        let tapGesture = UIGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
+        uiviewPlaceBar.addGestureRecognizer(tapGesture)
         
-        view.addSubview(placeResultTbl)
+        view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = UIButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
@@ -25,6 +27,10 @@ extension FaeMapViewController: PlaceViewDelegate {
         view.addSubview(btnTapToShowResultTbl)
         btnTapToShowResultTbl.alpha = 0
         btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)
+    }
+    
+    func handleTapPlaceBar() {
+        placePinAction(action: .detail)
     }
     
     // PlaceViewDelegate

@@ -13,7 +13,7 @@ import RealmSwift
 protocol LeftSlidingMenuDelegate: class {
     func userInvisible(isOn: Bool)
     func jumpToMoodAvatar()
-    func logOutInLeftMenu()
+    func jumpToSettings()
     func jumpToFaeUserMainPage()
     func jumpToCollections()
     func jumpToContacts()
@@ -55,17 +55,23 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         case moodAvatar
         case collections
         case myActivities
-        case logOut
+        case settings
         case myFaeMainPage
     }
     var tableSelections: TableSelctions = .none
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadLeftWindow()
+        DispatchQueue.main.async {
+            self.loadLeftWindow()
+            let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
+            self.view.addGestureRecognizer(draggingGesture)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         loadUserInfo()
-        let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
-        view.addGestureRecognizer(draggingGesture)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -150,7 +156,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         if indexPath.row < 4 {
             cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         } else {
-           cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
+            cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
         }
         cell.lblMiddle.text = array[indexPath.row]
         cell.switchRight.tag = indexPath.row
@@ -192,18 +198,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             tableSelections = .moodAvatar
             actionCloseMenu(btnBackground)
         } else if indexPath.row == 5 {
-            let logOut = FaeUser()
-            logOut.logOut { (status: Int?, _: Any?) in
-                if status! / 100 == 2 {
-                    print("[LeftMenu-LogOut] Success")
-                    self.tableSelections = .logOut
-                    self.actionCloseMenu(self.btnBackground)
-                } else {
-                    print("[LeftMenu-LogOut] Failure")
-                    self.tableSelections = .logOut
-                    self.actionCloseMenu(self.btnBackground)
-                }
-            }
+            tableSelections = .settings
+            actionCloseMenu(btnBackground)
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -310,9 +306,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 case .myActivities:
                     self.tableSelections = .none
                     break
-                case .logOut:
+                case .settings:
                     self.tableSelections = .none
-                    self.delegate?.logOutInLeftMenu()
+                    self.delegate?.jumpToSettings()
                     break
                 case .myFaeMainPage:
                     self.tableSelections = .none

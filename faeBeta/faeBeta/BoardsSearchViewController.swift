@@ -17,9 +17,9 @@ import SwiftyJSON
     @objc optional func chooseLocationOnMap()
     @objc optional func sendLocationBack(address: RouteAddress)
 }
-enum EnterMode {
-    case place
-    case location
+enum EnterMode: String {
+    case place = "place"
+    case location = "location"
 }
 
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource {
@@ -444,9 +444,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
         } else if enterMode == .place { // search places
             let selectedPlace = filteredPlaces[indexPath.row]
-            let vc = PlaceDetailViewController()
-            vc.place = selectedPlace
-            navigationController?.pushViewController(vc, animated: true)
+            let vcPlaceDetail = PlaceDetailViewController()
+            vcPlaceDetail.place = selectedPlace
+            navigationController?.pushViewController(vcPlaceDetail, animated: true)
         }
     }
     

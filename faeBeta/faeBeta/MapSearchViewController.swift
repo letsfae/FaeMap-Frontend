@@ -8,9 +8,9 @@
 import SwiftyJSON
 import MapKit
 
-protocol MapSearchDelegate: class {
-    func jumpToOnePlace(searchText: String, place: PlacePin)
-    func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation)
+@objc protocol MapSearchDelegate: class {
+    @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
+    @objc optional func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation)
 //    func backToMainMapFromMapSearch()
 }
 
@@ -305,7 +305,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         searchBar.txtSchField.resignFirstResponder()
         
         if searchBar == schPlaceBar {
-            delegate?.jumpToPlaces(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
+            delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
             navigationController?.popViewController(animated: false)
         }
     }
@@ -439,7 +439,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         } else { // search places
             let selectedPlace = filteredPlaces[indexPath.row]
-            delegate?.jumpToOnePlace(searchText: selectedPlace.name, place: selectedPlace)
+            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
             navigationController?.popViewController(animated: false)
         }
     }

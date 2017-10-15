@@ -10,6 +10,8 @@ import UIKit
 
 class FaeMap {
     
+    static let shared = FaeMap()
+    
     var keyValue = [String:AnyObject]()
     func whereKey(_ key: String, value: String?) -> Void {
         keyValue[key] = value as AnyObject?

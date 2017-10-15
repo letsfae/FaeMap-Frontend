@@ -16,9 +16,8 @@ class FaeAvatarView: UIImageView {
 
     var userID = -1
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
-        
         // add tapRecoginizer to open the bigger image of this view
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.openThisMedia(_:)))
         self.addGestureRecognizer(tapRecognizer)
@@ -34,16 +33,12 @@ class FaeAvatarView: UIImageView {
         self.image = nil
         
         if let imageFromCache = faeImageCache.object(forKey: id as AnyObject) as? UIImage {
-//            joshprint("[getAvatar - \(id)] already in cache")
             self.image = imageFromCache
             return
         }
         
         getAvatar(userID: self.userID, type: 2) { (status, etag, imageRawData) in
-            guard imageRawData != nil else {
-//                print("[getAvatar] fail, imageRawData is nil")
-                return
-            }
+            guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }
             DispatchQueue.main.async(execute: {
                 guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }

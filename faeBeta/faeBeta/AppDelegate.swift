@@ -239,7 +239,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    func checkNotificationStatus() {
+    fileprivate func checkNotificationStatus() {
         //        let center = UNUserNotificationCenter.current()
         //        center.getNotificationSettings { (settings) in
         //            if settings.authorizationStatus == .authorized {

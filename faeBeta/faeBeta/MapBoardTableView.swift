@@ -158,9 +158,9 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             
         } else if tableMode == .places {
             if placeTableMode == .search {
-                let vc = PlaceDetailViewController()
-                vc.place = mbPlaces[indexPath.row]
-                navigationController?.pushViewController(vc, animated: true)
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = mbPlaces[indexPath.row]
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
         } else if tableMode == .talk {
         }

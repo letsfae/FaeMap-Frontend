@@ -63,7 +63,7 @@ class SignInSupportCodeViewController: RegisterBaseViewController {
     
     func validation() {
         var isValid = false
-        isValid = code.characters.count == 6
+        isValid = code.count == 6
         enableContinueButton(isValid)
     }
     
@@ -103,12 +103,12 @@ extension SignInSupportCodeViewController: UITableViewDelegate, UITableViewDataS
 extension SignInSupportCodeViewController: FAENumberKeyboardDelegate {
     func keyboardButtonTapped(_ num: Int) {
         if num != -1 {
-            if code.characters.count < 6 {
+            if code.count < 6 {
                 code = "\(code)\(num)"
             }
         } else {
-            if code.characters.count >= 0 {
-                code = String(code.characters.dropLast())
+            if code.count >= 0 {
+                code = String(code.dropLast())
             }
         }
         cellEnterCode.showText(code)

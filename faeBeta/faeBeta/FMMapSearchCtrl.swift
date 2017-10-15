@@ -12,43 +12,64 @@ extension FaeMapViewController: MapSearchDelegate {
     
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
-        updateUI(searchText: searchText)
-        uiviewPlaceBar.load(for: place)
         PLACE_ENABLE = false
-        let camera = faeMapView.camera
-        camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: false)
+        let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
+        placesFromSearch.append(pin)
+        if searchText == "fromPlaceDetail" {
+            mapMode = .pinDetail
+            let pin_self = FaePinAnnotation(type: "place", data: place)
+            pin_self.coordinate = LocManager.shared.curtLoc.coordinate
+            zoomToFitAllAnnotations(annotations: [pin, pin_self])
+            animateMainItems(show: true, animated: false)
+            faeMapView.blockTap = true
+            lblExpContent.text = "Map View"
+        } else {
+            updateUI(searchText: searchText)
+            let camera = faeMapView.camera
+            camera.centerCoordinate = place.coordinate
+            faeMapView.setCamera(camera, animated: false)
+        }
+        uiviewPlaceBar.load(for: place)
         placeClusterManager.removeAnnotations(faePlacePins) {
-            self.faePlacePins.removeAll()
-            let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
-            self.faePlacePins.append(pin)
             self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
-        updateUI(searchText: searchText)
         PLACE_ENABLE = false
-        swipingState = .multipleSearch
-        uiviewPlaceBar.places = placeResultTbl.updatePlacesArray(places: places)
-        if let firstPlacePin = places.first {
-            uiviewPlaceBar.loading(current: firstPlacePin)
-        }
-        btnTapToShowResultTbl.alpha = 1
+        placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.removeAnnotations(faePlacePins) {
-            self.faePlacePins.removeAll()
-            for place in self.uiviewPlaceBar.places {
-                let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
-                self.faePlacePins.append(pin)
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+        }
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        if searchText == "fromEXP" {
+            mapMode = .explore
+            setTitle(type: "Random")
+            arrExpPlace = places
+            clctViewMap.reloadData()
+        } else {
+            updateUI(searchText: searchText)
+            swipingState = .multipleSearch
+            uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
+            if let firstPlacePin = places.first {
+                uiviewPlaceBar.loading(current: firstPlacePin)
             }
-            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
-            self.zoomToFitAllAnnotations(annotations: self.faePlacePins)
+            btnTapToShowResultTbl.alpha = 1
+            uiviewPlaceBar.places = places
         }
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
         guard let firstAnn = annotations.first else { return }
-        placeClusterManager.maxZoomLevelForClustering = 0
+//        placeClusterManager.maxZoomLevelForClustering = 0
         let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {
@@ -56,8 +77,13 @@ extension FaeMapViewController: MapSearchDelegate {
             let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
             zoomRect = MKMapRectUnion(zoomRect, pointRect)
         }
-        let edgePadding = UIEdgeInsetsMake(60, 40, 60, 40)
-        faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: true)
+        var edgePadding = UIEdgeInsetsMake(120, 40, 100, 40)
+        if mapMode == .explore {
+            edgePadding = UIEdgeInsetsMake(120, 40, 300, 40)
+        } else if mapMode == .pinDetail {
+            edgePadding = UIEdgeInsetsMake(220, 80, 120, 80)
+        }
+        faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
     }
     
 //    func backToMainMapFromMapSearch() {

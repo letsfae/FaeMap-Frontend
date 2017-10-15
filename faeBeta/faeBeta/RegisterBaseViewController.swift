@@ -41,6 +41,7 @@ class RegisterBaseViewController: UIViewController {
     // MARK: - Functions
     func addTapGesture() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        tap.cancelsTouchesInView = true
         view.addGestureRecognizer(tap)
     }
     
@@ -58,14 +59,14 @@ class RegisterBaseViewController: UIViewController {
 extension RegisterBaseViewController {
     
     func createTopView(_ imageNamed: String) {
-        let uiviewTop = UIView(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 50))
+        let uiviewTop = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 70))
         uiviewTop.backgroundColor = .white
-        let btnBack = UIButton(frame: CGRect(x: 10, y: 5, width: 40, height: 40))
+        let btnBack = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.setTitleColor(UIColor.blue, for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
-        imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 20, width: 90, height: 10))
+        imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 40, width: 90, height: 10))
         imgProgress.image = UIImage(named: imageNamed)
     
         uiviewTop.addSubview(btnBack)

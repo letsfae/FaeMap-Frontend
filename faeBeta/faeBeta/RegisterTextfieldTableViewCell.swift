@@ -33,7 +33,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     }
     
     func loadContent() {
-        textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 44))
         addSubview(textfield)
         textfield.delegate = self
         textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged )
@@ -72,7 +72,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
             return;
         }
         var count = 0
-        for c in text.characters {
+        for c in text {
             if c < "a" || c > "z" {
                 count += 1
             }
@@ -128,11 +128,11 @@ extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
                 return false
             }
         }
-        let currentCharacterCount = textField.text?.characters.count ?? 0
+        let currentCharacterCount = textField.text?.count ?? 0
         if range.length + range.location > currentCharacterCount {
             return false
         }
-        let newLength = currentCharacterCount + string.characters.count - range.length
+        let newLength = currentCharacterCount + string.count - range.length
         return (newLength <= limitNumber) || (!isCharacterLimit)
     }
 }
