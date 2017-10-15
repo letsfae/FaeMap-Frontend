@@ -55,7 +55,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         faeCollection.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
-                // 后端数据改好后，改为collections.array
                 guard let colArray = collections.array else {
                     print("[loadCollectionData] fail to parse collections info")
                     return

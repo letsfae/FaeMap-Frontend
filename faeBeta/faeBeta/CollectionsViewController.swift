@@ -24,8 +24,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var tableMode: CollectionTableMode = .place
     var curtTitle: String = "Places"
     var navBarMenuBtnClicked: Bool = false
-    var arrPlaceListName = ["Favorite Places", "Saved Places", "Places to Go"]
-    var arrLocationListName = ["Favorite Locations", "Saved Locations"]
     var arrCollection = [PinCollection]()
     let faeCollection = FaeCollection()
     
@@ -43,7 +41,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         faeCollection.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
-                // 后端数据改好后，改为collections.array
+                
                 guard let colArray = collections.array else {
                     print("[loadCollectionData] fail to parse collections info")
                     return
@@ -58,7 +56,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 }
                 
                 self.tblCollections.reloadData()
-                print("[Get Collections] Get Successfully")
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
             }
