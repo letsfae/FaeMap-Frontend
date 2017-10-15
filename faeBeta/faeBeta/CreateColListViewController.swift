@@ -74,6 +74,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         uiviewNavBar.addSubview(btnCreate)
         btnCreate.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnCreate.addTarget(self, action: #selector(self.actionCreateList(_:)), for: .touchUpInside)
+        btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
+        btnCreate.setTitleColor(UIColor._255160160(), for: .disabled)
         
         let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
         uiviewNavBar.addSubview(lblTitle)
@@ -85,13 +87,11 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             btnCreate.setTitle("Create", for: .normal)
             btnCreate.tag = 0
             btnCreate.isEnabled = false
-            btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
         } else {
             lblTitle.text =  "List Settings"
             btnCreate.setTitle("Save", for: .normal)
             btnCreate.tag = 1
             btnCreate.isEnabled = true
-            btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
         }
     }
     
@@ -202,11 +202,10 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
-        btnCreate.isEnabled = textviewListName.text.count > 0
         if newText.isEmpty {
-            btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
             if textView == textviewListName {
                 lblNameRemainChars.text = "60"
+                btnCreate.isEnabled = false
             } else {
                 lblDespRemainChars.text = "300"
             }
@@ -215,7 +214,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
             return false
         } else if textView.textColor == UIColor._155155155() && !text.isEmpty {
-            btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
             textView.text = nil
             textView.textColor = UIColor._898989()
         }
@@ -223,6 +221,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        btnCreate.isEnabled = !textviewListName.text.isEmpty
         if textView == textviewListName {
             nameRemainChars = 60 - textView.text.count
             lblNameRemainChars.text = String(nameRemainChars)
@@ -236,7 +235,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 textviewDesp.frame.origin.y = 159 - offset + txtHeight
                 numLinesName = Int(textView.contentSize.height / textView.font!.lineHeight)
             }
-            btnCreate.isEnabled = textView.text.count > 0
         } else {
             numLinesDesp = 4 - numLinesName
             if screenWidth == 375 {
@@ -244,7 +242,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             } else if screenWidth == 414 {
                 numLinesDesp = 8 - numLinesName
             }
-            despRemainChars = 300 - textView.text.count;
+            despRemainChars = 300 - textView.text.count
             lblDespRemainChars.text = String(despRemainChars)
             let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
             if numLines >= numLinesDesp {
@@ -257,7 +255,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
         
         if textView.text.count == 0 {
-            btnCreate.setTitleColor(UIColor._255160160(), for: .normal)
             textView.text = textView == textviewListName ? placeholder[0] : placeholder[1]
             textView.textColor = UIColor._155155155()
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
