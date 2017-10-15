@@ -105,6 +105,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
         backgroundColor = .white
         loadContent()
+        loadCollectionData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -240,6 +241,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     }
     
     func actionCancel(_ sender: UIButton) {
+        print("actionCancel")
         delegate?.cancelAddPlace()
     }
     

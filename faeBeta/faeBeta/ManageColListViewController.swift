@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol ManageColListDelegate: class {
+    func returnValBack(savedItems: [SavedPin])
+}
+
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
     var uiviewNavBar: UIView!
     var btnDone: UIButton!
@@ -18,16 +22,15 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     var btnRemove: UIButton!
     var selectedIdx = [IndexPath]()
     var enterMode: CollectionTableMode!
+    var colId: Int = -1
     
     let SHARE = 0
     let MEMO = 1
     let REMOVE = 2
     
-    var arrColList: [[String]] = [["Monster Trio Burger", "888 No.3 Road, Richmond",""],
-                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""],
-                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", "WOWOWOWOWOWOWOWOWOWOWOWOWWOWOWOWOWOWOWOWOWOWOWOWOW"],
-                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""],
-                                  ["Polly Bubble Tea", "888 No.3 Road, Richmond", ""]]
+    weak var delegate: ManageColListDelegate?
+    
+    var arrColList = [SavedPin]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,6 +114,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func actionDone(_ sender: UIButton) {
+        delegate?.returnValBack(savedItems: arrColList)
         dismiss(animated: true)
     }
     
@@ -126,19 +130,33 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             vc.indexPath = selectedIdx[0]
             let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
             vc.txtMemo = cell.lblColMemo.text!
+            vc.pinId = arrColList[selectedIdx[0].row].pinId
             vc.modalPresentationStyle = .overCurrentContext
             present(vc, animated: false)
             break
         case REMOVE:
+            // 对后端需求，批量删除？
+//            var boolRemoved = false
             for idxPath in selectedIdx {
-                let cell = tblManageList.cellForRow(at: idxPath) as! ManageColListCell
+                let id = String(arrColList[idxPath.row].pinId)
+                let cell = self.tblManageList.cellForRow(at: idxPath) as! ManageColListCell
                 cell.btnSelect.isSelected = false
                 let idx = idxPath.row
-                arrColList.remove(at: idx)
+                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: id) {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        self.arrColList.remove(at: idx)
+//                        boolRemoved = true
+                    } else {
+                        print("[Fail to Unsave Item From Collection] \(status) \(message!)")
+                    }
+                }
             }
-            reloadAfterDelete()
-            selectedIdx.removeAll()
-            updateTabBarBtnColor(selectedCount: 0)
+            
+//            if boolRemoved {
+                reloadAfterDelete()
+                selectedIdx.removeAll()
+                updateTabBarBtnColor(selectedCount: 0)
+//            }
             break
         default:
             break
@@ -176,10 +194,8 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColListCell", for: indexPath) as! ManageColListCell
-        let arrName = arrColList[indexPath.row][0]
-        let arrAddr = arrColList[indexPath.row][1]
-        let arrMemo = arrColList[indexPath.row][2]
-        cell.setValueForCell(name: arrName, addr: arrAddr, memo: arrMemo)
+        let savedItem = arrColList[indexPath.row]
+        cell.setValueForCell(savedItem: savedItem)
         return cell
     }
     
@@ -210,7 +226,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     // EditMemoDelegate
     func saveMemo(memo: String) {
         let idx = selectedIdx[0].row
-        arrColList[idx][2] = memo
+        arrColList[idx].memo = memo
         tblManageList.reloadData()
     }
 }

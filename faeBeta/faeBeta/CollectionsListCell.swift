@@ -80,3 +80,5 @@ class CollectionsEmptyListCell: UITableViewCell {
         addSubview(lblListName)
     }
 }
+
+

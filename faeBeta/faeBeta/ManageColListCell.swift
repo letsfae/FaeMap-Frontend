@@ -63,9 +63,9 @@ class ManageColListCell: UITableViewCell {
         addConstraintsWithFormat("V:|-20-[v0(50)]", options: [], views: btnSelect)
     }
     
-    func setValueForCell(name: String, addr: String, memo: String) {
-        lblColName.text = name
-        lblColAddr.text = addr
-        lblColMemo.text = memo
+    func setValueForCell(savedItem: SavedPin) {
+        lblColName.text = savedItem.pinName
+        lblColAddr.text = savedItem.pinAddr
+        lblColMemo.text = savedItem.memo
     }
 }
