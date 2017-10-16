@@ -33,10 +33,11 @@ class FaeRecommendedCell: UITableViewCell {
     fileprivate func loadRecommendedCellContent() {
         imgAvatar = UIImageView()
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
+        imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-        imgAvatar.backgroundColor = .red
+        //imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()

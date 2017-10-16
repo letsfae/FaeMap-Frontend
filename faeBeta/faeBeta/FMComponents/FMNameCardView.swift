@@ -230,8 +230,19 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func updateNameCard(withUserId: Int) {
+        if withUserId == 1 {
+            imgAvatar.image = UIImage(named: "faeAvatar")
+            imgAvatar.isUserInteractionEnabled = false
+            imgMoodAvatar.isHidden = true
+            uiviewPrivacy.isHidden = true
+            lblUserName.text = "@faemaps"
+            lblNickName.text = "Fae Map Team"
+            btnOptions.isHidden = true
+            return
+        }
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
+            self.imgAvatar.isUserInteractionEnabled = true
         }
         uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, _) in
             self.lblNickName.text = nickName
@@ -244,7 +255,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         guard !isAnimating else { return }
         isAnimating = true
         boolCardOpened = true
-        btnProfile.isHidden = self.userId == Key.shared.user_id
+        btnProfile.isHidden = [Key.shared.user_id, 1].contains(self.userId)
         if avatar == nil {
             let getMiniAvatar = FaeUser()
             getMiniAvatar.getOthersProfile("\(userId)", completion: { (status, message) in
@@ -274,7 +285,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
             self.imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
-            self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
+            self.btnChat.frame = CGRect(x: ([Key.shared.user_id, 1].contains(self.userId)) ? 146.5 : 98.5, y: 272, w: 27, h: 27)
             self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
             self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
             self.btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
@@ -566,3 +577,4 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     // PassStatusFromViewToButton End
 }
+
