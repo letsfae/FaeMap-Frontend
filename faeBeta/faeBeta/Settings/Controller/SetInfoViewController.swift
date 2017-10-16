@@ -79,6 +79,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         else {
             cell.switchIcon.isHidden = false
+            cell.switchIcon.tag = indexPath.row + 100
             cell.imgView.isHidden = true
         }
         cell.lblDes.text = arrDetail[indexPath.section]

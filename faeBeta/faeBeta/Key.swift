@@ -42,6 +42,8 @@ class Key: NSObject { //  singleton class
     
     let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
     
+    
+    
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
     var headerContentType = "application/x-www-form-urlencoded"

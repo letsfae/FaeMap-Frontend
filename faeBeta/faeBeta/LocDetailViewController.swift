@@ -149,7 +149,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     func loadHeader() {
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 352, w: 414, h: 101))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
