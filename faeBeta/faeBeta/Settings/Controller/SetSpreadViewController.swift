@@ -12,7 +12,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     var uiviewNavBar: FaeNavBar!
     var tblSpLove: UITableView!
-    var arrStr = ["00":"Invite Friends!", "01":"From Contacts", "02":"From Facebook", "10":"Share Fae Map!", "11":"SendMessage", "12":"Send Email", "13":"Share on Facebook", "14":"Share on Twitter", "15":"Other Options"]
+    var arrStr: [String: String] = ["00":"Invite Friends!", "01":"From Contacts", "02":"From Facebook", "10":"Share Fae Map!", "11":"SendMessage", "12":"Send Email", "13":"Share on Facebook", "14":"Share on Twitter", "15":"Other Options"]
     
     override func viewDidLoad() {
         view.backgroundColor = .white

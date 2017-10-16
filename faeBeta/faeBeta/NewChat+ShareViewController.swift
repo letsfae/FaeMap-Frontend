@@ -44,6 +44,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var lblTo: UILabel!
     var cllcSelected: UICollectionView!
     var uiviewSchabr: UIView!
+    var uiviewBottomLine: UIView!
     var schbarChatTo: FaeSearchBar!
     var searchField: UITextField!
     let uitxDummy: UITextField = UITextField()
@@ -262,6 +263,12 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         cllcSelected.register(SelectedFriendCollectionViewCell.self, forCellWithReuseIdentifier: "select")
         cllcSelected.register(TextFieldCollectionViewCell.self, forCellWithReuseIdentifier: "input")
         view.addSubview(cllcSelected)
+        
+        uiviewBottomLine = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: 1))
+        uiviewBottomLine.layer.borderWidth = screenWidth
+        uiviewBottomLine.layer.borderColor = UIColor._200199204cg()
+        uiviewBottomLine.layer.zPosition = 1
+        view.addSubview(uiviewBottomLine)
     }
     
     func loadChatsList() {
@@ -570,6 +577,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             currentHeight = 49
         }
         cllcSelected.frame = CGRect(x: 47, y: 65, width: screenWidth - 47, height: currentHeight)
+        uiviewBottomLine.frame.origin.y = 65 + currentHeight
         tblFriends.frame = CGRect(x: 0, y: 65 + currentHeight, width: screenWidth, height: screenHeight - 65 - currentHeight)
     }
     

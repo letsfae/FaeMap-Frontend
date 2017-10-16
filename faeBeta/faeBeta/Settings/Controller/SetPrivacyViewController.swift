@@ -12,7 +12,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var uiviewNavBar: FaeNavBar!
     var tblPrivacy: UITableView!
-    var arrTitle = ["00":"Go Invisible", "10":"Shadow Location System", "11":"Minimal Effect", "12":"Normal Effect", "13":"Maximum Effect", "20":"Blocked List", "30":"Clear Char History"]
+    var arrTitle: [String: String] = ["00":"Go Invisible", "10":"Shadow Location System", "11":"Minimal Effect", "12":"Normal Effect", "13":"Maximum Effect", "20":"Blocked List", "30":"Clear Char History"]
     var arrDetail: [String] = ["Hide your own Map Avatar and all other Avatars. You can't see others and others can't see you.", "Now you see me, now you don't! S.L.S is used to protect your true location in public.", "List for all the users you blocked. Banned users will no longer appear in the list.", "Clears all chat contents excluding those with Official Accounts. This does not delete the chat itself."]
     
     var uiviewHidden: UIView!

@@ -38,7 +38,7 @@
  */
 @property (nonatomic, assign) BOOL isReadyToPlay;
 
-@property (nonatomic) UIImage *snapImage;
+@property (nonatomic, strong) UIImage *snapImage;
 
 /**
  *  Initializes and returns a video media item having the given fileURL.
