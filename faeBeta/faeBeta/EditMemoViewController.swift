@@ -81,18 +81,15 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     
     func actionSave(_ sender: UIButton) {
         txtMemo = textviewMemo.textColor == UIColor._182182182() ? "" : textviewMemo.text
-//        let faeCollection = FaeCollection()
-//        faeCollection.whereKey("content", value: txtMemo)
-//        faeCollection.createMemo(enterMode.rawValue, pinID: String(pinId)) {(status: Int, message: Any?) in
-//            if status / 100 == 2 {
-//                delegate?.saveMemo(memo: txtMemo)
-//                hideMemoView()
-//            } else {
-//                print("[Create Memo] Fail to Create \(status) \(message!)")
-//            }
-//        }
-        delegate?.saveMemo(memo: txtMemo)
-        hideMemoView()
+        FaeCollection.shared.whereKey("content", value: txtMemo)
+        FaeCollection.shared.createMemo(enterMode.rawValue, pinID: String(pinId)) {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                self.delegate?.saveMemo(memo: self.txtMemo)
+                self.hideMemoView()
+            } else {
+                print("[Create Memo] Fail to Create \(status) \(message!)")
+            }
+        }
     }
     
     func hideMemoView() {

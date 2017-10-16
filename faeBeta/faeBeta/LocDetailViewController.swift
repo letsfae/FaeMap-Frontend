@@ -197,6 +197,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     fileprivate func loadAddtoCollection() {
         uiviewAddCollection = AddPlaceToCollectionView()
         uiviewAddCollection.delegate = self
+        uiviewAddCollection.tableMode = .location
         view.addSubview(uiviewAddCollection)
     }
     
@@ -261,7 +262,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     
     func createColList() {
         let vc = CreateColListViewController()
-        vc.enterMode = .place
+        vc.enterMode = .location
         present(vc, animated: true)
         //        navigationController?.pushViewController(vc, animated: true)
     }

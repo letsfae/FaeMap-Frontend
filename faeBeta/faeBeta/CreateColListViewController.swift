@@ -158,7 +158,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         if sender.tag == 0 {  // create
             faeCollection.whereKey("type", value: enterMode.rawValue)
             faeCollection.whereKey("name", value: txtListName)
-            faeCollection.whereKey("description", value: txtListDesp)
+            if txtListDesp != "" {
+                faeCollection.whereKey("description", value: txtListDesp)
+            }
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.createCollection {(status: Int, message: Any?) in
                 if status / 100 == 2 {
@@ -173,7 +175,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             }
         } else {  // save
             faeCollection.whereKey("name", value: txtListName)
-            faeCollection.whereKey("description", value: txtListDesp)
+            if txtListDesp != "" {
+                faeCollection.whereKey("description", value: txtListDesp)
+            }
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
