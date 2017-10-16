@@ -49,7 +49,7 @@ class RealmRecent_v2: Object {
     dynamic var unread_count: Int = 0
     
     var latest_message: RealmMessage_v2? {
-        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", String(Key.shared.user_id), String(is_group), self.chat_id).sorted(byKeyPath: "index").last
+        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", String(Key.shared.user_id), is_group, self.chat_id).sorted(byKeyPath: "index").last
     }
     
     override static func primaryKey() -> String? {
@@ -90,7 +90,7 @@ extension Object {
 
 extension Realm {
     func filterAllMessages(_ login_user_id: String, _ is_group: Int, _ chat_id: String) -> Results<RealmMessage_v2> {
-        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", login_user_id, String(is_group), chat_id).sorted(byKeyPath: "index")
+        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", login_user_id, is_group, chat_id).sorted(byKeyPath: "index")
     }
     
     func filterUser(_ login_user_id: String, id: String) -> RealmUser? {
@@ -229,7 +229,7 @@ class RealmChat {
         }
     }
     
-    static func dateConverter(date: Date) -> String{
+    static func dateConverter(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -237,8 +237,10 @@ class RealmChat {
         return dateFormatter.string(from: date)
     }
     
-    static func dateConverter(str: String) -> Date{
+    static func dateConverter(str: String) -> Date {
         let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
         dateFormatter.dateFormat = "yyyyMMddhhmmssSSS"
         return dateFormatter.date(from: str)!
     }

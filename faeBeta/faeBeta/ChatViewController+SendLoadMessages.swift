@@ -55,7 +55,7 @@ extension ChatViewController: OutgoingMessageProtocol {
             realm.add(recentRealm, update: true)
         }
         //JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        //finishSendingMessage()
+        finishSendingMessage()
     }
     // MARK: - send message
     func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
@@ -220,6 +220,9 @@ extension ChatViewController: OutgoingMessageProtocol {
                 let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
                 arrJSQMessages.append(messageJSQ)
                 arrRealmMessages.append(resultRealmMessages[i])
+                realm.beginWrite()
+                resultRealmMessages[i].unread_count = 0
+                try! realm.commitWrite()
             }
         }
         finishReceivingMessage(animated: false)
@@ -230,14 +233,17 @@ extension ChatViewController: OutgoingMessageProtocol {
                 print("initial")
                 break
             case .update(_, let deletions, let insertions, let modifications):
-                print("update")
+                print("chat update")
                 if insertions.count > 0 {
                     let insertMessage = self!.resultRealmMessages[insertions[0]]
                     let incomingMessage = IncomingMessage(collectionView_: collectionView)
                     let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
                     self!.arrJSQMessages.append(messageJSQ)
                     self!.arrRealmMessages.append(insertMessage)
-                    self!.finishReceivingMessage(animated: false)                    
+                    self!.finishReceivingMessage(animated: false)
+                    realm.beginWrite()
+                    insertMessage.unread_count = 0
+                    try! realm.commitWrite()                    
                 }
                 break
             case .error:
@@ -406,7 +412,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         //let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
         //imageData = UIImageJPEGRepresentation(snapImage, factor)
         //sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
-        sendMeaages_v2(type: "[Video]", text: "[\"\(duration)\"]", media: video)
+        sendMeaages_v2(type: "[Video]", text: "\(duration)", media: video)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

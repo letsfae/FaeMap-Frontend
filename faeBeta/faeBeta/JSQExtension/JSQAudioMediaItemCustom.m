@@ -232,7 +232,7 @@
 
 - (UIView *)mediaView
 {
-    if (self.audioData && self.cachedMediaView == nil) {
+    //if (self.audioData && self.cachedMediaView == nil) {
         if (self.audioData) {
             self.audioPlayer = [[AVAudioPlayer alloc] initWithData:self.audioData error:nil];
             self.audioPlayer.delegate = self;
@@ -316,7 +316,7 @@
 
         [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:playView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         self.cachedMediaView = playView;
-    }
+    //}
 
     return self.cachedMediaView;
 }

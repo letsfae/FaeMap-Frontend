@@ -106,7 +106,7 @@ class RecentTableViewCell: UITableViewCell {
         lblLastMessage = UILabel()
         lblLastMessage.text = ""
         lblLastMessage.textAlignment = .left
-        lblLastMessage.textColor = UIColor._898989()
+        lblLastMessage.textColor = UIColor._146146146()
         lblLastMessage.lineBreakMode = NSLineBreakMode.byTruncatingTail
         lblLastMessage.numberOfLines = 2
         
@@ -176,7 +176,7 @@ class RecentTableViewCell: UITableViewCell {
         if latest.unread_count > 0 {
             lblCounter.isHidden = false
             lblCounter.text = latest.unread_count > 99 ? "•••" : "\(latest.unread_count)"
-            if lblCounter.text?.characters.count >= 2 {
+            if lblCounter.text?.count >= 2 {
                 uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
             } else {
@@ -187,11 +187,12 @@ class RecentTableViewCell: UITableViewCell {
             lblCounter.isHidden = true
         }
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
-        let date = dateFormatter.date(from: latest.created_at)
+        //let dateFormatter = DateFormatter()
+        //dateFormatter.calendar = Calendar(identifier: .gregorian)
+        //dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        //dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
+        //let date = dateFormatter.date(from: latest.created_at)
+        let date = dateFormatter().date(from: latest.created_at)
         let seconds = Date().timeIntervalSince(date!)
         lblDate.text = TimeElipsed(seconds, lastMessageTime: date!)
         lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
@@ -242,13 +243,13 @@ class RecentTableViewCell: UITableViewCell {
     
     // MARK: helper
     private func TimeElipsed(_ seconds: TimeInterval, lastMessageTime: Date) -> String {
-        let dayFormatter = dateFormatter()
+        let dayFormatter = DateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
-        let minFormatter = dateFormatter()
+        let minFormatter = DateFormatter()
         minFormatter.timeStyle = .short
-        let weekdayFormatter = dateFormatter()
+        let weekdayFormatter = DateFormatter()
         weekdayFormatter.dateFormat = "EEEE"
-        let realDateFormatter = dateFormatter()
+        let realDateFormatter = DateFormatter()
         realDateFormatter.dateFormat = "MM/dd/yy"
         
         let elipsed : String?

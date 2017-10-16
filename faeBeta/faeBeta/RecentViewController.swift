@@ -357,7 +357,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 tableview.reloadData()
                 break
             case .update(_, let deletions, let insertions, let modifications):
-                print("update")
+                print("recent update")
                 UIView.setAnimationsEnabled(false)
                 tableview.beginUpdates()
                 tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)

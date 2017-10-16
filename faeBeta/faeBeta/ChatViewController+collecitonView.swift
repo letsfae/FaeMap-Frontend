@@ -12,6 +12,7 @@ import IDMPhotoBrowser
 import Photos
 import AVKit
 import AVFoundation
+import SwiftyJSON
 
 extension ChatViewController {
     // MARK: - collection view delegate
@@ -68,6 +69,12 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == arrRealmMessages.count - 1 {
+            let message = arrRealmMessages[indexPath.row]
+            if message.sender?.id != "\(Key.shared.user_id)" || message.type != "[Heart]" {
+                boolJustSentHeart = false
+            }
+        }
         /*if collectionView == self.collectionView && indexPath.row == arrJSQMessages.count - 1 {
             clearRecentCounter(strChatId)
             let object = arrDictMessages[indexPath.row]
@@ -96,10 +103,10 @@ extension ChatViewController {
     //this delegate is used to tell which bubble image should be used on current message
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         
-        let data = arrJSQMessages[indexPath.row]
+        let message = arrJSQMessages[indexPath.row]
         
-        if data.senderId == "\(Key.shared.user_id)" {
-            if data.isMediaMessage {
+        if message.senderId == "\(Key.shared.user_id)" {
+            if message.isMediaMessage {
                 outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleRed())
             }
             return outgoingBubble
@@ -110,21 +117,30 @@ extension ChatViewController {
     
     //this is used to edit top label of every cell
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
-        /*let object = arrDictMessages[indexPath.row]
-        if object["hasTimeStamp"] as! Bool {
-            let message = arrJSQMessages[indexPath.item]
+        let message = arrJSQMessages[indexPath.row]
+        if indexPath.row == 0 {
             return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
-        }*/
+        } else {
+            let prevMessage = arrJSQMessages[indexPath.row - 1]
+            if message.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
+                return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
+            }
+        }
         return nil
         
     }
     
     //this is to modify the label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
-        /*let object = arrDictMessages[indexPath.row]
-        if object["hasTimeStamp"] as! Bool  {
+        let message = arrJSQMessages[indexPath.row]
+        if indexPath.row == 0 {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
-        }*/
+        } else {
+            let prevMessage = arrJSQMessages[indexPath.row - 1]
+            if message.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
+                return kJSQMessagesCollectionViewCellLabelHeightDefault
+            }
+        }
         return 0.0
     }
     
@@ -158,6 +174,37 @@ extension ChatViewController {
     //taped bubble
     // function when user tap the bubble, like image, location
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
+        closeToolbarContentView()
+        let message = arrRealmMessages[indexPath.row]
+        if ["[Picture]", "[Gif]"].contains(message.type) {
+            let photo = IDMPhoto.photos(withImages: [UIImage(data: message.media! as Data)!])
+            let browser = IDMPhotoBrowser(photos: photo)
+            present(browser!, animated: true, completion: nil)
+        }
+        if message.type == "[Video]" {
+            let messageJSQ = arrJSQMessages[indexPath.row]
+            if let mediaItem = messageJSQ.media as? JSQVideoMediaItemCustom {
+                if let videoURL = mediaItem.fileURL {
+                    let player = AVPlayer(url: videoURL)
+                    let playerController = AVPlayerViewController()
+                    playerController.player = player
+                    boolGoToFullContent = true
+                    present(playerController, animated: true) {
+                        player.play()
+                    }
+                }
+            }
+        }
+        if message.type == "[Location]" {
+            let strLocDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
+            let vcLocDetail = LocDetailViewController()
+            vcLocDetail.coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
+            // TODO: capital first letter
+            vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue
+            vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
+            navigationController?.pushViewController(vcLocDetail, animated: true)
+        }
         
         /*closeToolbarContentView()
         
@@ -224,7 +271,12 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        var returnValue = false
+        let message = arrRealmMessages[indexPath.row]
+        if ["[Picture]", "[Sticker]", "text"].contains(message.type) {
+            selectedIndexPathForMenu = indexPath
+            return true
+        }
+        return false
         
         /*let object = arrDictMessages[indexPath.row]
         
@@ -232,7 +284,9 @@ extension ChatViewController {
             returnValue = true
         }
         self.selectedIndexPathForMenu = indexPath;*/
-        return returnValue
     }
 
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
+        print(indexPath.row)
+    }
 }

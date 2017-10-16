@@ -107,7 +107,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.backgroundColor = UIColor._241241241()
         senderId = "\(Key.shared.user_id)"
         //senderDisplayName = realmWithUser!.display_name
-        senderDisplayName = "[]"
+        
         /*let realm = try! Realm()
         let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
         notificationToken = messages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
@@ -123,9 +123,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }*/
         let realm = try! Realm()
         for user_id in arrUserIDs {
-            let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
+            let user = realm.filterUser("\(Key.shared.user_id)", id: "\(user_id)")! //objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
             arrRealmUsers.append(user)
         }
+        senderDisplayName = arrRealmUsers[1].display_name
         setAvatar()
         loadMessagesFromRealm()
         navigationBarSet()
@@ -182,7 +183,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        removeObservers()
+        //removeObservers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -203,7 +204,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)        
-        //uiviewNavBar.lblTitle.text = realmWithUser!.display_name
+        uiviewNavBar.lblTitle.text = arrRealmUsers[1].display_name
     }
     
     func loadInputBarComponent() {
@@ -304,7 +305,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
-        inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
+        //inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -347,17 +348,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //scrollToBottom(false)
     }
     
-    func showCamera() {
-        view.endEditing(true)
-        uiviewLocationExtend.isHidden = true
-        boolGoToFullContent = true
-        UIView.animate(withDuration: 0.3, animations: {
-            self.closeToolbarContentView()
-        }, completion: nil)
-        let camera = Camera(delegate_: self)
-        camera.presentPhotoCamera(self, canEdit: false)
-    }
-    
     func showStikcer() {
         view.endEditing(true)
         resetToolbarButtonIcon()
@@ -383,6 +373,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewLocationExtend.isHidden = true
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
+    }
+    
+    func showCamera() {
+        view.endEditing(true)
+        uiviewLocationExtend.isHidden = true
+        boolGoToFullContent = true
+        UIView.animate(withDuration: 0.3, animations: {
+            self.closeToolbarContentView()
+        }, completion: nil)
+        let camera = Camera(delegate_: self)
+        camera.presentPhotoCamera(self, canEdit: false)
     }
     
     func showRecord() {
@@ -896,7 +897,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
         btnLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
-        btnSend.isEnabled = !uiviewLocationExtend.isHidden
+        btnSend.isEnabled = !uiviewLocationExtend.isHidden || inputToolbar.contentView.textView.text.count > 0
     }
     
     // allow adding timestamp to message (used in SendLoadMessages)

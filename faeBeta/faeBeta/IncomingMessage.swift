@@ -31,7 +31,8 @@ class IncomingMessage {
         var message: JSQMessage!
         senderName = (reamlMessage.sender?.display_name)!
         senderId = (reamlMessage.sender?.id)!
-        createdAt = dateFormatter().date(from: reamlMessage.created_at)!
+        //createdAt = dateFormatter().date(from: reamlMessage.created_at)!
+        createdAt = RealmChat.dateConverter(str: reamlMessage.created_at)
         switch reamlMessage.type {
         case "text":
             message = textJSQMessage(reamlMessage)
@@ -85,44 +86,27 @@ class IncomingMessage {
     }
     
     fileprivate func videoJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let strLocDetail = reamlMessage.text.replacingOccurrences(of: "\\", with: "")
-        let data = strLocDetail.data(using: .utf8)
-        let jsonVideo = JSON(data: data!)
-        let boolLocalized: Bool = jsonVideo.count == 2
-        var fileURL = ""
-        let realm = try! Realm()
-        if !boolLocalized {
-            let documentPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            fileURL = documentPath + "/" + reamlMessage.primary_key + ".mov"
+        let tempPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+        let fileURL = tempPath + "/" + reamlMessage.primary_key + ".mov"
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: fileURL) {
             do {
                 try reamlMessage.media?.write(to: URL(fileURLWithPath: fileURL), options: [.atomic])
-                realm.beginWrite()
-                reamlMessage.text = "[\"\(jsonVideo[0].stringValue)\", \"\(fileURL)\"]"
             } catch {
                 // fail to write to document folder
                 // local disk is full
             }
-        } else {
-            fileURL = jsonVideo[1].stringValue
         }
         let asset = AVURLAsset(url: URL(fileURLWithPath: fileURL))
-        let duration = jsonVideo[0].intValue
-        //var time = asset.duration
-        //time.value = 0
+        let duration = reamlMessage.text
         var snapImage = UIImage()
-        if !boolLocalized {
-            do {
-                let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: CMTime(seconds: 0.0, preferredTimescale: 1), actualTime: nil)
-                snapImage = UIImage(cgImage: imgRef)
-                reamlMessage.media = RealmChat.compressImageToData(snapImage)! as NSData
-                try! realm.commitWrite()
-            } catch {
-                // fail to get snap image
-            }
-        } else {
-            snapImage = UIImage(data: reamlMessage.media! as Data)!
+        do {
+            let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: CMTime(seconds: 0.0, preferredTimescale: 1), actualTime: nil)
+            snapImage = UIImage(cgImage: imgRef)
+        } catch {
+            // fail to get snap image
         }
-        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(duration), isReadyToPlay: true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(duration)!, isReadyToPlay: true)
          mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
@@ -142,9 +126,10 @@ class IncomingMessage {
             controlPadding: 5,
             audioCategory: "AVAudioSessionCategoryPlayback",
             audioCategoryOptions: options)
-        let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes: attribute)
+        //let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes: attribute)
         
-        mediaItem.audioData = reamlMessage.media! as Data
+        //mediaItem.audioData = reamlMessage.media! as Data
+        let mediaItem = JSQAudioMediaItemCustom(data: reamlMessage.media! as Data, audioViewAttributes: attribute)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     

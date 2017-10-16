@@ -16,6 +16,7 @@ class FaeChat {
     
     var token: NotificationToken? = nil
     var notificationRunLoop: CFRunLoop? = nil
+    var intLastSentIndex: Int = -1
     
     func updateFriendsList() {
         let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", "", true, "", Key.shared.gender])
@@ -62,9 +63,10 @@ class FaeChat {
                         case .update(_, let deletions, let insertions, let modifications):
                             //print("update")
                             for insert in insertions {
-                                if messages[insert].sender?.id != String(Key.shared.user_id) {
+                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex {
                                     break
                                 } else {
+                                    self?.intLastSentIndex = insert
                                     self?.sendNewMessageToServer(messages[insert])
                                 }
                             }
@@ -128,7 +130,7 @@ class FaeChat {
                     let chat_id = dictItem["chat_id"] as! Int
                     var unread_count = dictItem["unread_count"] as! Int
                     let callGroup = DispatchGroup()
-                    while unread_count > 0 {
+                    //while unread_count > 0 {
                         callGroup.enter()
                         getFromURL("chats_v2/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
                             if let unreadMessages = result as? NSArray {
@@ -143,7 +145,7 @@ class FaeChat {
                                 //print("no more new message")
                             }
                         }
-                    }
+                    //}
                     callGroup.notify(queue: .main) {
                         print("finish reading")
                         postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
