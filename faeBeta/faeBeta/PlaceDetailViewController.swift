@@ -205,6 +205,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     fileprivate func loadAddtoCollection() {
         uiviewAddCollection = AddPlaceToCollectionView()
         uiviewAddCollection.delegate = self
+        uiviewAddCollection.tableMode = .place
         view.addSubview(uiviewAddCollection)
     }
     
@@ -288,6 +289,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
+        print("cancelAddPlace")
         hideAddCollectionView()
     }
     
