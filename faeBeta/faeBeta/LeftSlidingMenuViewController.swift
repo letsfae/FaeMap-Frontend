@@ -25,16 +25,15 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     weak var delegate: LeftSlidingMenuDelegate?
     
-    var uiViewLeftWindow: UIView!
+    var uiviewLeftWindow: UIView!
     var btnBackground: UIButton!
-    var imageLeftSlideWindowUp: UIImageView!
-    var imageLeftSlideWindowMiddle: UIImageView!
-    var imageAvatar: UIImageView!
-    var buttonImageOverlay: UIButton!
-    var label: UILabel!
-    var tableLeftSlideWindow: UITableView!
-    var backgroundColorViewTop: UIView!
-    var backgroundColorViewDown: UIView!
+    var imgLeftSlideUp: UIImageView!
+    var imgLeftSlideMiddle: UIImageView!
+    var imgAvatar: UIImageView!
+    var lblNickName: UILabel!
+    var tblLeftSlide: UITableView!
+    var uiviewBackTop: UIView!
+    var uiviewBackBottom: UIView!
     
     // For pan gesture var
     var sizeFrom: CGFloat = 0
@@ -44,6 +43,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     var percent: Double = 0
     var displayName = ""
     // End of pan gesture var
+    
+    var activityIndicator: UIActivityIndicatorView!
     
     static var boolMapBoardIsOn = false
     
@@ -66,22 +67,29 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             self.loadLeftWindow()
             let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
             self.view.addGestureRecognizer(draggingGesture)
+            self.loadUserInfo()
+            self.loadActivityIndicator()
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadUserInfo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIView.animate(withDuration: 0.3, animations: {
             self.btnBackground.alpha = 0.7
-            self.tableLeftSlideWindow.frame.origin.x = 0
-            self.backgroundColorViewTop.frame.origin.x = 0
-            self.backgroundColorViewDown.frame.origin.x = 0
+            self.tblLeftSlide.frame.origin.x = 0
+            self.uiviewBackTop.frame.origin.x = 0
+            self.uiviewBackBottom.frame.origin.x = 0
         }, completion: nil)
+    }
+    
+    func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     func loadLeftWindow() {
@@ -91,73 +99,67 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         view.addSubview(btnBackground)
         btnBackground.alpha = 0
         
-        backgroundColorViewTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight / 2))
-        backgroundColorViewTop.backgroundColor = UIColor._2499090()
-        view.addSubview(backgroundColorViewTop)
-        backgroundColorViewTop.center.x -= 290
+        uiviewBackTop = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight / 2))
+        uiviewBackTop.backgroundColor = UIColor._2499090()
+        view.addSubview(uiviewBackTop)
+        uiviewBackTop.center.x -= 290
         
-        backgroundColorViewDown = UIView(frame: CGRect(x: 0, y: screenHeight / 2, width: 290, height: screenHeight / 2))
-        backgroundColorViewDown.backgroundColor = UIColor.white
-        view.addSubview(backgroundColorViewDown)
-        backgroundColorViewDown.center.x -= 290
+        uiviewBackBottom = UIView(frame: CGRect(x: 0, y: screenHeight / 2, width: 290, height: screenHeight / 2))
+        uiviewBackBottom.backgroundColor = UIColor.white
+        view.addSubview(uiviewBackBottom)
+        uiviewBackBottom.center.x -= 290
         
-        uiViewLeftWindow = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: 241.5))
-        uiViewLeftWindow.backgroundColor = UIColor.white
+        uiviewLeftWindow = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: 241.5))
+        uiviewLeftWindow.backgroundColor = UIColor.white
         
-        imageLeftSlideWindowUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
-        imageLeftSlideWindowUp.image = #imageLiteral(resourceName: "leftWindowbackground")
-        uiViewLeftWindow.addSubview(imageLeftSlideWindowUp)
+        imgLeftSlideUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
+        imgLeftSlideUp.image = #imageLiteral(resourceName: "leftWindowbackground")
+        uiviewLeftWindow.addSubview(imgLeftSlideUp)
         
-        imageAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
-        uiViewLeftWindow.addSubview(imageAvatar)
-        imageAvatar.center.x = 145
-        imageAvatar.layer.cornerRadius = 45.5
-        imageAvatar.layer.borderColor = UIColor.white.cgColor
-        imageAvatar.layer.borderWidth = 5
-        imageAvatar.image = Key.shared.gender == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
-        imageAvatar.contentMode = .scaleAspectFill
-        imageAvatar.layer.masksToBounds = true
-        buttonImageOverlay = UIButton(frame: CGRect(x: 100, y: 40, width: 91, height: 91))
-        uiViewLeftWindow.addSubview(buttonImageOverlay)
-        buttonImageOverlay.center.x = 145
-        buttonImageOverlay.layer.cornerRadius = 45.5 * screenWidthFactor
-        buttonImageOverlay.addTarget(self, action: #selector(actionJumpToMainPage(_:)), for: .touchUpInside)
+        imgAvatar = UIImageView(frame: CGRect(x: 105, y: 40, width: 91, height: 91))
+        uiviewLeftWindow.addSubview(imgAvatar)
+        imgAvatar.center.x = 145
+        imgAvatar.layer.cornerRadius = 45.5
+        imgAvatar.layer.borderColor = UIColor.white.cgColor
+        imgAvatar.layer.borderWidth = 5
+        imgAvatar.image = Key.shared.gender == "male" ? #imageLiteral(resourceName: "defaultMen") : #imageLiteral(resourceName: "defaultWomen")
+        imgAvatar.contentMode = .scaleAspectFill
+        imgAvatar.layer.masksToBounds = true
+        imgAvatar.isUserInteractionEnabled = true
+        let imgTapGes = UITapGestureRecognizer(target: self, action: #selector(actionJumpToMainPage))
+        imgAvatar.addGestureRecognizer(imgTapGes)
         
-        label = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
-        label.text = displayName
-        label.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        label.textColor = UIColor.white
-        label.center.x = 145
-        label.textAlignment = .center
-        uiViewLeftWindow.addSubview(label)
+        lblNickName = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
+        lblNickName.text = displayName
+        lblNickName.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        lblNickName.textColor = UIColor.white
+        lblNickName.center.x = 145
+        lblNickName.textAlignment = .center
+        uiviewLeftWindow.addSubview(lblNickName)
         
-        imageLeftSlideWindowMiddle = UIImageView(frame: CGRect(x: 0, y: 152, width: 290, height: 108))
-        imageLeftSlideWindowMiddle.image = #imageLiteral(resourceName: "leftMenuCloud")
-        uiViewLeftWindow.addSubview(imageLeftSlideWindowMiddle)
+        imgLeftSlideMiddle = UIImageView(frame: CGRect(x: 0, y: 152, width: 290, height: 108))
+        imgLeftSlideMiddle.image = #imageLiteral(resourceName: "leftMenuCloud")
+        uiviewLeftWindow.addSubview(imgLeftSlideMiddle)
         
-        tableLeftSlideWindow = UITableView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight))
-        tableLeftSlideWindow.delegate = self
-        tableLeftSlideWindow.dataSource = self
-        tableLeftSlideWindow.register(LeftSlideWindowCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
-        tableLeftSlideWindow.separatorStyle = .none
-        tableLeftSlideWindow.tableHeaderView = uiViewLeftWindow
-        view.addSubview(tableLeftSlideWindow)
-        tableLeftSlideWindow.center.x -= 290
-        tableLeftSlideWindow.backgroundColor = UIColor.clear
-        tableLeftSlideWindow.delaysContentTouches = false
-        tableLeftSlideWindow.showsVerticalScrollIndicator = false
+        tblLeftSlide = UITableView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight))
+        tblLeftSlide.delegate = self
+        tblLeftSlide.dataSource = self
+        tblLeftSlide.register(LeftSlideWindowCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
+        tblLeftSlide.separatorStyle = .none
+        tblLeftSlide.tableHeaderView = uiviewLeftWindow
+        view.addSubview(tblLeftSlide)
+        tblLeftSlide.center.x -= 290
+        tblLeftSlide.backgroundColor = UIColor.clear
+        tblLeftSlide.delaysContentTouches = false
+        tblLeftSlide.showsVerticalScrollIndicator = false
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableLeftSlideWindow.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
+        let cell = tblLeftSlide.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
         let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatars", "Settings"]
         //  "Activities",
-        if indexPath.row < 4 {
-            cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
-        } else {
-            cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row + 1)")
-        }
+        cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.lblMiddle.text = array[indexPath.row]
         cell.switchRight.tag = indexPath.row
         if indexPath.row < 2 {
@@ -178,7 +180,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         return 6 // 7
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableLeftSlideWindow.cellForRow(at: indexPath) as! LeftSlideWindowCell
+        let cell = tblLeftSlide.cellForRow(at: indexPath) as! LeftSlideWindowCell
         // Go Invisible
         if indexPath.row == 0 {
             tableSelections = .mapBoard
@@ -212,7 +214,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             let location = pan.location(in: view)
             space = location.x - 290
             end = location.x
-            if tableLeftSlideWindow.frame.origin.x == 0 {
+            if tblLeftSlide.frame.origin.x == 0 {
                 sizeFrom = 0
                 sizeTo = -290
             }
@@ -225,9 +227,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             }
             if percent > 0.1 {
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.tableLeftSlideWindow.frame.origin.x = self.sizeTo
-                    self.backgroundColorViewTop.frame.origin.x = self.sizeTo
-                    self.backgroundColorViewDown.frame.origin.x = self.sizeTo
+                    self.tblLeftSlide.frame.origin.x = self.sizeTo
+                    self.uiviewBackTop.frame.origin.x = self.sizeTo
+                    self.uiviewBackBottom.frame.origin.x = self.sizeTo
                     self.btnBackground.alpha = 0
                 }, completion: { (_: Bool) in
                     self.dismiss(animated: false, completion: {
@@ -236,18 +238,18 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 })
             } else {
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.tableLeftSlideWindow.frame.origin.x = self.sizeFrom
-                    self.backgroundColorViewTop.frame.origin.x = self.sizeFrom
-                    self.backgroundColorViewDown.frame.origin.x = self.sizeFrom
+                    self.tblLeftSlide.frame.origin.x = self.sizeFrom
+                    self.uiviewBackTop.frame.origin.x = self.sizeFrom
+                    self.uiviewBackBottom.frame.origin.x = self.sizeFrom
                     self.btnBackground.alpha = 0.7
                 })
             }
         } else {
             let location = pan.location(in: view)
             if location.x <= end {
-                tableLeftSlideWindow.frame.origin.x = location.x - (290 + space)
-                backgroundColorViewTop.frame.origin.x = location.x - (290 + space)
-                backgroundColorViewDown.frame.origin.x = location.x - (290 + space)
+                tblLeftSlide.frame.origin.x = location.x - (290 + space)
+                uiviewBackTop.frame.origin.x = location.x - (290 + space)
+                uiviewBackBottom.frame.origin.x = location.x - (290 + space)
                 btnBackground.alpha = (location.x - space) / 290 * 0.7
                 percent = Double((end - location.x) / 290)
             }
@@ -257,7 +259,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     func loadUserInfo() {
         General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
-            self.imageAvatar.image = avatarImage
+            self.imgAvatar.image = avatarImage
         })
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
@@ -265,7 +267,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 guard status / 100 == 2 else { return }
                 let nickNameInfo = JSON(message!)
                 DispatchQueue.main.async {
-                    self.label.text = nickNameInfo["nick_name"].stringValue
+                    self.lblNickName.text = nickNameInfo["nick_name"].stringValue
                 }
             }
         }
@@ -274,9 +276,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func actionCloseMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.btnBackground.alpha = 0
-            self.tableLeftSlideWindow.center.x -= 290
-            self.backgroundColorViewTop.center.x -= 290
-            self.backgroundColorViewDown.center.x -= 290
+            self.tblLeftSlide.center.x -= 290
+            self.uiviewBackTop.center.x -= 290
+            self.uiviewBackBottom.center.x -= 290
         }) { _ in
             self.dismiss(animated: false, completion: {
                 self.delegate?.reloadSelfPosition()
@@ -321,9 +323,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func actionJumpToMainPage(_ sender: UIButton) {
-        tableSelections = .myFaeMainPage
-        actionCloseMenu(btnBackground)
+    func actionJumpToMainPage() {
+//        tableSelections = .myFaeMainPage
+//        actionCloseMenu(btnBackground)
+        addProfileAvatar()
     }
     
     func mapBoardSwitch(_ sender: UISwitch) {

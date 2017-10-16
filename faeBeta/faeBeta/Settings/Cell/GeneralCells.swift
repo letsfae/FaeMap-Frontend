@@ -50,6 +50,19 @@ class GeneralTitleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func actionSwitchFunc(_ sender: UISwitch) {
+        switch sender.tag {
+        case 101:
+            break
+        case 102:
+            break
+        case 103:
+            break
+        default:
+            break
+        }
+    }
+    
     fileprivate func loadContent() {
         lblName = FaeLabel(CGRect.zero, .left, .medium, 18, UIColor._898989())
         addSubview(lblName)
