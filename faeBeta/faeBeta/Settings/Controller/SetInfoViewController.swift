@@ -8,18 +8,42 @@
 
 import UIKit
 
-class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GeneralTitleCellDelegate {
     
     var tblInfo: UITableView!
     var uiviewNavBar: FaeNavBar!
     var arrTitle: [String] = ["Edit NameCard", "Hide NameCard Options", "Disable Gender", "Disable Age"]
     var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCad Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
+    var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
         loadNavBar()
         loadTableView()
+        loadActivityIndicator()
+    }
+    
+    // GeneralTitleCellDelegate
+    func startUpdating() {
+        activityIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+    
+    // GeneralTitleCellDelegate
+    func stopUpdating() {
+        activityIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+    
+    func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     func loadNavBar() {
@@ -42,7 +66,6 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         tblInfo.rowHeight = UITableViewAutomaticDimension
     }
     
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -50,13 +73,6 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
-    
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if indexPath.section == 0 {
-//            return 90
-//        }
-//        return 110
-//    }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let uiview = UIView()
@@ -73,13 +89,19 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.lblName.isHidden = false
         cell.lblDes.isHidden = false
         cell.setContraintsForDes()
+        cell.delegate = self
         if indexPath.section == 0 {
             cell.switchIcon.isHidden = true
             cell.imgView.isHidden = false
         }
         else {
             cell.switchIcon.isHidden = false
-            cell.switchIcon.tag = indexPath.row + 100
+            cell.switchIcon.tag = indexPath.section + 100
+            if indexPath.section == 2 {
+                cell.switchIcon.setOn(Key.shared.disableGender, animated: false)
+            } else if indexPath.section == 3 {
+                cell.switchIcon.setOn(Key.shared.disableAge, animated: false)
+            }
             cell.imgView.isHidden = true
         }
         cell.lblDes.text = arrDetail[indexPath.section]

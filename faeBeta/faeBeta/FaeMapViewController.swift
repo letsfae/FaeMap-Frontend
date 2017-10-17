@@ -216,7 +216,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapChat()
         renewSelfLocation()
         checkDisplayNameExisitency()
-        updateGenderAge()
         updateTimerForAllPins()
     }
     
@@ -305,6 +304,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func loadFirstLoginVC() {
+        updateGenderAge()
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)
