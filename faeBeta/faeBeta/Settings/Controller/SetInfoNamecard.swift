@@ -51,6 +51,7 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         uiviewNameCard.showFullNameCard()
         uiviewNameCard.frame.origin.y = 65 + 11
         uiviewNameCard.boolSmallSize = true
+        uiviewNameCard.userId = Key.shared.user_id
         view.addSubview(uiviewNameCard)
         
         uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, width: screenWidth, height: 5))
