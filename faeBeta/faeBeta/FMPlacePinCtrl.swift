@@ -32,8 +32,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
-        let vcCollectedList = CollectionsViewController()
-        navigationController?.pushViewController(vcCollectedList, animated: true)
+        handleLocInfoBarTap()
     }
     
     func loadPlaceListView() {
