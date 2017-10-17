@@ -41,7 +41,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var btnMyTalks: UIButton!
     var btnNavBarMenu: UIButton!
     var btnPeople: UIButton!
-    var btnPeopleLocDetail: UIButton!
+    var imgPeopleLocDetail: UIImageView!
     var btnPlaces: UIButton!
     var btnSocial: UIButton!
     var btnTalk: UIButton!
@@ -91,7 +91,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var arrAllPlaces = [PlacePin]()
     var imgIcon: UIImageView!
     var lblCurtLoc: UILabel!
-    var window: UIWindow?
+    var btnSearchLoc: UIButton!   // fake button to search location
     
     var imgPlaces1: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames1: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
@@ -177,6 +177,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
         uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
+        
+        // uiviewBubbleHint和tblMapBoard需要添加多个gesture，之后需修复此bug
+//        let rollup = UISwipeGestureRecognizer(target: self, action: #selector(rollUpPeopleLocPage(_:)))
+//        uiviewBubbleHint.addGestureRecognizer(rollup)
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
         boolLoadedTalkPage = true
@@ -330,17 +334,23 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewAllCom.backgroundColor = .white
         view.addSubview(uiviewAllCom)
         
+        btnSearchLoc = UIButton()
+        btnSearchLoc.tag = 0
+        uiviewAllCom.addSubview(btnSearchLoc)
+        btnSearchLoc.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
+        uiviewAllCom.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
+        uiviewAllCom.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
+        
         imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
         imgIconBeforeAllCom.contentMode = .center
         lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
         lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblAllCom.textColor = UIColor._107107107()
-        btnPeopleLocDetail = UIButton()
-        btnPeopleLocDetail.tag = 0
-        uiviewAllCom.addSubview(btnPeopleLocDetail)
-        uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: btnPeopleLocDetail)
-        uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: btnPeopleLocDetail)
-        btnPeopleLocDetail.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
+        imgPeopleLocDetail = UIImageView()
+        imgPeopleLocDetail.contentMode = .center
+        uiviewAllCom.addSubview(imgPeopleLocDetail)
+        uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
+        uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: imgPeopleLocDetail)
         
         imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
         lblAllCom.text = "Current Location"
@@ -374,15 +384,15 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             uiviewPlaceTab.isHidden = false
             tblMapBoard.tableHeaderView = uiviewPlaceHeader
             tblMapBoard.frame.size.height = screenHeight - 163
-            btnPeopleLocDetail.setImage(#imageLiteral(resourceName: "mb_rightArrow"), for: .normal)
-            btnPeopleLocDetail.tag = 0
+            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
+            btnSearchLoc.tag = 0
 //            switchPlaceTabPage()
         } else {
             uiviewPlaceTab.isHidden = true
             tblMapBoard.tableHeaderView = nil
             tblMapBoard.frame.size.height = screenHeight - 114
-            btnPeopleLocDetail.setImage(#imageLiteral(resourceName: "mb_curtLoc"), for: .normal)
-            btnPeopleLocDetail.tag = 1
+            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
+            btnSearchLoc.tag = 1
         }
         
         if tableMode == .talk {
@@ -435,6 +445,16 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         } else {
             hideDropDownMenu()
         }
+        
+        
+//        if !uiviewPeopleLocDetail.isHidden {
+//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+//                self.uiviewPeopleLocDetail.frame.origin.y = -299
+//            }, completion: { _ in
+//                self.uiviewPeopleLocDetail.isHidden = true
+//            })
+//            updateNearbyPeople()
+//        }
     }
     
     // function for hide the drop down menu when tap on table
