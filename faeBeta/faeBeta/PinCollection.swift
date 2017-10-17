@@ -48,7 +48,7 @@ struct CollectionList {
         let time = json["created_at"].stringValue
         let date = time.split(separator: " ")[0].split(separator: "-")
         colTime = date[1] + "/" + date[0]
-        let ids = json["pin_id"].arrayValue//.map({Int($0.stringValue)})
+        let ids = json["pin_id"].arrayValue //.map({Int($0.stringValue)})
         if ids.count != 0 {
             for id in ids {
                 pinIds.append(id["pin_id"].intValue)
@@ -70,8 +70,8 @@ struct SavedPin {
         pinType = json["type"].stringValue
         if pinType == "place" {
             pinName = json["pin_object"]["name"].stringValue
-            let addr1 = json["pin_object"]["address"].stringValue
-            let addr2 = json["pin_object"]["city"].stringValue + ", " + json["pin_object"]["state"].stringValue + ", " + json["pin_object"]["country"].stringValue
+            let addr1 = json["pin_object"]["location"]["address"].stringValue
+            let addr2 = json["pin_object"]["location"]["city"].stringValue + ", " + json["pin_object"]["location"]["state"].stringValue + ", " + json["pin_object"]["location"]["country"].stringValue
             pinAddr = addr1 + ", " + addr2
         } else {
             pinName = json["pin_object"]["geolocation"]["latitude"].stringValue
