@@ -92,6 +92,12 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         imgDownArrow.contentMode = .center
         addSubview(imgDownArrow)
         
+        
+        // draw fake button to hide map filter menu
+        btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 66))
+        btnHideMFMenu.addTarget(self, action: #selector(self.hide(_:)), for: .touchUpInside)
+        addSubview(btnHideMFMenu)
+        
         // draw two uiview of Map Options
         uiviewMapOpt = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 405))
         
@@ -114,11 +120,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         pageMapOptions.currentPageIndicatorTintColor = UIColor._2499090()
         pageMapOptions.addTarget(self, action: #selector(changePage(_:)), for: .valueChanged)
         addSubview(pageMapOptions)
-        
-        // draw fake button to hide map filter menu
-        btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 66))
-        btnHideMFMenu.addTarget(self, action: #selector(self.hide(_:)), for: .touchUpInside)
-        addSubview(btnHideMFMenu)
         
         loadView1()
         loadView2()

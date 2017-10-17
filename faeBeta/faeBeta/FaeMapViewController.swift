@@ -172,6 +172,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                     }
                     locationPin = nil
                 }
+                if uiviewAfterAdded.frame.origin.y != screenHeight {
+                    uiviewAfterAdded.hide()
+                }
             }
         }
     }
