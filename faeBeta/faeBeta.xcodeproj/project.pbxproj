@@ -696,6 +696,16 @@
 			name = Explore;
 			sourceTree = "<group>";
 		};
+		50500F8B1F967244009C51FB /* PinDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
+				B33F8A021F3EC4520033610D /* PlaceDetail */,
+				50E940821F79B37000269945 /* LocationDetail */,
+			);
+			name = PinDetail;
+			sourceTree = "<group>";
+		};
 		506D1FE01F2B1863004119EA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -955,8 +965,7 @@
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B33FB22C1F267C0500EC6655 /* Contacts */,
-				B33F8A021F3EC4520033610D /* PlaceDetail */,
-				50E940821F79B37000269945 /* LocationDetail */,
+				50500F8B1F967244009C51FB /* PinDetail */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				504CE4D01F67BF3400070284 /* Explore */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
@@ -1155,7 +1164,6 @@
 				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
-				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";

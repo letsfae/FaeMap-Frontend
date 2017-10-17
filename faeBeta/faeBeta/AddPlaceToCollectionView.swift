@@ -18,6 +18,8 @@ class AfterAddedToListView: UIView {
     
     weak var delegate: AfterAddedToListDelegate?
     var uiviewAfterAdded: UIView!
+    var pinIdInAction: Int = -1
+    var selectedCollection: PinCollection!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
@@ -63,7 +65,16 @@ class AfterAddedToListView: UIView {
     }
     
     func undoCollecting() {
-        delegate?.undoCollect()
+        guard let col = selectedCollection, pinIdInAction != -1 else { return }
+//        delegate?.undoCollect()
+        self.hide()
+        FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            joshprint("[undoCollecting] successfully undo saving")
+            self.selectedCollection = nil
+            self.pinIdInAction = -1
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideCollectedNoti"), object: nil)
+        }
     }
     
     func goToList() {
@@ -218,6 +229,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         joshprint(arrCollection[indexPath.row])
         let colInfo = arrCollection[indexPath.row]
+        uiviewAfterAdded.selectedCollection = colInfo
         FaeMap.shared.whereKey("content", value: "test_ys")
         FaeMap.shared.whereKey("geo_latitude", value: "\(locationPin.coordinate.latitude)")
         FaeMap.shared.whereKey("geo_longitude", value: "\(locationPin.coordinate.longitude)")
@@ -227,9 +239,9 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
             let idJSON = JSON(message!)
             let locationId = idJSON["location_id"].intValue
             joshprint(locationId)
+            self.uiviewAfterAdded.pinIdInAction = locationId
             FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
                 guard code / 100 == 2 else { return }
-//                guard result != nil else { return }
                 self.hide()
                 self.uiviewAfterAdded.show()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
