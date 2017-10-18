@@ -65,6 +65,9 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
         loadCollectionView()
         loadFooter()
         updateLocation()
+//        let line = UIView(frame: CGRect(x: 0, y: 169, width: screenWidth, height: 1))
+//        line.backgroundColor = .black
+//        view.addSubview(line)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +100,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     func loadMap() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 40))
+        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 48))
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isPitchEnabled = false

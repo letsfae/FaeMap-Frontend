@@ -11,7 +11,7 @@ import SwiftyJSON
 import CoreLocation
 
 class PlacePin: NSObject {
-     
+    
     let id: Int
     var name: String
     let coordinate: CLLocationCoordinate2D
@@ -56,14 +56,5 @@ class PlacePin: NSObject {
         class_2_icon_id = placeJSON["categories"]["class1_icon_id"].intValue
         address1 = placeJSON["location"]["address1"].stringValue
         address2 = placeJSON["location"]["address2"].stringValue
-    }
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        guard let rhs = object as? PlacePin else { return false }
-        return self.id == rhs.id
-    }
-    
-    static func ==(lhs: PlacePin, rhs: PlacePin) -> Bool {
-        return lhs.isEqual(rhs)
     }
 }
