@@ -184,11 +184,13 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                     self.btnFilterIcon.frame.origin.y = screenHeight + 10
                 }, completion: { _ in
                     self.btnCompass.boolLowPos = true
-                    self.btnCompass.transform = self.btnCompass.savedTransform
+//                    self.btnCompass.transform = self.btnCompass.savedTransform
+                    if self.btnCompass != nil { self.btnCompass.rotateCompass() }
                 })
             } else {
                 self.btnCompass.frame.origin.y = 664 * screenHeightFactor
-                self.btnCompass.transform = self.btnCompass.savedTransform
+//                self.btnCompass.transform = self.btnCompass.savedTransform
+                if self.btnCompass != nil { self.btnCompass.rotateCompass() }
                 self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = screenHeight + 10
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
@@ -205,7 +207,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                     self.btnFilterIcon.center.y = screenHeight - 25
                 }, completion: { _ in
                     self.btnCompass.boolLowPos = false
-                    self.btnCompass.transform = self.btnCompass.savedTransform
+//                    self.btnCompass.transform = self.btnCompass.savedTransform
+//                    self.mapView(self.faeMapView, regionDidChangeAnimated: false)
+                    if self.btnCompass != nil { self.btnCompass.rotateCompass() }
                 })
             } else {
                 self.btnCompass.frame.origin.y = 582 * screenHeightFactor
@@ -214,7 +218,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                 self.btnFilterIcon.center.y = screenHeight - 25
                 self.btnCompass.boolLowPos = false
-                self.btnCompass.transform = self.btnCompass.savedTransform
+//                self.btnCompass.transform = self.btnCompass.savedTransform
+//                self.mapView(self.faeMapView, regionDidChangeAnimated: false)
+                if self.btnCompass != nil { self.btnCompass.rotateCompass() }
             }
         }
     }

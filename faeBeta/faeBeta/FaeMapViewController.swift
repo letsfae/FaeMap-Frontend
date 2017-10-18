@@ -33,6 +33,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var faeUserPins = [FaePinAnnotation]()
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
+    var setPlacePins = Set<Int>()
     var arrPlaceData = [PlacePin]()
     
     // Search Bar
@@ -189,6 +190,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
     var fullyLoaded = false // indicate if all components are fully loaded
+    var boolNextUpdate = true
     
     // System Functions
     override func viewDidLoad() {
@@ -200,6 +202,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadMapView()
         loadButton()
+        view.bringSubview(toFront: uiviewFilterMenu)
         loadExploreBar()
         loadPlaceDetail()
         loadPlaceListView()

@@ -32,8 +32,18 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     }
     
     func actionFilterIcon(_ sender: UIButton) {
-        updateTimerForUserPin()
-        updateTimerForLoadRegionPlacePin()
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        placeClusterManager.removeAnnotations(faeUserPins) {
+            self.faeUserPins.removeAll(keepingCapacity: true)
+            self.updateTimerForUserPin()
+        }
+        placeClusterManager.removeAnnotations(faePlacePins) {
+            self.faePlacePins.removeAll(keepingCapacity: true)
+            self.setPlacePins.removeAll(keepingCapacity: true)
+            self.updateTimerForLoadRegionPlacePin()
+        }
     }
     
     // MapFilterMenuDelegate

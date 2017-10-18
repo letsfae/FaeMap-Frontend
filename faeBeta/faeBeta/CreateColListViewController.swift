@@ -25,7 +25,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var despRemainChars: Int!
     var textviewListName: UITextView!
     var textviewDesp: UITextView!
-    let placeholder = ["List Name", "Describe your list"]
+    let placeholder = ["List Name", "Describe your List"]
     var keyboardHeight: CGFloat = 0
     var txtListName: String = ""
     var txtListDesp: String = ""
