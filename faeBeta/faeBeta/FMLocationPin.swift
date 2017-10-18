@@ -68,6 +68,7 @@ extension FaeMapViewController {
 //            faeMapView.removeAnnotation(locationPin!)
             locationPin = nil
         }
+        uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()
         locAnnoView?.optionsReady = false
         locAnnoView?.optionsOpened = false
@@ -121,7 +122,7 @@ extension FaeMapViewController {
                 address_2 += a
             }
             if let p = first.postalCode {
-                address_2 += p
+                address_2 += " " + p
             }
             if let c = first.country {
                 if address_2 != "" {

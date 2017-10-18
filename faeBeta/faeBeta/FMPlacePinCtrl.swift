@@ -27,6 +27,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     // AfterAddedToListDelegate
     func undoCollect() {
         uiviewAfterAdded.hide()
+        uiviewCollectedList.show()
     }
     
     // AfterAddedToListDelegate

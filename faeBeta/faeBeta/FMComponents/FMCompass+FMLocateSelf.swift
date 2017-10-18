@@ -13,6 +13,8 @@ class FMCompass: UIButton {
     var mapView: MKMapView!
     var nameCard = FMNameCardView()
     var faeMapCtrler: FaeMapViewController?
+    var savedTransform: CGAffineTransform!
+    var boolLowPos = false
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 21.5, y: screenHeight - 153, width: 60, height: 60))
@@ -40,9 +42,16 @@ class FMCompass: UIButton {
     }
     
     func rotateCompass() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * -self.mapView.camera.heading) / 180.0)
-        })
+        if boolLowPos {
+            self.transform = CGAffineTransform.identity
+            self.frame.origin.y = 664 * screenHeightFactor
+        }
+        let angle = CGFloat(Double.pi * -self.mapView.camera.heading) / 180.0
+        let newTransform = CGAffineTransform.identity.rotated(by: angle)
+        self.transform = newTransform
+        UIView.animate(withDuration: 0.25) {
+            
+        }
     }
 }
 
