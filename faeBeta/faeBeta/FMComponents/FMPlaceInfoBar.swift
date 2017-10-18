@@ -332,7 +332,7 @@ class LocationView: UIView {
     private func loadContent() {
         layer.zPosition = 605
         
-        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410, height: 80))
+        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 80))
         imgBack.contentMode = .scaleAspectFit
         imgBack.image = #imageLiteral(resourceName: "location_bar_shadow")
         addSubview(imgBack)

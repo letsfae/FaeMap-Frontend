@@ -66,13 +66,13 @@ class AfterAddedToListView: UIView {
     
     func undoCollecting() {
         guard let col = selectedCollection, pinIdInAction != -1 else { return }
-//        delegate?.undoCollect()
         self.hide()
         FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
             guard status / 100 == 2 else { return }
             joshprint("[undoCollecting] successfully undo saving")
             self.selectedCollection = nil
             self.pinIdInAction = -1
+            self.delegate?.undoCollect()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "hideCollectedNoti"), object: nil)
         }
     }
@@ -111,6 +111,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var arrCollection = [PinCollection]()
     var tableMode: CollectionTableMode = .place
     var locationPin: FaePinAnnotation!
+    var timer: Timer?
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
@@ -230,6 +231,8 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         joshprint(arrCollection[indexPath.row])
         let colInfo = arrCollection[indexPath.row]
         uiviewAfterAdded.selectedCollection = colInfo
+        self.timer?.invalidate()
+        self.timer = nil
         FaeMap.shared.whereKey("content", value: "test_ys")
         FaeMap.shared.whereKey("geo_latitude", value: "\(locationPin.coordinate.latitude)")
         FaeMap.shared.whereKey("geo_longitude", value: "\(locationPin.coordinate.longitude)")
@@ -245,11 +248,16 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
                 self.hide()
                 self.uiviewAfterAdded.show()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.uiviewAfterAdded.hide()
-                }
+                self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//
+//                }
             })
         })
+    }
+    
+    func timerFunc() {
+        uiviewAfterAdded.hide()
     }
     
     func actionCancel(_ sender: UIButton) {
