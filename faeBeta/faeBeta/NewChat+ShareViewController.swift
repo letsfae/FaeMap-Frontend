@@ -155,8 +155,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             if let message = chatWithUser.message {
                 vcChat.strChatId = message.chat_id
                 startChat_v2(vcChat)
-            }
-            else {
+            } else {
                 postToURL("chats_v2", parameter: ["receiver_id": IDs[0] as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if statusCode / 100 == 2 {
                         if let resultDic = result as? NSDictionary {
