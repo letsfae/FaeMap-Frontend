@@ -27,57 +27,57 @@ class IncomingMessage {
         collectionView = collectionView_
     }
     
-    func createJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+    func createJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
         var message: JSQMessage!
-        senderName = (reamlMessage.sender?.display_name)!
-        senderId = (reamlMessage.sender?.id)!
-        //createdAt = dateFormatter().date(from: reamlMessage.created_at)!
-        createdAt = RealmChat.dateConverter(str: reamlMessage.created_at)
-        switch reamlMessage.type {
+        senderName = (realmMessage.sender?.display_name)!
+        senderId = (realmMessage.sender?.id)!
+        //createdAt = dateFormatter().date(from: realmMessage.created_at)!
+        createdAt = RealmChat.dateConverter(str: realmMessage.created_at)
+        switch realmMessage.type {
         case "text":
-            message = textJSQMessage(reamlMessage)
+            message = textJSQMessage(realmMessage)
             break
         case "[Picture]":
-            message = pictureJSQMessage(reamlMessage)
+            message = pictureJSQMessage(realmMessage)
             break
         case "[Video]":
-            message = videoJSQMessage(reamlMessage)
+            message = videoJSQMessage(realmMessage)
             break
         case "[Audio]":
-            message = audioJSQMessage(reamlMessage)
+            message = audioJSQMessage(realmMessage)
             break
         case "[Heart]":
-            message = stickerJSQMessage(reamlMessage)
+            message = stickerJSQMessage(realmMessage)
             break
         case "[Sticker]":
-            message = stickerJSQMessage(reamlMessage)
+            message = stickerJSQMessage(realmMessage)
             break
         case "[Gif]":
-            message = pictureJSQMessage(reamlMessage)
+            message = pictureJSQMessage(realmMessage)
             break
         case "[Location]":
-            message = locationJSQMessage(reamlMessage)
+            message = locationJSQMessage(realmMessage)
             break
         case "[Place]":
-            message = placeJSQMessage(reamlMessage)
+            message = placeJSQMessage(realmMessage)
             break
         case "[Collection]":
-            message = collectionJSQMessage(reamlMessage)
+            message = collectionJSQMessage(realmMessage)
             break
         default:
-            message = textJSQMessage(reamlMessage)
+            message = textJSQMessage(realmMessage)
             break
         }
         return message
     }
     
-    fileprivate func textJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let content = reamlMessage.text
+    fileprivate func textJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let content = realmMessage.text
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
     }
     
-    fileprivate func pictureJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let imgPic = UIImage(data: reamlMessage.media! as Data)
+    fileprivate func pictureJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let imgPic = UIImage(data: realmMessage.media! as Data)
         let mediaItem = JSQPhotoMediaItemCustom(image: imgPic)
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
@@ -85,20 +85,20 @@ class IncomingMessage {
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     
-    fileprivate func videoJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+    fileprivate func videoJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
         let tempPath = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-        let fileURL = tempPath + "/" + reamlMessage.primary_key + ".mov"
+        let fileURL = tempPath + "/" + realmMessage.primary_key + ".mov"
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: fileURL) {
             do {
-                try reamlMessage.media?.write(to: URL(fileURLWithPath: fileURL), options: [.atomic])
+                try realmMessage.media?.write(to: URL(fileURLWithPath: fileURL), options: [.atomic])
             } catch {
                 // fail to write to document folder
                 // local disk is full
             }
         }
         let asset = AVURLAsset(url: URL(fileURLWithPath: fileURL))
-        let duration = reamlMessage.text
+        let duration = realmMessage.text
         var snapImage = UIImage()
         do {
             let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: CMTime(seconds: 0.0, preferredTimescale: 1), actualTime: nil)
@@ -111,7 +111,7 @@ class IncomingMessage {
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     
-    fileprivate func audioJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
+    fileprivate func audioJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
         let isOutGoingMessage = senderId == "\(Key.shared.user_id)"
         let options: AVAudioSessionCategoryOptions = [AVAudioSessionCategoryOptions.duckOthers, AVAudioSessionCategoryOptions.defaultToSpeaker,AVAudioSessionCategoryOptions.allowBluetooth]
         let font = UIFont(name: "AvenirNext-DemiBold", size: 16)
@@ -128,48 +128,65 @@ class IncomingMessage {
             audioCategoryOptions: options)
         //let mediaItem = JSQAudioMediaItemCustom(audioViewAttributes: attribute)
         
-        //mediaItem.audioData = reamlMessage.media! as Data
-        let mediaItem = JSQAudioMediaItemCustom(data: reamlMessage.media! as Data, audioViewAttributes: attribute)
+        //mediaItem.audioData = realmMessage.media! as Data
+        let mediaItem = JSQAudioMediaItemCustom(data: realmMessage.media! as Data, audioViewAttributes: attribute)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     
-    fileprivate func stickerJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let imgSticker = UIImage(named: reamlMessage.text)
+    fileprivate func stickerJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let imgSticker = UIImage(named: realmMessage.text)
         let mediaItem = JSQStickerMediaItem(image: imgSticker)
-        if reamlMessage.type == "[Heart]" {
+        if realmMessage.type == "[Heart]" {
             mediaItem?.sizeCustomize = CGSize(width: 61, height: 50)
         }
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     
-    fileprivate func locationJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let strLocDetail = reamlMessage.text.replacingOccurrences(of: "\\", with: "")
+    fileprivate func locationJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
         var mediaItem: JSQLocationMediaItemCustom
         let data = strLocDetail.data(using: .utf8)
         let jsonLoc = JSON(data: data!)
         let clLoc = CLLocation(latitude: Double(jsonLoc["latitude"].stringValue)!, longitude: Double(jsonLoc["longitude"].stringValue)!)
-        let snapImage = UIImage(data: reamlMessage.media! as Data)
+        var snapImage: UIImage!
+        if let nsdata = realmMessage.media {
+            snapImage = UIImage(data: nsdata as Data)
+        } else {
+            snapImage = UIImage(named: "collection_locations")
+        }
         var comment = ""
         if let comm = jsonLoc["comment"].string {
             comment = comm
         }
         mediaItem = JSQLocationMediaItemCustom(location: clLoc, snapImage: snapImage, text: comment)
-        mediaItem.address1 = jsonLoc["address1"].stringValue
-        mediaItem.address2 = jsonLoc["address2"].stringValue
-        mediaItem.address3 = jsonLoc["address3"].stringValue
+        mediaItem.address1 = jsonLoc["address1"].stringValue.trimmingCharacters(in: .whitespaces)
+        mediaItem.address2 = jsonLoc["address2"].stringValue.trimmingCharacters(in: .whitespaces)
+        mediaItem.address3 = jsonLoc["address3"].stringValue.trimmingCharacters(in: .whitespaces)
         mediaItem.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
     
-    fileprivate func placeJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let content = reamlMessage.text
-        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    fileprivate func placeJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
+        let dataPlace = strPlaceDetail.data(using: .utf8)
+        let jsonPlace = JSON(data: dataPlace!)
+        let snapImage = UIImage(named: "food_1")
+        let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonPlace["id"].intValue, type: "place", snapImage: snapImage, text: jsonPlace["comment"].stringValue)
+        mediaItem?.title = jsonPlace["name"].stringValue
+        mediaItem?.subtitle = jsonPlace["address"].stringValue
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem!)
     }
     
-    fileprivate func collectionJSQMessage(_ reamlMessage: RealmMessage_v2) -> JSQMessage {
-        let content = reamlMessage.text
-        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, text: content)
+    fileprivate func collectionJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
+        let strCollectionDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
+        let dataCollection = strCollectionDetail.data(using: .utf8)
+        let jsonCollection = JSON(data: dataCollection!)
+        let snapImage = UIImage(named: "defaultPlaceIcon")
+        let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonCollection["id"].intValue, type: "collection", snapImage: snapImage, text: jsonCollection["comment"].stringValue)
+        mediaItem?.title = jsonCollection["name"].stringValue
+        mediaItem?.subtitle = jsonCollection["count"].stringValue + " items"
+        return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem!)
     }
     
     //MARK: - create messages
@@ -188,7 +205,7 @@ class IncomingMessage {
         }
         
         if type == "place" {
-            message = createPlaceMessage(dictionary)
+            //message = createPlaceMessage(dictionary)
         }
         
         if type == "picture" {
@@ -291,7 +308,7 @@ class IncomingMessage {
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
     }
     
-    private func createPlaceMessage(_ item : NSDictionary) -> JSQMessage {
+    /*private func createPlaceMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
         let userId = item["senderId"] as? String
         let date = dateFormatter().date(from: (item["date"] as? String)!)
@@ -306,11 +323,11 @@ class IncomingMessage {
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(userId!)
         
         self.snapShotFromData(item) { (image) in
-            mediaItem?.cachedPlaceSnapshotImage = image
+            mediaItem?.cachedSnapshotImage = image
         }
         
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
-    }
+    }*/
     
     private func createPictureMessage(_ item : NSDictionary) -> JSQMessage {
         let name = item["senderName"] as? String
@@ -425,9 +442,9 @@ class IncomingMessage {
     }
     
     //MARK: - abstract m	edia from data
-    fileprivate func imageFromData_v2(_ reamlMessage: RealmMessage_v2, result: (_ image : UIImage?) -> Void) {
+    fileprivate func imageFromData_v2(_ realmMessage: RealmMessage_v2, result: (_ image : UIImage?) -> Void) {
         var image : UIImage?
-        if let decodedData = reamlMessage.media {
+        if let decodedData = realmMessage.media {
             image = UIImage(data: decodedData as Data)
             result(image)
         }

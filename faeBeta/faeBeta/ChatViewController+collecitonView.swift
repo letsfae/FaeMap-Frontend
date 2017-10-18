@@ -205,6 +205,30 @@ extension ChatViewController {
             vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
             navigationController?.pushViewController(vcLocDetail, animated: true)
         }
+        if message.type == "[Place]" {
+            let strPlaceDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let dataPlace = strPlaceDetail.data(using: .utf8)
+            let jsonPlace = JSON(data: dataPlace!)
+            FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    guard let placeInfo = message else { return }
+                    let jsonPlace = JSON(placeInfo)
+                    let vcPlaceDetail = PlaceDetailViewController()
+                    vcPlaceDetail.place = PlacePin(json: jsonPlace)
+                    self.navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                }
+            }
+        }
+        if message.type == "[Collection]" {
+            let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let dataCollection = strCollectionDetail.data(using: .utf8)
+            let jsonCollection = JSON(data: dataCollection!)
+            let vcCollection = CollectionsListDetailViewController()
+            vcCollection.enterMode = .place
+            vcCollection.boolFromChat = true
+            vcCollection.colId = jsonCollection["id"].intValue
+            navigationController?.pushViewController(vcCollection, animated: true)
+        }
         
         /*closeToolbarContentView()
         
