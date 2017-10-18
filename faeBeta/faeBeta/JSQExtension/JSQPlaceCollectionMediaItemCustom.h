@@ -15,24 +15,24 @@
  *  You may wish to subclass `JSQLocationMediaItem` to provide additional functionality or behavior.
  */
 //@interface JSQLocationMediaItemCustom : JSQMediaItem <JSQMessageMediaData, MKAnnotation, NSCoding, NSCopying>
-@class PlacePin;
 
-@interface JSQPlaceMediaItemCustom : JSQMediaItem <JSQMessageMediaData, NSCoding, NSCopying>
+@interface JSQPlaceCollectionMediaItemCustom : JSQMediaItem <JSQMessageMediaData, NSCoding, NSCopying>
 
-@property (copy, nonatomic) PlacePin *place;
+@property long itemID;
+@property (nonatomic, retain, readwrite) NSString *itemType;
 
 /**
  *  The coordinate of the location property.
  */
-@property (nonatomic, retain, readwrite) UIView *cachedPlaceImageView;
+@property (nonatomic, retain, readwrite) UIView *cachedSnapImageView;
 
-@property (nonatomic, retain, readwrite) UIImage *cachedPlaceSnapshotImage;
+@property (nonatomic, retain, readwrite) UIImage *cachedSnapshotImage;
 
-@property (nonatomic, retain, readwrite) NSString *placeName;
-@property (nonatomic, retain, readwrite) NSString *placeAddress;
+@property (nonatomic, retain, readwrite) NSString *title;
+@property (nonatomic, retain, readwrite) NSString *subtitle;
 
-@property (nonatomic, retain, readwrite) UILabel *lblPlaceName;
-@property (nonatomic, retain, readwrite) UILabel *lblPlaceAddress;
+@property (nonatomic, retain, readwrite) UILabel *lblTitle;
+@property (nonatomic, retain, readwrite) UILabel *lblSubtitle;
 
 @property (nonatomic, retain, readwrite) UILabel *textLabel;
 /**
@@ -48,7 +48,7 @@
  *  using `setLocation: withCompletionHandler:`
  */
 
-- (instancetype)initWithPlace:(PlacePin *)place snapImage: (UIImage *) snap text : (NSString *) comment;
+- (instancetype)initWithItemID:(long)itemID type:(NSString *)itemType snapImage:(UIImage *)snap text:(NSString *)comment;
 
 @end
 

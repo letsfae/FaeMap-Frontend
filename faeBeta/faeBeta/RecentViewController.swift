@@ -178,7 +178,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func navigationRightItemTapped() {
-        let vc = NewChatShareController(chatOrShare: "chat")
+        let vc = NewChatShareController(friendListMode: .chat)
         navigationController?.pushViewController(vc, animated: true)
     }
     

@@ -67,7 +67,7 @@ class FaeChat {
                                     break
                                 } else {
                                     self?.intLastSentIndex = insert
-                                    self?.sendNewMessageToServer(messages[insert])
+                                    //self?.sendNewMessageToServer(messages[insert])
                                 }
                             }
                             break

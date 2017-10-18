@@ -31,7 +31,7 @@ struct cellFriendData {
     }
 }
 
-class NewChatShareController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, CustomTextFieldDelegate, DeleteCellDelegate, UIScrollViewDelegate, UISearchBarDelegate  {
+class NewChatShareController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate, UISearchBarDelegate, CustomTextFieldDelegate, DeleteCellDelegate {
     
     var chatOrShare: String!
     
@@ -57,23 +57,23 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var boolIsClick: Bool = false
     var floatScrollViewOriginOffset: CGFloat = 0
     
-    var boolDeleting: Bool = false
-    var strLastTextField: String = ""
-    var boolReadyToChat: Bool = false
-    var boolReadyToDel: Bool = false
-    var boolToDelete: Bool = false
-    var intLastToDelPos: Int = 0
-    var strSearchWord: String = ""
-    let AT_SELECTED_AREA: Int = 0
-    let AT_BORDER_POSITION: Int = 1
-    let AT_UNSELECTED_AREA: Int = 2
+    enum FriendListMode {
+        case chat
+        case location
+        case collection
+        case place
+    }
+    var friendListMode: FriendListMode = .chat
+    var locationDetail: String = ""
+    var collectionDetail: CollectionList?
+    var placeDetail: PlacePin?
     
     let apiCalls = FaeContact()
     
-    var placeDetail: PlacePin?
+    //var placeDetail: PlacePin?
     
-    init(chatOrShare: String) {
-        self.chatOrShare = chatOrShare
+    init(friendListMode: FriendListMode) {
+        self.friendListMode = friendListMode
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -116,13 +116,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "canSendMessage"), for: .selected)
         uiviewNavBar.rightBtn.isEnabled = false
         uiviewNavBar.loadBtnConstraints()
-        if chatOrShare == "chat" {
+        if friendListMode == .chat {
             uiviewNavBar.lblTitle.text = "Start New Chat"
-        }
-        else if chatOrShare == "share" {
+        } else {
             uiviewNavBar.lblTitle.text = "Share"
         }
-        
         view.addSubview(uiviewNavBar)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(navigationRightItemTapped), for: .touchUpInside)
@@ -133,12 +131,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func navigationRightItemTapped() {
-        //if chatOrShare == "chat" {
+        if friendListMode == .chat {
             chatWithUsers(IDs: [arrFriends[arrIntSelected[0]].userID])
-        //}
-        //else if chatOrShare == "share" {
-            
-        //}
+        } else {
+            shareWithUsers()
+        }
         
     }
     
@@ -242,6 +239,68 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             arrViewControllers!.removeLast()
             arrViewControllers!.append(chatVC)
             navigationController?.setViewControllers(arrViewControllers!, animated: true)
+        }
+    }
+    
+    func shareWithUsers() {
+        navigationLeftItemTapped()
+        for index in arrIntSelected {
+            let realm = try! Realm()
+            let login_user_id = String(Key.shared.user_id)
+            let shareToUser = realm.filterUser(login_user_id, id: arrFriends[index].userID)!
+            var newIndex = 0
+            var chat_id = ""
+            if let message = shareToUser.message {
+                newIndex = message.index + 1
+                chat_id = message.chat_id
+                sendMessage(to: shareToUser, chat_id: chat_id, newIndex: newIndex)
+            } else {
+                postToURL("chats_v2", parameter: ["receiver_id": shareToUser.id as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                    if statusCode / 100 == 2 {
+                        if let resultDic = result as? NSDictionary {
+                            chat_id = (resultDic["chat_id"] as! NSNumber).stringValue
+                            self.sendMessage(to: shareToUser, chat_id: chat_id, newIndex: newIndex)
+                        }
+                    }
+                })
+            }
+        }
+    }
+    
+    func sendMessage(to shareToUser: RealmUser, chat_id: String, newIndex: Int) {
+        let login_user_id = String(Key.shared.user_id)
+        let realm = try! Realm()
+        let newMessage = RealmMessage_v2()
+        newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, newIndex)
+        let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
+        newMessage.sender = selfUser
+        newMessage.members.append(selfUser)
+        newMessage.members.append(shareToUser)
+        newMessage.created_at = RealmChat.dateConverter(date: Date())
+        switch friendListMode {
+        case .location:
+            newMessage.type = "[Location]"
+            let arrLocationInfo = locationDetail.split(separator: ",")
+            newMessage.text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
+            break
+        case .collection:
+            newMessage.type = "[Collection]"
+            newMessage.text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+            break
+        case .place:
+            newMessage.type = "[Place]"
+            newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
+            break
+        default:
+            break
+        }
+        let recentRealm = RealmRecent_v2()
+        recentRealm.created_at = newMessage.created_at
+        recentRealm.unread_count = 0
+        recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
+        try! realm.write {
+            realm.add(newMessage)
+            realm.add(recentRealm, update: true)
         }
     }
     
@@ -419,7 +478,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentCell = tableView.cellForRow(at: indexPath) as! NewChatTableViewCell
+        //let currentCell = tableView.cellForRow(at: indexPath) as! NewChatTableViewCell
         let currentIndex = arrFiltered[indexPath.row].index
         if arrIntSelected.contains(currentIndex) {
             let indexInCollection = arrIntSelected.index(of: currentIndex)!

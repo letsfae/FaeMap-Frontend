@@ -252,7 +252,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
             break
         case 2:
             // TODO jichao
-            
+            let vcShareCollection = NewChatShareController(friendListMode: .place)
+            vcShareCollection.placeDetail = place
+            navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         default:
             break

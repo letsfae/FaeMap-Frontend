@@ -61,8 +61,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
                 navigationController?.pushViewController(vcLocDetail, animated: true)
-            }
-            else {
+            } else {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                     return
                 }
@@ -141,9 +140,17 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             }
             break
         case .share:
-            locAnnoView?.optionsToNormal()
-            if let placeData = selectedPlace?.pinInfo as? PlacePin {
-                let vcSharePlace = NewChatShareController(chatOrShare: "share")
+            if createLocation == .create {
+                locAnnoView?.optionsToNormal()
+                locAnnoView?.hideButtons()
+                let vcShareCollection = NewChatShareController(friendListMode: .location)
+                let coordinate = locationPin?.coordinate
+                vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(uiviewLocationBar.lblName.text ?? "Invalid Name"),\(uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
+                navigationController?.pushViewController(vcShareCollection, animated: true)
+            } else {
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+                selectedPlaceView?.hideButtons()
+                let vcSharePlace = NewChatShareController(friendListMode: .place)
                 vcSharePlace.placeDetail = placeData
                 navigationController?.pushViewController(vcSharePlace, animated: true)
             }
