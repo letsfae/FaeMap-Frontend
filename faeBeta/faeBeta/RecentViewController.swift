@@ -76,6 +76,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewWillDisappear(_ animated: Bool) {
         loadingRecentTimer.invalidate()
         isDraggingRecentTableViewCell = false
+        for indexP in self.cellsCurrentlyEditing {
+            let cell = tblRecents.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
+            cell.closeCell()
+        }
     }
 
      // MARK: setup UI

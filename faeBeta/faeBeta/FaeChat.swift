@@ -44,6 +44,15 @@ class FaeChat {
                     }
                 }
             }
+            let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", true, "", ""])
+            let realmFaeAvatar = UserAvatar()
+            realmFaeAvatar.user_id = "1"
+            realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
+            try! realm.write {
+                realm.add(realmFae, update: true)
+                realm.add(realmFaeAvatar, update: true)
+            }
+            
         }
     }
     

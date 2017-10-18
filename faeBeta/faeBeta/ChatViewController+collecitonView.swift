@@ -230,68 +230,6 @@ extension ChatViewController {
             navigationController?.pushViewController(vcCollection, animated: true)
         }
         
-        /*closeToolbarContentView()
-        
-        let object = arrDictMessages[indexPath.row]
-        
-        if object["type"] as! String == "picture" || object["type"] as! String == "gif" {
-            
-            let message = arrJSQMessages[indexPath.row]
-            
-            if let mediaItem = message.media as? JSQPhotoMediaItemCustom{
-                let photos = IDMPhoto.photos(withImages: [mediaItem.image])
-                let browser = IDMPhotoBrowser(photos: photos)
-                
-                self.present(browser!, animated: true, completion: nil)
-            }
-        }
-        
-        if object["type"] as! String == "location" {
-            
-            let message = arrJSQMessages[indexPath.row]
-            
-            if let mediaItem = message.media as? JSQLocationMediaItemCustom {
-                
-                //let vc = UIStoryboard(name: "Chat", bundle: nil) .instantiateViewController(withIdentifier: "ChatMapViewController")as! ChatMapViewController
-                let vc = ChatMapViewController()
-                vc.address1 = mediaItem.address1 ?? "error address1"
-                vc.address2 = mediaItem.address2 ?? "error address2"
-                vc.address3 = mediaItem.address3 ?? "error address3"
-
-                vc.chatLatitude = mediaItem.coordinate.latitude
-                vc.chatLongitude = mediaItem.coordinate.longitude
-                
-                boolGoToFullContent = true
-                
-                self.navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-        
-        if object["type"] as! String == "place" {
-            let message = arrJSQMessages[indexPath.row]
-            if let mediaItem = message.media as? JSQPlaceMediaItemCustom {
-                boolGoToFullContent = true
-                let vcPlaceDetail = PlaceDetailViewController()
-                vcPlaceDetail.place = mediaItem.place
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
-            }
-        }
-        
-        if object["type"] as! String == "video" {
-            let message = arrJSQMessages[indexPath.row]
-            
-            if let mediaItem = message.media as? JSQVideoMediaItemCustom
-            {
-                if let dataUrl = mediaItem.fileURL {
-                    let player = AVPlayer(url:dataUrl)
-                    let playerController = AVPlayerViewController()
-                    playerController.player = player
-                    self.present(playerController, animated: true) {
-                        player.play()
-                    }
-                }
-            }
-        }*/
     }
     
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {

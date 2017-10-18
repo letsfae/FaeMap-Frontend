@@ -268,9 +268,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {
+                sendWelcomeMessage()
             } else {
                 self.loadFirstLoginVC()
-                firebaseWelcome()
+                sendWelcomeMessage()
             }
         }
     }

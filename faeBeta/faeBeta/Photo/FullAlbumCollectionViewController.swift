@@ -147,6 +147,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         tblAlbums.register(AlbumTableViewCell.self, forCellReuseIdentifier: albumReuseIdentifiler)
         tblAlbums.delegate = self
         tblAlbums.dataSource = self
+        tblAlbums.alwaysBounceVertical = false
     }
     
     func getUserAlbumSet() {
