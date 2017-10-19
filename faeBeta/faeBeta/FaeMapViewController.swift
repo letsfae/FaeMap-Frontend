@@ -123,6 +123,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
+    let faeChat = FaeChat()
+    
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }

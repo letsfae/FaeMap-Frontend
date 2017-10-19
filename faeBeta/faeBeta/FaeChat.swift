@@ -24,6 +24,14 @@ class FaeChat {
         try! realm.write {
             realm.add(realmUser, update: true)
         }
+        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", true, "", ""])
+        let realmFaeAvatar = UserAvatar()
+        realmFaeAvatar.user_id = "1"
+        realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
+        try! realm.write {
+            realm.add(realmFae, update: true)
+            realm.add(realmFaeAvatar, update: true)
+        }
         apiCalls.getFriends() {(status: Int, message: Any?) in
             let json = JSON(message!)
             if status / 100 != 2 {
@@ -44,14 +52,7 @@ class FaeChat {
                     }
                 }
             }
-            let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", true, "", ""])
-            let realmFaeAvatar = UserAvatar()
-            realmFaeAvatar.user_id = "1"
-            realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
-            try! realm.write {
-                realm.add(realmFae, update: true)
-                realm.add(realmFaeAvatar, update: true)
-            }
+
             
         }
     }
@@ -72,11 +73,13 @@ class FaeChat {
                         case .update(_, let deletions, let insertions, let modifications):
                             //print("update")
                             for insert in insertions {
-                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex || messages[insert].chat_id == "-1" {
-                                    break
+                                print(insert)
+                                print(self?.intLastSentIndex)
+                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex || messages[insert].chat_id == "\(Key.shared.user_id)" {
+                                    
                                 } else {
                                     self?.intLastSentIndex = insert
-                                    //self?.sendNewMessageToServer(messages[insert])
+                                    self?.sendNewMessageToServer(messages[insert])
                                 }
                             }
                             break
@@ -113,9 +116,8 @@ class FaeChat {
             let json = try JSONSerialization.data(withJSONObject: message, options: [])
             postToURL("chats_v2", parameter: ["receiver_id": members[1] as AnyObject, "message": String(data: json, encoding: .utf8)!, "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                 if statusCode / 100 == 2 {
-                    
                     if let resultDic = result as? NSDictionary {
-                        print(statusCode)
+                        print("\(statusCode) \(message["index"])")
                     }
                 } else {
                     print("failed")
@@ -136,17 +138,20 @@ class FaeChat {
             if let unreadList = result as? NSArray {
                 for item in unreadList {
                     let dictItem: NSDictionary = item as! NSDictionary
-                    let chat_id = dictItem["chat_id"] as! Int
+                    let chat_id = dictItem["last_message_sender_id"] as! Int
                     var unread_count = dictItem["unread_count"] as! Int
                     let callGroup = DispatchGroup()
                     //while unread_count > 0 {
+                    for _ in 0...unread_count/50 {
                         callGroup.enter()
-                        getFromURL("chats_v2/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
-                            if let unreadMessages = result as? NSArray {
-                                unread_count -= unreadMessages.count
+                        getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
+                            if let response = result as? NSDictionary {
+                                //unread_count = response["unread_count"] as! Int
+                                let unreadMessages = response["messages"] as! NSArray
                                 for unreadMessage in unreadMessages {
                                     if let message = unreadMessage as? NSDictionary {
-                                        self.storeMessageToRealm(message["message"] as! String, is_group: 0)
+                                        if chat_id == 1 { break }
+                                        self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
                                     }
                                 }
                                 callGroup.leave()
@@ -154,27 +159,27 @@ class FaeChat {
                                 //print("no more new message")
                             }
                         }
-                    //}
+                    }
                     callGroup.notify(queue: .main) {
                         print("finish reading")
-                        postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                            print("\(statusCode)")
-                        })
+                        //postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                            //print("\(statusCode)")
+                        //})
                     }
                 }
             }
         }
     }
     
-    func storeMessageToRealm(_ message: String, is_group: Int) {
-        if message == "[GET_CHAT_ID]" { return }
+    func storeMessageToRealm(_ message: String, is_group: Int, chatID: Int) {
+        //if message == "[GET_CHAT_ID]" { return }
         //print("\(message)")
         guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
         let messageJSON = JSON(data: messageData)
         let messageRealm = RealmMessage_v2()
         let login_user_id = "\(Key.shared.user_id)"
         //messageRealm.login_user_id = login_user_id
-        let chat_id = messageJSON["chat_id"].string!
+        let chat_id = "\(chatID)"
         //messageRealm.chat_id = chat_id
         let realm = try! Realm()
         let messagesInThisChat = realm.filterAllMessages(login_user_id, is_group, chat_id)//realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
