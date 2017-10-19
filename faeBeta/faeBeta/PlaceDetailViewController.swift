@@ -40,7 +40,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         loadHeader()
         loadMidTable()
         loadFixedHeader()
-        automaticallyAdjustsScrollViewInsets = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -158,7 +157,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         if #available(iOS 11.0, *) {
             tblPlaceDetail.contentInsetAdjustmentBehavior = .never
         } else {
-            // Fallback on earlier versions
+            automaticallyAdjustsScrollViewInsets = false
         }
     }
 

@@ -233,27 +233,62 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
         self.timer = nil
-        FaeMap.shared.whereKey("content", value: "test_ys")
-        FaeMap.shared.whereKey("geo_latitude", value: "\(locationPin.coordinate.latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(locationPin.coordinate.longitude)")
-        FaeMap.shared.postPin(type: "location", completion: { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let idJSON = JSON(message!)
-            let locationId = idJSON["location_id"].intValue
-            joshprint(locationId)
-            self.uiviewAfterAdded.pinIdInAction = locationId
-            FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
-                guard code / 100 == 2 else { return }
-                self.hide()
-                self.uiviewAfterAdded.show()
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
-                self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//
-//                }
-            })
-        })
+        mapScreenShot(coordinate: locationPin.coordinate) { (snapShotImage) in
+            FaeImage.shared.type = "image"
+            FaeImage.shared.image = snapShotImage
+            FaeImage.shared.faeUploadFile { (status, message) in
+                guard status / 100 == 2 else { return }
+                guard message != nil else { return }
+                let fileIDJSON = JSON(message!)
+                let fileId = fileIDJSON["file_id"].intValue
+                FaeMap.shared.whereKey("content", value: "\(fileId)")
+                FaeMap.shared.whereKey("geo_latitude", value: "\(self.locationPin.coordinate.latitude)")
+                FaeMap.shared.whereKey("geo_longitude", value: "\(self.locationPin.coordinate.longitude)")
+                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let idJSON = JSON(message!)
+                    let locationId = idJSON["location_id"].intValue
+                    joshprint(locationId)
+                    self.uiviewAfterAdded.pinIdInAction = locationId
+                    FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
+                        guard code / 100 == 2 else { return }
+                        self.hide()
+                        self.uiviewAfterAdded.show()
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                        self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+                    })
+                })
+            }
+        }
+    }
+    
+    func mapScreenShot(coordinate: CLLocationCoordinate2D, _ completion: @escaping (UIImage) -> Void) {
+        let mapSnapshotOptions = MKMapSnapshotOptions()
+        
+        // Set the region of the map that is rendered.
+        let region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000)
+        mapSnapshotOptions.region = region
+        
+        // Set the scale of the image. We'll just use the scale of the current device, which is 2x scale on Retina screens.
+        mapSnapshotOptions.scale = UIScreen.main.scale
+        
+        // Set the size of the image output.
+        mapSnapshotOptions.size = CGSize(width: 66, height: 66)
+        
+        // Show buildings and Points of Interest on the snapshot
+        mapSnapshotOptions.showsBuildings = true
+        mapSnapshotOptions.showsPointsOfInterest = true
+        
+        let snapShotter = MKMapSnapshotter(options: mapSnapshotOptions)
+        
+        snapShotter.start { (snapShot, error) in
+            guard let snap = snapShot else { return }
+//            let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 66, height: 66))
+//            imgView.image = snapShot?.image
+//            UIApplication.shared.keyWindow?.addSubview(imgView)
+            completion(snap.image)
+        }
     }
     
     func timerFunc() {

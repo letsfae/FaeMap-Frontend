@@ -20,7 +20,7 @@ extension FaeMapViewController {
         view.addSubview(faeMapView)
         view.sendSubview(toBack: faeMapView)
         faeMapView.showsPointsOfInterest = false
-        faeMapView.showsCompass = false
+        faeMapView.showsCompass = true
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
         

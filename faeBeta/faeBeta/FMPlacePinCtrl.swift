@@ -10,12 +10,18 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
+    
+    // CreateColListDelegate
+    func updateCols() {
+        uiviewCollectedList.loadCollectionData()
+    }
     
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
-        vc.enterMode = .place
+        vc.enterMode = uiviewCollectedList.tableMode
+        vc.delegate = self
         present(vc, animated: true)
     }
     
@@ -33,6 +39,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewCollectedList.tableMode
+        navigationController?.pushViewController(vcList, animated: true)
         handleLocInfoBarTap()
     }
     
