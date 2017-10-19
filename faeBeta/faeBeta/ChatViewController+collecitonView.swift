@@ -57,6 +57,10 @@ extension ChatViewController {
                 break
             case "[Audio]":
                 cell.contentType = Audio
+                let JSQMessage = arrJSQMessages[indexPath.row]
+                if let message = JSQMessage.media as? JSQAudioMediaItemCustom {
+                    message.delegate = self
+                }
                 break
             case "[Video]":
                 cell.contentType = Video
