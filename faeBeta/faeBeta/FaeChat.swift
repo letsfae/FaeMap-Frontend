@@ -72,7 +72,7 @@ class FaeChat {
                         case .update(_, let deletions, let insertions, let modifications):
                             //print("update")
                             for insert in insertions {
-                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex {
+                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex || messages[insert].chat_id == "-1" {
                                     break
                                 } else {
                                     self?.intLastSentIndex = insert
