@@ -81,16 +81,57 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     var uiviewBackground: UIButton!
     
+    var boolSmallSize: Bool = false {
+        didSet {
+            guard fullLoaded else { return }
+            if boolSmallSize {
+                imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 301)
+                imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new_sm")
+            } else {
+                imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350)
+                imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new")
+            }
+            imgMiddleLine.isHidden = boolSmallSize
+            btnChat.isHidden = boolSmallSize
+            btnProfile.isHidden = boolSmallSize
+        }
+    }
+    
+    var fullLoaded = false
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
         center.y = 276 * screenHeightFactor // 451
         self.frame.size.width = 320 * screenWidthFactor
         loadContent()
+        fullLoaded = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func showFullNameCard() {
+        self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
+        self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
+        self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
+        self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
+        self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
+        self.imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
+        self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
+        self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
+        self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
+        self.btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
+        self.uiviewPrivacy.frame = CGRect(x: 41, y: 171, w: 46, h: 18)
+        self.btnLeftPart.frame = CGRect(x: 0, y: 0, w: 26, h: 350)
+        self.btnRightPart.frame = CGRect(x: 294, y: 0, w: 26, h: 350)
+        self.btnTopPart.frame = CGRect(x: 26, y: 0, w: 268, h: 38)
+        self.btnBottomPart.frame = CGRect(x: 26, y: 312, w: 268, h: 38)
+        self.lblNickName.frame = CGRect(x: 67, y: 202, w: 186, h: 25)
+        self.lblNickName.alpha = 1
+        self.lblUserName.frame = CGRect(x: 75, y: 228, w: 171, h: 18)
+        self.lblUserName.alpha = 1
     }
     
     func openFaeUsrInfo() {
@@ -189,8 +230,19 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func updateNameCard(withUserId: Int) {
+        if withUserId == 1 {
+            imgAvatar.image = UIImage(named: "faeAvatar")
+            imgAvatar.isUserInteractionEnabled = false
+            imgMoodAvatar.isHidden = true
+            uiviewPrivacy.isHidden = true
+            lblUserName.text = "@faemaps"
+            lblNickName.text = "Fae Map Team"
+            btnOptions.isHidden = true
+            return
+        }
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
+            self.imgAvatar.isUserInteractionEnabled = true
         }
         uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, _) in
             self.lblNickName.text = nickName
@@ -203,7 +255,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         guard !isAnimating else { return }
         isAnimating = true
         boolCardOpened = true
-        btnProfile.isHidden = self.userId == Key.shared.user_id
+        btnProfile.isHidden = [Key.shared.user_id, 1].contains(self.userId)
         if avatar == nil {
             let getMiniAvatar = FaeUser()
             getMiniAvatar.getOthersProfile("\(userId)", completion: { (status, message) in
@@ -233,7 +285,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
             self.imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
-            self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
+            self.btnChat.frame = CGRect(x: ([Key.shared.user_id, 1].contains(self.userId)) ? 146.5 : 98.5, y: 272, w: 27, h: 27)
             self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
             self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
             self.btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
@@ -413,7 +465,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         btnCloseOptions.alpha = 0
         btnCloseOptions.addTarget(self, action: #selector(hideOptions(_:)), for: .touchUpInside)
         
-        imgAvatar.isUserInteractionEnabled = true
+        imgAvatar.isUserInteractionEnabled = false
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
         imgAvatar.addGestureRecognizer(tapGesture)
         
@@ -525,3 +577,4 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     // PassStatusFromViewToButton End
 }
+

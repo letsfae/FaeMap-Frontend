@@ -8,9 +8,16 @@
 
 import UIKit
 
+protocol GeneralTitleCellDelegate: class {
+    func startUpdating()
+    func stopUpdating()
+}
+
 class GeneralTitleCell: UITableViewCell {
     
     // Cell Height = 60 or 110
+    
+    weak var delegate: GeneralTitleCellDelegate?
     
     var lblName: FaeLabel!
     var switchIcon: UISwitch!
@@ -50,6 +57,47 @@ class GeneralTitleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func actionSwitchFunc(_ sender: UISwitch) {
+        print(sender.tag)
+        switch sender.tag {
+        case 101:
+            Key.shared.hideNameCardOptions = sender.isOn
+            break
+        case 102:
+            delegate?.startUpdating()
+            let updateGenderAge = FaeUser()
+            updateGenderAge.whereKey("show_gender", value: "\(!sender.isOn)")
+            updateGenderAge.updateNameCard { status, _ in
+                if status / 100 == 2 {
+                    print("[showGenderAge] Successfully update namecard")
+                    Key.shared.disableGender = sender.isOn
+                } else {
+                    print("[showGenderAge] Fail to update namecard")
+                    sender.setOn(!sender.isOn, animated: true)
+                }
+                self.delegate?.stopUpdating()
+            }
+            break
+        case 103:
+            delegate?.startUpdating()
+            let updateGenderAge = FaeUser()
+            updateGenderAge.whereKey("show_age", value: "\(!sender.isOn)")
+            updateGenderAge.updateNameCard { status, _ in
+                if status / 100 == 2 {
+                    print("[showGenderAge] Successfully update namecard")
+                    Key.shared.disableAge = sender.isOn
+                } else {
+                    print("[showGenderAge] Fail to update namecard")
+                    sender.setOn(!sender.isOn, animated: true)
+                }
+                self.delegate?.stopUpdating()
+            }
+            break
+        default:
+            break
+        }
+    }
+    
     fileprivate func loadContent() {
         lblName = FaeLabel(CGRect.zero, .left, .medium, 18, UIColor._898989())
         addSubview(lblName)
@@ -60,6 +108,7 @@ class GeneralTitleCell: UITableViewCell {
         switchIcon.isOn = false
         switchIcon.onTintColor = UIColor._2499090()
         switchIcon.transform = CGAffineTransform(scaleX: 35 / 51, y: 21 / 31)
+        switchIcon.addTarget(self, action: #selector(actionSwitchFunc(_:)), for: .valueChanged)
         addSubview(switchIcon)
         addConstraintsWithFormat("H:[v0(38)]-19-|", options: [], views: switchIcon)
         addConstraintsWithFormat("V:|-18-[v0(23)]", options: [], views: switchIcon)
@@ -87,7 +136,7 @@ class GeneralTitleCell: UITableViewCell {
         removeConstraints(lblDesContraint)
         lblNameContraint = returnConstraintsWithFormat("V:|-20-[v0]-15-|", options: [], views: lblName)
     }
-
+    
 }
 
 class GeneralSubTitleCell: UITableViewCell {
@@ -161,7 +210,7 @@ class GeneralSubTitleCell: UITableViewCell {
         addSubview(switchIcon)
         addConstraintsWithFormat("H:[v0(39)]-19-|", options: [], views: switchIcon)
         addConstraintsWithFormat("V:|-(-3)-[v0(23)]", options: [], views: switchIcon)
-
+        
         imgView = UIImageView()
         addSubview(imgView)
         imgView.image = #imageLiteral(resourceName: "Settings_next")
@@ -188,3 +237,4 @@ class GeneralSubTitleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

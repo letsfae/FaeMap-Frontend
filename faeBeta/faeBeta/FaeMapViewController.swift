@@ -33,6 +33,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var faeUserPins = [FaePinAnnotation]()
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
+    var setPlacePins = Set<Int>()
     var arrPlaceData = [PlacePin]()
     var timerLoadMessages: Timer?
     
@@ -175,6 +176,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                     }
                     locationPin = nil
                 }
+                if uiviewAfterAdded.frame.origin.y != screenHeight {
+                    uiviewAfterAdded.hide()
+                }
             }
         }
     }
@@ -189,6 +193,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
     var fullyLoaded = false // indicate if all components are fully loaded
+    var boolNextUpdate = true
     
     // System Functions
     override func viewDidLoad() {
@@ -200,6 +205,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadMapView()
         loadButton()
+        view.bringSubview(toFront: uiviewFilterMenu)
         loadExploreBar()
         loadPlaceDetail()
         loadPlaceListView()
@@ -212,6 +218,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
+        
+//        let line = UIView(frame: CGRect(x: 25, y: 0, width: 1, height: screenHeight))
+//        line.backgroundColor = UIColor._200199204()
+//        view.addSubview(line)
+//        line.layer.zPosition = 3000
+//        
+//        let line_1 = UIView(frame: CGRect(x: 25 + 51, y: 0, width: 1, height: screenHeight))
+//        line_1.backgroundColor = UIColor._200199204()
+//        view.addSubview(line_1)
+//        line_1.layer.zPosition = 3000
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -219,7 +235,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapChat()
         renewSelfLocation()
         checkDisplayNameExisitency()
-        updateGenderAge()
         updateTimerForAllPins()
     }
     
@@ -312,6 +327,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func loadFirstLoginVC() {
+        updateGenderAge()
         let firstTimeLoginVC = FirstTimeLoginViewController()
         firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
         present(firstTimeLoginVC, animated: false, completion: nil)

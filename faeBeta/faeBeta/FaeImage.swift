@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import Alamofire
 
 typealias ImageView = UIImageView
 
@@ -30,9 +31,20 @@ func compressImage(_ image: UIImage, max_image_bytes: Int = 1024) -> Data {
 }
 class FaeImage: NSObject {
 
+    static let shared = FaeImage()
+    
     var image: UIImage!
     var type: String!
-
+    
+    func downloadImage(url: String, _ completion: @escaping (UIImage?) -> Void) {
+        Alamofire.download(url).responseData { response in
+            if let data = response.result.value {
+                let image = UIImage(data: data)
+                completion(image)
+            }
+        }
+    }
+    
     func faeUploadFile(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
             completion(-400, "Error: Need to save image first" as AnyObject?)

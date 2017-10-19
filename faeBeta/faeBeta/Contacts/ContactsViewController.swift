@@ -67,6 +67,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var lblTop: UILabel!
     var lblBottom: UILabel!
     var imgTick: UIImageView!
+    var imgDot: UIImageView!
     var navBarMenuBtnClicked = false
     var curtTitle: String = "Friends"
     var titleArray: [String] = ["Friends", "Requests"] //["Following", "Followers"]
@@ -192,6 +193,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                     self.arrFriends.append(Friends(displayName: json[i-1]["friend_user_nick_name"].stringValue, userName: json[i-1]["friend_user_name"].stringValue, userId: json[i-1]["friend_id"].intValue))
                 }
             }
+            self.arrFriends.append(Friends(displayName: "Fae Maps Team", userName: "faemaps", userId: 1))
             self.arrFriends.sort{ $0.displayName < $1.displayName }
             self.countFriends = self.arrFriends.count
             self.tblContacts.reloadData()
@@ -219,6 +221,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 for i in 1...json.count {
                     self.arrReceivedRequests.append(Friends(displayName: json[i-1]["request_user_nick_name"].stringValue, userName: json[i-1]["request_user_name"].stringValue, userId: json[i-1]["request_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
+                self.imgDot.isHidden = false
             }
             self.tblContacts.reloadData()
         }

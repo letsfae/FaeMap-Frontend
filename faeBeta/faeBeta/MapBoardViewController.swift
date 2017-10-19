@@ -280,6 +280,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         //        btnPlaces.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnPlaces.contentHorizontalAlignment = .left
         btnPlaces.setImage(#imageLiteral(resourceName: "mb_places"), for: .normal)
+        btnPlaces.adjustsImageWhenHighlighted = false
         btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
         btnPeople = UIButton(frame: CGRect(x: 56, y: 59, width: 240 * screenWidthFactor, height: 38))
@@ -287,6 +288,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnPeople.tag = 1
         btnPeople.contentHorizontalAlignment = .left
         btnPeople.setImage(#imageLiteral(resourceName: "mb_people"), for: .normal)
+        btnPeople.adjustsImageWhenHighlighted = false
         btnPeople.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
         /*
@@ -295,6 +297,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnSocial.tag = 2
         btnSocial.contentHorizontalAlignment = .left
         btnSocial.setImage(#imageLiteral(resourceName: "mb_social"), for: .normal)
+        btnSocial.adjustsImageWhenHighlighted = false
         btnSocial.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
         btnTalk = UIButton(frame: CGRect(x: 56, y: 157, width: 240 * screenWidthFactor, height: 38))
@@ -302,6 +305,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnTalk.tag = 3
         btnTalk.contentHorizontalAlignment = .left
         btnTalk.setImage(#imageLiteral(resourceName: "mb_talk"), for: .normal)
+        btnTalk.adjustsImageWhenHighlighted = false
         btnTalk.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         */
         

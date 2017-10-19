@@ -57,18 +57,18 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         loadSearchTable()
         loadNavBar()
-        definesPresentationContext = true
-        view.addSubview(btnIndicator)
+        //definesPresentationContext = true
+        //view.addSubview(btnIndicator)
         view.backgroundColor = .white
         
         // Vicky 07/28/17
         schbarUsernames.txtSchField.becomeFirstResponder()
         // Vicky 07/28/17 End
-        getUserList(nil)
+        //getUserList(nil)
         
         // Add pan gesture to custom indicator
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureIndicator(_:)))
-        btnIndicator.addGestureRecognizer(panGesture)
+        //let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureIndicator(_:)))
+        //btnIndicator.addGestureRecognizer(panGesture)
     }
     
     func getUserList(_ completion: ((Int) -> ())?) {

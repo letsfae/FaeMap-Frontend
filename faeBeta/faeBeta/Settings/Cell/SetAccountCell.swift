@@ -22,7 +22,7 @@ class SetAccountCell: UITableViewCell {
         lblTitle.textAlignment = .left
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        addConstraintsWithFormat("H:|-20-[v0(180)]", options: [], views: lblTitle)
+        addConstraintsWithFormat("H:|-20-[v0(200)]", options: [], views: lblTitle)
         addConstraintsWithFormat("V:|-21-[v0(25)]", options: [], views: lblTitle)
         
         lblContent = UILabel()

@@ -24,6 +24,7 @@
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
 		504CE4D21F67BF4500070284 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504CE4D11F67BF4500070284 /* ExploreViewController.swift */; };
+		506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */; };
 		506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */; };
 		506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */; };
 		506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */; };
@@ -325,6 +326,7 @@
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
 		504CE4D11F67BF4500070284 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSMProfilePic.swift; sourceTree = "<group>"; };
 		506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceInfoBar.swift; sourceTree = "<group>"; };
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
@@ -701,6 +703,16 @@
 			name = Explore;
 			sourceTree = "<group>";
 		};
+		50500F8B1F967244009C51FB /* PinDetail */ = {
+			isa = PBXGroup;
+			children = (
+				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
+				B33F8A021F3EC4520033610D /* PlaceDetail */,
+				50E940821F79B37000269945 /* LocationDetail */,
+			);
+			name = PinDetail;
+			sourceTree = "<group>";
+		};
 		506D1FE01F2B1863004119EA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -731,6 +743,7 @@
 			children = (
 				8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */,
 				8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */,
+				506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */,
 			);
 			name = LeftSlidingMenu;
 			sourceTree = "<group>";
@@ -960,8 +973,7 @@
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B33FB22C1F267C0500EC6655 /* Contacts */,
-				B33F8A021F3EC4520033610D /* PlaceDetail */,
-				50E940821F79B37000269945 /* LocationDetail */,
+				50500F8B1F967244009C51FB /* PinDetail */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				504CE4D01F67BF3400070284 /* Explore */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
@@ -1160,7 +1172,6 @@
 				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
-				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -1872,6 +1883,7 @@
 				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
 				B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */,
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
+				506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
 				506D67B81F5272C600CE8BBB /* CollectionsListCell.swift in Sources */,

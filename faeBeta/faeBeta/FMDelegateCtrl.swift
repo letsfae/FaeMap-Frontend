@@ -15,7 +15,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
     func backToMainMap() {
         timerSetup()
         renewSelfLocation()
-        reloadMainScreenButtons()
+        resetCompassRotation()
         deselectAllAnnotations()
     }
     func animateToCamera(_ coordinate: CLLocationCoordinate2D) {
@@ -109,7 +109,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
     
     func reloadSelfPosition() {
         self.boolCanOpenPin = true
-        self.reloadMainScreenButtons()
+        self.resetCompassRotation()
     }
     
     func switchMapMode() {
@@ -120,24 +120,9 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
         LeftSlidingMenuViewController.boolMapBoardIsOn = true
     }
     
-    fileprivate func reloadMainScreenButtons() {
-        
-        btnCompass.transform = CGAffineTransform.identity
-        
-        UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            if self.FILTER_ENABLE {
-                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2 - 22, y: screenHeight - 47, width: 44, height: 44)
-            }
-            self.btnCompass.frame = CGRect(x: 22, y: 582 * screenWidthFactor, width: 59, height: 59)
-            self.btnLocateSelf.frame = CGRect(x: 333 * screenWidthFactor, y: 582 * screenWidthFactor, width: 59, height: 59)
-            self.btnOpenChat.frame = CGRect(x: 12, y: 646 * screenWidthFactor, width: 79, height: 79)
-            self.lblUnreadCount.frame = CGRect(x: 55, y: 1, width: 0, height: 22)
-            self.updateUnreadChatIndicator()
-            self.btnDiscovery.frame = CGRect(x: 323 * screenWidthFactor, y: 646 * screenWidthFactor, width: 79, height: 79)
-            let direction: CGFloat = CGFloat(self.prevBearing)
-            let angle: CGFloat = ((360.0 - direction) * .pi / 180.0) as CGFloat
-            self.btnCompass.transform = CGAffineTransform(rotationAngle: angle)
-        }, completion: nil)
+    func resetCompassRotation() {
+//        btnCompass.transform = btnCompass.savedTransform
+        updateUnreadChatIndicator()
     }
     
     // ButtonFinishClickedDelegate

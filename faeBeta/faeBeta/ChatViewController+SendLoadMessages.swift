@@ -164,7 +164,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         
         // play message sent sound
         
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        //JSQSystemSoundPlayer.jsq_playMessageSentSound()
         
         
         outgoingMessage!.delegate = self
@@ -297,7 +297,7 @@ extension ChatViewController: OutgoingMessageProtocol {
             }
             let isIncoming = self.insertMessage(item)
             if isIncoming {
-                JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
+                //JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
             }
             DispatchQueue.main.async {
                 self.finishReceivingMessage(animated: false)

@@ -18,7 +18,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     var lblCurtAvatar: UILabel!
     var btnSave: UIButton!
     
-    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous",  "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Doge"]
+    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous",  "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Shiba Inu"]
     
     var shadowGray = UIColor._200199204()
     
