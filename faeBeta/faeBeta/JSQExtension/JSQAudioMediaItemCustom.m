@@ -194,14 +194,19 @@
 
         [self startProgressTimer];
         [self.audioPlayer play];
+        if (self.delegate) {
+            [self.delegate audioMediaItemDidStartPlayingAudio:self audioButton:sender];
+        }
     }
 }
 
-#pragma mark - AVAudioPlayerDelegate
+- (void)finishPlaying {
+    [self.audioPlayer stop];
+    self.audioPlayer.currentTime = 0.0;
+    [self resetAudioItem];
+}
 
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
-                       successfully:(BOOL)flag {
-
+- (void)resetAudioItem {
     // set progress to full, then fade back to the default state
     [self stopProgressTimer];
     self.progressView.progress = 1;
@@ -218,6 +223,13 @@
                         id error;
                         [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
                     } ];
+}
+
+#pragma mark - AVAudioPlayerDelegate
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player
+                       successfully:(BOOL)flag {
+    [self resetAudioItem];
 }
 
 #pragma mark - JSQMessageMediaData protocol

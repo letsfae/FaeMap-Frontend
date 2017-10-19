@@ -20,7 +20,21 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate, JSQAudioMediaItemDelegateCustom {
+    var playingAudio: JSQAudioMediaItemCustom?
+    
+    func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
+    }
+    
+    func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
+        if let current = playingAudio {
+            if current != audioMediaItem {
+                current.finishPlaying()
+            }
+        }
+        playingAudio = audioMediaItem
+    }
+    
     // MARK: properties
     var uiviewNavBar: FaeNavBar!
     var uiviewLocationExtend = LocationExtendView()
@@ -184,6 +198,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         //removeObservers()
+        playingAudio?.finishPlaying()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
