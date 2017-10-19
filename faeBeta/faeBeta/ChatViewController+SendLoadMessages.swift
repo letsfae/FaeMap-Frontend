@@ -216,10 +216,14 @@ extension ChatViewController: OutgoingMessageProtocol {
             if i < 0 {
                 continue
             } else {
+                let messageRealm = resultRealmMessages[i]
+                if messageRealm.index < 0 {
+                    continue
+                }
                 let incomingMessage = IncomingMessage(collectionView_: collectionView!)
-                let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
+                let messageJSQ = incomingMessage.createJSQMessage(messageRealm)
                 arrJSQMessages.append(messageJSQ)
-                arrRealmMessages.append(resultRealmMessages[i])
+                arrRealmMessages.append(messageRealm)
                 realm.beginWrite()
                 resultRealmMessages[i].unread_count = 0
                 try! realm.commitWrite()
