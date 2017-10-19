@@ -207,6 +207,15 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        joshprint(text)
+        if text == "\n" {
+            if textView == textviewListName {
+                textviewDesp.becomeFirstResponder()
+            } else if textView == textviewDesp {
+                textviewDesp.resignFirstResponder()
+            }
+            return false
+        }
         let newText = (textView.text as NSString).replacingCharacters(in: range, with: text)
         if newText.isEmpty {
             if textView == textviewListName {

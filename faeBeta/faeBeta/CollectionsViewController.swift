@@ -157,7 +157,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func loadTable() {
-        tblCollections = UITableView(frame: CGRect(x: 0, y: 90, width: screenWidth, height: screenHeight - 80), style: UITableViewStyle.plain)
+        tblCollections = UITableView(frame: CGRect(x: 0, y: 90, width: screenWidth, height: screenHeight - 90), style: UITableViewStyle.plain)
         view.addSubview(tblCollections)
         tblCollections.backgroundColor = .white
         tblCollections.register(CollectionsListCell.self, forCellReuseIdentifier: "CollectionsListCell")
