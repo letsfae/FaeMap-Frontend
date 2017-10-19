@@ -33,11 +33,11 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             uiviewBubbleHint.isHidden = false
             strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
             lblBubbleHint.text = strBubbleHint
-            btnPeopleLocDetail.isUserInteractionEnabled = false
+            btnSearchLoc.isUserInteractionEnabled = false
         } else {
             tblMapBoard.isHidden = false
             uiviewBubbleHint.isHidden = true
-            btnPeopleLocDetail.isUserInteractionEnabled = true
+            btnSearchLoc.isUserInteractionEnabled = true
         }
     }
     
@@ -64,7 +64,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             self.tblMapBoard.delaysContentTouches = false
             sliderDisFilter.setValue(Float(disVal)!, animated: false)
             
-            let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(self.rollUpPeopleLocPage(_:)))
+            let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(rollUpPeopleLocPage(_:)))
             uiviewPeopleLocDetail.addGestureRecognizer(swipeGesture)
             swipeGesture.direction = .up
         } else { // in place page
@@ -82,7 +82,6 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }, completion: { _ in
             self.uiviewPeopleLocDetail.isHidden = true
         })
-        btnNavBarMenu.isUserInteractionEnabled = true
         
         updateNearbyPeople()
     }

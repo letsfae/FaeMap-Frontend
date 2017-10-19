@@ -24,7 +24,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     var uiviewChooseLoc: UIView!
     var lblChooseLoc: UILabel!
     var imgIconChooseLoc: UIImageView!
-    var btnPeopleLocDetail: UIButton!
+    var imgPeopleLocDetail: UIImageView!
     var searchedLoc: CLLocation!
     
     override func viewDidLoad() {
@@ -86,12 +86,11 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         lblChooseLoc.text = "Current Location"
         lblChooseLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblChooseLoc.textColor = UIColor._107107107()
-        btnPeopleLocDetail = UIButton()
-        btnPeopleLocDetail.setImage(#imageLiteral(resourceName: "mb_rightArrow"), for: .normal)
-        uiviewChooseLoc.addSubview(btnPeopleLocDetail)
-        uiviewChooseLoc.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: btnPeopleLocDetail)
-        uiviewChooseLoc.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: btnPeopleLocDetail)
-        btnPeopleLocDetail.addTarget(self, action: #selector(SearchLocation(_:)), for: .touchUpInside)
+        imgPeopleLocDetail = UIImageView()
+        imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
+        uiviewChooseLoc.addSubview(imgPeopleLocDetail)
+        uiviewChooseLoc.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
+        uiviewChooseLoc.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: imgPeopleLocDetail)
         
         // draw line
         let lblChooseLocLine = UIView(frame: CGRect(x: 0, y: 48, width: screenWidth, height: 1))

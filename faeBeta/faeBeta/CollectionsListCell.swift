@@ -28,7 +28,6 @@ class CollectionsListCell: UITableViewCell {
 
     fileprivate func loadCellContent() {
         imgPic = UIImageView(frame: CGRect(x: 11, y: 15, width: 70, height: 70))
-        imgPic.image = #imageLiteral(resourceName: "defaultPlaceIcon")
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 9
         addSubview(imgPic)
@@ -45,6 +44,7 @@ class CollectionsListCell: UITableViewCell {
     }
     
     func setValueForCell(cols: PinCollection) {
+        imgPic.image = cols.colType == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
         lblListName.text = cols.colName
         lblListNum.text = cols.itemsCount == 0 ? "0 item" : "\(cols.itemsCount) items"
     }
