@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 enum NavOpenMode {
     case mapFirst
@@ -42,6 +43,10 @@ class Key: NSObject { //  singleton class
     
     let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
     
+    var hideNameCardOptions: Bool = false
+    var disableGender: Bool = false
+    var disableAge: Bool = false
+    
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
     var headerContentType = "application/x-www-form-urlencoded"
@@ -52,7 +57,11 @@ class Key: NSObject { //  singleton class
     var userToken = ""
     var userTokenEncode = ""
     var session_id: Int = -1
-    var user_id: Int = -1
+    var user_id: Int = -1 {
+        didSet {
+            self.getUserInfo()
+        }
+    }
     var is_Login: Int = 0
     var userEmail = ""
     var userPassword = ""
@@ -63,7 +72,7 @@ class Key: NSObject { //  singleton class
     var shortIntro: String = ""
     var showGender = false
     var showAge = false
-    var userAge: Int?
+    var userAge: String = ""
     
     var userStatus: Int = -1
     
@@ -89,4 +98,28 @@ class Key: NSObject { //  singleton class
     
     var dblAltitude: Double = 500
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    
+    func getUserInfo() {
+        getGenderAge()
+    }
+    
+    func getGenderAge() {
+        guard Key.shared.user_id > 0 else { return }
+        let userNameCard = FaeUser()
+        userNameCard.getUserCard("\(Key.shared.user_id)") { (status: Int, message: Any?) in
+            DispatchQueue.main.async(execute: {
+                guard status / 100 == 2 else { return }
+                guard let unwrapMessage = message else {
+                    print("[getUserCard] message is nil")
+                    return
+                }
+                let profileInfo = JSON(unwrapMessage)
+                Key.shared.disableGender = !profileInfo["show_gender"].boolValue
+                Key.shared.gender = profileInfo["gender"].stringValue
+                Key.shared.disableAge = profileInfo["show_age"].boolValue
+                Key.shared.userAge = profileInfo["age"].stringValue
+                joshprint("[getGenderAge] age gender updated")
+            })
+        }
+    }
 }

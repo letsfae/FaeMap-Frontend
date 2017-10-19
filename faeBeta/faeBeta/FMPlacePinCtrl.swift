@@ -10,12 +10,18 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
+    
+    // CreateColListDelegate
+    func updateCols() {
+        uiviewCollectedList.loadCollectionData()
+    }
     
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
-        vc.enterMode = .place
+        vc.enterMode = uiviewCollectedList.tableMode
+        vc.delegate = self
         present(vc, animated: true)
     }
     
@@ -27,13 +33,16 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     // AfterAddedToListDelegate
     func undoCollect() {
         uiviewAfterAdded.hide()
+        uiviewCollectedList.show()
     }
     
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
-        let vcCollectedList = CollectionsViewController()
-        navigationController?.pushViewController(vcCollectedList, animated: true)
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewCollectedList.tableMode
+        navigationController?.pushViewController(vcList, animated: true)
+        handleLocInfoBarTap()
     }
     
     func loadPlaceListView() {
@@ -274,6 +283,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         }
         
         guard PLACE_ENABLE else { return }
+        guard boolNextUpdate else { return }
+        boolNextUpdate = false
         btnFilterIcon.startIconSpin()
         let time_0 = DispatchTime.now()
         renewSelfLocation()
@@ -288,15 +299,18 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
+                self.boolNextUpdate = true
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
+                self.boolNextUpdate = true
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
+                self.boolNextUpdate = true
                 return
             }
             var placePins = [FaePinAnnotation]()
@@ -307,19 +321,23 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 // Fallback on earlier versions
             }
             serialQueue.async {
+                var i = 0
                 for placeJson in mapPlaceJsonArray {
                     let placeData = PlacePin(json: placeJson)
-                    if self.arrPlaceData.contains(placeData) {
-                        continue
+                    let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
+                    if self.setPlacePins.contains(placeJson["place_id"].intValue) {
+//                        joshprint(i, "inserted fail")
                     } else {
-                        // MARK: - Bug Here, negative count and malloc problem
-                        let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
-                        self.arrPlaceData.append(placeData)
-                        self.faePlacePins.append(place)
+                        self.setPlacePins.insert(placeJson["place_id"].intValue)
                         placePins.append(place)
+                        self.faePlacePins.append(place)
                     }
+                    i += 1
                 }
+                self.boolNextUpdate = true
+//                joshprint(" ")
                 guard placePins.count > 0 else { return }
+//                joshprint(self.faePlacePins.count)
                 DispatchQueue.main.async {
                     self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
                 }

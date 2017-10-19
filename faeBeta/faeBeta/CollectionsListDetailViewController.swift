@@ -14,7 +14,7 @@ protocol CollectionsListDetailDelegate: class {
     func updateColName(indexPath: IndexPath, name: String, numItems: Int)
 }
 
-class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate {
+class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate {
     
     var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
@@ -22,14 +22,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var lblListName: UILabel!
     var lblItemsNum: UILabel!
     var numItems: Int = 0
+    var lblNum: UILabel!
     var tblColListDetail: UITableView!
     var uiviewFooter: UIView!
     var btnBack: UIButton!
     var btnMapView: UIButton!
     var btnShare: UIButton!
     var btnMore: UIButton!
-    var faeMap = FaeMap()
-    var savedItems = [PlacePin]()
+    var savedItems = [SavedPin]()
     
     // variables in extension file
     var uiviewShadowBG: UIView!
@@ -45,11 +45,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     var txtName: String = ""
     var txtDesp: String = ""
-    var txtTime: String = "09/2017"
+    var txtTime: String = ""
     
     var arrColDetails: CollectionList!
     var colId: Int = -1
-    let faeCollection = FaeCollection()
+    
+    var arrLocPinIds = [Int]()
     
     var indexPath: IndexPath!
     weak var delegate: CollectionsListDetailDelegate?
@@ -59,10 +60,10 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        getSavedItems()
         loadTable()
         loadFooter()
         loadHiddenHeader()
+        loadHiddenSectionHeader()
         loadChooseOption()
         ColListDetailHeader.boolExpandMore = false
         loadColItems()
@@ -74,7 +75,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
-        faeCollection.getOneCollection(String(colId)) {(status: Int, message: Any?) in
+        FaeCollection.shared.getOneCollection(String(colId)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 let list = JSON(message!)
                 self.arrColDetails = CollectionList(json: list)
@@ -82,12 +83,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 self.lblListName.text = self.arrColDetails.colName
                 self.txtName = self.arrColDetails.colName
                 self.txtDesp = self.arrColDetails.colDesp
-//                self.txtTime = self.arrColDetails.colTime
+                self.txtTime = self.arrColDetails.colTime
+                self.numItems = self.arrColDetails.pinIds.count
                 
+                self.getSavedItems(colId: self.colId)
                 self.tblColListDetail.reloadData()
-                print("[Get Collection items] Get Successfully")
             } else {
-                print("[Get Collection items] Fail to Get \(status) \(message!)")
+                print("[Get Collection detail] Fail to Get \(status) \(message!)")
             }
         }
     }
@@ -114,11 +116,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 34))
         uiviewFixedSectionHeader.backgroundColor = .white
         view.addSubview(uiviewFixedSectionHeader)
-        let lblNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
+        
+        lblNum = UILabel(frame: CGRect(x: 20, y: 4, width: 80, height: 25))
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
         lblNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblNum.text = "\(numItems) items"
         
         let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
         uiviewFixedSectionHeader.addSubview(lblDateAdded)
@@ -137,15 +139,22 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         view.addSubview(tblColListDetail)
         
         automaticallyAdjustsScrollViewInsets = false
-
+        
         tblColListDetail.delegate = self
         tblColListDetail.dataSource = self
         tblColListDetail.separatorStyle = .none
         tblColListDetail.rowHeight = UITableViewAutomaticDimension
         tblColListDetail.showsVerticalScrollIndicator = false
         tblColListDetail.register(ColListDetailHeader.self, forCellReuseIdentifier: "ColListDetailHeader")
-        tblColListDetail.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
+        tblColListDetail.register(ColListPlaceCell.self, forCellReuseIdentifier: "ColListPlaceCell")
+        tblColListDetail.register(ColListLocationCell.self, forCellReuseIdentifier: "ColListLocationCell")
         tblColListDetail.register(ColListEmptyCell.self, forCellReuseIdentifier: "ColListEmptyCell")
+        
+        if #available(iOS 11.0, *) {
+            tblColListDetail.contentInsetAdjustmentBehavior = .never
+        } else {
+            automaticallyAdjustsScrollViewInsets = false
+        }
     }
     
     fileprivate func loadFooter() {
@@ -183,17 +192,16 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func actionBack(_ sender: UIButton) {
-        print("txtName \(txtName)")
-        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: 0)
+        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
     func tabButtonPressed(_ sender: UIButton) {
         switch sender.tag {
-        case 0:  // map view
+        case 0: // map view
             break
-        case 1:  // share
-            // TODO jichao
+        case 1: // share
+            // TODO: jichao
             let vcShareCollection = NewChatShareController(friendListMode: .collection)
             vcShareCollection.collectionDetail = arrColDetails
             navigationController?.pushViewController(vcShareCollection, animated: true)
@@ -253,6 +261,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 0 {
             return 1
         } else {
+            if enterMode == .location {
+                return arrLocPinIds.count == 0 ? 1 : arrLocPinIds.count
+            }
             return savedItems.count == 0 ? 1 : savedItems.count
         }
     }
@@ -266,15 +277,21 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             cell.updateValueForCell(name: txtName, desp: txtDesp, time: txtTime)
             return cell
         } else {
-            if savedItems.count == 0 {
+            if savedItems.count == 0 && arrLocPinIds.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ColListEmptyCell", for: indexPath) as! ColListEmptyCell
                 let img = enterMode == .place ? #imageLiteral(resourceName: "collection_noPlaceList") : #imageLiteral(resourceName: "collection_noLocList")
                 cell.setValueForCell(img: img)
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "AllPlacesCell", for: indexPath) as! AllPlacesCell
-                cell.setValueForCell(place: savedItems[indexPath.row])
-                return cell
+                if enterMode == .location {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "ColListLocationCell", for: indexPath) as! ColListLocationCell
+                    cell.setValueForLocationPin(locId: arrLocPinIds[indexPath.row])
+                    return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
+                    cell.setValueForCell(col: savedItems[indexPath.row])
+                    return cell
+                }
             }
         }
     }
@@ -292,7 +309,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             uiviewFixedHeader.isHidden = true
         }
         if uiviewFixedSectionHeader != nil {
-            if tblColListDetail.contentOffset.y >= tblColListDetail.rect(forSection: 0).height - 65 &&  tblColListDetail.contentOffset.y >= 0 {
+            if tblColListDetail.contentOffset.y >= tblColListDetail.rect(forSection: 0).height - 65 && tblColListDetail.contentOffset.y >= 0 {
                 uiviewFixedSectionHeader.isHidden = false
             } else {
                 uiviewFixedSectionHeader.isHidden = true
@@ -300,25 +317,52 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-    func getSavedItems() {
+    func getSavedItems(colId: Int) {
         if enterMode == .place {
-            faeMap.whereKey("is_place", value: "true")
-            faeMap.getSavedPins() {(status: Int, message: Any?) in
+            FaeMap.shared.whereKey("is_place", value: "true")
+            FaeMap.shared.getSavedPins { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     let savedPinsJSON = JSON(message!)
                     for i in 0..<savedPinsJSON.count {
-                        let savedData = PlacePin(json: savedPinsJSON[i])
-                        self.savedItems.append(savedData)
+                        let savedData = SavedPin(json: savedPinsJSON[i])
+                        if savedData.pinBelongs.elementsEqual(String(colId)) {
+                            self.savedItems.append(savedData)
+                        }
                     }
                     self.tblColListDetail.reloadData()
-                    self.loadHiddenSectionHeader()
-                }
-                else {
-                    print("Fail to get saved pins!")
+                    if self.lblNum != nil {
+                        self.lblNum.text = "\(self.numItems) items"
+                    }
+                } else {
+                    print("Fail to get saved places!")
                 }
             }
         } else {
-            loadHiddenSectionHeader()
+            FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
+                guard status / 100 == 2 else { return }
+                guard message != nil else { return }
+                let resultJson = JSON(message!)
+                let arrLocPinId = resultJson["pin_id"].arrayValue
+                self.arrLocPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
+                joshprint(self.arrLocPinIds)
+            })
+            FaeMap.shared.getSavedPins { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let savedPinsJSON = JSON(message!)
+                    for i in 0..<savedPinsJSON.count {
+                        let savedData = SavedPin(json: savedPinsJSON[i])
+                        if savedData.pinType == "location" && savedData.pinBelongs.elementsEqual(String(colId)) {
+                            self.savedItems.append(savedData)
+                        }
+                    }
+                    self.tblColListDetail.reloadData()
+                    if self.lblNum != nil {
+                        self.lblNum.text = "\(self.numItems) items"
+                    }
+                } else {
+                    print("Fail to get saved locations!")
+                }
+            }
         }
     }
     
@@ -428,7 +472,7 @@ class ColListDetailHeader: UITableViewCell {
     
     func setValueForCell(img: UIImage) {
         imgHeader.image = img
-        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
+        General.shared.avatar(userid: Key.shared.user_id, completion: { avatarImage in
             self.imgAvatar.image = avatarImage
         })
     }
@@ -459,8 +503,8 @@ class ColListDetailHeader: UITableViewCell {
         //        print("charSize: \(charSize)")
         //        print("No of lines: \(lineCount)")
         
-//        print(lineCount)
-//        print(ColListDetailHeader.boolExpandMore)
+        //        print(lineCount)
+        //        print(ColListDetailHeader.boolExpandMore)
         if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
             btnReadMore.isHidden = true
             lblDesp.numberOfLines = 0
@@ -498,6 +542,190 @@ class ColListEmptyCell: UITableViewCell {
     
     func setValueForCell(img: UIImage) {
         imgEmpty.image = img
+    }
+}
+
+class ColListPlaceCell: UITableViewCell {
+    
+    var imgSavedItem: FaeImageView!
+    var lblItemName: UILabel!
+    var lblItemAddr: UILabel!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        let separatorView = UIView(frame: CGRect(x: 89, y: 89, width: screenWidth - 89, height: 1))
+        separatorView.backgroundColor = UIColor._206203203()
+        addSubview(separatorView)
+        selectionStyle = .none
+        loadCellContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadCellContent() {
+        imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
+        imgSavedItem.layer.cornerRadius = 5
+        imgSavedItem.clipsToBounds = true
+        imgSavedItem.backgroundColor = UIColor._2499090()
+        imgSavedItem.contentMode = .scaleAspectFill
+        addSubview(imgSavedItem)
+        let icon = UIImageView(frame: CGRect(x: 23, y: 22, width: 19, height: 24))
+        icon.contentMode = .scaleAspectFit
+        icon.image = #imageLiteral(resourceName: "icon_destination")
+        imgSavedItem.addSubview(icon)
+        
+        lblItemName = UILabel(frame: CGRect(x: 93, y: 26, width: screenWidth - 93, height: 22))
+        lblItemName.textColor = UIColor._898989()
+        lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        addSubview(lblItemName)
+        
+        lblItemAddr = UILabel(frame: CGRect(x: 93, y: 48, width: screenWidth - 93, height: 16))
+        lblItemAddr.textColor = UIColor._107105105()
+        lblItemAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addSubview(lblItemAddr)
+    }
+    
+    func setValueForCell(col: SavedPin) {
+        //        imgSavedItem.backgroundColor = .red
+        lblItemName.text = col.pinName
+        lblItemAddr.text = col.pinAddr
+    }
+}
+
+let faeLocationCache = NSCache<AnyObject, AnyObject>()
+
+class ColListLocationCell: UITableViewCell {
+    
+    var imgSavedItem: FaeImageView!
+    var lblItemName: UILabel!
+    var lblItemAddr_1: UILabel!
+    var lblItemAddr_2: UILabel!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        let separatorView = UIView(frame: CGRect(x: 89, y: 89, width: screenWidth - 89, height: 1))
+        separatorView.backgroundColor = UIColor._206203203()
+        addSubview(separatorView)
+        selectionStyle = .none
+        loadCellContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadCellContent() {
+        imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
+        imgSavedItem.clipsToBounds = true
+        imgSavedItem.backgroundColor = UIColor._2499090()
+        imgSavedItem.contentMode = .scaleAspectFill
+        addSubview(imgSavedItem)
+        let icon = UIImageView(frame: CGRect(x: 23, y: 22, width: 19, height: 24))
+        icon.contentMode = .scaleAspectFit
+        icon.image = #imageLiteral(resourceName: "icon_destination")
+        imgSavedItem.addSubview(icon)
+        
+        lblItemName = UILabel(frame: CGRect(x: 93, y: 18, width: screenWidth - 110, height: 22))
+        lblItemName.textColor = UIColor._898989()
+        lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        addSubview(lblItemName)
+        
+        lblItemAddr_1 = UILabel(frame: CGRect(x: 93, y: 40, width: screenWidth - 93, height: 16))
+        lblItemAddr_1.textColor = UIColor._107105105()
+        lblItemAddr_1.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addSubview(lblItemAddr_1)
+        
+        lblItemAddr_2 = UILabel(frame: CGRect(x: 93, y: 57, width: screenWidth - 93, height: 16))
+        lblItemAddr_2.textColor = UIColor._107105105()
+        lblItemAddr_2.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addSubview(lblItemAddr_2)
+    }
+    
+    func setValueForLocationPin(locId: Int) {
+        if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
+            let lat = locationFromCache["geolocation"]["latitude"].doubleValue
+            let lon = locationFromCache["geolocation"]["longitude"].doubleValue
+            let location = CLLocation(latitude: lat, longitude: lon)
+            self.imgSavedItem.fileID = locationFromCache["content"].intValue
+            self.imgSavedItem.loadImage(id: locationFromCache["content"].intValue)
+            self.getAddressForLocation(location: location)
+            joshprint("[setValueForLocationPin] get location pin from cache")
+            return
+        }
+        FaeMap.shared.getPin(type: "location", pinId: String(locId)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            faeLocationCache.setObject(resultJson as AnyObject, forKey: locId as AnyObject)
+            let lat = resultJson["geolocation"]["latitude"].doubleValue
+            let lon = resultJson["geolocation"]["longitude"].doubleValue
+            let location = CLLocation(latitude: lat, longitude: lon)
+            self.imgSavedItem.fileID = resultJson["content"].intValue
+            self.imgSavedItem.loadImage(id: resultJson["content"].intValue)
+            self.getAddressForLocation(location: location)
+            joshprint("[setValueForLocationPin] get location pin successfully")
+        }
+    }
+    
+    func getAddressForLocation(location: CLLocation) {
+        General.shared.getAddress(location: location, original: true) { (original) in
+            guard let first = original as? CLPlacemark else { return }
+            
+            var name = ""
+            var subThoroughfare = ""
+            var thoroughfare = ""
+            
+            var address_1 = ""
+            var address_2 = ""
+            var address_3 = ""
+            
+            if let n = first.name {
+                name = n
+                address_1 += n
+            }
+            if let s = first.subThoroughfare {
+                subThoroughfare = s
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += s
+            }
+            if let t = first.thoroughfare {
+                thoroughfare = t
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += t
+            }
+            
+            if name == subThoroughfare + " " + thoroughfare {
+                address_1 = name
+            }
+            
+            if let l = first.locality {
+                address_2 += l
+            }
+            if let a = first.administrativeArea {
+                if address_2 != "" {
+                    address_2 += ", "
+                }
+                address_2 += a
+            }
+            if let p = first.postalCode {
+                address_2 += " " + p
+            }
+            if let c = first.country {
+                address_3 += c
+            }
+            
+            DispatchQueue.main.async {
+                self.lblItemName.text = address_1
+                self.lblItemAddr_1.text = address_2
+                self.lblItemAddr_2.text = address_3
+            }
+        }
     }
 }
 
@@ -610,7 +838,10 @@ extension CollectionsListDetailViewController {
         case 0: // manage
             animationHideOptions()
             let vc = ManageColListViewController()
+            vc.delegate = self
             vc.enterMode = enterMode
+            vc.arrColList = savedItems
+            vc.colId = colId
             present(vc, animated: true)
             break
         case 1: // settings
@@ -631,8 +862,7 @@ extension CollectionsListDetailViewController {
     }
     
     func actionYes(_ sender: UIButton) {
-        let faeCollection = FaeCollection()
-        faeCollection.deleteOneCollection(String(colId)) {(status: Int, message: Any?) in
+        FaeCollection.shared.deleteOneCollection(String(colId)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.animationHideOptions()
                 self.navigationController?.popViewController(animated: true)
@@ -677,4 +907,17 @@ extension CollectionsListDetailViewController {
         })
     }
     // animations end
+    
+    // ManageColListDelegate
+    func returnValBack(savedItems: [SavedPin]) {
+        self.savedItems = savedItems
+        numItems = savedItems.count
+        if lblNum != nil {
+            lblNum.text = "\(numItems) items"
+        }
+        
+        let section = IndexSet(integer: 1)
+        tblColListDetail.reloadSections(section, with: .none)
+        //        tblColListDetail.reloadData()
+    }
 }

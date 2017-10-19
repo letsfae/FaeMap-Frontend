@@ -36,7 +36,7 @@ extension ContactsViewController {
     }
     
     func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 103))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 103))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -39 // 64 - 103
@@ -81,13 +81,18 @@ extension ContactsViewController {
         lblBottom.text = "Requests"
         btnBottom.addSubview(lblBottom)
         
-        let uiviewDropMenuLineTop = UIView(frame: CGRect(x: (screenWidth - 280) / 2, y: 51, width: 280, height: 1))
+        let uiviewDropMenuLineTop = UIView(frame: CGRect(x: (screenWidth - 332 * screenWidthFactor) / 2, y: 51, width: 332 * screenWidthFactor, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuLineTop)
         uiviewDropMenuLineTop.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
         
         imgTick = UIImageView(frame: CGRect(x: screenWidth - 75, y: 20, width: 16, height: 16))
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
         uiviewDropDownMenu.addSubview(imgTick)
+        
+        imgDot = UIImageView(frame: CGRect(x: 30, y: 74, width: 8, height: 8))
+        imgDot.image = #imageLiteral(resourceName: "verification_dot")
+        uiviewDropDownMenu.addSubview(imgDot)
+        imgDot.isHidden = true
     }
     
     fileprivate func updateFriendCount() {
@@ -136,15 +141,15 @@ extension ContactsViewController {
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 64
             })
+            navBarMenuBtnClicked = true
             btnNavBarSetTitle()
             updateFriendCount()
-            navBarMenuBtnClicked = true
         } else {
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = -39
             })
-            btnNavBarSetTitle()
             navBarMenuBtnClicked = false
+            btnNavBarSetTitle()
         }
     }
     
@@ -183,7 +188,7 @@ extension ContactsViewController {
             tblContacts.frame.origin.y = 114
             cellStatus = 0
         } else {
-            imgTick.frame.origin.y = 62
+            imgTick.frame.origin.y = 71
             uiviewNavBar.rightBtn.isHidden = true
             uiviewBottomNav.isHidden = false
             uiviewSchbar.isHidden = true
@@ -191,12 +196,12 @@ extension ContactsViewController {
             cellStatus = btnFFF.isSelected ? 1 : 2
         }
         
-        btnNavBarSetTitle()
         
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -92
         })
         navBarMenuBtnClicked = false
+        btnNavBarSetTitle()
         
 //        switchFriendsAndFollows()
         tblContacts.reloadData()
@@ -217,7 +222,11 @@ extension ContactsViewController {
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         let downAttachment = InlineTextAttachment()
         downAttachment.fontDescender = 1
-        downAttachment.image = #imageLiteral(resourceName: "btn_down")
+        if navBarMenuBtnClicked {
+            downAttachment.image = #imageLiteral(resourceName: "btn_up")
+        } else {
+            downAttachment.image = #imageLiteral(resourceName: "btn_down")
+        }
         
         let curtTitlePlusImg = curtTitleStr
         curtTitlePlusImg.append(NSAttributedString(attachment: downAttachment))

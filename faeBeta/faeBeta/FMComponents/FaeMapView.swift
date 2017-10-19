@@ -13,6 +13,20 @@ class FaeMapView: MKMapView {
     private var block = false
     var faeMapCtrler: FaeMapViewController?
     var blockTap = false
+    var btnCompass = FMCompass()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
+            compassView.frame = CGRect(x: 21.5, y: screenHeight - 151.5, width: 60, height: 60)
+            if let imgView = compassView.subviews.first as? UIImageView {
+                imgView.image = #imageLiteral(resourceName: "mainScreenNorth_new")
+            }
+//            btnCompass.isHidden = true
+        } else {
+//            btnCompass.isHidden = false
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +43,9 @@ class FaeMapView: MKMapView {
         addGestureRecognizer(longPress)
         guard let subview = self.subviews.first else { return }
         subview.addGestureRecognizer(doubleTap)
+        
+        addSubview(btnCompass)
+        btnCompass.layer.zPosition = 9999
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -91,12 +108,12 @@ class FaeMapView: MKMapView {
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
         guard !block else { return }
         block = true
-        faeMapCtrler?.uiviewNameCard.hide() {
-            self.faeMapCtrler?.mapGesture(isOn: true)
-        }
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView && blockTap == false {
             if let anView = v as? PlacePinAnnotationView {
+                faeMapCtrler?.uiviewNameCard.hide() {
+                    self.faeMapCtrler?.mapGesture(isOn: true)
+                }
                 cancelCreatingLocationPin()
                 if anView.optionsReady == false {
                     faeMapCtrler?.deselectAllAnnotations()
@@ -114,8 +131,10 @@ class FaeMapView: MKMapView {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
-                
             } else if let anView = v as? LocPinAnnotationView {
+                faeMapCtrler?.uiviewNameCard.hide() {
+                    self.faeMapCtrler?.mapGesture(isOn: true)
+                }
                 if anView.optionsReady == false {
 //                    faeMapCtrler?.deselectAllAnnotations()
                     anView.optionsReady = true
@@ -128,6 +147,9 @@ class FaeMapView: MKMapView {
                 }
             }
         } else {
+            faeMapCtrler?.uiviewNameCard.hide() {
+                self.faeMapCtrler?.mapGesture(isOn: true)
+            }
             if v is LocationView {
                 
             } else {

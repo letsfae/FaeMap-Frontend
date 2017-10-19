@@ -11,7 +11,7 @@ import SwiftyJSON
 import CoreLocation
 
 class PlacePin: NSObject {
-     
+    
     let id: Int
     var name: String
     let coordinate: CLLocationCoordinate2D
@@ -23,6 +23,9 @@ class PlacePin: NSObject {
     var icon: UIImage?
     var imageURL = ""
     var class_1: String = ""
+    var url = ""
+    var price = ""
+    var phone = ""
     
     init(json: JSON) {
         id = json["place_id"].intValue
@@ -44,6 +47,14 @@ class PlacePin: NSObject {
         icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         
         class_1 = json["categories"]["class1"].stringValue
+        
+        imageURL = json["img"].stringValue
+        
+        url = json["url"].stringValue
+        
+        price = json["priceRange"].stringValue
+        
+        phone = json["phone"].stringValue
     }
     
     init(string: String) {
@@ -56,14 +67,5 @@ class PlacePin: NSObject {
         class_2_icon_id = placeJSON["categories"]["class1_icon_id"].intValue
         address1 = placeJSON["location"]["address1"].stringValue
         address2 = placeJSON["location"]["address2"].stringValue
-    }
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        guard let rhs = object as? PlacePin else { return false }
-        return self.id == rhs.id
-    }
-    
-    static func ==(lhs: PlacePin, rhs: PlacePin) -> Bool {
-        return lhs.isEqual(rhs)
     }
 }

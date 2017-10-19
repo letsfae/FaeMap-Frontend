@@ -65,6 +65,9 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
         loadCollectionView()
         loadFooter()
         updateLocation()
+//        let line = UIView(frame: CGRect(x: 0, y: 169, width: screenWidth, height: 1))
+//        line.backgroundColor = .black
+//        view.addSubview(line)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,7 +100,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     func loadMap() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 40))
+        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 48))
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isPitchEnabled = false
@@ -149,7 +152,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     func loadHeader() {
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 352, w: 414, h: 101))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
@@ -197,6 +200,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     fileprivate func loadAddtoCollection() {
         uiviewAddCollection = AddPlaceToCollectionView()
         uiviewAddCollection.delegate = self
+        uiviewAddCollection.tableMode = .location
         view.addSubview(uiviewAddCollection)
     }
     
@@ -263,7 +267,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     
     func createColList() {
         let vc = CreateColListViewController()
-        vc.enterMode = .place
+        vc.enterMode = .location
         present(vc, animated: true)
         //        navigationController?.pushViewController(vc, animated: true)
     }

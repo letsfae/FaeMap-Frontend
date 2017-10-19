@@ -18,6 +18,8 @@ class AfterAddedToListView: UIView {
     
     weak var delegate: AfterAddedToListDelegate?
     var uiviewAfterAdded: UIView!
+    var pinIdInAction: Int = -1
+    var selectedCollection: PinCollection!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
@@ -63,7 +65,16 @@ class AfterAddedToListView: UIView {
     }
     
     func undoCollecting() {
-        delegate?.undoCollect()
+        guard let col = selectedCollection, pinIdInAction != -1 else { return }
+        self.hide()
+        FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            joshprint("[undoCollecting] successfully undo saving")
+            self.selectedCollection = nil
+            self.pinIdInAction = -1
+            self.delegate?.undoCollect()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideCollectedNoti"), object: nil)
+        }
     }
     
     func goToList() {
@@ -100,11 +111,13 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var arrCollection = [PinCollection]()
     var tableMode: CollectionTableMode = .place
     var locationPin: FaePinAnnotation!
+    var timer: Timer?
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
         backgroundColor = .white
         loadContent()
+        loadCollectionData()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -217,29 +230,73 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         joshprint(arrCollection[indexPath.row])
         let colInfo = arrCollection[indexPath.row]
-        FaeMap.shared.whereKey("content", value: "test_ys")
-        FaeMap.shared.whereKey("geo_latitude", value: "\(locationPin.coordinate.latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(locationPin.coordinate.longitude)")
-        FaeMap.shared.postPin(type: "location", completion: { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let idJSON = JSON(message!)
-            let locationId = idJSON["location_id"].intValue
-            joshprint(locationId)
-            FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
-                guard code / 100 == 2 else { return }
-//                guard result != nil else { return }
-                self.hide()
-                self.uiviewAfterAdded.show()
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.uiviewAfterAdded.hide()
-                }
-            })
-        })
+        uiviewAfterAdded.selectedCollection = colInfo
+        self.timer?.invalidate()
+        self.timer = nil
+        mapScreenShot(coordinate: locationPin.coordinate) { (snapShotImage) in
+            FaeImage.shared.type = "image"
+            FaeImage.shared.image = snapShotImage
+            FaeImage.shared.faeUploadFile { (status, message) in
+                guard status / 100 == 2 else { return }
+                guard message != nil else { return }
+                let fileIDJSON = JSON(message!)
+                let fileId = fileIDJSON["file_id"].intValue
+                FaeMap.shared.whereKey("content", value: "\(fileId)")
+                FaeMap.shared.whereKey("geo_latitude", value: "\(self.locationPin.coordinate.latitude)")
+                FaeMap.shared.whereKey("geo_longitude", value: "\(self.locationPin.coordinate.longitude)")
+                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let idJSON = JSON(message!)
+                    let locationId = idJSON["location_id"].intValue
+                    joshprint(locationId)
+                    self.uiviewAfterAdded.pinIdInAction = locationId
+                    FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
+                        guard code / 100 == 2 else { return }
+                        self.hide()
+                        self.uiviewAfterAdded.show()
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                        self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+                    })
+                })
+            }
+        }
+    }
+    
+    func mapScreenShot(coordinate: CLLocationCoordinate2D, _ completion: @escaping (UIImage) -> Void) {
+        let mapSnapshotOptions = MKMapSnapshotOptions()
+        
+        // Set the region of the map that is rendered.
+        let region = MKCoordinateRegionMakeWithDistance(coordinate, 1000, 1000)
+        mapSnapshotOptions.region = region
+        
+        // Set the scale of the image. We'll just use the scale of the current device, which is 2x scale on Retina screens.
+        mapSnapshotOptions.scale = UIScreen.main.scale
+        
+        // Set the size of the image output.
+        mapSnapshotOptions.size = CGSize(width: 66, height: 66)
+        
+        // Show buildings and Points of Interest on the snapshot
+        mapSnapshotOptions.showsBuildings = true
+        mapSnapshotOptions.showsPointsOfInterest = true
+        
+        let snapShotter = MKMapSnapshotter(options: mapSnapshotOptions)
+        
+        snapShotter.start { (snapShot, error) in
+            guard let snap = snapShot else { return }
+//            let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 66, height: 66))
+//            imgView.image = snapShot?.image
+//            UIApplication.shared.keyWindow?.addSubview(imgView)
+            completion(snap.image)
+        }
+    }
+    
+    func timerFunc() {
+        uiviewAfterAdded.hide()
     }
     
     func actionCancel(_ sender: UIButton) {
+        print("actionCancel")
         delegate?.cancelAddPlace()
     }
     

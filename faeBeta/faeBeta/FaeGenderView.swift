@@ -61,6 +61,7 @@ class FaeGenderView: UIView {
                 let gender = profileInfo["gender"].stringValue
                 let canShowAge = profileInfo["show_age"].boolValue
                 let age = profileInfo["age"].stringValue
+                joshprint("age", age)
                 self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
                 completion(profileInfo["nick_name"].stringValue, profileInfo["user_name"].stringValue, profileInfo["short_intro"].stringValue)
             })
@@ -95,7 +96,7 @@ class FaeGenderView: UIView {
             lblCardAge.text = age
             lblCardAge.frame.size = lblCardAge.intrinsicContentSize
             frame.size.width = 17 * screenHeightFactor + lblCardAge.intrinsicContentSize.width
-            lblCardAge.frame.origin.x = 97 * screenHeightFactor
+            lblCardAge.frame.origin.x = 9 * screenHeightFactor
             imgCardGender.image = nil
             backgroundColor = UIColor._210210210()
         } else if showGender && !showAge {

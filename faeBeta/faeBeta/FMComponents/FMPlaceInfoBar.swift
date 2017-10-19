@@ -74,14 +74,32 @@ class FMPlaceInfoBar: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
+    func loadPlaceImage(imgView: PlaceView, placeInfo: PlacePin) {
+        if placeInfo.imageURL == "" {
+            imgView.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+        } else {
+            downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    let placeImg = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        imgView.imgType.image = placeImg
+                    }
+                }
+            }
+        }
+    }
+    
     func load(for placeInfo: PlacePin) {
         state = .singleSearch
-        imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+//        imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
         imgBack_1.lblName.text = placeInfo.name
         imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         self.alpha = 1
         boolLeft = false
         boolRight = false
+        imgBack_1.lblPrice.text = placeInfo.price
+        loadPlaceImage(imgView: imgBack_1, placeInfo: placeInfo)
     }
     
     var prevPlacePin: PlacePin!
@@ -89,9 +107,10 @@ class FMPlaceInfoBar: UIView {
     
     func loading(current: PlacePin) {
         state = .multipleSearch
-        imgBack_1.imgType.image = UIImage(named: "place_result_\(current.class_2_icon_id)") ?? UIImage(named: "place_result_48")
         imgBack_1.lblName.text = current.name
         imgBack_1.lblAddr.text = current.address1 + ", " + current.address2
+        imgBack_1.lblPrice.text = current.price
+        loadPlaceImage(imgView: imgBack_1, placeInfo: current)
         self.alpha = 1
         guard places.count > 0 else { return }
         var prev_idx = places.count - 1
@@ -113,22 +132,26 @@ class FMPlaceInfoBar: UIView {
         prevPlacePin = places[prev_idx]
         nextPlacePin = places[next_idx]
         
-        imgBack_0.imgType.image = UIImage(named: "place_result_\(prevPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
         imgBack_0.lblName.text = prevPlacePin.name
         imgBack_0.lblAddr.text = prevPlacePin.address1 + ", " + prevPlacePin.address2
+        imgBack_0.lblPrice.text = prevPlacePin.price
+        loadPlaceImage(imgView: imgBack_0, placeInfo: prevPlacePin)
         
-        imgBack_2.imgType.image = UIImage(named: "place_result_\(nextPlacePin.class_2_icon_id)") ?? UIImage(named: "place_result_48")
         imgBack_2.lblName.text = nextPlacePin.name
         imgBack_2.lblAddr.text = nextPlacePin.address1 + ", " + nextPlacePin.address2
+        imgBack_2.lblPrice.text = nextPlacePin.price
+        loadPlaceImage(imgView: imgBack_2, placeInfo: nextPlacePin)
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
         state = .map
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_1.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_1.lblName.text = placeInfo.name
                 imgBack_1.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+                imgBack_1.lblPrice.text = placeInfo.price
+                loadPlaceImage(imgView: imgBack_1, placeInfo: placeInfo)
+                joshprint(placeInfo.imageURL)
             }
         }
         guard annotations.count > 0 else { return }
@@ -152,16 +175,18 @@ class FMPlaceInfoBar: UIView {
         nextAnnotation = annotations[next_idx]
         if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_0.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_0.lblName.text = placeInfo.name
                 imgBack_0.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+                imgBack_0.lblPrice.text = placeInfo.price
+                loadPlaceImage(imgView: imgBack_0, placeInfo: placeInfo)
             }
         }
         if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_2.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
                 imgBack_2.lblName.text = placeInfo.name
                 imgBack_2.lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+                imgBack_2.lblPrice.text = placeInfo.price
+                loadPlaceImage(imgView: imgBack_2, placeInfo: placeInfo)
             }
         }
     }
@@ -310,7 +335,6 @@ class PlaceView: UIImageView {
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addConstraintsWithFormat("H:[v0(32)]-18-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:|-69-[v0(18)]", options: [], views: lblPrice)
-        lblPrice.text = "$$$$"
     }
 }
 
@@ -332,7 +356,7 @@ class LocationView: UIView {
     private func loadContent() {
         layer.zPosition = 605
         
-        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410, height: 80))
+        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 80))
         imgBack.contentMode = .scaleAspectFit
         imgBack.image = #imageLiteral(resourceName: "location_bar_shadow")
         addSubview(imgBack)

@@ -22,10 +22,10 @@ enum EnterMode: String {
     case location = "location"
 }
 
-class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource {
+class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
     var enterMode: EnterMode!
     weak var delegate: BoardsSearchDelegate?
-    var arrLocList = ["Los Angeles CA, United States", "Long Beach CA, United States", "London ON, Canada", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United Statesssss", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United States", "Long Beach CA, United States", "San Francisco CA, United States"]
+    var arrLocList: [String] = ["Los Angeles CA, United States", "Long Beach CA, United States", "London ON, Canada", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United Statesssss", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United States", "Long Beach CA, United States", "San Francisco CA, United States"]
     //    var cityList = ["CA, United States", "CA, United States", "CA, United States", ""]
     var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
     
@@ -62,6 +62,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     static var boolToDestination = false
     var boolCurtLocSelected = false
     
+    // MapKit address autocompletion
+    var searchCompleter = MKLocalSearchCompleter()
+    var searchResults = [MKLocalSearchCompletion]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // navigationController?.isNavigationBarHidden = true
@@ -74,6 +78,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         schBar.txtSchField.becomeFirstResponder()
         searchedLoc = LocManager.shared.curtLoc
         getPlaceInfo()
+        
+        searchCompleter.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -101,6 +107,21 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }, completion: nil)
             delay += 0.1
         }
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        filteredLocations = searchResults.map({ $0.title })
+        self.tblLocationRes.reloadData()
+        if self.searchResults.count > 0 {
+            
+        }
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
     }
     
     // shows "no results"
@@ -258,12 +279,13 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
             break
         case .location:
-            filteredLocations.removeAll()
-            for location in arrLocList {
-                if location.lowercased().range(of: searchText.lowercased()) != nil {
-                    filteredLocations.append(location)
-                }
-            }
+//            filteredLocations.removeAll()
+//            for location in arrLocList {
+//                if location.lowercased().range(of: searchText.lowercased()) != nil {
+//                    filteredLocations.append(location)
+//                }
+//            }
+            searchCompleter.queryFragment = searchText
             break
         default:
             break
@@ -422,10 +444,16 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             schBar.txtSchField.resignFirstResponder()
             if tableView == tblLocationRes {
-                let address = RouteAddress(name: filteredLocations[indexPath.row])
-                delegate?.sendLocationBack?(address: address)
-                delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: filteredLocations[indexPath.row], location: LocManager.shared.curtLoc)
-                navigationController?.popViewController(animated: false)
+                let searchRequest = MKLocalSearchRequest(completion: searchResults[indexPath.row])
+                let search = MKLocalSearch(request: searchRequest)
+                search.start { (response, error) in
+                    guard let coordinate = response?.mapItems[0].placemark.coordinate else { return }
+                    let address = RouteAddress(name: self.filteredLocations[indexPath.row])
+                    self.delegate?.sendLocationBack?(address: address)
+                    self.delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: self.filteredLocations[indexPath.row], location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
+                    self.navigationController?.popViewController(animated: false)
+                }
+                
             } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
                     if boolCurtLocSelected {

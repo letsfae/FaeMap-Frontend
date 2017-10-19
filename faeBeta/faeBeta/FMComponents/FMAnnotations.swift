@@ -646,7 +646,7 @@ class LocPinAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-        layer.zPosition = 1
+        layer.zPosition = 1001
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
         
@@ -654,6 +654,7 @@ class LocPinAnnotationView: MKAnnotationView {
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
         NotificationCenter.default.addObserver(self, selector: #selector(showCollectedNoti), name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideCollectedNoti), name: NSNotification.Name(rawValue: "hideCollectedNoti"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -662,6 +663,7 @@ class LocPinAnnotationView: MKAnnotationView {
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideCollectedNoti"), object: nil)
     }
     
     func assignImage(_ image: UIImage) {
@@ -693,12 +695,13 @@ class LocPinAnnotationView: MKAnnotationView {
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share_s"), for: .selected)
         btnShare.alpha = 0
         
-        layer.zPosition = 2
-        imgIcon.layer.zPosition = 2
-        btnDetail.layer.zPosition = 2
-        btnCollect.layer.zPosition = 2
-        btnRoute.layer.zPosition = 2
-        btnShare.layer.zPosition = 2
+//        layer.zPosition = 2
+//        imgIcon.layer.zPosition = 2
+//        btnDetail.layer.zPosition = 2
+//        btnCollect.layer.zPosition = 2
+//        btnRoute.layer.zPosition = 2
+//        btnShare.layer.zPosition = 2
+        // what happened
         
         addSubview(btnDetail)
         addSubview(btnCollect)
@@ -784,6 +787,13 @@ class LocPinAnnotationView: MKAnnotationView {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgCollected.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgCollected.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideCollectedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgCollected.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
+            self.imgCollected.alpha = 0
         }, completion: nil)
     }
     
