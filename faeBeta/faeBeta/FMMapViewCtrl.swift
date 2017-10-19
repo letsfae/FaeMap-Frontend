@@ -34,32 +34,32 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
+                anView.alpha = 0
+                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
+                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
                 DispatchQueue.main.async {
-                    anView.alpha = 0
-                    anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                    let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
                     UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
                         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
                         anView.alpha = 1
                     }, completion: nil)
                 }
             } else if let anView = annotationView as? UserPinAnnotationView {
+                anView.alpha = 0
                 DispatchQueue.main.async {
-                    anView.alpha = 0
                     UIView.animate(withDuration: 0.4, animations: {
                         anView.alpha = 1
                     })
                 }
             } else if let anView = annotationView as? LocPinAnnotationView {
+                anView.alpha = 0
                 DispatchQueue.main.async {
-                    anView.alpha = 0
                     UIView.animate(withDuration: 0.2, animations: {
                         anView.alpha = 1
                     })
                 }
             } else if let anView = annotationView as? MKAnnotationView {
+                anView.alpha = 0
                 DispatchQueue.main.async {
-                    anView.alpha = 0
                     UIView.animate(withDuration: 0.4, animations: {
                         anView.alpha = 1
                     })
