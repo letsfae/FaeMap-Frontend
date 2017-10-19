@@ -133,6 +133,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         textviewListName.textColor = txtListName == "" ? UIColor._155155155() : UIColor._898989()
         textviewListName.tintColor = UIColor._2499090()
         textviewListName.text = txtListName == "" ? placeholder[0] : txtListName
+        textviewListName.returnKeyType = .next
         uiviewContent.addSubview(textviewListName)
         
         textviewDesp = UITextView(frame: CGRect(x: 20, y: 159, width: screenWidth - 40, height: screenHeight - 159 - 65))
@@ -141,6 +142,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         textviewDesp.textColor = txtListDesp == "" ? UIColor._155155155() : UIColor._898989()
         textviewDesp.tintColor = UIColor._2499090()
         textviewDesp.text = txtListDesp == "" ? placeholder[1] : txtListDesp
+        textviewDesp.returnKeyType = .next
         uiviewContent.addSubview(textviewDesp)
         
         textviewListName.becomeFirstResponder()
