@@ -30,34 +30,28 @@ func sendWelcomeMessage() {
     let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
     if let _ = fae.message {
     } else {
-        postToURL("chats_v2", parameter: ["receiver_id": "1" as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
-            if statusCode / 100 == 2 {
-                if let resultDic = result as? NSDictionary {
-                    let chat_id = (resultDic["chat_id"] as! NSNumber).stringValue
-                    let newMessage = RealmMessage_v2()
-                    newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, 0)
-                    newMessage.sender = fae
-                    newMessage.members.append(selfUser)
-                    newMessage.members.append(fae)
-                    newMessage.created_at = RealmChat.dateConverter(date: Date())
-                    newMessage.type = "text"
-                    newMessage.text = text
-                    newMessage.unread_count = 1
-                    let recentRealm = RealmRecent_v2()
-                    recentRealm.created_at = newMessage.created_at
-                    recentRealm.unread_count = 1
-                    recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
-                    try! realm.write {
-                        realm.add(newMessage)
-                        realm.add(recentRealm, update: true)
-                    }
-                }
-            }
-        })
-    }
-    if realm.filterAllMessages(login_user_id, 0, "-1").count == 0 {
+        let chat_id = "1"
         let newMessage = RealmMessage_v2()
-        newMessage.setPrimaryKeyInfo(login_user_id, 0, "-1", -1)
+        newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, 0)
+        newMessage.sender = fae
+        newMessage.members.append(selfUser)
+        newMessage.members.append(fae)
+        newMessage.created_at = RealmChat.dateConverter(date: Date())
+        newMessage.type = "text"
+        newMessage.text = text
+        newMessage.unread_count = 1
+        let recentRealm = RealmRecent_v2()
+        recentRealm.created_at = newMessage.created_at
+        recentRealm.unread_count = 1
+        recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
+        try! realm.write {
+            realm.add(newMessage)
+            realm.add(recentRealm, update: true)
+        }
+    }
+    if realm.filterAllMessages(login_user_id, 0, login_user_id).count == 0 {
+        let newMessage = RealmMessage_v2()
+        newMessage.setPrimaryKeyInfo(login_user_id, 0, login_user_id, -1)
         newMessage.sender = selfUser
         newMessage.members.append(selfUser)
         newMessage.members.append(selfUser)
@@ -68,7 +62,7 @@ func sendWelcomeMessage() {
         let recentRealm = RealmRecent_v2()
         recentRealm.created_at = newMessage.created_at
         recentRealm.unread_count = 0
-        recentRealm.setPrimaryKeyInfo(login_user_id, 0, "-1")
+        recentRealm.setPrimaryKeyInfo(login_user_id, 0, login_user_id)
         try! realm.write {
             realm.add(newMessage)
             realm.add(recentRealm, update: true)

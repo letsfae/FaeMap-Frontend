@@ -13,7 +13,8 @@ class RealmMessage_v2: Object {
     dynamic var primary_key: String = "" // login_user_id, is_group, chat_id, index
     dynamic var login_user_id: String = ""
     dynamic var is_group: Int = 0
-    dynamic var chat_id: String = ""
+    dynamic var chat_id: String = "" // for private chat, chat_id is the id of the other user
+                                     // for group chat, chat_id is the id of the group chatroom
     dynamic var index: Int = -1
     dynamic var sender: RealmUser? = nil
     let members = List<RealmUser>()

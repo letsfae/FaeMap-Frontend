@@ -245,9 +245,11 @@ extension ChatViewController: OutgoingMessageProtocol {
                     self!.arrJSQMessages.append(messageJSQ)
                     self!.arrRealmMessages.append(insertMessage)
                     self!.finishReceivingMessage(animated: false)
-                    realm.beginWrite()
-                    insertMessage.unread_count = 0
-                    try! realm.commitWrite()                    
+                    if incomingMessage.senderId != "\(Key.shared.user_id)" {
+                        realm.beginWrite()
+                        insertMessage.unread_count = 0
+                        try! realm.commitWrite()
+                    }                    
                 }
                 break
             case .error:

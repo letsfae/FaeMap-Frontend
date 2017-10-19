@@ -19,7 +19,7 @@ class IncomingMessage {
     //MARK: - properties
     private var collectionView : JSQMessagesCollectionViewCustom
     private var senderName: String = ""
-    private var senderId: String = ""
+    var senderId: String = ""
     private var createdAt: Date = Date()
     
     //MARK: - init

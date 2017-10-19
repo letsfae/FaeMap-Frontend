@@ -158,7 +158,7 @@ class RecentTableViewCell: UITableViewCell {
             imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
         }*/
         for user in latest.members {
-            if user.id != user.login_user_id || latest.chat_id == "-1" {
+            if user.id != user.login_user_id || latest.chat_id == user.login_user_id {
                 lblName.text = user.display_name
                 if let avatarData = user.avatar?.userSmallAvatar {
                     imgAvatar.image = UIImage(data: avatarData as Data)

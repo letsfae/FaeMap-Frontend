@@ -152,11 +152,13 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             //vcChat.arrRealmUsers.append(chatWithUser)
             //vcChat.realmWithUser = chatWithUser
             //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
-            if let message = chatWithUser.message {
+            vcChat.strChatId = "\(IDs[0])"
+            startChat_v2(vcChat)
+            /*if let message = chatWithUser.message {
                 vcChat.strChatId = message.chat_id
                 startChat_v2(vcChat)
             } else {
-                postToURL("chats_v2", parameter: ["receiver_id": IDs[0] as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                postToURL("chats_v2", parameter: ["receiver_id": IDs[0] as AnyObject, "message": "[GET_CHAT_ID]", "type": "get_id"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if statusCode / 100 == 2 {
                         if let resultDic = result as? NSDictionary {
                             vcChat.strChatId = (resultDic["chat_id"] as! NSNumber).stringValue
@@ -164,7 +166,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                         }
                     }
                 })
-            }
+            }*/
             
         }
         // First get chatroom id
@@ -244,17 +246,40 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     func shareWithUsers() {
         navigationLeftItemTapped()
         for index in arrIntSelected {
-            let realm = try! Realm()
+            let vcChat = ChatViewController()
+            let login_user_id = String(Key.shared.user_id)
+            vcChat.arrUserIDs.append(login_user_id)
+            vcChat.arrUserIDs.append(arrFriends[index].userID)
+            vcChat.strChatId = arrFriends[index].userID
+            var type = ""
+            var text = ""
+            switch friendListMode {
+            case .location:
+                type = "[Location]"
+                let arrLocationInfo = locationDetail.split(separator: ",")
+                text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
+                break
+            case .collection:
+                type = "[Collection]"
+                text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+                break
+            case .place:
+                type = "[Place]"
+                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
+                break
+            default:
+                break
+            }
+            vcChat.sendMeaages_v2(type: type, text: text)
+            /*let realm = try! Realm()
             let login_user_id = String(Key.shared.user_id)
             let shareToUser = realm.filterUser(login_user_id, id: arrFriends[index].userID)!
             var newIndex = 0
-            var chat_id = ""
+            let chat_id = arrFriends[index].userID
             if let message = shareToUser.message {
                 newIndex = message.index + 1
-                chat_id = message.chat_id
-                sendMessage(to: shareToUser, chat_id: chat_id, newIndex: newIndex)
-            } else {
-                postToURL("chats_v2", parameter: ["receiver_id": shareToUser.id as AnyObject, "message": "[GET_CHAT_ID]", "type": "text"], authentication: headerAuthentication(), completion: { (statusCode, result) in
+            } /*else {
+                postToURL("chats_v2", parameter: ["receiver_id": shareToUser.id as AnyObject, "message": "[GET_CHAT_ID]", "type": "get_id"], authentication: headerAuthentication(), completion: { (statusCode, result) in
                     if statusCode / 100 == 2 {
                         if let resultDic = result as? NSDictionary {
                             chat_id = (resultDic["chat_id"] as! NSNumber).stringValue
@@ -262,7 +287,40 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                         }
                     }
                 })
+            }*/
+            //sendMessage(to: shareToUser, chat_id: chat_id, newIndex: newIndex)
+            let newMessage = RealmMessage_v2()
+            newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, newIndex)
+            let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
+            newMessage.sender = selfUser
+            newMessage.members.append(selfUser)
+            newMessage.members.append(shareToUser)
+            newMessage.created_at = RealmChat.dateConverter(date: Date())
+            switch friendListMode {
+            case .location:
+                newMessage.type = "[Location]"
+                let arrLocationInfo = locationDetail.split(separator: ",")
+                newMessage.text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
+                break
+            case .collection:
+                newMessage.type = "[Collection]"
+                newMessage.text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+                break
+            case .place:
+                newMessage.type = "[Place]"
+                newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
+                break
+            default:
+                break
             }
+            let recentRealm = RealmRecent_v2()
+            recentRealm.created_at = newMessage.created_at
+            recentRealm.unread_count = 0
+            recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
+            try! realm.write {
+                realm.add(newMessage)
+                realm.add(recentRealm, update: true)
+            }*/
         }
     }
     
