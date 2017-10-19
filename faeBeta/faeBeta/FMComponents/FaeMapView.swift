@@ -13,6 +13,20 @@ class FaeMapView: MKMapView {
     private var block = false
     var faeMapCtrler: FaeMapViewController?
     var blockTap = false
+    var btnCompass = FMCompass()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
+            compassView.frame = CGRect(x: 21.5, y: screenHeight - 151.5, width: 60, height: 60)
+            if let imgView = compassView.subviews.first as? UIImageView {
+                imgView.image = #imageLiteral(resourceName: "mainScreenNorth_new")
+            }
+//            btnCompass.isHidden = true
+        } else {
+//            btnCompass.isHidden = false
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,6 +43,9 @@ class FaeMapView: MKMapView {
         addGestureRecognizer(longPress)
         guard let subview = self.subviews.first else { return }
         subview.addGestureRecognizer(doubleTap)
+        
+        addSubview(btnCompass)
+        btnCompass.layer.zPosition = 9999
     }
     
     required init?(coder aDecoder: NSCoder) {

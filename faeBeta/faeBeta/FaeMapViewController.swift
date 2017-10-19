@@ -215,6 +215,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
+        
+//        let line = UIView(frame: CGRect(x: 25, y: 0, width: 1, height: screenHeight))
+//        line.backgroundColor = UIColor._200199204()
+//        view.addSubview(line)
+//        line.layer.zPosition = 3000
+//        
+//        let line_1 = UIView(frame: CGRect(x: 25 + 51, y: 0, width: 1, height: screenHeight))
+//        line_1.backgroundColor = UIColor._200199204()
+//        view.addSubview(line_1)
+//        line_1.layer.zPosition = 3000
     }
     
     override func viewWillAppear(_ animated: Bool) {

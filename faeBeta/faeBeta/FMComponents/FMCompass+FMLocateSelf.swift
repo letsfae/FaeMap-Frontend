@@ -19,6 +19,7 @@ class FMCompass: UIButton {
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 21.5, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
+        self.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {

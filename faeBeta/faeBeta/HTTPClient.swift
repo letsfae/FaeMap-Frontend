@@ -326,6 +326,21 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
         }
 }
 
+func downloadImage(URL: String, completion: @escaping (Data?) -> Void) {
+    
+    Alamofire.request(URL).responseJSON { response in
+        if response.response != nil {
+            guard (response.response?.statusCode) != nil else {
+                completion(nil)
+                return
+            }
+            completion(response.data)
+        } else {
+            completion(nil)
+        }
+    }
+}
+
 func postFileToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
     
