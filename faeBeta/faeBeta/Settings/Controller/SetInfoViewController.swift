@@ -13,7 +13,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     var tblInfo: UITableView!
     var uiviewNavBar: FaeNavBar!
     var arrTitle: [String] = ["Edit NameCard", "Hide NameCard Options", "Disable Gender", "Disable Age"]
-    var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCad Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
+    var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCard Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
     var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
