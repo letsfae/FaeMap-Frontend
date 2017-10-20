@@ -171,7 +171,10 @@ class IncomingMessage {
         let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
         let dataPlace = strPlaceDetail.data(using: .utf8)
         let jsonPlace = JSON(data: dataPlace!)
-        let snapImage = UIImage(named: "food_1")
+        var snapImage = UIImage(named: "place_result_48")
+        if let media = realmMessage.media {
+            snapImage = UIImage(data: media as Data)
+        }
         let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonPlace["id"].intValue, type: "place", snapImage: snapImage, text: jsonPlace["comment"].stringValue)
         mediaItem?.title = jsonPlace["name"].stringValue
         mediaItem?.subtitle = jsonPlace["address"].stringValue
