@@ -17,7 +17,6 @@ class PlacePin: NSObject {
     let coordinate: CLLocationCoordinate2D
     var class_2: String = ""
     var class_2_icon_id: Int = 48
-    // let imageURL: String
     let address1: String
     let address2: String
     var icon: UIImage?

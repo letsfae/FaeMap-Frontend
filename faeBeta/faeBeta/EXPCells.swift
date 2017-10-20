@@ -30,6 +30,14 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     
     var boolInMap = true
     
+    var placeInfo: PlacePin!
+    
+    var arrImgURL = [String]() {
+        didSet {
+            
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCollectionView()
@@ -42,6 +50,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     }
     
     func updateCell(placeData: PlacePin) {
+        placeInfo = placeData
         lblPlaceName.text = placeData.name
         var arrNames = placeData.address2.split(separator: ",")
         guard arrNames.count >= 1 else {
@@ -51,6 +60,9 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         let cityName = String(arrNames[0]).trimmingCharacters(in: CharacterSet.whitespaces)
         lblPlaceName.text = placeData.name
         lblPlaceAddr.text = placeData.address1 + ", " + cityName
+        arrImgURL.removeAll(keepingCapacity: true)
+        arrImgURL.append(placeData.imageURL)
+        clctViewImages.reloadData()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -65,12 +77,13 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return arrImgURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == clctViewImages {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_img", for: indexPath) as! EXPClctImgCell
+            cell.updateImages(placeInfo: placeInfo, imgURL: arrImgURL[indexPath.row])
             return cell
         } else {
             let cell = UICollectionViewCell()
@@ -175,6 +188,14 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     
     var intCurtPage = 0
     
+    var placeInfo: PlacePin!
+    
+    var arrImgURL = [String]() {
+        didSet {
+            
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCollectionView()
@@ -187,6 +208,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     }
     
     func updateCell(placeData: PlacePin) {
+        placeInfo = placeData
         lblPlaceName.text = placeData.name
         var arrNames = placeData.address2.split(separator: ",")
         guard arrNames.count >= 1 else {
@@ -196,6 +218,9 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         let cityName = String(arrNames[0]).trimmingCharacters(in: CharacterSet.whitespaces)
         lblPlaceName.text = placeData.name
         lblPlaceAddr.text = placeData.address1 + ", " + cityName
+        arrImgURL.removeAll(keepingCapacity: true)
+        arrImgURL.append(placeData.imageURL)
+        clctViewImages.reloadData()
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -210,12 +235,13 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return arrImgURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == clctViewImages {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_img", for: indexPath) as! EXPClctImgCell
+            cell.updateImages(placeInfo: placeInfo, imgURL: arrImgURL[indexPath.row])
             return cell
         } else {
             let cell = UICollectionViewCell()
@@ -313,10 +339,34 @@ class EXPClctImgCell: UICollectionViewCell {
     func loadCellItems() {
         img = UIImageView()
         img.contentMode = .scaleAspectFill
-        img.image = #imageLiteral(resourceName: "exp_pic_demo")
+//        img.image = #imageLiteral(resourceName: "exp_pic_demo")
         addSubview(img)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: img)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: img)
+    }
+    
+    func updateImages(placeInfo: PlacePin, imgURL: String) {
+        if imgURL == "" {
+            img.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            img.backgroundColor = .white
+        } else {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: imgURL as AnyObject) as? UIImage {
+                self.img.image = placeImgFromCache
+                self.img.backgroundColor = UIColor._2499090()
+            } else {
+                downloadImage(URL: imgURL) { (rawData) in
+                    guard let data = rawData else { return }
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        guard let placeImg = UIImage(data: data) else { return }
+                        DispatchQueue.main.async {
+                            self.img.image = placeImg
+                            self.img.backgroundColor = UIColor._2499090()
+                            placeInfoBarImageCache.setObject(placeImg, forKey: imgURL as AnyObject)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

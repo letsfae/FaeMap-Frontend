@@ -136,8 +136,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         tblColListDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49))
         view.addSubview(tblColListDetail)
         
-        automaticallyAdjustsScrollViewInsets = false
-        
         tblColListDetail.delegate = self
         tblColListDetail.dataSource = self
         tblColListDetail.separatorStyle = .none

@@ -151,9 +151,11 @@ extension FaeMapViewController {
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
         }
+        PLACE_ENABLE = true
         mapMode = .normal
         faeMapView.blockTap = false
 //        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll(keepingCapacity: true)

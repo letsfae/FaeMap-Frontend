@@ -273,12 +273,15 @@ class PlaceView: UIImageView {
         lblName.text = placeInfo.name
         lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         lblPrice.text = placeInfo.price
+        imgType.backgroundColor = .white
         
         if placeInfo.imageURL == "" {
             imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgType.backgroundColor = .white
         } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.id as AnyObject) as? UIImage {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
                 self.imgType.image = placeImgFromCache
+                self.imgType.backgroundColor = UIColor._2499090()
             } else {
                 downloadImage(URL: placeInfo.imageURL) { (rawData) in
                     guard let data = rawData else { return }
@@ -286,7 +289,8 @@ class PlaceView: UIImageView {
                         guard let placeImg = UIImage(data: data) else { return }
                         DispatchQueue.main.async {
                             self.imgType.image = placeImg
-                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.id as AnyObject)
+                            self.imgType.backgroundColor = UIColor._2499090()
+                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
                         }
                     }
                 }
