@@ -29,7 +29,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // MapView Data and Control
     var faeMapView: FaeMapView!
     var placeClusterManager: CCHMapClusterController!
-//    var userClusterManager: CCHMapClusterController!
+    var userClusterManager: CCHMapClusterController!
     var faeUserPins = [FaePinAnnotation]()
     var timerUserPin: Timer? // timer to renew update user pins
     var faePlacePins = [FaePinAnnotation]()
@@ -117,7 +117,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgPinOnMap: UIImageView!
     
     // Location Pin Control
-    var locationPin: FaePinAnnotation?
+    var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: LocationView!
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
@@ -163,15 +163,15 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 lblSearchContent.text = "Search Fae Map"
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
-                if locationPin != nil {
-                    locationPinClusterManager.removeAnnotations([locationPin!], withCompletionHandler: nil)
+                if selectedLocation != nil {
+                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
                     if locAnnoView != nil {
                         locAnnoView?.hideButtons()
                         locAnnoView?.optionsReady = false
                         locAnnoView?.optionsOpened = false
                         locAnnoView?.optionsOpeing = false
                     }
-                    locationPin = nil
+                    selectedLocation = nil
                 }
                 if uiviewAfterAdded.frame.origin.y != screenHeight {
                     uiviewAfterAdded.hide()

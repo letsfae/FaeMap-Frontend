@@ -49,8 +49,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     var arrColDetails: CollectionList!
     var colId: Int = -1
+    var colInfo: PinCollection!
     
-    var arrLocPinIds = [Int]()
+    var arrSavedPinIds = [Int]()
     
     var indexPath: IndexPath!
     weak var delegate: CollectionsListDetailDelegate?
@@ -242,7 +243,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            return savedItems.count == 0 ? 312 : 90
+            return arrSavedPinIds.count == 0 ? 312 : 90
         } else {
             tblColListDetail.estimatedRowHeight = 400
             return tblColListDetail.rowHeight
@@ -253,10 +254,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 0 {
             return 1
         } else {
-            if enterMode == .location {
-                return arrLocPinIds.count == 0 ? 1 : arrLocPinIds.count
-            }
-            return savedItems.count == 0 ? 1 : savedItems.count
+            return arrSavedPinIds.count == 0 ? 1 : arrSavedPinIds.count
         }
     }
     
@@ -269,7 +267,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             cell.updateValueForCell(name: txtName, desp: txtDesp, time: txtTime)
             return cell
         } else {
-            if savedItems.count == 0 && arrLocPinIds.count == 0 {
+            if arrSavedPinIds.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ColListEmptyCell", for: indexPath) as! ColListEmptyCell
                 let img = enterMode == .place ? #imageLiteral(resourceName: "collection_noPlaceList") : #imageLiteral(resourceName: "collection_noLocList")
                 cell.setValueForCell(img: img)
@@ -277,11 +275,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             } else {
                 if enterMode == .location {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListLocationCell", for: indexPath) as! ColListLocationCell
-                    cell.setValueForLocationPin(locId: arrLocPinIds[indexPath.row])
+                    cell.setValueForLocationPin(locId: arrSavedPinIds[indexPath.row])
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
-                    cell.setValueForCell(col: savedItems[indexPath.row])
+                    cell.setValueForCell(placeId: arrSavedPinIds[indexPath.row])
                     return cell
                 }
             }
@@ -289,7 +287,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && savedItems.count != 0 {
+        if indexPath.section == 1 && arrSavedPinIds.count != 0 {
             
         }
     }
@@ -310,52 +308,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func getSavedItems(colId: Int) {
-        if enterMode == .place {
-            FaeMap.shared.whereKey("is_place", value: "true")
-            FaeMap.shared.getSavedPins { (status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    let savedPinsJSON = JSON(message!)
-                    for i in 0..<savedPinsJSON.count {
-                        let savedData = SavedPin(json: savedPinsJSON[i])
-                        if savedData.pinBelongs.elementsEqual(String(colId)) {
-                            self.savedItems.append(savedData)
-                        }
-                    }
-                    self.tblColListDetail.reloadData()
-                    if self.lblNum != nil {
-                        self.lblNum.text = "\(self.numItems) items"
-                    }
-                } else {
-                    print("Fail to get saved places!")
-                }
-            }
-        } else {
-            FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
-                guard status / 100 == 2 else { return }
-                guard message != nil else { return }
-                let resultJson = JSON(message!)
-                let arrLocPinId = resultJson["pin_id"].arrayValue
-                self.arrLocPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
-                joshprint(self.arrLocPinIds)
-            })
-            FaeMap.shared.getSavedPins { (status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    let savedPinsJSON = JSON(message!)
-                    for i in 0..<savedPinsJSON.count {
-                        let savedData = SavedPin(json: savedPinsJSON[i])
-                        if savedData.pinType == "location" && savedData.pinBelongs.elementsEqual(String(colId)) {
-                            self.savedItems.append(savedData)
-                        }
-                    }
-                    self.tblColListDetail.reloadData()
-                    if self.lblNum != nil {
-                        self.lblNum.text = "\(self.numItems) items"
-                    }
-                } else {
-                    print("Fail to get saved locations!")
-                }
-            }
-        }
+        FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pin_id"].arrayValue
+            self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
+            joshprint(self.arrSavedPinIds)
+            self.tblColListDetail.reloadData()
+        })
     }
     
     // ColListDetailHeaderDelegate
@@ -563,10 +524,6 @@ class ColListPlaceCell: UITableViewCell {
         imgSavedItem.backgroundColor = UIColor._2499090()
         imgSavedItem.contentMode = .scaleAspectFill
         addSubview(imgSavedItem)
-        let icon = UIImageView(frame: CGRect(x: 23, y: 22, width: 19, height: 24))
-        icon.contentMode = .scaleAspectFit
-        icon.image = #imageLiteral(resourceName: "icon_destination")
-        imgSavedItem.addSubview(icon)
         
         lblItemName = UILabel(frame: CGRect(x: 93, y: 26, width: screenWidth - 93, height: 22))
         lblItemName.textColor = UIColor._898989()
@@ -579,10 +536,42 @@ class ColListPlaceCell: UITableViewCell {
         addSubview(lblItemAddr)
     }
     
-    func setValueForCell(col: SavedPin) {
-        //        imgSavedItem.backgroundColor = .red
-        lblItemName.text = col.pinName
-        lblItemAddr.text = col.pinAddr
+    func setValueForCell(placeId: Int) {
+        FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let placeInfo = PlacePin(json: resultJson)
+            self.setValueForPlace(placeInfo)
+        }
+    }
+    
+    func setValueForPlace(_ placeInfo: PlacePin) {
+        lblItemName.text = placeInfo.name
+        lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        imgSavedItem.backgroundColor = .white
+        
+        if placeInfo.imageURL == "" {
+            imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgSavedItem.backgroundColor = .white
+        } else {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
+                self.imgSavedItem.image = placeImgFromCache
+                self.imgSavedItem.backgroundColor = UIColor._2499090()
+            } else {
+                downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                    guard let data = rawData else { return }
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        guard let placeImg = UIImage(data: data) else { return }
+                        DispatchQueue.main.async {
+                            self.imgSavedItem.image = placeImg
+                            self.imgSavedItem.backgroundColor = UIColor._2499090()
+                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -636,12 +625,14 @@ class ColListLocationCell: UITableViewCell {
     }
     
     func setValueForLocationPin(locId: Int) {
+        self.imgSavedItem.alpha = 0
         if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
             let lat = locationFromCache["geolocation"]["latitude"].doubleValue
             let lon = locationFromCache["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = locationFromCache["content"].intValue
             self.imgSavedItem.loadImage(id: locationFromCache["content"].intValue)
+            self.imgSavedItem.alpha = 1
             self.getAddressForLocation(location: location)
             joshprint("[setValueForLocationPin] get location pin from cache")
             return
@@ -658,6 +649,7 @@ class ColListLocationCell: UITableViewCell {
             self.imgSavedItem.loadImage(id: resultJson["content"].intValue)
             self.getAddressForLocation(location: location)
             joshprint("[setValueForLocationPin] get location pin successfully")
+            self.imgSavedItem.alpha = 1
         }
     }
     

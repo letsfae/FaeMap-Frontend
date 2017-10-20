@@ -59,7 +59,7 @@ extension FaeMapViewController {
             self.placesFromSearch.removeAll(keepingCapacity: true)
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
-        placeClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
+        userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     func actionPlacePinAction(_ sender: UIButton) {
@@ -156,7 +156,7 @@ extension FaeMapViewController {
         faeMapView.blockTap = false
 //        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: nil)
-        placeClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
+        userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll(keepingCapacity: true)
         clctViewMap.reloadData()

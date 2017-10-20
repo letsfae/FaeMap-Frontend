@@ -110,7 +110,7 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     let faeCollection = FaeCollection()
     var arrCollection = [PinCollection]()
     var tableMode: CollectionTableMode = .place
-    var locationPin: FaePinAnnotation!
+    var pinToSave: FaePinAnnotation!
     var timer: Timer?
     
     override init(frame: CGRect = .zero) {
@@ -233,32 +233,43 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
         self.timer = nil
-        mapScreenShot(coordinate: locationPin.coordinate) { (snapShotImage) in
-            FaeImage.shared.type = "image"
-            FaeImage.shared.image = snapShotImage
-            FaeImage.shared.faeUploadFile { (status, message) in
-                guard status / 100 == 2 else { return }
-                guard message != nil else { return }
-                let fileIDJSON = JSON(message!)
-                let fileId = fileIDJSON["file_id"].intValue
-                FaeMap.shared.whereKey("content", value: "\(fileId)")
-                FaeMap.shared.whereKey("geo_latitude", value: "\(self.locationPin.coordinate.latitude)")
-                FaeMap.shared.whereKey("geo_longitude", value: "\(self.locationPin.coordinate.longitude)")
-                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+        if tableMode == .place {
+            guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
+            FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(placeData.id)", completion: { (code, result) in
+                guard code / 100 == 2 else { return }
+                self.hide()
+                self.uiviewAfterAdded.show()
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+            })
+        } else {
+            mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
+                FaeImage.shared.type = "image"
+                FaeImage.shared.image = snapShotImage
+                FaeImage.shared.faeUploadFile { (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
-                    let idJSON = JSON(message!)
-                    let locationId = idJSON["location_id"].intValue
-                    joshprint(locationId)
-                    self.uiviewAfterAdded.pinIdInAction = locationId
-                    FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
-                        guard code / 100 == 2 else { return }
-                        self.hide()
-                        self.uiviewAfterAdded.show()
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
-                        self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+                    let fileIDJSON = JSON(message!)
+                    let fileId = fileIDJSON["file_id"].intValue
+                    FaeMap.shared.whereKey("content", value: "\(fileId)")
+                    FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
+                    FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
+                    FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+                        guard status / 100 == 2 else { return }
+                        guard message != nil else { return }
+                        let idJSON = JSON(message!)
+                        let locationId = idJSON["location_id"].intValue
+                        joshprint(locationId)
+                        self.uiviewAfterAdded.pinIdInAction = locationId
+                        FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
+                            guard code / 100 == 2 else { return }
+                            self.hide()
+                            self.uiviewAfterAdded.show()
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+                        })
                     })
-                })
+                }
             }
         }
     }
