@@ -254,5 +254,10 @@ extension ChatViewController {
 
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         print(indexPath.row)
+        let messageJSQ = arrJSQMessages[indexPath.row]
+        uiviewNameCard.userId = Int(messageJSQ.senderId)!
+        uiviewNameCard.boolSmallSize = true
+        uiviewNameCard.imgBackShadow.frame = CGRect.zero
+        uiviewNameCard.show { }
     }
 }

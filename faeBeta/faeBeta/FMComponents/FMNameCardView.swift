@@ -255,7 +255,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         guard !isAnimating else { return }
         isAnimating = true
         boolCardOpened = true
-        btnProfile.isHidden = [Key.shared.user_id, 1].contains(self.userId)
+        btnProfile.isHidden = [Key.shared.user_id, 1].contains(self.userId) || boolSmallSize
+        btnChat.isHidden = boolSmallSize
         if avatar == nil {
             let getMiniAvatar = FaeUser()
             getMiniAvatar.getOthersProfile("\(userId)", completion: { (status, message) in
@@ -280,7 +281,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         }
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
-            self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
+            self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: self.boolSmallSize ? 301 : 350) // height 301
             self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
             self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)

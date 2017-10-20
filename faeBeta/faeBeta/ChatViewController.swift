@@ -39,6 +39,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var uiviewNavBar: FaeNavBar!
     var uiviewLocationExtend = LocationExtendView()
     var toolbarContentView: FAEChatToolBarContentView!
+    var uiviewNameCard: FMNameCardView!
     // custom toolBar the bottom toolbar button
     var btnSet = [UIButton]()
     var btnSend: UIButton!
@@ -52,6 +53,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
     // the proxy of the keyboard
     var uiviewKeyboard: UIView!
+    
     
     var ref = Database.database().reference().child(fireBaseRef) // reference to all chat room
     var roomRef: DatabaseReference?
@@ -150,7 +152,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewLocationExtend.buttonCancel.addTarget(self, action: #selector(closeLocExtendView), for: .touchUpInside)
         view.addSubview(uiviewLocationExtend)
         moveDownInputBar()
-        
+        setupNameCard()
         
         
         
@@ -304,6 +306,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(toolbarContentView)
         toolbarContentView.viewMiniLoc.btnSearch.addTarget(self, action: #selector(showFullLocationView), for: .touchUpInside)
         toolbarContentView.viewMiniLoc.btnSend.addTarget(self, action: #selector(sendLocationMessageFromMini), for: .touchUpInside)
+    }
+    
+    func setupNameCard() {
+        uiviewNameCard = FMNameCardView()
+        view.addSubview(uiviewNameCard)
     }
     
     func navigationLeftItemTapped() {
