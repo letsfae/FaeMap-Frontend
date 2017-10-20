@@ -24,7 +24,7 @@ extension FaeMapViewController {
         if createLocation == .create {
             locAnnoView?.hideButtons()
             let vcLocDetail = LocDetailViewController()
-            vcLocDetail.coordinate = locationPin?.coordinate
+            vcLocDetail.coordinate = selectedLocation?.coordinate
             vcLocDetail.delegate = self
             vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
             vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
@@ -63,18 +63,18 @@ extension FaeMapViewController {
         createLocation = .create
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-        if locationPin != nil {
-            locationPinClusterManager.removeAnnotations([locationPin!], withCompletionHandler: nil)
+        if selectedLocation != nil {
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
 //            faeMapView.removeAnnotation(locationPin!)
-            locationPin = nil
+            selectedLocation = nil
         }
         uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()
         locAnnoView?.optionsReady = false
         locAnnoView?.optionsOpened = false
         locAnnoView?.optionsOpeing = false
-        locationPin = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
-        locationPinClusterManager.addAnnotations([locationPin!], withCompletionHandler: nil)
+        selectedLocation = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
+        locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
 //        faeMapView.addAnnotation(locationPin!)
         uiviewLocationBar.show()
         view.bringSubview(toFront: activityIndicator)
@@ -131,8 +131,8 @@ extension FaeMapViewController {
                 address_2 += c
             }
 
-            self.locationPin?.address_1 = address_1
-            self.locationPin?.address_2 = address_2
+            self.selectedLocation?.address_1 = address_1
+            self.selectedLocation?.address_2 = address_2
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
                 self.activityIndicator.stopAnimating()

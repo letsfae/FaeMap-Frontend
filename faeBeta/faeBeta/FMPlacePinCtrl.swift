@@ -41,8 +41,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewCollectedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colInfo = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
-        handleLocInfoBarTap()
     }
     
     func loadPlaceListView() {
@@ -65,7 +66,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 locAnnoView?.optionsToNormal()
                 locAnnoView?.hideButtons()
                 let vcLocDetail = LocDetailViewController()
-                vcLocDetail.coordinate = locationPin?.coordinate
+                vcLocDetail.coordinate = selectedLocation?.coordinate
                 vcLocDetail.delegate = self
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
@@ -88,24 +89,18 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             if createLocation == .create {
                 uiviewCollectedList.tableMode = .location
                 uiviewCollectedList.loadCollectionData()
-                guard let locPin = locationPin else { return }
-                uiviewCollectedList.locationPin = locPin
+                guard let locPin = selectedLocation else { return }
+                uiviewCollectedList.pinToSave = locPin
             } else {
                 uiviewCollectedList.tableMode = .place
                 uiviewCollectedList.loadCollectionData()
-                guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
-                let pinId = placeData.id
-                let collectPlace = FaePinAction()
-                collectPlace.saveThisPin("place", pinID: "\(pinId)", completion: { (status, message) in
-                    guard status / 100 == 2 || status == 400 else { return }
-                    self.selectedPlaceView?.showCollectedNoti()
-                })
+                guard let placePin = selectedPlace else { return }
+                uiviewCollectedList.pinToSave = placePin
             }
-            
             break
         case .route:
             if createLocation == .create {
-                guard let coordinate = self.locationPin?.coordinate else {
+                guard let coordinate = self.selectedLocation?.coordinate else {
                     return
                 }
                 uiviewLocationBar.hide()
@@ -122,7 +117,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                     user.isValid = false
                 }
                 // remove user pins but don't delete them
-                placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+                userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
                 startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
             }
             if let placeData = selectedPlace?.pinInfo as? PlacePin {
@@ -141,7 +136,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                     user.isValid = false
                 }
                 // remove user pins but don't delete them
-                placeClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+                userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
                 startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
                 if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
                     uiviewChooseLocs.updateDestination(name: placeInfo.name)

@@ -35,7 +35,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
         for user in faeUserPins {
             user.isValid = false
         }
-        placeClusterManager.removeAnnotations(faeUserPins) {
+        userClusterManager.removeAnnotations(faeUserPins) {
             self.faeUserPins.removeAll(keepingCapacity: true)
             self.updateTimerForUserPin()
         }
@@ -94,7 +94,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
             for faeUser in faeUserPins {
                 faeUser.isValid = false
             }
-            placeClusterManager.removeAnnotations(faeUserPins) {
+            userClusterManager.removeAnnotations(faeUserPins) {
                 self.faeUserPins.removeAll()
             }
         } else {

@@ -33,10 +33,10 @@ extension FaeMapViewController {
 //        placeClusterManager.isDebuggingEnabled = true
         placeClusterManager.animator = self
         
-//        userClusterManager = CCHMapClusterController(mapView: faeMapView)
-//        userClusterManager.delegate = self
-//        userClusterManager.cellSize = 100
-//        userClusterManager.marginFactor = 0.15
+        userClusterManager = CCHMapClusterController(mapView: faeMapView)
+        userClusterManager.delegate = self
+        userClusterManager.cellSize = 100
+        userClusterManager.marginFactor = 0.15
         // userClusterManager.clusterer = CCHNearCenterMapClusterer()
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
