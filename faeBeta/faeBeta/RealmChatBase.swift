@@ -10,10 +10,97 @@ import Foundation
 import RealmSwift
 
 class RealmMessage_v2: Object {
-    dynamic var messageID : String = ""
-    dynamic var withUserID : String = ""
-    dynamic var date : String = ""
-    //dynamic var message: NSDictionary = [:]
+    dynamic var primary_key: String = "" // login_user_id, is_group, chat_id, index
+    dynamic var login_user_id: String = ""
+    dynamic var is_group: Int = 0
+    dynamic var chat_id: String = "" // for private chat, chat_id is the id of the other user
+                                     // for group chat, chat_id is the id of the group chatroom
+    dynamic var index: Int = -1
+    dynamic var sender: RealmUser? = nil
+    let members = List<RealmUser>()
+    dynamic var created_at: String = ""
+    dynamic var type: String = ""
+    dynamic var text: String = ""
+    dynamic var media: NSData? = nil
+    dynamic var upload_to_server: Bool = false
+    dynamic var delivered_to_user: Bool = false
+    dynamic var unread_count: Int = 0
+    
+    override static func primaryKey() -> String? {
+        return "primary_key"
+    }
+    
+    func setPrimaryKeyInfo(_ login_user_id: String, _ is_group: Int, _ chat_id: String, _ index: Int) {
+        self.login_user_id = login_user_id
+        self.is_group = is_group
+        self.chat_id = chat_id
+        self.index = index
+        self.primary_key = "\(login_user_id)_\(is_group)_\(chat_id)_\(index)"
+    }
+}
+
+class RealmRecent_v2: Object {
+    dynamic var primary_key: String = "" //loginUserID_chatID
+    dynamic var login_user_id: String = ""
+    dynamic var is_group: Int = 0
+    dynamic var chat_id: String = ""
+    dynamic var chat_name: String = ""
+    //dynamic var latest_message: String = ""
+    dynamic var created_at: String = ""
+    dynamic var unread_count: Int = 0
+    
+    var latest_message: RealmMessage_v2? {
+        return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", String(Key.shared.user_id), is_group, self.chat_id).sorted(byKeyPath: "index").last
+    }
+    
+    override static func primaryKey() -> String? {
+        return "primary_key"
+    }
+    
+    func setPrimaryKeyInfo(_ login_user_id: String, _ is_group: Int, _ chat_id: String) {
+        self.login_user_id = login_user_id
+        self.is_group = is_group
+        self.chat_id = chat_id
+        self.primary_key = "\(login_user_id)_\(is_group)_\(chat_id)"
+    }
+}
+
+extension Object {
+    func toDictionary() -> NSMutableDictionary {
+        let properties = self.objectSchema.properties.map { $0.name }
+        let dictionary = self.dictionaryWithValues(forKeys: properties)
+        let mutabledic = NSMutableDictionary()
+        mutabledic.setValuesForKeys(dictionary)
+        
+        for prop in self.objectSchema.properties as [Property]! {
+            // find lists
+            if let nestedObject = self[prop.name] as? Object {
+                mutabledic.setValue(nestedObject.toDictionary(), forKey: prop.name)
+            } else if let nestedListObject = self[prop.name] as? ListBase {
+                var objects = [AnyObject]()
+                for index in 0..<nestedListObject._rlmArray.count  {
+                    let object = nestedListObject._rlmArray[index] as AnyObject
+                    objects.append(object.toDictionary())
+                }
+                mutabledic.setObject(objects, forKey: prop.name as NSCopying)
+            }
+        }
+        return mutabledic
+    }
+}
+
+extension Realm {
+    func filterAllMessages(_ login_user_id: String, _ is_group: Int, _ chat_id: String) -> Results<RealmMessage_v2> {
+        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", login_user_id, is_group, chat_id).sorted(byKeyPath: "index")
+    }
+    
+    func filterMessage(_ primary_key: String) -> RealmMessage_v2? {
+        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND primary_key == %@", "\(Key.shared.user_id)", primary_key).first
+    }
+    
+    func filterUser(_ login_user_id: String, id: String) -> RealmUser? {
+        return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, id).first
+    }
 }
 
 class RealmMessage: Object {
@@ -103,18 +190,6 @@ class RealmChat {
             realm.add(message);
         }
     }
-    static func receiveMessage_v2(message : NSDictionary, withUserID: String) {
-        let realm = try! Realm()
-        let timeStr = message["date"]! as! String
-        let messageRealm = RealmMessage_v2()
-        messageRealm.messageID = withUserID + (message["messageId"]! as! String)
-        messageRealm.withUserID = withUserID
-        messageRealm.date = timeStr
-        try! realm.write {
-            realm.add(messageRealm)
-        }
-
-    }
     
     static func receiveMessage(message : NSDictionary, withUserID: String) {
         let realm = try! Realm()
@@ -159,15 +234,19 @@ class RealmChat {
         }
     }
     
-    static func dateConverter(date: Date) -> String{
+    static func dateConverter(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
         return dateFormatter.string(from: date)
     }
     
-    static func dateConverter(str: String) -> Date{
+    static func dateConverter(str: String) -> Date {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMddhhmmssSS"
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddhhmmssSSS"
         return dateFormatter.date(from: str)!
     }
     
@@ -197,6 +276,13 @@ class RealmChat {
             realm.add(withUser)
             print("add user")
         }
+    }
+    
+    static func compressImageToData(_ image: UIImage) -> Data? {
+        var imageData = UIImageJPEGRepresentation(image, 1)
+        let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+        imageData = UIImageJPEGRepresentation(image, factor)
+        return imageData
     }
     
 }

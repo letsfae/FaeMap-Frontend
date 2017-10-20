@@ -35,6 +35,9 @@ didChangeAudioCategory:(NSString *)category
                options:(AVAudioSessionCategoryOptions)options
                  error:(nullable NSError *)error;
 
+- (void)audioMediaItemDidStartPlayingAudio:(JSQAudioMediaItemCustom *)audioMediaItem
+                               audioButton:(UIButton *)sender;
+
 @end
 
 
@@ -113,6 +116,8 @@ didChangeAudioCategory:(NSString *)category
  *  @param audioURL A File URL containing the location of the audio data.
  */
 - (void)setAudioDataWithUrl:(nonnull NSURL *)audioURL;
+
+- (void)finishPlaying;
 
 @end
 

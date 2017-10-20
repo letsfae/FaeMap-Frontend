@@ -12,7 +12,7 @@ import UIKit
 
 class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var uiviewNavBar: FaeNavBar!
-    var arrNames = ["00": "Measurement Units", "01": "Imperial (miles)", "02": "Metric (kilometers)", "10": "Permissions", "11": "Location", "12": "Camera", "13": "Microphone", "14": "Contacts", "15": "Push Notifications", "21": "Background Location", "31": "Email Subscription"]
+    var arrNames: [String: String] = ["00": "Measurement Units", "01": "Imperial (miles)", "02": "Metric (kilometers)", "10": "Permissions", "11": "Location", "12": "Camera", "13": "Microphone", "14": "Contacts", "15": "Push Notifications", "21": "Background Location", "31": "Email Subscription"]
     var tblGeneral: UITableView!
     var uiviewAlert: UIView!
     var lblAlert: UILabel!

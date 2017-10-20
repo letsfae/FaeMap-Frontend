@@ -48,19 +48,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Config Realm Database
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 3,
-            migrationBlock: { _, _ in
+            schemaVersion: 4,
+            migrationBlock: { _, oldSchemaVersion in
                 //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
-                //                    if oldSchemaVersion < 3 {
+                if oldSchemaVersion < 4 { }
                 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
                 //                    }
                 //                }
             }
         )
         // Delete all realm swift database data
-        do {
+        /*do {
             try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-        } catch {}
+        } catch {}*/
         
         headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         

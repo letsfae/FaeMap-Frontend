@@ -298,7 +298,17 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
 //            let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 66, height: 66))
 //            imgView.image = snapShot?.image
 //            UIApplication.shared.keyWindow?.addSubview(imgView)
-            completion(snap.image)
+            let imgMap = snap.image
+            let imgAnnotation = UIImage(named: "locationMiniPin")!
+            UIGraphicsBeginImageContextWithOptions(imgMap.size, true, imgMap.scale)
+            imgMap.draw(at: .zero)
+            let annotationHeight = imgMap.size.height / 3.0
+            let annotationWith = annotationHeight * imgAnnotation.size.width / imgAnnotation.size.height
+            imgAnnotation.draw(in: CGRect(x: (imgMap.size.width - annotationWith) / 2, y: (imgMap.size.height - annotationHeight) / 2, width: annotationWith, height: annotationHeight))
+            let imgFinal = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            completion(imgFinal!)
         }
     }
     

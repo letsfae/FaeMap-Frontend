@@ -27,6 +27,15 @@ class General: NSObject {
             completion(defaultImage)
         }
         
+        let realm = try! Realm()
+        if let userAvatar = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userid)").first {
+            if let dataAvatar = userAvatar.userSmallAvatar {
+                let imageFromRealm = UIImage(data: dataAvatar as Data)
+                completion(imageFromRealm!)
+                return
+            }
+        }
+        
         if let imageFromCache = faeImageCache.object(forKey: userid as AnyObject) as? UIImage {
 //            joshprint("[getAvatar - \(userid)] already in cache")
             completion(imageFromCache)

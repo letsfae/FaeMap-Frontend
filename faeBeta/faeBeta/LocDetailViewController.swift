@@ -228,7 +228,9 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
             break
         case 2:
             // TODO jichao
-            
+            let vcShareCollection = NewChatShareController(friendListMode: .location)
+            vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
+            navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         default:
             break

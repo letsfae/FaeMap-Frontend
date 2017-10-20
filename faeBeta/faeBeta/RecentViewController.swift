@@ -41,28 +41,51 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private var indexToDelete = IndexPath() // index of cell whose delete button is tapped
     var backClosure: BackClosure? // used to pass current # of unread messages to main map view
     
+    private var arrRecentsRealm: [String: RealmMessage_v2] = [:]
+    let realm = try! Realm()
+    var notificationToken: NotificationToken? = nil
+    private var resultRealmRecents: Results<RealmRecent_v2>!
+    private var timerUpdateTimestamp: Timer!
+    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadRecentsFromRealm()
+        
         navigationBarSet()
         loadRecentTable()
         loadDeleteConfirm()
         addGestureRecognizer()        
         downloadCurrentUserAvatar()
         //firebase.keepSynced(true)
+        observeOnMessageChange()
+        
+        // TODO
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username , Key.shared.nickname ?? "", true, "", Key.shared.gender])
+        try! realm.write {
+            realm.add(realmUser, update: true)
+        }
+    }
+    deinit {
+        notificationToken?.stop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        startCheckingRecent()
-        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCheckingRecent), userInfo: nil, repeats: true)
-        let realm = try! Realm()
-        realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
+        //startCheckingRecent()
+        //loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCheckingRecent), userInfo: nil, repeats: true)
+        //let realm = try! Realm()
+        //realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
         tblRecents.reloadData()
+        loadingRecentTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateTimestamp), userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         loadingRecentTimer.invalidate()
         isDraggingRecentTableViewCell = false
+        for indexP in self.cellsCurrentlyEditing {
+            let cell = tblRecents.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
+            cell.closeCell()
+        }
     }
 
      // MARK: setup UI
@@ -165,28 +188,33 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func navigationRightItemTapped() {
-        let vc = NewChatShareController(chatOrShare: "chat")
+        let vc = NewChatShareController(friendListMode: .chat)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func confirmDetele() {
-        //let indexPath = indexToDelete
+        let indexPath = indexToDelete
+        let recentToDeleted = resultRealmRecents[indexPath.row]
+        let chat_id = recentToDeleted.chat_id
+        let allMessages = realm.filterAllMessages("\(Key.shared.user_id)", 0, chat_id)
+        try! realm.write {
+            realm.delete(recentToDeleted)
+            realm.delete(allMessages)
+        }
         uiviewBackground.isHidden = true
-        let cell = tblRecents.cellForRow(at: indexToDelete) as! RecentTableViewCell
-        cell.closeCell()
-        /*let indexPath = tableView.indexPath(for: cell)!
-         let recent = recents![indexPath.row]
-         let realmRecent = realmRecents![indexPath.row]
-         RealmChat.removeRecentWith(recentItem: realmRecent)
-         
-         // remove recent form the array
-         DeleteRecentItem(recent, completion: { (statusCode, _) -> Void in
-         if statusCode / 100 == 2 {
-         self.loadRecents(true, removeIndexPaths: [indexPath])
-         }
-         })
-         
-         cellsCurrentlyEditing.remove(indexPath)*/
+        cellsCurrentlyEditing.remove(indexPath)
+        getFromURL("chats_v2/users/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {statusCode, result in
+            if statusCode / 100 == 2 {
+                if let response = result as? NSDictionary {
+                    let id = response["chat_id"] as! Int
+                    deleteFromURL("chats_v2/\(id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                        if statusCode / 100 == 2 {
+                            print("delete \(chat_id) successfully")
+                        }
+                    })
+                }
+            }
+        }        
     }
     
     func dismissDelete() {
@@ -199,14 +227,17 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // TODO double click bug
         if self.cellsCurrentlyEditing.count == 0 {
-            self.loadingRecentTimer.invalidate()
+            /*self.loadingRecentTimer.invalidate()
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
                     let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
                     cell.uiviewMain.backgroundColor = UIColor._225225225()
                     gotoChatFromRecent(selectedRowAt: indexPath)
                 }
-            }
+            }*/
+            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            cell.uiviewMain.backgroundColor = UIColor._225225225()
+            gotoChatFromRecent_v2(selectedRowAt: indexPath)
         } else {
             for indexP in self.cellsCurrentlyEditing {
                 let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
@@ -233,7 +264,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.recents == nil ? 0 : self.recents!.count
+        return resultRealmRecents.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -242,8 +273,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         cell.delegate = self
         cell.uiviewMain.backgroundColor = .white
         
-        let realmRecent = realmRecents![indexPath.row]
-        cell.bindData(realmRecent)
+        //let realmRecent = realmRecents![indexPath.row]
+        //cell.bindData(realmRecent)
+        //let recentRealm = arrRecentsRealm[indexPath.row]
+        //cell.bindData_v2(recentRealm)
+        let recentRealm = resultRealmRecents[indexPath.row]
+        cell.bindData_v2(recentRealm.latest_message!)
         
         if cellsCurrentlyEditing.contains(indexPath) {
             cell.openCell()
@@ -252,6 +287,19 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: helpers
+    func gotoChatFromRecent_v2(selectedRowAt indexPath: IndexPath) {
+        let vcChat = ChatViewController()
+        let latestMessage = resultRealmRecents[indexPath.row].latest_message!
+        for user in latestMessage.members {
+            vcChat.arrUserIDs.append(user.id)
+        }
+        vcChat.strChatId = latestMessage.chat_id
+        navigationController?.pushViewController(vcChat, animated: true)
+        try! realm.write {
+            resultRealmRecents[indexPath.row].unread_count = 0
+        }
+    }
+    
     func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
         let vcChat = ChatViewController()
         vcChat.hidesBottomBarWhenPushed = true
@@ -262,9 +310,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let withUserName = recent["with_user_name"].string
         let withUserNickName = recent["with_nick_name"].string
         vcChat.realmWithUser = RealmUser()
-        vcChat.realmWithUser!.userName = withUserName!
-        vcChat.realmWithUser!.userNickName = withUserNickName!
-        vcChat.realmWithUser!.userID = withUserUserId!
+        vcChat.realmWithUser!.user_name = withUserName!
+        vcChat.realmWithUser!.display_name = withUserNickName!
+        vcChat.realmWithUser!.id = withUserUserId!
         //vcChat.withUserId = withUserUserId!
         
         //firebase.child(vcChat.chatRoomId).keepSynced(true)
@@ -294,7 +342,53 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
+    @objc private func updateTimestamp() {
+        for index in 0..<resultRealmRecents.count {
+            let cell = tblRecents.cellForRow(at: IndexPath(row: index, section: 0)) as! RecentTableViewCell
+            if cell.lblDate.text == "Just Now" || cell.lblDate.text == "Yesterday" {
+                UIView.setAnimationsEnabled(false)
+                tblRecents.beginUpdates()
+                tblRecents.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+                tblRecents.endUpdates()
+                UIView.setAnimationsEnabled(true)
+            }
+        }
+    }
+    
     // MARK: load recent messages from the server
+    private func loadRecentsFromRealm() {
+        resultRealmRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", String(Key.shared.user_id)).sorted(byKeyPath: "created_at", ascending: false)
+        /*let allChatID = Set(realm.objects(RealmMessage_v2.self).filter("login_user_id == %@", String(Key.shared.user_id)).value(forKey: "chat_id") as! [String])
+        for chatID in allChatID {
+            let lastMessage = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), chatID).sorted(byKeyPath: "index").last
+            arrRecentsRealm.append(lastMessage!)
+        }
+        arrRecentsRealm.sort { $0.created_at > $1.created_at }*/
+    }
+    
+    private func observeOnMessageChange() {
+        guard let tableview = self.tblRecents else { return }
+        notificationToken = resultRealmRecents.addNotificationBlock { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                print("initial")
+                tableview.reloadData()
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+                print("recent update")
+                UIView.setAnimationsEnabled(false)
+                tableview.beginUpdates()
+                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.endUpdates()
+                UIView.setAnimationsEnabled(true)
+            case .error:
+                print("error")
+            }
+        }
+    }
+    
     /// load recent list from server, also used to reload the recent list after deletion
     /// - Parameters:
     ///   - animated: update the table with/without animation
@@ -304,7 +398,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
                 self.recents = json
-                RealmChat.updateRecent(recents: cacheRecent)
+                //RealmChat.updateRecent(recents: cacheRecent)
                 for item in cacheRecent {
                     let recent: NSDictionary = item as! NSDictionary
                     let chatRoomId = Key.shared.user_id < recent["with_user_id"] as! Int ? "\(Key.shared.user_id)-\(recent["with_user_id"] ?? "")" : "\(recent["with_user_id"] ?? "")-\(Key.shared.user_id)"

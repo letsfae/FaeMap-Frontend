@@ -106,7 +106,7 @@ class RecentTableViewCell: UITableViewCell {
         lblLastMessage = UILabel()
         lblLastMessage.text = ""
         lblLastMessage.textAlignment = .left
-        lblLastMessage.textColor = UIColor._898989()
+        lblLastMessage.textColor = UIColor._146146146()
         lblLastMessage.lineBreakMode = NSLineBreakMode.byTruncatingTail
         lblLastMessage.numberOfLines = 2
         
@@ -153,6 +153,58 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     // MARK: bind data to the cell
+    func bindData_v2(_ latest : RealmMessage_v2) {
+        /*if let myInteger = Int(latest.withUserID) {
+            imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
+        }*/
+        for user in latest.members {
+            if user.id != user.login_user_id || latest.chat_id == user.login_user_id {
+                lblName.text = user.display_name
+                if let avatarData = user.avatar?.userSmallAvatar {
+                    imgAvatar.image = UIImage(data: avatarData as Data)
+                } else {
+                    imgAvatar.image = UIImage(named: "avatarPlaceholder")
+                }
+            }
+        }
+        if latest.type == "text" {
+            lblLastMessage.text = latest.text
+        } else {
+            lblLastMessage.text = latest.type
+        }        
+        
+        if latest.unread_count > 0 {
+            lblCounter.isHidden = false
+            lblCounter.text = latest.unread_count > 99 ? "•••" : "\(latest.unread_count)"
+            if lblCounter.text?.count >= 2 {
+                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
+            } else {
+                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(22)]", options: [], views: lblCounter)
+                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
+            }
+        } else {
+            lblCounter.isHidden = true
+        }
+        
+        //let dateFormatter = DateFormatter()
+        //dateFormatter.calendar = Calendar(identifier: .gregorian)
+        //dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        //dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
+        //let date = dateFormatter.date(from: latest.created_at)
+        let date = dateFormatter().date(from: latest.created_at)
+        let seconds = Date().timeIntervalSince(date!)
+        lblDate.text = TimeElipsed(seconds, lastMessageTime: date!)
+        lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
+        lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
+        
+        //        guard let userid = Int(recent.withUserID) else { return }
+        //        guard avatarDic[userid] == nil else { return }
+        //        General.shared.avatar(userid: userid) { (avatarImage) in
+        //            avatarDic[userid] = avatarImage
+        //        }
+    }
+
     func bindData(_ recent : RealmRecent) {
         if let myInteger = Int(recent.withUserID) {
             imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
@@ -181,23 +233,23 @@ class RecentTableViewCell: UITableViewCell {
         lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
         lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
         
-        guard let userid = Int(recent.withUserID) else { return }
-        guard avatarDic[userid] == nil else { return }
-        General.shared.avatar(userid: userid) { (avatarImage) in
-            avatarDic[userid] = avatarImage
-        }
+//        guard let userid = Int(recent.withUserID) else { return }
+//        guard avatarDic[userid] == nil else { return }
+//        General.shared.avatar(userid: userid) { (avatarImage) in
+//            avatarDic[userid] = avatarImage
+//        }
     }
 
     
     // MARK: helper
-    private func TimeElipsed(_ seconds : TimeInterval, lastMessageTime:Date) -> String {
-        let dayFormatter = dateFormatter()
+    private func TimeElipsed(_ seconds: TimeInterval, lastMessageTime: Date) -> String {
+        let dayFormatter = DateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
-        let minFormatter = dateFormatter()
+        let minFormatter = DateFormatter()
         minFormatter.timeStyle = .short
-        let weekdayFormatter = dateFormatter()
+        let weekdayFormatter = DateFormatter()
         weekdayFormatter.dateFormat = "EEEE"
-        let realDateFormatter = dateFormatter()
+        let realDateFormatter = DateFormatter()
         realDateFormatter.dateFormat = "MM/dd/yy"
         
         let elipsed : String?
