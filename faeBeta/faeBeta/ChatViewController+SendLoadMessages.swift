@@ -13,7 +13,50 @@ import FirebaseDatabase
 import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
-    
+    func sendMeaages_v2(type: String, text: String, media: Data? = nil) {
+        let newMessage = RealmMessage_v2()
+        let login_user_id = String(Key.shared.user_id)
+        //newMessage.login_user_id = login_user_id
+        let realm = try! Realm()
+        //let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        let messages = realm.filterAllMessages(login_user_id, intIsGroup, strChatId!)
+        var newIndex = 0
+        if messages.count > 0 {
+            newIndex = (messages.last?.index)! + 1
+        }
+        //newMessage.index = newIndex
+        //let primaryKey = "\(login_user_id)_\(strChatId!)_\(newIndex)"
+        //newMessage.loginUserID_chatID_index = primaryKey
+        //newMessage.chat_id = strChatId!
+        newMessage.setPrimaryKeyInfo(login_user_id, intIsGroup, strChatId!, newIndex)
+        for user_id in arrUserIDs {
+            //let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
+            let user = realm.filterUser(login_user_id, id: user_id)!
+            newMessage.members.append(user)
+            if user.loginUserID_id == "\(login_user_id)_\(login_user_id)" {
+                newMessage.sender = user
+            }
+        }
+        newMessage.created_at = RealmChat.dateConverter(date: Date())
+        newMessage.type = type
+        newMessage.text = text
+        if media != nil {
+            newMessage.media = media! as NSData
+        }
+        let recentRealm = RealmRecent_v2()
+        //recentRealm.login_user_id = login_user_id
+        //recentRealm.chat_id = strChatId!
+        recentRealm.created_at = newMessage.created_at
+        recentRealm.unread_count = 0
+        //recentRealm.loginUserID_chatID = "\(login_user_id)_\(strChatId!)"
+        recentRealm.setPrimaryKeyInfo(login_user_id, intIsGroup, strChatId!)
+        try! realm.write {
+            realm.add(newMessage)
+            realm.add(recentRealm, update: true)
+        }
+        //JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        finishSendingMessage()
+    }
     // MARK: - send message
     func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
         
@@ -22,7 +65,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         let shouldHaveTimeStamp = date.timeIntervalSince(dateLastMarker as Date) > 300 && !boolSentInLast5s
         let realmMessage = RealmMessage()
         realmMessage.messageID = "\(Key.shared.user_id)_\(RealmChat.dateConverter(date: date)))"
-        realmMessage.withUserID = realmWithUser!.userID
+        realmMessage.withUserID = realmWithUser!.id
         realmMessage.senderID = "\(Key.shared.user_id)"
         realmMessage.senderName = Key.shared.username
         realmMessage.hasTimeStamp = shouldHaveTimeStamp
@@ -143,22 +186,105 @@ extension ChatViewController: OutgoingMessageProtocol {
     // send image delegate function
     func sendImages(_ images: [UIImage]) {
         for i in 0 ..< images.count {
-            self.sendMessage(picture: images[i], date: Date())
+            //self.sendMessage(picture: images[i], date: Date())
+            sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(images[i]))
         }
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(_ name: String) {
-        self.sendMessage(sticker: UIImage(named: name), date: Date())
+        //self.sendMessage(sticker: UIImage(named: name), date: Date())
+        sendMeaages_v2(type: "[Sticker]", text: name)
     }
     
     func sendAudioData(_ data: Data) {
-        self.sendMessage(audio: data, date: Date())
+        //self.sendMessage(audio: data, date: Date())
+        sendMeaages_v2(type: "[Audio]", text: "[Audio]", media: data)
     }
     
     func sendGifData(_ data: Data) {
-        self.sendMessage(snapImage: data, date: Date())
+        //self.sendMessage(snapImage: data, date: Date())
+        sendMeaages_v2(type: "[Gif]", text: "[Gif]", media: data)
     }
+    
+    func loadMessagesFromRealm() {
+        let realm = try! Realm()
+        //resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        resultRealmMessages = realm.filterAllMessages(String(Key.shared.user_id), intIsGroup, strChatId)
+        let count = resultRealmMessages.count
+        for i in (count - intNumberOfMessagesOneTime)..<count {
+            if i < 0 {
+                continue
+            } else {
+                let messageRealm = resultRealmMessages[i]
+                if messageRealm.index < 0 {
+                    continue
+                }
+                let incomingMessage = IncomingMessage(collectionView_: collectionView!)
+                let messageJSQ = incomingMessage.createJSQMessage(messageRealm)
+                arrJSQMessages.append(messageJSQ)
+                arrRealmMessages.append(messageRealm)
+                realm.beginWrite()
+                resultRealmMessages[i].unread_count = 0
+                try! realm.commitWrite()
+            }
+        }
+        finishReceivingMessage(animated: false)
+        guard let collectionView = self.collectionView else { return }
+        notificationToken = resultRealmMessages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                print("initial")
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+                print("chat update")
+                if insertions.count > 0 {
+                    let insertMessage = self!.resultRealmMessages[insertions[0]]
+                    let incomingMessage = IncomingMessage(collectionView_: collectionView)
+                    let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
+                    self!.arrJSQMessages.append(messageJSQ)
+                    self!.arrRealmMessages.append(insertMessage)
+                    self!.finishReceivingMessage(animated: false)
+                    if incomingMessage.senderId != "\(Key.shared.user_id)" {
+                        realm.beginWrite()
+                        insertMessage.unread_count = 0
+                        try! realm.commitWrite()
+                    }                    
+                }
+                break
+            case .error:
+                print("error")
+            }
+        }
+    }
+    
+    func loadPrevMessagesFromRealm() {
+        boolLoadingPreviousMessages = true
+        let countAll = resultRealmMessages.count
+        if countAll > arrRealmMessages.count {
+            let intEndIndex = countAll - arrRealmMessages.count
+            let intStartIndex = intEndIndex - intNumberOfMessagesOneTime
+            for i in (intStartIndex..<intEndIndex).reversed() {
+                if i < 0 {
+                    continue
+                } else {
+                    let incomingMessage = IncomingMessage(collectionView_: collectionView!)
+                    let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
+                    arrJSQMessages.insert(messageJSQ, at: 0)
+                    arrRealmMessages.insert(resultRealmMessages[i], at: 0)
+                }
+            }
+            let oldOffset = collectionView.contentSize.height - collectionView.contentOffset.y
+            collectionView.reloadData()
+            collectionView.layoutIfNeeded()
+            collectionView.contentOffset = CGPoint(x: 0.0, y: collectionView.contentSize.height - oldOffset)
+            boolLoadingPreviousMessages = false
+        } else {
+            boolLoadingPreviousMessages = false
+        }
+        
+    }
+    
     
     // MARK: handle messages
     // open an observer on firebase to load new messages
@@ -203,6 +329,11 @@ extension ChatViewController: OutgoingMessageProtocol {
         } else {
             self.boolLoadingPreviousMessages = false
         }
+    }
+    
+    func insertMessage_v2(_ message: RealmMessage_v2) -> Bool {
+        let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
+        return false
     }
     
     /// append message to then end
@@ -283,10 +414,11 @@ extension ChatViewController: OutgoingMessageProtocol {
     }
     
     func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int) {
-        var imageData = UIImageJPEGRepresentation(snapImage, 1)
-        let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
-        imageData = UIImageJPEGRepresentation(snapImage, factor)
-        sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
+        //var imageData = UIImageJPEGRepresentation(snapImage, 1)
+        //let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+        //imageData = UIImageJPEGRepresentation(snapImage, factor)
+        //sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
+        sendMeaages_v2(type: "[Video]", text: "\(duration)", media: video)
         self.toolbarContentView.cleanUpSelectedPhotos()
     }
     

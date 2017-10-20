@@ -136,8 +136,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         chatVC.strChatId = chat_id
         let nickName = nickName ?? "Chat"
         chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userNickName = nickName
-        chatVC.realmWithUser!.userID = "\(userId)"
+        chatVC.realmWithUser!.display_name = nickName
+        chatVC.realmWithUser!.id = "\(userId)"
         navigationController?.pushViewController(chatVC, animated: true)
     }
     

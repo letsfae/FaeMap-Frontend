@@ -10,6 +10,7 @@ import CoreLocation
 import SwiftyJSON
 import MapKit
 import CCHMapClusterController
+import RealmSwift
 
 enum MapMode {
     case normal
@@ -35,6 +36,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var faePlacePins = [FaePinAnnotation]()
     var setPlacePins = Set<Int>()
     var arrPlaceData = [PlacePin]()
+    var timerLoadMessages: Timer?
     
     // Search Bar
     var imgSchbarShadow: UIImageView!
@@ -123,6 +125,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
+    let faeChat = FaeChat()
+    
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }
@@ -192,6 +196,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var fullyLoaded = false // indicate if all components are fully loaded
     var boolNextUpdate = true
     
+    var unreadNotiToken: NotificationToken? = nil
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,6 +231,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //        line_1.backgroundColor = UIColor._200199204()
 //        view.addSubview(line_1)
 //        line_1.layer.zPosition = 3000
+    }
+    
+    deinit {
+        unreadNotiToken?.stop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -282,9 +292,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {
+                sendWelcomeMessage()
             } else {
                 self.loadFirstLoginVC()
-                firebaseWelcome()
+                sendWelcomeMessage()
             }
         }
     }
@@ -312,11 +323,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
+        timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateMessages), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
         timerUserPin?.invalidate()
         timerUserPin = nil
+        timerLoadMessages?.invalidate()
+        timerLoadMessages = nil
     }
     
     func loadFirstLoginVC() {

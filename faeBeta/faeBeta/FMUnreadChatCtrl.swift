@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 // MARK: Show unread chat tableView
 extension FaeMapViewController {
@@ -15,10 +16,35 @@ extension FaeMapViewController {
     func loadMapChat() {
         lblUnreadCount.isHidden = true
         updateUnreadChatIndicator()
+        if Key.shared.user_id != -1 {
+            faeChat.updateFriendsList()
+        }
+        if faeChat.notificationRunLoop == nil {
+            // each call will start a run loop, so only initialize one
+            faeChat.observeMessageChange()
+        }
+    }
+    
+    func updateMessages() {
+        faeChat.getMessageFromServer()
     }
     
     func updateUnreadChatIndicator() {
-        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 5.0) {
+        let realm = try! Realm()
+        let resultRealmRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", String(Key.shared.user_id))
+        unreadNotiToken = resultRealmRecents.addNotificationBlock { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                self.setupUnreadNum(resultRealmRecents)
+                break
+            case .update:
+                self.setupUnreadNum(resultRealmRecents)
+                break
+            case .error:
+                break
+            }
+        }
+        /*DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + 5.0) {
             let sync = FaePush()
             sync.getSync({ (status, message) in
                 guard status / 100 == 2 else { return }
@@ -33,7 +59,19 @@ extension FaeMapViewController {
                     UIApplication.shared.applicationIconBadgeNumber = unreadCount
                 }
             })
+        }*/
+    }
+    
+    func setupUnreadNum(_ currentRecents: Results<RealmRecent_v2>) {
+        var unreadCount = 0
+        for recent in currentRecents {
+            unreadCount += recent.unread_count
         }
+        lblUnreadCount.text = unreadCount > 99 ? "•••" : "\(unreadCount)"
+        lblUnreadCount.frame.size.width = unreadCount / 10 >= 1 ? 28 : 22
+        btnOpenChat.isSelected = unreadCount != 0
+        lblUnreadCount.isHidden = unreadCount == 0
+        UIApplication.shared.applicationIconBadgeNumber = unreadCount
     }
     
     func segueToChat(_ withUserId: NSNumber, withUserName: String) {
@@ -48,8 +86,8 @@ extension FaeMapViewController {
         
         // Bryan
         chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userID = withUserId.stringValue
-        chatVC.realmWithUser!.userName = withUserName
+        chatVC.realmWithUser!.id = withUserId.stringValue
+        chatVC.realmWithUser!.user_name = withUserName
         
         // EndBryan
         self.present(chatVC, animated: true, completion: nil)

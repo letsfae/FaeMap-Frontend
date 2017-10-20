@@ -122,6 +122,10 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         switch sender.tag {
         case SHARE:
             // TODO jichao
+            //let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
+            //let vcShareCollection = NewChatShareController(friendListMode: .place)
+            //vcShareCollection.placeDetail = "\(cell.lblColName.text);\(cell.lblColAddr.text)"
+            //navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         case MEMO:
             let vc = EditMemoViewController()

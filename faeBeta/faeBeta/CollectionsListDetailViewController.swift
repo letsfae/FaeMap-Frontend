@@ -56,6 +56,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var indexPath: IndexPath!
     weak var delegate: CollectionsListDetailDelegate?
     
+    var boolFromChat: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -184,6 +186,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFooter.addSubview(btnMapView)
         uiviewFooter.addSubview(btnShare)
         uiviewFooter.addSubview(btnMore)
+        
+        btnMore.isHidden = boolFromChat
     }
     
     func actionBack(_ sender: UIButton) {
@@ -197,7 +201,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             break
         case 1: // share
             // TODO: jichao
-            
+            let vcShareCollection = NewChatShareController(friendListMode: .collection)
+            vcShareCollection.collectionDetail = arrColDetails
+            navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         default:
             break

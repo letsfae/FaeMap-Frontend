@@ -51,6 +51,8 @@ func clearRecentCounter(_ chatRoomId : String?) {
 /// - Returns: a DateFormatter
 func dateFormatter() -> DateFormatter {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyyMMddHHmmss"
+    dateFormatter.calendar = Calendar(identifier: .gregorian)
+    dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+    dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
     return dateFormatter
 }

@@ -51,7 +51,8 @@
 		86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F911D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m */; };
 		86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 86242F961D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m */; };
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
-		9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */; };
+		9F186F851F6A320F00D24E07 /* FaeChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F186F841F6A320F00D24E07 /* FaeChat.swift */; };
+		9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */; };
 		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
@@ -279,7 +280,7 @@
 		C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */; };
 		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
 		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
-		CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */; };
+		CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* Welcomer.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
 		DC084A911DDCF969007DCC88 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC084A901DDCF969007DCC88 /* Recent.swift */; };
 		DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0B09331F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift */; };
@@ -301,6 +302,8 @@
 		DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */; };
 		DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */; };
 		DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */; };
+		DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */; };
+		DCC59D141F8C334E00B2A27F /* CPCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */; };
 		DCF1EBD21DA31D240066B3ED /* ChatViewController+collecitonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */; };
 		DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */; };
 /* End PBXBuildFile section */
@@ -358,8 +361,9 @@
 		8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQMessagesCollectionViewCustom.m; sourceTree = "<group>"; };
 		8660BBF31D9066E100D4820C /* JSQMessagesCollectionViewDataSourceCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesCollectionViewDataSourceCustom.h; sourceTree = "<group>"; };
 		8660BBF41D906B2200D4820C /* JSQMessagesBubbleSizeCalculatingCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleSizeCalculatingCustom.h; sourceTree = "<group>"; };
-		9F1D68C61F4E89100067EFF9 /* JSQPlaceMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceMediaItemCustom.h; sourceTree = "<group>"; };
-		9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceMediaItemCustom.m; sourceTree = "<group>"; };
+		9F186F841F6A320F00D24E07 /* FaeChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeChat.swift; sourceTree = "<group>"; };
+		9F1D68C61F4E89100067EFF9 /* JSQPlaceCollectionMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceCollectionMediaItemCustom.h; sourceTree = "<group>"; };
+		9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceCollectionMediaItemCustom.m; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
@@ -599,7 +603,7 @@
 		C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChatBase.swift; sourceTree = "<group>"; };
 		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
 		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
-		CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseWelcomer.swift; sourceTree = "<group>"; };
+		CE7D2C571E451AF1003C0577 /* Welcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Welcomer.swift; sourceTree = "<group>"; };
 		D1C7940300202F2022AF7263 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
 		DC084A8D1DDC4E84007DCC88 /* EmojiService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmojiService.h; sourceTree = "<group>"; };
 		DC084A8E1DDC4E84007DCC88 /* EmojiService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmojiService.m; sourceTree = "<group>"; };
@@ -629,6 +633,9 @@
 		DC9F453C1E079B2D00128444 /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
 		DC9F453E1E08F51A00128444 /* NSMutableAttributedString+bullet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+bullet.swift"; sourceTree = "<group>"; };
 		DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderView.swift; sourceTree = "<group>"; };
+		DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedFriendCollectionViewCell.swift; sourceTree = "<group>"; };
+		DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPCollectionViewLayout.swift; sourceTree = "<group>"; };
+		DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSVC_backup.swift; sourceTree = "<group>"; };
 		DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+collecitonView.swift"; sourceTree = "<group>"; };
 		DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatViewController+SendLoadMessages.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -838,6 +845,7 @@
 		B0714D7F1D5E463B00356705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				DCC59D101F8C279A00B2A27F /* ContactsPicker */,
 				C1DE0DE71E9F00C6003188BE /* Realm */,
 				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
@@ -849,7 +857,6 @@
 				B064EEB31D6E0CEA00C078F5 /* Photo */,
 				B0714D801D5E464500356705 /* Camera */,
 				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
-				DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -868,7 +875,7 @@
 				B064EEA41D6E0CA100C078F5 /* IncomingMessage.swift */,
 				B064EEA51D6E0CA100C078F5 /* OutgoingMessage.swift */,
 				DC084A901DDCF969007DCC88 /* Recent.swift */,
-				CE7D2C571E451AF1003C0577 /* FirebaseWelcomer.swift */,
+				CE7D2C571E451AF1003C0577 /* Welcomer.swift */,
 			);
 			name = FireBaseData;
 			sourceTree = "<group>";
@@ -883,6 +890,7 @@
 				DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */,
 				DC3982091DD2BC88000CB51F /* UIScreenService.swift */,
 				DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */,
+				DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */,
 			);
 			name = UIviewController;
 			sourceTree = "<group>";
@@ -1010,8 +1018,8 @@
 				B0BF356B1D8DC8D600B0540B /* JSQPhotoMediaItemCustom.m */,
 				DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */,
 				DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */,
-				9F1D68C61F4E89100067EFF9 /* JSQPlaceMediaItemCustom.h */,
-				9F1D68C71F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m */,
+				9F1D68C61F4E89100067EFF9 /* JSQPlaceCollectionMediaItemCustom.h */,
+				9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */,
 				DC084A8D1DDC4E84007DCC88 /* EmojiService.h */,
 				DC084A8E1DDC4E84007DCC88 /* EmojiService.m */,
 				B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */,
@@ -1398,6 +1406,7 @@
 			isa = PBXGroup;
 			children = (
 				C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */,
+				9F186F841F6A320F00D24E07 /* FaeChat.swift */,
 			);
 			name = Realm;
 			sourceTree = "<group>";
@@ -1468,6 +1477,16 @@
 				DCBE690A1DB60F1400BFF46C /* AudioRecorderView.swift */,
 			);
 			name = Audio;
+			sourceTree = "<group>";
+		};
+		DCC59D101F8C279A00B2A27F /* ContactsPicker */ = {
+			isa = PBXGroup;
+			children = (
+				DCC59D111F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift */,
+				DCC59D131F8C334E00B2A27F /* CPCollectionViewLayout.swift */,
+				DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */,
+			);
+			name = ContactsPicker;
 			sourceTree = "<group>";
 		};
 		DCEB8CA01DEFBE5A00B516E9 /* Support */ = {
@@ -1693,6 +1712,7 @@
 				B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */,
 				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,
 				B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */,
+				DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
@@ -1819,6 +1839,7 @@
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
 				B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */,
+				9F186F851F6A320F00D24E07 /* FaeChat.swift in Sources */,
 				B8849EB81EEB147A00D4588D /* MBChatsViewController.swift in Sources */,
 				B8849EB91EEB147A00D4588D /* MBChatSpotsCell.swift in Sources */,
 				B0714E141D62530E00356705 /* EnableNotificationViewController.swift in Sources */,
@@ -1837,6 +1858,7 @@
 				B37E5DC01F831040008A6B4B /* SetPrivacyViewController.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
+				DCC59D141F8C334E00B2A27F /* CPCollectionViewLayout.swift in Sources */,
 				DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */,
 				B8B7AF541E728C2300BE92AB /* FMPlacePinCtrl.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */,
@@ -1871,10 +1893,10 @@
 				50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */,
 				B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */,
 				B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */,
-				9F1D68C81F4E907D0067EFF9 /* JSQPlaceMediaItemCustom.m in Sources */,
+				9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
 				B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */,
-				CE7D2C581E451AF1003C0577 /* FirebaseWelcomer.swift in Sources */,
+				CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */,
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,

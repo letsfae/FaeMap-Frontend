@@ -84,8 +84,8 @@ extension FaeMapViewController: NameCardDelegate {
         // Bryan
         // TODO: Tell nickname and username apart
         chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.userNickName = nickName
-        chatVC.realmWithUser!.userID = "\(userId)"
+        chatVC.realmWithUser!.display_name = nickName
+        chatVC.realmWithUser!.id = "\(userId)"
         // chatVC.realmWithUser?.userAvatar =
         
         // RealmChat.addWithUser(withUser: chatVC.realmWithUser!)

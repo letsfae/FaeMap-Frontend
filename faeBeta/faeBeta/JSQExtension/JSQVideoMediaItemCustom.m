@@ -83,7 +83,7 @@
         return nil;
     }
     
-    if (self.cachedVideoImageView == nil) {
+    //if (self.cachedVideoImageView == nil) {
         CGSize size = [self mediaViewDisplaySize];
         UIImage *playIcon = [UIImage imageNamed:@"videoPlayButtonIcon"];
         
@@ -127,7 +127,7 @@
         imageView.clipsToBounds = YES;
         [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:imageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
         self.cachedVideoImageView = imageView;
-    }
+    //}
     
     return self.cachedVideoImageView;
 }

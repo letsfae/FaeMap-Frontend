@@ -10,16 +10,23 @@ import RealmSwift
 
 //Bryan
 class RealmUser: Object {
-    dynamic var userName: String = ""
-    dynamic var userNickName: String = ""
-    dynamic var userID: String = ""
-    //Avatar has not been added to local storage yet
-    dynamic var userSmallAvatar: NSData? = nil
-    dynamic var smallAvatarEtag: String? = nil
-    dynamic var userLargeAvatar: NSData? = nil
-    dynamic var largeAvatarEtag: String? = nil
+    dynamic var loginUserID_id: String = ""
+    dynamic var login_user_id: String = ""
+    dynamic var id: String = ""
+    dynamic var user_name: String = ""
+    dynamic var display_name: String = ""
+    dynamic var is_friend: Bool = false
+    dynamic var age: String = ""
+    dynamic var gender: String = ""
+    //let message = LinkingObjects(fromType: RealmMessage_v2.self, property: "members")
+    var message: RealmMessage_v2? {
+        return realm?.objects(RealmMessage_v2.self).filter("login_user_id = %@ AND members.@count = 2 AND %@ IN members", self.login_user_id, self).last
+    }
+    var avatar: UserAvatar? {
+        return realm?.objects(UserAvatar.self).filter("user_id == %@", self.id).first
+    }
     override static func primaryKey() -> String? {
-        return "userID"
+        return "loginUserID_id"
     }
 }
 //ENDBryan
@@ -36,9 +43,14 @@ class SelfInformation: Object {
 }
 
 class UserAvatar: Object {
-    dynamic var userId = 0
-    dynamic var avatar: NSData? = nil
-    dynamic var etag = ""
+    dynamic var user_id: String = ""
+    dynamic var userSmallAvatar: NSData? = nil
+    dynamic var smallAvatarEtag: String? = nil
+    dynamic var userLargeAvatar: NSData? = nil
+    dynamic var largeAvatarEtag: String? = nil
+    override static func primaryKey() -> String? {
+        return "user_id"
+    }
 }
 
 class NewFaePin: Object {

@@ -43,6 +43,8 @@ class AlbumTableViewCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(19)]-10-|", options: [], views: imgCheckMark)
         addConstraintsWithFormat("V:|-34-[v0(15)]", options: [], views: imgCheckMark)
         
+        selectionStyle = .none
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
