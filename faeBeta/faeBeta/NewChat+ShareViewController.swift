@@ -65,6 +65,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     var friendListMode: FriendListMode = .chat
     var locationDetail: String = ""
+    var locationSnapImage: UIImage?
     var collectionDetail: CollectionList?
     var placeDetail: PlacePin?
     
@@ -253,24 +254,33 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             vcChat.strChatId = arrFriends[index].userID
             var type = ""
             var text = ""
+            var media: Data?
             switch friendListMode {
             case .location:
                 type = "[Location]"
                 let arrLocationInfo = locationDetail.split(separator: ",")
                 text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
+                media = RealmChat.compressImageToData(locationSnapImage!)
+                vcChat.sendMeaages_v2(type: type, text: text, media: media)
                 break
             case .collection:
                 type = "[Collection]"
                 text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+                vcChat.sendMeaages_v2(type: type, text: text)
                 break
             case .place:
                 type = "[Place]"
-                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
+                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
+                downloadImage(URL: placeDetail!.imageURL) { (rawData) in
+                    guard let data = rawData else { return }
+                    media = data
+                    vcChat.sendMeaages_v2(type: type, text: text, media: media)
+                }
                 break
             default:
                 break
             }
-            vcChat.sendMeaages_v2(type: type, text: text)
+            //vcChat.sendMeaages_v2(type: type, text: text, media: media)
             /*let realm = try! Realm()
             let login_user_id = String(Key.shared.user_id)
             let shareToUser = realm.filterUser(login_user_id, id: arrFriends[index].userID)!

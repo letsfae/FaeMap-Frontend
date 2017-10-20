@@ -94,6 +94,10 @@ extension Realm {
         return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", login_user_id, is_group, chat_id).sorted(byKeyPath: "index")
     }
     
+    func filterMessage(_ primary_key: String) -> RealmMessage_v2? {
+        return self.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND primary_key == %@", "\(Key.shared.user_id)", primary_key).first
+    }
+    
     func filterUser(_ login_user_id: String, id: String) -> RealmUser? {
         return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, id).first
     }

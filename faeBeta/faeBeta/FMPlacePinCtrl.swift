@@ -154,8 +154,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 locAnnoView?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
                 let coordinate = locationPin?.coordinate
-                vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(uiviewLocationBar.lblName.text ?? "Invalid Name"),\(uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
-                navigationController?.pushViewController(vcShareCollection, animated: true)
+                AddPlaceToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+                    vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(self.uiviewLocationBar.lblName.text ?? "Invalid Name"),\(self.uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
+                    vcShareCollection.locationSnapImage = snapShotImage
+                    self.navigationController?.pushViewController(vcShareCollection, animated: true)
+                }
             } else {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
                 selectedPlaceView?.hideButtons()

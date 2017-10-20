@@ -109,7 +109,11 @@ class FaeChat {
         }
         message["members"] = members
         if let media = message["media"] {
-            message["media"] = (media as! NSData).base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
+            if !["[Place]"].contains(newMessage.type) {
+                message["media"] = (media as! NSData).base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0))
+            } else {
+                message["media"] = ""
+            }
         }
         message["sender"] = String(Key.shared.user_id)
         do {
@@ -210,6 +214,13 @@ class FaeChat {
         messageRealm.created_at = messageJSON["created_at"].string!
         messageRealm.type = messageJSON["type"].string!
         messageRealm.text = messageJSON["text"].string!
+        switch messageRealm.type {
+        case "[Place]":
+            downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
+            break
+        default:
+            break
+        }
         if let media = messageJSON["media"].string {
             if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue : 0)) {
                 messageRealm.media = decodeData as NSData
@@ -227,6 +238,29 @@ class FaeChat {
         try! realm.write {
             realm.add(messageRealm, update: false)
             realm.add(recentRealm, update: true)
+        }
+    }
+    
+    func downloadImageFor(_ message: JSON, primary_key: String) {
+        let strDetail = message["text"].stringValue.replacingOccurrences(of: "\\", with: "")
+        let dataDetail = strDetail.data(using: .utf8)
+        let jsonDetail = JSON(data: dataDetail!)
+        let imageURL = jsonDetail["imageURL"].stringValue
+        if imageURL != "" {
+            downloadImage(URL: imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    DispatchQueue.main.async {
+                        let realm = try! Realm()
+                        if let target = realm.filterMessage(primary_key) {
+                            try! realm.write {
+                                target.media = data as NSData
+                                realm.add(target, update: true)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
