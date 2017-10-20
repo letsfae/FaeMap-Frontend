@@ -10,6 +10,7 @@ import CoreLocation
 import SwiftyJSON
 import MapKit
 import CCHMapClusterController
+import RealmSwift
 
 enum MapMode {
     case normal
@@ -195,6 +196,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var fullyLoaded = false // indicate if all components are fully loaded
     var boolNextUpdate = true
     
+    var unreadNotiToken: NotificationToken? = nil
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -228,6 +231,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //        line_1.backgroundColor = UIColor._200199204()
 //        view.addSubview(line_1)
 //        line_1.layer.zPosition = 3000
+    }
+    
+    deinit {
+        unreadNotiToken?.stop()
     }
     
     override func viewWillAppear(_ animated: Bool) {
