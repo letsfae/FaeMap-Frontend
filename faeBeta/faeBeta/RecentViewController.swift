@@ -290,6 +290,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
         vcChat.strChatId = latestMessage.chat_id
         navigationController?.pushViewController(vcChat, animated: true)
+        try! realm.write {
+            resultRealmRecents[indexPath.row].unread_count = 0
+        }
     }
     
     func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
