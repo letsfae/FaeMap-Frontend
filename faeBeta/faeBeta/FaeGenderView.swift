@@ -90,6 +90,7 @@ class FaeGenderView: UIView {
             }
             lblCardAge.text = age
             lblCardAge.frame.size = lblCardAge.intrinsicContentSize
+            lblCardAge.frame.origin.x = 25 * screenHeightFactor
             frame.size.width = 32 * screenHeightFactor + lblCardAge.intrinsicContentSize.width
         } else if showAge && !showGender {
             isHidden = false

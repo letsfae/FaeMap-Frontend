@@ -78,6 +78,19 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadPlaces() {
+        
+        func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
+            var tempRaw = arrRaw
+            var arrResult = [PlacePin]()
+            let count = arrRaw.count < 20 ? arrRaw.count : 20
+            for _ in 0..<count {
+                let random: Int = Int(arc4random_uniform(UInt32(tempRaw.count)))
+                arrResult.append(tempRaw[random])
+                tempRaw.remove(at: random)
+            }
+            return arrResult
+        }
+        
         // use uiview.tag as a Bool like value to indicate whether we should
         // animate the alpha value between clctView and Wave sub view
         if uiviewAvatarWaveSub.tag != 0 {
@@ -88,12 +101,14 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         uiviewAvatarWaveSub.tag = 1
         arrPlaceData.removeAll(keepingCapacity: true)
+        clctViewPics.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            General.shared.getPlacePins(coordinate: LocManager.shared.curtLoc.coordinate, radius: 0, count: 20, completion: { (status, placesJSON) in
+            General.shared.getPlacePins(coordinate: LocManager.shared.curtLoc.coordinate, radius: 0, count: 200, completion: { (status, placesJSON) in
                 guard status / 100 == 2 else { return }
                 guard let mapPlaceJsonArray = placesJSON.array else { return }
                 guard mapPlaceJsonArray.count > 0 else { return }
-                self.arrPlaceData = mapPlaceJsonArray.map { PlacePin(json: $0) }
+                let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
+                self.arrPlaceData = getRandomIndex(arrRaw)
                 self.clctViewPics.reloadData()
                 self.buttonEnable(on: true)
                 UIView.animate(withDuration: 0.3, animations: {

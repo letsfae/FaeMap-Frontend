@@ -63,23 +63,23 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         DispatchQueue.main.async {
             self.loadLeftWindow()
             let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
             self.view.addGestureRecognizer(draggingGesture)
             self.loadUserInfo()
             self.loadActivityIndicator()
+            UIView.animate(withDuration: 0.3, animations: {
+                self.btnBackground.alpha = 0.7
+                self.tblLeftSlide.frame.origin.x = 0
+                self.uiviewBackTop.frame.origin.x = 0
+                self.uiviewBackBottom.frame.origin.x = 0
+            }, completion: nil)
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.3, animations: {
-            self.btnBackground.alpha = 0.7
-            self.tblLeftSlide.frame.origin.x = 0
-            self.uiviewBackTop.frame.origin.x = 0
-            self.uiviewBackBottom.frame.origin.x = 0
-        }, completion: nil)
     }
     
     func loadActivityIndicator() {
@@ -152,6 +152,12 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         tblLeftSlide.backgroundColor = UIColor.clear
         tblLeftSlide.delaysContentTouches = false
         tblLeftSlide.showsVerticalScrollIndicator = false
+        
+        if #available(iOS 11.0, *) {
+            tblLeftSlide.contentInsetAdjustmentBehavior = .never
+        } else {
+            automaticallyAdjustsScrollViewInsets = false
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
