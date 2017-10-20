@@ -193,23 +193,28 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func confirmDetele() {
-        //let indexPath = indexToDelete
+        let indexPath = indexToDelete
+        let recentToDeleted = resultRealmRecents[indexPath.row]
+        let chat_id = recentToDeleted.chat_id
+        let allMessages = realm.filterAllMessages("\(Key.shared.user_id)", 0, chat_id)
+        try! realm.write {
+            realm.delete(recentToDeleted)
+            realm.delete(allMessages)
+        }
         uiviewBackground.isHidden = true
-        let cell = tblRecents.cellForRow(at: indexToDelete) as! RecentTableViewCell
-        cell.closeCell()
-        /*let indexPath = tableView.indexPath(for: cell)!
-         let recent = recents![indexPath.row]
-         let realmRecent = realmRecents![indexPath.row]
-         RealmChat.removeRecentWith(recentItem: realmRecent)
-         
-         // remove recent form the array
-         DeleteRecentItem(recent, completion: { (statusCode, _) -> Void in
-         if statusCode / 100 == 2 {
-         self.loadRecents(true, removeIndexPaths: [indexPath])
-         }
-         })
-         
-         cellsCurrentlyEditing.remove(indexPath)*/
+        cellsCurrentlyEditing.remove(indexPath)
+        getFromURL("chats_v2/users/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {statusCode, result in
+            if statusCode / 100 == 2 {
+                if let response = result as? NSDictionary {
+                    let id = response["chat_id"] as! Int
+                    deleteFromURL("chats_v2/\(id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                        if statusCode / 100 == 2 {
+                            print("delete \(chat_id) successfully")
+                        }
+                    })
+                }
+            }
+        }        
     }
     
     func dismissDelete() {
