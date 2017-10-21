@@ -12,7 +12,6 @@
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
-		500DB27E1F6B085400DB8798 /* EXPMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */; };
 		500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */; };
 		50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50111C251F476B4B004EA00E /* FMChooseLocs.swift */; };
 		50181F0B1F688579004798B5 /* EXPCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPCells.swift */; };
@@ -314,7 +313,6 @@
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
-		500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPMapViewController.swift; sourceTree = "<group>"; };
 		500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterCellCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		50111C251F476B4B004EA00E /* FMChooseLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMChooseLocs.swift; sourceTree = "<group>"; };
 		50181F0A1F688579004798B5 /* EXPCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPCells.swift; sourceTree = "<group>"; };
@@ -661,7 +659,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		37C725431E7346C1001A5060 /* PinCollection */ = {
+		37C725431E7346C1001A5060 /* Collections */ = {
 			isa = PBXGroup;
 			children = (
 				B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */,
@@ -673,7 +671,7 @@
 				B30B878B1F80211F00B52027 /* EditMemoViewController.swift */,
 				B3170EA11F4560DF0072F9CD /* Temporarily unused */,
 			);
-			name = PinCollection;
+			name = Collections;
 			sourceTree = "<group>";
 		};
 		50111C241F476063004EA00E /* FMComponents */ = {
@@ -697,7 +695,6 @@
 			isa = PBXGroup;
 			children = (
 				504CE4D11F67BF4500070284 /* ExploreViewController.swift */,
-				500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */,
 				50181F0A1F688579004798B5 /* EXPCells.swift */,
 			);
 			name = Explore;
@@ -967,7 +964,7 @@
 				B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */,
 				B0CFC9B51CED39CF00EC356A /* ServiceViewControllers */,
 				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
-				37C725431E7346C1001A5060 /* PinCollection */,
+				37C725431E7346C1001A5060 /* Collections */,
 				B0714D7F1D5E463B00356705 /* Chat */,
 				B0D8CC731D3D525C0030939E /* Mood Avatar */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
@@ -1943,7 +1940,6 @@
 				B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */,
 				506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
-				500DB27E1F6B085400DB8798 /* EXPMapViewController.swift in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B37E5DC31F831040008A6B4B /* SetDisplayName.swift in Sources */,
 				50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */,
