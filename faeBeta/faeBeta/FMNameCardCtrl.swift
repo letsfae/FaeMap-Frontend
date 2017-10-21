@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 extension FaeMapViewController: NameCardDelegate {
     func loadNameCard() {
@@ -46,11 +47,32 @@ extension FaeMapViewController: NameCardDelegate {
     
     // NameCardDelegate
     func chatUser(id: Int) {
+        let vcChat = ChatViewController()
+        vcChat.arrUserIDs.append("\(Key.shared.user_id)")
+        vcChat.arrUserIDs.append("\(id)")
+        vcChat.strChatId = "\(id)"
+        let realm = try! Realm()
+        if let _ = realm.filterUser("\(Key.shared.user_id)", id: "\(id)") {
+            navigationController?.pushViewController(vcChat, animated: true)
+        } else {
+            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+                if status / 100 == 2 && result != nil {
+                    let profileJSON = JSON(result!)
+                    let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", String(Key.shared.user_id), "\(id)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, false, "", ""])
+                    try! realm.write {
+                        realm.add(newUser, update: true)
+                    }
+                    General.shared.avatar(userid: id) { (avatarImage) in
+                    }
+                    self.navigationController?.pushViewController(vcChat, animated: true)
+                }
+            }
+        }
 //        uiviewNameCard.hide() {
 //            self.mapGesture(isOn: true)
 //        }
         // First get chatroom id
-        getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
+       /* getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])
             if status / 100 == 2 {
                 resultJson1 = JSON(result!)
@@ -69,7 +91,7 @@ extension FaeMapViewController: NameCardDelegate {
                     self.startChat(chat_id, userId: id, nickName: nil)
                 }
             }
-        }
+        }*/
     }
     
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {

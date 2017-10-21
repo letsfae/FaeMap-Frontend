@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 
+
 extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate, AddFriendFromNameCardDelegate {
     
     func loadSearchBar() {
@@ -90,8 +91,14 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     // NameCardDelegate
     func chatUser(id: Int) {
         uiviewNameCard.hideSelf()
+        let vcChat = ChatViewController()
+        vcChat.arrUserIDs.append("\(Key.shared.user_id)")
+        vcChat.arrUserIDs.append("\(id)")
+        vcChat.strChatId = "\(id)"
+        navigationController?.pushViewController(vcChat, animated: true)
+        
         // First get chatroom id
-        getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
+        /*getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
             var resultJson1 = JSON([])
             if status / 100 == 2 {
                 resultJson1 = JSON(result!)
@@ -110,7 +117,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     self.startChat(chat_id, userId: id, nickName: nil)
                 }
             }
-        }
+        }*/
     }
     // NameCardDelegate
     func reportUser(id: Int) {
@@ -131,14 +138,16 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
-        let chatVC = ChatViewController()
-        chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
+        let vcChat = ChatViewController()
+        vcChat.arrUserIDs.append("\(Key.shared.user_id)")
+         vcChat.arrUserIDs.append("\(userId)")
+        /*chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
         chatVC.strChatId = chat_id
         let nickName = nickName ?? "Chat"
         chatVC.realmWithUser = RealmUser()
         chatVC.realmWithUser!.display_name = nickName
-        chatVC.realmWithUser!.id = "\(userId)"
-        navigationController?.pushViewController(chatVC, animated: true)
+        chatVC.realmWithUser!.id = "\(userId)"*/
+        navigationController?.pushViewController(vcChat, animated: true)
     }
     
     // AddFriendFromNameCardDelegate
