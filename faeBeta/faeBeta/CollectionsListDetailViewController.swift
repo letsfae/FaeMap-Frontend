@@ -527,7 +527,7 @@ class ColListPlaceCell: UITableViewCell {
         imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
         imgSavedItem.layer.cornerRadius = 5
         imgSavedItem.clipsToBounds = true
-        imgSavedItem.backgroundColor = UIColor._2499090()
+        imgSavedItem.backgroundColor = .white
         imgSavedItem.contentMode = .scaleAspectFill
         addSubview(imgSavedItem)
         
@@ -556,7 +556,6 @@ class ColListPlaceCell: UITableViewCell {
         lblItemName.text = placeInfo.name
         lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         imgSavedItem.backgroundColor = .white
-        
         if placeInfo.imageURL == "" {
             imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
             imgSavedItem.backgroundColor = .white
@@ -564,16 +563,16 @@ class ColListPlaceCell: UITableViewCell {
             if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
                 self.imgSavedItem.image = placeImgFromCache
                 self.imgSavedItem.backgroundColor = UIColor._2499090()
-            } else {
-                downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                    guard let data = rawData else { return }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        guard let placeImg = UIImage(data: data) else { return }
-                        DispatchQueue.main.async {
-                            self.imgSavedItem.image = placeImg
-                            self.imgSavedItem.backgroundColor = UIColor._2499090()
-                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                        }
+                return
+            }
+            downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    guard let placeImg = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        self.imgSavedItem.image = placeImg
+                        self.imgSavedItem.backgroundColor = UIColor._2499090()
+                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
                     }
                 }
             }
@@ -582,6 +581,7 @@ class ColListPlaceCell: UITableViewCell {
 }
 
 let faeLocationCache = NSCache<AnyObject, AnyObject>()
+let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
 
 class ColListLocationCell: UITableViewCell {
     
@@ -632,14 +632,19 @@ class ColListLocationCell: UITableViewCell {
     
     func setValueForLocationPin(locId: Int) {
         self.imgSavedItem.alpha = 0
+        self.lblItemName.alpha = 0
+        self.lblItemAddr_1.alpha = 0
+        self.lblItemAddr_2.alpha = 0
         if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
             let lat = locationFromCache["geolocation"]["latitude"].doubleValue
             let lon = locationFromCache["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = locationFromCache["content"].intValue
             self.imgSavedItem.loadImage(id: locationFromCache["content"].intValue)
-            self.imgSavedItem.alpha = 1
-            self.getAddressForLocation(location: location)
+            UIView.animate(withDuration: 0.1, animations: {
+                self.imgSavedItem.alpha = 1
+            })
+            self.getAddressForLocation(locId, location)
             joshprint("[setValueForLocationPin] get location pin from cache")
             return
         }
@@ -653,13 +658,26 @@ class ColListLocationCell: UITableViewCell {
             let location = CLLocation(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = resultJson["content"].intValue
             self.imgSavedItem.loadImage(id: resultJson["content"].intValue)
-            self.getAddressForLocation(location: location)
+            self.getAddressForLocation(locId, location)
             joshprint("[setValueForLocationPin] get location pin successfully")
-            self.imgSavedItem.alpha = 1
+            UIView.animate(withDuration: 0.1, animations: {
+                self.imgSavedItem.alpha = 1
+            })
         }
     }
     
-    func getAddressForLocation(location: CLLocation) {
+    func getAddressForLocation(_ locId: Int, _ location: CLLocation) {
+        if let locationFromCache = faeLocationInfoCache.object(forKey: locId as AnyObject) as? [String] {
+            self.lblItemName.text = locationFromCache[0]
+            self.lblItemAddr_1.text = locationFromCache[1]
+            self.lblItemAddr_2.text = locationFromCache[2]
+            UIView.animate(withDuration: 0.1, animations: {
+                self.lblItemName.alpha = 1
+                self.lblItemAddr_1.alpha = 1
+                self.lblItemAddr_2.alpha = 1
+            })
+            return
+        }
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             
@@ -714,6 +732,16 @@ class ColListLocationCell: UITableViewCell {
                 self.lblItemName.text = address_1
                 self.lblItemAddr_1.text = address_2
                 self.lblItemAddr_2.text = address_3
+                var arrAddrs = [String]()
+                arrAddrs.append(address_1)
+                arrAddrs.append(address_2)
+                arrAddrs.append(address_3)
+                faeLocationInfoCache.setObject(arrAddrs as AnyObject, forKey: locId as AnyObject)
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.lblItemName.alpha = 1
+                    self.lblItemAddr_1.alpha = 1
+                    self.lblItemAddr_2.alpha = 1
+                })
             }
         }
     }
