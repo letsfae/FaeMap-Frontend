@@ -139,8 +139,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }*/
         let realm = try! Realm()
         for user_id in arrUserIDs {
-            let user = realm.filterUser("\(Key.shared.user_id)", id: "\(user_id)")! //objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
-            arrRealmUsers.append(user)
+            if let user = realm.filterUser("\(Key.shared.user_id)", id: "\(user_id)") {
+                arrRealmUsers.append(user)
+            }
         }
         senderDisplayName = arrRealmUsers[1].display_name
         setAvatar()
