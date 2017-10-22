@@ -9,9 +9,14 @@
 import UIKit
 import SwiftyJSON
 
+protocol PlaceDetailDelegate: class {
+    func getRouteToPin(placeInfo: PlacePin)
+}
+
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
+    weak var featureDelegate: PlaceDetailDelegate?
     
     var place: PlacePin!
     var allPlaces = [PlacePin]()
@@ -48,7 +53,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         checkSavedStatus() {}
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,8 +94,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
-            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else { return }
-            guard is_saved != "false" else { return }
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion()
+                return
+            }
+            guard is_saved != "false" else {
+                completion()
+                return
+            }
             var ids = [Int]()
             for colIdRaw in is_saved.split(separator: ",") {
                 let strColId = String(colIdRaw)
@@ -188,12 +204,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         btnRoute = UIButton(frame: CGRect(x: (screenWidth - 47) / 2, y: 2, width: 47, height: 47))
         btnRoute.setImage(#imageLiteral(resourceName: "place_route"), for: .normal)
         btnRoute.tag = 1
-        btnRoute.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnRoute.addTarget(self, action: #selector(routeToThisPin), for: .touchUpInside)
         
         btnShare = UIButton(frame: CGRect(x: screenWidth / 2 + 58, y: 2, width: 47, height: 47))
         btnShare.setImage(#imageLiteral(resourceName: "place_share"), for: .normal)
         btnShare.tag = 2
-        btnShare.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnShare.addTarget(self, action: #selector(shareThisPin), for: .touchUpInside)
         
         uiviewFooter.addSubview(btnBack)
         uiviewFooter.addSubview(btnSave)
@@ -225,7 +241,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     fileprivate func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
-        uiviewSavedList.tableMode = .placeDetail
+        uiviewSavedList.tableMode = .place
         view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
@@ -265,43 +281,15 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func tabButtonPressed(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            if boolSaved {
-                faePinAction.unsaveThisPin("place", pinID: String(place.id)) { (status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.boolSaved = false
-                        self.imgSaved.isHidden = true
-                    } else {
-                        print("[PlaceDetail-Unsave Pin] Unsave Place Pin Fail \(status) \(message!)")
-                    }
-                }
-            } else {
-                showAddCollectionView()
-                /*
-                faePinAction.saveThisPin("place", pinID: String(place.id)) { (status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.boolSaved = true
-                        self.imgSaved.isHidden = false
-                    } else {
-                        print("[PlaceDetail-Save Pin] Save Place Pin Fail \(status) \(message!)")
-                    }
-                }
-                 */
-            }
-            break
-        case 1:
-            break
-        case 2:
-            // TODO: jichao
-            let vcShareCollection = NewChatShareController(friendListMode: .place)
-            vcShareCollection.placeDetail = place
-            navigationController?.pushViewController(vcShareCollection, animated: true)
-            break
-        default:
-            break
-        }
+    func routeToThisPin() {
+        featureDelegate?.getRouteToPin(placeInfo: self.place)
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func shareThisPin() {
+        let vcShareCollection = NewChatShareController(friendListMode: .place)
+        vcShareCollection.placeDetail = place
+        navigationController?.pushViewController(vcShareCollection, animated: true)
     }
     
     func showAddCollectionView() {

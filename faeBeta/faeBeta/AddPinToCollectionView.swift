@@ -158,7 +158,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
         self.timer = nil
-        if tableMode == .place || tableMode == .placeDetail {
+        if tableMode == .place {
             guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
             FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(placeData.id)", completion: { (code, result) in
                 guard code / 100 == 2 else { return }
@@ -167,11 +167,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 self.arrListSavedThisPin.append(colInfo.colId)
                 self.uiviewAfterAdded.pinIdInAction = placeData.id
                 self.tblAddCollection.reloadData()
-                if self.tableMode == .place {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
-                } else {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
                 self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
             })
         } else {

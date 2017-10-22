@@ -10,7 +10,12 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
+    
+    // PlaceDetailDelegate
+    func getRouteToPin(placeInfo: PlacePin) {
+        routingFunction(placeInfo)
+    }
     
     // CreateColListDelegate
     func updateCols() {
@@ -68,13 +73,36 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
+    func routingFunction(_ placeInfo: PlacePin) {
+        let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeInfo)
+        pin.animatable = false
+        tempFaePins.append(pin)
+        HIDE_AVATARS = true
+        PLACE_ENABLE = false
+        // remove place pins but don't delete them
+        placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+            self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+            self.routeCalculator(destination: pin.coordinate)
+        })
+        // stop user pins changing location and popping up
+        for user in self.faeUserPins {
+            user.isValid = false
+        }
+        // remove user pins but don't delete them
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+        if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
+            uiviewChooseLocs.updateDestination(name: placeInfo.name)
+            destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
+        }
+    }
+    
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction) {
         switch action {
         case .detail:
             if createLocation == .create {
                 locAnnoView?.optionsToNormal()
-                locAnnoView?.hideButtons()
                 let vcLocDetail = LocDetailViewController()
                 vcLocDetail.coordinate = selectedLocation?.coordinate
                 vcLocDetail.delegate = self
@@ -85,8 +113,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                     return
                 }
-                selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placeData
+                vcPlaceDetail.featureDelegate = self
                 vcPlaceDetail.delegate = self
                 navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
@@ -128,28 +157,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
                 startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
             }
-            if let placeData = selectedPlace?.pinInfo as? PlacePin {
-                let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeData)
-                pin.animatable = false
-                tempFaePins.append(pin)
-                HIDE_AVATARS = true
-                PLACE_ENABLE = false
-                // remove place pins but don't delete them
-                placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
-                    self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-                    self.routeCalculator(destination: pin.coordinate)
-                })
-                // stop user pins changing location and popping up
-                for user in self.faeUserPins {
-                    user.isValid = false
-                }
-                // remove user pins but don't delete them
-                userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
-                startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
-                if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
-                    uiviewChooseLocs.updateDestination(name: placeInfo.name)
-                    destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
-                }
+            if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
+                routingFunction(placeInfo)
             }
             break
         case .share:

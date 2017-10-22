@@ -12,8 +12,6 @@ import SwiftyJSON
 enum CollectionTableMode: String {
     case place
     case location
-    case placeDetail
-    case locationDetail
 }
 
 class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, CollectionsListDetailDelegate, CreateColListDelegate {

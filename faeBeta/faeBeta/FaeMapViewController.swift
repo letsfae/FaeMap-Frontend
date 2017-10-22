@@ -128,9 +128,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Chat
     let faeChat = FaeChat()
     
-    // Place Detail
-    lazy var vcPlaceDetail = PlaceDetailViewController()
-    
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }

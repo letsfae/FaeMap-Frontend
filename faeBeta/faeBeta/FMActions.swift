@@ -143,6 +143,7 @@ extension FaeMapViewController {
             if let ann = selectedPlace {
                 guard let placePin = ann.pinInfo as? PlacePin else { return }
                 selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placePin
                 vcPlaceDetail.delegate = self
                 navigationController?.pushViewController(vcPlaceDetail, animated: true)
