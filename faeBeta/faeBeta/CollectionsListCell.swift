@@ -9,9 +9,11 @@
 import UIKit
 
 class CollectionsListCell: UITableViewCell {
+    
     var imgPic: UIImageView!
     var lblListName: UILabel!
     var lblListNum: UILabel!
+    var imgIsIn: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -41,12 +43,20 @@ class CollectionsListCell: UITableViewCell {
         lblListNum.textColor = UIColor._107105105()
         lblListNum.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblListNum)
+        
+        imgIsIn = UIImageView(frame: CGRect(x: 11, y: 15, width: 70, height: 70))
+        imgIsIn.image = #imageLiteral(resourceName: "mb_tick")
+        addSubview(imgIsIn)
+        addConstraintsWithFormat("H:[v0(20)]-12-|", options: [], views: imgIsIn)
+        addConstraintsWithFormat("V:|-41-[v0(20)]", options: [], views: imgIsIn)
+        imgIsIn.isHidden = true
     }
     
-    func setValueForCell(cols: PinCollection) {
+    func setValueForCell(cols: PinCollection, isIn: Bool = false) {
         imgPic.image = cols.colType == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
         lblListName.text = cols.colName
         lblListNum.text = cols.itemsCount == 0 ? "0 item" : "\(cols.itemsCount) items"
+        imgIsIn.isHidden = !isIn
     }
 }
 

@@ -20,7 +20,7 @@ import SwiftyJSON
         2. when trainsitioning from collections, saved_status will be always true
         So, no need to check saved_status in back end
 */
-class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate, MKMapViewDelegate {
+class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate {
     
     weak var delegate: MapSearchDelegate?
     
@@ -44,7 +44,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     let faePinAction = FaePinAction()
     var boolSaved: Bool = false
     
-    var uiviewAddCollection: AddPlaceToCollectionView!
+    var uiviewAddCollection: AddPinToCollectionView!
     
     var lblClctViewTitle: UILabel!
     var btnSeeAll: UIButton!
@@ -198,7 +198,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacet
     }
     
     fileprivate func loadAddtoCollection() {
-        uiviewAddCollection = AddPlaceToCollectionView()
+        uiviewAddCollection = AddPinToCollectionView()
         uiviewAddCollection.delegate = self
         uiviewAddCollection.tableMode = .location
         view.addSubview(uiviewAddCollection)

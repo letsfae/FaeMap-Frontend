@@ -150,6 +150,7 @@ class FaeMapView: MKMapView {
             faeMapCtrler?.uiviewNameCard.hide() {
                 self.faeMapCtrler?.mapGesture(isOn: true)
             }
+            faeMapCtrler?.uiviewSavedList.hide()
             if v is LocationView {
                 
             } else {

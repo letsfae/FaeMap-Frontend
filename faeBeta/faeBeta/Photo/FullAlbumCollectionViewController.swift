@@ -258,8 +258,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             
         } else {
             var images = [UIImage]()
-            for i in 0..<viewPhotoPicker.indexImageDict.count {
-                images.append(viewPhotoPicker.indexImageDict[i]!)
+            for (_, image) in viewPhotoPicker.indexImageDict {
+                images.append(image)
             }
             imageDelegate.sendImages(images)
         }

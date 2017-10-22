@@ -10,8 +10,10 @@ import UIKit
 import SwiftyJSON
 
 enum CollectionTableMode: String {
-    case place = "place"
-    case location = "location"
+    case place
+    case location
+    case placeDetail
+    case locationDetail
 }
 
 class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, CollectionsListDetailDelegate, CreateColListDelegate {

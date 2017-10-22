@@ -102,7 +102,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevBearing: Double = 0
     
     // Collecting Pin Control
-    var uiviewCollectedList: AddPlaceToCollectionView!
+    var uiviewSavedList: AddPinToCollectionView!
     var uiviewAfterAdded: AfterAddedToListView!
     
     // Routes Calculator
@@ -125,7 +125,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
+    // Chat
     let faeChat = FaeChat()
+    
+    // Place Detail
+    lazy var vcPlaceDetail = PlaceDetailViewController()
     
     var mapMode: MapMode = .normal {
         didSet {
@@ -218,6 +222,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         timerSetup()
         updateSelfInfo()
+        
+        checkDisplayNameExisitency()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
@@ -234,15 +241,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     deinit {
-        unreadNotiToken?.stop()
+        unreadNotiToken?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadMapChat()
         renewSelfLocation()
-        checkDisplayNameExisitency()
-        updateTimerForAllPins()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -252,6 +257,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
+        
+        updateTimerForAllPins()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -292,10 +299,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {
-                sendWelcomeMessage()
+                DispatchQueue.main.async {
+                    sendWelcomeMessage()
+                }
             } else {
-                self.loadFirstLoginVC()
-                sendWelcomeMessage()
+                DispatchQueue.main.async {
+                    self.loadFirstLoginVC()
+                    sendWelcomeMessage()
+                }
             }
         }
     }
