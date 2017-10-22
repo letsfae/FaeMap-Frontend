@@ -207,6 +207,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
+            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
             selectedPlaceView?.optionsReady = false

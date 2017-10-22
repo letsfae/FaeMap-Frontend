@@ -40,11 +40,20 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var arrCollection = [PinCollection]()
     let faeCollection = FaeCollection()
     var tableMode: CollectionTableMode = .place
+    var arrListThatSavedThisPin = [Int]() {
+        didSet {
+            guard fullLoaded else { return }
+            guard arrListThatSavedThisPin.count > 0 else { return }
+            tblPlaceLoc.reloadData()
+        }
+    }
+    var fullLoaded = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
         loadCollectionData()
+        fullLoaded = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -355,7 +364,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let collection = arrCollection[indexPath.row]
-        cell.setValueForCell(cols: collection)
+        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.colId)
+        cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell
     }
     

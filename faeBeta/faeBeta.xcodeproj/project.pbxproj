@@ -140,7 +140,7 @@
 		B30B878C1F80212000B52027 /* EditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30B878B1F80211F00B52027 /* EditMemoViewController.swift */; };
 		B31437AA1F310B1E007AE884 /* FMMapSearchCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchCtrl.swift */; };
 		B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */; };
-		B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */; };
+		B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */; };
 		B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */; };
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
 		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
@@ -462,7 +462,7 @@
 		B30B878B1F80211F00B52027 /* EditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewController.swift; sourceTree = "<group>"; };
 		B31437A91F310B1E007AE884 /* FMMapSearchCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchCtrl.swift; sourceTree = "<group>"; };
 		B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingView.swift; sourceTree = "<group>"; };
-		B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceToCollectionView.swift; sourceTree = "<group>"; };
+		B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPinToCollectionView.swift; sourceTree = "<group>"; };
 		B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateColListViewController.swift; sourceTree = "<group>"; };
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
@@ -703,7 +703,7 @@
 		50500F8B1F967244009C51FB /* PinDetail */ = {
 			isa = PBXGroup;
 			children = (
-				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
+				B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */,
 				B33F8A021F3EC4520033610D /* PlaceDetail */,
 				50E940821F79B37000269945 /* LocationDetail */,
 			);
@@ -1811,7 +1811,7 @@
 				500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */,
 				5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
-				B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */,
+				B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */,
 				B0714D731D5E435200356705 /* FMMapPinCtrl.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,

@@ -10,52 +10,62 @@ import UIKit
 import SwiftyJSON
 import CCHMapClusterController
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
     
     // CreateColListDelegate
     func updateCols() {
-        uiviewCollectedList.loadCollectionData()
+        uiviewSavedList.loadCollectionData()
     }
     
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
-        vc.enterMode = uiviewCollectedList.tableMode
+        vc.enterMode = uiviewSavedList.tableMode
         vc.delegate = self
         present(vc, animated: true)
     }
     
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
-        uiviewCollectedList.hide()
+        uiviewSavedList.hide()
     }
     
     // AfterAddedToListDelegate
-    func undoCollect() {
+    func undoCollect(colId: Int) {
         uiviewAfterAdded.hide()
-        uiviewCollectedList.show()
+        uiviewSavedList.show()
+        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+            let arrListIds = uiviewSavedList.arrListSavedThisPin
+            uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+        }
+        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
+        if uiviewSavedList.tableMode == .location {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
+        } else if uiviewSavedList.tableMode == .place {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+        }
     }
     
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
-        vcList.enterMode = uiviewCollectedList.tableMode
+        vcList.enterMode = uiviewSavedList.tableMode
         vcList.colId = uiviewAfterAdded.selectedCollection.colId
         vcList.colInfo = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
     }
     
     func loadPlaceListView() {
-        uiviewCollectedList = AddPlaceToCollectionView()
-        uiviewCollectedList.delegate = self
-        view.addSubview(uiviewCollectedList)
+        uiviewSavedList = AddPinToCollectionView()
+        uiviewSavedList.delegate = self
+        view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
         uiviewAfterAdded.delegate = self
         view.addSubview(uiviewAfterAdded)
         
-        uiviewCollectedList.uiviewAfterAdded = uiviewAfterAdded
+        uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     // PlacePinAnnotationDelegate
@@ -76,25 +86,24 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                     return
                 }
                 selectedPlaceView?.hideButtons()
-                let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placeData
                 vcPlaceDetail.delegate = self
                 navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
             break
         case .collect:
-            uiviewCollectedList.show()
+            uiviewSavedList.show()
             locAnnoView?.optionsToNormal()
             if createLocation == .create {
-                uiviewCollectedList.tableMode = .location
-                uiviewCollectedList.loadCollectionData()
+                uiviewSavedList.tableMode = .location
+                uiviewSavedList.loadCollectionData()
                 guard let locPin = selectedLocation else { return }
-                uiviewCollectedList.pinToSave = locPin
+                uiviewSavedList.pinToSave = locPin
             } else {
-                uiviewCollectedList.tableMode = .place
-                uiviewCollectedList.loadCollectionData()
+                uiviewSavedList.tableMode = .place
+                uiviewSavedList.loadCollectionData()
                 guard let placePin = selectedPlace else { return }
-                uiviewCollectedList.pinToSave = placePin
+                uiviewSavedList.pinToSave = placePin
             }
             break
         case .route:
@@ -149,7 +158,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
                 locAnnoView?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
                 let coordinate = selectedLocation?.coordinate
-                AddPlaceToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+                AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
                     vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(self.uiviewLocationBar.lblName.text ?? "Invalid Name"),\(self.uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
                     vcShareCollection.locationSnapImage = snapShotImage
                     self.navigationController?.pushViewController(vcShareCollection, animated: true)
@@ -219,26 +228,26 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
     func tapPlacePin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
-        if let anView = view as? PlacePinAnnotationView {
-            anView.layer.zPosition = 2
-            anView.imgIcon.layer.zPosition = 2
-            let idx = firstAnn.class_2_icon_id
-            firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
-            anView.assignImage(firstAnn.icon)
-//            if firstSelectPlace { self.selectedPlace = firstAnn }
-//            if let slcAnno = selectedPlace {
-//                faeMapView.removeAnnotation(slcAnno)
-//                placeClusterManager.addAnnotations([slcAnno], withCompletionHandler: {
-//                    self.selectedPlace = firstAnn
-//                    firstAnn.selected = true
-//                    self.faeMapView.addAnnotation(firstAnn)
-//                })
-//            }
-            selectedPlace = firstAnn
-            selectedPlaceView = anView
-        }
+        guard let anView = view as? PlacePinAnnotationView else { return }
+        anView.layer.zPosition = 2
+        anView.imgIcon.layer.zPosition = 2
+        let idx = firstAnn.class_2_icon_id
+        firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
+        anView.assignImage(firstAnn.icon)
+        selectedPlace = firstAnn
+        selectedPlaceView = anView
+        selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
+        selectedPlaceView?.layer.zPosition = 1001
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
+        uiviewSavedList.arrListSavedThisPin.removeAll()
+        getPlaceDetail(id: placePin.id) { (ids) in
+            let placeData = placePin
+            placeData.arrListSavedThisPin = ids
+            firstAnn.pinInfo = placeData as AnyObject
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            anView.boolShowSavedNoti = true
+        }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
         uiviewPlaceBar.tag = 1
@@ -247,6 +256,23 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPlacetoCollection
             uiviewPlaceBar.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
             uiviewPlaceBar.loading(current: placePin)
+        }
+    }
+    
+    func getPlaceDetail(id: Int, _ completion: @escaping ([Int]) -> Void) {
+        FaeMap.shared.getPin(type: "place", pinId: String(id)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else { return }
+            guard is_saved != "false" else { return }
+            var ids = [Int]()
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            completion(ids)
         }
     }
     

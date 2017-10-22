@@ -25,6 +25,7 @@ class PlacePin: NSObject {
     var url = ""
     var price = ""
     var phone = ""
+    var arrListSavedThisPin = [Int]()
     
     init(json: JSON) {
         id = json["place_id"].intValue

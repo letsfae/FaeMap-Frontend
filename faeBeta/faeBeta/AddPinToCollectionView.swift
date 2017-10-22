@@ -1,5 +1,5 @@
 //
-//  AddPlaceToCollectionView.swift
+//  AddPinToCollectionView.swift
 //  faeBeta
 //
 //  Created by Faevorite 2 on 2017-08-16.
@@ -9,98 +9,13 @@
 import UIKit
 import SwiftyJSON
 
-protocol AfterAddedToListDelegate: class {
-    func seeList()
-    func undoCollect()
-}
-
-class AfterAddedToListView: UIView {
-    
-    weak var delegate: AfterAddedToListDelegate?
-    var uiviewAfterAdded: UIView!
-    var pinIdInAction: Int = -1
-    var selectedCollection: PinCollection!
-    
-    override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
-        loadContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadContent() {
-        
-        layer.zPosition = 1002
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        addSubview(blurEffectView)
-        
-        let lblCollected = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
-        lblCollected.text = "Collocted to List!"
-        addSubview(lblCollected)
-        
-        let btnUndo = UIButton()
-        btnUndo.setTitle("Undo", for: .normal)
-        btnUndo.setTitleColor(.white, for: .normal)
-        btnUndo.setTitleColor(.lightGray, for: .highlighted)
-        btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
-        btnUndo.addTarget(self, action: #selector(undoCollecting), for: .touchUpInside)
-        addSubview(btnUndo)
-        addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
-        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
-        
-        let btnSeeList = UIButton()
-        btnSeeList.setTitle("See List", for: .normal)
-        btnSeeList.setTitleColor(.white, for: .normal)
-        btnSeeList.setTitleColor(.lightGray, for: .highlighted)
-        btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
-        btnSeeList.addTarget(self, action: #selector(goToList), for: .touchUpInside)
-        addSubview(btnSeeList)
-        addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
-        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
-    }
-    
-    func undoCollecting() {
-        guard let col = selectedCollection, pinIdInAction != -1 else { return }
-        self.hide()
-        FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            joshprint("[undoCollecting] successfully undo saving")
-            self.selectedCollection = nil
-            self.pinIdInAction = -1
-            self.delegate?.undoCollect()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideCollectedNoti"), object: nil)
-        }
-    }
-    
-    func goToList() {
-        delegate?.seeList()
-    }
-    
-    func show() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight - self.frame.size.height
-        }, completion: nil)
-    }
-    
-    func hide() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight
-        }, completion: nil)
-    }
-}
-
-protocol AddPlacetoCollectionDelegate: class {
+protocol AddPinToCollectionDelegate: class {
     func createColList()
     func cancelAddPlace()
 }
 
-class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
-    weak var delegate: AddPlacetoCollectionDelegate?
+class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
+    weak var delegate: AddPinToCollectionDelegate?
     
     var uiviewHeader: UIView!
     var btnNew: UIButton!
@@ -112,12 +27,21 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     var tableMode: CollectionTableMode = .place
     var pinToSave: FaePinAnnotation!
     var timer: Timer?
+    var arrListSavedThisPin = [Int]() {
+        didSet {
+            guard fullLoaded else { return }
+            guard arrListSavedThisPin.count > 0 else { return }
+            tblAddCollection.reloadData()
+        }
+    }
+    var fullLoaded = false
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
         backgroundColor = .white
         loadContent()
         loadCollectionData()
+        fullLoaded = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -223,7 +147,8 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblAddCollection.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let collection = arrCollection[indexPath.row]
-        cell.setValueForCell(cols: collection)
+        let isSavedInThisList = arrListSavedThisPin.contains(collection.colId)
+        cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell
     }
     
@@ -233,13 +158,20 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
         uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
         self.timer = nil
-        if tableMode == .place {
+        if tableMode == .place || tableMode == .placeDetail {
             guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
             FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(placeData.id)", completion: { (code, result) in
                 guard code / 100 == 2 else { return }
                 self.hide()
                 self.uiviewAfterAdded.show()
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                self.arrListSavedThisPin.append(colInfo.colId)
+                self.uiviewAfterAdded.pinIdInAction = placeData.id
+                self.tblAddCollection.reloadData()
+                if self.tableMode == .place {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
+                } else {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+                }
                 self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
             })
         } else {
@@ -265,7 +197,9 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
                             guard code / 100 == 2 else { return }
                             self.hide()
                             self.uiviewAfterAdded.show()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "showCollectedNoti"), object: nil)
+                            self.arrListSavedThisPin.append(colInfo.colId)
+                            self.tblAddCollection.reloadData()
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: nil)
                             self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
                         })
                     })
@@ -323,5 +257,89 @@ class AddPlaceToCollectionView: UIView, UITableViewDelegate, UITableViewDataSour
     
     func actionNew(_ sender: UIButton) {
         delegate?.createColList()
+    }
+}
+
+protocol AfterAddedToListDelegate: class {
+    func seeList()
+    func undoCollect(colId: Int)
+}
+
+class AfterAddedToListView: UIView {
+    
+    weak var delegate: AfterAddedToListDelegate?
+    var uiviewAfterAdded: UIView!
+    var pinIdInAction: Int = -1
+    var selectedCollection: PinCollection!
+    
+    override init(frame: CGRect = .zero) {
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
+        loadContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadContent() {
+        
+        layer.zPosition = 1002
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.bounds
+        addSubview(blurEffectView)
+        
+        let lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
+        lblSaved.text = "Collocted to List!"
+        addSubview(lblSaved)
+        
+        let btnUndo = UIButton()
+        btnUndo.setTitle("Undo", for: .normal)
+        btnUndo.setTitleColor(.white, for: .normal)
+        btnUndo.setTitleColor(.lightGray, for: .highlighted)
+        btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnUndo.addTarget(self, action: #selector(undoCollecting), for: .touchUpInside)
+        addSubview(btnUndo)
+        addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
+        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
+        
+        let btnSeeList = UIButton()
+        btnSeeList.setTitle("See List", for: .normal)
+        btnSeeList.setTitleColor(.white, for: .normal)
+        btnSeeList.setTitleColor(.lightGray, for: .highlighted)
+        btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
+        btnSeeList.addTarget(self, action: #selector(goToList), for: .touchUpInside)
+        addSubview(btnSeeList)
+        addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
+        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
+    }
+    
+    func undoCollecting() {
+        guard let col = selectedCollection, pinIdInAction != -1 else { return }
+        self.hide()
+        FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            joshprint("[undoCollecting] successfully undo saving")
+            self.selectedCollection = nil
+            self.pinIdInAction = -1
+            self.delegate?.undoCollect(colId: col.colId)
+        }
+    }
+    
+    func goToList() {
+        delegate?.seeList()
+    }
+    
+    func show() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight - self.frame.size.height
+        }, completion: nil)
+    }
+    
+    func hide() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = screenHeight
+        }, completion: nil)
     }
 }

@@ -79,8 +79,9 @@ extension Object {
             } else if let nestedListObject = self[prop.name] as? ListBase {
                 var objects = [AnyObject]()
                 for index in 0..<nestedListObject._rlmArray.count  {
-                    let object = nestedListObject._rlmArray[index] as AnyObject
-                    objects.append(object.toDictionary())
+                    if let object = nestedListObject._rlmArray[index] as? Object {
+                        objects.append(object.toDictionary())
+                    }
                 }
                 mutabledic.setObject(objects, forKey: prop.name as NSCopying)
             }

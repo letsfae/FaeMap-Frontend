@@ -65,7 +65,7 @@ class FaeChat {
                 CFRunLoopPerformBlock(self.notificationRunLoop, CFRunLoopMode.defaultMode.rawValue) {
                     let realm = try! Realm()
                     let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
-                    self.token = messages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
+                    self.token = messages.observe { [weak self] (changes: RealmCollectionChange) in
                         switch changes {
                         case .initial:
                             //print("initial")
@@ -95,7 +95,7 @@ class FaeChat {
     }
     
     deinit {
-        token?.stop()
+        token?.invalidate()
         if let runloop = notificationRunLoop {
             CFRunLoopStop(runloop)
         }
