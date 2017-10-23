@@ -17,7 +17,7 @@ class FaeMapView: MKMapView {
     override func layoutSubviews() {
         super.layoutSubviews()
         if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
-            compassView.frame = CGRect(x: 21.5, y: screenHeight - 151.5, width: 60, height: 60)
+            compassView.frame = CGRect(x: 21, y: screenHeight - 215, width: 60, height: 60)
             if let imgView = compassView.subviews.first as? UIImageView {
                 imgView.image = #imageLiteral(resourceName: "mainScreenNorth")
             }
@@ -34,7 +34,7 @@ class FaeMapView: MKMapView {
         doubleTap.numberOfTapsRequired = 2
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        
+        longPress.minimumPressDuration = 0.3
         addGestureRecognizer(singleTap)
         addGestureRecognizer(longPress)
         guard let subview = self.subviews.first else { return }
@@ -84,7 +84,7 @@ class FaeMapView: MKMapView {
             span.latitudeDelta *= 0.5
             span.longitudeDelta *= 0.5
             region.span = span
-            self.setRegion(region, animated: true)
+            self.setRegion(region, animated: false)
             faeMapCtrler?.mapGesture(isOn: true)
         }
         block = false
@@ -144,6 +144,7 @@ class FaeMapView: MKMapView {
                 self.faeMapCtrler?.mapGesture(isOn: true)
             }
             faeMapCtrler?.uiviewSavedList.hide()
+            faeMapCtrler?.btnZoom.smallMode()
             if v is LocationView {
                 
             } else {

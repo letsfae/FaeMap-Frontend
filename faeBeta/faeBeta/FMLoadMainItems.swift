@@ -127,12 +127,11 @@ extension FaeMapViewController {
         imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
         imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
         
-        // Click to back to north
-        btnCompass = FMCompass()
-        btnCompass.mapView = faeMapView
-        btnCompass.faeMapCtrler = self
-        view.addSubview(btnCompass)
-        btnCompass.nameCard = uiviewNameCard
+        // Click to back to zoom
+        btnZoom = FMZoomButton()
+        btnZoom.mapView = faeMapView
+        btnZoom.faeMapCtrler = self
+        view.addSubview(btnZoom)
         
         // Click to locate the current location
         btnLocateSelf = FMLocateSelf()

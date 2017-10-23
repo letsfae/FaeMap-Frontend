@@ -172,55 +172,37 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     func animateMainItems(show: Bool, animated: Bool = true) {
-        btnCompass.savedTransform = btnCompass.transform
-        btnCompass.transform = CGAffineTransform.identity
         if show {
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-                    self.btnCompass.frame.origin.y = 664 * screenHeightFactor
+                    self.btnZoom.frame.origin.y = 664 * screenHeightFactor
                     self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
                     self.btnOpenChat.frame.origin.y = screenHeight + 10
                     self.btnDiscovery.frame.origin.y = screenHeight + 10
                     self.btnFilterIcon.frame.origin.y = screenHeight + 10
-                }, completion: { _ in
-                    self.btnCompass.boolLowPos = true
-//                    self.btnCompass.transform = self.btnCompass.savedTransform
-                    if self.btnCompass != nil { self.btnCompass.rotateCompass() }
-                })
+                }, completion: nil)
             } else {
-                self.btnCompass.frame.origin.y = 664 * screenHeightFactor
-//                self.btnCompass.transform = self.btnCompass.savedTransform
-                if self.btnCompass != nil { self.btnCompass.rotateCompass() }
+                self.btnZoom.frame.origin.y = 664 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = screenHeight + 10
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
                 self.btnFilterIcon.frame.origin.y = screenHeight + 10
-                self.btnCompass.boolLowPos = true
             }
         } else {
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-                    self.btnCompass.frame.origin.y = 582 * screenHeightFactor
+                    self.btnZoom.frame.origin.y = 582 * screenHeightFactor
                     self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
                     self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
                     self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                     self.btnFilterIcon.center.y = screenHeight - 25
-                }, completion: { _ in
-                    self.btnCompass.boolLowPos = false
-//                    self.btnCompass.transform = self.btnCompass.savedTransform
-//                    self.mapView(self.faeMapView, regionDidChangeAnimated: false)
-                    if self.btnCompass != nil { self.btnCompass.rotateCompass() }
-                })
+                }, completion: nil)
             } else {
-                self.btnCompass.frame.origin.y = 582 * screenHeightFactor
+                self.btnZoom.frame.origin.y = 582 * screenHeightFactor
                 self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
                 self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
                 self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                 self.btnFilterIcon.center.y = screenHeight - 25
-                self.btnCompass.boolLowPos = false
-//                self.btnCompass.transform = self.btnCompass.savedTransform
-//                self.mapView(self.faeMapView, regionDidChangeAnimated: false)
-                if self.btnCompass != nil { self.btnCompass.rotateCompass() }
             }
         }
     }
