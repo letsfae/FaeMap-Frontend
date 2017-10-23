@@ -26,6 +26,7 @@ extension FaeMapViewController {
     }
     
     func actionMainScreenSearch(_ sender: UIButton) {
+        btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -38,6 +39,7 @@ extension FaeMapViewController {
     }
     
     func actionClearSearchResults(_ sender: UIButton) {
+        btnZoom.smallMode()
         if createLocation == .create {
             createLocation = .cancel
             return
@@ -51,7 +53,7 @@ extension FaeMapViewController {
         tblPlaceResult.alpha = 0
         btnTapToShowResultTbl.alpha = 0
         btnLocateSelf.isHidden = false
-        btnCompass.isHidden = false
+        btnZoom.isHidden = false
         btnTapToShowResultTbl.center.y = 181
         mapGesture(isOn: true)
         deselectAllAnnotations()
@@ -78,6 +80,7 @@ extension FaeMapViewController {
     }
     
     func actionLeftWindowShow(_ sender: UIButton) {
+        btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -89,18 +92,19 @@ extension FaeMapViewController {
     }
     
     func actionShowResultTbl(_ sender: UIButton) {
+        btnZoom.smallMode()
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.show {
                 self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68
             }
-            btnCompass.isHidden = true
+            btnZoom.isHidden = true
             btnLocateSelf.isHidden = true
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
         } else {
             sender.tag = 0
             tblPlaceResult.hide()
-            btnCompass.isHidden = false
+            btnZoom.isHidden = false
             btnLocateSelf.isHidden = false
             btnTapToShowResultTbl.center.y = 181
             btnTapToShowResultTbl.transform = CGAffineTransform.identity
@@ -108,6 +112,7 @@ extension FaeMapViewController {
     }
     
     func actionChatWindowShow(_ sender: UIButton) {
+        btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -123,6 +128,7 @@ extension FaeMapViewController {
     }
     
     func actionOpenExplore(_ sender: UIButton) {
+        btnZoom.smallMode()
         uiviewNameCard.hide {}
         let vcExp = ExploreViewController()
         vcExp.delegate = self
@@ -130,11 +136,13 @@ extension FaeMapViewController {
     }
     
     func actionCancelSelecting() {
+        btnZoom.smallMode()
         mapMode = .routing
         uiviewChooseLocs.show()
     }
     
     func actionBackToExp(_ sender: UIButton) {
+        btnZoom.smallMode()
         if mapMode == .explore {
             let vcExp = ExploreViewController()
             vcExp.delegate = self

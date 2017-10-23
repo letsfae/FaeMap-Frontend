@@ -56,7 +56,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrExpPlace = [PlacePin]()
     
     // Compass and Locating Self
-    var btnCompass: FMCompass!
+    var btnZoom: FMZoomButton!
     var btnLocateSelf: FMLocateSelf!
     
     // Chat Button
@@ -135,7 +135,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail
             imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail
-            btnCompass.isHidden = mapMode == .explore
+            btnZoom.isHidden = mapMode == .explore
             btnLocateSelf.isHidden = mapMode == .explore
             btnOpenChat.isHidden = mapMode == .explore
             btnFilterIcon.isHidden = mapMode == .explore
@@ -164,8 +164,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             btnClearSearchRes.isHidden = createLocation == .cancel
             if createLocation == .cancel {
-                lblSearchContent.textColor = UIColor._182182182()
-                lblSearchContent.text = "Search Fae Map"
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
@@ -237,15 +235,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         fullyLoaded = true
         
-//        let line = UIView(frame: CGRect(x: 25, y: 0, width: 1, height: screenHeight))
-//        line.backgroundColor = UIColor._200199204()
+//        let line = UIView(frame: CGRect(x: 0, y: btnZoom.frame.origin.y+60-4, width: screenWidth, height: 1))
+//        line.layer.borderColor = UIColor.black.cgColor
+//        line.layer.borderWidth = 1
 //        view.addSubview(line)
-//        line.layer.zPosition = 3000
-//        
-//        let line_1 = UIView(frame: CGRect(x: 25 + 51, y: 0, width: 1, height: screenHeight))
-//        line_1.backgroundColor = UIColor._200199204()
-//        view.addSubview(line_1)
-//        line_1.layer.zPosition = 3000
     }
     
     deinit {

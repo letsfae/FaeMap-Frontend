@@ -148,9 +148,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     func loadHeader() {
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309))
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
-        uiviewHeader.addSubview(uiviewScrollingPhotos)
-        
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
@@ -161,7 +158,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
-        uiviewFixedHeader.uiviewTopLine.isHidden = true
     }
     
     func loadMidTable() {
@@ -182,6 +178,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         } else {
             automaticallyAdjustsScrollViewInsets = false
         }
+        
+        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
+        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 1))
+        bottomLine.backgroundColor = UIColor._241241241()
+        uiviewScrollingPhotos.addSubview(bottomLine)
     }
     
     func loadFooter() {
@@ -252,6 +254,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if uiviewScrollingPhotos != nil {
+            var frame = uiviewScrollingPhotos.frame
+            if tblPlaceDetail.contentOffset.y < 0 {
+                frame.origin.y = tblPlaceDetail.contentOffset.y
+                uiviewScrollingPhotos.frame = frame
+            } else {
+                frame.origin.y = 0
+                uiviewScrollingPhotos.frame = frame
+            }
+        }
         if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
@@ -358,7 +370,6 @@ class FixedHeader: UIView {
     var lblName: UILabel!
     var lblCategory: UILabel!
     var lblPrice: UILabel!
-    var uiviewTopLine: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -394,10 +405,6 @@ class FixedHeader: UIView {
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
-        
-        uiviewTopLine = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 1))
-        uiviewTopLine.backgroundColor = UIColor._241241241()
-        addSubview(uiviewTopLine)
     }
     
     func setValue(place: PlacePin) {
