@@ -669,6 +669,8 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var imgSaved: UIImageView!
     
+    var locationId: Int = 0
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
@@ -679,7 +681,7 @@ class LocPinAnnotationView: MKAnnotationView {
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
-        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_loc"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_loc"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
@@ -801,7 +803,14 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func showSavedNoti() {
+    func showSavedNoti(_ sender: Notification) {
+        if let id = sender.object as? Int {
+            self.locationId = id
+        }
+        savedNotiAnimation()
+    }
+    
+    func savedNotiAnimation() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgSaved.alpha = 1
