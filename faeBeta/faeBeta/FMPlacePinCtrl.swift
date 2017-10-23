@@ -13,8 +13,8 @@ import CCHMapClusterController
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
     
     // PlaceDetailDelegate
-    func getRouteToPin(placeInfo: PlacePin) {
-        routingFunction(placeInfo)
+    func getRouteToPin() {
+        placePinAction(action: .route)
     }
     
     // CreateColListDelegate
@@ -102,10 +102,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         switch action {
         case .detail:
             if createLocation == .create {
-                locAnnoView?.optionsToNormal()
+                guard let anView = locAnnoView else { return }
+                anView.optionsToNormal()
                 let vcLocDetail = LocDetailViewController()
+                vcLocDetail.locationId = anView.locationId
                 vcLocDetail.coordinate = selectedLocation?.coordinate
                 vcLocDetail.delegate = self
+                vcLocDetail.featureDelegate = self
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
                 navigationController?.pushViewController(vcLocDetail, animated: true)

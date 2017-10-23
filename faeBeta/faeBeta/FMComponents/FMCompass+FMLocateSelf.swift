@@ -17,9 +17,8 @@ class FMCompass: UIButton {
     var boolLowPos = false
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 21.5, y: screenHeight - 153, width: 60, height: 60))
+        super.init(frame: CGRect(x: screenWidth - 81.5, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
-        self.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -27,7 +26,7 @@ class FMCompass: UIButton {
     }
     
     private func loadContent() {
-        setImage(#imageLiteral(resourceName: "mainScreenNorth_new"), for: .normal)
+        setImage(#imageLiteral(resourceName: "main_map_zoom_sm"), for: .normal)
         addTarget(self, action: #selector(actionToNorth(_:)), for: .touchUpInside)
         layer.zPosition = 500
     }
@@ -63,7 +62,7 @@ class FMLocateSelf: UIButton {
     var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: screenWidth - 81.5, y: screenHeight - 153, width: 60, height: 60))
+        super.init(frame: CGRect(x: 21.5, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
     }
     

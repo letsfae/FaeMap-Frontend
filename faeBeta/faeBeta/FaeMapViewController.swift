@@ -199,6 +199,17 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var unreadNotiToken: NotificationToken? = nil
     
+    // Filter Menu Place Collection Interface to Show All Saved Pins
+    var completionCount = 0 {
+        didSet {
+            guard fullyLoaded else { return }
+            guard desiredCount > 0 else { return }
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+        }
+    }
+    var desiredCount = 0
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -20,11 +20,12 @@ import SwiftyJSON
         2. when trainsitioning from collections, saved_status will be always true
         So, no need to check saved_status in back end
 */
-class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate {
+class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
+    weak var featureDelegate: PlaceDetailDelegate?
     
-    var place: PlacePin!
+    var location: PlacePin!
     var allPlaces = [PlacePin]()
     var coordinate: CLLocationCoordinate2D?
     var uiviewHeader: UIView!
@@ -44,7 +45,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     let faePinAction = FaePinAction()
     var boolSaved: Bool = false
     
-    var uiviewAddCollection: AddPinToCollectionView!
+    var uiviewSavedList: AddPinToCollectionView!
+    var uiviewAfterAdded: AfterAddedToListView!
     
     var lblClctViewTitle: UILabel!
     var btnSeeAll: UIButton!
@@ -57,6 +59,18 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     var mapView: MKMapView!
     
+    var arrListSavedThisPin = [Int]()
+    var boolSavedListLoaded = false
+    
+    var fullLoaded = false
+    
+    var locationId: Int = 0 {
+        didSet {
+            guard fullLoaded else { return }
+            checkSavedStatus {}
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -65,9 +79,19 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         loadCollectionView()
         loadFooter()
         updateLocation()
-//        let line = UIView(frame: CGRect(x: 0, y: 169, width: screenWidth, height: 1))
-//        line.backgroundColor = .black
-//        view.addSubview(line)
+        view.bringSubview(toFront: uiviewSavedList)
+        view.bringSubview(toFront: uiviewAfterAdded)
+        checkSavedStatus() {}
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_locDetail"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_locDetail"), object: nil)
+        
+        fullLoaded = true
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_locDetail"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_locDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +105,36 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     func updateLocation() {
         uiviewSubHeader.lblName.text = strLocName
         uiviewSubHeader.lblCategory.text = strLocAddr
+    }
+    
+    func checkSavedStatus(_ completion: @escaping () -> ()) {
+        guard locationId != 0 else { return }
+        FaeMap.shared.getPin(type: "location", pinId: String(locationId)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion()
+                return
+            }
+            guard is_saved != "false" else {
+                completion()
+                return
+            }
+            var ids = [Int]()
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            self.arrListSavedThisPin = ids
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            self.boolSavedListLoaded = true
+            if ids.count != 0 {
+                self.savedNotiAnimation()
+            }
+            completion()
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -172,17 +226,17 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         btnSave = UIButton(frame: CGRect(x: screenWidth / 2 - 105, y: 2, width: 47, height: 47))
         btnSave.setImage(#imageLiteral(resourceName: "place_save"), for: .normal)
         btnSave.tag = 0
-        btnSave.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnSave.addTarget(self, action: #selector(saveThisPin), for: .touchUpInside)
         
         btnRoute = UIButton(frame: CGRect(x: (screenWidth - 47) / 2, y: 2, width: 47, height: 47))
         btnRoute.setImage(#imageLiteral(resourceName: "place_route"), for: .normal)
         btnRoute.tag = 1
-        btnRoute.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnRoute.addTarget(self, action: #selector(routeToThisPin), for: .touchUpInside)
         
         btnShare = UIButton(frame: CGRect(x: screenWidth / 2 + 58, y: 2, width: 47, height: 47))
         btnShare.setImage(#imageLiteral(resourceName: "place_share"), for: .normal)
         btnShare.tag = 2
-        btnShare.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnShare.addTarget(self, action: #selector(shareThisPin), for: .touchUpInside)
         
         uiviewFooter.addSubview(btnBack)
         uiviewFooter.addSubview(btnSave)
@@ -192,57 +246,82 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         imgSaved = UIImageView(frame: CGRect(x: 29, y: 5, width: 18, height: 18))
         btnSave.addSubview(imgSaved)
         imgSaved.image = #imageLiteral(resourceName: "place_saved")
-        imgSaved.isHidden = true
+        imgSaved.alpha = 0
         
         loadAddtoCollection()
     }
     
+    func showSavedNoti(_ sender: Notification) {
+        if let id = sender.object as? Int {
+            self.locationId = id
+        }
+        savedNotiAnimation()
+    }
+    
+    func savedNotiAnimation() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+    
     fileprivate func loadAddtoCollection() {
-        uiviewAddCollection = AddPinToCollectionView()
-        uiviewAddCollection.delegate = self
-        uiviewAddCollection.tableMode = .location
-        view.addSubview(uiviewAddCollection)
+        uiviewSavedList = AddPinToCollectionView()
+        uiviewSavedList.delegate = self
+        uiviewSavedList.tableMode = .place
+        view.addSubview(uiviewSavedList)
+        
+        uiviewAfterAdded = AfterAddedToListView()
+        uiviewAfterAdded.delegate = self
+        view.addSubview(uiviewAfterAdded)
+        
+        uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     func backToMapBoard(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func tabButtonPressed(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            if boolSaved {
-                faePinAction.unsaveThisPin("location", pinID: String(place.id)) { (status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.boolSaved = false
-                        self.imgSaved.isHidden = true
-                    } else {
-                        print("[PlaceDetail-Unsave Pin] Unsave Place Pin Fail \(status) \(message!)")
-                    }
-                }
-            } else {
-                showAddCollectionView()
+    func saveThisPin() {
+        func showCollections() {
+            uiviewSavedList.tableMode = .location
+            uiviewSavedList.loadCollectionData()
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: "location", cluster: nil, data: coordinate as AnyObject)
+            uiviewSavedList.show()
+        }
+        if locationId == 0 {
+            showCollections()
+        } else {
+            checkSavedStatus {
+                showCollections()
             }
-            break
-        case 1:
-            break
-        case 2:
-            // TODO jichao
-            let vcShareCollection = NewChatShareController(friendListMode: .location)
-            vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
-            navigationController?.pushViewController(vcShareCollection, animated: true)
-            break
-        default:
-            break
         }
     }
     
+    func routeToThisPin() {
+        featureDelegate?.getRouteToPin()
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func shareThisPin() {
+        let vcShareCollection = NewChatShareController(friendListMode: .location)
+        vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
+        navigationController?.pushViewController(vcShareCollection, animated: true)
+    }
+    
     func showAddCollectionView() {
-        uiviewAddCollection.show()
+        uiviewSavedList.show()
     }
     
     func hideAddCollectionView() {
-        uiviewAddCollection.hide()
+        uiviewSavedList.hide()
     }
     
     // SeeAllPlacesDelegate
@@ -258,7 +337,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         vcPlaceDetail.place = place
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
-    // SeeAllPlacesDelegate End
     
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
@@ -269,7 +347,29 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         let vc = CreateColListViewController()
         vc.enterMode = .location
         present(vc, animated: true)
-        //        navigationController?.pushViewController(vc, animated: true)
     }
     // AddPlacetoCollectionDelegate End
+    
+    // AfterAddedToListDelegate
+    func seeList() {
+        uiviewAfterAdded.hide()
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewSavedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colInfo = uiviewAfterAdded.selectedCollection
+        navigationController?.pushViewController(vcList, animated: true)
+    }
+    
+    // AfterAddedToListDelegate
+    func undoCollect(colId: Int) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.show()
+        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+            let arrListIds = uiviewSavedList.arrListSavedThisPin
+            arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        }
+        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
+        // shrink imgSaved button
+    }
 }

@@ -13,6 +13,7 @@ protocol MapFilterMenuDelegate: class {
     func autoReresh(isOn: Bool)
     func autoCyclePins(isOn: Bool)
     func hideAvatars(isOn: Bool)
+    func showSavedPins(type: String, savedPinIds: [Int])
 }
 
 class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -308,7 +309,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        if scrollView == scrollViewFilterMenu {
+            pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        }
     }
     
     func switchBetweenDisAndSocial(_ sender: UIButton) {
@@ -370,6 +373,14 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        let colInfo = arrCollection[indexPath.row]
+        FaeCollection.shared.getOneCollection(String(colInfo.colId)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pin_id"].arrayValue
+            let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
+            self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds)
+        }
     }
 }

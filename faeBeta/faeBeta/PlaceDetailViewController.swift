@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 protocol PlaceDetailDelegate: class {
-    func getRouteToPin(placeInfo: PlacePin)
+    func getRouteToPin()
 }
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
@@ -282,7 +282,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func routeToThisPin() {
-        featureDelegate?.getRouteToPin(placeInfo: self.place)
+        featureDelegate?.getRouteToPin()
         navigationController?.popViewController(animated: false)
     }
     
