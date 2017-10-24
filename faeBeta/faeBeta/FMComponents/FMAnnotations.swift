@@ -89,9 +89,9 @@ class FaePinAnnotation: MKPointAnnotation {
         super.init()
         mapViewCluster = cluster
         self.type = type
+        self.pinInfo = data
         if type == "place" {
             guard let placePin = data as? PlacePin else { return }
-            pinInfo = data
             id = placePin.id
             class_2_icon_id = placePin.class_2_icon_id
             icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
@@ -113,7 +113,7 @@ class FaePinAnnotation: MKPointAnnotation {
         } else if type == "location" {
             guard let pin = data as? LocationPin else { return }
             coordinate = pin.coordinate
-            icon = #imageLiteral(resourceName: "location_pin")
+            icon = #imageLiteral(resourceName: "icon_destination")
         }
     }
     
@@ -671,12 +671,16 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var locationId: Int = 0
     
+    var boolShowSavedNoti = false
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         layer.zPosition = 1001
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
+        
+        boolShowSavedNoti = false
         
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
@@ -758,7 +762,11 @@ class LocPinAnnotationView: MKAnnotationView {
                 else if btn == self.btnCollect { btn.frame.origin = CGPoint(x: 35, y: 0) }
                 else if btn == self.btnRoute { btn.frame.origin = CGPoint(x: 93, y: 0) }
                 else if btn == self.btnShare { btn.frame.origin = CGPoint(x: 128, y: 43) }
-            }, completion: nil)
+            }, completion: { _ in
+                if btn == self.btnCollect && self.boolShowSavedNoti {
+                    self.savedNotiAnimation()
+                }
+            })
             delay += 0.075
         }
     }
@@ -811,6 +819,9 @@ class LocPinAnnotationView: MKAnnotationView {
     }
     
     func savedNotiAnimation() {
+        if imgSaved == nil {
+            showButtons()
+        }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgSaved.alpha = 1

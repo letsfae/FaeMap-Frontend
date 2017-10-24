@@ -544,6 +544,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         locAnnoView?.optionsOpeing = false
         deselectAllAnnotations()
         let pinData = LocationPin(position: coordinate)
+        pinData.optionsReady = true
         selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
         locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
         //        faeMapView.addAnnotation(locationPin!)

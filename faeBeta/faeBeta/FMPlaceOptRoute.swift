@@ -167,6 +167,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             self.userClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
             self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
         }
+        deselectAllLocations()
+        deselectAllAnnotations()
         HIDE_AVATARS = false
         PLACE_ENABLE = true
     }

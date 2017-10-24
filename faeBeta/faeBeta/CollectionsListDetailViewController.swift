@@ -310,7 +310,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pin_id"].arrayValue
+            let arrLocPinId = resultJson["pins"].arrayValue
             self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
             joshprint(self.arrSavedPinIds)
             self.tblColListDetail.reloadData()

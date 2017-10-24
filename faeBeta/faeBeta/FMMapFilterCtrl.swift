@@ -56,11 +56,8 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     // MapFilterMenuDelegate
     func autoCyclePins(isOn: Bool) {
         AUTO_CIRCLE_PINS = isOn
-        if isOn {
-            
-        } else {
-            
-        }
+        placeClusterManager.canUpdate = isOn
+        
     }
     
     /*
@@ -121,13 +118,14 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
+                        pin.icon = #imageLiteral(resourceName: "icon_destination")
                         self.placesFromSearch.append(pin)
                         self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                     } else if type == "location" {
                         let pinData = LocationPin(json: resultJson)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
                         self.placesFromSearch.append(pin)
-                        self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                     }
                     
                     self.completionCount += 1

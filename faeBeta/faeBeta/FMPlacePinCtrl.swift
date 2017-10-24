@@ -42,10 +42,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func undoCollect(colId: Int) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()
+        joshprint("count before:", uiviewSavedList.arrListSavedThisPin.count)
         if uiviewSavedList.arrListSavedThisPin.contains(colId) {
             let arrListIds = uiviewSavedList.arrListSavedThisPin
             uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
         }
+        joshprint("count after:", uiviewSavedList.arrListSavedThisPin.count)
         guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
         if uiviewSavedList.tableMode == .location {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
@@ -77,7 +79,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    func routingFunction(_ placeInfo: PlacePin) {
+    func routingPlace(_ placeInfo: PlacePin) {
         let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeInfo)
         pin.animatable = false
         tempFaePins.append(pin)
@@ -99,6 +101,30 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             uiviewChooseLocs.updateDestination(name: placeInfo.name)
             destinationAddr = RouteAddress(name: placeInfo.name, coordinate: placeInfo.coordinate)
         }
+    }
+    
+    func routingLocation() {
+        guard let pin = self.selectedLocation else { return }
+        uiviewLocationBar.hide()
+        locAnnoView?.hideButtons()
+        locAnnoView?.optionsToNormal()
+        HIDE_AVATARS = true
+        PLACE_ENABLE = false
+        // remove place pins but don't delete them
+        placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
+        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
+            self.tempFaePins.removeAll()
+            self.tempFaePins.append(pin)
+            self.locationPinClusterManager.addAnnotations(self.tempFaePins, withCompletionHandler: nil)
+            self.routeCalculator(destination: pin.coordinate)
+        })
+        // stop user pins changing location and popping up
+        for user in self.faeUserPins {
+            user.isValid = false
+        }
+        // remove user pins but don't delete them
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
     }
     
     // PlacePinAnnotationDelegate
@@ -143,29 +169,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
             break
         case .route:
-            if createLocation == .create {
-                guard let coordinate = self.selectedLocation?.coordinate else {
-                    return
-                }
-                uiviewLocationBar.hide()
-                locAnnoView?.hideButtons()
-                locAnnoView?.optionsToNormal()
-                HIDE_AVATARS = true
-                PLACE_ENABLE = false
-                // remove place pins but don't delete them
-                placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
-                    self.routeCalculator(destination: coordinate)
-                })
-                // stop user pins changing location and popping up
-                for user in self.faeUserPins {
-                    user.isValid = false
-                }
-                // remove user pins but don't delete them
-                userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
-                startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+            if selectedLocation != nil {
+                routingLocation()
             }
             if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
-                routingFunction(placeInfo)
+                routingPlace(placeInfo)
             }
             break
         case .share:
@@ -257,7 +265,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         uiviewSavedList.arrListSavedThisPin.removeAll()
-        getPlaceDetail(id: placePin.id) { (ids) in
+        getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
             let placeData = placePin
             placeData.arrListSavedThisPin = ids
             firstAnn.pinInfo = placeData as AnyObject
@@ -275,8 +283,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
     }
     
-    func getPlaceDetail(id: Int, _ completion: @escaping ([Int]) -> Void) {
-        FaeMap.shared.getPin(type: "place", pinId: String(id)) { (status, message) in
+    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
+        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)

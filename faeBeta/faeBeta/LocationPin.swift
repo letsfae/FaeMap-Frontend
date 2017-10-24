@@ -20,6 +20,7 @@ class LocationPin: NSObject {
     var icon: UIImage?
     var fileId: String = ""
     var arrListSavedThisPin = [Int]()
+    var optionsReady = false
     
     init(json: JSON) {
         id = json["location_id"].intValue

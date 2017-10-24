@@ -66,7 +66,7 @@ class CollectionsListCell: UITableViewCell {
             self.imgAvatar.image = avatarImage
         })
         lblListName.text = cols.colName
-        lblListNum.text = cols.itemsCount == 0 ? "0 item" : "\(cols.itemsCount) items"
+        lblListNum.text = cols.itemsCount <= 1 ? "\(cols.itemsCount) item" : "\(cols.itemsCount) items"
         imgIsIn.isHidden = !isIn
     }
 }
