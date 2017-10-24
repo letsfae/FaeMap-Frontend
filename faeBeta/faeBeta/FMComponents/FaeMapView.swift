@@ -12,6 +12,7 @@ class FaeMapView: MKMapView {
 
     private var block = false
     var faeMapCtrler: FaeMapViewController?
+    var slcMapCtrler: SelectLocationViewController?
     var blockTap = false
     
     override func layoutSubviews() {
@@ -49,10 +50,13 @@ class FaeMapView: MKMapView {
         if faeMapCtrler?.createLocation == .create {
             faeMapCtrler?.createLocation = .cancel
         }
+        if slcMapCtrler?.createLocation == .create {
+            slcMapCtrler?.createLocation = .cancel
+        }
     }
     
     func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
-        
+        guard slcMapCtrler == nil else { return }
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
@@ -94,7 +98,7 @@ class FaeMapView: MKMapView {
     
     func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
         
-        guard faeMapCtrler?.mapMode != .routing else { return }
+        guard faeMapCtrler?.mapMode != .routing || slcMapCtrler != nil else { return }
         
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
@@ -111,7 +115,9 @@ class FaeMapView: MKMapView {
                 if anView.optionsReady == false {
                     faeMapCtrler?.deselectAllAnnotations()
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
-                    anView.optionsReady = true
+                    slcMapCtrler?.deselectAllAnnotations()
+                    slcMapCtrler?.tapPlacePin(didSelect: anView)
+                    anView.optionsReady = slcMapCtrler == nil
                 } else if anView.optionsReady && !anView.optionsOpened {
                     anView.showButtons()
                     anView.optionsOpened = true
@@ -128,15 +134,17 @@ class FaeMapView: MKMapView {
                 faeMapCtrler?.uiviewNameCard.hide() {
                     self.faeMapCtrler?.mapGesture(isOn: true)
                 }
-                if anView.optionsReady == false {
-//                    faeMapCtrler?.deselectAllAnnotations()
-                    anView.optionsReady = true
-                } else if anView.optionsReady && !anView.optionsOpened {
-                    anView.showButtons()
-                    anView.optionsOpened = true
-                } else if anView.optionsReady && anView.optionsOpened {
-                    anView.hideButtons()
-                    anView.optionsOpened = false
+                if slcMapCtrler == nil {
+                    if anView.optionsReady == false {
+                        //                    faeMapCtrler?.deselectAllAnnotations()
+                        anView.optionsReady = true
+                    } else if anView.optionsReady && !anView.optionsOpened {
+                        anView.showButtons()
+                        anView.optionsOpened = true
+                    } else if anView.optionsReady && anView.optionsOpened {
+                        anView.hideButtons()
+                        anView.optionsOpened = false
+                    }
                 }
             }
         } else {
@@ -153,8 +161,11 @@ class FaeMapView: MKMapView {
                 if faeMapCtrler?.mapMode != .pinDetail {
                     faeMapCtrler?.uiviewPlaceBar.hide()
                 }
+                slcMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.deselectAllAnnotations()
                 faeMapCtrler?.selectedPlace = nil
+                slcMapCtrler?.deselectAllAnnotations()
+                slcMapCtrler?.selectedPlace = nil
             }
         }
         block = false
@@ -164,7 +175,7 @@ class FaeMapView: MKMapView {
 
     func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
-        guard faeMapCtrler?.mapMode != .routing else { return }
+        guard faeMapCtrler?.mapMode != .routing || slcMapCtrler != nil else { return }
         guard blockTap == false else { return }
         let tapPoint = sender.location(in: self)
         let numberOfTouches = sender.numberOfTouches
@@ -190,6 +201,7 @@ class FaeMapView: MKMapView {
             } else {
                 if !(v is UIButton) {
                     faeMapCtrler?.createLocationPin(point: tapPoint)
+                    slcMapCtrler?.createLocationPin(point: tapPoint)
                 }
             }
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
