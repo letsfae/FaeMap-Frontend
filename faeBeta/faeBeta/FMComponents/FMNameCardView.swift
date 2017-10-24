@@ -26,6 +26,8 @@ enum FriendStatus: String {
     case blocked
     case pending
     case requested
+    case nameCardOther
+    case nameCardSelf
 }
 
 class FMNameCardView: UIView, PassStatusFromViewToButton {
@@ -166,6 +168,21 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func showOptions(_ sender: UIButton) {
+        var thisIsMe = false
+        if userId == Int(Key.shared.user_id) {
+            print("[showNameCardOptions] this is me")
+            thisIsMe = true
+        }
+        
+        if thisIsMe {
+            statusMode = .nameCardSelf
+        } else {
+            statusMode = .nameCardOther
+        }
+        
+        delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
+        
+        /*
         guard !boolOptionsOpened else { return }
         boolOptionsOpened = true
         btnCloseOptions.alpha = 1
@@ -227,6 +244,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                 self.btnReport.frame = self.secondBtnFrame
             }
         }, completion: nil)
+        */
     }
     
     func updateNameCard(withUserId: Int) {
@@ -563,6 +581,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             break
         case .blocked:
             btnProfile.isHidden = true
+            break
+        default:
             break
         }
     }
