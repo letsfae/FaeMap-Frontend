@@ -52,8 +52,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.lblTitle.text = arrTitle[indexPath.row]
         
         let excla = InlineTextAttachment()
-        excla.fontDescender = 1
-        excla.image = #imageLiteral(resourceName: "exclamation_red_new")
+        excla.fontDescender = -2
+        excla.image = #imageLiteral(resourceName: "Settings_exclamation")
         
         let attr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!, NSForegroundColorAttributeName: UIColor._2499090()]
         
@@ -79,7 +79,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             if !Key.shared.userEmailVerified {
                 let txt = NSMutableAttributedString()
                 txt.append(NSAttributedString(attachment: excla))
-                let str = NSAttributedString(string: " \(Key.shared.userEmail)", attributes: attr)
+                let str = NSAttributedString(string: "  \(Key.shared.userEmail)", attributes: attr)
                 txt.append(NSAttributedString(attributedString: str))
                 
                 cell.lblContent.attributedText = txt
@@ -92,7 +92,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             if !Key.shared.userPhoneVerified { //Key.shared.userPhoneNumber == "" {
                 let txt = NSMutableAttributedString()
                 txt.append(NSAttributedString(attachment: excla))
-                let str = NSAttributedString(string: " Link", attributes: attr)
+                let str = NSAttributedString(string: "  Link", attributes: attr)
                 txt.append(NSAttributedString(attributedString: str))
                 
                 cell.lblContent.attributedText = txt

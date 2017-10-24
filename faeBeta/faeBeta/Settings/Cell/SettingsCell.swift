@@ -31,8 +31,8 @@ class SettingsCell: UITableViewCell {
         addSubview(btnNext)
         btnNext.setImage(#imageLiteral(resourceName: "Settings_next"), for: .normal)
         
-        addConstraintsWithFormat("H:|-20-[v0(28)]", options: [], views: icon)
-        addConstraintsWithFormat("V:|-18-[v0(28)]", options: [], views: icon)
+        addConstraintsWithFormat("H:|-22-[v0(24)]", options: [], views: icon)
+        addConstraintsWithFormat("V:|-20-[v0(24)]", options: [], views: icon)
         addConstraintsWithFormat("H:|-65-[v0]-29-|", options: [], views: lblSetting)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSetting)
         addConstraintsWithFormat("H:[v0(9)]-29-|", options: [], views: btnNext)

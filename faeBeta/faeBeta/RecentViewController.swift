@@ -39,6 +39,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
     private var loadingRecentTimer: Timer!
     private var indexToDelete = IndexPath() // index of cell whose delete button is tapped
+    private var indexShowDelete = -1
+    private var indexSelected = -1
     var backClosure: BackClosure? // used to pass current # of unread messages to main map view
     
     private var arrRecentsRealm: [String: RealmMessage_v2] = [:]
@@ -46,6 +48,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     var notificationToken: NotificationToken? = nil
     private var resultRealmRecents: Results<RealmRecent_v2>!
     private var timerUpdateTimestamp: Timer!
+    
+    var boolFingerMoved: Bool = false
     
     // MARK: lifecycle
     override func viewDidLoad() {
@@ -82,10 +86,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewWillDisappear(_ animated: Bool) {
         loadingRecentTimer.invalidate()
         isDraggingRecentTableViewCell = false
-        for indexP in self.cellsCurrentlyEditing {
+        /*for indexP in self.cellsCurrentlyEditing {
             let cell = tblRecents.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
             cell.closeCell()
-        }
+        }*/
+        //closeCurrentOpenCell()
+        indexSelected = -1
     }
 
      // MARK: setup UI
@@ -119,6 +125,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         tblRecents.tableFooterView = UIView()
         tblRecents.backgroundColor = UIColor.white
         view.addSubview(tblRecents)
+        tblRecents.delaysContentTouches = false
         
         // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
         //         whole table view and cell will automatically disable this
@@ -178,7 +185,15 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     private func addGestureRecognizer() {
-        tblRecents.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeAllCell)))
+        let tapGestureRecognize = UITapGestureRecognizer(target: self, action: #selector(closeAllCell))
+        tapGestureRecognize.delaysTouchesBegan = false
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPressGesture.delaysTouchesBegan = false
+        longPressGesture.cancelsTouchesInView = true
+        //tapGestureRecognize.cancelsTouchesInView = false
+        tblRecents.addGestureRecognizer(tapGestureRecognize)
+        tblRecents.addGestureRecognizer(longPressGesture)
+        //tblRecents.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeAllCell)))
     }
     
     func navigationLeftItemTapped() {
@@ -225,8 +240,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: UItableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexShowDelete >= 0 {
+            if indexShowDelete != indexPath.row {
+                indexSelected = indexPath.row
+            }
+            closeCurrentOpenCell()
+        } else {
+            gotoChatFromRecent_v2(selectedRowAt: indexPath)
+        }
         // TODO double click bug
-        if self.cellsCurrentlyEditing.count == 0 {
+        //let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+        //cell.uiviewMain.backgroundColor = UIColor._225225225()
+        //if self.cellsCurrentlyEditing.count == 0 {
             /*self.loadingRecentTimer.invalidate()
             if let recent = recents?[indexPath.row] {
                 if recent["with_user_id"].number != nil {
@@ -235,19 +260,39 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                     gotoChatFromRecent(selectedRowAt: indexPath)
                 }
             }*/
-            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
-            cell.uiviewMain.backgroundColor = UIColor._225225225()
-            gotoChatFromRecent_v2(selectedRowAt: indexPath)
-        } else {
-            for indexP in self.cellsCurrentlyEditing {
-                let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
-                cell.closeCell()
-            }
-        }
+            //let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            //cell.uiviewMain.backgroundColor = UIColor._225225225()
+            //gotoChatFromRecent_v2(selectedRowAt: indexPath)
+        //} else {
+           // for indexP in self.cellsCurrentlyEditing {
+               // let cell = tableView.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
+               // cell.closeCell()
+            //}
+        //}
     }
     
     public func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return true
+    }
+    
+    func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        if indexShowDelete >= 0 && indexShowDelete == indexPath.row {
+            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            cell.uiviewMain.backgroundColor = UIColor.white
+        }
+        /*if indexShowDelete < 0 || indexShowDelete != indexPath.row {
+            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            cell.btnDelete.isHidden = true
+            cell.uiviewMain.backgroundColor = UIColor._225225225()
+        }*/
+    }
+    
+    func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
+        /*if indexShowDelete == indexPath.row {
+            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
+            cell.btnDelete.isHidden = false
+            cell.uiviewMain.backgroundColor = UIColor.white
+        }*/
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -280,9 +325,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let recentRealm = resultRealmRecents[indexPath.row]
         cell.bindData_v2(recentRealm.latest_message!)
         
-        if cellsCurrentlyEditing.contains(indexPath) {
-            cell.openCell()
-        }
+        //if cellsCurrentlyEditing.contains(indexPath) {
+            //cell.openCell()
+        //}
         return cell
     }
     
@@ -419,32 +464,109 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: handle tap gesture
     func closeAllCell(_ recognizer: UITapGestureRecognizer) {
-        let point = recognizer.location(in: tblRecents)
-        if let indexPath = tblRecents.indexPathForRow(at: point) {
-            tableView(tblRecents, didSelectRowAt: indexPath)
-        } else {
-            for indexP in cellsCurrentlyEditing {
-                let cell = tblRecents.cellForRow(at: indexP as! IndexPath) as! RecentTableViewCell
-                cell.closeCell()
+        //print(recognizer.state)
+        if recognizer.state == .ended {
+            let point = recognizer.location(in: tblRecents)
+            if let indexPath = tblRecents.indexPathForRow(at: point) {
+                if indexPath.row == indexShowDelete {
+                    closeCurrentOpenCell()
+                } else {
+                    let cell = tblRecents.cellForRow(at: indexPath) as! RecentTableViewCell
+                    cell.uiviewMain.backgroundColor = UIColor._225225225()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.tableView(self.tblRecents, didSelectRowAt: indexPath)
+                    }
+                }
+            } else {
+                closeCurrentOpenCell()
             }
+        }
+    }
+    
+    func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+        let point = recognizer.location(in: tblRecents)
+        switch recognizer.state {
+        case .began:
+            print("long press begin")
+            if let indexPath = tblRecents.indexPathForRow(at: point) {
+                if indexPath.row == indexShowDelete {
+                    closeCurrentOpenCell()
+                } else {
+                    let cell = tblRecents.cellForRow(at: indexPath) as! RecentTableViewCell
+                    cell.uiviewMain.backgroundColor = UIColor._225225225()
+                }
+            } else {
+                closeCurrentOpenCell()
+            }
+            break
+        case .changed:
+            print("long press changed")
+            if let indexPath = tblRecents.indexPathForRow(at: point) {
+                if indexPath.row != indexShowDelete {
+                    let cell = tblRecents.cellForRow(at: indexPath) as! RecentTableViewCell
+                    cell.uiviewMain.backgroundColor = UIColor.white
+                }
+            }
+            boolFingerMoved = true
+            break
+        case .ended:
+            print("long press ended")
+            if let indexPath = tblRecents.indexPathForRow(at: point) {
+                if indexPath.row == indexShowDelete {
+                    indexShowDelete = -1
+                } else if !boolFingerMoved {
+                    //tableView(tblRecents, didSelectRowAt: indexPath)
+                    gotoChatFromRecent_v2(selectedRowAt: indexPath)
+                }
+            } else {
+                indexShowDelete = -1
+            }
+            boolFingerMoved = false
+            break
+        default:
+            break
+        }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func closeCurrentOpenCell() {
+        if indexShowDelete >= 0 {
+            let cell = tblRecents.cellForRow(at: IndexPath(row: indexShowDelete, section: 0)) as! RecentTableViewCell
+            cell.closeCell()
+            cell.uiviewMain.backgroundColor = .white
+            //indexShowDelete = -1
         }
     }
     
     // MARK: SwipeableCellDelegate
     func cellwillOpen(_ cell: UITableViewCell) {
-        closeAllCell(UITapGestureRecognizer())
+        let current = cell as! RecentTableViewCell
+        current.btnDelete.isHidden = false
+        //closeAllCell(UITapGestureRecognizer())
+        closeCurrentOpenCell()
     }
     
     func cellDidOpen(_ cell: UITableViewCell) {
-        let currentEditingIndexPath = tblRecents.indexPath(for: cell)
-        if currentEditingIndexPath != nil {
-            cellsCurrentlyEditing.add(currentEditingIndexPath!)
+        //let currentEditingIndexPath = tblRecents.indexPath(for: cell)
+        if let currentEditingIndexPath = tblRecents.indexPath(for: cell) {
+            //cellsCurrentlyEditing.add(currentEditingIndexPath!)
+            indexShowDelete = currentEditingIndexPath.row
         }
     }
     
     func cellDidClose(_ cell: UITableViewCell) {
+        if indexSelected >= 0 {
+            let cell = tblRecents.cellForRow(at: IndexPath(row: indexSelected, section: 0)) as! RecentTableViewCell
+            cell.btnDelete.isHidden = true
+            gotoChatFromRecent_v2(selectedRowAt: IndexPath(row: indexSelected, section: 0))
+            //indexSelected = -1
+        }
         if tblRecents.indexPath(for: cell) != nil {
-            cellsCurrentlyEditing.remove(tblRecents.indexPath(for: cell)!)
+            //cellsCurrentlyEditing.remove(tblRecents.indexPath(for: cell)!)
+            //indexShowDelete = -1
         }
     }
     
