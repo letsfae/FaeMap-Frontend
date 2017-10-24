@@ -48,7 +48,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var btnTalkFeed: UIButton!
     var btnTalkMypost: UIButton!
     var btnTalkTopic: UIButton!
-    var curtTitle: String = "Places"
+    var curtTitle: String = "Choose a Board..."
     var disVal: String = "23.0"
     var imgBubbleHint: UIImageView!
     var imgIconBeforeAllCom: UIImageView!
@@ -57,6 +57,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var lblAllCom: UILabel!
     var lblBubbleHint: UILabel!
     var lblDisVal: UILabel!
+    var lblPlaces: UILabel!
+    var lblPeople: UILabel!
 //    var mbComments = [MBSocialStruct]()
 //    var mbStories = [MBSocialStruct]()
     var mbPeople = [MBPeopleStruct]()
@@ -74,6 +76,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var uiviewBubbleHint: UIView!
     var uiviewDisRedLine: UIView!
     var uiviewDropDownMenu: UIView!
+    var uiviewLineBelowLoc: UIView!
     var uiviewNavBar: FaeNavBar!
     var uiviewPeopleLocDetail: UIView!
     var uiviewRedUnderLine: UIView!
@@ -140,7 +143,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     let comment_valTalkTime: Array = ["Septermber 23, 2015", "Mar 28, 2017"]
     let comment_valContent: Array = ["LOL what are you talking abouta???", "I understand perfectly O(∩_∩)O"]
     let comment_valVoteCount: Array = [90, 90]
-    
+ 
     enum TalkTableMode: Int {
         case feed = 0
         case topic = 1
@@ -165,9 +168,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadTable()
         loadCannotFindPeople()
         loadPlaceTabView()
+        loadChooseNearbyPeopleView()
         loadMidViewContent()
         loadNavBar()
-        loadChooseNearbyPeopleView()
         loadTalkTabView()
         uiviewBubbleHint.isHidden = true
         uiviewTalkTab.isHidden = true
@@ -177,10 +180,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
         uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
-        
-        // uiviewBubbleHint和tblMapBoard需要添加多个gesture，之后需修复此bug
-//        let rollup = UISwipeGestureRecognizer(target: self, action: #selector(rollUpPeopleLocPage(_:)))
-//        uiviewBubbleHint.addGestureRecognizer(rollup)
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
         boolLoadedTalkPage = true
@@ -192,6 +191,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
         tapRecognizer.numberOfTapsRequired = 1
         tapRecognizer.cancelsTouchesInView = false
+        
         return tapRecognizer
     }
     
@@ -235,9 +235,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.addTalkFeed(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
         
-        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 140) / 2, y: 23, width: 140, height: 37))
+        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
-        btnNavBarSetTitle()
+        btnNavBarMenu.setTitle(curtTitle, for: .normal)
+        btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
+        btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
         
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         
@@ -276,42 +278,33 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
         uiviewDropMenuBottomLine.backgroundColor = UIColor._200199204()
         
-        btnPlaces = UIButton(frame: CGRect(x: 56, y: 9, width: 240 * screenWidthFactor, height: 38))
+        btnPlaces = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnPlaces)
         btnPlaces.tag = 0
-        //        btnPlaces.setTitle(titleArray[0], for: .normal)
-        //        btnPlaces.setTitleColor(UIColor.faeAppInputTextGrayColor(), for: .normal)
-        //        btnPlaces.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnPlaces.contentHorizontalAlignment = .left
-        btnPlaces.setImage(#imageLiteral(resourceName: "mb_places"), for: .normal)
-        btnPlaces.adjustsImageWhenHighlighted = false
         btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnPeople = UIButton(frame: CGRect(x: 56, y: 59, width: 240 * screenWidthFactor, height: 38))
+        btnPeople = UIButton(frame: CGRect(x: 0, y: 51, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnPeople)
         btnPeople.tag = 1
-        btnPeople.contentHorizontalAlignment = .left
-        btnPeople.setImage(#imageLiteral(resourceName: "mb_people"), for: .normal)
-        btnPeople.adjustsImageWhenHighlighted = false
         btnPeople.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces.text = "Places"
+        btnPlaces.addSubview(lblPlaces)
         
-        /*
-        btnSocial = UIButton(frame: CGRect(x: 56, y: 109, width: 240 * screenWidthFactor, height: 38))
-        uiviewDropDownMenu.addSubview(btnSocial)
-        btnSocial.tag = 2
-        btnSocial.contentHorizontalAlignment = .left
-        btnSocial.setImage(#imageLiteral(resourceName: "mb_social"), for: .normal)
-        btnSocial.adjustsImageWhenHighlighted = false
-        btnSocial.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        lblPeople = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPeople.text = "People"
+        btnPeople.addSubview(lblPeople)
         
-        btnTalk = UIButton(frame: CGRect(x: 56, y: 157, width: 240 * screenWidthFactor, height: 38))
-        uiviewDropDownMenu.addSubview(btnTalk)
-        btnTalk.tag = 3
-        btnTalk.contentHorizontalAlignment = .left
-        btnTalk.setImage(#imageLiteral(resourceName: "mb_talk"), for: .normal)
-        btnTalk.adjustsImageWhenHighlighted = false
-        btnTalk.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
-        */
+        let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
+        imgPlaces.image = #imageLiteral(resourceName: "collection_locations")
+        imgPlaces.contentMode = .center
+        btnPlaces.addSubview(imgPlaces)
+        
+        let imgPeople = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
+        imgPeople.image = #imageLiteral(resourceName: "mb_people")
+        imgPeople.contentMode = .center
+        btnPeople.addSubview(imgPeople)
         
         // imgTick.frame.origin.y = 20, 70, 120, 168
         imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
@@ -320,17 +313,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
-        uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
-        
-        /*
-        let uiviewDropMenuSecLine = UIView(frame: CGRect(x: 41, y: 100, width: screenWidth - 82, height: 1))
-        uiviewDropDownMenu.addSubview(uiviewDropMenuSecLine)
-        uiviewDropMenuSecLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
-        
-        let uiviewDropMenuThirdLine = UIView(frame: CGRect(x: 41, y: 150, width: screenWidth - 82, height: 1))
-        uiviewDropDownMenu.addSubview(uiviewDropMenuThirdLine)
-        uiviewDropMenuThirdLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
-        */
+        uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
     }
     
     fileprivate func loadMidViewContent() {
@@ -362,9 +345,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         setViewContent()
         
         // draw line
-        let lblAllComLine = UIView(frame: CGRect(x: 0, y: 48, width: screenWidth, height: 1))
-        lblAllComLine.backgroundColor = UIColor._200199204()
-        uiviewAllCom.addSubview(lblAllComLine)
+        uiviewLineBelowLoc = UIView(frame: CGRect(x: 0, y: 48, width: screenWidth, height: 1))
+        uiviewLineBelowLoc.backgroundColor = UIColor._200199204()
+        uiviewAllCom.addSubview(uiviewLineBelowLoc)
         
         uiviewAllCom.addSubview(imgIconBeforeAllCom)
         uiviewAllCom.addSubview(lblAllCom)
@@ -409,7 +392,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
                 uiviewTalkPostHead.isHidden = true
                 uiviewAllCom.isHidden = false
                 uiviewNavBar.bottomLine.isHidden = false
-//                tblMapBoard.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
             }
         }
     }
@@ -450,20 +432,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             hideDropDownMenu()
         }
         
-        
-//        if !uiviewPeopleLocDetail.isHidden {
-//            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-//                self.uiviewPeopleLocDetail.frame.origin.y = -299
-//            }, completion: { _ in
-//                self.uiviewPeopleLocDetail.isHidden = true
-//            })
-//            updateNearbyPeople()
-//        }
+        rollUpFilter()
     }
     
     // function for hide the drop down menu when tap on table
     func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
         hideDropDownMenu()
+        rollUpFilter()
     }
     
     // function for buttons in drop down menu

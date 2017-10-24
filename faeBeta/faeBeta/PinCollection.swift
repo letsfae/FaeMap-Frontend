@@ -17,27 +17,7 @@ struct PinCollection {
     var boolPri: Bool
     var colTime: String
     var itemsCount: Int = 0
-    
-    init(json: JSON) {
-        colId = json["collection_id"].intValue
-        colName = json["name"].stringValue
-        colDesp = json["description"].stringValue
-        colType = json["type"].stringValue
-        boolPri = json["is_private"].boolValue
-        let time = json["created_at"].stringValue
-        let date = time.split(separator: " ")[0].split(separator: "-")
-        colTime = date[1] + "/" + date[0]
-    }
-}
-
-struct CollectionList {
-    let colId: Int
-    var colName: String
-    var colDesp: String
-    let colType: String
-    var boolPri: Bool
     var pinIds = [Int]()
-    var colTime: String
     
     init(json: JSON) {
         colId = json["collection_id"].intValue
@@ -48,6 +28,7 @@ struct CollectionList {
         let time = json["created_at"].stringValue
         let date = time.split(separator: " ")[0].split(separator: "-")
         colTime = date[1] + "/" + date[0]
+        
         let ids = json["pin_id"].arrayValue //.map({Int($0.stringValue)})
         if ids.count != 0 {
             for id in ids {

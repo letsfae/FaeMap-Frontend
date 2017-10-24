@@ -74,6 +74,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             })
         })
         PlaceDetailCell.boolFold = true
+        
+//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -322,7 +324,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {

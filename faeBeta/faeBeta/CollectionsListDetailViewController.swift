@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 protocol CollectionsListDetailDelegate: class {
-    func deleteColList(indexPath: IndexPath)
-    func updateColName(indexPath: IndexPath, name: String, numItems: Int)
+    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath)
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int)
 }
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate {
@@ -47,7 +47,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var txtDesp: String = ""
     var txtTime: String = ""
     
-    var arrColDetails: CollectionList!
+    var arrColDetails: PinCollection!
     var colId: Int = -1
     var colInfo: PinCollection!
     
@@ -76,23 +76,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
-        FaeCollection.shared.getOneCollection(String(colId)) { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let list = JSON(message!)
-                self.arrColDetails = CollectionList(json: list)
+        colId = arrColDetails.colId
+        lblListName.text = arrColDetails.colName
+        txtName = arrColDetails.colName
+        txtDesp = arrColDetails.colDesp
+        txtTime = arrColDetails.colTime
+        numItems = arrColDetails.pinIds.count
                 
-                self.lblListName.text = self.arrColDetails.colName
-                self.txtName = self.arrColDetails.colName
-                self.txtDesp = self.arrColDetails.colDesp
-                self.txtTime = self.arrColDetails.colTime
-                self.numItems = self.arrColDetails.pinIds.count
-                
-                self.getSavedItems(colId: self.colId)
-                self.tblColListDetail.reloadData()
-            } else {
-                print("[Get Collection detail] Fail to Get \(status) \(message!)")
-            }
-        }
+        self.getSavedItems(colId: self.colId)
+        self.tblColListDetail.reloadData()
     }
     
     fileprivate func loadHiddenHeader() {
@@ -191,7 +183,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func actionBack(_ sender: UIButton) {
-        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: numItems)
+        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
@@ -340,6 +332,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtTime = "09/2017"
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
+    
+    func updateCols(col: PinCollection) {}
     // CreateColListDelegate End
 }
 
@@ -884,7 +878,7 @@ extension CollectionsListDetailViewController {
             if status / 100 == 2 {
                 self.animationHideOptions()
                 self.navigationController?.popViewController(animated: true)
-                self.delegate?.deleteColList(indexPath: self.indexPath)
+                self.delegate?.deleteColList(enterMode: self.enterMode, indexPath: self.indexPath)
             } else {
                 print("[Collections] Fail to Delete \(status) \(message!)")
             }
@@ -936,6 +930,5 @@ extension CollectionsListDetailViewController {
         
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
-        //        tblColListDetail.reloadData()
     }
 }
