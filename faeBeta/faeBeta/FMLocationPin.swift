@@ -74,7 +74,8 @@ extension FaeMapViewController {
         locAnnoView?.optionsOpened = false
         locAnnoView?.optionsOpeing = false
         deselectAllAnnotations()
-        selectedLocation = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
+        let pinData = LocationPin(position: coordinate)
+        selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
         locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
 //        faeMapView.addAnnotation(locationPin!)
         uiviewLocationBar.show()

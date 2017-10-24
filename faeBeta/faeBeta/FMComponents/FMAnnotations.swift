@@ -111,9 +111,9 @@ class FaePinAnnotation: MKPointAnnotation {
             changePosition()
             timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
         } else if type == "location" {
-            guard let position = data as? CLLocationCoordinate2D else { return }
+            guard let pin = data as? LocationPin else { return }
+            coordinate = pin.coordinate
             icon = #imageLiteral(resourceName: "location_pin")
-            coordinate = position
         }
     }
     
