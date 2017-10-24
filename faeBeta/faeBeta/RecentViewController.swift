@@ -71,7 +71,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     deinit {
-        notificationToken?.stop()
+        notificationToken?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -413,7 +413,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     private func observeOnMessageChange() {
         guard let tableview = self.tblRecents else { return }
-        notificationToken = resultRealmRecents.addNotificationBlock { (changes: RealmCollectionChange) in
+        notificationToken = resultRealmRecents.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 print("initial")

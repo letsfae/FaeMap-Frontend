@@ -9,7 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MapBoardPlaceTabDelegate, BoardsSearchDelegate {
+class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, MapBoardPlaceTabDelegate, BoardsSearchDelegate {
     var uiviewNavBar: FaeNavBar!
     var tblAllPlaces: UITableView!
     var strTitle: String! = ""
@@ -37,6 +37,18 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         loadFooter()
         searchedLoc = LocManager.shared.curtLoc
         getPlaceInfo()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
 
     fileprivate func loadNavBar() {

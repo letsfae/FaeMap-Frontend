@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 import CCHMapClusterController
 
 extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDelegate {
@@ -32,6 +33,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     }
     
     func actionFilterIcon(_ sender: UIButton) {
+        PLACE_ENABLE = true
         for user in faeUserPins {
             user.isValid = false
         }
@@ -102,15 +104,41 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
         }
     }
     
-    // CollectionsListDetailDelegate
-    func deleteColList(indexPath: IndexPath) {
-        
+    // MapFilterMenuDelegate
+    func showSavedPins(type: String, savedPinIds: [Int]) {
+        guard savedPinIds.count > 0 else { return }
+        PLACE_ENABLE = false
+        self.desiredCount = savedPinIds.count
+        self.completionCount = 0
+        placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
+        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
+            self.placesFromSearch.removeAll(keepingCapacity: true)
+            for id in savedPinIds {
+                FaeMap.shared.getPin(type: type, pinId: String(id), completion: { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let resultJson = JSON(message!)
+                    let placeData = PlacePin(json: resultJson)
+                    let placePin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: placeData as AnyObject)
+                    self.placesFromSearch.append(placePin)
+                    self.placeClusterManager.addAnnotations([placePin], withCompletionHandler: nil)
+                    self.completionCount += 1
+                })
+            }
+        })
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     // CollectionsListDetailDelegate
-    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
+    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath) {}
+    
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int) {
         
     }
+    // CollectionsListDetailDelegate End
     
     func actionHideFilterMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {

@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 protocol CollectionsListDetailDelegate: class {
-    func deleteColList(indexPath: IndexPath)
-    func updateColName(indexPath: IndexPath, name: String, numItems: Int)
+    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath)
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int)
 }
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate {
@@ -47,7 +47,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var txtDesp: String = ""
     var txtTime: String = ""
     
-    var arrColDetails: CollectionList!
+    var arrColDetails: PinCollection!
     var colId: Int = -1
     var colInfo: PinCollection!
     
@@ -76,23 +76,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
-        FaeCollection.shared.getOneCollection(String(colId)) { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let list = JSON(message!)
-                self.arrColDetails = CollectionList(json: list)
+        colId = arrColDetails.colId
+        lblListName.text = arrColDetails.colName
+        txtName = arrColDetails.colName
+        txtDesp = arrColDetails.colDesp
+        txtTime = arrColDetails.colTime
+        numItems = arrColDetails.pinIds.count
                 
-                self.lblListName.text = self.arrColDetails.colName
-                self.txtName = self.arrColDetails.colName
-                self.txtDesp = self.arrColDetails.colDesp
-                self.txtTime = self.arrColDetails.colTime
-                self.numItems = self.arrColDetails.pinIds.count
-                
-                self.getSavedItems(colId: self.colId)
-                self.tblColListDetail.reloadData()
-            } else {
-                print("[Get Collection detail] Fail to Get \(status) \(message!)")
-            }
-        }
+        self.getSavedItems(colId: self.colId)
+        self.tblColListDetail.reloadData()
     }
     
     fileprivate func loadHiddenHeader() {
@@ -191,7 +183,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func actionBack(_ sender: UIButton) {
-        delegate?.updateColName(indexPath: indexPath, name: txtName, numItems: numItems)
+        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
@@ -340,6 +332,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtTime = "09/2017"
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
+    
+    func updateCols(col: PinCollection) {}
     // CreateColListDelegate End
 }
 
@@ -527,7 +521,7 @@ class ColListPlaceCell: UITableViewCell {
         imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
         imgSavedItem.layer.cornerRadius = 5
         imgSavedItem.clipsToBounds = true
-        imgSavedItem.backgroundColor = UIColor._2499090()
+        imgSavedItem.backgroundColor = .white
         imgSavedItem.contentMode = .scaleAspectFill
         addSubview(imgSavedItem)
         
@@ -556,7 +550,6 @@ class ColListPlaceCell: UITableViewCell {
         lblItemName.text = placeInfo.name
         lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         imgSavedItem.backgroundColor = .white
-        
         if placeInfo.imageURL == "" {
             imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
             imgSavedItem.backgroundColor = .white
@@ -564,16 +557,16 @@ class ColListPlaceCell: UITableViewCell {
             if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
                 self.imgSavedItem.image = placeImgFromCache
                 self.imgSavedItem.backgroundColor = UIColor._2499090()
-            } else {
-                downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                    guard let data = rawData else { return }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        guard let placeImg = UIImage(data: data) else { return }
-                        DispatchQueue.main.async {
-                            self.imgSavedItem.image = placeImg
-                            self.imgSavedItem.backgroundColor = UIColor._2499090()
-                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                        }
+                return
+            }
+            downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    guard let placeImg = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        self.imgSavedItem.image = placeImg
+                        self.imgSavedItem.backgroundColor = UIColor._2499090()
+                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
                     }
                 }
             }
@@ -582,6 +575,7 @@ class ColListPlaceCell: UITableViewCell {
 }
 
 let faeLocationCache = NSCache<AnyObject, AnyObject>()
+let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
 
 class ColListLocationCell: UITableViewCell {
     
@@ -632,14 +626,19 @@ class ColListLocationCell: UITableViewCell {
     
     func setValueForLocationPin(locId: Int) {
         self.imgSavedItem.alpha = 0
+        self.lblItemName.alpha = 0
+        self.lblItemAddr_1.alpha = 0
+        self.lblItemAddr_2.alpha = 0
         if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
             let lat = locationFromCache["geolocation"]["latitude"].doubleValue
             let lon = locationFromCache["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = locationFromCache["content"].intValue
             self.imgSavedItem.loadImage(id: locationFromCache["content"].intValue)
-            self.imgSavedItem.alpha = 1
-            self.getAddressForLocation(location: location)
+            UIView.animate(withDuration: 0.1, animations: {
+                self.imgSavedItem.alpha = 1
+            })
+            self.getAddressForLocation(locId, location)
             joshprint("[setValueForLocationPin] get location pin from cache")
             return
         }
@@ -653,13 +652,26 @@ class ColListLocationCell: UITableViewCell {
             let location = CLLocation(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = resultJson["content"].intValue
             self.imgSavedItem.loadImage(id: resultJson["content"].intValue)
-            self.getAddressForLocation(location: location)
+            self.getAddressForLocation(locId, location)
             joshprint("[setValueForLocationPin] get location pin successfully")
-            self.imgSavedItem.alpha = 1
+            UIView.animate(withDuration: 0.1, animations: {
+                self.imgSavedItem.alpha = 1
+            })
         }
     }
     
-    func getAddressForLocation(location: CLLocation) {
+    func getAddressForLocation(_ locId: Int, _ location: CLLocation) {
+        if let locationFromCache = faeLocationInfoCache.object(forKey: locId as AnyObject) as? [String] {
+            self.lblItemName.text = locationFromCache[0]
+            self.lblItemAddr_1.text = locationFromCache[1]
+            self.lblItemAddr_2.text = locationFromCache[2]
+            UIView.animate(withDuration: 0.1, animations: {
+                self.lblItemName.alpha = 1
+                self.lblItemAddr_1.alpha = 1
+                self.lblItemAddr_2.alpha = 1
+            })
+            return
+        }
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             
@@ -714,6 +726,16 @@ class ColListLocationCell: UITableViewCell {
                 self.lblItemName.text = address_1
                 self.lblItemAddr_1.text = address_2
                 self.lblItemAddr_2.text = address_3
+                var arrAddrs = [String]()
+                arrAddrs.append(address_1)
+                arrAddrs.append(address_2)
+                arrAddrs.append(address_3)
+                faeLocationInfoCache.setObject(arrAddrs as AnyObject, forKey: locId as AnyObject)
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.lblItemName.alpha = 1
+                    self.lblItemAddr_1.alpha = 1
+                    self.lblItemAddr_2.alpha = 1
+                })
             }
         }
     }
@@ -856,7 +878,7 @@ extension CollectionsListDetailViewController {
             if status / 100 == 2 {
                 self.animationHideOptions()
                 self.navigationController?.popViewController(animated: true)
-                self.delegate?.deleteColList(indexPath: self.indexPath)
+                self.delegate?.deleteColList(enterMode: self.enterMode, indexPath: self.indexPath)
             } else {
                 print("[Collections] Fail to Delete \(status) \(message!)")
             }
@@ -908,6 +930,5 @@ extension CollectionsListDetailViewController {
         
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
-        //        tblColListDetail.reloadData()
     }
 }

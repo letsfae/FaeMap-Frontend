@@ -13,6 +13,7 @@ protocol MapFilterMenuDelegate: class {
     func autoReresh(isOn: Bool)
     func autoCyclePins(isOn: Bool)
     func hideAvatars(isOn: Bool)
+    func showSavedPins(type: String, savedPinIds: [Int])
 }
 
 class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -37,14 +38,24 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var curtTitle: String = "Places"
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
-    var arrCollection = [PinCollection]()
+    var arrPlaces = [PinCollection]()
+    var arrLocations = [PinCollection]()
     let faeCollection = FaeCollection()
     var tableMode: CollectionTableMode = .place
+    var arrListThatSavedThisPin = [Int]() {
+        didSet {
+            guard fullLoaded else { return }
+            guard arrListThatSavedThisPin.count > 0 else { return }
+            tblPlaceLoc.reloadData()
+        }
+    }
+    var fullLoaded = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
         loadCollectionData()
+        fullLoaded = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -60,14 +71,15 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                     return
                 }
                 
-                self.arrCollection.removeAll()
                 for col in colArray {
                     let data = PinCollection(json: col)
-                    if data.colType == self.tableMode.rawValue {
-                        self.arrCollection.append(data)
+                    if data.colType == "place" {
+                        self.arrPlaces.append(data)
+                    }
+                    if data.colType == "location" {
+                        self.arrLocations.append(data)
                     }
                 }
-                
                 self.tblPlaceLoc.reloadData()
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
@@ -211,8 +223,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     func loadView2() {
         // button "Places" & "Locations"
-        btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, w: 150, h: 27))
+        btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 27))
         btnPlaceLoc.center.x = screenWidth / 2
+        btnPlaceLoc.tag = 0
         uiviewPlaceLoc.addSubview(btnPlaceLoc)
         btnPlaceLoc.addTarget(self, action: #selector(dropDownMenuAct(_:)), for: .touchUpInside)
         setView2CurtTitle()
@@ -282,16 +295,18 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         case 0:
             curtTitle = "Places"
             tableMode = .place
+            sender.tag = 1
             break
         case 1:
             curtTitle = "Locations"
             tableMode = .location
+            sender.tag = 0
             break
         default:
             return
         }
         setView2CurtTitle()
-        loadCollectionData()
+        tblPlaceLoc.reloadData()
     }
     
     func changePage(_ sender: Any?) {
@@ -299,7 +314,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        if scrollView == scrollViewFilterMenu {
+            pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        }
     }
     
     func switchBetweenDisAndSocial(_ sender: UIButton) {
@@ -349,17 +366,26 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         return 100
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrCollection.count
+        return tableMode == .place ? arrPlaces.count : arrLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-        let collection = arrCollection[indexPath.row]
-        cell.setValueForCell(cols: collection)
+        let collection = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
+        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.colId)
+        cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        let colInfo = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
+        FaeCollection.shared.getOneCollection(String(colInfo.colId)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pin_id"].arrayValue
+            let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
+            self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds)
+        }
     }
 }

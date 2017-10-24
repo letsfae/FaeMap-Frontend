@@ -429,7 +429,9 @@ class PlacePinAnnotationView: MKAnnotationView {
     var optionsOpened = false
     var optionsOpeing = false
     
-    var imgCollected: UIImageView!
+    var imgSaved: UIImageView!
+    
+    var boolShowSavedNoti = false
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -437,10 +439,37 @@ class PlacePinAnnotationView: MKAnnotationView {
         layer.zPosition = 1
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
+        boolShowSavedNoti = false
         
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_place"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_place"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+    }
+    
+    func showSavedNoti() {
+        guard imgSaved != nil else { return }
+        guard arrBtns.count == 4 else { return }
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideSavedNoti() {
+        guard imgSaved != nil else { return }
+        guard arrBtns.count == 4 else { return }
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -461,10 +490,10 @@ class PlacePinAnnotationView: MKAnnotationView {
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect"), for: .normal)
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect_s"), for: .selected)
         btnCollect.alpha = 0
-        imgCollected = UIImageView(frame: CGRect(x: 36, y: 10, width: 0, height: 0))
-        imgCollected.image = #imageLiteral(resourceName: "place_new_collected")
-        imgCollected.alpha = 0
-        btnCollect.addSubview(imgCollected)
+        imgSaved = UIImageView(frame: CGRect(x: 36, y: 10, width: 0, height: 0))
+        imgSaved.image = #imageLiteral(resourceName: "place_new_collected")
+        imgSaved.alpha = 0
+        btnCollect.addSubview(imgSaved)
         
         btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 46, height: 46))
         btnRoute.setImage(#imageLiteral(resourceName: "place_new_route"), for: .normal)
@@ -518,7 +547,11 @@ class PlacePinAnnotationView: MKAnnotationView {
                 else if btn == self.btnCollect { btn.frame.origin = CGPoint(x: 35, y: 0) }
                 else if btn == self.btnRoute { btn.frame.origin = CGPoint(x: 93, y: 0) }
                 else if btn == self.btnShare { btn.frame.origin = CGPoint(x: 128, y: 43) }
-            }, completion: nil)
+            }, completion: { _ in
+                if btn == self.btnCollect && self.boolShowSavedNoti {
+                    self.showSavedNoti()
+                }
+            })
             delay += 0.075
         }
     }
@@ -560,13 +593,6 @@ class PlacePinAnnotationView: MKAnnotationView {
                 btn.isSelected = false
                 btn.frame.size = CGSize(width: 46, height: 46)
             }
-        }, completion: nil)
-    }
-    
-    func showCollectedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgCollected.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
-            self.imgCollected.alpha = 1
         }, completion: nil)
     }
     
@@ -641,7 +667,9 @@ class LocPinAnnotationView: MKAnnotationView {
     var optionsOpened = false
     var optionsOpeing = false
     
-    var imgCollected: UIImageView!
+    var imgSaved: UIImageView!
+    
+    var locationId: Int = 0
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -653,8 +681,8 @@ class LocPinAnnotationView: MKAnnotationView {
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
-        NotificationCenter.default.addObserver(self, selector: #selector(showCollectedNoti), name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideCollectedNoti), name: NSNotification.Name(rawValue: "hideCollectedNoti"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_loc"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -662,8 +690,8 @@ class LocPinAnnotationView: MKAnnotationView {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showCollectedNoti"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideCollectedNoti"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_loc"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
     func assignImage(_ image: UIImage) {
@@ -680,10 +708,10 @@ class LocPinAnnotationView: MKAnnotationView {
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect"), for: .normal)
         btnCollect.setImage(#imageLiteral(resourceName: "place_new_collect_s"), for: .selected)
         btnCollect.alpha = 0
-        imgCollected = UIImageView(frame: CGRect(x: 36, y: 10, width: 0, height: 0))
-        imgCollected.image = #imageLiteral(resourceName: "place_new_collected")
-        imgCollected.alpha = 0
-        btnCollect.addSubview(imgCollected)
+        imgSaved = UIImageView(frame: CGRect(x: 36, y: 10, width: 0, height: 0))
+        imgSaved.image = #imageLiteral(resourceName: "place_new_collected")
+        imgSaved.alpha = 0
+        btnCollect.addSubview(imgSaved)
         
         btnRoute = UIButton(frame: CGRect(x: 93, y: 0, width: 46, height: 46))
         btnRoute.setImage(#imageLiteral(resourceName: "place_new_route"), for: .normal)
@@ -694,14 +722,6 @@ class LocPinAnnotationView: MKAnnotationView {
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share"), for: .normal)
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share_s"), for: .selected)
         btnShare.alpha = 0
-        
-//        layer.zPosition = 2
-//        imgIcon.layer.zPosition = 2
-//        btnDetail.layer.zPosition = 2
-//        btnCollect.layer.zPosition = 2
-//        btnRoute.layer.zPosition = 2
-//        btnShare.layer.zPosition = 2
-        // what happened
         
         addSubview(btnDetail)
         addSubview(btnCollect)
@@ -783,17 +803,25 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func showCollectedNoti() {
+    func showSavedNoti(_ sender: Notification) {
+        if let id = sender.object as? Int {
+            self.locationId = id
+        }
+        savedNotiAnimation()
+    }
+    
+    func savedNotiAnimation() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgCollected.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
-            self.imgCollected.alpha = 1
+            self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
+            self.imgSaved.alpha = 1
         }, completion: nil)
     }
     
-    func hideCollectedNoti() {
+    func hideSavedNoti() {
+        guard imgSaved != nil else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgCollected.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
-            self.imgCollected.alpha = 0
+            self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
+            self.imgSaved.alpha = 0
         }, completion: nil)
     }
     

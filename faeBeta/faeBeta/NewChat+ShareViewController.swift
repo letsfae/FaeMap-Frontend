@@ -66,7 +66,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var friendListMode: FriendListMode = .chat
     var locationDetail: String = ""
     var locationSnapImage: UIImage?
-    var collectionDetail: CollectionList?
+    var collectionDetail: PinCollection?
     var placeDetail: PlacePin?
     
     let apiCalls = FaeContact()

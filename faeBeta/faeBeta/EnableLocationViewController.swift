@@ -43,7 +43,7 @@ class EnableLocationViewController: UIViewController {
         
         infoLabel = UILabel(frame: CGRect(x: 15, y: screenHeight - 20 - 36, width: screenWidth - 30, height: 36))
         infoLabel.numberOfLines = 2
-        infoLabel.attributedText = NSAttributedString(string: "Fae Map’s Shadow Security System always\nProtects your Location Information.", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
+        infoLabel.attributedText = NSAttributedString(string: "Fae Map’s Shadow Location System always\nProtects your Location Information.", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!])
         infoLabel.textAlignment = .center
         self.view.addSubview(infoLabel)
         

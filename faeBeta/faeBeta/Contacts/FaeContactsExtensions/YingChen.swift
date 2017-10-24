@@ -41,49 +41,44 @@ extension ContactsViewController {
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -39 // 64 - 103
         
-        // Line at y = 103 inside the blurViewDropDownMenu
         let bottomLine = UIView(frame: CGRect(x: 0, y: 103, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
         bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewDropDownMenu.addSubview(bottomLine)
         
-        btnTop = UIButton(frame: CGRect(x: 41, y: 0, width: 200, height: 50))
+        btnTop = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnTop)
         btnTop.tag = 0
-//        btnTop.setTitle(titleArray[0], for: .normal)
-//        btnTop.setTitleColor(UIColor._898989(), for: .normal)
-//        btnTop.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnTop.backgroundColor = .clear
         
-        btnBottom = UIButton(frame: CGRect(x: 41, y: 52, width: 200, height: 50))
+        btnBottom = UIButton(frame: CGRect(x: 0, y: 52, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnBottom)
         btnBottom.tag = 1
-//        btnBottom.setTitle(titleArray[1], for: .normal)
-//        btnBottom.setTitleColor(UIColor._898989(), for: .normal)
-//        btnBottom.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnBottom.backgroundColor = .clear
         
-        let imgTop = UIImageView(frame: CGRect(x: 15, y: 14, width: 28, height: 28))
-        let imgBottom = UIImageView(frame: CGRect(x: 15, y: 14, width: 28, height: 28))
+        let imgTop = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
+        let imgBottom = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
         imgTop.image = #imageLiteral(resourceName: "FFFselected")
         imgBottom.image = #imageLiteral(resourceName: "RRselected")
         btnTop.addSubview(imgTop)
         btnBottom.addSubview(imgBottom)
         
-        lblTop = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
+        lblTop = UILabel(frame: CGRect(x: 104, y: 16, width: 100, height: 25))
         lblTop.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addSubview(lblTop)
         updateFriendCount()
         
-        lblBottom = UILabel(frame: CGRect(x: 63, y: 16, width: 100, height: 25))
+        lblBottom = UILabel(frame: CGRect(x: 104, y: 16, width: 100, height: 25))
         lblBottom.textColor = UIColor._898989()
         lblBottom.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblBottom.text = "Requests"
         btnBottom.addSubview(lblBottom)
         
-        let uiviewDropMenuLineTop = UIView(frame: CGRect(x: (screenWidth - 332 * screenWidthFactor) / 2, y: 51, width: 332 * screenWidthFactor, height: 1))
+        let uiviewDropMenuLineTop = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuLineTop)
-        uiviewDropMenuLineTop.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
+        uiviewDropMenuLineTop.backgroundColor = UIColor._206203203()
         
         imgTick = UIImageView(frame: CGRect(x: screenWidth - 75, y: 20, width: 16, height: 16))
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
@@ -103,20 +98,6 @@ extension ContactsViewController {
         attributedStr.append(count)
         
         lblTop.attributedText = attributedStr
-        
-        
-//        let lastNS : NSAttributedString = NSAttributedString(string: arrFriends[arrSelected[arrSelected.count - 1]].nickName + ",", attributes: [NSForegroundColorAttributeName : UIColor._2499090()])
-//        attributedStrM.append(lastNS)
-//        strLastTextField = strLastTextField + arrFriends[arrSelected[arrSelected.count - 1]].nickName + ","
-//
-//        let changeColor : NSAttributedString = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-//        attributedStrM.append(changeColor)
-//
-//        let newSearchWord : NSAttributedString = NSAttributedString(string: moreWord, attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-//        attributedStrM.append(newSearchWord)
-//        strLastTextField = strLastTextField + moreWord
-//
-//        searchField.attributedText = attributedStrM
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {

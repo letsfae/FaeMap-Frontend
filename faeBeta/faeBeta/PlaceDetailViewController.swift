@@ -9,9 +9,14 @@
 import UIKit
 import SwiftyJSON
 
-class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlacetoCollectionDelegate {
+protocol PlaceDetailDelegate: class {
+    func getRouteToPin()
+}
+
+class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
+    weak var featureDelegate: PlaceDetailDelegate?
     
     var place: PlacePin!
     var allPlaces = [PlacePin]()
@@ -31,7 +36,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     let faeMap = FaeMap()
     let faePinAction = FaePinAction()
     var boolSaved: Bool = false
-    var uiviewAddCollection: AddPlaceToCollectionView!
+    var uiviewSavedList: AddPinToCollectionView!
+    var uiviewAfterAdded: AfterAddedToListView!
+    var arrListSavedThisPin = [Int]()
+    var boolSavedListLoaded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +48,17 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         loadHeader()
         loadMidTable()
         loadFixedHeader()
+        view.bringSubview(toFront: uiviewSavedList)
+        view.bringSubview(toFront: uiviewAfterAdded)
+        checkSavedStatus() {}
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,15 +66,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         uiviewSubHeader.setValue(place: place)
         uiviewFixedHeader.setValue(place: place)
         tblPlaceDetail.reloadData()
-        checkSavedStatus()
-        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 500000, isSimilar: true, completion: { (arrPlaces) in
+        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 500000, isSimilar: true, completion: { arrPlaces in
             self.arrRelatedPlaces.append(arrPlaces)
-            self.getRelatedPlaces(lat: String(self.place.coordinate.latitude), long: String(self.place.coordinate.longitude), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
+            self.getRelatedPlaces(lat: String(self.place.coordinate.latitude), long: String(self.place.coordinate.longitude), radius: 5000, isSimilar: false, completion: { arrPlaces in
                 self.arrRelatedPlaces.append(arrPlaces)
                 self.tblPlaceDetail.reloadData()
             })
         })
         PlaceDetailCell.boolFold = true
+        
+//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -66,45 +86,52 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         }
     }
     
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
     }
     
-    func checkSavedStatus() {
-        faeMap.whereKey("is_place", value: "true")
-        faeMap.getSavedPins() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let savedPinsJSON = JSON(message!)
-                for i in 0..<savedPinsJSON.count {
-                    if savedPinsJSON[i]["pin_id"].intValue == self.place.id {
-                        self.boolSaved = true
-                        self.imgSaved.isHidden = false
-                        break
-                    }
-                }
+    func checkSavedStatus(_ completion: @escaping () -> ()) {
+        FaeMap.shared.getPin(type: "place", pinId: String(place.id)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion()
+                return
             }
-            else {
-                print("Fail to get saved pins!")
+            guard is_saved != "false" else {
+                completion()
+                return
             }
+            var ids = [Int]()
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            self.arrListSavedThisPin = ids
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            self.boolSavedListLoaded = true
+            if ids.count != 0 {
+                self.showSavedNoti()
+            }
+            completion()
         }
     }
     
-    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
+    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion: @escaping ([PlacePin]) -> Void) {
         faeMap.whereKey("geo_latitude", value: "\(lat)")
         faeMap.whereKey("geo_longitude", value: "\(long)")
         faeMap.whereKey("radius", value: "\(radius)")
         faeMap.whereKey("type", value: "place")
-        faeMap.whereKey("max_count", value: "1000")
+        faeMap.whereKey("max_count", value: "20")
         faeMap.getMapInformation { (status: Int, message: Any?) in
             var arrPlaces = [PlacePin]()
             arrPlaces.removeAll()
             if status / 100 == 2 {
                 let json = JSON(message!)
-                guard let placeJson = json.array else {
-                    return
-                }
+                guard let placeJson = json.array else { return }
                 for pl in placeJson {
                     let placePin = PlacePin(json: pl)
                     if arrPlaces.count < 15 && placePin.id != self.place.id {
@@ -123,9 +150,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
     func loadHeader() {
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309))
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
-        uiviewHeader.addSubview(uiviewScrollingPhotos)
-        
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
@@ -136,7 +160,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
-        uiviewFixedHeader.uiviewTopLine.isHidden = true
     }
     
     func loadMidTable() {
@@ -144,8 +167,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
-        automaticallyAdjustsScrollViewInsets = false
-                
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
         tblPlaceDetail.register(PlaceDetailSection1Cell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
@@ -159,8 +180,15 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         } else {
             automaticallyAdjustsScrollViewInsets = false
         }
+        
+        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
+        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 1))
+        bottomLine.backgroundColor = UIColor._241241241()
+        uiviewScrollingPhotos.addSubview(bottomLine)
+        uiviewScrollingPhotos.loadImages(place: place)
     }
-
+    
     func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
         view.addSubview(uiviewFooter)
@@ -176,39 +204,69 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         btnSave = UIButton(frame: CGRect(x: screenWidth / 2 - 105, y: 2, width: 47, height: 47))
         btnSave.setImage(#imageLiteral(resourceName: "place_save"), for: .normal)
         btnSave.tag = 0
-        btnSave.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnSave.addTarget(self, action: #selector(saveThisPin), for: .touchUpInside)
         
         btnRoute = UIButton(frame: CGRect(x: (screenWidth - 47) / 2, y: 2, width: 47, height: 47))
         btnRoute.setImage(#imageLiteral(resourceName: "place_route"), for: .normal)
         btnRoute.tag = 1
-        btnRoute.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnRoute.addTarget(self, action: #selector(routeToThisPin), for: .touchUpInside)
         
         btnShare = UIButton(frame: CGRect(x: screenWidth / 2 + 58, y: 2, width: 47, height: 47))
         btnShare.setImage(#imageLiteral(resourceName: "place_share"), for: .normal)
         btnShare.tag = 2
-        btnShare.addTarget(self, action: #selector(tabButtonPressed(_:)), for: .touchUpInside)
+        btnShare.addTarget(self, action: #selector(shareThisPin), for: .touchUpInside)
         
         uiviewFooter.addSubview(btnBack)
         uiviewFooter.addSubview(btnSave)
         uiviewFooter.addSubview(btnRoute)
         uiviewFooter.addSubview(btnShare)
         
-        imgSaved = UIImageView(frame: CGRect(x: 29, y: 5, width: 18, height: 18))
+        imgSaved = UIImageView(frame: CGRect(x: 38, y: 14, width: 0, height: 0))
         btnSave.addSubview(imgSaved)
         imgSaved.image = #imageLiteral(resourceName: "place_saved")
-        imgSaved.isHidden = true
+        imgSaved.alpha = 0
         
         loadAddtoCollection()
     }
     
+    func showSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+    
     fileprivate func loadAddtoCollection() {
-        uiviewAddCollection = AddPlaceToCollectionView()
-        uiviewAddCollection.delegate = self
-        uiviewAddCollection.tableMode = .place
-        view.addSubview(uiviewAddCollection)
+        uiviewSavedList = AddPinToCollectionView()
+        uiviewSavedList.delegate = self
+        uiviewSavedList.tableMode = .place
+        view.addSubview(uiviewSavedList)
+        
+        uiviewAfterAdded = AfterAddedToListView()
+        uiviewAfterAdded.delegate = self
+        view.addSubview(uiviewAfterAdded)
+        
+        uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if uiviewScrollingPhotos != nil {
+            var frame = uiviewScrollingPhotos.frame
+            if tblPlaceDetail.contentOffset.y < 0 {
+                frame.origin.y = tblPlaceDetail.contentOffset.y
+                uiviewScrollingPhotos.frame = frame
+            } else {
+                frame.origin.y = 0
+                uiviewScrollingPhotos.frame = frame
+            }
+        }
         if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
@@ -222,51 +280,39 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         navigationController?.popViewController(animated: true)
     }
     
-    func tabButtonPressed(_ sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            if boolSaved {
-                faePinAction.unsaveThisPin("place", pinID: String(place.id)) { (status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.boolSaved = false
-                        self.imgSaved.isHidden = true
-                    } else {
-                        print("[PlaceDetail-Unsave Pin] Unsave Place Pin Fail \(status) \(message!)")
-                    }
-                }
-            } else {
-                showAddCollectionView()
-                /*
-                faePinAction.saveThisPin("place", pinID: String(place.id)) { (status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.boolSaved = true
-                        self.imgSaved.isHidden = false
-                    } else {
-                        print("[PlaceDetail-Save Pin] Save Place Pin Fail \(status) \(message!)")
-                    }
-                }
-                 */
+    func saveThisPin() {
+        func showCollections() {
+            uiviewSavedList.tableMode = .place
+            uiviewSavedList.loadCollectionData()
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
+            uiviewSavedList.show()
+        }
+        if boolSavedListLoaded {
+            showCollections()
+        } else {
+            checkSavedStatus {
+                showCollections()
             }
-            break
-        case 1:
-            break
-        case 2:
-            // TODO jichao
-            let vcShareCollection = NewChatShareController(friendListMode: .place)
-            vcShareCollection.placeDetail = place
-            navigationController?.pushViewController(vcShareCollection, animated: true)
-            break
-        default:
-            break
         }
     }
     
+    func routeToThisPin() {
+        featureDelegate?.getRouteToPin()
+        navigationController?.popViewController(animated: false)
+    }
+    
+    func shareThisPin() {
+        let vcShareCollection = NewChatShareController(friendListMode: .place)
+        vcShareCollection.placeDetail = place
+        navigationController?.pushViewController(vcShareCollection, animated: true)
+    }
+    
     func showAddCollectionView() {
-        uiviewAddCollection.show()
+        uiviewSavedList.show()
     }
     
     func hideAddCollectionView() {
-        uiviewAddCollection.hide()
+        uiviewSavedList.hide()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -278,7 +324,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
@@ -286,28 +332,47 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPlac
         vcPlaceDetail.place = place
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
-    // SeeAllPlacesDelegate End
     
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
-        print("cancelAddPlace")
         hideAddCollectionView()
     }
     
+    // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
         present(vc, animated: true)
-//        navigationController?.pushViewController(vc, animated: true)
     }
-    // AddPlacetoCollectionDelegate End
+    
+    // AfterAddedToListDelegate
+    func seeList() {
+        uiviewAfterAdded.hide()
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewSavedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colInfo = uiviewAfterAdded.selectedCollection
+        navigationController?.pushViewController(vcList, animated: true)
+    }
+    
+    // AfterAddedToListDelegate
+    func undoCollect(colId: Int) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.show()
+        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+            let arrListIds = uiviewSavedList.arrListSavedThisPin
+            arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        }
+        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
+        // shrink imgSaved button
+    }
 }
 
 class FixedHeader: UIView {
     var lblName: UILabel!
     var lblCategory: UILabel!
     var lblPrice: UILabel!
-    var uiviewTopLine: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -343,10 +408,6 @@ class FixedHeader: UIView {
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
-        
-        uiviewTopLine = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 1))
-        uiviewTopLine.backgroundColor = UIColor._241241241()
-        addSubview(uiviewTopLine)
     }
     
     func setValue(place: PlacePin) {

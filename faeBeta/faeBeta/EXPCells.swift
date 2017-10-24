@@ -42,7 +42,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         super.init(frame: frame)
         loadCollectionView()
         loadCellItems()
-        loadPageCtrl()
+//        loadPageCtrl()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -200,7 +200,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         super.init(frame: frame)
         loadCollectionView()
         loadCellItems()
-        loadPageCtrl()
+//        loadPageCtrl()
     }
     
     required init?(coder aDecoder: NSCoder) {

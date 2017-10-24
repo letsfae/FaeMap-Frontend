@@ -12,7 +12,6 @@
 		372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */; };
 		372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */; };
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
-		500DB27E1F6B085400DB8798 /* EXPMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */; };
 		500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */; };
 		50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50111C251F476B4B004EA00E /* FMChooseLocs.swift */; };
 		50181F0B1F688579004798B5 /* EXPCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPCells.swift */; };
@@ -141,7 +140,7 @@
 		B30B878C1F80212000B52027 /* EditMemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B30B878B1F80211F00B52027 /* EditMemoViewController.swift */; };
 		B31437AA1F310B1E007AE884 /* FMMapSearchCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31437A91F310B1E007AE884 /* FMMapSearchCtrl.swift */; };
 		B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */; };
-		B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */; };
+		B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */; };
 		B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */; };
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
 		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
@@ -314,7 +313,6 @@
 		372F29C91EAC3AEB008113A4 /* PinSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinSearchViewController.swift; sourceTree = "<group>"; };
 		372F29CB1EADB817008113A4 /* Pls&LocSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Pls&LocSearchViewController.swift"; sourceTree = "<group>"; };
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
-		500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPMapViewController.swift; sourceTree = "<group>"; };
 		500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterCellCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		50111C251F476B4B004EA00E /* FMChooseLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMChooseLocs.swift; sourceTree = "<group>"; };
 		50181F0A1F688579004798B5 /* EXPCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPCells.swift; sourceTree = "<group>"; };
@@ -464,7 +462,7 @@
 		B30B878B1F80211F00B52027 /* EditMemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewController.swift; sourceTree = "<group>"; };
 		B31437A91F310B1E007AE884 /* FMMapSearchCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMMapSearchCtrl.swift; sourceTree = "<group>"; };
 		B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingView.swift; sourceTree = "<group>"; };
-		B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPlaceToCollectionView.swift; sourceTree = "<group>"; };
+		B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPinToCollectionView.swift; sourceTree = "<group>"; };
 		B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateColListViewController.swift; sourceTree = "<group>"; };
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
@@ -661,7 +659,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		37C725431E7346C1001A5060 /* PinCollection */ = {
+		37C725431E7346C1001A5060 /* Collections */ = {
 			isa = PBXGroup;
 			children = (
 				B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */,
@@ -673,7 +671,7 @@
 				B30B878B1F80211F00B52027 /* EditMemoViewController.swift */,
 				B3170EA11F4560DF0072F9CD /* Temporarily unused */,
 			);
-			name = PinCollection;
+			name = Collections;
 			sourceTree = "<group>";
 		};
 		50111C241F476063004EA00E /* FMComponents */ = {
@@ -697,7 +695,6 @@
 			isa = PBXGroup;
 			children = (
 				504CE4D11F67BF4500070284 /* ExploreViewController.swift */,
-				500DB27D1F6B085400DB8798 /* EXPMapViewController.swift */,
 				50181F0A1F688579004798B5 /* EXPCells.swift */,
 			);
 			name = Explore;
@@ -706,7 +703,7 @@
 		50500F8B1F967244009C51FB /* PinDetail */ = {
 			isa = PBXGroup;
 			children = (
-				B3170E9F1F454DEA0072F9CD /* AddPlaceToCollectionView.swift */,
+				B3170E9F1F454DEA0072F9CD /* AddPinToCollectionView.swift */,
 				B33F8A021F3EC4520033610D /* PlaceDetail */,
 				50E940821F79B37000269945 /* LocationDetail */,
 			);
@@ -967,7 +964,7 @@
 				B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */,
 				B0CFC9B51CED39CF00EC356A /* ServiceViewControllers */,
 				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
-				37C725431E7346C1001A5060 /* PinCollection */,
+				37C725431E7346C1001A5060 /* Collections */,
 				B0714D7F1D5E463B00356705 /* Chat */,
 				B0D8CC731D3D525C0030939E /* Mood Avatar */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
@@ -1814,7 +1811,7 @@
 				500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */,
 				5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
-				B3170EA01F454DEA0072F9CD /* AddPlaceToCollectionView.swift in Sources */,
+				B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */,
 				B0714D731D5E435200356705 /* FMMapPinCtrl.swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
@@ -1943,7 +1940,6 @@
 				B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */,
 				506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
-				500DB27E1F6B085400DB8798 /* EXPMapViewController.swift in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B37E5DC31F831040008A6B4B /* SetDisplayName.swift in Sources */,
 				50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */,
