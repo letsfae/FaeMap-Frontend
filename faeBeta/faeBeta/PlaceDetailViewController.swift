@@ -184,6 +184,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
         uiviewScrollingPhotos.addSubview(bottomLine)
+        uiviewScrollingPhotos.loadImages(place: place)
     }
     
     func loadFooter() {
