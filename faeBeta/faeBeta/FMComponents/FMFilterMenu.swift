@@ -378,7 +378,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let colInfo = arrCollection[indexPath.row]
+        let colInfo = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
         FaeCollection.shared.getOneCollection(String(colInfo.colId)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
