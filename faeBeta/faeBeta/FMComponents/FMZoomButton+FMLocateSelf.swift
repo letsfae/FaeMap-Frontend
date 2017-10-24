@@ -1,5 +1,5 @@
 //
-//  FMCustomComponents.swift
+//  FMZoomButton+FMLocateSelf.swift
 //  faeBeta
 //
 //  Created by Yue Shen on 8/1/17.
@@ -17,6 +17,7 @@ class FMZoomButton: UIButton {
     var btnZoomIn: UIButton!
     var btnZoomOut: UIButton!
     var prevRegion: MKCoordinateRegion!
+    var prev_y: CGFloat = 0
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153, width: 60, height: 60))
@@ -39,6 +40,7 @@ class FMZoomButton: UIButton {
             prevRegion = mapView.region
             faeMapCtrler?.placeClusterManager.canUpdate = false
             faeMapCtrler?.userClusterManager.canUpdate = false
+            prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             smallMode()
             faeMapCtrler?.placeClusterManager.canUpdate = true
@@ -47,7 +49,7 @@ class FMZoomButton: UIButton {
             faeMapCtrler?.userClusterManager.manuallyCallRegionDidChange()
         } else if sender.state == .changed {
             let point = sender.location(in: self)
-            let m = Double(point.y) - 61.0
+            let m = Double(point.y - prev_y)
             zoom(multiplier: m * 0.05)
         }
     }
