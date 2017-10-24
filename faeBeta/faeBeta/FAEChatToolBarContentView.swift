@@ -136,14 +136,14 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
 
     func setup(_ type : UInt32) {
         // sticker view
-        /*func initializeStickerView() {
+        func initializeStickerView() {
             viewStickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
             viewStickerPicker.sendStickerDelegate = self
             self.addSubview(viewStickerPicker)
             viewStickerPicker.isHidden = true
             
             boolStickerInitialized = true
-        }*/
+        }
         
         //quick image picker
         
@@ -201,7 +201,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         self.backgroundColor = UIColor.white
         
         if (type & FAEChatToolBarContentType.sticker.rawValue > 0) && !boolStickerInitialized {
-            //initializeStickerView()
+            initializeStickerView()
         }
         if (type & FAEChatToolBarContentType.photo.rawValue > 0) && !boolPhotoInitialized {
             initializePhotoQuickPicker()
