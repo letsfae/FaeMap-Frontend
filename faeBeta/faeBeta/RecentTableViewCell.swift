@@ -69,6 +69,7 @@ class RecentTableViewCell: UITableViewCell {
         btnDelete = UIButton(frame: CGRect(x: screenWidth - 69, y: 0, width: 69, height: 74))
         btnDelete.setImage(UIImage(named: "deleteButton.png"), for: .normal)
         addSubview(btnDelete)
+        btnDelete.isHidden = true
         btnDelete.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         
         uiviewMain = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 74.5))
@@ -279,6 +280,8 @@ class RecentTableViewCell: UITableViewCell {
             isDraggingRecentTableViewCell = true
             pointPanStart = recognizer.translation(in: uiviewMain)
             floatStartingRightLayoutConstraintConstant = distanceToRight.constant
+            self.uiviewMain.backgroundColor = .white
+            self.btnDelete.isHidden = false
             break
         case .changed:
             let currentPoint = recognizer.translation(in: uiviewMain)
@@ -354,9 +357,9 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     private func resetConstraintContstantsToZero(_ animated: Bool, notifyDelegateDidClose notifyDelegate:Bool) {
-        if (notifyDelegate) {
+        /*if (notifyDelegate) {
             delegate.cellDidClose(self)
-        }
+        }*/
         
         if floatStartingRightLayoutConstraintConstant == 0 && distanceToRight.constant == 0 {
             //Already all the way closed, no bounce necessary
@@ -373,6 +376,9 @@ class RecentTableViewCell: UITableViewCell {
                 self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
                     self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
                     isDraggingRecentTableViewCell = false
+                    if notifyDelegate {
+                        self.delegate.cellDidClose(self)
+                    }
                 })
             })
         //})

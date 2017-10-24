@@ -153,7 +153,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewLocationExtend.isHidden = true
         uiviewLocationExtend.buttonCancel.addTarget(self, action: #selector(closeLocExtendView), for: .touchUpInside)
         view.addSubview(uiviewLocationExtend)
-        moveDownInputBar()
+        DispatchQueue.main.async {
+            self.moveDownInputBar()
+        }
         setupNameCard()
         
         /*for message in dictArrInitMessages {
@@ -190,7 +192,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
-        toolbarContentView.setup(initializeType)
+        DispatchQueue.main.async {
+            self.toolbarContentView.setup(initializeType)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
