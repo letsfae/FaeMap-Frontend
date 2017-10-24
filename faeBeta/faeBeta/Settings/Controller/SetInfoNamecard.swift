@@ -7,6 +7,10 @@
 //
 
 import UIKit
+enum SetInfoEnterMode {
+    case nameCard
+    case settings
+}
 
 class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate {
     
@@ -28,6 +32,7 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
     var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
     var textName: String?
     var textIntro: String?
+    var enterMode: SetInfoEnterMode!
     // Vicky 09/17/71 不要在这个地方单独操作，当你进入SetDisplayName()的时候，有一个push操作，直接在那个地方delegate=self。你在这个地方，是给了SetDisplayName()一个叫做vc的引用，在viewDidLoad里给这个引用的delegate=self,但你在pushViewController里是push了另一个引用，那个引用里需要将vc.delegate=self，否则是无效的。如果还不理解，周一再问我。
     //    var vc = SetDisplayName()
     
@@ -109,6 +114,10 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func actionGoBack(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        if enterMode == .nameCard {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 }

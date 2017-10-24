@@ -125,6 +125,8 @@ class FaeAddUsernameCell: UITableViewCell {
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
             break
+        default:
+            break
         }
     }
     
