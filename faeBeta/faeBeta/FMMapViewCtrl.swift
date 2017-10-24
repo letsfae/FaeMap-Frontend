@@ -207,6 +207,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
+            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
             selectedPlaceView?.optionsReady = false
@@ -242,11 +243,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
         if AUTO_REFRESH {
             calculateDistanceOffset()
         }
-        
-        if btnCompass != nil { btnCompass.rotateCompass() }
         
         if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
         
@@ -278,7 +278,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if self.FILTER_ENABLE {
                 self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
             }
-            self.btnCompass.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
+            self.btnZoom.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnLocateSelf.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnOpenChat.frame = CGRect(x: 51.5, y: 685.5 * screenWidthFactor, width: 0, height: 0)
             self.lblUnreadCount.frame = CGRect(x: 0, y: 0, width: 0, height: 0)

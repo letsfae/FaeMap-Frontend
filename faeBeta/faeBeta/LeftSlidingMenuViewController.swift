@@ -46,6 +46,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     var activityIndicator: UIActivityIndicatorView!
     
+    var fullLoaded = false
+    
     static var boolMapBoardIsOn = false
     
     enum TableSelctions {
@@ -67,6 +69,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        guard !fullLoaded else { return }
+        fullLoaded = true
         DispatchQueue.main.async {
             self.loadLeftWindow()
             let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))

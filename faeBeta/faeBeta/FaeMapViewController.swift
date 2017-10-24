@@ -56,7 +56,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrExpPlace = [PlacePin]()
     
     // Compass and Locating Self
-    var btnCompass: FMCompass!
+    var btnZoom: FMZoomButton!
     var btnLocateSelf: FMLocateSelf!
     
     // Chat Button
@@ -102,7 +102,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var prevBearing: Double = 0
     
     // Collecting Pin Control
-    var uiviewCollectedList: AddPlaceToCollectionView!
+    var uiviewSavedList: AddPinToCollectionView!
     var uiviewAfterAdded: AfterAddedToListView!
     
     // Routes Calculator
@@ -125,6 +125,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
+    // Chat
     let faeChat = FaeChat()
     
     var mapMode: MapMode = .normal {
@@ -134,7 +135,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail
             imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail
-            btnCompass.isHidden = mapMode == .explore
+            btnZoom.isHidden = mapMode == .explore
             btnLocateSelf.isHidden = mapMode == .explore
             btnOpenChat.isHidden = mapMode == .explore
             btnFilterIcon.isHidden = mapMode == .explore
@@ -163,8 +164,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             btnClearSearchRes.isHidden = createLocation == .cancel
             if createLocation == .cancel {
-                lblSearchContent.textColor = UIColor._182182182()
-                lblSearchContent.text = "Search Fae Map"
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
@@ -198,6 +197,17 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var unreadNotiToken: NotificationToken? = nil
     
+    // Filter Menu Place Collection Interface to Show All Saved Pins
+    var completionCount = 0 {
+        didSet {
+            guard fullyLoaded else { return }
+            guard desiredCount > 0 else { return }
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+        }
+    }
+    var desiredCount = 0
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -218,31 +228,27 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         timerSetup()
         updateSelfInfo()
+        
+        checkDisplayNameExisitency()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
         
-//        let line = UIView(frame: CGRect(x: 25, y: 0, width: 1, height: screenHeight))
-//        line.backgroundColor = UIColor._200199204()
+//        let line = UIView(frame: CGRect(x: 0, y: btnZoom.frame.origin.y+60-4, width: screenWidth, height: 1))
+//        line.layer.borderColor = UIColor.black.cgColor
+//        line.layer.borderWidth = 1
 //        view.addSubview(line)
-//        line.layer.zPosition = 3000
-//        
-//        let line_1 = UIView(frame: CGRect(x: 25 + 51, y: 0, width: 1, height: screenHeight))
-//        line_1.backgroundColor = UIColor._200199204()
-//        view.addSubview(line_1)
-//        line_1.layer.zPosition = 3000
     }
     
     deinit {
-        unreadNotiToken?.stop()
+        unreadNotiToken?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadMapChat()
         renewSelfLocation()
-        checkDisplayNameExisitency()
-        updateTimerForAllPins()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -252,6 +258,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
+        
+        updateTimerForAllPins()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -292,10 +300,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {
-                sendWelcomeMessage()
+                DispatchQueue.main.async {
+                    sendWelcomeMessage()
+                }
             } else {
-                self.loadFirstLoginVC()
-                sendWelcomeMessage()
+                DispatchQueue.main.async {
+                    self.loadFirstLoginVC()
+                    sendWelcomeMessage()
+                }
             }
         }
     }

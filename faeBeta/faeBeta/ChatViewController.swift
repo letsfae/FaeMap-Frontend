@@ -137,6 +137,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 print("error")
             }
         }*/
+        
         let realm = try! Realm()
         for user_id in arrUserIDs {
             if let user = realm.filterUser("\(Key.shared.user_id)", id: "\(user_id)") {
@@ -154,8 +155,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(uiviewLocationExtend)
         moveDownInputBar()
         setupNameCard()
-        
-        
         
         /*for message in dictArrInitMessages {
             _ = insertMessage(message)

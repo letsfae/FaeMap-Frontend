@@ -32,7 +32,7 @@ extension FaeMapViewController {
     func updateUnreadChatIndicator() {
         let realm = try! Realm()
         let resultRealmRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", String(Key.shared.user_id))
-        unreadNotiToken = resultRealmRecents.addNotificationBlock { (changes: RealmCollectionChange) in
+        unreadNotiToken = resultRealmRecents.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 self.setupUnreadNum(resultRealmRecents)

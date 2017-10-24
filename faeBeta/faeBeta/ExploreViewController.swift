@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPlacetoCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
     
     static let shared = ExploreViewController()
     
@@ -25,7 +25,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var btnSave: UIButton!
     var btnRefresh: UIButton!
     var btnMap: UIButton!
-    var imgCollected: UIImageView!
+    var imgSaved: UIImageView!
     
     var intCurtPage = 0
     
@@ -39,7 +39,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var filterCircle_4: UIImageView!
     
     // Collecting Pin Control
-    var uiviewCollectedList: AddPlaceToCollectionView!
+    var uiviewSavedList: AddPinToCollectionView!
     var uiviewAfterAdded: AfterAddedToListView!
     
     var arrPlaceData = [PlacePin]()
@@ -132,11 +132,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
-        let vcCollectedList = CollectionsViewController()
-        navigationController?.pushViewController(vcCollectedList, animated: true)
+        let vcSavedList = CollectionsViewController()
+        navigationController?.pushViewController(vcSavedList, animated: true)
     }
     // AfterAddedToListDelegate
-    func undoCollect() {
+    func undoCollect(colId: Int) {
         uiviewAfterAdded.hide()
     }
     // AddPlacetoCollectionDelegate
@@ -147,19 +147,19 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     // AddPlacetoCollectionDelegate
     func cancelAddPlace() {
-        uiviewCollectedList.hide()
+        uiviewSavedList.hide()
     }
     
     func loadPlaceListView() {
-        uiviewCollectedList = AddPlaceToCollectionView()
-        uiviewCollectedList.delegate = self
-        view.addSubview(uiviewCollectedList)
+        uiviewSavedList = AddPinToCollectionView()
+        uiviewSavedList.delegate = self
+        view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
         uiviewAfterAdded.delegate = self
         view.addSubview(uiviewAfterAdded)
         
-        uiviewCollectedList.uiviewAfterAdded = uiviewAfterAdded
+        uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
     func loadAvatarWave() {
@@ -249,10 +249,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func actionSave(_ sender: UIButton) {
-        uiviewCollectedList.show()
+        uiviewSavedList.show()
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgCollected.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
-            self.imgCollected.alpha = 1
+            self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
+            self.imgSaved.alpha = 1
         }, completion: nil)
     }
     
@@ -349,10 +349,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewBtnSub.addSubview(btnSave)
         uiviewBtnSub.addConstraintsWithFormat("H:|-82-[v0(66)]", options: [], views: btnSave)
         uiviewBtnSub.addConstraintsWithFormat("V:|-6-[v0(66)]", options: [], views: btnSave)
-        imgCollected = UIImageView(frame: CGRect(x: 50, y: 16, width: 0, height: 0))
-        imgCollected.image = #imageLiteral(resourceName: "place_new_collected")
-        imgCollected.alpha = 0
-        btnSave.addSubview(imgCollected)
+        imgSaved = UIImageView(frame: CGRect(x: 50, y: 16, width: 0, height: 0))
+        imgSaved.image = #imageLiteral(resourceName: "place_new_collected")
+        imgSaved.alpha = 0
+        btnSave.addSubview(imgSaved)
         
         btnRefresh = UIButton()
         btnRefresh.setImage(#imageLiteral(resourceName: "exp_refresh"), for: .normal)

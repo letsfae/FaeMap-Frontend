@@ -231,7 +231,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         }
         finishReceivingMessage(animated: false)
         guard let collectionView = self.collectionView else { return }
-        notificationToken = resultRealmMessages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
+        notificationToken = resultRealmMessages.observe { [weak self] (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
                 print("initial")

@@ -38,6 +38,8 @@ class FMPlaceInfoBar: UIView {
     var prevAnnotation: CCHMapClusterAnnotation!
     var nextAnnotation: CCHMapClusterAnnotation!
     
+    var boolDisableSwipe = false
+    
     var state: PlaceInfoBarState = .map {
         didSet {
             boolLeft = annotations.count > 1 || places.count > 1
@@ -230,6 +232,7 @@ class FMPlaceInfoBar: UIView {
                 resumeTime = 0.3
             }
             let absPercent: CGFloat = 0.1
+            guard boolDisableSwipe == false else { return }
             if percent < -absPercent {
                 panToPrev(resumeTime)
             } else if percent > absPercent {

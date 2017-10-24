@@ -33,23 +33,59 @@ class InfiniteScrollingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func loadImages(place: PlacePin) {
+        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_1)
+        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_0)
+        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_2)
+    }
+    
+    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
+        if url == "" {
+            imgPic.image = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgPic.backgroundColor = .white
+        } else {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: url as AnyObject) as? UIImage {
+                imgPic.image = placeImgFromCache
+                imgPic.backgroundColor = UIColor._2499090()
+            } else {
+                downloadImage(URL: url) { (rawData) in
+                    guard let data = rawData else { return }
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        guard let placeImg = UIImage(data: data) else { return }
+                        DispatchQueue.main.async {
+                            imgPic.image = placeImg
+                            imgPic.backgroundColor = UIColor._2499090()
+                            placeInfoBarImageCache.setObject(placeImg, forKey: url as AnyObject)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func loadContent() {
         imgPic_0 = UIImageView(frame: frame)
         imgPic_1 = UIImageView(frame: frame)
         imgPic_2 = UIImageView(frame: frame)
+        imgPic_0.contentMode = .scaleAspectFill
+        imgPic_1.contentMode = .scaleAspectFill
+        imgPic_2.contentMode = .scaleAspectFill
+        imgPic_0.clipsToBounds = true
+        imgPic_1.clipsToBounds = true
+        imgPic_2.clipsToBounds = true
         resetSubviews()
         
         addSubview(imgPic_0)
         addSubview(imgPic_1)
         addSubview(imgPic_2)
         if placePhotos.count == 0 {
-            imgPic_0.image = #imageLiteral(resourceName: "food_1")
-            imgPic_1.image = #imageLiteral(resourceName: "food_1")
-            imgPic_2.image = #imageLiteral(resourceName: "food_1")
+//            imgPic_0.image = #imageLiteral(resourceName: "food_1")
+//            imgPic_1.image = #imageLiteral(resourceName: "food_1")
+//            imgPic_2.image = #imageLiteral(resourceName: "food_1")
         } else {
-            imgPic_0.image = placePhotos[placePhotos.count - 1]
-            imgPic_1.image = placePhotos[0]
-            imgPic_2.image = placePhotos[1 % placePhotos.count]
+//            imgPic_0.image = placePhotos[placePhotos.count - 1]
+//            imgPic_1.image = placePhotos[0]
+//            imgPic_2.image = placePhotos[1 % placePhotos.count]
         }
         boolLeft = placePhotos.count > 1
         boolRight = placePhotos.count > 1
@@ -60,11 +96,12 @@ class InfiniteScrollingView: UIView {
             self.imgPic_0.frame.origin.x = 0
             self.imgPic_1.frame.origin.x += screenWidth
         }, completion: {_ in
+            let image = self.imgPic_2.image
             self.imgPic_2.image = self.imgPic_1.image
             self.imgPic_1.image = self.imgPic_0.image
-            var idx = self.placePhotos.index(of: self.imgPic_0.image!)!
-            idx = (idx + self.placePhotos.count - 1) % self.placePhotos.count
-            self.imgPic_0.image = self.placePhotos[idx]
+//            var idx = self.placePhotos.index(of: self.imgPic_0.image!)!
+//            idx = (idx + self.placePhotos.count - 1) % self.placePhotos.count
+            self.imgPic_0.image = image
             self.resetSubviews()
         })
     }
@@ -74,11 +111,12 @@ class InfiniteScrollingView: UIView {
             self.imgPic_1.frame.origin.x = -screenWidth
             self.imgPic_2.frame.origin.x = 0
         }, completion: { _ in
+            let image = self.imgPic_0.image
             self.imgPic_0.image = self.imgPic_1.image
             self.imgPic_1.image = self.imgPic_2.image
-            var idx = self.placePhotos.index(of: self.imgPic_2.image!)!
-            idx = (idx + self.placePhotos.count + 1) % self.placePhotos.count
-            self.imgPic_2.image = self.placePhotos[idx]
+//            var idx = self.placePhotos.index(of: self.imgPic_2.image!)!
+//            idx = (idx + self.placePhotos.count + 1) % self.placePhotos.count
+            self.imgPic_2.image = image
             self.resetSubviews()
         })
     }

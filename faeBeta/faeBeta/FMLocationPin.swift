@@ -73,6 +73,7 @@ extension FaeMapViewController {
         locAnnoView?.optionsReady = false
         locAnnoView?.optionsOpened = false
         locAnnoView?.optionsOpeing = false
+        deselectAllAnnotations()
         selectedLocation = FaePinAnnotation(type: "location", data: coordinate as AnyObject)
         locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
 //        faeMapView.addAnnotation(locationPin!)
@@ -136,8 +137,6 @@ extension FaeMapViewController {
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
                 self.activityIndicator.stopAnimating()
-                self.lblSearchContent.text = address_1
-                self.lblSearchContent.textColor = UIColor._898989()
                 self.uiviewChooseLocs.updateDestination(name: address_1)
                 self.destinationAddr = RouteAddress(name: address_1, coordinate: coordinate)
             }
