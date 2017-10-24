@@ -250,7 +250,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {

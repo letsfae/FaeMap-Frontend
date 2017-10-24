@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-@objc protocol CreateColListDelegate: class {
-    @objc optional func saveSettings(name: String, desp: String)
-    @objc optional func updateCols()
+protocol CreateColListDelegate: class {
+    func saveSettings(name: String, desp: String)
+    func updateCols(col: PinCollection)
 }
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
@@ -32,6 +33,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     weak var delegate: CreateColListDelegate?
     var colId: Int = -1
     let faeCollection = FaeCollection()
+    var uiviewPrivacy: UIView!
     
     var numLinesName = 1 {
         didSet {
@@ -52,7 +54,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+        loadPrivacyView()
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     fileprivate func loadNavBar() {
@@ -148,6 +152,29 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         textviewListName.becomeFirstResponder()
     }
     
+    fileprivate func loadPrivacyView() {
+        uiviewPrivacy = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
+        uiviewPrivacy.backgroundColor = .white
+        view.addSubview(uiviewPrivacy)
+        
+        let upperLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+        uiviewPrivacy.addSubview(upperLine)
+        upperLine.backgroundColor = UIColor._200199204()
+        
+        let lowerLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
+        uiviewPrivacy.addSubview(lowerLine)
+        lowerLine.backgroundColor = UIColor._200199204()
+        
+        let imgLock = UIImageView(frame: CGRect(x: 15, y: 17, width: 16, height: 18))
+        imgLock.image = #imageLiteral(resourceName: "collection_locker")
+        imgLock.contentMode = .scaleAspectFill
+        uiviewPrivacy.addSubview(imgLock)
+        
+        let lblPrivacy = FaeLabel(CGRect(x: 41, y: 15, width: screenWidth - 41, height: 25), .left, .medium, 18, UIColor._155155155())
+        lblPrivacy.text = "Private List - Shareable"
+        uiviewPrivacy.addSubview(lblPrivacy)
+    }
+    
     @objc func actionCancel(_ sender: UIButton) {
         textviewListName.resignFirstResponder()
         textviewDesp.resignFirstResponder()
@@ -166,7 +193,16 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.createCollection {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    self.delegate?.updateCols!()
+                    let colId = JSON(message!)["collection_id"].stringValue
+                    let curtDate = Date()
+                    let dateformatter = DateFormatter()
+                    dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+                    let time = dateformatter.string(from: curtDate)
+                    
+                    let json: JSON = ["collection_id": colId, "name": self.txtListName, "description": self.txtListDesp, "type": self.enterMode.rawValue, "is_private": true, "created_at": time]
+                    let newCol = PinCollection(json: json)
+                    
+                    self.delegate?.updateCols(col: newCol)
                     self.textviewListName.resignFirstResponder()
                     self.textviewDesp.resignFirstResponder()
                     self.dismiss(animated: true)
@@ -183,7 +219,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    self.delegate?.saveSettings!(name: self.txtListName, desp: self.txtListDesp)
+                    self.delegate?.saveSettings(name: self.txtListName, desp: self.txtListDesp)
                     self.textviewListName.resignFirstResponder()
                     self.textviewDesp.resignFirstResponder()
                     self.dismiss(animated: true)
@@ -281,5 +317,13 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
         keyboardHeight = keyboardRectangle.height
+        
+        uiviewPrivacy.frame.origin.y = screenHeight - keyboardHeight - 50
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
+            uiviewPrivacy.frame.origin.y = screenHeight - 50
+        }
     }
 }

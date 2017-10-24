@@ -110,21 +110,11 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         /* Joshua 06/16/17
          tblUsernames' height should be screenHeight - 65 - height of schbar
          */
-        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
-        schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 9, y: 1, width: screenWidth, height: 49))
+        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+        schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
         schbarUsernames.txtSchField.placeholder = "Search Username"
         schbarUsernames.delegate = self
         uiviewSchbar.addSubview(schbarUsernames)
-        
-        let schBarTopLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        schBarTopLine.layer.borderWidth = 1
-        schBarTopLine.layer.borderColor = UIColor.white.cgColor
-        schbarUsernames.addSubview(schBarTopLine)
-        
-        let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
-        topLine.layer.borderWidth = 1
-        topLine.layer.borderColor = UIColor._200199204cg()
-        uiviewSchbar.addSubview(topLine)
         
         let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
