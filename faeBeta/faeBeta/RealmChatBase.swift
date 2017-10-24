@@ -77,10 +77,11 @@ extension Object {
             if let nestedObject = self[prop.name] as? Object {
                 mutabledic.setValue(nestedObject.toDictionary(), forKey: prop.name)
             } else if let nestedListObject = self[prop.name] as? ListBase {
-                var objects = [AnyObject]()
+                var objects = [NSMutableDictionary]()
                 for index in 0..<nestedListObject._rlmArray.count  {
-                    let object = nestedListObject._rlmArray[index] as AnyObject
-                    objects.append(object.toDictionary())
+                    let object = nestedListObject._rlmArray[index]
+                    let obj = unsafeBitCast(object, to: Object.self)
+                    objects.append(obj.toDictionary())
                 }
                 mutabledic.setObject(objects, forKey: prop.name as NSCopying)
             }
