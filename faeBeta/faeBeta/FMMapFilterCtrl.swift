@@ -133,14 +133,12 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     }
     
     // CollectionsListDetailDelegate
-    func deleteColList(indexPath: IndexPath) {
-        
-    }
+    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath) {}
     
-    // CollectionsListDetailDelegate
-    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int) {
         
     }
+    // CollectionsListDetailDelegate End
     
     func actionHideFilterMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {

@@ -21,10 +21,15 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var tblCollections: UITableView!
     var btnPlaces: UIButton!
     var btnLocations: UIButton!
+    var lblPlaces: UILabel!
+    var lblLocations: UILabel!
+    var countPlaces: Int = 0
+    var countLocations: Int = 0
     var tableMode: CollectionTableMode = .place
-    var curtTitle: String = "Places"
+    var curtTitle: String = "Choose a Collection..."
     var navBarMenuBtnClicked: Bool = false
-    var arrCollection = [PinCollection]()
+    var arrPlaces = [PinCollection]()
+    var arrLocations = [PinCollection]()
     let faeCollection = FaeCollection()
     
     override func viewDidLoad() {
@@ -47,14 +52,18 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                     return
                 }
                 
-                self.arrCollection.removeAll()
                 for col in colArray {
                     let data = PinCollection(json: col)
-                    if data.colType == self.tableMode.rawValue {
-                        self.arrCollection.append(data)
+                    if data.colType == "place" {
+                        self.arrPlaces.append(data)
+                    }
+                    if data.colType == "location" {
+                        self.arrLocations.append(data)
                     }
                 }
                 
+                self.countPlaces = self.arrPlaces.count
+                self.countLocations = self.arrLocations.count
                 self.tblCollections.reloadData()
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
@@ -70,9 +79,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
         
-        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 140) / 2, y: 23, width: 140, height: 37))
+        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
-        btnNavBarSetTitle()
+        btnNavBarMenu.setTitle(curtTitle, for: .normal)
+        btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
+        btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
     }
     
@@ -90,7 +101,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 103))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -36 // 65 - 201
@@ -100,33 +111,31 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
         uiviewDropMenuBottomLine.backgroundColor = UIColor._200199204()
         
-        btnPlaces = UIButton(frame: CGRect(x: 104, y: 9, width: 180 * screenWidthFactor, height: 38))
+        btnPlaces = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnPlaces)
         btnPlaces.tag = 0
-        btnPlaces.setTitle("Places", for: .normal)
-        btnPlaces.setTitleColor(UIColor._898989(), for: .normal)
-        btnPlaces.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnPlaces.contentHorizontalAlignment = .left
         btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnLocations = UIButton(frame: CGRect(x: 104, y: 59, width: 180 * screenWidthFactor, height: 38))
+        btnLocations = UIButton(frame: CGRect(x: 0, y: 52, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnLocations)
         btnLocations.tag = 1
-        btnLocations.setTitle("Locations", for: .normal)
-        btnLocations.setTitleColor(UIColor._898989(), for: .normal)
-        btnLocations.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnLocations.contentHorizontalAlignment = .left
         btnLocations.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        btnPlaces.addSubview(lblPlaces)
+        
+        lblLocations = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        btnLocations.addSubview(lblLocations)
         
         let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
         imgPlaces.image = #imageLiteral(resourceName: "collection_places")
         imgPlaces.contentMode = .center
-        uiviewDropDownMenu.addSubview(imgPlaces)
+        btnPlaces.addSubview(imgPlaces)
         
-        let imgLocations = UIImageView(frame: CGRect(x: 56, y: 64, width: 28, height: 28))
+        let imgLocations = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
         imgLocations.image = #imageLiteral(resourceName: "collection_locations")
         imgLocations.contentMode = .center
-        uiviewDropDownMenu.addSubview(imgLocations)
+        btnLocations.addSubview(imgLocations)
         
         // imgTick.frame.origin.y = 20, 70, 120, 168
         imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
@@ -135,7 +144,27 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         
         let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
-        uiviewDropMenuFirstLine.backgroundColor = UIColor(red: 206 / 255, green: 203 / 255, blue: 203 / 255, alpha: 1)
+        uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
+        
+        updateCount()
+    }
+    
+    fileprivate func updateCount() {
+        countPlaces = arrPlaces.count
+        let attributedStr1 = NSMutableAttributedString()
+        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        attributedStr1.append(strPlaces)
+        attributedStr1.append(countP)
+        lblPlaces.attributedText = attributedStr1
+        
+        countLocations = arrLocations.count
+        let attributedStr2 = NSMutableAttributedString()
+        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        attributedStr2.append(strLocations)
+        attributedStr2.append(countL)
+        lblLocations.attributedText = attributedStr2
     }
     
     fileprivate func laodMyListView() {
@@ -196,6 +225,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         } else {
             hideDropDownMenu()
         }
+        updateCount()
     }
     
     // function for hide the drop down menu when tap on table
@@ -221,8 +251,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         btnNavBarSetTitle()
         hideDropDownMenu()
-        
-        loadCollectionData()
+        tblCollections.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -237,7 +266,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         if section == 1 {
             return 1
         } else {
-            return arrCollection.count
+            return tableMode == .place ? arrPlaces.count : arrLocations.count
         }
     }
     
@@ -247,7 +276,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-            let collection = arrCollection[indexPath.row]
+            let collection = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
             cell.setValueForCell(cols: collection)
             return cell
         }
@@ -264,7 +293,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             vc.delegate = self
             vc.indexPath = indexPath
             vc.enterMode = tableMode
-            vc.colId = arrCollection[indexPath.row].colId
+            vc.arrColDetails = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -274,14 +303,23 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     // CollectionsListDetailDelegate
-    func deleteColList(indexPath: IndexPath) {
-        arrCollection.remove(at: indexPath.row)
+    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath) {
+        if enterMode == .place {
+            arrPlaces.remove(at: indexPath.row)
+        } else {
+            arrLocations.remove(at: indexPath.row)
+        }
         reloadAfterDelete(indexPath: indexPath)
     }
     
-    func updateColName(indexPath: IndexPath, name: String, numItems: Int) {
-        arrCollection[indexPath.row].colName = name
-        arrCollection[indexPath.row].itemsCount = numItems
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int) {
+        if enterMode == .place {
+            arrPlaces[indexPath.row].colName = name
+            arrPlaces[indexPath.row].itemsCount = numItems
+        } else {
+            arrLocations[indexPath.row].colName = name
+            arrLocations[indexPath.row].itemsCount = numItems
+        }
         tblCollections.reloadRows(at: [indexPath], with: .none)
     }
     
@@ -294,7 +332,15 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     // CreateColListDelegate
-    func updateCols() {
-        loadCollectionData()
+    func updateCols(col: PinCollection) {
+        if col.colType == "place" {
+            arrPlaces.append(col)
+        } else {
+            arrLocations.append(col)
+        }
+        tblCollections.reloadData()
+        print(col)
     }
+    
+    func saveSettings(name: String, desp: String) {}
 }
