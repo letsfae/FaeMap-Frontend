@@ -499,7 +499,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pin_id"].arrayValue
+            let arrLocPinId = resultJson["pins"].arrayValue
             let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
             self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds)
         }

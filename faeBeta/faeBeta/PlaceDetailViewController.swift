@@ -40,6 +40,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var uiviewAfterAdded: AfterAddedToListView!
     var arrListSavedThisPin = [Int]()
     var boolSavedListLoaded = false
+    var uiviewWhite: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,10 +157,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadFixedHeader() {
-        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 0, w: 414, h: 101))
+        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101))
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
+        uiviewWhite = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 22))
+        uiviewWhite.backgroundColor = .white
+        view.addSubview(uiviewWhite)
+        uiviewWhite.alpha = 0
     }
     
     func loadMidTable() {
@@ -256,10 +261,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
+    var boolAnimateTo_1 = true
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        joshprint(scrollView.contentOffset.y)
         if uiviewScrollingPhotos != nil {
             var frame = uiviewScrollingPhotos.frame
-            if tblPlaceDetail.contentOffset.y < 0 {
+            if tblPlaceDetail.contentOffset.y < 0 * screenHeightFactor {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewScrollingPhotos.frame = frame
             } else {
@@ -267,12 +275,26 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 uiviewScrollingPhotos.frame = frame
             }
         }
-        if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
+        if tblPlaceDetail.contentOffset.y >= 186 * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
+            if boolAnimateTo_1 {
+                boolAnimateTo_1 = false
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.uiviewScrollingPhotos.alpha = 0
+                    self.uiviewWhite.alpha = 1
+                })
+            }
         } else {
             uiviewFixedHeader.isHidden = true
+            self.uiviewWhite.alpha = 0
             UIApplication.shared.statusBarStyle = .lightContent
+            if boolAnimateTo_1 == false {
+                boolAnimateTo_1 = true
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.uiviewScrollingPhotos.alpha = 1
+                })
+            }
         }
     }
     
@@ -352,6 +374,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         vcList.enterMode = uiviewSavedList.tableMode
         vcList.colId = uiviewAfterAdded.selectedCollection.colId
         vcList.colInfo = uiviewAfterAdded.selectedCollection
+        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
     }
     

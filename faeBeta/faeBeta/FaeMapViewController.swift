@@ -168,13 +168,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
                     locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-                    if locAnnoView != nil {
-                        locAnnoView?.hideButtons()
-                        locAnnoView?.optionsReady = false
-                        locAnnoView?.optionsOpened = false
-                        locAnnoView?.optionsOpeing = false
-                    }
-                    selectedLocation = nil
+                    deselectAllLocations()
                 }
                 if uiviewAfterAdded.frame.origin.y != screenHeight {
                     uiviewAfterAdded.hide()

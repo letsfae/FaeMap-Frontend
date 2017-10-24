@@ -216,6 +216,21 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    func deselectAllLocations() {
+        
+        uiviewLocationBar.hide()
+        uiviewPinActionDisplay.hide()
+        uiviewSavedList.arrListSavedThisPin.removeAll()
+        uiviewAfterAdded.pinIdInAction = -1
+        boolCanOpenPin = true
+        
+        locAnnoView?.hideButtons()
+        locAnnoView?.optionsReady = false
+        locAnnoView?.optionsOpened = false
+        locAnnoView = nil
+        selectedLocation = nil
+    }
+    
     func calculateDistanceOffset() {
         DispatchQueue.global(qos: .userInitiated).async {
             let curtMapCenter = self.faeMapView.camera.centerCoordinate

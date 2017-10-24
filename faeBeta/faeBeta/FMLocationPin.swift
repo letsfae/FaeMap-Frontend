@@ -7,8 +7,35 @@
 //
 
 import UIKit
+import CCHMapClusterController
 
 extension FaeMapViewController {
+    
+    func tapLocationPin(didSelect view: MKAnnotationView) {
+        guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
+        guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
+        guard let anView = view as? LocPinAnnotationView else { return }
+        anView.layer.zPosition = 2
+        anView.imgIcon.layer.zPosition = 2
+        anView.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
+        selectedLocation = firstAnn
+        locAnnoView = anView
+        locAnnoView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
+        locAnnoView?.layer.zPosition = 1001
+        guard firstAnn.type == "location" else { return }
+        guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
+        uiviewSavedList.arrListSavedThisPin.removeAll()
+        getPinSavedInfo(id: locationData.id, type: "location") { (ids) in
+            let pinData = locationData
+            pinData.arrListSavedThisPin = ids
+            firstAnn.pinInfo = pinData as AnyObject
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            anView.boolShowSavedNoti = true
+        }
+        let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
+        updateLocationInfo(location: cllocation)
+        mapView(faeMapView, regionDidChangeAnimated: false)
+    }
     
     func loadLocationView() {
         uiviewLocationBar = LocationView()
@@ -46,7 +73,9 @@ extension FaeMapViewController {
         anView.delegate = self
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
-        anView.optionsReady = true
+        if let locationData = first.pinInfo as? LocationPin {
+            anView.optionsReady = locationData.optionsReady
+        }
         return anView
     }
     
@@ -75,22 +104,27 @@ extension FaeMapViewController {
         locAnnoView?.optionsOpeing = false
         deselectAllAnnotations()
         let pinData = LocationPin(position: coordinate)
+        pinData.optionsReady = true
         selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
+        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
         locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
-//        faeMapView.addAnnotation(locationPin!)
+        updateLocationInfo(location: cllocation)
+    }
+    
+    func updateLocationInfo(location: CLLocation) {
         uiviewLocationBar.show()
         view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
-        General.shared.getAddress(location: cllocation, original: true) { (original) in
+        General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
-
+            
             var name = ""
             var subThoroughfare = ""
             var thoroughfare = ""
-
+            
             var address_1 = ""
             var address_2 = ""
-
+            
             if let n = first.name {
                 name = n
                 address_1 += n
@@ -109,11 +143,11 @@ extension FaeMapViewController {
                 }
                 address_1 += t
             }
-
+            
             if name == subThoroughfare + " " + thoroughfare {
                 address_1 = name
             }
-
+            
             if let l = first.locality {
                 address_2 += l
             }
@@ -132,14 +166,14 @@ extension FaeMapViewController {
                 }
                 address_2 += c
             }
-
+            
             self.selectedLocation?.address_1 = address_1
             self.selectedLocation?.address_2 = address_2
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
                 self.activityIndicator.stopAnimating()
                 self.uiviewChooseLocs.updateDestination(name: address_1)
-                self.destinationAddr = RouteAddress(name: address_1, coordinate: coordinate)
+                self.destinationAddr = RouteAddress(name: address_1, coordinate: location.coordinate)
             }
         }
     }

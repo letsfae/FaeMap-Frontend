@@ -49,6 +49,9 @@ class FaeMapView: MKMapView {
     func cancelCreatingLocationPin() {
         if faeMapCtrler?.createLocation == .create {
             faeMapCtrler?.createLocation = .cancel
+        } else {
+            faeMapCtrler?.locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+            faeMapCtrler?.deselectAllLocations()
         }
         if slcMapCtrler?.createLocation == .create {
             slcMapCtrler?.createLocation = .cancel
@@ -136,7 +139,8 @@ class FaeMapView: MKMapView {
                 }
                 if slcMapCtrler == nil {
                     if anView.optionsReady == false {
-                        //                    faeMapCtrler?.deselectAllAnnotations()
+                        faeMapCtrler?.deselectAllLocations()
+                        faeMapCtrler?.tapLocationPin(didSelect: anView)
                         anView.optionsReady = true
                     } else if anView.optionsReady && !anView.optionsOpened {
                         anView.showButtons()
@@ -163,7 +167,6 @@ class FaeMapView: MKMapView {
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.deselectAllAnnotations()
-                faeMapCtrler?.selectedPlace = nil
                 slcMapCtrler?.deselectAllAnnotations()
                 slcMapCtrler?.selectedPlace = nil
             }

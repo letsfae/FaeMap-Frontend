@@ -30,7 +30,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     var arrListSavedThisPin = [Int]() {
         didSet {
             guard fullLoaded else { return }
-            guard arrListSavedThisPin.count > 0 else { return }
             tblAddCollection.reloadData()
         }
     }
@@ -172,6 +171,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
             })
         } else {
+            guard self.uiviewAfterAdded.pinIdInAction == -1 else {
+                let locationId = self.uiviewAfterAdded.pinIdInAction
+                self.saveToCollection(colInfo: colInfo, locationId: locationId)
+                return
+            }
             mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
                 FaeImage.shared.type = "image"
                 FaeImage.shared.image = snapShotImage
@@ -188,25 +192,28 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                         guard message != nil else { return }
                         let idJSON = JSON(message!)
                         let locationId = idJSON["location_id"].intValue
-                        joshprint(locationId)
                         self.uiviewAfterAdded.pinIdInAction = locationId
-                        FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
-                            guard code / 100 == 2 else { return }
-                            self.hide()
-                            self.uiviewAfterAdded.show()
-                            self.arrListSavedThisPin.append(colInfo.colId)
-                            self.tblAddCollection.reloadData()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
-                            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-                        })
+                        self.saveToCollection(colInfo: colInfo, locationId: locationId)
                     })
                 }
             }
         }
     }
     
-    func mapScreenShot(coordinate: CLLocationCoordinate2D, _ completion: @escaping (UIImage) -> Void) {
+    func saveToCollection(colInfo: PinCollection, locationId: Int) {
+        FaeCollection.shared.saveToCollection(colInfo.colType, collectionID: "\(colInfo.colId)", pinID: "\(locationId)", completion: { (code, result) in
+            guard code / 100 == 2 else { return }
+            self.hide()
+            self.uiviewAfterAdded.show()
+            self.arrListSavedThisPin.append(colInfo.colId)
+            self.tblAddCollection.reloadData()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
+            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+        })
+    }
+    
+    func mapScreenShot(coordinate: CLLocationCoordinate2D, size: CGSize = CGSize(width: 66, height: 66), icon: Bool = true, _ completion: @escaping (UIImage) -> Void) {
         let mapSnapshotOptions = MKMapSnapshotOptions()
         
         // Set the region of the map that is rendered.
@@ -217,7 +224,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         mapSnapshotOptions.scale = UIScreen.main.scale
         
         // Set the size of the image output.
-        mapSnapshotOptions.size = CGSize(width: 66, height: 66)
+        mapSnapshotOptions.size = size
         
         // Show buildings and Points of Interest on the snapshot
         mapSnapshotOptions.showsBuildings = true
@@ -231,6 +238,10 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
 //            imgView.image = snapShot?.image
 //            UIApplication.shared.keyWindow?.addSubview(imgView)
             let imgMap = snap.image
+            if icon == false {
+                completion(imgMap)
+                return
+            }
             let imgAnnotation = UIImage(named: "locationMiniPin")!
             UIGraphicsBeginImageContextWithOptions(imgMap.size, true, imgMap.scale)
             imgMap.draw(at: .zero)
@@ -320,7 +331,6 @@ class AfterAddedToListView: UIView {
             guard status / 100 == 2 else { return }
             joshprint("[undoCollecting] successfully undo saving")
             self.selectedCollection = nil
-            self.pinIdInAction = -1
             self.delegate?.undoCollect(colId: col.colId)
         }
     }
