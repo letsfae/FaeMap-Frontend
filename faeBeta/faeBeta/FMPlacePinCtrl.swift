@@ -12,10 +12,6 @@ import CCHMapClusterController
 
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate {
     // CreateColListDelegate
-    func updateCols() {
-//        uiviewSavedList.loadCollectionData()
-    }
-    
     func saveSettings(name: String, desp: String) {}
     
     func updateCols(col: PinCollection) {

@@ -34,11 +34,24 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var pageMapOptions: UIPageControl!
     var scrollViewFilterMenu: UIScrollView!
     var btnPlaceLoc: UIButton!
-    var curtTitle: String = "Places"
+    var curtTitle: String = "Choose a Collection..."
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
+    
+    
+    var imgTick: UIImageView!
+    var uiviewDropDownMenu: UIView!
+    var tblCollections: UITableView!
+    var btnPlaces: UIButton!
+    var btnLocations: UIButton!
+    var lblPlaces: UILabel!
+    var lblLocations: UILabel!
+    var countPlaces: Int = 0
+    var countLocations: Int = 0
+    var navBarMenuBtnClicked: Bool = false
     var arrPlaces = [PinCollection]()
     var arrLocations = [PinCollection]()
+    
     let faeCollection = FaeCollection()
     var tableMode: CollectionTableMode = .place
     var arrListThatSavedThisPin = [Int]() {
@@ -70,6 +83,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                     return
                 }
                 
+                self.arrPlaces.removeAll()
+                self.arrLocations.removeAll()
                 for col in colArray {
                     let data = PinCollection(json: col)
                     if data.colType == "place" {
@@ -79,6 +94,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                         self.arrLocations.append(data)
                     }
                 }
+                self.countPlaces = self.arrPlaces.count
+                self.countLocations = self.arrLocations.count
                 self.tblPlaceLoc.reloadData()
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
@@ -145,9 +162,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         lblMapOptions.textColor = UIColor._898989()
         uiviewMapOpt.addSubview(lblMapOptions)
         
-        let line = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor, width: screenWidth, height: 1))
-        line.backgroundColor = UIColor._200199204()
-        uiviewMapOpt.addSubview(line)
+        let lineBelowTitle = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor, width: screenWidth, height: 1))
+        lineBelowTitle.backgroundColor = UIColor._200199204()
+        uiviewMapOpt.addSubview(lineBelowTitle)
         
         // draw "Map Type"
         let lblMapType = UILabel(frame: CGRect(x: 30, y: 54, w: 100, h: 25))
@@ -221,14 +238,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func loadView2() {
-        // button "Places" & "Locations"
-        btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 27))
-        btnPlaceLoc.center.x = screenWidth / 2
-        btnPlaceLoc.tag = 0
-        uiviewPlaceLoc.addSubview(btnPlaceLoc)
-        btnPlaceLoc.addTarget(self, action: #selector(dropDownMenuAct(_:)), for: .touchUpInside)
-        setView2CurtTitle()
-        
         let uiviewMyList = UIView(frame: CGRect(x: 0, y: 36, w: 414, h: 27))
         uiviewMyList.backgroundColor = UIColor._248248248()
         uiviewPlaceLoc.addSubview(uiviewMyList)
@@ -273,6 +282,89 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         uiviewPlaceLoc.addSubview(tblPlaceLoc)
         
         uiviewBubbleHint.isHidden = true
+        
+        loadDropDownMenu()
+        
+        // button "Places" & "Locations"
+        btnPlaceLoc = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36 * screenHeightFactor + 1))
+        btnPlaceLoc.center.x = screenWidth / 2
+        btnPlaceLoc.backgroundColor = .white
+        uiviewPlaceLoc.addSubview(btnPlaceLoc)
+        btnPlaceLoc.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
+        btnPlaceLoc.setTitle(curtTitle, for: .normal)
+        btnPlaceLoc.setTitleColor(UIColor._898989(), for: .normal)
+        btnPlaceLoc.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
+        
+        let line = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor, width: screenWidth, height: 1))
+        line.backgroundColor = UIColor._200199204()
+        btnPlaceLoc.addSubview(line)
+    }
+    
+    fileprivate func loadDropDownMenu() {
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor + 1, width: screenWidth, height: 102))
+        uiviewDropDownMenu.backgroundColor = .white
+        uiviewPlaceLoc.addSubview(uiviewDropDownMenu)
+        uiviewDropDownMenu.frame.origin.y = 36 * screenHeightFactor - 101
+        uiviewDropDownMenu.isHidden = true
+        
+        let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 101, width: screenWidth, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuBottomLine)
+        uiviewDropMenuBottomLine.backgroundColor = UIColor._200199204()
+        
+        btnPlaces = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
+        uiviewDropDownMenu.addSubview(btnPlaces)
+        btnPlaces.tag = 0
+        btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        
+        btnLocations = UIButton(frame: CGRect(x: 0, y: 51, width: screenWidth, height: 50))
+        uiviewDropDownMenu.addSubview(btnLocations)
+        btnLocations.tag = 1
+        btnLocations.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        btnPlaces.addSubview(lblPlaces)
+        
+        lblLocations = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        btnLocations.addSubview(lblLocations)
+        
+        let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
+        imgPlaces.image = #imageLiteral(resourceName: "collection_places")
+        imgPlaces.contentMode = .center
+        btnPlaces.addSubview(imgPlaces)
+        
+        let imgLocations = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
+        imgLocations.image = #imageLiteral(resourceName: "collection_locations")
+        imgLocations.contentMode = .center
+        btnLocations.addSubview(imgLocations)
+        
+        // imgTick.frame.origin.y = 20, 70, 120, 168
+        imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
+        imgTick.image = #imageLiteral(resourceName: "mb_tick")
+        uiviewDropDownMenu.addSubview(imgTick)
+        
+        let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
+        uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
+        uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
+        
+        updateCount()
+    }
+    
+    fileprivate func updateCount() {
+        countPlaces = arrPlaces.count
+        let attributedStr1 = NSMutableAttributedString()
+        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        attributedStr1.append(strPlaces)
+        attributedStr1.append(countP)
+        lblPlaces.attributedText = attributedStr1
+        
+        countLocations = arrLocations.count
+        let attributedStr2 = NSMutableAttributedString()
+        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
+        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        attributedStr2.append(strLocations)
+        attributedStr2.append(countL)
+        lblLocations.attributedText = attributedStr2
     }
     
     func setView2CurtTitle() {
@@ -288,22 +380,46 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnPlaceLoc.setAttributedTitle(curtTitlePlusImg, for: .normal)
     }
     
+    fileprivate func hideDropDownMenu() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.uiviewDropDownMenu.frame.origin.y = 36 * screenHeightFactor - 101
+        }, completion: { _ in
+            self.uiviewDropDownMenu.isHidden = true
+        })
+        
+        navBarMenuBtnClicked = false
+    }
+    
+    func navBarMenuAct(_ sender: UIButton) {
+        if !navBarMenuBtnClicked {
+            uiviewDropDownMenu.isHidden = false
+            UIView.animate(withDuration: 0.2, animations: {
+                self.uiviewDropDownMenu.frame.origin.y = 36 * screenHeightFactor + 1
+            })
+            navBarMenuBtnClicked = true
+        } else {
+            hideDropDownMenu()
+        }
+        updateCount()
+    }
+    
     // function for buttons in drop down menu
     func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = "Places"
             tableMode = .place
-            sender.tag = 1
+            imgTick.frame.origin.y = 20
             break
         case 1:
             curtTitle = "Locations"
             tableMode = .location
-            sender.tag = 0
+            imgTick.frame.origin.y = 70
             break
         default:
             return
         }
+        hideDropDownMenu()
         setView2CurtTitle()
         tblPlaceLoc.reloadData()
     }
@@ -313,7 +429,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageMapOptions.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        pageMapOptions.currentPage = scrollViewFilterMenu.contentOffset.x == 0 ? 0 : 1
     }
     
     func switchBetweenDisAndSocial(_ sender: UIButton) {
@@ -376,5 +492,9 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideDropDownMenu()
     }
 }
