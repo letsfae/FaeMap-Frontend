@@ -106,7 +106,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 103))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
-        uiviewDropDownMenu.frame.origin.y = -36 // 65 - 201
+        uiviewDropDownMenu.frame.origin.y = -37 // 65 - 102
         uiviewDropDownMenu.isHidden = true
         
         let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 1))
