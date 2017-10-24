@@ -118,10 +118,18 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
-                    let placeData = PlacePin(json: resultJson)
-                    let placePin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: placeData as AnyObject)
-                    self.placesFromSearch.append(placePin)
-                    self.placeClusterManager.addAnnotations([placePin], withCompletionHandler: nil)
+                    if type == "place" {
+                        let pinData = PlacePin(json: resultJson)
+                        let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
+                        self.placesFromSearch.append(pin)
+                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                    } else if type == "location" {
+                        let pinData = LocationPin(json: resultJson)
+                        let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
+                        self.placesFromSearch.append(pin)
+                        self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                    }
+                    
                     self.completionCount += 1
                 })
             }

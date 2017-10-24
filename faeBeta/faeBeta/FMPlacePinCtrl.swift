@@ -61,6 +61,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         vcList.enterMode = uiviewSavedList.tableMode
         vcList.colId = uiviewAfterAdded.selectedCollection.colId
         vcList.colInfo = uiviewAfterAdded.selectedCollection
+        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
     }
     
