@@ -15,6 +15,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     var arrTitle: [String] = ["Edit NameCard", "Hide NameCard Options", "Disable Gender", "Disable Age"]
     var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCard Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
     var activityIndicator: UIActivityIndicatorView!
+    var enterMode: SetInfoEnterMode!
     
     override func viewDidLoad() {
         view.backgroundColor = .white
@@ -112,7 +113,9 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            navigationController?.pushViewController(SetInfoNamecard(), animated: true)
+            let vc = SetInfoNamecard()
+            vc.enterMode = .settings
+            navigationController?.pushViewController(vc, animated: true)
             break
         default:
             break
@@ -120,6 +123,10 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        if enterMode == .nameCard {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 }

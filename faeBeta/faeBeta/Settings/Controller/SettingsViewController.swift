@@ -176,7 +176,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(SetPrivacyViewController(), animated: true)
             break
         case 3:
-            navigationController?.pushViewController(SetInfoViewController(), animated: true)
+            let vc = SetInfoViewController()
+            vc.enterMode = .settings
+            navigationController?.pushViewController(vc, animated: true)
             break
         case 4:
             navigationController?.pushViewController(SetAccountViewController(), animated: true)

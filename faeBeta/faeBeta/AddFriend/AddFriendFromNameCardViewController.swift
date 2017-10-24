@@ -44,6 +44,8 @@ class AddFriendFromNameCardViewController: UIViewController {
     let UNFOLLOW_ACT = 8
     let ACCEPT_ACT = 9
     let IGNORE_ACT = 10
+    let EDIT_NAME_CARD = 11
+    let INFO_SETTING = 12
     
     var statusMode: FriendStatus = .defaultMode
     
@@ -191,6 +193,16 @@ class AddFriendFromNameCardViewController: UIViewController {
             btnActThird.setTitle("Report", for: .normal)
             btnActThird.tag = REPORT_ACT
             break
+        case .nameCardOther:
+            btnActFirst.setTitle("Block", for: .normal)
+            btnActFirst.tag = BLOCK_ACT
+            btnActSecond.setTitle("Report", for: .normal)
+            btnActSecond.tag = REPORT_ACT
+        case .nameCardSelf:
+            btnActFirst.setTitle("Edit NameCard", for: .normal)
+            btnActFirst.tag = EDIT_NAME_CARD
+            btnActSecond.setTitle("Info Settings", for: .normal)
+            btnActSecond.tag = INFO_SETTING
         default:
             break
         }
@@ -212,7 +224,8 @@ class AddFriendFromNameCardViewController: UIViewController {
     
     // actions
     func sentActRequest(_ sender: UIButton!) {
-        if sender.tag != REPORT_ACT {
+        if !(sender.tag == REPORT_ACT || sender.tag == EDIT_NAME_CARD || sender.tag == INFO_SETTING) {
+            print(sender.tag)
             uiviewChooseAction.isHidden = true
         }
         if sender.tag == BLOCK_ACT {
@@ -326,6 +339,18 @@ class AddFriendFromNameCardViewController: UIViewController {
             reportPinVC.reportType = 0
             reportPinVC.modalPresentationStyle = .overCurrentContext
             self.present(reportPinVC, animated: true, completion: nil)
+            break
+        case EDIT_NAME_CARD:
+            let vc = SetInfoNamecard()
+            vc.enterMode = .nameCard
+            vc.modalPresentationStyle = .overCurrentContext
+            self.present(vc, animated: true, completion: nil)
+            break
+        case INFO_SETTING:
+            let vc = SetInfoViewController()
+            vc.enterMode = .nameCard
+            vc.modalPresentationStyle = .overCurrentContext
+            self.present(vc, animated: true, completion: nil)
             break
         default:
             break
