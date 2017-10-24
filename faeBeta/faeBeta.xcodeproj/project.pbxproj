@@ -32,7 +32,7 @@
 		507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D19FE1F57746300F98663 /* UITableViewExtension.swift */; };
 		5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMFilterIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
-		50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */; };
+		50816DBC1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */; };
 		5087686A1F47AC6A009922BA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508768691F47AC6A009922BA /* UserPin.swift */; };
 		508E2C581F6FA233004F423D /* FMLoadCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E2C571F6FA233004F423D /* FMLoadCollection.swift */; };
 		50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F541F2BB530002553F1 /* MapSearchViewController.swift */; };
@@ -333,7 +333,7 @@
 		507D19FE1F57746300F98663 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
-		50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMCompass+FMLocateSelf.swift"; sourceTree = "<group>"; };
+		50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMZoomButton+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		508768691F47AC6A009922BA /* UserPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
 		508E2C571F6FA233004F423D /* FMLoadCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLoadCollection.swift; sourceTree = "<group>"; };
 		50902F541F2BB530002553F1 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
@@ -682,7 +682,7 @@
 				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
-				50816DBB1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift */,
+				50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */,
 				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
 				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
 				50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */,
@@ -1887,7 +1887,7 @@
 				B88905721E36094B00E68D58 /* Reachability.swift in Sources */,
 				B0714D551D5E435200356705 /* FMLoadMainItems.swift in Sources */,
 				B064EF251D74EB7300C078F5 /* RegisterBaseViewController.swift in Sources */,
-				50816DBC1F318BF00021EC74 /* FMCompass+FMLocateSelf.swift in Sources */,
+				50816DBC1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift in Sources */,
 				B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */,
 				B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */,
 				9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */,
