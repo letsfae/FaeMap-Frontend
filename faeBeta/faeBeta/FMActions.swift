@@ -30,7 +30,7 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
-        uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+        uiviewFilterMenu.hide()
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self

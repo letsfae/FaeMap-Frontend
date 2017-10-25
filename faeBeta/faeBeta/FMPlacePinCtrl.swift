@@ -350,7 +350,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         getPlaceInfo.whereKey("radius", value: "500000")
         getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count", value: "100")
+        getPlaceInfo.whereKey("max_count", value: "500")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))

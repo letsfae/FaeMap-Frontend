@@ -104,6 +104,43 @@ func postCoverImageToURL(_ className: String, parameter: [String: AnyObject]?, a
     }
 }
 
+func searchToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+    let URL = baseURL + "/" + className
+    var headers = [
+        "User-Agent": headerUserAgent,
+        "Fae-Client-Version": headerClientVersion,
+        "Device-ID": headerDeviceID,
+        "Accept": headerAccept,
+        "Content-Type": "application/json",
+        ]
+    if authentication != nil {
+        for (key, value) in authentication! {
+            headers[key] = value as? String
+        }
+    }
+    
+    guard parameter != nil else { return }
+    Alamofire.request(URL, method: .post, parameters: parameter!, encoding: JSONEncoding.default, headers: headers)
+        .responseJSON { response in
+            guard response.response != nil else {
+                completion(-500, "Internet error")
+                return
+            }
+            if response.response!.statusCode != 0 {
+                
+            }
+            if let _ = response.response?.allHeaderFields {
+                
+            }
+            if let resMess = response.result.value {
+                completion(response.response!.statusCode, resMess)
+            } else {
+                // MARK: bug here
+                completion(response.response!.statusCode, "no Json body")
+            }
+    }
+}
+
 func postToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = baseURL + "/" + className
     var headers = [
@@ -119,26 +156,24 @@ func postToURL(_ className: String, parameter: [String: Any]?, authentication: [
         }
     }
     
-    if parameter != nil {
-        Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
-            .responseJSON { response in
+    guard parameter != nil else { return }
+    Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
+        .responseJSON { response in
+            guard response.response != nil else {
+                completion(-500, "Internet error")
+                return
+            }
+            if response.response!.statusCode != 0 {
                 
-                if response.response != nil {
-                    if response.response!.statusCode != 0 {
-                        
-                    }
-                    if let _ = response.response?.allHeaderFields {
-                        
-                    }
-                    if let resMess = response.result.value {
-                        completion(response.response!.statusCode, resMess)
-                    } else {
-                        // MARK: bug here
-                        completion(response.response!.statusCode, "no Json body")
-                    }
-                } else {
-                    completion(-500, "Internet error")
-                }
+            }
+            if let _ = response.response?.allHeaderFields {
+                
+            }
+            if let resMess = response.result.value {
+                completion(response.response!.statusCode, resMess)
+            } else {
+                // MARK: bug here
+                completion(response.response!.statusCode, "no Json body")
             }
     }
 }

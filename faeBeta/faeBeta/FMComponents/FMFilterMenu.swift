@@ -124,7 +124,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         
         // draw fake button to hide map filter menu
         btnHideMFMenu = UIButton(frame: CGRect(x: 0, y: 0, w: 414, h: 66))
-        btnHideMFMenu.addTarget(self, action: #selector(self.hide(_:)), for: .touchUpInside)
+        btnHideMFMenu.addTarget(self, action: #selector(self.hide), for: .touchUpInside)
         addSubview(btnHideMFMenu)
         
         // draw two uiview of Map Options
@@ -453,7 +453,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         delegate?.hideAvatars?(isOn: switchHideAvatars.isOn)
     }
     
-    func hide(_ sender: UIButton) {
+    func hide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.origin.y = screenHeight
             if self.btnFilterIcon.center.y < screenHeight - 25 {

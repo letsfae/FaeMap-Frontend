@@ -32,13 +32,19 @@ class FaeMapView: MKMapView {
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(_:)))
         singleTap.numberOfTapsRequired = 1
         
+        let singleTapTwo = UITapGestureRecognizer(target: self, action: #selector(handleSingleTapTwo(_:)))
+        singleTapTwo.numberOfTapsRequired = 1
+        singleTapTwo.numberOfTouchesRequired = 2
+        
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
         doubleTap.numberOfTapsRequired = 2
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         longPress.minimumPressDuration = 0.3
+        
         addGestureRecognizer(singleTap)
         addGestureRecognizer(longPress)
+        addGestureRecognizer(singleTapTwo)
         guard let subview = self.subviews.first else { return }
         subview.addGestureRecognizer(doubleTap)
     }
@@ -57,6 +63,10 @@ class FaeMapView: MKMapView {
         if slcMapCtrler?.createLocation == .create {
             slcMapCtrler?.createLocation = .cancel
         }
+    }
+    
+    func handleSingleTapTwo(_ tapGesture: UITapGestureRecognizer) {
+        
     }
     
     func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
@@ -87,13 +97,16 @@ class FaeMapView: MKMapView {
                 }
             }
         } else {
+            /**
             var region = self.region
             var span = self.region.span
             span.latitudeDelta *= 0.5
             span.longitudeDelta *= 0.5
             region.span = span
             self.setRegion(region, animated: false)
+            */
             faeMapCtrler?.mapGesture(isOn: true)
+            
         }
         block = false
         guard faeMapCtrler?.uiviewFilterMenu != nil else { return }

@@ -95,9 +95,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "placeResultBarCell", for: indexPath) as! FMPlaceResultBarCell
         let data = arrPlaces[indexPath.row]
-        cell.class_2_icon_id = data.class_2_icon_id
-        cell.lblAddr.text = data.address1 + ", " + data.address2
-        cell.lblName.text = data.name
+        cell.setValueForPlace(data)
         return cell
     }
     
@@ -109,14 +107,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class FMPlaceResultBarCell: UITableViewCell {
     
-    var class_2_icon_id = 0 {
-        didSet {
-            imgType.image = UIImage(named: "place_result_\(class_2_icon_id)") ?? #imageLiteral(resourceName: "place_result_48")
-        }
-    }
-    var imgType: UIImageView!
-    var lblName: UILabel!
-    var lblAddr: UILabel!
+    var class_2_icon_id = 0
+    var imgSavedItem: UIImageView!
+    var lblItemName: UILabel!
+    var lblItemAddr: UILabel!
     var lblHours: UILabel!
     var lblPrice: UILabel!
     
@@ -133,29 +127,58 @@ class FMPlaceResultBarCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setValueForPlace(_ placeInfo: PlacePin) {
+        lblItemName.text = placeInfo.name
+        lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        imgSavedItem.backgroundColor = .white
+        lblPrice.text = placeInfo.price
+        lblHours.text = placeInfo.hours
+        if placeInfo.imageURL == "" {
+            imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgSavedItem.backgroundColor = .white
+        } else {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
+                self.imgSavedItem.image = placeImgFromCache
+                self.imgSavedItem.backgroundColor = UIColor._2499090()
+                return
+            }
+            downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    guard let placeImg = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        self.imgSavedItem.image = placeImg
+                        self.imgSavedItem.backgroundColor = UIColor._2499090()
+                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
+                    }
+                }
+            }
+        }
+    }
+    
     fileprivate func loadContent() {
-        imgType = UIImageView()
-        imgType.layer.cornerRadius = 5
-        imgType.clipsToBounds = true
-        addSubview(imgType)
-        addConstraintsWithFormat("H:|-9-[v0(66)]", options: [], views: imgType)
-        addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgType)
+        imgSavedItem = UIImageView()
+        imgSavedItem.layer.cornerRadius = 5
+        imgSavedItem.clipsToBounds = true
+        addSubview(imgSavedItem)
+        addConstraintsWithFormat("H:|-9-[v0(66)]", options: [], views: imgSavedItem)
+        addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgSavedItem)
         
-        lblName = UILabel()
-        addSubview(lblName)
-        lblName.textAlignment = .left
-        lblName.textColor = UIColor._898989()
-        lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblName)
-        addConstraintsWithFormat("V:|-17-[v0(20)]", options: [], views: lblName)
+        lblItemName = UILabel()
+        addSubview(lblItemName)
+        lblItemName.textAlignment = .left
+        lblItemName.textColor = UIColor._898989()
+        lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblItemName)
+        addConstraintsWithFormat("V:|-17-[v0(20)]", options: [], views: lblItemName)
         
-        lblAddr = UILabel()
-        addSubview(lblAddr)
-        lblAddr.textAlignment = .left
-        lblAddr.textColor = UIColor._107107107()
-        lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblAddr)
-        addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblAddr)
+        lblItemAddr = UILabel()
+        addSubview(lblItemAddr)
+        lblItemAddr.textAlignment = .left
+        lblItemAddr.textColor = UIColor._107107107()
+        lblItemAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblItemAddr)
+        addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblItemAddr)
         
         lblHours = UILabel()
         addSubview(lblHours)
@@ -164,7 +187,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblHours.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblHours)
         addConstraintsWithFormat("V:|-57-[v0(16)]", options: [], views: lblHours)
-        lblHours.text = "Open 24 Hours"
+        lblHours.text = ""
         
         lblPrice = UILabel()
         addSubview(lblPrice)
@@ -173,7 +196,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:|-69-[v0(12)]", options: [], views: lblPrice)
-        lblPrice.text = "$$$$"
+        lblPrice.text = ""
     }
 }
 
