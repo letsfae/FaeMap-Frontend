@@ -97,7 +97,9 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 cell.lblContent.attributedText = txt
             } else {
-                cell.lblContent.text = Key.shared.userPhoneNumber
+                let arrPhone = Key.shared.userPhoneNumber?.split(separator: "(")[0].split(separator: ")")
+                let phoneNumber = "+" + arrPhone![0] + " " + arrPhone![1]
+                cell.lblContent.text = phoneNumber
             }
             break
         default:
@@ -157,7 +159,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             } else {
                 let vc = UpdateUsrnameEmailViewController()
                 //            vc.delegate = self
-                vc.strPhone = cell.lblContent.text
+                let arrPhone = cell.lblContent.text?.split(separator: " ")
+                vc.strPhone = "\(arrPhone![1])"
                 vc.enterMode = .phone
                 navigationController?.pushViewController(vc, animated: true)
             }
