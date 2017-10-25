@@ -40,6 +40,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     var uiviewPlaceBar = FMPlaceInfoBar()
     var fullyLoaded = false
     
+    var boolFromBoard = false
+    
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: LocationView!
@@ -182,6 +184,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         camera.centerCoordinate = Key.shared.selectedLoc
         if mode == .part { camera.altitude = 35000 }
         faeMapView.setCamera(camera, animated: false)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
+        faeMapView.setRegion(coordinateRegion, animated: false)
         
         imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
         imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
@@ -257,19 +261,25 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func handleTap(_ tap: UITapGestureRecognizer) {
-        print("")
         /*guard routeAddress != nil else { return }
         navigationController?.popViewController(animated: false)
         delegate?.sendLocationBack?(address: routeAddress)*/
-        if selectedLocation != nil {
-            let address = RouteAddress(name: selectedLocation!.address_1, coordinate: selectedLocation!.coordinate)
-            navigationController?.popViewController(animated: false)
-            delegate?.sendLocationBack?(address: address)
-        }
-        if selectedPlace != nil {
-            guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
-            navigationController?.popViewController(animated: false)
-            delegate?.sendPlaceBack?(placeData: placeData)
+        if boolFromBoard {
+            if selectedLocation != nil {
+                delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "\(selectedLocation!.address_1), \(selectedLocation!.address_2)", location: CLLocation(latitude: selectedLocation!.coordinate.latitude, longitude: selectedLocation!.coordinate.longitude))
+                navigationController?.popViewController(animated: false)
+            }
+        } else {
+            if selectedLocation != nil {
+                let address = RouteAddress(name: selectedLocation!.address_1, coordinate: selectedLocation!.coordinate)
+                navigationController?.popViewController(animated: false)
+                delegate?.sendLocationBack?(address: address)
+            }
+            if selectedPlace != nil {
+                guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+                navigationController?.popViewController(animated: false)
+                delegate?.sendPlaceBack?(placeData: placeData)
+            }
         }
     }
     
@@ -393,7 +403,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func refreshPlacePins(radius: Int) {
-        
+        if boolFromBoard { return }
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
             let nowTime = DispatchTime.now()
