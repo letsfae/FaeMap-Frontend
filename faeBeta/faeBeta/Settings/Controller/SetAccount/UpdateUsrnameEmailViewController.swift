@@ -10,10 +10,10 @@ import UIKit
 
 protocol UpdateUsrnameEmailDelegate: class {
     func updateEmail()
+    func updatePhone()
 }
 
-class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
-    
+class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     var lblTitle: FaeLabel!
     var lblHint: FaeLabel!
     var btnUpdate: UIButton!
@@ -44,6 +44,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+//        navigationController?.interactivePopGestureRecognizer?.addTarget(<#T##target: Any##Any#>, action: <#T##Selector#>)
     }
     
     fileprivate func loadNavBar() {
@@ -219,7 +220,18 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
     func actionBack(_ sender: UIButton) {
         if enterMode == .email {
             delegate?.updateEmail()
+        } else if enterMode == .phone {
+            faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
+                if(statusCode / 100 == 2) {
+                    print("Successfully get account info \(statusCode) \(result!)")
+                    Key.shared.userPhoneVerified = true
+                    self.delegate?.updatePhone()
+                } else {
+                    print("Fail to get account info \(statusCode) \(result!)")
+                }
+            }
         }
+        
         navigationController?.popViewController(animated: true)
     }
         
@@ -235,6 +247,9 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
             animationShowView()
             break
         case .phone:
+            let vc = SignInPhoneViewController()
+            vc.enterMode = .settingsUpdate
+            navigationController?.pushViewController(vc, animated: true)
             break
         default:
             break
@@ -250,9 +265,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
     }
 
     func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
-        let vc = SignInEmailViewController()
+        let vc = VerifyCodeViewController()
         vc.delegate = self
-        vc.enterMode = .settings
+        vc.enterMode = .email
+        vc.enterEmailMode = .settings
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
         faeUser.updateEmail{ (statusCode, result) in
@@ -285,8 +301,9 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
         })
     }
     // animations end
-    
-    // VerifyEmailDelegate
+
+    // VerifyCodeDelegate
+    func verifyPhoneSucceed() {}
     func verifyEmailSucceed() {
         setHintRedLabel()
     }
