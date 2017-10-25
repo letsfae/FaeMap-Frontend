@@ -10,6 +10,7 @@ import UIKit
 
 protocol UpdateUsrnameEmailDelegate: class {
     func updateEmail()
+    func updatePhone()
 }
 
 class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
@@ -43,6 +44,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+//        navigationController?.interactivePopGestureRecognizer?.addTarget(<#T##target: Any##Any#>, action: <#T##Selector#>)
     }
     
     fileprivate func loadNavBar() {
@@ -218,7 +220,18 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     func actionBack(_ sender: UIButton) {
         if enterMode == .email {
             delegate?.updateEmail()
+        } else if enterMode == .phone {
+            faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
+                if(statusCode / 100 == 2) {
+                    print("Successfully get account info \(statusCode) \(result!)")
+                    Key.shared.userPhoneVerified = true
+                    self.delegate?.updatePhone()
+                } else {
+                    print("Fail to get account info \(statusCode) \(result!)")
+                }
+            }
         }
+        
         navigationController?.popViewController(animated: true)
     }
         

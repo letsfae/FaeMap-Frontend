@@ -39,9 +39,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     
     fileprivate var numberKeyboard: FAENumberKeyboard!
     fileprivate var indicatorView: UIActivityIndicatorView!
-//    fileprivate var timer: Timer!
-//    fileprivate var remainingTime = 59
-    //MARK: - View did/will ...
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -182,8 +180,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     func actionSendCode() {
         indicatorView.startAnimating()
         self.view.endEditing(true)
+        user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
         if enterMode != .signInSupport {
-            user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
             user.updatePhoneNumber {(status, message) in
                 print("[UPDATE PHONE] \(status) \(message!)")
                 if status / 100 == 2 {
@@ -195,7 +193,6 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                 self.indicatorView.stopAnimating()
             }
         } else {
-            user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
             user.checkPhoneExistence{(status, message) in
                 print("\(status) \(message!)")
                 if status / 100 == 2 {

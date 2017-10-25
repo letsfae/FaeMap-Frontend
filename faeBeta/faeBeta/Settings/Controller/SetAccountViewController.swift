@@ -89,6 +89,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.lblContent.text = Key.shared.username
             break
         case 5:
+            print("verify \(Key.shared.userPhoneVerified)")
             if !Key.shared.userPhoneVerified { //Key.shared.userPhoneNumber == "" {
                 let txt = NSMutableAttributedString()
                 txt.append(NSAttributedString(attachment: excla))
@@ -97,6 +98,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 cell.lblContent.attributedText = txt
             } else {
+                print("\(String(describing: Key.shared.userPhoneNumber))")
                 let arrPhone = Key.shared.userPhoneNumber?.split(separator: "(")[0].split(separator: ")")
                 let phoneNumber = "+" + arrPhone![0] + " " + arrPhone![1]
                 cell.lblContent.text = phoneNumber
@@ -151,14 +153,13 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         case 5:
             if !Key.shared.userPhoneVerified {
                 let vc = SignInPhoneViewController()
-                //            vc.delegate = self
-                
+//                vc.delegate = self
                 vc.enterMode = .settings
                 navigationController?.pushViewController(vc, animated: true)
                 break
             } else {
                 let vc = UpdateUsrnameEmailViewController()
-                //            vc.delegate = self
+                vc.delegate = self
                 let arrPhone = cell.lblContent.text?.split(separator: " ")
                 vc.strPhone = "\(arrPhone![1])"
                 vc.enterMode = .phone
@@ -198,6 +199,12 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // UpdateUsrnameEmailDelegate
     func updateEmail() {
+        print("updateEmail")
         tblAccount.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
+    }
+    
+    func updatePhone() {
+        print("updatePhone")
+        tblAccount.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .none)
     }
 }
