@@ -61,6 +61,17 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
             break
         case 2:
             navigationController?.pushViewController(SetDeactiveViewController(), animated: true)
+            break
+        case 3:
+            let vc = TermsOfServiceViewController()
+            vc.boolPush = true
+            navigationController?.pushViewController(vc, animated: true)
+            break
+        case 4:
+            let vc = PrivacyPolicyViewController()
+            vc.boolPush = true
+            navigationController?.pushViewController(vc, animated: true)
+            break
         default:
             break
         }

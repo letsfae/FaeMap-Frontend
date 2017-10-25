@@ -40,6 +40,7 @@ extension FaeMapViewController: MapSearchDelegate {
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
+        guard places.count > 0 else { return }
         PLACE_ENABLE = false
         placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.removeAnnotations(faePlacePins) {
@@ -62,7 +63,6 @@ extension FaeMapViewController: MapSearchDelegate {
             if let firstPlacePin = places.first {
                 uiviewPlaceBar.loading(current: firstPlacePin)
             }
-            btnTapToShowResultTbl.alpha = 1
             uiviewPlaceBar.places = places
         }
     }
@@ -77,7 +77,7 @@ extension FaeMapViewController: MapSearchDelegate {
             let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
             zoomRect = MKMapRectUnion(zoomRect, pointRect)
         }
-        var edgePadding = UIEdgeInsetsMake(120, 40, 100, 40)
+        var edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
         if mapMode == .explore {
             edgePadding = UIEdgeInsetsMake(120, 40, 300, 40)
         } else if mapMode == .pinDetail {

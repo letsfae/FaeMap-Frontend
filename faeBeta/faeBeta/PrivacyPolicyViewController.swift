@@ -10,7 +10,7 @@
 import UIKit
 
 class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
-
+    var boolPush = false
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -78,7 +78,11 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func backButtonTapped(_ sender:UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        if boolPush {
+            navigationController?.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     private func astrContent() -> NSAttributedString {

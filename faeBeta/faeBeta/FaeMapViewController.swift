@@ -83,7 +83,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var swipingState: PlaceInfoBarState = .map {
         didSet {
             guard fullyLoaded else { return }
-//            placeClusterManager.maxZoomLevelForClustering = swipingState == .multipleSearch ? 0 : Double.greatestFiniteMagnitude
+            btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
         }
     }
     var boolSelecting = false

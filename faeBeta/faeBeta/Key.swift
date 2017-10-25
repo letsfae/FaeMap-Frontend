@@ -20,6 +20,7 @@ class Key: NSObject { //  singleton class
     
     var joshDebug: Bool = true
     var vickyDebug: Bool = false
+    var felixDebug: Bool = false
     
     private enum SERVERTYPE {
         case development

@@ -19,3 +19,9 @@ func vickyPrint(_ items: Any...) {
         print(items)
     }
 }
+
+func felixPrint(_ items: Any...) {
+    if Key.shared.felixDebug {
+        print(items)
+    }
+}

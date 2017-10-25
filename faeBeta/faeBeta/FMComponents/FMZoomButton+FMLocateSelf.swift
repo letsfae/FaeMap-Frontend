@@ -38,6 +38,7 @@ class FMZoomButton: UIButton {
         if sender.state == .began {
             largeMode()
             prevRegion = mapView.region
+            guard prevRegion != nil else { return }
             faeMapCtrler?.placeClusterManager.canUpdate = false
             faeMapCtrler?.userClusterManager.canUpdate = false
             prev_y = sender.location(in: self).y
@@ -55,7 +56,7 @@ class FMZoomButton: UIButton {
     }
     
     func zoom(multiplier: Double) {
-        
+        guard prevRegion != nil else { return }
         var region = prevRegion
         var span = prevRegion.span
         var lat = span.latitudeDelta * pow(2, multiplier)
@@ -178,6 +179,10 @@ class FMLocateSelf: UIButton {
     }
     
     func actionLocateSelf(_ sender: UIButton) {
+        FaeSearch.shared.search { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+        }
         faeMapCtrler?.btnZoom.smallMode()
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate

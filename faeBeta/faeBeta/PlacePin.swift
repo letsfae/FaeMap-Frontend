@@ -26,6 +26,7 @@ class PlacePin: NSObject {
     var price = ""
     var phone = ""
     var arrListSavedThisPin = [Int]()
+    var hours: String = ""
     
     init(json: JSON) {
         id = json["place_id"].intValue
@@ -50,6 +51,7 @@ class PlacePin: NSObject {
         url = json["url"].stringValue
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
+        hours = json["hours"].stringValue
     }
     
     init(string: String) {

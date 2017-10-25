@@ -294,14 +294,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         } else {
             cellStatus = 0
-            filteredPlaces.removeAll()
-            for searchedPlace in searchedPlaces {
-                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
-                    filteredPlaces.append(searchedPlace)
-                }
-            }
+//            filteredPlaces.removeAll()
+//            for searchedPlace in searchedPlaces {
+//                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
+//                    filteredPlaces.append(searchedPlace)
+//                }
+//            }
+            getPlaceInfo(content: searchText.lowercased())
         }
-        showOrHideViews(searchText: searchText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
@@ -464,14 +464,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         schLocationBar.txtSchField.resignFirstResponder()
     }
     
-    func getPlaceInfo() {
-        let placesList = FaeMap()
-        placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")
-        placesList.whereKey("geo_longitude", value: "\(searchedLoc.coordinate.longitude)")
-        placesList.whereKey("radius", value: "50000")
-        placesList.whereKey("type", value: "place")
-        placesList.whereKey("max_count", value: "1000")
-        placesList.getMapInformation { (status: Int, message: Any?) in
+    func getPlaceInfo(content: String = "", source: String = "name") {
+        FaeSearch.shared.whereKey("content", value: content)
+        FaeSearch.shared.whereKey("source", value: source)
+        FaeSearch.shared.whereKey("type", value: "place")
+        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMapSearchPlaceInfo] status/100 != 2")
                 return
@@ -481,20 +481,9 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
                 print("[loadMapSearchPlaceInfo] fail to parse map search place info")
                 return
             }
-            if placeInfoJsonArray.count <= 0 {
-                print("[loadMapSearchPlaceInfo] array is nil")
-                return
-            }
-            
-            self.searchedPlaces.removeAll()
-            
-            for result in placeInfoJsonArray {
-                let placeData = PlacePin(json: result)
-//                if placeData.class_2_icon_id != 0 {
-                    self.searchedPlaces.append(placeData)
-//                }
-            }
-            print(self.searchedPlaces.count)
+            self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            print(self.filteredPlaces.count)
+            self.showOrHideViews(searchText: content)
         }
     }
     

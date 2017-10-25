@@ -45,6 +45,7 @@
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E50C151F9EF861008645C8 /* LocationPin.swift */; };
 		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
+		50FCE42C1FA0EAC80071D472 /* FaeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
 		8537A88A1E08A4B00009C39B /* LeftSlideWindowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8891E08A4B00009C39B /* LeftSlideWindowCell.swift */; };
@@ -348,6 +349,7 @@
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		50E50C151F9EF861008645C8 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
 		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
+		50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearch.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		690452871F032A9900B58982 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeGenderView.swift; sourceTree = "<group>"; };
 		82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_faeBeta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1067,6 +1069,7 @@
 				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
 				B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */,
 				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
+				50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */,
 				B05E2DBA1DCE357700D6745A /* FaePush.swift */,
 				B04BB9E41CEDB796009B9531 /* FaeUser.swift */,
 				B00182641D0EFA2B002D05C5 /* FaeImage.swift */,
@@ -1699,6 +1702,7 @@
 				50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */,
 				50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */,
 				B33FB2431F267CA600EC6655 /* AddUsernameController.swift in Sources */,
+				50FCE42C1FA0EAC80071D472 /* FaeSearch.swift in Sources */,
 				B33FB2441F267CA600EC6655 /* FaeAddFriendOptionsCell.swift in Sources */,
 				B33FB2451F267CA600EC6655 /* FaeAddUsernameCell.swift in Sources */,
 				B33FB2461F267CA600EC6655 /* FaeContactsCell.swift in Sources */,
