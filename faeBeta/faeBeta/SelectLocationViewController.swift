@@ -241,7 +241,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect = FMDistIndicator()
         btnSelect.frame.origin.y = screenHeight - 74
         btnSelect.lblDistance.text = "Select"
-        btnSelect.isUserInteractionEnabled = true
+        btnSelect.lblDistance.textColor = UIColor._255160160()
+        btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
         
         btnZoom = FMZoomButton()
@@ -256,9 +257,20 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func handleTap(_ tap: UITapGestureRecognizer) {
-        guard routeAddress != nil else { return }
+        print("")
+        /*guard routeAddress != nil else { return }
         navigationController?.popViewController(animated: false)
-        delegate?.sendLocationBack?(address: routeAddress)
+        delegate?.sendLocationBack?(address: routeAddress)*/
+        if selectedLocation != nil {
+            let address = RouteAddress(name: selectedLocation!.address_1, coordinate: selectedLocation!.coordinate)
+            navigationController?.popViewController(animated: false)
+            delegate?.sendLocationBack?(address: address)
+        }
+        if selectedPlace != nil {
+            guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+            navigationController?.popViewController(animated: false)
+            delegate?.sendPlaceBack?(placeData: placeData)
+        }
     }
     
     func actionBack(_ sender: UIButton) {
@@ -464,6 +476,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         uiviewPlaceBar.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: false)
         uiviewPlaceBar.loadingData(current: cluster)
+        btnSelect.lblDistance.textColor = UIColor._2499090()
+        btnSelect.isUserInteractionEnabled = true
+        if selectedLocation != nil { // TODO
+            selectedLocation = nil
+        }
     }
     
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?) {
@@ -500,6 +517,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             selectedPlaceView?.optionsOpened = false
             selectedPlaceView = nil
         }
+        btnSelect.lblDistance.textColor = UIColor._255160160()
+        btnSelect.isUserInteractionEnabled = false
     }
     
     func loadLocationView() {
@@ -616,6 +635,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
                 self.activityIndicator.stopAnimating()
+                self.btnSelect.lblDistance.textColor = UIColor._2499090()
+                self.btnSelect.isUserInteractionEnabled = true
             }
         }
     }
