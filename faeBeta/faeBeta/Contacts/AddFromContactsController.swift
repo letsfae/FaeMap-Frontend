@@ -44,6 +44,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
                 return
             }
             let selfUserInfoJSON = JSON(message!)
+            print(selfUserInfoJSON)
             let phone = selfUserInfoJSON["phone_verified"].boolValue
             if phone == false {
                 self.uiviewNotAllowed.isHidden = true
@@ -291,7 +292,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         navigationController?.popViewController(animated: false)
     }
     
-    func verifyPhoneSucceed() {
+    func backToAddFromContacts() {
         showView()
     }
 }

@@ -56,6 +56,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+        createActivityIndicator()
     }
     
     fileprivate func loadNavBar() {
@@ -243,7 +244,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         if enterMode != .password {
             faeUser.updateAccountBasicInfo({(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    print("Successfully basic info")
+                    print("Successfully update basic info")
                     self.delegate?.updateInfo()
                     self.navigationController?.popViewController(animated: true)
                 }
