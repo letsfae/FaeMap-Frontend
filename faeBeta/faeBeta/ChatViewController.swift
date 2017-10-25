@@ -437,8 +437,20 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
             //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
         } else {
-            let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
-            sendMeaages_v2(type: "[Location]", text: locDetail, media:uiviewLocationExtend.getImageDate())
+            switch uiviewLocationExtend.strType {
+            case "Location":
+                let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
+                sendMeaages_v2(type: "[Location]", text: locDetail, media: uiviewLocationExtend.getImageData())
+                break
+            case "Place":
+                if let place = uiviewLocationExtend.placeData {
+                    let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\"}"
+                    sendMeaages_v2(type: "[Place]", text: placeDetail, media: uiviewLocationExtend.getImageData())
+                }
+                break
+            default:
+                break
+            }
             //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
         if uiviewLocationExtend.isHidden == false {
@@ -725,12 +737,42 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // BoardsSearchDelegate
     func sendLocationBack(address: RouteAddress) {
-        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: {
+        let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             guard let response = placemarks?[0] else { return }
             self.addResponseToLocationExtend(response: response, withMini: false)
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
         })
+        AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
+            self.uiviewLocationExtend.setAvator(image: snapShotImage)
+        }
+        
+        /*CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
+            guard let response = placemarks?[0] else { return }
+            
+            self.addResponseToLocationExtend(response: response, withMini: false)
+            //self.sendLocationMessageFromMini(UIButton())
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+        })*/
+    }
+    
+    func sendPlaceBack(placeData: PlacePin) {
+        downloadImage(URL: placeData.imageURL) { (rawData) in
+            guard let data = rawData else { return }
+            self.uiviewLocationExtend.placeData = placeData
+            self.uiviewLocationExtend.setAvator(image: UIImage(data: data)!)
+            self.uiviewLocationExtend.setToPlace()
+            self.uiviewLocationExtend.isHidden = false
+            let extendHeight = self.uiviewLocationExtend.isHidden ? 0 : self.floatLocExtendHeight
+            var distance = self.floatInputBarHeight + extendHeight
+            distance += self.floatToolBarContentHeight
+            let insets = UIEdgeInsetsMake(0.0, 0.0, distance, 0.0)
+            self.collectionView.contentInset = insets
+            self.collectionView.scrollIndicatorInsets = insets
+            self.scrollToBottom(false)
+            self.btnSend.isEnabled = true
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+        }
     }
     
     func closeLocExtendView() {
@@ -758,8 +800,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func addResponseToLocationExtend(response: CLPlacemark, withMini: Bool) {
-        var texts: [String] = []
-        texts.append((response.subThoroughfare)! + " " + (response.thoroughfare)!)
+        uiviewLocationExtend.setToLocation()
+        if let lines = response.addressDictionary?["FormattedAddressLines"] as? [String] {
+            uiviewLocationExtend.setLabel(texts: lines)
+        }
+        /*texts.append((response.subThoroughfare)! + " " + (response.thoroughfare)!)
         var cityText = response.locality
         if response.administrativeArea != nil {
             cityText = cityText! + ", " + (response.administrativeArea)!
@@ -768,8 +813,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             cityText = cityText! + " " + (response.postalCode)!
         }
         texts.append(cityText!)
-        texts.append((response.country)!)
-        uiviewLocationExtend.setLabel(texts: texts)
+        texts.append((response.country)!)*/
+        
+        //uiviewLocationExtend.setLabel(texts: texts)
         uiviewLocationExtend.location = CLLocation(latitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.latitude, longitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.longitude)
         
         uiviewLocationExtend.isHidden = false
@@ -897,11 +943,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // scroll to the bottom of all messages
     func scrollToBottom(_ animated: Bool) {
-        let item = collectionView(collectionView!, numberOfItemsInSection: 0) - 1
+        let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
+        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
+        let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - extendHeight
+        if currentHeight > currentVisibleHeight {
+            collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
+        }
+        
+        /*let item = collectionView(collectionView!, numberOfItemsInSection: 0) - 1
         if item >= 0 {
             let lastItemIndex = IndexPath(item: item, section: 0)
             collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.top, animated: animated)
-        }
+        }*/
     }
     
     // dismiss the toolbar content view

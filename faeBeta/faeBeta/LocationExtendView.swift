@@ -17,6 +17,9 @@ class LocationExtendView : UIView {
     var LabelLine2 : UILabel!
     var LabelLine3 : UILabel!
     var location : CLLocation!
+    var placeData: PlacePin?
+    
+    var strType: String = "Location"
     
     init() {
         super.init(frame : CGRect(x: 0, y: screenHeight - 76 - 90, width: screenWidth, height: 76));
@@ -32,20 +35,20 @@ class LocationExtendView : UIView {
         self.addSubview(imageView)
         
         // address label
-        LabelLine1 = UILabel(frame: CGRect(x: 92, y: 17, width: 267, height: 22))
+        LabelLine1 = UILabel(frame: CGRect(x: 94, y: 17, width: 267, height: 22))
         LabelLine1.text = "2714 S. HOOVER STREET"
         LabelLine1.font = UIFont(name: "AvenirNext-Medium", size: 16)
         LabelLine1.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
         self.addSubview(LabelLine1)
         
-        LabelLine2 = UILabel(frame: CGRect(x: 92, y: 37, width: 267, height: 16))
+        LabelLine2 = UILabel(frame: CGRect(x: 94, y: 37, width: 267, height: 16))
         LabelLine2.text = "LOS ANGELES, CA 90007"
         
         LabelLine2.font = UIFont(name: "AvenirNext-Medium", size: 12)
         LabelLine2.textColor = UIColor._107105105()
         self.addSubview(LabelLine2)
         
-        LabelLine3 = UILabel(frame: CGRect(x: 92, y: 55, width: 267, height: 16))
+        LabelLine3 = UILabel(frame: CGRect(x: 94, y: 55, width: 267, height: 16))
         LabelLine3.text = "UNITED STATES"
         LabelLine3.font = UIFont(name: "AvenirNext-Medium", size: 12)
         LabelLine3.textColor = UIColor._107105105()
@@ -87,7 +90,25 @@ class LocationExtendView : UIView {
         self.isHidden = true
     }
     
-    func getImageDate() -> Data {
+    func getImageData() -> Data {
         return UIImageJPEGRepresentation(imageView.image!, 0.7)!
+    }
+    
+    func setToLocation() {
+        LabelLine1.frame = CGRect(x: 94, y: 17, width: 267, height: 22)
+        LabelLine2.frame = CGRect(x: 94, y: 37, width: 267, height: 16)
+        LabelLine3.isHidden = false
+        strType = "Location"
+    }
+    
+    func setToPlace() {
+        LabelLine1.frame = CGRect(x: 94, y: 25, width: 267, height: 22)
+        LabelLine2.frame = CGRect(x: 94, y: 47, width: 267, height: 16)
+        if let place = placeData {
+            LabelLine1.text = place.name
+            LabelLine2.text = "\(place.address1), \(place.address2)"
+        }
+        LabelLine3.isHidden = true
+        strType = "Place"
     }
 }

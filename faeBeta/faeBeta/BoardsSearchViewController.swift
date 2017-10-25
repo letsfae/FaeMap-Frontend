@@ -16,6 +16,7 @@ import SwiftyJSON
     @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
     @objc optional func chooseLocationOnMap()
     @objc optional func sendLocationBack(address: RouteAddress)
+    @objc optional func sendPlaceBack(placeData: PlacePin)
 }
 enum EnterMode: String {
     case place = "place"

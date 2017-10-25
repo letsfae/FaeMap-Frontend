@@ -150,14 +150,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func jumpToWelcomeView(animated: Bool) {
-        if Key.shared.navOpenMode == .welcomeFirst {
+        /*if Key.shared.navOpenMode == .welcomeFirst {
             navigationController?.popToRootViewController(animated: animated)
-        } else {
+        } else {*/
             let welcomeVC = WelcomeViewController()
             navigationController?.pushViewController(welcomeVC, animated: animated)
             navigationController?.viewControllers = [welcomeVC]
             Key.shared.navOpenMode = .welcomeFirst
-        }
+        //}
     }
     
     func showMainView(_ sender: UIButton) {
