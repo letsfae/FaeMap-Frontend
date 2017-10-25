@@ -194,6 +194,7 @@
 		B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB41F831040008A6B4B /* SetAlertController.swift */; };
 		B37E5DC81F831040008A6B4B /* SetGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */; };
 		B37E5DC91F831040008A6B4B /* SetInfoNamecard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */; };
+		B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */; };
 		B38FE86E1F679C4000F3C83E /* SignInPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */; };
 		B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */; };
 		B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */; };
@@ -516,6 +517,7 @@
 		B37E5DB41F831040008A6B4B /* SetAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAlertController.swift; sourceTree = "<group>"; };
 		B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGeneralViewController.swift; sourceTree = "<group>"; };
 		B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInfoNamecard.swift; sourceTree = "<group>"; };
+		B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
 		B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPhoneViewController.swift; sourceTree = "<group>"; };
 		B393E2EA1F4F7644009FD949 /* CollectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsViewController.swift; sourceTree = "<group>"; };
 		B393E2EC1F4F8080009FD949 /* CollectionsListDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListDetailViewController.swift; sourceTree = "<group>"; };
@@ -1448,6 +1450,7 @@
 				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
 				B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */,
 				B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */,
+				B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
@@ -1911,6 +1914,7 @@
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */,
 				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
+				B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,

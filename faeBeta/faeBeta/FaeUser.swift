@@ -177,6 +177,12 @@ class FaeUser: NSObject {
         }
     }
     
+    func checkPhoneExistence(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("/existence/phone/_batch", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
     /* faeuser check username exist function
      Required parameters: username
      Optional parameters: nil

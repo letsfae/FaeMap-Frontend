@@ -12,8 +12,7 @@ protocol UpdateUsrnameEmailDelegate: class {
     func updateEmail()
 }
 
-class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
-    
+class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     var lblTitle: FaeLabel!
     var lblHint: FaeLabel!
     var btnUpdate: UIButton!
@@ -235,6 +234,9 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
             animationShowView()
             break
         case .phone:
+            let vc = SignInPhoneViewController()
+            vc.enterMode = .settingsUpdate
+            navigationController?.pushViewController(vc, animated: true)
             break
         default:
             break
@@ -250,9 +252,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
     }
 
     func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
-        let vc = SignInEmailViewController()
+        let vc = VerifyCodeViewController()
         vc.delegate = self
-        vc.enterMode = .settings
+        vc.enterMode = .email
+        vc.enterEmailMode = .settings
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
         faeUser.updateEmail{ (statusCode, result) in
@@ -285,8 +288,9 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyEmailDelegate {
         })
     }
     // animations end
-    
-    // VerifyEmailDelegate
+
+    // VerifyCodeDelegate
+    func verifyPhoneSucceed() {}
     func verifyEmailSucceed() {
         setHintRedLabel()
     }
