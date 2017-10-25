@@ -14,6 +14,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     weak var delegate: MapSearchDelegate?
     
+    var faeMapCtrler: FaeMapViewController?
+    
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
     var clctViewPics: UICollectionView!
@@ -27,7 +29,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var intCurtPage = 0
     
-    var testTypes = ["Random", "Food", "Drink", "Shopping", "Outdoors", "Cinema", "Pharmacy", "Supermarket", "Fitness", "KTV", "Spa", "School", "Track&Field", "Sushi Bar"]
+    var testTypes: [String] = ["Women's Store", "Falafel Restaurant", "Theater", "Bookstore", "American Restaurant", "Korean Restaurant", "Latin American Restaurant", "Japanese Restaurant", "Mexican Restaurant", "Whisky Bar", "Middle Eastern Restaurant", "Jewelry Store", "Italian Restaurant", "Speakeasy", "Dive Bar", "Sake Bar", "Vietnamese Restaurant", "Wine Bar", "Vegetarian / Vegan Restaurant", "Chinese Restaurant", "Martial Arts Dojo", "Caribbean Restaurant", "Hookah Bar", "Hotel Bar", "Gyms / Fitness Center", "Sushi Restaurant", "Art Museum", "Cocktail Bar", "Hawaiian Restaurant", "Pool", "Thai Restaurant", "Science Museum", "Southern / Soul Food Restaurant", "Clothing Store", "Sports Bar", "Leather Goods Store", "Mediterranean Restaurant", "New American Restaurant", "South American Restaurant", "Indie Theater", "Indonesian Restaurant", "Shopping Mall", "Gastropub", "Asian Restaurant", "Accessories Store", "Peruvian Restaurant", "French Restaurant", "Soccer Field", "Halal Restaurant", "Rock Club", "Seafood Restaurant", "Beer Bar", "Filipino Restaurant", "Ethiopian Restaurant", "Cajun / Creole Restaurant", "Flower Shop", "Kosher Restaurant", "Irish Pub", "Beer Garden"]
     
     var uiviewAvatarWaveSub: UIView!
     var imgAvatar: FaeAvatarView!
@@ -45,18 +47,26 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var fullyLoaded = false
     
+    var coordinate: CLLocationCoordinate2D?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
+        loadAvatarWave()
         DispatchQueue.main.async {
             self.loadContent()
-            self.buttonEnable(on: false)
-            self.loadPlaces()
-            self.loadWaves()
+            self.coordinate = LocManager.shared.curtLoc.coordinate
+            self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
+//            self.loadWaves()
             self.fullyLoaded = true
         }
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadWaves()
     }
     
     deinit {
@@ -64,7 +74,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadContent() {
-        loadAvatarWave()
+//        loadAvatarWave()
         loadTopTypesCollection()
         loadPicCollections()
         loadButtons()
@@ -81,7 +91,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblBottomLocation.isUserInteractionEnabled = on
     }
     
-    func loadPlaces() {
+    func loadPlaces(center: CLLocationCoordinate2D) {
         
         func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
             var tempRaw = arrRaw
@@ -94,7 +104,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             return arrResult
         }
-        
+        buttonEnable(on: false)
         // use uiview.tag as a Bool like value to indicate whether we should
         // animate the alpha value between clctView and Wave sub view
         if uiviewAvatarWaveSub.tag != 0 {
@@ -107,7 +117,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         arrPlaceData.removeAll(keepingCapacity: true)
         clctViewPics.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            General.shared.getPlacePins(coordinate: LocManager.shared.curtLoc.coordinate, radius: 0, count: 200, completion: { (status, placesJSON) in
+            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
                 guard status / 100 == 2 else { return }
                 guard let mapPlaceJsonArray = placesJSON.array else { return }
                 guard mapPlaceJsonArray.count > 0 else { return }
@@ -416,7 +426,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         btnRefresh = UIButton()
         btnRefresh.setImage(#imageLiteral(resourceName: "exp_refresh"), for: .normal)
-        btnRefresh.addTarget(self, action: #selector(loadPlaces), for: .touchUpInside)
+        btnRefresh.addTarget(self, action: #selector(actionRefresh), for: .touchUpInside)
         uiviewBtnSub.addSubview(btnRefresh)
         uiviewBtnSub.addConstraintsWithFormat("H:|-152-[v0(66)]", options: [], views: btnRefresh)
         uiviewBtnSub.addConstraintsWithFormat("V:|-6-[v0(66)]", options: [], views: btnRefresh)
@@ -434,6 +444,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewBtnSub.addSubview(btnGoRight)
         uiviewBtnSub.addConstraintsWithFormat("H:[v0(78)]-0-|", options: [], views: btnGoRight)
         uiviewBtnSub.addConstraintsWithFormat("V:|-0-[v0(78)]", options: [], views: btnGoRight)
+    }
+    
+    func actionRefresh() {
+        guard coordinate != nil else { return }
+        loadPlaces(center: coordinate!)
     }
     
     func loadBottomLocation() {
@@ -472,6 +487,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         } else if array.count == 2 {
             reloadBottomText(array[0], array[1])
         }
+        loadPlaces(center: address.coordinate)
     }
     
     func reloadBottomText(_ city: String, _ state: String) {

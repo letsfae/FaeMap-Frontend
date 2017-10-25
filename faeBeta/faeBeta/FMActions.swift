@@ -132,6 +132,7 @@ extension FaeMapViewController {
         uiviewNameCard.hide {}
         let vcExp = ExploreViewController()
         vcExp.delegate = self
+        vcExp.faeMapCtrler = self
         navigationController?.pushViewController(vcExp, animated: true)
     }
     

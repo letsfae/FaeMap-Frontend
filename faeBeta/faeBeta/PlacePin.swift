@@ -45,15 +45,10 @@ class PlacePin: NSObject {
             class_2_icon_id = _2_icon_id
         }
         icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
-        
         class_1 = json["categories"]["class1"].stringValue
-        
         imageURL = json["img"].stringValue
-        
         url = json["url"].stringValue
-        
         price = json["priceRange"].stringValue
-        
         phone = json["phone"].stringValue
     }
     
