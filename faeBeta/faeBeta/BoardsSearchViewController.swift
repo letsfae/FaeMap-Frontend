@@ -116,7 +116,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         filteredLocations = searchResults.map({ $0.title })
         self.tblLocationRes.reloadData()
         if self.searchResults.count > 0 {
-            
+            showOrHideViews(searchText: completer.queryFragment)
         }
     }
     
@@ -467,8 +467,19 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                     delegate?.sendLocationBack?(address: address)
                     navigationController?.popViewController(animated: false)
                 } else {
-                    navigationController?.popViewController(animated: false)
-                    delegate?.chooseLocationOnMap?()
+                    //navigationController?.popViewController(animated: false)
+                    //delegate?.chooseLocationOnMap?()
+                    let vc = SelectLocationViewController()
+                    Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
+                    //navigationController?.pushViewController(vc, animated: true)
+                    var arrViewControllers = navigationController?.viewControllers
+                    arrViewControllers!.removeLast()
+                    let lastVC = arrViewControllers?.last as! InitialPageController
+                    let vcMB = lastVC.arrViewCtrl.last as! MapBoardViewController
+                    vc.delegate = vcMB
+                    vc.boolFromBoard = true
+                    arrViewControllers!.append(vc)
+                    navigationController?.setViewControllers(arrViewControllers!, animated: true)
                 }
             }
         } else if enterMode == .place { // search places

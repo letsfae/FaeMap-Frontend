@@ -165,7 +165,7 @@ class FaeChat {
                         }
                     }
                     callGroup.notify(queue: .main) {
-                        print("finish reading")
+                        //print("finish reading")
                         //postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
                             //print("\(statusCode)")
                         //})
