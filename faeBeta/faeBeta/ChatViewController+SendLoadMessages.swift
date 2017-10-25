@@ -268,10 +268,14 @@ extension ChatViewController: OutgoingMessageProtocol {
                 if i < 0 {
                     continue
                 } else {
+                    let messageRealm = resultRealmMessages[i]
+                    if messageRealm.index < 0 {
+                        continue
+                    }
                     let incomingMessage = IncomingMessage(collectionView_: collectionView!)
-                    let messageJSQ = incomingMessage.createJSQMessage(resultRealmMessages[i])
+                    let messageJSQ = incomingMessage.createJSQMessage(messageRealm)
                     arrJSQMessages.insert(messageJSQ, at: 0)
-                    arrRealmMessages.insert(resultRealmMessages[i], at: 0)
+                    arrRealmMessages.insert(messageRealm, at: 0)
                 }
             }
             let oldOffset = collectionView.contentSize.height - collectionView.contentOffset.y

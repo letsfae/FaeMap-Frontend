@@ -79,7 +79,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //loadingRecentTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(startCheckingRecent), userInfo: nil, repeats: true)
         //let realm = try! Realm()
         //realmRecents = realm.objects(RealmRecent.self).sorted(byKeyPath: "date", ascending: false)
-        tblRecents.reloadData()
+        //tblRecents.reloadData()
         loadingRecentTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateTimestamp), userInfo: nil, repeats: true)
     }
     
