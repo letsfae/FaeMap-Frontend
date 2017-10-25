@@ -24,7 +24,7 @@ enum EnterEmailMode {
     case settings
 }
 
-class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
+class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //}, UpdateUsrnameEmailDelegate {
     var enterMode: EnterVerifyCodeMode!
     var enterPhoneMode: EnterPhoneMode!
     var enterEmailMode: EnterEmailMode!
@@ -37,6 +37,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     var strPhoneNumber = ""
     var strEmail = ""
     var delegate: VerifyCodeDelegate!
+    var updatePhoneDelegate: UpdateUsrnameEmailDelegate!
     let faeUser = FaeUser()
     fileprivate var verificationCodeView: FAEVerificationCodeView!
     fileprivate var timer: Timer!
@@ -192,27 +193,49 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
             faeUser.verifyPhoneNumber {(status, message) in
                 print("[verify phone] \(status) \(message!)")
                 if(status / 100 == 2 ) {
-                    if self.enterPhoneMode == .settings || self.enterPhoneMode == .settingsUpdate {
-                        let vc = UpdateUsrnameEmailViewController()
-                        vc.enterMode = .phone
-                        vc.strCountry = self.strCountry + " +" + self.strCountryCode
-                        vc.strPhone = self.strPhoneNumber
-                        var arrViewControllers = self.navigationController?.viewControllers
-                        arrViewControllers?.removeLast()
-                        arrViewControllers?.removeLast()
-                        arrViewControllers?.append(vc)
-                        self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
-                    } else if self.enterPhoneMode == .signInSupport {
-                        Key.shared.userPhoneVerified = true
+                    if self.enterPhoneMode == .signInSupport {
                         let controller = SignInSupportNewPassViewController()
                         controller.enterMode = self.enterMode
                         controller.phone = "(" + self.strCountryCode + ")" + self.strPhoneNumber
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
-                    } else {  // from contacts
-                        Key.shared.userPhoneVerified = true
-                        self.delegate?.verifyPhoneSucceed()
-                        self.dismiss(animated: false)
+                    } else {
+//                        self.faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
+//                            if(statusCode / 100 == 2) {
+//                                print("Successfully get account info \(statusCode) \(result!)")
+//                                Key.shared.userPhoneVerified = true
+//                                self.updatePhoneDelegate?.updatePhone()
+//                            } else {
+//                                print("Fail to get account info \(statusCode) \(result!)")
+//                            }
+//                        }
+                        if self.enterPhoneMode == .settings {
+                            let vc = UpdateUsrnameEmailViewController()
+//                            vc.delegate =
+                            vc.enterMode = .phone
+                            vc.strCountry = self.strCountry + " +" + self.strCountryCode
+                            vc.strPhone = self.strPhoneNumber
+                            var arrViewControllers = self.navigationController?.viewControllers
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.append(vc)
+                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                        } else if self.enterPhoneMode == .settingsUpdate {
+                            let vc = UpdateUsrnameEmailViewController()
+                            // vc.delgate
+                            vc.enterMode = .phone
+                            vc.strCountry = self.strCountry + " +" + self.strCountryCode
+                            vc.strPhone = self.strPhoneNumber
+                            var arrViewControllers = self.navigationController?.viewControllers
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.append(vc)
+                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                        } else {  // from contacts
+                            self.delegate?.verifyPhoneSucceed()
+                            self.dismiss(animated: false)
+                        }
                     }
                 } else {
                     for _ in 0..<6 {
@@ -272,5 +295,12 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
         }
         startTimer()
         btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
+    }
+    
+    // UpdateUsrnameEmailDelegate
+    func updateEmail() {}
+    
+    func updatePhone() {
+
     }
 }
