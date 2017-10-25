@@ -12,8 +12,6 @@ import CoreLocation
 
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
     
-    static let shared = ExploreViewController()
-    
     weak var delegate: MapSearchDelegate?
     
     var uiviewNavBar: FaeNavBar!
@@ -41,6 +39,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // Collecting Pin Control
     var uiviewSavedList: AddPinToCollectionView!
     var uiviewAfterAdded: AfterAddedToListView!
+    var arrListSavedThisPin = [Int]()
     
     var arrPlaceData = [PlacePin]()
     
@@ -57,15 +56,20 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.loadWaves()
             self.fullyLoaded = true
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        if fullyLoaded { buttonEnable(on: false) }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    func loadContent() {
+        loadAvatarWave()
+        loadTopTypesCollection()
+        loadPicCollections()
+        loadButtons()
+        loadBottomLocation()
+        loadPlaceListView()
     }
     
     func buttonEnable(on: Bool) {
@@ -115,29 +119,32 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                     self.clctViewPics.alpha = 1
                     self.uiviewAvatarWaveSub.alpha = 0
                 })
+                self.checkSavedStatus(id: 0)
             })
-            
         }
-    }
-    
-    func loadContent() {
-        loadAvatarWave()
-        loadTopTypesCollection()
-        loadPicCollections()
-        loadButtons()
-        loadBottomLocation()
-        loadPlaceListView()
     }
     
     // AfterAddedToListDelegate
     func seeList() {
         uiviewAfterAdded.hide()
-        let vcSavedList = CollectionsViewController()
-        navigationController?.pushViewController(vcSavedList, animated: true)
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewSavedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colInfo = uiviewAfterAdded.selectedCollection
+        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
+        navigationController?.pushViewController(vcList, animated: true)
     }
     // AfterAddedToListDelegate
     func undoCollect(colId: Int) {
         uiviewAfterAdded.hide()
+        uiviewSavedList.show()
+        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+            let arrListIds = uiviewSavedList.arrListSavedThisPin
+            arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        }
+        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
+        hideSavedNoti()
     }
     // AddPlacetoCollectionDelegate
     func createColList() {
@@ -153,6 +160,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
+        uiviewSavedList.tableMode = .place
+        uiviewSavedList.loadCollectionData()
         view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
@@ -250,9 +259,20 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func actionSave(_ sender: UIButton) {
         uiviewSavedList.show()
+        uiviewSavedList.loadCollectionData()
+    }
+    
+    func showSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
             self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 50, y: 16, width: 0, height: 0)
+            self.imgSaved.alpha = 0
         }, completion: nil)
     }
     
@@ -270,6 +290,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
         intCurtPage = numPage
+        checkSavedStatus(id: intCurtPage)
     }
     
     func actionBack(_ sender: UIButton) {
@@ -279,6 +300,45 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth = clctViewPics.frame.size.width
         intCurtPage = Int(clctViewPics.contentOffset.x / pageWidth)
+        checkSavedStatus(id: intCurtPage)
+    }
+    
+    func checkSavedStatus(id: Int) {
+        guard id < arrPlaceData.count else {
+            // 判断:
+            return
+        }
+        let placePin = arrPlaceData[id]
+        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: placePin as AnyObject)
+        getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+            self.arrListSavedThisPin = ids
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            if ids.count > 0 {
+                self.showSavedNoti()
+            } else {
+                self.hideSavedNoti()
+            }
+        }
+    }
+    
+    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
+        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            var ids = [Int]()
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion(ids)
+                return
+            }
+            guard is_saved != "false" else { return }
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            completion(ids)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

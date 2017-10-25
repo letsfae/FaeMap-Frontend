@@ -11,6 +11,8 @@ import SwiftyJSON
 
 class FaeGenderView: UIView {
     
+    static let shared = FaeGenderView()
+    
     var userId = -1
     var boolAlignLeft = true
     var imgCardGender: UIImageView!
@@ -21,7 +23,7 @@ class FaeGenderView: UIView {
     static var imageMale = #imageLiteral(resourceName: "userGenderMale")
     static var imageFemale = #imageLiteral(resourceName: "userGenderFemale")
     
-    override init(frame: CGRect) {
+    override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         
         backgroundColor = UIColor(r: 149, g: 207, b: 246, alpha: 100)

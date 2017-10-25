@@ -179,7 +179,7 @@ extension FaeMapViewController {
         let btnBackToExp = UIButton()
         btnBackToExp.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         imgExpbarShadow.addSubview(btnBackToExp)
-        btnBackToExp.addTarget(self, action: #selector(self.actionBackToExp(_:)), for: .touchUpInside)
+        btnBackToExp.addTarget(self, action: #selector(self.actionBackTo(_:)), for: .touchUpInside)
         imgExpbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnBackToExp)
         imgExpbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnBackToExp)
         btnBackToExp.adjustsImageWhenDisabled = false
@@ -203,6 +203,13 @@ extension FaeMapViewController {
         let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
         title_0_attr.append(title_1_attr)
         
+        lblExpContent.attributedText = title_0_attr
+    }
+    
+    func setCollectionTitle(type: String) {
+        let title_0 = type
+        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
         lblExpContent.attributedText = title_0_attr
     }
 }

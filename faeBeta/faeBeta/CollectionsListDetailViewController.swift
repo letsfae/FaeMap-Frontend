@@ -54,9 +54,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var arrSavedPinIds = [Int]()
     
     var indexPath: IndexPath!
+    
     weak var delegate: CollectionsListDetailDelegate?
+    weak var featureDelegate: MapFilterMenuDelegate?
     
     var boolFromChat: Bool = false
+    
+    var intRemoveCount = 2
+    
+    var faeMapCtrler: FaeMapViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,7 +88,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtDesp = arrColDetails.colDesp
         txtTime = arrColDetails.colTime
         numItems = arrColDetails.pinIds.count
-                
+        btnMapView.isEnabled = false
         self.getSavedItems(colId: self.colId)
         self.tblColListDetail.reloadData()
     }
@@ -190,6 +196,16 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     func tabButtonPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0: // map view
+            var arrCtrlers = navigationController?.viewControllers
+            if let ctrler = faeMapCtrler {
+                ctrler.arrCtrlers = arrCtrlers!
+                ctrler.boolFromMap = false
+            }
+            for _ in 0..<intRemoveCount {
+                arrCtrlers?.removeLast()
+            }
+            featureDelegate?.showSavedPins(type: arrColDetails.colType, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.colName)
+            navigationController?.setViewControllers(arrCtrlers!, animated: false)
             break
         case 1: // share
             // TODO: jichao
@@ -262,7 +278,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             cell.delegate = self
             let img = enterMode == .place ? #imageLiteral(resourceName: "collection_placeHeader") : #imageLiteral(resourceName: "collection_locationHeader")
             cell.setValueForCell(img: img)
-            cell.updateValueForCell(name: txtName, desp: txtDesp, time: txtTime)
+            cell.updateValueForCell(colInfo: arrColDetails)
             return cell
         } else {
             if arrSavedPinIds.count == 0 {
@@ -314,6 +330,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
             joshprint(self.arrSavedPinIds)
             self.tblColListDetail.reloadData()
+            self.btnMapView.isEnabled = true
         })
     }
     
@@ -430,21 +447,30 @@ class ColListDetailHeader: UITableViewCell {
         })
     }
     
-    func updateValueForCell(name: String, desp: String, time: String) {
+    func updateValueForCell(colInfo: PinCollection) {
+        
+        General.shared.avatar(userid: colInfo.creatorId) { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+            self.imgAvatar.isUserInteractionEnabled = true
+        }
+        
         let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._146146146()]
         let nameAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSForegroundColorAttributeName: UIColor._2499090()]
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
-        let nameStr = NSMutableAttributedString(string: "\(Key.shared.nickname ?? "Someone")", attributes: nameAttr)
-        let updateStr = NSMutableAttributedString(string: " ::: Updated \(time)", attributes: attribute)
         
-        curtStr.append(nameStr)
-        curtStr.append(updateStr)
+        FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
+            let nameStr = NSMutableAttributedString(string: "\(nickname ?? "Someone")", attributes: nameAttr)
+            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.colTime)", attributes: attribute)
+            curtStr.append(nameStr)
+            curtStr.append(updateStr)
+            
+            self.lblTime.attributedText = curtStr
+        }
         
-        lblTime.attributedText = curtStr
-        lblName.text = name
+        lblName.text = colInfo.colName
         
         let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
-        lblDesp.attributedText = NSAttributedString(string: desp, attributes: despAttr)
+        lblDesp.attributedText = NSAttributedString(string: colInfo.colDesp, attributes: despAttr)
         
         var lineCount: Int = 0
         let textSize = CGSize(width: screenWidth - 50, height: CGFloat(MAXFLOAT))
@@ -600,7 +626,6 @@ class ColListLocationCell: UITableViewCell {
     fileprivate func loadCellContent() {
         imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
         imgSavedItem.clipsToBounds = true
-        imgSavedItem.backgroundColor = UIColor._2499090()
         imgSavedItem.contentMode = .scaleAspectFill
         addSubview(imgSavedItem)
         let icon = UIImageView(frame: CGRect(x: 23, y: 22, width: 19, height: 24))
@@ -633,13 +658,12 @@ class ColListLocationCell: UITableViewCell {
             let lat = locationFromCache["geolocation"]["latitude"].doubleValue
             let lon = locationFromCache["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = locationFromCache["content"].intValue
-            self.imgSavedItem.loadImage(id: locationFromCache["content"].intValue)
+            self.imgSavedItem.fileID = locationFromCache["file_ids"].intValue
+            self.imgSavedItem.loadImage(id: locationFromCache["file_ids"].intValue)
             UIView.animate(withDuration: 0.1, animations: {
                 self.imgSavedItem.alpha = 1
             })
             self.getAddressForLocation(locId, location)
-            joshprint("[setValueForLocationPin] get location pin from cache")
             return
         }
         FaeMap.shared.getPin(type: "location", pinId: String(locId)) { (status, message) in
@@ -650,10 +674,9 @@ class ColListLocationCell: UITableViewCell {
             let lat = resultJson["geolocation"]["latitude"].doubleValue
             let lon = resultJson["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = resultJson["content"].intValue
-            self.imgSavedItem.loadImage(id: resultJson["content"].intValue)
+            self.imgSavedItem.fileID = resultJson["file_ids"].intValue
+            self.imgSavedItem.loadImage(id: resultJson["file_ids"].intValue)
             self.getAddressForLocation(locId, location)
-            joshprint("[setValueForLocationPin] get location pin successfully")
             UIView.animate(withDuration: 0.1, animations: {
                 self.imgSavedItem.alpha = 1
             })

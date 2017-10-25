@@ -62,7 +62,7 @@ class CollectionsListCell: UITableViewCell {
     
     func setValueForCell(cols: PinCollection, isIn: Bool = false) {
         imgPic.image = cols.colType == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
-        General.shared.avatar(userid: Key.shared.user_id, completion: { avatarImage in
+        General.shared.avatar(userid: cols.creatorId, completion: { avatarImage in
             self.imgAvatar.image = avatarImage
         })
         lblListName.text = cols.colName

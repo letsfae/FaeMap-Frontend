@@ -31,6 +31,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var arrPlaces = [PinCollection]()
     var arrLocations = [PinCollection]()
     let faeCollection = FaeCollection()
+    var faeMapCtrler: FaeMapViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -294,6 +295,10 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             vc.indexPath = indexPath
             vc.enterMode = tableMode
             vc.arrColDetails = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
+            if let ctrler = faeMapCtrler {
+                vc.featureDelegate = ctrler
+                vc.faeMapCtrler = ctrler
+            }
             navigationController?.pushViewController(vc, animated: true)
         }
     }

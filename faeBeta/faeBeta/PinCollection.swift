@@ -19,6 +19,7 @@ struct PinCollection {
     var itemsCount: Int = 0
     var pinIds = [Int]()
     var lastUpdate: String
+    var creatorId: Int
     
     init(json: JSON) {
         colId = json["collection_id"].intValue
@@ -37,6 +38,7 @@ struct PinCollection {
                 pinIds.append(id["pin_id"].intValue)
             }
         }
+        creatorId = json["user_id"].intValue
     }
 }
 

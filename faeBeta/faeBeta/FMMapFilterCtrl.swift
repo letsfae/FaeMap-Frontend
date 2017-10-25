@@ -102,8 +102,16 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     }
     
     // MapFilterMenuDelegate
-    func showSavedPins(type: String, savedPinIds: [Int]) {
-        guard savedPinIds.count > 0 else { return }
+    func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String) {
+        if isCollections {
+            mapMode = .collection
+            setCollectionTitle(type: colName)
+        }
+        animateMainItems(show: true, animated: false)
+        guard savedPinIds.count > 0 else {
+            // 判断:
+            return
+        }
         PLACE_ENABLE = false
         self.desiredCount = savedPinIds.count
         self.completionCount = 0
@@ -118,7 +126,6 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
-                        pin.icon = #imageLiteral(resourceName: "icon_destination")
                         self.placesFromSearch.append(pin)
                         self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                     } else if type == "location" {

@@ -190,6 +190,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
                 self.btnFilterIcon.frame.origin.y = screenHeight + 10
             }
+            faeMapView.cgfloatCompassOffset = 134
+            faeMapView.layoutSubviews()
         } else {
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
@@ -206,6 +208,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
                 self.btnFilterIcon.center.y = screenHeight - 25
             }
+            faeMapView.cgfloatCompassOffset = 215
+            faeMapView.layoutSubviews()
         }
     }
     
