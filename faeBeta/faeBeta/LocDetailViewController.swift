@@ -84,14 +84,12 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         checkSavedStatus() {}
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_locDetail"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_locDetail"), object: nil)
         
         fullLoaded = true
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_locDetail"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_locDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -373,6 +371,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
         }
         guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        // shrink imgSaved button
+        hideSavedNoti()
     }
 }

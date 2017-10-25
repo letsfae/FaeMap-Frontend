@@ -141,7 +141,7 @@ extension FaeMapViewController {
         uiviewChooseLocs.show()
     }
     
-    func actionBackToExp(_ sender: UIButton) {
+    func actionBackTo(_ sender: UIButton) {
         btnZoom.smallMode()
         if mapMode == .explore {
             let vcExp = ExploreViewController()
@@ -158,11 +158,16 @@ extension FaeMapViewController {
             }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
+        } else if mapMode == .collection {
+            animateMainItems(show: false, animated: boolFromMap)
+            if boolFromMap == false {
+                boolFromMap = true
+                navigationController?.setViewControllers(arrCtrlers, animated: false)
+            }
         }
         PLACE_ENABLE = true
         mapMode = .normal
         faeMapView.blockTap = false
-//        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: nil)
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)

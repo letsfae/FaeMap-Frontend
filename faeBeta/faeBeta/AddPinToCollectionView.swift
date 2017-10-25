@@ -55,7 +55,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                     print("[loadCollectionData] fail to parse collections info")
                     return
                 }
-                
                 self.arrCollection.removeAll()
                 for col in colArray {
                     let data = PinCollection(json: col)
@@ -63,7 +62,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                         self.arrCollection.append(data)
                     }
                 }
-                
                 self.tblAddCollection.reloadData()
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
@@ -168,6 +166,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 self.tblAddCollection.reloadData()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_explore"), object: nil)
                 self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
             })
         } else {
@@ -185,6 +184,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                     let fileIDJSON = JSON(message!)
                     let fileId = fileIDJSON["file_id"].intValue
                     FaeMap.shared.whereKey("content", value: "\(fileId)")
+                    FaeMap.shared.whereKey("file_ids", value: "\(fileId)")
                     FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
                     FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
                     FaeMap.shared.postPin(type: "location", completion: { (status, message) in

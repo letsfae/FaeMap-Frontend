@@ -23,7 +23,7 @@ class FMZoomButton: UIButton {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        longPress.minimumPressDuration = 0.0001
+        longPress.minimumPressDuration = 0.2
         addGestureRecognizer(longPress)
     }
     
@@ -90,7 +90,8 @@ class FMZoomButton: UIButton {
         UIView.animate(withDuration: 0.2) {
             self.btnSmall.alpha = 0
             self.btnLarge.alpha = 1
-            self.frame = CGRect(x: screenWidth - 82, y: screenHeight - 216, width: 60, height: 122)
+            let origin_y = self.frame.origin.y
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y - 61 * screenHeightFactor, width: 60, height: 122)
         }
     }
     
@@ -100,7 +101,8 @@ class FMZoomButton: UIButton {
         UIView.animate(withDuration: 0.2) {
             self.btnSmall.alpha = 1
             self.btnLarge.alpha = 0
-            self.frame = CGRect(x: screenWidth - 82, y: screenHeight - 153, width: 60, height: 60)
+            let origin_y = self.frame.origin.y
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y + 61 * screenHeightFactor, width: 60, height: 60)
         }
     }
     
@@ -169,7 +171,7 @@ class FMLocateSelf: UIButton {
     }
     
     private func loadContent() {
-        setImage(#imageLiteral(resourceName: "mainScreenLocateSelf_new"), for: .normal)
+        setImage(#imageLiteral(resourceName: "mainScreenLocateSelf"), for: .normal)
         addTarget(self, action: #selector(actionLocateSelf(_:)), for: .touchUpInside)
         layer.zPosition = 500
         adjustsImageWhenHighlighted = false

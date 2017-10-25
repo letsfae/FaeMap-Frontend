@@ -60,7 +60,7 @@ extension FaeMapViewController {
     }
     
     func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
-        let identifier = "location"
+        let identifier = "location\(mapMode)"
         var anView: LocPinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? LocPinAnnotationView {
             dequeuedView.annotation = annotation

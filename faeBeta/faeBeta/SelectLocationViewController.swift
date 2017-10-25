@@ -25,6 +25,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     var imgPinOnMap: UIImageView!
     var btnCancel: UIButton!
     var btnLocat: FMLocateSelf!
+    var btnZoom: FMZoomButton!
     var buttonSetLocationOnMap: UIButton!
     var btnSelect: FMDistIndicator!
     var lblSearchContent: UILabel!
@@ -223,19 +224,19 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func loadButtons() {
-        btnCancel = UIButton()
-        btnCancel.setImage(#imageLiteral(resourceName: "cancelSelectLocation"), for: .normal)
-        view.addSubview(btnCancel)
-        btnCancel.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
-        view.addConstraintsWithFormat("H:|-20-[v0(63)]", options: [], views: btnCancel)
-        view.addConstraintsWithFormat("V:[v0(63)]-11-|", options: [], views: btnCancel)
+//        btnCancel = UIButton()
+//        btnCancel.setImage(#imageLiteral(resourceName: "cancelSelectLocation"), for: .normal)
+//        view.addSubview(btnCancel)
+//        btnCancel.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
+//        view.addConstraintsWithFormat("H:|-20-[v0(63)]", options: [], views: btnCancel)
+//        view.addConstraintsWithFormat("V:[v0(63)]-11-|", options: [], views: btnCancel)
         
         btnLocat = FMLocateSelf()
         btnLocat.removeTarget(nil, action: nil, for: .touchUpInside)
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
         view.addSubview(btnLocat)
-        view.addConstraintsWithFormat("H:[v0(63)]-20-|", options: [], views: btnLocat)
-        view.addConstraintsWithFormat("V:[v0(63)]-11-|", options: [], views: btnLocat)
+        view.addConstraintsWithFormat("H:|-21-[v0(60)]", options: [], views: btnLocat)
+        view.addConstraintsWithFormat("V:[v0(60)]-13-|", options: [], views: btnLocat)
         
         btnSelect = FMDistIndicator()
         btnSelect.frame.origin.y = screenHeight - 74
@@ -243,8 +244,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.isUserInteractionEnabled = true
         view.addSubview(btnSelect)
         
+        btnZoom = FMZoomButton()
+        btnZoom.frame.origin.y = 664 * screenHeightFactor
+        view.addSubview(btnZoom)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         btnSelect.addGestureRecognizer(tapGesture)
+        
+        faeMapView.cgfloatCompassOffset = 134
+        faeMapView.layoutSubviews()
     }
     
     func handleTap(_ tap: UITapGestureRecognizer) {

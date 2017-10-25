@@ -54,12 +54,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         checkSavedStatus() {}
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -388,7 +386,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
         }
         guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        // shrink imgSaved button
+        hideSavedNoti()
     }
 }
 

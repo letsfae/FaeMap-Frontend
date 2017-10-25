@@ -18,6 +18,7 @@ enum MapMode {
     case pinDetail
     case selecting
     case explore
+    case collection
 }
 
 enum CreateLocation {
@@ -128,13 +129,17 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Chat
     let faeChat = FaeChat()
     
+    // Collections Managements
+    var arrCtrlers = [UIViewController]()
+    var boolFromMap = true
+    
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }
             imgSearchIcon.isHidden = mapMode == .selecting
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
-            imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail
-            imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail
+            imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
+            imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail || mapMode == .collection
             btnZoom.isHidden = mapMode == .explore
             btnLocateSelf.isHidden = mapMode == .explore
             btnOpenChat.isHidden = mapMode == .explore

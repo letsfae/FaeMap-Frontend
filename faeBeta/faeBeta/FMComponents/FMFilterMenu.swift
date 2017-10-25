@@ -9,11 +9,11 @@
 import UIKit
 import SwiftyJSON
 
-protocol MapFilterMenuDelegate: class {
-    func autoReresh(isOn: Bool)
-    func autoCyclePins(isOn: Bool)
-    func hideAvatars(isOn: Bool)
-    func showSavedPins(type: String, savedPinIds: [Int])
+@objc protocol MapFilterMenuDelegate: class {
+    @objc optional func autoReresh(isOn: Bool)
+    @objc optional func autoCyclePins(isOn: Bool)
+    @objc optional func hideAvatars(isOn: Bool)
+    func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String)
 }
 
 class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -439,33 +439,18 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func switchAutoRefresh(_ sender: UISwitch) {
-        if switchRefresh.isOn {
-            lblRefresh.textColor = UIColor._115115115()
-            delegate?.autoReresh(isOn: true)
-        } else {
-            lblRefresh.textColor = UIColor._146146146()
-            delegate?.autoReresh(isOn: false)
-        }
+        lblRefresh.textColor = switchRefresh.isOn ? UIColor._115115115() : UIColor._146146146()
+        delegate?.autoReresh?(isOn: switchRefresh.isOn)
     }
     
     func switchAutoCyclePins(_ sender: UISwitch) {
-        if switchCyclePins.isOn {
-            lblCyclePins.textColor = UIColor._115115115()
-            delegate?.autoCyclePins(isOn: true)
-        } else {
-            lblCyclePins.textColor = UIColor._146146146()
-            delegate?.autoCyclePins(isOn: false)
-        }
+        lblCyclePins.textColor = switchCyclePins.isOn ? UIColor._115115115() : UIColor._146146146()
+        delegate?.autoCyclePins?(isOn: switchCyclePins.isOn)
     }
     
     func switchShowAvatars(_ sender: UISwitch) {
-        if switchHideAvatars.isOn {
-            lblHideAvatars.textColor = UIColor._115115115()
-            delegate?.hideAvatars(isOn: true)
-        } else {
-            lblHideAvatars.textColor = UIColor._146146146()
-            delegate?.hideAvatars(isOn: false)
-        }
+        lblHideAvatars.textColor = switchHideAvatars.isOn ? UIColor._115115115() : UIColor._146146146()
+        delegate?.hideAvatars?(isOn: switchHideAvatars.isOn)
     }
     
     func hide(_ sender: UIButton) {
@@ -501,7 +486,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             let resultJson = JSON(message!)
             let arrLocPinId = resultJson["pins"].arrayValue
             let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
-            self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds)
+            self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.colName)
         }
     }
     

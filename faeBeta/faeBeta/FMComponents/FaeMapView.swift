@@ -14,11 +14,12 @@ class FaeMapView: MKMapView {
     var faeMapCtrler: FaeMapViewController?
     var slcMapCtrler: SelectLocationViewController?
     var blockTap = false
+    var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
     
     override func layoutSubviews() {
         super.layoutSubviews()
         if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
-            compassView.frame = CGRect(x: 21, y: screenHeight - 215, width: 60, height: 60)
+            compassView.frame = CGRect(x: 21, y: screenHeight - cgfloatCompassOffset, width: 60, height: 60)
             if let imgView = compassView.subviews.first as? UIImageView {
                 imgView.image = #imageLiteral(resourceName: "mainScreenNorth")
             }
