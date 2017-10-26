@@ -40,6 +40,11 @@ class PlacePin: NSObject {
         } else if let _2 = json["categories"]["class2"].string {
             class_2 = _2
         }
+        /**
+        if json["categories"]["class2"].stringValue != "" {
+            print(json["categories"]["class2"].stringValue)
+        }
+         */
         if let _3_icon_id = json["categories"]["class3_icon_id"].int {
             class_2_icon_id = _3_icon_id
         } else if let _2_icon_id = json["categories"]["class2_icon_id"].int {

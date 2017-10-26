@@ -20,6 +20,17 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
         }   
     }
     
+    // UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            picker.dismiss(animated: true, completion: nil)
+            showAlert(title: "Taking Photo Failed", message: "please try again")
+            return
+        }
+        picker.dismiss(animated: true, completion: nil)
+        uploadProfileAvatar(image: image)
+    }
+    
     func uploadProfileAvatar(image: UIImage) {
         view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
@@ -55,10 +66,6 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
     }
     
     func addProfileAvatar() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        //imagePicker.sourceType = .camera
-        imagePicker.sourceType = .photoLibrary // prevent simulator crashing
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
@@ -85,6 +92,9 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
             }
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .camera
             var photoStatus = PHPhotoLibrary.authorizationStatus()
             if photoStatus != .authorized {
                 PHPhotoLibrary.requestAuthorization({ (status) in

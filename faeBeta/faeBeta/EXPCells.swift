@@ -370,10 +370,16 @@ class EXPClctImgCell: UICollectionViewCell {
     }
 }
 
+protocol ExploreCategorySearch: class {
+    func search(category: String)
+}
+
 class EXPClctTypeCell: UICollectionViewCell {
-    weak var delegate: EXPCellDelegate?
+    
+    weak var delegate: ExploreCategorySearch?
     
     var btnType: UIButton!
+    var category = ""
     
     internal var widthContraint = [NSLayoutConstraint]() {
         didSet {
@@ -402,12 +408,18 @@ class EXPClctTypeCell: UICollectionViewCell {
         btnType.setTitleColor(.lightGray, for: .highlighted)
         btnType.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
         btnType.titleLabel?.textAlignment = .center
+        btnType.addTarget(self, action: #selector(actionSearch), for: .touchUpInside)
         addSubview(btnType)
         widthContraint = returnConstraintsWithFormat("H:|-0-[v0(50)]", options: [], views: btnType)
         addConstraintsWithFormat("V:[v0(36)]-0-|", options: [], views: btnType)
     }
     
+    func actionSearch() {
+        delegate?.search(category: category)
+    }
+    
     func updateTitle(type: String) {
+        category = type
         btnType.setTitle(type, for: .normal)
         guard let lblWidth = btnType.titleLabel?.intrinsicContentSize.width else { return }
         widthContraint = returnConstraintsWithFormat("H:|-0-[v0(\(Int(lblWidth) + 3))]", options: [], views: btnType)

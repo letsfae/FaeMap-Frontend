@@ -204,10 +204,6 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func addProfileAvatar(_ sender: UIButton) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        //imagePicker.sourceType = .camera
-        imagePicker.sourceType = .photoLibrary // prevent simulator crashing
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
@@ -234,6 +230,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             }
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = .camera
             var photoStatus = PHPhotoLibrary.authorizationStatus()
             if photoStatus != .authorized {
                 PHPhotoLibrary.requestAuthorization({ (status) in
@@ -261,6 +260,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.imageViewAvatar.image = image
+        uploadProfileAvatar()
         picker.dismiss(animated: true, completion: nil)
     }
     
