@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import RealmSwift
 
 extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
     
@@ -30,6 +31,13 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
             if code / 100 == 2 {
                 self.imgAvatar.image = image
                 print("[uploadProfileAvatar] succeed")
+                let realm = try! Realm()
+                let realmUser = UserAvatar()
+                realmUser.user_id = "\(Key.shared.user_id)"
+                realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
+                try! realm.write {
+                    realm.add(realmUser, update: true)
+                }
             }
             else {
                 print("[uploadProfileAvatar] fail")

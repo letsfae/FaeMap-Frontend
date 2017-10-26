@@ -267,7 +267,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         if boolFromBoard {
             if selectedLocation != nil {
                 delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "\(selectedLocation!.address_1), \(selectedLocation!.address_2)", location: CLLocation(latitude: selectedLocation!.coordinate.latitude, longitude: selectedLocation!.coordinate.longitude))
-                navigationController?.popViewController(animated: false)
+                navigationController?.popViewController(animated: true)
             }
         } else {
             if selectedLocation != nil {

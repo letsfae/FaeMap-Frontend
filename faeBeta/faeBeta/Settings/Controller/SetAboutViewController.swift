@@ -60,7 +60,8 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(SetFaeMap(), animated: true)
             break
         case 2:
-            navigationController?.pushViewController(SetDeactiveViewController(), animated: true)
+            navigationController?.pushViewController(SetWebViewController(), animated: true)
+            break
         default:
             break
         }
