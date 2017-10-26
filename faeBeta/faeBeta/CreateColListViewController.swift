@@ -199,7 +199,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
                     let time = dateformatter.string(from: curtDate)
                     
-                    let json: JSON = ["collection_id": colId, "name": self.txtListName, "description": self.txtListDesp, "type": self.enterMode.rawValue, "is_private": true, "created_at": time]
+                    let json: JSON = ["collection_id": colId, "name": self.txtListName, "user_id": Key.shared.user_id, "description": self.txtListDesp, "type": self.enterMode.rawValue, "is_private": true, "created_at": time, "count": "0", "last_updated_at": time]
                     let newCol = PinCollection(json: json)
                     
                     self.delegate?.updateCols(col: newCol)

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ManageColListDelegate: class {
-    func returnValBack(savedItems: [SavedPin])
+    func returnValBack()
 }
 
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
@@ -29,8 +29,8 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     let REMOVE = 2
     
     weak var delegate: ManageColListDelegate?
-    
-    var arrColList = [SavedPin]()
+    var arrSavedIds = [Int]()
+//    var arrColList = [SavedPin]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,12 +67,12 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         tblManageList = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65 - 56), style: .plain)
         view.addSubview(tblManageList)
         tblManageList.backgroundColor = .white
-        
         tblManageList.dataSource = self
         tblManageList.delegate = self
         tblManageList.separatorStyle = .none
-        tblManageList.estimatedRowHeight = 90
-        tblManageList.register(ManageColListCell.self, forCellReuseIdentifier: "ManageColListCell")
+        tblManageList.estimatedRowHeight = 100
+        tblManageList.register(ColListPlaceCell.self, forCellReuseIdentifier: "ManageColPlaceCell")
+        tblManageList.register(ColListLocationCell.self, forCellReuseIdentifier: "ManageColLocationCell")
     }
     
     fileprivate func loadTab() {
@@ -114,7 +114,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func actionDone(_ sender: UIButton) {
-        delegate?.returnValBack(savedItems: arrColList)
+        delegate?.returnValBack()//savedItems: arrColList)
         dismiss(animated: true)
     }
     
@@ -132,34 +132,51 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             vc.delegate = self
             vc.enterMode = enterMode
             vc.indexPath = selectedIdx[0]
-            let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
-            vc.txtMemo = cell.lblColMemo.text!
-            vc.pinId = arrColList[selectedIdx[0].row].pinId
+            
+//            if enterMode == .place {
+//                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColPlaceCell
+//            } else {
+//                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColLocationCell
+//            }
+//            vc.txtMemo = cell.lblColMemo.text!
+            vc.pinId = arrSavedIds[selectedIdx[0].row] //arrColList[selectedIdx[0].row].pinId
             vc.modalPresentationStyle = .overCurrentContext
             present(vc, animated: false)
             break
         case REMOVE:
             // 对后端需求，批量删除？
-//            var boolRemoved = false
-            for idxPath in selectedIdx {
-                let id = String(arrColList[idxPath.row].pinId)
-                let cell = self.tblManageList.cellForRow(at: idxPath) as! ManageColListCell
+            print(arrSavedIds)
+            for i in 0..<selectedIdx.count {
+                let idxPath = selectedIdx[i]
+                print("\(i)  \(idxPath)")
+                let id = String(arrSavedIds[idxPath.row]) //arrColList[idxPath.row].pinId)
+                let cell = self.tblManageList.cellForRow(at: idxPath) as! ColListPlaceCell
                 cell.btnSelect.isSelected = false
                 let idx = idxPath.row
                 FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: id) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
-                        self.arrColList.remove(at: idx)
-//                        boolRemoved = true
+                        self.arrSavedIds.remove(at: idx)
                     } else {
                         print("[Fail to Unsave Item From Collection] \(status) \(message!)")
+                    }
+                    
+//                    self.selectedIdx.remove(at: i)
+                    print("idx \(idx) \(self.selectedIdx) \(self.selectedIdx[self.selectedIdx.count - 1].row)")
+                    print(self.arrSavedIds)
+                    if idx == self.selectedIdx[self.selectedIdx.count - 1].row {
+                        print(self.arrSavedIds)
+                        self.reloadAfterDelete()
+                        self.selectedIdx.removeAll()
+                        self.updateTabBarBtnColor(selectedCount: 0)
                     }
                 }
             }
             
 //            if boolRemoved {
-                reloadAfterDelete()
-                selectedIdx.removeAll()
-                updateTabBarBtnColor(selectedCount: 0)
+//                print(arrSavedIds)
+////                reloadAfterDelete()
+//                selectedIdx.removeAll()
+//                updateTabBarBtnColor(selectedCount: 0)
 //            }
             break
         default:
@@ -193,30 +210,52 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrColList.count
+        return arrSavedIds.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColListCell", for: indexPath) as! ManageColListCell
-        let savedItem = arrColList[indexPath.row]
-        cell.setValueForCell(savedItem: savedItem)
-        return cell
+        if enterMode == .place {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColPlaceCell", for: indexPath) as! ColListPlaceCell
+            let savedId = arrSavedIds[indexPath.row]
+            cell.setValueForPlacePin(placeId: savedId)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColLocationCell", for: indexPath) as! ColListLocationCell
+            let savedId = arrSavedIds[indexPath.row]
+            cell.setValueForLocationPin(locId: savedId)
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ManageColListCell
-        if !cell.btnSelect.isSelected {
-            cell.btnSelect.isSelected = true
-            selectedIdx.append(indexPath)
-        } else {
-            cell.btnSelect.isSelected = false
-            guard let idx = selectedIdx.index(of: indexPath) else {
-                return;
+        if enterMode == .place {
+            let cell = tableView.cellForRow(at: indexPath) as! ColListPlaceCell
+            if !cell.btnSelect.isSelected {
+                cell.btnSelect.isSelected = true
+                selectedIdx.append(indexPath)
+            } else {
+                cell.btnSelect.isSelected = false
+                guard let idx = selectedIdx.index(of: indexPath) else {
+                    return;
+                }
+                selectedIdx.remove(at: idx)
             }
-            selectedIdx.remove(at: idx)
+        } else {
+            let cell = tableView.cellForRow(at: indexPath) as! ColListLocationCell
+            if !cell.btnSelect.isSelected {
+                cell.btnSelect.isSelected = true
+                selectedIdx.append(indexPath)
+            } else {
+                cell.btnSelect.isSelected = false
+                guard let idx = selectedIdx.index(of: indexPath) else {
+                    return;
+                }
+                selectedIdx.remove(at: idx)
+            }
         }
         updateTabBarBtnColor(selectedCount: selectedIdx.count)
         selectedIdx.sort{$0.row > $1.row}
+        print(selectedIdx)
     }
     
     func reloadAfterDelete() {
@@ -229,8 +268,6 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     
     // EditMemoDelegate
     func saveMemo(memo: String) {
-        let idx = selectedIdx[0].row
-        arrColList[idx].memo = memo
         tblManageList.reloadData()
     }
 }

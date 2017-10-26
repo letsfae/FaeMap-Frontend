@@ -30,6 +30,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnShare: UIButton!
     var btnMore: UIButton!
     var savedItems = [SavedPin]()
+    var savedPlaces = [PlacePin]()
     
     // variables in extension file
     var uiviewShadowBG: UIView!
@@ -43,6 +44,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnCrossCancel: UIButton!
     var btnYes: UIButton!
     
+    var creatorId: Int = -1
     var txtName: String = ""
     var txtDesp: String = ""
     var txtTime: String = ""
@@ -69,11 +71,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         view.backgroundColor = .white
         loadTable()
         loadFooter()
+        loadColItems()
         loadHiddenHeader()
         loadHiddenSectionHeader()
         loadChooseOption()
         ColListDetailHeader.boolExpandMore = false
-        loadColItems()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -82,15 +84,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
+        creatorId = arrColDetails.creatorId
         colId = arrColDetails.colId
-        lblListName.text = arrColDetails.colName
         txtName = arrColDetails.colName
         txtDesp = arrColDetails.colDesp
         txtTime = arrColDetails.colTime
-        numItems = arrColDetails.pinIds.count
+        numItems = arrColDetails.itemsCount
         btnMapView.isEnabled = false
         self.getSavedItems(colId: self.colId)
-        self.tblColListDetail.reloadData()
     }
     
     fileprivate func loadHiddenHeader() {
@@ -103,6 +104,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName.textColor = UIColor._898989()
         lblListName.text = txtName
         lblListName.lineBreakMode = .byTruncatingTail
+        lblListName.text = arrColDetails.colName
         uiviewFixedHeader.addSubview(lblListName)
         
         let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -120,6 +122,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
         lblNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblNum.text = "\(numItems) items"
         
         let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
         uiviewFixedSectionHeader.addSubview(lblDateAdded)
@@ -257,7 +260,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            return arrSavedPinIds.count == 0 ? 312 : 90
+            if arrSavedPinIds.count == 0 {
+                return 312
+            } else {
+                tblColListDetail.rowHeight = UITableViewAutomaticDimension
+                tblColListDetail.estimatedRowHeight = 100
+                return tblColListDetail.rowHeight
+            }
         } else {
             tblColListDetail.estimatedRowHeight = 400
             return tblColListDetail.rowHeight
@@ -293,7 +302,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
-                    cell.setValueForCell(placeId: arrSavedPinIds[indexPath.row])
+                    cell.setValueForPlacePin(placeId: arrSavedPinIds[indexPath.row])
+//                    let test = ["12345","678","",""]
+//                    cell.lblColMemo.text = test[indexPath.row]
                     return cell
                 }
             }
@@ -332,6 +343,23 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             self.tblColListDetail.reloadData()
             self.btnMapView.isEnabled = true
         })
+        
+        if arrSavedPinIds.count == 0 {
+            return
+        }
+        
+        // 实在不行采用的办法
+        /*
+        for placeId in arrSavedPinIds {
+            FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
+                guard status / 100 == 2 else { return }
+                guard message != nil else { return }
+                let resultJson = JSON(message!)
+                let placeInfo = PlacePin(json: resultJson)
+                savedPlaces.append(placeInfo)
+            }
+        }
+        */
     }
     
     // ColListDetailHeaderDelegate
@@ -346,7 +374,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName.text = name
         txtName = name
         txtDesp = desp
-        txtTime = "09/2017"
+        
+        let curtDate = Date()
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        let date = dateformatter.string(from: curtDate).split(separator: " ")[0].split(separator: "-")
+        txtTime = date[1] + "/" + date[0]
+        arrColDetails.colName = txtName
+        arrColDetails.colDesp = txtDesp
+        arrColDetails.colTime = txtTime
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
@@ -459,7 +495,7 @@ class ColListDetailHeader: UITableViewCell {
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
         
         FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
-            let nameStr = NSMutableAttributedString(string: "\(nickname ?? "Someone")", attributes: nameAttr)
+            let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
             let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.colTime)", attributes: attribute)
             curtStr.append(nameStr)
             curtStr.append(updateStr)
@@ -523,7 +559,7 @@ class ColListEmptyCell: UITableViewCell {
         imgEmpty.image = img
     }
 }
-
+/*
 class ColListPlaceCell: UITableViewCell {
     
     var imgSavedItem: FaeImageView!
@@ -763,7 +799,7 @@ class ColListLocationCell: UITableViewCell {
         }
     }
 }
-
+*/
 extension CollectionsListDetailViewController {
     fileprivate func loadChooseOption() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
@@ -875,7 +911,8 @@ extension CollectionsListDetailViewController {
             let vc = ManageColListViewController()
             vc.delegate = self
             vc.enterMode = enterMode
-            vc.arrColList = savedItems
+//            vc.arrColList = savedItems
+            vc.arrSavedIds = arrSavedPinIds
             vc.colId = colId
             present(vc, animated: true)
             break
@@ -944,12 +981,12 @@ extension CollectionsListDetailViewController {
     // animations end
     
     // ManageColListDelegate
-    func returnValBack(savedItems: [SavedPin]) {
-        self.savedItems = savedItems
-        numItems = savedItems.count
-        if lblNum != nil {
-            lblNum.text = "\(numItems) items"
-        }
+    func returnValBack() {
+//        self.savedItems = savedItems
+//        numItems = savedItems.count
+//        if lblNum != nil {
+//            lblNum.text = "\(numItems) items"
+//        }
         
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
