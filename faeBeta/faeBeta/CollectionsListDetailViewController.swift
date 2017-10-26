@@ -14,7 +14,7 @@ protocol CollectionsListDetailDelegate: class {
     func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int)
 }
 
-class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate {
+class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate, ColListCellDelegate {
     
     var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
@@ -311,6 +311,15 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
+    // ColListCellDelegate
+    func reloadCell(indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.tblColListDetail.beginUpdates()
+            self.tblColListDetail.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            self.tblColListDetail.endUpdates()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 && arrSavedPinIds.count != 0 {
             
@@ -332,6 +341,16 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
+    var desiredCount = 0
+    var fetchCount = 0 {
+        didSet {
+            guard desiredCount != 0 && fetchCount != 0 else { return }
+            if fetchCount == desiredCount {
+                tblColListDetail.reloadData()
+            }
+        }
+    }
+    
     func getSavedItems(colId: Int) {
         FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
             guard status / 100 == 2 else { return }
@@ -340,26 +359,21 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             let arrLocPinId = resultJson["pins"].arrayValue
             self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
             joshprint(self.arrSavedPinIds)
-            self.tblColListDetail.reloadData()
+//            self.tblColListDetail.reloadData()
             self.btnMapView.isEnabled = true
-        })
-        
-        if arrSavedPinIds.count == 0 {
-            return
-        }
-        
-        // 实在不行采用的办法
-        /*
-        for placeId in arrSavedPinIds {
-            FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
-                guard status / 100 == 2 else { return }
-                guard message != nil else { return }
-                let resultJson = JSON(message!)
-                let placeInfo = PlacePin(json: resultJson)
-                savedPlaces.append(placeInfo)
+            self.desiredCount = self.arrSavedPinIds.count
+            for placeId in self.arrSavedPinIds {
+                FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let resultJson = JSON(message!)
+                    let placeInfo = PlacePin(json: resultJson)
+                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
+                    self.savedPlaces.append(placeInfo)
+                    self.fetchCount += 1
+                }
             }
-        }
-        */
+        })
     }
     
     // ColListDetailHeaderDelegate
@@ -559,247 +573,7 @@ class ColListEmptyCell: UITableViewCell {
         imgEmpty.image = img
     }
 }
-/*
-class ColListPlaceCell: UITableViewCell {
-    
-    var imgSavedItem: FaeImageView!
-    var lblItemName: UILabel!
-    var lblItemAddr: UILabel!
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let separatorView = UIView(frame: CGRect(x: 89, y: 89, width: screenWidth - 89, height: 1))
-        separatorView.backgroundColor = UIColor._206203203()
-        addSubview(separatorView)
-        selectionStyle = .none
-        loadCellContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadCellContent() {
-        imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
-        imgSavedItem.layer.cornerRadius = 5
-        imgSavedItem.clipsToBounds = true
-        imgSavedItem.backgroundColor = .white
-        imgSavedItem.contentMode = .scaleAspectFill
-        addSubview(imgSavedItem)
-        
-        lblItemName = UILabel(frame: CGRect(x: 93, y: 26, width: screenWidth - 93, height: 22))
-        lblItemName.textColor = UIColor._898989()
-        lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addSubview(lblItemName)
-        
-        lblItemAddr = UILabel(frame: CGRect(x: 93, y: 48, width: screenWidth - 93, height: 16))
-        lblItemAddr.textColor = UIColor._107105105()
-        lblItemAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addSubview(lblItemAddr)
-    }
-    
-    func setValueForCell(placeId: Int) {
-        FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            let placeInfo = PlacePin(json: resultJson)
-            self.setValueForPlace(placeInfo)
-        }
-    }
-    
-    func setValueForPlace(_ placeInfo: PlacePin) {
-        lblItemName.text = placeInfo.name
-        lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
-        imgSavedItem.backgroundColor = .white
-        if placeInfo.imageURL == "" {
-            imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-            imgSavedItem.backgroundColor = .white
-        } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
-                self.imgSavedItem.image = placeImgFromCache
-                self.imgSavedItem.backgroundColor = UIColor._2499090()
-                return
-            }
-            downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                guard let data = rawData else { return }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    guard let placeImg = UIImage(data: data) else { return }
-                    DispatchQueue.main.async {
-                        self.imgSavedItem.image = placeImg
-                        self.imgSavedItem.backgroundColor = UIColor._2499090()
-                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                    }
-                }
-            }
-        }
-    }
-}
 
-let faeLocationCache = NSCache<AnyObject, AnyObject>()
-let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
-
-class ColListLocationCell: UITableViewCell {
-    
-    var imgSavedItem: FaeImageView!
-    var lblItemName: UILabel!
-    var lblItemAddr_1: UILabel!
-    var lblItemAddr_2: UILabel!
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let separatorView = UIView(frame: CGRect(x: 89, y: 89, width: screenWidth - 89, height: 1))
-        separatorView.backgroundColor = UIColor._206203203()
-        addSubview(separatorView)
-        selectionStyle = .none
-        loadCellContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadCellContent() {
-        imgSavedItem = FaeImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
-        imgSavedItem.clipsToBounds = true
-        imgSavedItem.contentMode = .scaleAspectFill
-        addSubview(imgSavedItem)
-        let icon = UIImageView(frame: CGRect(x: 23, y: 22, width: 19, height: 24))
-        icon.contentMode = .scaleAspectFit
-        icon.image = #imageLiteral(resourceName: "icon_destination")
-        imgSavedItem.addSubview(icon)
-        
-        lblItemName = UILabel(frame: CGRect(x: 93, y: 18, width: screenWidth - 110, height: 22))
-        lblItemName.textColor = UIColor._898989()
-        lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addSubview(lblItemName)
-        
-        lblItemAddr_1 = UILabel(frame: CGRect(x: 93, y: 40, width: screenWidth - 93, height: 16))
-        lblItemAddr_1.textColor = UIColor._107105105()
-        lblItemAddr_1.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addSubview(lblItemAddr_1)
-        
-        lblItemAddr_2 = UILabel(frame: CGRect(x: 93, y: 57, width: screenWidth - 93, height: 16))
-        lblItemAddr_2.textColor = UIColor._107105105()
-        lblItemAddr_2.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addSubview(lblItemAddr_2)
-    }
-    
-    func setValueForLocationPin(locId: Int) {
-        self.imgSavedItem.alpha = 0
-        self.lblItemName.alpha = 0
-        self.lblItemAddr_1.alpha = 0
-        self.lblItemAddr_2.alpha = 0
-        if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
-            let lat = locationFromCache["geolocation"]["latitude"].doubleValue
-            let lon = locationFromCache["geolocation"]["longitude"].doubleValue
-            let location = CLLocation(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = locationFromCache["file_ids"].intValue
-            self.imgSavedItem.loadImage(id: locationFromCache["file_ids"].intValue)
-            UIView.animate(withDuration: 0.1, animations: {
-                self.imgSavedItem.alpha = 1
-            })
-            self.getAddressForLocation(locId, location)
-            return
-        }
-        FaeMap.shared.getPin(type: "location", pinId: String(locId)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            faeLocationCache.setObject(resultJson as AnyObject, forKey: locId as AnyObject)
-            let lat = resultJson["geolocation"]["latitude"].doubleValue
-            let lon = resultJson["geolocation"]["longitude"].doubleValue
-            let location = CLLocation(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = resultJson["file_ids"].intValue
-            self.imgSavedItem.loadImage(id: resultJson["file_ids"].intValue)
-            self.getAddressForLocation(locId, location)
-            UIView.animate(withDuration: 0.1, animations: {
-                self.imgSavedItem.alpha = 1
-            })
-        }
-    }
-    
-    func getAddressForLocation(_ locId: Int, _ location: CLLocation) {
-        if let locationFromCache = faeLocationInfoCache.object(forKey: locId as AnyObject) as? [String] {
-            self.lblItemName.text = locationFromCache[0]
-            self.lblItemAddr_1.text = locationFromCache[1]
-            self.lblItemAddr_2.text = locationFromCache[2]
-            UIView.animate(withDuration: 0.1, animations: {
-                self.lblItemName.alpha = 1
-                self.lblItemAddr_1.alpha = 1
-                self.lblItemAddr_2.alpha = 1
-            })
-            return
-        }
-        General.shared.getAddress(location: location, original: true) { (original) in
-            guard let first = original as? CLPlacemark else { return }
-            
-            var name = ""
-            var subThoroughfare = ""
-            var thoroughfare = ""
-            
-            var address_1 = ""
-            var address_2 = ""
-            var address_3 = ""
-            
-            if let n = first.name {
-                name = n
-                address_1 += n
-            }
-            if let s = first.subThoroughfare {
-                subThoroughfare = s
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += s
-            }
-            if let t = first.thoroughfare {
-                thoroughfare = t
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += t
-            }
-            
-            if name == subThoroughfare + " " + thoroughfare {
-                address_1 = name
-            }
-            
-            if let l = first.locality {
-                address_2 += l
-            }
-            if let a = first.administrativeArea {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += a
-            }
-            if let p = first.postalCode {
-                address_2 += " " + p
-            }
-            if let c = first.country {
-                address_3 += c
-            }
-            
-            DispatchQueue.main.async {
-                self.lblItemName.text = address_1
-                self.lblItemAddr_1.text = address_2
-                self.lblItemAddr_2.text = address_3
-                var arrAddrs = [String]()
-                arrAddrs.append(address_1)
-                arrAddrs.append(address_2)
-                arrAddrs.append(address_3)
-                faeLocationInfoCache.setObject(arrAddrs as AnyObject, forKey: locId as AnyObject)
-                UIView.animate(withDuration: 0.1, animations: {
-                    self.lblItemName.alpha = 1
-                    self.lblItemAddr_1.alpha = 1
-                    self.lblItemAddr_2.alpha = 1
-                })
-            }
-        }
-    }
-}
-*/
 extension CollectionsListDetailViewController {
     fileprivate func loadChooseOption() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
@@ -982,12 +756,6 @@ extension CollectionsListDetailViewController {
     
     // ManageColListDelegate
     func returnValBack() {
-//        self.savedItems = savedItems
-//        numItems = savedItems.count
-//        if lblNum != nil {
-//            lblNum.text = "\(numItems) items"
-//        }
-        
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
     }

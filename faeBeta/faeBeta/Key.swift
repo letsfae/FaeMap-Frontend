@@ -9,6 +9,11 @@
 import UIKit
 import SwiftyJSON
 
+let faePlaceInfoCache = NSCache<AnyObject, AnyObject>()
+let placeInfoBarImageCache = NSCache<AnyObject, AnyObject>()
+let faeLocationCache = NSCache<AnyObject, AnyObject>()
+let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
+
 enum NavOpenMode {
     case mapFirst
     case welcomeFirst

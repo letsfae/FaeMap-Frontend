@@ -9,20 +9,38 @@
 import UIKit
 import SwiftyJSON
 
+protocol ColListCellDelegate: class {
+    func reloadCell(indexPath: IndexPath)
+}
+
 class ColListPlaceCell: UITableViewCell {
+    
+    weak var delegate: ColListCellDelegate?
     var imgPic: FaeImageView!
     var lblColName: UILabel!
     var lblColAddr: UILabel!
     var lblColMemo: UILabel!
     var btnSelect: UIButton!
+    var indexPath: IndexPath!
     
-    internal var lblConstraint = [NSLayoutConstraint]() {
+    internal var memoConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 self.removeConstraints(oldValue)
             }
-            if lblConstraint.count != 0 {
-                self.addConstraints(lblConstraint)
+            if memoConstraint.count != 0 {
+                self.addConstraints(memoConstraint)
+            }
+        }
+    }
+    
+    internal var addrConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                self.removeConstraints(oldValue)
+            }
+            if addrConstraint.count != 0 {
+                self.addConstraints(addrConstraint)
             }
         }
     }
@@ -54,19 +72,20 @@ class ColListPlaceCell: UITableViewCell {
         lblColName = FaeLabel(CGRect.zero, .left, .medium, 16, UIColor._898989())
         addSubview(lblColName)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColName)
+        addConstraintsWithFormat("V:|-26-[v0(22)]", options: [], views: lblColName)
         
         lblColAddr = FaeLabel(CGRect.zero, .left, .medium, 12, UIColor._107105105())
         addSubview(lblColAddr)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColAddr)
+        addrConstraint = returnConstraintsWithFormat("V:|-48-[v0(16)]-26-|", options: [], views: lblColAddr)
         
         lblColMemo =  FaeLabel(CGRect.zero, .left, .demiBoldItalic, 12, UIColor._107105105())
         lblColMemo.numberOfLines = 0
-        lblColMemo.text = "123456"
-        lblColMemo.backgroundColor = .blue
+//        lblColMemo.text = "123456"
+        lblColMemo.backgroundColor = .red
         addSubview(lblColMemo)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColMemo)
-        
-        addConstraintsWithFormat("V:|-26-[v0(22)]-0-[v1(16)]-5-[v2]-18-|", options: [], views: lblColName, lblColAddr, lblColMemo)
+        memoConstraint = returnConstraintsWithFormat("V:|-69-[v0(0)]", options: [], views: lblColMemo)
         
         btnSelect = UIButton()
         btnSelect.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
@@ -78,28 +97,42 @@ class ColListPlaceCell: UITableViewCell {
         addConstraintsWithFormat("V:|-20-[v0(50)]", options: [], views: btnSelect)
     }
     
-    func setConstraints() {
-        lblConstraint = returnConstraintsWithFormat("V:|-26-[v0(22)]-0-[v1(16)]-5-[v2]-18-|", options: [], views: lblColName, lblColAddr, lblColMemo)
+    func setConstraints(memo: String) {
+        if memo == "" {
+            addrConstraint = returnConstraintsWithFormat("V:|-48-[v0(16)]-26-|", options: [], views: lblColAddr)
+            memoConstraint = returnConstraintsWithFormat("V:|-69-[v0(0)]", options: [], views: lblColMemo)
+        } else {
+            addrConstraint = returnConstraintsWithFormat("V:|-48-[v0(16)]", options: [], views: lblColAddr)
+            memoConstraint = returnConstraintsWithFormat("V:|-69-[v0]-21-|", options: [], views: lblColMemo)
+        }
     }
     
     func setValueForPlacePin(placeId: Int) {
+        if let placeInfo = faePlaceInfoCache.object(forKey: placeId as AnyObject) as? PlacePin {
+            setValueForPlace(placeInfo)
+            return
+        }
         FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let placeInfo = PlacePin(json: resultJson)
-            self.setValueForPlace(placeInfo)
+            faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
+            self.setValueForPlace(placeInfo, memoFetched: true)
         }
     }
     
-    func setValueForPlace(_ placeInfo: PlacePin) {
-        lblColName.text = placeInfo.name
-        lblColAddr.text = placeInfo.address1 + ", " + placeInfo.address2
-        lblColMemo.text = placeInfo.memo
-        print("lblColMemo \(lblColMemo.text!)")
-        setConstraints()
-        print(lblColMemo.frame.height)
-        imgPic.backgroundColor = .white
+    func setValueForPlace(_ placeInfo: PlacePin, memoFetched: Bool = false) {
+        self.lblColName.text = placeInfo.name
+        self.lblColAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        self.lblColMemo.text = placeInfo.memo
+        print("lblColMemo: \(placeInfo.memo)")
+        self.setConstraints(memo: placeInfo.memo)
+        if memoFetched {
+            delegate?.reloadCell(indexPath: self.indexPath)
+        }
+        print(self.lblColMemo.frame.height)
+        self.imgPic.backgroundColor = .white
         if placeInfo.imageURL == "" {
             imgPic.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
             imgPic.backgroundColor = .white
@@ -123,9 +156,6 @@ class ColListPlaceCell: UITableViewCell {
         }
     }
 }
-
-let faeLocationCache = NSCache<AnyObject, AnyObject>()
-let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
 
 class ColListLocationCell: UITableViewCell {
     var imgSavedItem: FaeImageView!

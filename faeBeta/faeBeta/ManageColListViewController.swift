@@ -132,13 +132,6 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             vc.delegate = self
             vc.enterMode = enterMode
             vc.indexPath = selectedIdx[0]
-            
-//            if enterMode == .place {
-//                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColPlaceCell
-//            } else {
-//                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColLocationCell
-//            }
-//            vc.txtMemo = cell.lblColMemo.text!
             vc.pinId = arrSavedIds[selectedIdx[0].row] //arrColList[selectedIdx[0].row].pinId
             vc.modalPresentationStyle = .overCurrentContext
             present(vc, animated: false)
@@ -218,11 +211,13 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColPlaceCell", for: indexPath) as! ColListPlaceCell
             let savedId = arrSavedIds[indexPath.row]
             cell.setValueForPlacePin(placeId: savedId)
+            cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColLocationCell", for: indexPath) as! ColListLocationCell
             let savedId = arrSavedIds[indexPath.row]
             cell.setValueForLocationPin(locId: savedId)
+            cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
         }
     }
@@ -236,7 +231,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             } else {
                 cell.btnSelect.isSelected = false
                 guard let idx = selectedIdx.index(of: indexPath) else {
-                    return;
+                    return
                 }
                 selectedIdx.remove(at: idx)
             }
