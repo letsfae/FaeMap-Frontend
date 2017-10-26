@@ -82,7 +82,7 @@ class ColListPlaceCell: UITableViewCell {
         lblColMemo =  FaeLabel(CGRect.zero, .left, .demiBoldItalic, 12, UIColor._107105105())
         lblColMemo.numberOfLines = 0
 //        lblColMemo.text = "123456"
-        lblColMemo.backgroundColor = .red
+//        lblColMemo.backgroundColor = .red
         addSubview(lblColMemo)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColMemo)
         memoConstraint = returnConstraintsWithFormat("V:|-69-[v0(0)]", options: [], views: lblColMemo)

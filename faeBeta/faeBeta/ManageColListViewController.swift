@@ -10,6 +10,7 @@ import UIKit
 
 protocol ManageColListDelegate: class {
     func returnValBack()
+    func finishDeleting(ids: [Int])
 }
 
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
@@ -118,6 +119,16 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         dismiss(animated: true)
     }
     
+    var desiredCount = 0
+    var deleteCount = 0 {
+        didSet {
+            guard desiredCount != 0 && deleteCount != 0 else { return }
+            if deleteCount == desiredCount {
+                reloadAfterDelete()
+            }
+        }
+    }
+    
     func actionOperateList(_ sender: UIButton) {
         switch sender.tag {
         case SHARE:
@@ -139,38 +150,22 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         case REMOVE:
             // 对后端需求，批量删除？
             print(arrSavedIds)
+            desiredCount = selectedIdx.count
             for i in 0..<selectedIdx.count {
                 let idxPath = selectedIdx[i]
-                print("\(i)  \(idxPath)")
-                let id = String(arrSavedIds[idxPath.row]) //arrColList[idxPath.row].pinId)
+                let id = String(arrSavedIds[idxPath.row])
                 let cell = self.tblManageList.cellForRow(at: idxPath) as! ColListPlaceCell
                 cell.btnSelect.isSelected = false
                 let idx = idxPath.row
                 FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: id) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.arrSavedIds.remove(at: idx)
+                        self.deleteCount += 1
                     } else {
                         print("[Fail to Unsave Item From Collection] \(status) \(message!)")
                     }
-                    
-//                    self.selectedIdx.remove(at: i)
-                    print("idx \(idx) \(self.selectedIdx) \(self.selectedIdx[self.selectedIdx.count - 1].row)")
-                    print(self.arrSavedIds)
-                    if idx == self.selectedIdx[self.selectedIdx.count - 1].row {
-                        print(self.arrSavedIds)
-                        self.reloadAfterDelete()
-                        self.selectedIdx.removeAll()
-                        self.updateTabBarBtnColor(selectedCount: 0)
-                    }
                 }
             }
-            
-//            if boolRemoved {
-//                print(arrSavedIds)
-////                reloadAfterDelete()
-//                selectedIdx.removeAll()
-//                updateTabBarBtnColor(selectedCount: 0)
-//            }
             break
         default:
             break
@@ -250,14 +245,16 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
         updateTabBarBtnColor(selectedCount: selectedIdx.count)
         selectedIdx.sort{$0.row > $1.row}
-        print(selectedIdx)
     }
     
     func reloadAfterDelete() {
         tblManageList.performUpdate({
             self.tblManageList.deleteRows(at: selectedIdx, with: UITableViewRowAnimation.right)
         }) {
+            self.selectedIdx.removeAll()
             self.tblManageList.reloadData()
+            self.updateTabBarBtnColor(selectedCount: 0)
+            self.delegate?.finishDeleting(ids: self.arrSavedIds)
         }
     }
     

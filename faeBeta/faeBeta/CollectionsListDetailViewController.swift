@@ -122,7 +122,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
         lblNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblNum.text = "\(numItems) items"
+        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
         
         let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
         uiviewFixedSectionHeader.addSubview(lblDateAdded)
@@ -758,5 +758,14 @@ extension CollectionsListDetailViewController {
     func returnValBack() {
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
+    }
+    
+    // ManageColListDelegate
+    func finishDeleting(ids: [Int]) {
+        self.arrSavedPinIds = ids
+        let section = IndexSet(integer: 1)
+        tblColListDetail.reloadSections(section, with: .none)
+        numItems = ids.count
+        lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
     }
 }

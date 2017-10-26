@@ -297,6 +297,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             vc.indexPath = indexPath
             vc.enterMode = tableMode
             vc.arrColDetails = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
+            joshprint(vc.arrColDetails.colId)
             if let ctrler = faeMapCtrler {
                 vc.featureDelegate = ctrler
                 vc.faeMapCtrler = ctrler
