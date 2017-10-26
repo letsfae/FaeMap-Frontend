@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate {
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, ExploreCategorySearch {
     
     weak var delegate: MapSearchDelegate?
     
@@ -29,7 +29,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var intCurtPage = 0
     
-    var testTypes: [String] = ["Women's Store", "Falafel Restaurant", "Theater", "Bookstore", "American Restaurant", "Korean Restaurant", "Latin American Restaurant", "Japanese Restaurant", "Mexican Restaurant", "Whisky Bar", "Middle Eastern Restaurant", "Jewelry Store", "Italian Restaurant", "Speakeasy", "Dive Bar", "Sake Bar", "Vietnamese Restaurant", "Wine Bar", "Vegetarian / Vegan Restaurant", "Chinese Restaurant", "Martial Arts Dojo", "Caribbean Restaurant", "Hookah Bar", "Hotel Bar", "Gyms / Fitness Center", "Sushi Restaurant", "Art Museum", "Cocktail Bar", "Hawaiian Restaurant", "Pool", "Thai Restaurant", "Science Museum", "Southern / Soul Food Restaurant", "Clothing Store", "Sports Bar", "Leather Goods Store", "Mediterranean Restaurant", "New American Restaurant", "South American Restaurant", "Indie Theater", "Indonesian Restaurant", "Shopping Mall", "Gastropub", "Asian Restaurant", "Accessories Store", "Peruvian Restaurant", "French Restaurant", "Soccer Field", "Halal Restaurant", "Rock Club", "Seafood Restaurant", "Beer Bar", "Filipino Restaurant", "Ethiopian Restaurant", "Cajun / Creole Restaurant", "Flower Shop", "Kosher Restaurant", "Irish Pub", "Beer Garden"]
+    var testTypes: [String] = ["Airport", "Antique Shop", "Arcade", "Art Gallery", "Arts & Crafts Store", "Athletics & Sports", "BBQ Joint", "Bagel Shop", "Bakery", "Bars", "Baseball Stadium", "Beach", "Beer Store", "Brewery", "Buffet", "Building", "Burger Joint", "Burrito Place", "Business Service", "Canal", "Candy Store", "Coffee Shop", "College Bookstore", "College Classroom", "Concert Hall", "Construction & Landscaping", "Convenience Store", "Cosmetics Shop", "Deli / Bodega", "Dessert Shop", "Diner", "Donut Shop", "Farmers Market", "Food Court", "Food Truck", "Fried Chicken Joint", "Frozen Yogurt Shop", "Furniture / Home Store", "Garden", "Gift Shop", "Gourmet Shop", "Grocery Store", "Health & Beauty Service", "Hot Dog Joint", "Ice Cream Shop", "Juice Bar", "Lake", "Library", "Light Rail Station", "Liquor Store", "Market", "Massage Studio", "Metro Station", "Moving Target", "Museum", "Music Store", "Music Venue", "Noodle House", "Organic Grocery", "Outdoor Sculpture", "Paper / Office Supplies Store", "Performing Arts Venue", "Pet Store", "Pharmacy", "Photography Studio", "Pizza Place", "Playground", "Plaza", "Rental Car Location", "Restaurant", "Salad Place", "Sandwich Place", "Scenic Lookout", "Shopping", "Skate Park", "Smoke Shop", "Snack Place", "Spa", "Sporting Goods Shop", "Steakhouse", "Street Food Gathering", "Supermarket", "Taco Place", "Theme Park", "Trail", "Wine Shop"]
     
     var uiviewAvatarWaveSub: UIView!
     var imgAvatar: FaeAvatarView!
@@ -114,7 +114,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             })
         }
         uiviewAvatarWaveSub.tag = 1
-        arrPlaceData.removeAll(keepingCapacity: true)
         clctViewPics.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
@@ -536,10 +535,65 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         } else if collectionView == clctViewTypes {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_types", for: indexPath) as! EXPClctTypeCell
             cell.updateTitle(type: testTypes[indexPath.row])
+            cell.delegate = self
             return cell
         } else {
             let cell = UICollectionViewCell()
             return cell
+        }
+    }
+    
+    // ExploreCategorySearch
+    func search(category: String) {
+        
+        func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
+            var tempRaw = arrRaw
+            var arrResult = [PlacePin]()
+            let count = arrRaw.count < 20 ? arrRaw.count : 20
+            for _ in 0..<count {
+                let random: Int = Int(arc4random_uniform(UInt32(tempRaw.count)))
+                arrResult.append(tempRaw[random])
+                tempRaw.remove(at: random)
+            }
+            return arrResult
+        }
+        buttonEnable(on: false)
+        // use uiview.tag as a Bool like value to indicate whether we should
+        // animate the alpha value between clctView and Wave sub view
+        if uiviewAvatarWaveSub.tag != 0 {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.clctViewPics.alpha = 0
+                self.uiviewAvatarWaveSub.alpha = 1
+            })
+        }
+        uiviewAvatarWaveSub.tag = 1
+        clctViewPics.reloadData()
+        
+        FaeSearch.shared.whereKey("content", value: category)
+        FaeSearch.shared.whereKey("source", value: "categories")
+        FaeSearch.shared.whereKey("type", value: "place")
+        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.search { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                print("[loadMapSearchPlaceInfo] status/100 != 2")
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
+                return
+            }
+            let arrRaw = placeInfoJsonArray.map { PlacePin(json: $0) }
+            self.arrPlaceData = getRandomIndex(arrRaw)
+            self.clctViewPics.reloadData()
+            self.buttonEnable(on: true)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.clctViewPics.alpha = 1
+                self.uiviewAvatarWaveSub.alpha = 0
+            })
+            self.checkSavedStatus(id: 0)
         }
     }
     
