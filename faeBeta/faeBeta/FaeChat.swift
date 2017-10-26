@@ -73,8 +73,8 @@ class FaeChat {
                         case .update(_, let deletions, let insertions, let modifications):
                             //print("update")
                             for insert in insertions {
-                                print(insert)
-                                print(self?.intLastSentIndex)
+                                //print(insert)
+                                //print(self?.intLastSentIndex)
                                 if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex || messages[insert].chat_id == "\(Key.shared.user_id)" {
                                     
                                 } else {
@@ -84,7 +84,7 @@ class FaeChat {
                             }
                             break
                         case .error:
-                            print("error")
+                            //print("error")
                             break
                         }
                     }
@@ -143,32 +143,41 @@ class FaeChat {
                 for item in unreadList {
                     let dictItem: NSDictionary = item as! NSDictionary
                     let chat_id = dictItem["last_message_sender_id"] as! Int
-                    var unread_count = dictItem["unread_count"] as! Int
-                    let callGroup = DispatchGroup()
-                    //while unread_count > 0 {
-                    for _ in 0...unread_count/50 {
-                        callGroup.enter()
-                        getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
-                            if let response = result as? NSDictionary {
-                                //unread_count = response["unread_count"] as! Int
-                                let unreadMessages = response["messages"] as! NSArray
-                                for unreadMessage in unreadMessages {
-                                    if let message = unreadMessage as? NSDictionary {
-                                        if chat_id == 1 { break }
-                                        self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
+                    let unread_count = dictItem["unread_count"] as! Int
+                    let chatIdOnServer = dictItem["chat_id"] as! Int
+                    if chat_id == 1 {
+                        deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                            if statusCode / 100 == 2 {
+                                print("delete \(chatIdOnServer) successfully")
+                            }
+                        })
+                    } else {
+                        let callGroup = DispatchGroup()
+                        //while unread_count > 0 {
+                        for _ in 0...unread_count/50 {
+                            callGroup.enter()
+                            getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {_, result in
+                                if let response = result as? NSDictionary {
+                                    //unread_count = response["unread_count"] as! Int
+                                    let unreadMessages = response["messages"] as! NSArray
+                                    for unreadMessage in unreadMessages {
+                                        if let message = unreadMessage as? NSDictionary {
+                                            if chat_id == 1 { break }
+                                            self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
+                                        }
                                     }
+                                    callGroup.leave()
+                                } else {
+                                    //print("no more new message")
                                 }
-                                callGroup.leave()
-                            } else {
-                                //print("no more new message")
                             }
                         }
-                    }
-                    callGroup.notify(queue: .main) {
-                        //print("finish reading")
-                        //postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                        callGroup.notify(queue: .main) {
+                            //print("finish reading")
+                            //postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
                             //print("\(statusCode)")
-                        //})
+                            //})
+                        }
                     }
                 }
             }
