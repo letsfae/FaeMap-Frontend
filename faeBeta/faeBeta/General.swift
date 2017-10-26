@@ -32,7 +32,6 @@ class General: NSObject {
             if let dataAvatar = userAvatar.userSmallAvatar {
                 let imageFromRealm = UIImage(data: dataAvatar as Data)
                 completion(imageFromRealm!)
-                return
             }
         }
         
