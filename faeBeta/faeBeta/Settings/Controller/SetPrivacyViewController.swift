@@ -38,9 +38,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         navigationController?.isNavigationBarHidden = true
         loadNavBar()
         loadTableView()
-        loadHiddenView()
-        
         loadBackground()
+        loadHiddenView()
         loaduiviewAlert()
     }
     
@@ -65,43 +64,38 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func loadHiddenView() {
-        let uiviewHiddenX = 290/414*screenWidth
-        uiviewHidden = UIView(frame: CGRect(x: (screenWidth-uiviewHiddenX)/2, y: 155/736*screenHeight, width: 290/414*screenWidth, height: 380))
+        uiviewHidden = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
         uiviewHidden.backgroundColor = .white
-        view.addSubview(uiviewHidden)
-        uiviewHidden.isHidden = true
+        uiviewHidden.layer.cornerRadius = 16 * screenWidthFactor
+        uiviewBackground.addSubview(uiviewHidden)
         
-        lblHiddenModel = UILabel(frame: CGRect(x: 73/414*screenWidth, y: 27/736*screenHeight, width: 144/414*screenWidth, height: 44))
-        uiviewHidden.addSubview(lblHiddenModel)
-        lblHiddenModel.numberOfLines = 0
-        lblHiddenModel.lineBreakMode = .byWordWrapping
-        lblHiddenModel.text = "You're now in Invisible Model!"
-        lblHiddenModel.textAlignment = .center
-        lblHiddenModel.textColor = UIColor._898989()
-        lblHiddenModel.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        let lblTitle = UILabel(frame: CGRect(x: 73, y: 27, w: 144, h: 44))
+        lblTitle.text = "You're now in\n Invisible Mode!"
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
+        lblTitle.numberOfLines = 0
+        lblTitle.textAlignment = NSTextAlignment.center
+        lblTitle.textColor = UIColor(red: 89 / 255, green: 89.0 / 255, blue: 89.0 / 255, alpha: 1.0)
+        uiviewHidden.addSubview(lblTitle)
         
-        imgviewHidden = UIImageView(frame: CGRect(x: 86/414*screenWidth, y: 89/736*screenHeight, width: 129/414*screenWidth, height: 145))
-        uiviewHidden.addSubview(imgviewHidden)
-        imgviewHidden.image = #imageLiteral(resourceName: "Settings_Invisble")
+        let imgInvisible = UIImageView(frame: CGRect(x: 89, y: 87, w: 117, h: 139))
+        imgInvisible.image = UIImage(named: "InvisibleMode")
+        uiviewHidden.addSubview(imgInvisible)
         
-        lblHiddenDes = UILabel(frame: CGRect(x: 56/414*screenWidth, y: 236/736*screenHeight, width: 179/414*screenWidth, height: 66))
-        uiviewHidden.addSubview(lblHiddenDes)
-        lblHiddenDes.numberOfLines = 0
-        lblHiddenDes.lineBreakMode = .byWordWrapping
-        lblHiddenDes.text = "You are Hidden.\nYou can't see others and others can't see you."
-        lblHiddenDes.textAlignment = .center
-        lblHiddenDes.textColor = UIColor._898989()
-        lblHiddenDes.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        let lblNote = UILabel(frame: CGRect(x: 41, y: 236, w: 209, h: 66))
+        lblNote.numberOfLines = 0
+        lblNote.text = "You are Hidden...\nNo one can see you and you\ncan't be discovered!"
+        lblNote.textAlignment = NSTextAlignment.center
+        lblNote.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
+        lblNote.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
+        uiviewHidden.addSubview(lblNote)
         
-        btnGot = UIButton(frame: CGRect(x: 40/414*screenWidth, y: 315/736*screenHeight, width: 209/414*screenWidth, height: 40))
+        btnGot = UIButton(frame: CGRect(x: 41, y: 315, w: 209, h: 40))
         uiviewHidden.addSubview(btnGot)
-        btnGot.titleLabel?.textColor = .white
-        btnGot.titleLabel?.textAlignment = .center
         btnGot.setTitle("Got it!", for: .normal)
-        btnGot.backgroundColor = UIColor._2499090()
-        btnGot.layer.cornerRadius = 19
+        btnGot.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
+        btnGot.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
+        btnGot.layer.cornerRadius = 20 * screenWidthFactor
         btnGot.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
-        
     }
     
     func loadBackground() {
@@ -125,17 +119,18 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewBackground.addSubview(uiviewAlert)
         
         let btnAlertX = 210/414*screenWidth
-        lblAlert = UILabel(frame: CGRect(x: (uiviewAlertX-btnAlertX)/2, y: 30/736*screenHeight, width: 210, height: 50))
+        lblAlert = UILabel(frame: CGRect(x: 0, y: 30, w: 205, h: 50))
+        lblAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(lblAlert)
         if tag == 0 {
-            lblAlert.text = "Are you sure you want to clear your Chat History?"
+            lblAlert.text = "Are you sure you want to\nclear your Chat History?"
         }
         else {
-            lblAlert.text = "Your Chat History has been cleared!"
+            lblAlert.text = "Your Chat History has\nbeen cleared!"
         }
         lblAlert.textAlignment = .center
         lblAlert.textColor = UIColor._898989()
-        lblAlert.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblAlert.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenWidthFactor)
         lblAlert.numberOfLines = 0
         lblAlert.lineBreakMode = .byWordWrapping
         
@@ -188,7 +183,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         let section = indexPath.section
         let row = indexPath.row
         if section == 1 && (row == 1 || row == 2 || row == 3) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralSubTitleCell", for: indexPath as IndexPath) as!GeneralSubTitleCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralSubTitleCell", for: indexPath as IndexPath) as! GeneralSubTitleCell
             cell.btnSelect.isHidden = false
             cell.btnSelect.isSelected = row == 1
             cell.imgView.isHidden = true
@@ -199,7 +194,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.lblName.textColor = UIColor._107105105()
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as!GeneralTitleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as! GeneralTitleCell
         if section == 0 {
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = false
@@ -224,16 +219,19 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
         //let row = indexPath.row
-        if section == 0 {
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as!GeneralTitleCell
+        if section == 0 { // TODO
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralTitleCell
             if cell.switchIcon.isOn == false {
                 //show main map and uiviewAlert, need to add mainscreen map here
                 cell.switchIcon.isOn = true
-                uiviewHidden.isHidden = false
+                uiviewBackground.isHidden = false
+                uiviewAlert.isHidden = true
             }
         }
-        else if section == 3 {
+        else if section == 3 { // TODO
             uiviewBackground.isHidden = false
+            uiviewHidden.isHidden = true
+            uiviewAlert.isHidden = false
             tag = 0
             //need to clear chat history later
             clearCharHistory()
@@ -258,6 +256,14 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     func showMainView(_ sender: UIButton) {
         uiviewHidden.isHidden = true
         uiviewBackground.isHidden = true
+    }
+    
+    func invisibleModeDimClicked(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: {
+            sender.alpha = 0
+        }, completion: { _ in
+            sender.removeFromSuperview()
+        })
     }
     
     func clearCharHistory() {

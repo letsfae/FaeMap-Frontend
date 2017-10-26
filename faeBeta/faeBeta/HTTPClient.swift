@@ -259,29 +259,29 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
                     return
                 }
 //                joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
-                if let reamlUser = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
+                if let realmUser = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
                     try! realm.write {
                         if type == 0 {
-                            reamlUser.largeAvatarEtag = etag
-                            reamlUser.userLargeAvatar = response.data as NSData?
+                            realmUser.largeAvatarEtag = etag
+                            realmUser.userLargeAvatar = response.data as NSData?
                         } else {
-                            reamlUser.smallAvatarEtag = etag
-                            reamlUser.userSmallAvatar = response.data as NSData?
+                            realmUser.smallAvatarEtag = etag
+                            realmUser.userSmallAvatar = response.data as NSData?
                         }
                         completion(statusCode, etag, response.data)
                     }
                 } else {
-                    let reamlUser = UserAvatar()
-                    reamlUser.user_id = "\(userID)"
+                    let realmUser = UserAvatar()
+                    realmUser.user_id = "\(userID)"
                     if type == 0 {
-                        reamlUser.largeAvatarEtag = etag
-                        reamlUser.userLargeAvatar = response.data as NSData?
+                        realmUser.largeAvatarEtag = etag
+                        realmUser.userLargeAvatar = response.data as NSData?
                     } else {
-                        reamlUser.smallAvatarEtag = etag
-                        reamlUser.userSmallAvatar = response.data as NSData?
+                        realmUser.smallAvatarEtag = etag
+                        realmUser.userSmallAvatar = response.data as NSData?
                     }
                     try! realm.write {
-                        realm.add(reamlUser)
+                        realm.add(realmUser)
                         completion(statusCode, etag, response.data)
                     }
                 }
