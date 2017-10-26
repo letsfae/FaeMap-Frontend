@@ -63,6 +63,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                     }
                 }
                 
+                self.arrPlaces.sort {$0.colId < $1.colId}
+                self.arrLocations.sort {$0.colId < $1.colId}
                 self.countPlaces = self.arrPlaces.count
                 self.countLocations = self.arrLocations.count
                 self.tblCollections.reloadData()
