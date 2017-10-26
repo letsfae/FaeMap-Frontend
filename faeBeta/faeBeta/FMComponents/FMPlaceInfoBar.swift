@@ -252,8 +252,6 @@ class FMPlaceInfoBar: UIView {
     }
 }
 
-let placeInfoBarImageCache = NSCache<AnyObject, AnyObject>()
-
 class PlaceView: UIImageView {
     
     var class_2_icon_id = 0
