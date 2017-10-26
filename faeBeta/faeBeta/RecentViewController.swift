@@ -92,6 +92,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }*/
         //closeCurrentOpenCell()
         indexSelected = -1
+        indexShowDelete = -1
     }
 
      // MARK: setup UI
@@ -276,10 +277,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        if indexShowDelete >= 0 && indexShowDelete == indexPath.row {
-            let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
-            cell.uiviewMain.backgroundColor = UIColor.white
-        }
         /*if indexShowDelete < 0 || indexShowDelete != indexPath.row {
             let cell = tableView.cellForRow(at: indexPath) as! RecentTableViewCell
             cell.btnDelete.isHidden = true
@@ -492,6 +489,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 if indexPath.row == indexShowDelete {
                     closeCurrentOpenCell()
                 } else {
+                    if indexShowDelete >= 0 {
+                        closeCurrentOpenCell()
+                    }
                     let cell = tblRecents.cellForRow(at: indexPath) as! RecentTableViewCell
                     cell.uiviewMain.backgroundColor = UIColor._225225225()
                 }
@@ -537,7 +537,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             let cell = tblRecents.cellForRow(at: IndexPath(row: indexShowDelete, section: 0)) as! RecentTableViewCell
             cell.closeCell()
             cell.uiviewMain.backgroundColor = .white
-            //indexShowDelete = -1
+            indexShowDelete = -1
         }
     }
     
@@ -563,6 +563,8 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             cell.btnDelete.isHidden = true
             gotoChatFromRecent_v2(selectedRowAt: IndexPath(row: indexSelected, section: 0))
             //indexSelected = -1
+        } else {
+            indexSelected = -1
         }
         if tblRecents.indexPath(for: cell) != nil {
             //cellsCurrentlyEditing.remove(tblRecents.indexPath(for: cell)!)
