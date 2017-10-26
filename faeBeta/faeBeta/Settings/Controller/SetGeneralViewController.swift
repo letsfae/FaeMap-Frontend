@@ -9,6 +9,7 @@
 // Vicky 09/17/17 这个页面我不知道在其他iphone型号有没有问题，在iPhone6上Scroll是scroll不下去的，你仔细注意一下“Background Location”以及“Email Subscription”的字体，老板给的是size 18,你用的是size 16。这个地方的实现我建议全部换成table来实现，而不是scrollView，(这样可能容易点儿？）分四个section，最后两个section可以用同一个cell，前两个section的"Measurement Units"和"Permissions"部分可以用sectionHeaderView来实现，具体自己查一下。只是个建议，自己衡量，只要UI和Sketch文件同样，下拉滑动时候没有问题，随便用什么实现都可以。 ps:这个问题在SetFaeMap.swift文件里也有出现，刚才发现是scrollview.isPagingEnabled = true这句话导致的，你可以试着在你自己手机上运行，将这句话分别给true和false看看有什么不同，我现在都给你改成false了，目前显示正常了。
 
 import UIKit
+import Contacts
 
 class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var uiviewNavBar: FaeNavBar!
@@ -21,15 +22,19 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     var btnBackground: UIButton!
     var uiviewBackground: UIView!
     
+    var dictPermissions: [String: Bool] = [:]
+    
     override func viewDidLoad() {
         // Vicky 09/17/17 把所有ViewController的背景色置为白色，我这里给你添加了一个作为例子，其他文件也都全部加上，我不知道在你从Settings主页面点击General等滑动动画时候有没有一个transition的问题，是因为你所有view的backgroundColor都没有赋值。
         view.backgroundColor = .white
         // Vicky 09/17/17 End
         navigationController?.isNavigationBarHidden = true
+        getPermissionStatus()
         loadNavBar()
         loadTableView()
         loadBackground()
         loaduiviewAlert()
+        NotificationCenter.default.addObserver(self, selector: #selector(appBecomeActive), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
     }
     
     func loadNavBar() {
@@ -175,6 +180,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.removeContraintsForDes()
             }
             cell.switchIcon.isHidden = false
+            cell.switchIcon.isOn = dictPermissions[arrNames["\(sec)\(row)"]!]!
             cell.btnSelect.isHidden = true
             cell.imgView.isHidden = true
             return cell
@@ -217,8 +223,11 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                     cell2.btnSelect.isSelected = false
                 }
             }
-        }
-        else if section == 3 {
+        } else if section == 1 {
+            if row != 1 {
+                UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+            }
+        } else if section == 3 {
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as!GeneralTitleCell
             if cell.switchIcon.isOn == true {
                 cell.switchIcon.isOn = false
@@ -253,6 +262,60 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func getPermissionStatus() {
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                dictPermissions["Location"] = false
+                break
+            case .authorizedAlways, .authorizedWhenInUse:
+                dictPermissions["Location"] = true
+            }
+        }
+        
+        switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) {
+        case .authorized:
+            dictPermissions["Camera"] = true
+            break
+        case .denied, .notDetermined, .restricted:
+            dictPermissions["Camera"] = false
+        }
+        
+        switch AVAudioSession.sharedInstance().recordPermission() {
+        case AVAudioSessionRecordPermission.granted:
+            dictPermissions["Microphone"] = true
+            break
+        default:
+            dictPermissions["Microphone"] = false
+        }
+        
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .authorized:
+            dictPermissions["Contacts"] = true
+            break
+        default:
+            dictPermissions["Contacts"] = false
+        }
+        
+        if UIApplication.shared.currentUserNotificationSettings?.types == UIUserNotificationType() {
+            dictPermissions["Push Notifications"] = false
+        } else {
+            dictPermissions["Push Notifications"] = true
+        }
+        
+        switch UIApplication.shared.backgroundRefreshStatus {// TODO
+        case .available:
+            dictPermissions["Background Location"] = true
+        default:
+            dictPermissions["Background Location"] = false
+        }
+    }
+    
+    func appBecomeActive() {
+        getPermissionStatus()
+        tblGeneral.reloadData()
     }
     
 }
