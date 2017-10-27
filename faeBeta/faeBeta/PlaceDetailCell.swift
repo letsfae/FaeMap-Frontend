@@ -187,7 +187,13 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         let components = calendar.dateComponents([.weekday], from: date)
         
         if let weekday = components.weekday {
-            lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
+            if weekday == 7 {
+                lblContent.text = arrDay_LG[0] + " / " + arrHour[0]
+            } else if weekday == 8 {
+                lblContent.text = arrDay_LG[1] + " / " + arrHour[1]
+            } else {
+                lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
+            }
         }
 
         tblOpeningHours.reloadData()
