@@ -264,7 +264,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                     } else if errorCode == "400-22" {
                         self.lblMsgSent.text = "The User Has Already \nSent You a Friend Request!"
                     } else if errorCode == "400-6" {
-                        self.lblMsgSent.text = "Friend Request \nSent Fail! [BLOCK]"
+                        self.lblMsgSent.text = "Friend Request \nSent Fail!"  // [BLOCK]
                         self.statusMode = .blocked
                     } else {
                         self.lblMsgSent.text = "Friend Request \nError!"
@@ -446,7 +446,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                     } else if errorCode == "400-22" {
                         self.lblMsgSent.text = "The User Has Already \nSent You a Friend Request!"
                     } else if errorCode == "400-6" {
-                        self.lblMsgSent.text = "Friend Request Sent \nFail! [BLOCK]"
+                        self.lblMsgSent.text = "Friend Request Sent \nFail!" // [BLOCK]
                         self.statusMode = .blocked
                     } else {
                         self.lblMsgSent.text = "Friend Request \nError!"

@@ -9,7 +9,20 @@
 import UIKit
 import SwiftyJSON
 
-class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate {
+struct UserNameCard {
+    let userId: Int
+    let userName: String
+    let displayName: String
+    let shortIntro: String
+    init(user_id: Int, nick_name: String, user_name: String, short_intro: String = "") {
+        userId = user_id
+        userName = user_name
+        displayName = nick_name
+        shortIntro = short_intro
+    }
+}
+
+class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
     
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
@@ -47,7 +60,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     var indicatorState: IndicatorState = .end
-    var filtered = [MBPeopleStruct]()
+    var filtered = [UserNameCard]()
     var arrUsers = [MBPeopleStruct]() //["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
     var arrFriends = [Friends]()
     var arrReceivedRequests = [Friends]()
@@ -71,6 +84,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         //btnIndicator.addGestureRecognizer(panGesture)
     }
     
+    /*
     func getUserList(_ completion: ((Int) -> ())?) {
         let userList = FaeMap()
         
@@ -101,6 +115,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
             completion?(self.arrUsers.count)
         }
     }
+    */
     
     func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
@@ -116,7 +131,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         schbarUsernames.delegate = self
         uiviewSchbar.addSubview(schbarUsernames)
         
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 48, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
         bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewSchbar.addSubview(bottomLine)
@@ -171,7 +186,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
          tblUsernames' height should be screenHeight - 65 - height of schbar
          */
         tblUsernames = UITableView()
-        tblUsernames.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 65 - 50)
+        tblUsernames.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
@@ -205,29 +220,48 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     // Vicky 07/28/17
     // FaeSearchBarTestDelegate
-    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
-        if searchText == "" {
-            filter(searchText: searchText)
-        }
-    }
+    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {}
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         schbarUsernames.txtSchField.becomeFirstResponder()
     }
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
         filter(searchText: searchBar.txtSchField.text!)
-//        schbarUsernames.txtSchField.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
-//        schbarUsernames.txtSchField.resignFirstResponder()
+        filter(searchText: "")
     }
     // End of FaeSearchBarTestDelegate
     
-    func filter(searchText: String, scope: String = "All") {
-        filtered = arrUsers.filter { user in
-            //(text.lowercased()).elementsEqual(searchText.lowercased())
-            (user.userName.lowercased()).range(of: searchText.lowercased()) != nil
+    func filter(searchText: String) {
+        filtered.removeAll()
+        if searchText == "" {
+            self.tblUsernames.reloadData()
+            return
         }
-        tblUsernames.reloadData()
+        let faeUser = FaeUser()
+        faeUser.whereKey("user_name", value: searchText)
+        faeUser.checkUserExistence() {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                if !json["existence"].boolValue {
+                    self.tblUsernames.reloadData()
+                    return
+                }
+                let userId = json["user_id"].intValue
+                faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        let json = JSON(message!)
+                        let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
+                        self.filtered.append(userInfo)
+                        self.tblUsernames.reloadData()
+                    } else {
+                        print("[get user name card fail] \(status) \(message!)")
+                    }
+                }
+            } else {
+                print("[check user existence fail] \(status) \(message!)")
+            }
+        }
     }
     // End of Vicky 07/28/17
     
@@ -236,8 +270,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
             tblUsernames.isHidden = false
             if filtered.count == 0 { // this means no results.
                 imgGhost.isHidden = false
-            }
-            else {
+            } else {
                 imgGhost.isHidden = true
             }
             return filtered.count
@@ -249,14 +282,15 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
-        let filteredUser = filtered[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
+        let user = filtered[indexPath.row]
         if schbarUsernames.txtSchField.text != "" {
-            cell.userId = filteredUser.userId
+            /*
+            cell.userId = user.userId
             var findRes = false
             if !findRes {
                 for friend in arrFriends {
-                    if friend.userId == filteredUser.userId {
+                    if friend.userId == cell.userId {
                         cell.friendStatus = .accepted
                         findRes = true
                         break
@@ -266,7 +300,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
             
             if !findRes {
                 for friend in arrReceivedRequests {
-                    if friend.userId == filteredUser.userId {
+                    if friend.userId == cell.userId {
                         cell.friendStatus = .requested
                         cell.requestId = friend.requestId
                         findRes = true
@@ -277,7 +311,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
             
             if !findRes {
                 for friend in arrRequested {
-                    if friend.userId == filteredUser.userId {
+                    if friend.userId == cell.userId {
                         cell.friendStatus = .pending
                         cell.requestId = friend.requestId
                         findRes = true
@@ -285,9 +319,12 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
                     }
                 }
             }
-            
-            cell.setValueForCell(user: filteredUser)
-            cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.
+            */
+            cell.indexPath = indexPath
+            cell.delegate = self
+            cell.setValueForCell(user: user)
+            cell.userId = user.userId
+            cell.getFriendStatus(id: cell.userId)
         }
         return cell
     }
@@ -303,4 +340,63 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarUsernames.txtSchField.resignFirstResponder()
     }
+    
+    
+    // FaeAddUsernameDelegate
+    func addFriend(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "add"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func resendRequest(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "resend"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func acceptRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "accept"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func ignoreRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "ignore"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func withdrawRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "withdraw"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    // FaeAddUsernameDelegate End
+    
+    // FriendOperationFromContactsDelegate
+    func passFriendStatusBack(indexPath: IndexPath) {
+        tblUsernames.reloadRows(at: [indexPath], with: .none)
+    }
+    // FriendOperationFromContactsDelegate End
 }

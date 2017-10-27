@@ -174,6 +174,7 @@
 		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
 		B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D341F46519500DE3107 /* MBTalkTalk.swift */; };
 		B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */; };
+		B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */; };
 		B37E5DA11F831019008A6B4B /* GeneralCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9E1F831019008A6B4B /* GeneralCells.swift */; };
 		B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9F1F831019008A6B4B /* SettingsCell.swift */; };
 		B37E5DA31F831019008A6B4B /* SetAccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA01F831019008A6B4B /* SetAccountCell.swift */; };
@@ -498,6 +499,7 @@
 		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
 		B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsSearchViewController.swift; sourceTree = "<group>"; };
+		B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendOperationFromContactsViewController.swift; sourceTree = "<group>"; };
 		B37E5D9E1F831019008A6B4B /* GeneralCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralCells.swift; sourceTree = "<group>"; };
 		B37E5D9F1F831019008A6B4B /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		B37E5DA01F831019008A6B4B /* SetAccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAccountCell.swift; sourceTree = "<group>"; };
@@ -1188,6 +1190,7 @@
 				B3B5201E1F5A41C900A6B0DC /* Cells */,
 				B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */,
 				B33FB2321F267C0500EC6655 /* AddUsernameController.swift */,
+				B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */,
 				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
 				B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */,
 				B33FB2311F267C0500EC6655 /* AddNearbyController.swift */,
@@ -1966,6 +1969,7 @@
 				DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */,
+				B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
