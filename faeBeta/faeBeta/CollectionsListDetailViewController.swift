@@ -241,7 +241,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             uiviewSectionHeader.addSubview(lblItemsNum)
             lblItemsNum.textColor = UIColor._146146146()
             lblItemsNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
-            lblItemsNum.text = "\(numItems) items"
+            lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
             
             let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
             uiviewSectionHeader.addSubview(lblDateAdded)
@@ -303,8 +303,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
                     cell.setValueForPlacePin(placeId: arrSavedPinIds[indexPath.row])
-//                    let test = ["12345","678","",""]
-//                    cell.lblColMemo.text = test[indexPath.row]
                     return cell
                 }
             }
@@ -359,11 +357,10 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             let arrLocPinId = resultJson["pins"].arrayValue
             self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
             joshprint(self.arrSavedPinIds)
-//            self.tblColListDetail.reloadData()
             self.btnMapView.isEnabled = true
             self.desiredCount = self.arrSavedPinIds.count
             for placeId in self.arrSavedPinIds {
-                FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(placeId)) { (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
@@ -767,5 +764,6 @@ extension CollectionsListDetailViewController {
         tblColListDetail.reloadSections(section, with: .none)
         numItems = ids.count
         lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
+        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
     }
 }
