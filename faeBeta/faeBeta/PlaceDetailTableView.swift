@@ -33,12 +33,12 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:   // place address
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailSection1Cell", for: indexPath) as! PlaceDetailSection1Cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailSection1Cell", for: indexPath) as! PlaceDetailMapCell
             cell.delegate = self
             cell.setValueForCell(place: place)
             return cell
         case 1:   // place opening hour
-            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailSection2Cell", for: indexPath) as! PlaceDetailSection2Cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailSection2Cell", for: indexPath) as! PlaceDetailHoursCell
             cell.setValueForCell(place: place)
             return cell
         case 2:   // place website & place phone number

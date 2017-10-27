@@ -44,7 +44,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
-    var uiviewLocationBar: LocationView!
+    var uiviewLocationBar: FMLocationInfoBar!
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
@@ -129,7 +129,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
                     self.lblSearchContent.text = addr
-                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+//                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
                 }
             }
         }
@@ -532,7 +532,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func loadLocationView() {
-        uiviewLocationBar = LocationView()
+        uiviewLocationBar = FMLocationInfoBar()
         view.addSubview(uiviewLocationBar)
         uiviewLocationBar.alpha = 0
         
@@ -588,6 +588,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         uiviewLocationBar.show()
         view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
+        General.shared.getAddress(location: cllocation, full: false) { (address) in
+            guard let addr = address as? String else { return }
+            DispatchQueue.main.async {
+                self.routeAddress = RouteAddress(name: addr, coordinate: cllocation.coordinate)
+            }
+        }
         General.shared.getAddress(location: cllocation, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             

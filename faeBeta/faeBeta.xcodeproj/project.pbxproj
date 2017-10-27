@@ -1117,7 +1117,7 @@
 				50111C241F476063004EA00E /* FMComponents */,
 				B33F89F51F3CDBEE0033610D /* AddFriend */,
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
-				B855E0D01DBC2B6F0085E926 /* MainScreenSearch */,
+				B855E0D01DBC2B6F0085E926 /* Search */,
 				B8E819541DB3248C00D418D1 /* ReportPin */,
 				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
@@ -1296,7 +1296,7 @@
 			name = PullDownToRefresh;
 			sourceTree = "<group>";
 		};
-		B855E0D01DBC2B6F0085E926 /* MainScreenSearch */ = {
+		B855E0D01DBC2B6F0085E926 /* Search */ = {
 			isa = PBXGroup;
 			children = (
 				50902F541F2BB530002553F1 /* MapSearchViewController.swift */,
@@ -1304,7 +1304,7 @@
 				50902F581F2BB72B002553F1 /* LocationListCell.swift */,
 				50902F5A1F2BB736002553F1 /* PlacesListCell.swift */,
 			);
-			name = MainScreenSearch;
+			name = Search;
 			sourceTree = "<group>";
 		};
 		B8849E991EEB0F9200D4588D /* MapBoard */ = {

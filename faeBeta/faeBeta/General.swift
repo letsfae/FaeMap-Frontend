@@ -55,7 +55,7 @@ class General: NSObject {
         }
     }
     
-    func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, completion: @escaping (AnyObject) -> Void) {
+    func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (AnyObject) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             
@@ -102,7 +102,18 @@ class General: NSObject {
                 
                 if full == false {
                     address = locality + ", " + administrativeArea + ", " + country
-                    completion(address as AnyObject)
+                    if detach {
+                        if locality == administrativeArea {
+                            address = locality + "@" + ", " + country
+                        }
+                        if locality == country {
+                            address = locality + "@"
+                        }
+                        address = locality + "@" + administrativeArea + ", " + country
+                        completion(address as AnyObject)
+                    } else {
+                        completion(address as AnyObject)
+                    }
                     return
                 }
                 
@@ -133,7 +144,7 @@ class General: NSObject {
         let getPlaces = FaeMap()
         getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
         getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
-        getPlaces.whereKey("radius", value: "500000")
+        getPlaces.whereKey("radius", value: "99999999")
         getPlaces.whereKey("type", value: "place")
         getPlaces.whereKey("max_count", value: "\(count)")
         getPlaces.getMapInformation { (status: Int, message: Any?) in

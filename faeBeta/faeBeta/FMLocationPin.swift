@@ -38,7 +38,7 @@ extension FaeMapViewController {
     }
     
     func loadLocationView() {
-        uiviewLocationBar = LocationView()
+        uiviewLocationBar = FMLocationInfoBar()
         view.addSubview(uiviewLocationBar)
         uiviewLocationBar.alpha = 0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLocInfoBarTap))
@@ -48,15 +48,16 @@ extension FaeMapViewController {
     }
     
     func handleLocInfoBarTap() {
-        if createLocation == .create {
-            locAnnoView?.hideButtons()
-            let vcLocDetail = LocDetailViewController()
-            vcLocDetail.coordinate = selectedLocation?.coordinate
-            vcLocDetail.delegate = self
-            vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
-            vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
-            navigationController?.pushViewController(vcLocDetail, animated: true)
-        }
+//        if createLocation == .create {
+//            locAnnoView?.hideButtons()
+//            let vcLocDetail = LocDetailViewController()
+//            vcLocDetail.coordinate = selectedLocation?.coordinate
+//            vcLocDetail.delegate = self
+//            vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
+//            vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
+//            navigationController?.pushViewController(vcLocDetail, animated: true)
+//        }
+        placePinAction(action: .detail)
     }
     
     func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {

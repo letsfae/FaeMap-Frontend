@@ -172,8 +172,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
-        tblPlaceDetail.register(PlaceDetailSection1Cell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
-        tblPlaceDetail.register(PlaceDetailSection2Cell.self, forCellReuseIdentifier: "PlaceDetailSection2Cell")
+        tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
+        tblPlaceDetail.register(PlaceDetailHoursCell.self, forCellReuseIdentifier: "PlaceDetailSection2Cell")
         tblPlaceDetail.register(PlaceDetailSection3Cell.self, forCellReuseIdentifier: "PlaceDetailSection3Cell")
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
         tblPlaceDetail.separatorStyle = .none

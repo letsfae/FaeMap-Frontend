@@ -101,7 +101,7 @@ protocol PlaceDetailSmallMapCellDelegate: class {
     func jumpToMainMapWithPlace()
 }
 
-class PlaceDetailSection1Cell: PlaceDetailCell {
+class PlaceDetailMapCell: PlaceDetailCell {
     
     var placeData: PlacePin!
     var boolPlaceAdded = false
@@ -156,12 +156,13 @@ class PlaceDetailSection1Cell: PlaceDetailCell {
     }
 }
 
-class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableViewDataSource {
+class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDataSource {
     var tblOpeningHours: UITableView!
     var lblHint: UILabel!
     
-    var arrDay = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    var arrHour = ["10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "N.A", "10:00 AM - 8:00 PM", "10:00 AM - 8:00 PM", "Not Open"]
+    var arrDay_LG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",]
+    var arrDay = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    var arrHour = [String]()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -173,7 +174,23 @@ class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableView
     
     override func setValueForCell(place: PlacePin) {
         imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-        lblContent.text = "Open / 9:00 AM - 8:00 PM"
+        for day in arrDay {
+            if place.hours.index(forKey: day) == nil {
+                arrHour.append("N/A")
+            } else {
+                arrHour.append(place.hours[day]!)
+            }
+        }
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.weekday], from: date)
+        
+        if let weekday = components.weekday {
+            lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
+        }
+
+        tblOpeningHours.reloadData()
     }
     
     override func loadHiddenContent() {
@@ -220,7 +237,7 @@ class PlaceDetailSection2Cell: PlaceDetailCell, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
-        let day = arrDay[indexPath.row]
+        let day = arrDay_LG[indexPath.row]
         let hour = arrHour[indexPath.row]
         cell.setValueForCell(day: day, hour: hour)
         return cell

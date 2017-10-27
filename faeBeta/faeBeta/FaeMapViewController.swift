@@ -121,7 +121,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
-    var uiviewLocationBar: LocationView!
+    var uiviewLocationBar: FMLocationInfoBar!
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!

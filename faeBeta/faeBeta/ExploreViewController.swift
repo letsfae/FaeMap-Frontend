@@ -47,7 +47,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var fullyLoaded = false
     
-    var coordinate: CLLocationCoordinate2D?
+    var coordinate: CLLocationCoordinate2D!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,10 +58,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.loadContent()
             self.coordinate = LocManager.shared.curtLoc.coordinate
             self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
-//            self.loadWaves()
             self.fullyLoaded = true
+            General.shared.getAddress(location: LocManager.shared.curtLoc, original: false, full: false, detach: true) { (address) in
+                if let addr = address as? String {
+                    let new = addr.split(separator: "@")
+                    self.reloadBottomText(String(new[0]), String(new[1]))
+                    self.lblBottomLocation.alpha = 1
+                }
+            }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,7 +81,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadContent() {
-//        loadAvatarWave()
         loadTopTypesCollection()
         loadPicCollections()
         loadButtons()
@@ -458,7 +464,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addSubview(lblBottomLocation)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblBottomLocation)
         view.addConstraintsWithFormat("V:[v0(25)]-19-|", options: [], views: lblBottomLocation)
-        reloadBottomText("Los Angeles", "CA, United States")
+        lblBottomLocation.alpha = 0
+        reloadBottomText("", "")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
@@ -486,7 +493,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         } else if array.count == 2 {
             reloadBottomText(array[0], array[1])
         }
-        loadPlaces(center: address.coordinate)
+        self.coordinate = address.coordinate
+        search(category: lastCategory)
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
@@ -543,9 +551,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    var lastCategory = ""
+    
     // ExploreCategorySearch
     func search(category: String) {
-        
+        lastCategory = category
         func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
             var tempRaw = arrRaw
             var arrResult = [PlacePin]()
@@ -575,6 +585,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+//        FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMapSearchPlaceInfo] status/100 != 2")

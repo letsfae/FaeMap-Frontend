@@ -275,7 +275,7 @@ class PlaceView: UIImageView {
         lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .white
-        lblHours.text = placeInfo.hours
+//        lblHours.text = placeInfo.hours
         if placeInfo.imageURL == "" {
             imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
             imgType.backgroundColor = .white
@@ -346,7 +346,7 @@ class PlaceView: UIImageView {
     }
 }
 
-class LocationView: UIView {
+class FMLocationInfoBar: UIView {
     
     var imgType: UIImageView!
     var lblName: UILabel!

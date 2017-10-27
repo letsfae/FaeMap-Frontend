@@ -14,7 +14,7 @@ extension FaeMapViewController: PlaceViewDelegate {
     func loadPlaceDetail() {
         view.addSubview(uiviewPlaceBar)
         uiviewPlaceBar.delegate = self
-        let tapGesture = UIGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
         uiviewPlaceBar.addGestureRecognizer(tapGesture)
         
         view.addSubview(tblPlaceResult)
