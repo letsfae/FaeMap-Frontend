@@ -511,56 +511,22 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     func getFriendStatus(id: Int) {
         statusMode = .defaultMode
-        faeContact.getFriends() {(status: Int, message: Any?) in
+        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        if json[i]["friend_id"].intValue == id {
-                            self.statusMode = .accepted
-                            break
-                        }
-                    }
+                let relation = Relations(json: json)
+                if relation.is_friend {
+                    self.statusMode = .accepted
+                } else if relation.requested {
+                    self.statusMode = .pending
+                } else if relation.requested_by {
+                    self.statusMode = .requested
+                } else if relation.blocked || relation.blocked_by {   // blocked & blocked_by
+                    self.statusMode = .blocked
                 }
                 self.setButtonImage()
             } else {
-                print("[FMUserInfo get friends list fail] - \(status) \(message!)")
-            }
-        }
-        
-        faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        if json[i]["requested_user_id"].intValue == id {
-                            self.statusMode = .pending
-                            self.requestId = json[i]["friend_request_id"].intValue
-                            break
-                        }
-                    }
-                }
-                self.setButtonImage()
-            } else {
-                print("[FMUserInfo get requested friends list fail] - \(status) \(message!)")
-            }
-        }
-        
-        faeContact.getFriendRequests() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        if json[i]["request_user_id"].intValue == id {
-                            self.statusMode = .requested
-                            self.requestId = json[i]["friend_request_id"].intValue
-                            break
-                        }
-                    }
-                }
-                self.setButtonImage()
-            } else {
-                print("[FMUserInfo get request friends list fail] - \(status) \(message!)")
+                print("[get friend status fail] - \(status) \(message!)")
             }
         }
     }

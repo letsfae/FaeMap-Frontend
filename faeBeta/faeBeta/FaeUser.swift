@@ -455,4 +455,10 @@ class FaeUser: NSObject {
         }
     }
     
+    func getUserRelation(_ user_id: String, completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/relation/\(user_id)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
 }

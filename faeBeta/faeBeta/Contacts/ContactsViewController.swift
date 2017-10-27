@@ -57,6 +57,26 @@ struct Follows {
     }
 }
 
+struct Relations {
+    let is_friend: Bool
+    let requested: Bool // I've sent request to others
+    let requested_by: Bool  // others have sent request to me
+    let blocked: Bool  // I blocked others
+    let blocked_by: Bool  // others blocked me
+    let followed: Bool  // I followed others
+    let followed_by: Bool  // others followed me
+    
+    init(json: JSON) {
+        is_friend = json["is_friend"].boolValue
+        requested = json["friend_requested"].boolValue
+        requested_by = json["friend_requested_by"].boolValue
+        blocked = json["blocked"].boolValue
+        blocked_by = json["blocked_by"].boolValue
+        followed = json["followed"].boolValue
+        followed_by = json["followed_by"].boolValue
+    }
+}
+
 class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, SomeDelegateRequested {
     
     // YingChen.swift variable declaration for UI objects
