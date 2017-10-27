@@ -55,19 +55,16 @@ class PlacePin: NSObject {
         class_1 = json["categories"]["class1"].stringValue
         imageURL = json["img"].stringValue
         url = json["url"].stringValue
+        if url == "" {
+            url = "N/A"
+        }
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
-        for (key, subJson) in json["hour"] {
-            if name == "Aldewaniah Restaurant" {
-                print(key, subJson.stringValue)
-                hours = hours + processHours(day: key, hour: subJson.stringValue)
-            }
+        if phone == "" {
+            phone = "N/A"
         }
-        if name == "Aldewaniah Restaurant" {
-            print("items count:", hours.count)
-            for (key, value) in hours {
-                print(key+": "+value)
-            }
+        for (key, subJson) in json["hour"] {
+            hours = hours + processHours(day: key, hour: subJson.stringValue)
         }
         
         memo = json["user_pin_operations"]["memo"].stringValue

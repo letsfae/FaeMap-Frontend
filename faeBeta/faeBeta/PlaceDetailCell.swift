@@ -160,8 +160,8 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
     var tblOpeningHours: UITableView!
     var lblHint: UILabel!
     
-    var arrDay_LG = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",]
-    var arrDay = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    var arrDay_LG = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     var arrHour = [String]()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -258,7 +258,7 @@ class PlaceDetailSection3Cell: PlaceDetailCell {
     override func setValueForCell(place: PlacePin) {
         imgDownArrow.isHidden = true
         imgIcon.image = row == 0 ? #imageLiteral(resourceName: "place_web") : #imageLiteral(resourceName: "place_call")
-        lblContent.text = row == 0 ? "https://www.faemaps.com/" : "+1 (209) 829 9986"
+        lblContent.text = row == 0 ? place.url : place.phone
     }
 }
 

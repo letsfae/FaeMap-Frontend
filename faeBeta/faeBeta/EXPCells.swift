@@ -371,7 +371,7 @@ class EXPClctImgCell: UICollectionViewCell {
 }
 
 protocol ExploreCategorySearch: class {
-    func search(category: String)
+    func search(category: String, indexPath: IndexPath)
 }
 
 class EXPClctTypeCell: UICollectionViewCell {
@@ -380,6 +380,7 @@ class EXPClctTypeCell: UICollectionViewCell {
     
     var btnType: UIButton!
     var category = ""
+    var indexPath: IndexPath!
     
     internal var widthContraint = [NSLayoutConstraint]() {
         didSet {
@@ -401,10 +402,20 @@ class EXPClctTypeCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setButtonColor(selected: Bool) {
+        btnType.isSelected = selected
+        if selected {
+            btnType.titleLabel?.font = FaeFont(fontType: .demiBold, size: 15)
+        } else {
+            btnType.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
+        }
+    }
+    
     func loadCellItems() {
         btnType = UIButton()
         btnType.setTitle("", for: .normal)
         btnType.setTitleColor(UIColor(r: 102, g: 192, b: 251, alpha: 100), for: .normal)
+        btnType.setTitleColor(UIColor(r: 249, g: 90, b: 90, alpha: 100), for: .selected)
         btnType.setTitleColor(.lightGray, for: .highlighted)
         btnType.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
         btnType.titleLabel?.textAlignment = .center
@@ -415,7 +426,8 @@ class EXPClctTypeCell: UICollectionViewCell {
     }
     
     func actionSearch() {
-        delegate?.search(category: category)
+        guard indexPath != nil else { return }
+        delegate?.search(category: category, indexPath: indexPath)
     }
     
     func updateTitle(type: String) {
