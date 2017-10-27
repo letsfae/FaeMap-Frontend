@@ -124,7 +124,6 @@ class Key: NSObject { //  singleton class
                 Key.shared.gender = profileInfo["gender"].stringValue
                 Key.shared.disableAge = profileInfo["show_age"].boolValue
                 Key.shared.userAge = profileInfo["age"].stringValue
-                joshprint("[getGenderAge] age gender updated")
             })
         }
     }

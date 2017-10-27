@@ -523,9 +523,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         fullAttrStr.append(title_0_attr)
         fullAttrStr.append(title_1_attr)
         fullAttrStr.append(secondImg_attach)
-        
-        lblBottomLocation.attributedText = fullAttrStr
-        lblBottomLocation.isHidden = false
+        DispatchQueue.main.async {
+            self.lblBottomLocation.attributedText = fullAttrStr
+            self.lblBottomLocation.isHidden = false
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
