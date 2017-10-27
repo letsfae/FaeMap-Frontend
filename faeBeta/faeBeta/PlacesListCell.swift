@@ -10,7 +10,7 @@ import UIKit
 
 class PlacesListCell: UITableViewCell {
     
-    var imgIcon: UIImageView!
+    var imgPic: UIImageView!
     var lblPlaceName: UILabel!
     var lblAddress: UILabel!
     var bottomLine: UIView!
@@ -28,12 +28,39 @@ class PlacesListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setValueForPlace(_ placeInfo: PlacePin) {
+        self.lblPlaceName.text = placeInfo.name
+        self.lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
+        self.imgPic.backgroundColor = .white
+        if placeInfo.imageURL == "" {
+            imgPic.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgPic.backgroundColor = .white
+        } else {
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
+                self.imgPic.image = placeImgFromCache
+                self.imgPic.backgroundColor = UIColor._2499090()
+                return
+            }
+            downloadImage(URL: placeInfo.imageURL) { (rawData) in
+                guard let data = rawData else { return }
+                DispatchQueue.global(qos: .userInitiated).async {
+                    guard let placeImg = UIImage(data: data) else { return }
+                    DispatchQueue.main.async {
+                        self.imgPic.image = placeImg
+                        self.imgPic.backgroundColor = UIColor._2499090()
+                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
+                    }
+                }
+            }
+        }
+    }
+    
     fileprivate func loadRecommendedCellContent() {
-        imgIcon = UIImageView()
-        imgIcon.frame = CGRect(x: 15 * screenWidthFactor, y: 11, width: 46, height: 46)
-        imgIcon.contentMode = .scaleAspectFill
-        imgIcon.clipsToBounds = true
-        addSubview(imgIcon)
+        imgPic = UIImageView()
+        imgPic.frame = CGRect(x: 15 * screenWidthFactor, y: 11, width: 46, height: 46)
+        imgPic.contentMode = .scaleAspectFill
+        imgPic.clipsToBounds = true
+        addSubview(imgPic)
         
         lblPlaceName = UILabel()
         lblPlaceName.textAlignment = .left

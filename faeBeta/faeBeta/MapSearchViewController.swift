@@ -413,14 +413,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
         let place = filteredPlaces[indexPath.row]
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            let img = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "Awkward")
-            DispatchQueue.main.async {
-                cell.imgIcon.image = img
-            }
-        }
-        cell.lblPlaceName.text = place.name
-        cell.lblAddress.text = place.address1 + ", " + place.address2
+        cell.setValueForPlace(place)
         cell.bottomLine.isHidden = false
 
         if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 {

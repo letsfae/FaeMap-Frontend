@@ -171,7 +171,7 @@ class FaeMapView: MKMapView {
             }
             faeMapCtrler?.uiviewSavedList.hide()
             faeMapCtrler?.btnZoom.smallMode()
-            if v is LocationView {
+            if v is FMLocationInfoBar {
                 
             } else {
                 cancelCreatingLocationPin()

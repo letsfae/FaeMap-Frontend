@@ -132,7 +132,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
-        lblHours.text = placeInfo.hours
+//        lblHours.text = placeInfo.hours
         if placeInfo.imageURL == "" {
             imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
             imgSavedItem.backgroundColor = .white
