@@ -10,11 +10,13 @@ import UIKit
 import SwiftyJSON
 
 struct CountryCodeStruct {
-    var countryName: String!
-    var phoneCode: String!
+    var countryName: String
+    var phoneCode: String
+    var countryCode: String
     
     init(json: JSON) {
         countryName = json["countryName"].stringValue
+        countryCode = json["countryCode"].stringValue
         phoneCode = json["phoneCode"].stringValue
     }
 }

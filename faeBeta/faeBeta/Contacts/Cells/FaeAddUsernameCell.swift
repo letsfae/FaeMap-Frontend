@@ -9,6 +9,14 @@
 import UIKit
 import SwiftyJSON
 
+protocol FaeAddUsernameDelegate: class {
+    func addFriend(indexPath: IndexPath, user_id: Int)
+    func resendRequest(indexPath: IndexPath, user_id: Int)
+    func acceptRequest(indexPath: IndexPath, request_id: Int)
+    func ignoreRequest(indexPath: IndexPath, request_id: Int)
+    func withdrawRequest(indexPath: IndexPath, request_id: Int)
+}
+
 class FaeAddUsernameCell: UITableViewCell {
     
     var userId: Int = -1
@@ -17,20 +25,24 @@ class FaeAddUsernameCell: UITableViewCell {
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var bottomLine: UIView!
-    var isFriend = false
     var hasAddedFriend = false
-    var friendStatus: FriendStatus = .defaultMode
+    var friendStatus: FriendStatus = .accepted
     var btnAddorAdded: UIButton! // btn that can substitute as the add button or the "added" button.
     var btnAcceptRequest: UIButton!
     var btnRefuseRequest: UIButton!
     var faeContact = FaeContact()
-    init(style: UITableViewCellStyle, reuseIdentifier: String?, isFriend: Bool?) {
+    var indexPath: IndexPath!
+    weak var delegate: FaeAddUsernameDelegate!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
         layoutMargins = UIEdgeInsets.zero
         selectionStyle = .none
-        loadRecommendedCellContent()
-//        getFriendStatus(id: userId)
+        loadCellContent()
+        if reuseIdentifier == "FaeAddUsernameCell" {
+            getFriendStatus(id: userId)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,67 +50,56 @@ class FaeAddUsernameCell: UITableViewCell {
     }
     
     func getFriendStatus(id: Int) {
-        friendStatus = .defaultMode
-        faeContact.getFriends() {(status: Int, message: Any?) in
+        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        print("json_id \(json[i]["friend_id"].intValue)")
-                        if json[i]["friend_id"].intValue == id {
-                            self.friendStatus = .accepted
-                            break
+                let relation = Relations(json: json)
+                if relation.is_friend {
+                    self.friendStatus = .accepted
+                    self.setButtonImage()
+                } else if relation.requested {
+                    self.friendStatus = .pending
+                    self.faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
+                        let json = JSON(message!)
+                        for i in 0..<json.count {
+                            if json[i]["requested_user_id"].intValue == self.userId {
+                                self.requestId = json[i]["friend_request_id"].intValue
+                            }
                         }
+                        self.setButtonImage()
                     }
-                }
-                self.setButtonImage()
-            } else {
-                print("[FMUserInfo get friends list fail] - \(status) \(message!)")
-            }
-        }
-        
-        faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        if json[i]["requested_user_id"].intValue == id {
-                            self.friendStatus = .pending
-                            self.requestId = json[i]["friend_request_id"].intValue
-                            break
+                } else if relation.requested_by {
+                    self.friendStatus = .requested
+                    self.faeContact.getFriendRequests() {(status: Int, message: Any?) in
+                        let json = JSON(message!)
+                        for i in 0..<json.count {
+                            if json[i]["request_user_id"].intValue == self.userId {
+                                self.requestId = json[i]["friend_request_id"].intValue
+                            }
                         }
+                        self.setButtonImage()
                     }
-                }
-                self.setButtonImage()
-            } else {
-                print("[FMUserInfo get requested friends list fail] - \(status) \(message!)")
-            }
-        }
-        
-        faeContact.getFriendRequests() {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                if json.count != 0 {
-                    for i in 0..<json.count {
-                        if json[i]["request_user_id"].intValue == id {
-                            self.friendStatus = .requested
-                            self.requestId = json[i]["friend_request_id"].intValue
-                            break
-                        }
+                } else if relation.blocked || relation.blocked_by {   // blocked & blocked_by
+                    self.friendStatus = .blocked
+                    self.setButtonImage()
+                } else {
+                    if id == Key.shared.user_id {
+                        self.friendStatus = .accepted
+                    } else {
+                        self.friendStatus = .defaultMode
                     }
+                    self.setButtonImage()
                 }
-                self.setButtonImage()
             } else {
-                print("[FMUserInfo get request friends list fail] - \(status) \(message!)")
+                print("[get friend status fail] - \(status) \(message!)")
             }
         }
     }
     
     fileprivate func setButtonImage() {
-        print(self.userId)
-        print("friendStatus \(friendStatus)")
         switch friendStatus {
         case .defaultMode:
+            btnAddorAdded.setImage(#imageLiteral(resourceName: "addButton"), for: .normal)
             btnAddorAdded.isHidden = false
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
@@ -130,14 +131,13 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    fileprivate func loadRecommendedCellContent() {
+    fileprivate func loadCellContent() {
         imgAvatar = UIImageView()
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-        //imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
@@ -155,8 +155,6 @@ class FaeAddUsernameCell: UITableViewCell {
         addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
         
         btnAddorAdded = UIButton()
-        btnAddorAdded.setImage(#imageLiteral(resourceName: "addButton"), for: .normal)
-
         btnAddorAdded.addTarget(self, action: #selector(self.changeButtonPic(_:)), for: .touchUpInside)
         addSubview(btnAddorAdded)
         addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnAddorAdded)
@@ -185,35 +183,43 @@ class FaeAddUsernameCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAcceptRequest)
     }
     
-    func setValueForCell(user: MBPeopleStruct) {
+    func setValueForCell(user: UserNameCard) {
         General.shared.avatar(userid: user.userId, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
         })
         lblUserName.text = user.displayName
         lblUserSaying.text = user.userName
         
-        setButtonImage()
+//        setButtonImage()
     }
     
     func changeButtonPic(_ sender: UIButton) {
         if sender.currentImage == #imageLiteral(resourceName: "addButton") {
-            friendStatus = .pending
-            setButtonImage()
+            delegate.addFriend(indexPath: indexPath, user_id: userId)
+            
+//            friendStatus = .pending
+//            setButtonImage()
         }
     }
     
     func acceptResendRequest(_ sender: UIButton) {
-        if friendStatus == .pending {   // sent request
+        print("request_id \(self.requestId)")
+        if friendStatus == .pending {
+            delegate.resendRequest(indexPath: indexPath, user_id: userId)
             print("resend")
-        } else {   // receive request
+        } else {
+            delegate.acceptRequest(indexPath: indexPath, request_id: requestId)
             print("accept")
         }
     }
     
     func refuseWithdrawRequest(_ sender: UIButton) {
-        if friendStatus == .pending {   // sent request
+        print("request_id \(self.requestId)")
+        if friendStatus == .pending {
+            delegate.withdrawRequest(indexPath: indexPath, request_id: requestId)
             print("withdraw")
-        } else {   // receive request
+        } else {
+            delegate.ignoreRequest(indexPath: indexPath, request_id: requestId)
             print("refuse")
         }
     }
