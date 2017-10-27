@@ -262,7 +262,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var boolAnimateTo_1 = true
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        joshprint(scrollView.contentOffset.y)
         if uiviewScrollingPhotos != nil {
             var frame = uiviewScrollingPhotos.frame
             if tblPlaceDetail.contentOffset.y < 0 * screenHeightFactor {

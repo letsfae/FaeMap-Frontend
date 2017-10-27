@@ -29,7 +29,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var intCurtPage = 0
     
-    var testTypes: [String] = ["Airport", "Antique Shop", "Arcade", "Art Gallery", "Arts & Crafts Store", "Athletics & Sports", "BBQ Joint", "Bagel Shop", "Bakery", "Bars", "Baseball Stadium", "Beach", "Beer Store", "Brewery", "Buffet", "Building", "Burger Joint", "Burrito Place", "Business Service", "Canal", "Candy Store", "Coffee Shop", "College Bookstore", "College Classroom", "Concert Hall", "Construction & Landscaping", "Convenience Store", "Cosmetics Shop", "Deli / Bodega", "Dessert Shop", "Diner", "Donut Shop", "Farmers Market", "Food Court", "Food Truck", "Fried Chicken Joint", "Frozen Yogurt Shop", "Furniture / Home Store", "Garden", "Gift Shop", "Gourmet Shop", "Grocery Store", "Health & Beauty Service", "Hot Dog Joint", "Ice Cream Shop", "Juice Bar", "Lake", "Library", "Light Rail Station", "Liquor Store", "Market", "Massage Studio", "Metro Station", "Moving Target", "Museum", "Music Store", "Music Venue", "Noodle House", "Organic Grocery", "Outdoor Sculpture", "Paper / Office Supplies Store", "Performing Arts Venue", "Pet Store", "Pharmacy", "Photography Studio", "Pizza Place", "Playground", "Plaza", "Rental Car Location", "Restaurant", "Salad Place", "Sandwich Place", "Scenic Lookout", "Shopping", "Skate Park", "Smoke Shop", "Snack Place", "Spa", "Sporting Goods Shop", "Steakhouse", "Street Food Gathering", "Supermarket", "Taco Place", "Theme Park", "Trail", "Wine Shop"]
+    var testTypes: [String] = ["Random", "Airport", "Antique Shop", "Arcade", "Art Gallery", "Arts & Crafts Store", "Athletics & Sports", "BBQ Joint", "Bagel Shop", "Bakery", "Bars", "Baseball Stadium", "Beach", "Beer Store", "Brewery", "Buffet", "Building", "Burger Joint", "Burrito Place", "Business Service", "Canal", "Candy Store", "Coffee Shop", "College Bookstore", "College Classroom", "Concert Hall", "Construction & Landscaping", "Convenience Store", "Cosmetics Shop", "Deli / Bodega", "Dessert Shop", "Diner", "Donut Shop", "Farmers Market", "Food Court", "Food Truck", "Fried Chicken Joint", "Frozen Yogurt Shop", "Furniture / Home Store", "Garden", "Gift Shop", "Gourmet Shop", "Grocery Store", "Health & Beauty Service", "Hot Dog Joint", "Ice Cream Shop", "Juice Bar", "Lake", "Library", "Light Rail Station", "Liquor Store", "Market", "Massage Studio", "Metro Station", "Moving Target", "Museum", "Music Store", "Music Venue", "Noodle House", "Organic Grocery", "Outdoor Sculpture", "Paper / Office Supplies Store", "Performing Arts Venue", "Pet Store", "Pharmacy", "Photography Studio", "Pizza Place", "Playground", "Plaza", "Rental Car Location", "Restaurant", "Salad Place", "Sandwich Place", "Scenic Lookout", "Shopping", "Skate Park", "Smoke Shop", "Snack Place", "Spa", "Sporting Goods Shop", "Steakhouse", "Street Food Gathering", "Supermarket", "Taco Place", "Theme Park", "Trail", "Wine Shop"]
     
     var uiviewAvatarWaveSub: UIView!
     var imgAvatar: FaeAvatarView!
@@ -49,6 +49,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var coordinate: CLLocationCoordinate2D!
     
+    var selectedTypeIdx: IndexPath!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -63,7 +65,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
                     self.reloadBottomText(String(new[0]), String(new[1]))
-                    self.lblBottomLocation.alpha = 1
                 }
             }
         }
@@ -95,6 +96,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         btnMap.isEnabled = on
         btnGoRight.isEnabled = on
         lblBottomLocation.isUserInteractionEnabled = on
+        clctViewTypes.isUserInteractionEnabled = on
     }
     
     func loadPlaces(center: CLLocationCoordinate2D) {
@@ -494,7 +496,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
-        search(category: lastCategory)
+        search(category: lastCategory, indexPath: selectedTypeIdx)
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
@@ -524,6 +526,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         fullAttrStr.append(secondImg_attach)
         
         lblBottomLocation.attributedText = fullAttrStr
+        lblBottomLocation.alpha = 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -544,6 +547,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_types", for: indexPath) as! EXPClctTypeCell
             cell.updateTitle(type: testTypes[indexPath.row])
             cell.delegate = self
+            cell.indexPath = indexPath
             return cell
         } else {
             let cell = UICollectionViewCell()
@@ -554,8 +558,24 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var lastCategory = ""
     
     // ExploreCategorySearch
-    func search(category: String) {
+    func search(category: String, indexPath: IndexPath) {
+        
+        if selectedTypeIdx != nil {
+            if let cell = clctViewTypes.cellForItem(at: selectedTypeIdx) as? EXPClctTypeCell {
+                cell.setButtonColor(selected: false)
+            }
+        }
+        if let cell = clctViewTypes.cellForItem(at: indexPath) as? EXPClctTypeCell {
+            cell.setButtonColor(selected: true)
+        }
+        selectedTypeIdx = indexPath
         lastCategory = category
+        
+        if lastCategory == "Random" {
+            loadPlaces(center: coordinate)
+            return
+        }
+        
         func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
             var tempRaw = arrRaw
             var arrResult = [PlacePin]()
