@@ -466,8 +466,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addSubview(lblBottomLocation)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblBottomLocation)
         view.addConstraintsWithFormat("V:[v0(25)]-19-|", options: [], views: lblBottomLocation)
-        lblBottomLocation.alpha = 0
-        reloadBottomText("", "")
+        lblBottomLocation.isHidden = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
@@ -526,7 +525,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         fullAttrStr.append(secondImg_attach)
         
         lblBottomLocation.attributedText = fullAttrStr
-        lblBottomLocation.alpha = 1
+        lblBottomLocation.isHidden = false
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
