@@ -74,8 +74,7 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
                 btnInvite.setImage(#imageLiteral(resourceName: "btnInvited"), for: .normal)
                 hasInvite = true
             }
-        }
-        else {
+        } else {
             btnInvite.setImage(#imageLiteral(resourceName: "btnInvite"), for: .normal)
             hasInvite = false
         }

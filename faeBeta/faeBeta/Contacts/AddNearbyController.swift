@@ -182,10 +182,9 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = FaeAddUsernameCell(style: UITableViewCellStyle.default, reuseIdentifier: "FaeAddUsernameCell", isFriend: false)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
         cell.lblUserName.text = testArray[indexPath.row]
         cell.lblUserSaying.text = testArray[indexPath.row]
-        cell.isFriend = true // enabled manual togging for testing; for real, we implement API calls.
         return cell
     }
     

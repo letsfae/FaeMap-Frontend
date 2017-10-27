@@ -304,8 +304,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     // SomeDelegateRequested End
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cell:\(cellStatus)")
-        print("get into cell")
         if cellStatus == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeReceivedCell", for: indexPath as IndexPath) as! FaeReceivedCell
             print("get into cell2")
