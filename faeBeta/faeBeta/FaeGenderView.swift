@@ -63,7 +63,6 @@ class FaeGenderView: UIView {
                 let gender = profileInfo["gender"].stringValue
                 let canShowAge = profileInfo["show_age"].boolValue
                 let age = profileInfo["age"].stringValue
-                joshprint("age", age)
                 self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
                 completion(profileInfo["nick_name"].stringValue, profileInfo["user_name"].stringValue, profileInfo["short_intro"].stringValue)
             })

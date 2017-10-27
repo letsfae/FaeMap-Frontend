@@ -154,8 +154,12 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             for i in 0..<selectedIdx.count {
                 let idxPath = selectedIdx[i]
                 let id = String(arrSavedIds[idxPath.row])
-                let cell = self.tblManageList.cellForRow(at: idxPath) as! ColListPlaceCell
-                cell.btnSelect.isSelected = false
+                if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListPlaceCell {
+                    cell.btnSelect.isSelected = false
+                }
+                if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListLocationCell {
+                    cell.btnSelect.isSelected = false
+                }
                 let idx = idxPath.row
                 FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: id) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
