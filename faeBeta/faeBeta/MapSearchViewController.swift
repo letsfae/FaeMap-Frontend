@@ -105,10 +105,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         searchResults = completer.results
         filteredLocations = searchResults.map({ $0.title })
-        self.tblLocationRes.reloadData()
-        if self.searchResults.count > 0 {
-            showOrHideViews(searchText: completer.queryFragment)
-        }
+        tblLocationRes.reloadData()
+        showOrHideViews(searchText: completer.queryFragment)
     }
     
     // MKLocalSearchCompleterDelegate
@@ -287,6 +285,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
+        joshprint("searchBarTextDidBeginEditing")
         if searchBar == schPlaceBar {   // search places
             cellStatus = 0
         } else {   // search locations
@@ -303,21 +302,12 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         if searchBar == schLocationBar {
             cellStatus = 1
-            /*filteredLocations.removeAll()
-            for location in arrLocList {
-                if location.lowercased().range(of: searchText.lowercased()) != nil {
-                    filteredLocations.append(location)
-                }
-            }*/
+            if searchText == "" {
+                showOrHideViews(searchText: searchText)
+            }
             searchCompleter.queryFragment = searchText
         } else {
             cellStatus = 0
-//            filteredPlaces.removeAll()
-//            for searchedPlace in searchedPlaces {
-//                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
-//                    filteredPlaces.append(searchedPlace)
-//                }
-//            }
             getPlaceInfo(content: searchText.lowercased())
         }
     }
@@ -486,16 +476,18 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
-                print("[loadMapSearchPlaceInfo] status/100 != 2")
+//                print("[loadMapSearchPlaceInfo] status/100 != 2")
+                self.showOrHideViews(searchText: content)
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
-                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
+//                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
+                self.showOrHideViews(searchText: content)
                 return
             }
             self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
-            print(self.filteredPlaces.count)
+//            print(self.filteredPlaces.count)
             self.showOrHideViews(searchText: content)
         }
     }
