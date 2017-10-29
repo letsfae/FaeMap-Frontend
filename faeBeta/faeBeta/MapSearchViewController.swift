@@ -310,8 +310,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // FaeSearchBarTestDelegate
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
-        searchBar.txtSchField.resignFirstResponder()
         if searchBar == schPlaceBar {
+            searchBar.txtSchField.resignFirstResponder()
             if searchBar.txtSchField.text == "" {
                 lookUpForCoordinate()
             } else {
@@ -324,6 +324,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
                 selectedPrediction = googlePredictions[0]
                 googlePredictions.removeAll()
                 showOrHideViews(searchText: "")
+                schPlaceBar.txtSchField.becomeFirstResponder()
             }
         }
     }
