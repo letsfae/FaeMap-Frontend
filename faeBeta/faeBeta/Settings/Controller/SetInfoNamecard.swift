@@ -59,11 +59,11 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         uiviewNameCard.userId = Key.shared.user_id
         view.addSubview(uiviewNameCard)
         
-        uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, width: screenWidth, height: 5))
+        uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, w: screenWidth / screenWidthFactor, h: 5))
         view.addSubview(uiviewInterval)
         uiviewInterval.backgroundColor = UIColor._241241241()
         
-        tblNameCard = UITableView(frame: CGRect(x: 0, y: 395, width: screenWidth, height: screenHeight - 395))
+        tblNameCard = UITableView(frame: CGRect(x: 0, y: 395 * screenHeightFactor, width: screenWidth, height: 270))
         view.addSubview(tblNameCard)
         tblNameCard.delegate = self
         tblNameCard.dataSource = self

@@ -25,6 +25,8 @@ class SetDisplayName: UIViewController {
     
     override func viewDidLoad() {
         view.backgroundColor = .white
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
+        
         btnBack = UIButton(frame: CGRect(x: 15, y: 36, width: 18, height: 18))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
@@ -40,25 +42,29 @@ class SetDisplayName: UIViewController {
         txtField = FAETextField(frame: CGRect(x: screenWidth/2-104, y: 174, width: 207, height: 34))
         view.addSubview(txtField)
         txtField.textAlignment = .center
-        if txtName == nil || txtName == ""{
-            txtField.placeholder = "Display Name"
-        }
-        else {
-            txtField.text = txtName
-        }
+        txtField.placeholder = "Display Name"
         
-        lblEditIntro = UILabel(frame: CGRect(x: screenWidth/2-124, y: screenHeight-392, width: 248, height: 36))
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: 344, width: 248, height: 36))
+        lblEditIntro.center.x = screenWidth / 2
         view.addSubview(lblEditIntro)
-        lblEditIntro.text = "Unlike your Username, a Display Name is just for show. You can change it anytime!"
+        lblEditIntro.text = "Unlike your Username, a Display Name is\njust for show. You can change it anytime!"
         lblEditIntro.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblEditIntro.textColor = UIColor._138138138()
+        lblEditIntro.textAlignment = .center
         lblEditIntro.lineBreakMode = .byWordWrapping
         lblEditIntro.numberOfLines = 0
         
-        btnSave = UIButton(frame: CGRect(x: screenWidth/2-150, y: screenHeight-337, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: 399, width: 300, height: 50))
+        btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
         btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
         btnSave.addTarget(self, action: #selector(actionSaveName(_ :)), for: .touchUpInside)
+    }
+    
+    func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            txtField.resignFirstResponder()
+        }
     }
     
     func actionGoBack(_ sender: UIButton) {

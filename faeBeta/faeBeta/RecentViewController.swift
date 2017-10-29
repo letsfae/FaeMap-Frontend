@@ -136,7 +136,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func loadDeleteConfirm() {
         uiviewBackground = UIView(frame: CGRect(x:0, y:0, width: screenWidth, height: screenHeight))
-        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
         
         uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
         uiviewDeleteConfirm.center.x = screenWidth / 2
@@ -320,7 +320,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //let recentRealm = arrRecentsRealm[indexPath.row]
         //cell.bindData_v2(recentRealm)
         let recentRealm = resultRealmRecents[indexPath.row]
-        cell.bindData_v2(recentRealm.latest_message!)
+        cell.bindData_v2(recentRealm)
         
         //if cellsCurrentlyEditing.contains(indexPath) {
             //cell.openCell()

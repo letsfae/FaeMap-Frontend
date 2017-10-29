@@ -12,17 +12,20 @@ protocol ViewControllerIntroDelegate: class {
     func protSaveIntro(txtIntro: String?)
 }
 
-class SetShortIntro: UIViewController {
+class SetShortIntro: UIViewController, UITextViewDelegate {
     
     weak var delegate: ViewControllerIntroDelegate?
     var btnBack: UIButton!
     var lblTitle: UILabel!
-    var txtField: FAETextField!
+    var lblPlaceholder: UILabel!
+    var textView: UITextView!
     var lblEditIntro: UILabel!
     var btnSave: UIButton!
     
     override func viewDidLoad() {
         view.backgroundColor = .white
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
+        
         btnBack = UIButton(frame: CGRect(x: 15, y: 36, width: 18, height: 18))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
@@ -35,32 +38,59 @@ class SetShortIntro: UIViewController {
         lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         
-        txtField = FAETextField(frame: CGRect(x: screenWidth/2-104, y: 174, width: 207, height: 34))
-        view.addSubview(txtField)
-        txtField.placeholder = "Write a Short Intro"
-        txtField.textAlignment = .center
-        //txtField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        textView = UITextView(frame: CGRect(x: 0, y: 174, width: 244, height: 105))
+        textView.center.x = screenWidth / 2
+        view.addSubview(textView)
+        textView.textAlignment = .left
+        textView.textColor = UIColor._898989()
+        textView.tintColor = UIColor._2499090()
+        textView.font = UIFont(name: "AvenirNext-Regular", size: 25)
+        textView.delegate = self
         
-        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight-371, width: screenWidth, height: 18))
+        lblPlaceholder = UILabel(frame: CGRect(x: 0, y: 0, width: 244, height: 34))
+        textView.addSubview(lblPlaceholder)
+        lblPlaceholder.frame.origin.y = (textView.font?.pointSize)! / 3
+        lblPlaceholder.text = "Write a Short Intro"
+        lblPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 25)
+        lblPlaceholder.textColor = UIColor._155155155()
+        lblPlaceholder.textAlignment = .center
+        
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: 365, width: screenWidth, height: 18))
         view.addSubview(lblEditIntro)
         lblEditIntro.text = "30 Characters"
         lblEditIntro.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblEditIntro.textColor = UIColor._138138138()
         lblEditIntro.textAlignment = .center
         
-        btnSave = UIButton(frame: CGRect(x: screenWidth/2-150, y: screenHeight-337, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: 399, width: 300, height: 50))
+        btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
         btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
         btnSave.addTarget(self, action: #selector(actionSaveIntro(_: )), for: .touchUpInside)
     }
     
-    func textFieldDidChange(textField: UITextField) {
-        lblEditIntro.text = "\(30-(txtField.text?.count)!) Characters"
-        lblEditIntro.textColor = UIColor._2499090()
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let maxCharacter: Int = 30
+        return (textView.text?.utf16.count ?? 0) + text.utf16.count - range.length <= maxCharacter
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let count = textView.text.utf16.count
+        lblEditIntro.text = "\(30-(count)) Characters"
+        if count == 30 {
+            lblEditIntro.textColor = UIColor._2499090()
+        }
+        lblPlaceholder.isHidden = count != 0
+    }
+    
+    func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            textView.resignFirstResponder()
+        }
     }
     
     func actionSaveIntro(_ sender: UIButton) {
-        delegate?.protSaveIntro(txtIntro: txtField.text)
+        delegate?.protSaveIntro(txtIntro: textView.text)
         navigationController?.popViewController(animated: true)
     }
     

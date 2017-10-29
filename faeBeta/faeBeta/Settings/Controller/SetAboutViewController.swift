@@ -40,13 +40,16 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
         return arrAboutString.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as!GeneralTitleCell
         cell.switchIcon.isHidden = true
         cell.lblDes.isHidden = true
         cell.imgView.isHidden = false
-        cell.setContraintsForDes()
+        cell.setContraintsForDes(desp: false)
         cell.lblName.text = arrAboutString[indexPath.row]
         return cell
     }
@@ -60,7 +63,7 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(SetFaeMap(), animated: true)
             break
         case 2:
-            navigationController?.pushViewController(SetDeactiveViewController(), animated: true)
+            navigationController?.pushViewController(SetWebViewController(), animated: true)
             break
         case 3:
             let vc = TermsOfServiceViewController()

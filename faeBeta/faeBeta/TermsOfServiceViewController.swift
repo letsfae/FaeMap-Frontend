@@ -24,7 +24,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func setup() {
-        let btnBack = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonTapped(_:)), for: .touchUpInside)
         self.view.addSubview(btnBack)
@@ -90,8 +90,12 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
-            indicator.backgroundColor = .red//UIColor._2499090()
+            //indicator.backgroundColor = .red//UIColor._2499090()
+            //indicator.tintColor = UIColor._2499090()
+            indicator.backgroundColor = UIColor._2499090()
+            indicator.tintAdjustmentMode = .normal
             indicator.tintColor = UIColor._2499090()
+            indicator.image = indicator.image?.withRenderingMode(.alwaysTemplate)
         }
     }
     

@@ -48,8 +48,8 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as! GeneralTitleCell
         cell.imgView.isHidden = false
+        cell.setContraintsForDes(desp: false)
         cell.lblDes.isHidden = true
-        cell.setContraintsForDes()
         cell.switchIcon.isHidden = true
         cell.lblName.text = arrContact[indexPath.row]
         return cell
