@@ -10,6 +10,10 @@ import CCHMapClusterController
 
 extension FaeMapViewController: MapSearchDelegate {
     
+    func jumpToLocation(region: MKCoordinateRegion) {
+        faeMapView.setRegion(region, animated: true)
+    }
+    
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         PLACE_ENABLE = false

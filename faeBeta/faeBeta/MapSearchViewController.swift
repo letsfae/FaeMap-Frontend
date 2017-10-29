@@ -8,10 +8,13 @@
 import SwiftyJSON
 import MapKit
 
+import GooglePlaces
+
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation)
 //    func backToMainMapFromMapSearch()
+    @objc optional func jumpToLocation(region: MKCoordinateRegion)
 }
 
 class MapSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, UIScrollViewDelegate, MKLocalSearchCompleterDelegate {
@@ -58,6 +61,11 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     var searchCompleter = MKLocalSearchCompleter()
     var searchResults = [MKLocalSearchCompletion]()
     
+    // Google address autocompletion
+    var googleFilter = GMSAutocompleteFilter()
+    var googlePredictions = [GMSAutocompletePrediction]()
+    var selectedPrediction: GMSAutocompletePrediction?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //navigationController?.isNavigationBarHidden = true
@@ -99,19 +107,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             }, completion: nil)
             delay += 0.1
         }
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        searchResults = completer.results
-        filteredLocations = searchResults.map({ $0.title })
-        tblLocationRes.reloadData()
-        showOrHideViews(searchText: completer.queryFragment)
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        // handle error
     }
     
     // shows "no results"
@@ -285,7 +280,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
-        joshprint("searchBarTextDidBeginEditing")
         if searchBar == schPlaceBar {   // search places
             cellStatus = 0
         } else {   // search locations
@@ -299,32 +293,97 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         showOrHideViews(searchText: searchBar.txtSchField.text!)
     }
     
+    // FaeSearchBarTestDelegate
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         if searchBar == schLocationBar {
             cellStatus = 1
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
             }
-            searchCompleter.queryFragment = searchText
+//            searchCompleter.queryFragment = searchText
+            placeAutocomplete(searchText)
         } else {
             cellStatus = 0
             getPlaceInfo(content: searchText.lowercased())
         }
     }
     
+    // FaeSearchBarTestDelegate
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
         searchBar.txtSchField.resignFirstResponder()
-        
         if searchBar == schPlaceBar {
-            delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
-            navigationController?.popViewController(animated: false)
+            if searchBar.txtSchField.text == "" {
+                lookUpForCoordinate()
+            } else {
+                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
+                navigationController?.popViewController(animated: false)
+            }
+        } else {
+            if googlePredictions.count > 0 {
+                schLocationBar.txtSchField.attributedText = googlePredictions[0].attributedFullText
+                selectedPrediction = googlePredictions[0]
+                googlePredictions.removeAll()
+                showOrHideViews(searchText: "")
+            }
         }
     }
     
+    // FaeSearchBarTestDelegate
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         searchBar.txtSchField.becomeFirstResponder()
     }
-    // End of FaeSearchBarTestDelegate
+    
+    // GMSLookUpPlaceForCoordinate
+    func lookUpForCoordinate() {
+        if let placeId = selectedPrediction?.placeID {
+            GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
+                if let error = error {
+                    print("lookup place id query error: \(error.localizedDescription)")
+                    return
+                }
+                guard let place = gmsPlace else {
+                    print("No place details for \(placeId)")
+                    return
+                }
+                let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
+                self.delegate?.jumpToLocation?(region: region)
+                self.navigationController?.popViewController(animated: false)
+            })
+        }
+    }
+    
+    // GMSAutocompleteFilter
+    func placeAutocomplete(_ searchText: String) {
+        selectedPrediction = nil
+        googleFilter.type = .city
+        GMSPlacesClient.shared().autocompleteQuery(searchText, bounds: nil, filter: googleFilter, callback: {(results, error) -> Void in
+            if let error = error {
+                joshprint("Autocomplete error \(error)")
+                self.googlePredictions.removeAll(keepingCapacity: true)
+                self.showOrHideViews(searchText: searchText)
+                return
+            }
+            if let results = results {
+                self.googlePredictions = results
+            }
+            self.showOrHideViews(searchText: searchText)
+        })
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        filteredLocations = searchResults.map({ $0.title })
+        tblLocationRes.reloadData()
+        showOrHideViews(searchText: completer.queryFragment)
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
+    }
+    
+    
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
@@ -362,12 +421,12 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
-            if searchText == "" || filteredLocations.count == 0 {
+            if searchText == "" || googlePredictions.count == 0 {
                 uiviewSchResBg.frame.origin.y = 124
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * filteredLocations.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * googlePredictions.count))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5
             }
@@ -382,7 +441,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         if cellStatus == 1 {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblLocationName.text = filteredLocations[indexPath.row]
+//                cell.lblLocationName.text = filteredLocations[indexPath.row]
+                cell.setValueForLocationPrediction(googlePredictions[indexPath.row])
                 cell.bottomLine.isHidden = false
                 if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
                     cell.bottomLine.isHidden = true
@@ -414,7 +474,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // cellStatus == 0 -> search places
-        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
+//        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
+        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -425,7 +486,8 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         // search location
         if cellStatus == 1 {
             if tableView == tblLocationRes {
-                schLocationBar.txtSchField.text = filteredLocations[indexPath.row]
+                schLocationBar.txtSchField.attributedText = googlePredictions[indexPath.row].attributedFullText
+                selectedPrediction = googlePredictions[indexPath.row]
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true

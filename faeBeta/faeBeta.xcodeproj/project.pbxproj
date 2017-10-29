@@ -23,6 +23,7 @@
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
 		504CE4D21F67BF4500070284 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504CE4D11F67BF4500070284 /* ExploreViewController.swift */; };
+		505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */; };
 		506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */; };
 		506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */; };
 		506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */; };
@@ -329,6 +330,7 @@
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
 		504CE4D11F67BF4500070284 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist"; sourceTree = "<group>"; };
 		506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSMProfilePic.swift; sourceTree = "<group>"; };
 		506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceInfoBar.swift; sourceTree = "<group>"; };
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
@@ -991,6 +993,7 @@
 				B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */,
 				B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */,
 				B0A2ACA71CE3A3C7002E0C9D /* Info.plist */,
+				505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */,
 				B0A2AC9F1CE3A3C7002E0C9D /* faeBeta.xcdatamodeld */,
 			);
 			path = faeBeta;
@@ -1594,6 +1597,7 @@
 				B39C1E451F6DE2EE0075CF59 /* CountryCode.json in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,
+				505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */,
 				B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */,
 				B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */,
 			);
@@ -1608,9 +1612,12 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
