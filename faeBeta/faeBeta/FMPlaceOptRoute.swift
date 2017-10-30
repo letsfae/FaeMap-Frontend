@@ -66,11 +66,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     // BoardsSearchDelegate
     func chooseLocationOnMap() {
-//        let selectLocVC = SelectLocationViewController()
-//        selectLocVC.delegate = self
-//        Key.shared.dblAltitude = faeMapView.camera.altitude
-//        Key.shared.selectedLoc = faeMapView.camera.centerCoordinate
-//        navigationController?.pushViewController(selectLocVC, animated: false)
         uiviewChooseLocs.hide(animated: false)
         mapMode = .selecting
         mapView(faeMapView, regionDidChangeAnimated: false)
