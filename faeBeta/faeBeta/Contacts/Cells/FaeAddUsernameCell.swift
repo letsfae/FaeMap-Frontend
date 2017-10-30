@@ -40,10 +40,15 @@ class FaeAddUsernameCell: UITableViewCell {
         layoutMargins = UIEdgeInsets.zero
         selectionStyle = .none
         loadCellContent()
-        if reuseIdentifier == "FaeAddUsernameCell" {
-            getFriendStatus(id: userId)
-        }
     }
+    
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        print("prepareForReuse")
+//        btnAddorAdded.setImage(nil, for: .normal)
+//        btnAcceptRequest.setImage(nil, for: .normal)
+//        btnRefuseRequest.setImage(nil, for: .normal)
+//    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -53,6 +58,7 @@ class FaeAddUsernameCell: UITableViewCell {
         FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
+                print(json)
                 let relation = Relations(json: json)
                 if relation.is_friend {
                     self.friendStatus = .accepted

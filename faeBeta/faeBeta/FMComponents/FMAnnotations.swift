@@ -240,7 +240,7 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func invisibleOff() {
-        guard Key.shared.userStatus != 5 else { return }
+        guard Key.shared.onlineStatus != 5 else { return }
         LocManager.shared.locManager.stopUpdatingHeading()
         timer?.invalidate()
         timer = nil
@@ -257,34 +257,20 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func changeAvatar() {
-        guard Key.shared.userStatus != 5 else { return }
+        guard Key.shared.onlineStatus != 5 else { return }
         mapAvatar = Key.shared.userMiniAvatar
     }
     
     func getSelfAccountInfo() {
         let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({ (status: Int, message: Any?) in
+        getSelfInfo.getAccountBasicInfo({ (status, message) in
             guard status / 100 == 2 else {
                 self.mapAvatar = 1
                 self.invisibleOff()
                 return
             }
-            let selfUserInfoJSON = JSON(message!)
-            Key.shared.userFirstname = selfUserInfoJSON["first_name"].stringValue
-            Key.shared.userLastname = selfUserInfoJSON["last_name"].stringValue
-            Key.shared.userBirthday = selfUserInfoJSON["birthday"].stringValue
-            Key.shared.gender = selfUserInfoJSON["gender"].stringValue
-            Key.shared.username = selfUserInfoJSON["user_name"].stringValue
-            Key.shared.userEmail = selfUserInfoJSON["email"].stringValue
-            Key.shared.userEmailVerified = selfUserInfoJSON["email_verified"].boolValue
-            Key.shared.userPhoneNumber = selfUserInfoJSON["phone"].stringValue
-            Key.shared.userPhoneVerified = selfUserInfoJSON["phone_verified"].boolValue
-            Key.shared.userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
-            LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
-            self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
-            if Key.shared.userStatus == 5 {
-                return
-            }
+            self.mapAvatar = Key.shared.userMiniAvatar
+            if Key.shared.onlineStatus == 5 { return }
             self.invisibleOff()
         })
     }

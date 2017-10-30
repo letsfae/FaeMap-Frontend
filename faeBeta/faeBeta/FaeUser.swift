@@ -20,6 +20,8 @@ import SwiftyJSON
  */
 class FaeUser: NSObject {
     
+    static let shared = FaeUser()
+    
     var keyValue = [String: AnyObject]()
     
     override init() {
@@ -157,7 +159,7 @@ class FaeUser: NSObject {
         Key.shared.session_id = -1
         Key.shared.user_id = -1
         Key.shared.is_Login = 0
-        Key.shared.userStatus = 1
+        Key.shared.onlineStatus = 1
         LocalStorageManager.shared.saveInt("is_Login", value: 0)
     }
     
@@ -263,6 +265,8 @@ class FaeUser: NSObject {
                 Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                 Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
                 Key.shared.userPhoneVerified = userInfoJSON["phone_verified"].boolValue
+                Key.shared.userMiniAvatar = userInfoJSON["mini_avatar"].intValue + 1
+                LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
                 LocalStorageManager.shared.getAccountStorage()
             }
             completion(status, message)

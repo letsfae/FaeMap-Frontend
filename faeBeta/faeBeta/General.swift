@@ -17,29 +17,15 @@ class General: NSObject {
     func avatar(userid: Int, completion:@escaping (UIImage) -> Void) {
         
         if userid == 1 {
-            guard let faeAvatar = Key.shared.imageFaeAvatar else { return }
+            guard let faeAvatar = Key.shared.faeAvatar else { return }
             completion(faeAvatar)
             return
         }
         
         if userid <= 0 {
-            guard let defaultImage = Key.shared.imageDefaultMale else { return }
+            guard let defaultImage = Key.shared.defaultMale else { return }
             completion(defaultImage)
         }
-        
-        /*let realm = try! Realm()
-        if let userAvatar = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userid)").first {
-            if let dataAvatar = userAvatar.userSmallAvatar {
-                let imageFromRealm = UIImage(data: dataAvatar as Data)
-                completion(imageFromRealm!)
-            }
-        }*/
-        
-        /*if let imageFromCache = faeImageCache.object(forKey: userid as AnyObject) as? UIImage {
-//            joshprint("[getAvatar - \(userid)] already in cache")
-            completion(imageFromCache)
-            return
-        }*/
         
         getAvatar(userID: userid, type: 2) { (status, etag, imageRawData) in
             guard imageRawData != nil else {

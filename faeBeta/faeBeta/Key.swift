@@ -50,10 +50,12 @@ class Key: NSObject { //  singleton class
     
     let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
     
+    // Settings -> My Information
     var hideNameCardOptions: Bool = false
     var disableGender: Bool = false
     var disableAge: Bool = false
     
+    // API Fetching Headers
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
     var headerContentType = "application/x-www-form-urlencoded"
@@ -61,6 +63,7 @@ class Key: NSObject { //  singleton class
     var headerDeviceID = ""
     var headerUserAgent = "iPhone"
     
+    // API Authorizations
     var userToken = ""
     var userTokenEncode = ""
     var session_id: Int = -1
@@ -76,12 +79,10 @@ class Key: NSObject { //  singleton class
     
     var username: String = ""
     var nickname: String?
-    var shortIntro: String = ""
-    var showGender = false
-    var showAge = false
-    var userAge: String = ""
+    var introduction: String = ""
+    var age: String = ""
     
-    var userStatus: Int = -1
+    var onlineStatus: Int = -1
     
     var userFirstname: String = ""
     var userLastname: String = ""
@@ -94,16 +95,13 @@ class Key: NSObject { //  singleton class
     var userEmailVerified: Bool = false
     var userPhoneVerified: Bool = false
     
-    var userAvatarMap = "miniAvatar_1" // new var by Yue Shen
+    var miniAvatar = "miniAvatar_1" // new var by Yue Shen
     
-    var arrayNameCard = [Int: UIImage]()
+    let defaultCover = UIImage(named: "defaultCover")
+    let defaultMale = UIImage(named: "defaultMen")
+    let defaultFemale = UIImage(named: "defaultWomen")
+    let faeAvatar = UIImage(named: "faeAvatar")
     
-    let imageDefaultCover = UIImage(named: "defaultCover")
-    let imageDefaultMale = UIImage(named: "defaultMen")
-    let imageDefaultFemale = UIImage(named: "defaultWomen")
-    let imageFaeAvatar = UIImage(named: "faeAvatar")
-    
-    var dblAltitude: Double = 500
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
     
@@ -113,8 +111,7 @@ class Key: NSObject { //  singleton class
     
     func getGenderAge() {
         guard Key.shared.user_id > 0 else { return }
-        let userNameCard = FaeUser()
-        userNameCard.getUserCard("\(Key.shared.user_id)") { (status: Int, message: Any?) in
+        FaeUser.shared.getUserCard("\(Key.shared.user_id)") { (status, message) in
             DispatchQueue.main.async(execute: {
                 guard status / 100 == 2 else { return }
                 guard let unwrapMessage = message else {
@@ -124,8 +121,8 @@ class Key: NSObject { //  singleton class
                 let profileInfo = JSON(unwrapMessage)
                 Key.shared.disableGender = !profileInfo["show_gender"].boolValue
                 Key.shared.gender = profileInfo["gender"].stringValue
-                Key.shared.disableAge = profileInfo["show_age"].boolValue
-                Key.shared.userAge = profileInfo["age"].stringValue
+                Key.shared.disableAge = !profileInfo["show_age"].boolValue
+                Key.shared.age = profileInfo["age"].stringValue
             })
         }
     }

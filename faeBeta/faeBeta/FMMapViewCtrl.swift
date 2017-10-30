@@ -136,7 +136,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            if Key.shared.userStatus == 5 {
+            if Key.shared.onlineStatus == 5 {
                 anView.invisibleOn()
             }
             return anView
