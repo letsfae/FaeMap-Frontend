@@ -211,18 +211,17 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
 //                        }
                         if self.enterPhoneMode == .settings {
                             let vc = UpdateUsrnameEmailViewController()
-//                            vc.delegate =
                             vc.enterMode = .phone
                             vc.strCountry = self.strCountry + " +" + self.strCountryCode
                             vc.strPhone = self.strPhoneNumber
                             var arrViewControllers = self.navigationController?.viewControllers
                             arrViewControllers?.removeLast()
                             arrViewControllers?.removeLast()
+                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
                             arrViewControllers?.append(vc)
                             self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
                         } else if self.enterPhoneMode == .settingsUpdate {
                             let vc = UpdateUsrnameEmailViewController()
-                            // vc.delgate
                             vc.enterMode = .phone
                             vc.strCountry = self.strCountry + " +" + self.strCountryCode
                             vc.strPhone = self.strPhoneNumber
@@ -230,6 +229,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             arrViewControllers?.removeLast()
                             arrViewControllers?.removeLast()
                             arrViewControllers?.removeLast()
+                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
                             arrViewControllers?.append(vc)
                             self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
                         } else {  // from contacts
