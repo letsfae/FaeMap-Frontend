@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import GooglePlaces
 
 let faePlaceInfoCache = NSCache<AnyObject, AnyObject>()
 let placeInfoBarImageCache = NSCache<AnyObject, AnyObject>()
@@ -104,6 +105,7 @@ class Key: NSObject { //  singleton class
     
     var dblAltitude: Double = 500
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var selectedPrediction: GMSAutocompletePrediction?
     
     func getUserInfo() {
         getGenderAge()

@@ -17,7 +17,7 @@ import GooglePlaces
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
 }
 
-class MapSearchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, UIScrollViewDelegate, MKLocalSearchCompleterDelegate {
+class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     var placesDict: [String: Int] = ["Concert Hall": 25, "Arcade": 26, "Museum": 27, "Art Museum": 34, "Science Museum": 86, "Performing Arts Venue": 28, "Indie Theater": 28, "Theater": 28, "Music Venue": 68, "Art Gallery": 34, "Baseball Stadium": 60, "Rock Club": 80, "Bars": 14, "Wine Bar": 2, "Sake Bar": 79, "Dive Bar": 14, "Sports Bar": 14, "Beer Bar": 14, "Gastropub": 14, "Irish Pub": 14, "Hookah Bar": 85, "Whisky Bar": 14, "Cocktail Bar": 14, "Hotel Bar": 14, "Beer Garden": 20, "Speakeasy": 14, "Restaurant": 5, "Italian Restaurant": 3, "French Restaurant": 5, "Korean Restaurant": 5, "Seafood Restaurant": 24, "Middle Eastern Restaurant": 5, "Japanese Restaurant": 10, "Sushi Restaurant": 10, "Southern / Soul Food Restaurant": 5, "Filipino Restaurant": 5, "Kosher Restaurant": 5, "South American Restaurant": 5, "Vegetarian / Vegan Restaurant": 78, "Halal Restaurant": 5, "Caribbean Restaurant": 5, "New American Restaurant": 5, "Peruvian Restaurant": 5, "Cajun / Creole Restaurant": 5, "Asian Restaurant": 5, "Chinese Restaurant": 48, "Falafel Restaurant": 5, "Ethiopian Restaurant": 5, "Latin American Restaurant": 5, "Mexican Restaurant": 5, "Thai Restaurant": 5, "Fast Food": 69, "Mediterranean Restaurant": 5, "Indonesian Restaurant": 5, "Vietnamese Restaurant": 5, "Ramen": 45, "American Restaurant": 5, "Hawaiian Restaurant": 5, "Brewery": 77, "Sandwich Place": 55, "Food Court": 5, "Snack Place": 5, "Burrito Place": 71, "Steakhouse": 36, "Buffet": 5, "Bagel Shop": 12, "Hot Dog Joint": 17, "Ice Cream Shop": 16, "Bakery": 13, "Salad Place": 74, "Coffee Shop": 19, "Donut Shop": 12, "Street Food Gathering": 39, "Food Truck": 39, "Burger Joint": 40, "Fried Chicken Joint": 89, "Frozen Yogurt Shop": 43, "Noodle House": 45, "Breakfast": 51, "Dessert Shop": 53, "Deli / Bodega": 55, "Dinner": 5, "Pizza Place": 57, "Taco Place": 83, "Juice Bar": 67, "BBQ Joint": 64, "Athletics & Sports": 1, "Gyms / Fitness Center": 6, "Gyms": 6, "Climbing Gym": 6, "Cycle Studio": 31, "Pilates Studio": 88, "Gymnastics Gym": 6, "Pool": 11, "Martial Arts Dojo": 72, "Soccer Field": 61, "Playground": 73, "Skate Park": 8, "Theme Park": 18, "Parks": 30, "Scenic Lookout": 32, "Plaza": 76, "Canal": 37, "Trail": 42, "Lake": 84, "Beach": 54, "Garden": 56, "Outdoor Sculpture": 87, "Shopping": 4, "Shoppint Mall": 4, "Bookstore": 9, "Jewelry Store": 15, "Flower Shop": 52, "Women's Store": 91, "Leather Goods Store": 4, "Accessories Store": 4, "Clothing Store": 75, "Gourmet Shop": 5, "Music Store": 68, "Organic Grocery": 7, "Spa": 23, "Beer Store": 20, "Grocery Store": 21, "Pharmacy": 29, "Cosmetics Shop": 46, "Convenience Store": 33, "Candy Store": 35, "Moving Target": 39, "Farmers Market": 7, "Liquor Store": 82, "Pet Store": 38, "Wine Shop": 2, "Furniture / Home Store": 70, "Sporting Goods Shop": 47, "Smoke Shop": 49, "Business Service": 44, "Supermarket": 21, "Massage Studio": 23, "Antique Shop": 33, "Market": 33, "Construction & Landscaping": 65, "Paper / Office Supplies Store": 81, "Arts & Crafts Store": 59, "Photography Studio": 66, "Gift Shop": 63, "Health & Beauty Service": 50, "Hotels": 41, "Metro Station": 90, "Light Rail Station": 90, "Airport": 58, "Rental Car Location": 62, "College Classroom": 22, "College Bookstore": 9, "Building": 65, "Library": 9]
     
@@ -64,7 +64,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     // Google address autocompletion
     var googleFilter = GMSAutocompleteFilter()
     var googlePredictions = [GMSAutocompletePrediction]()
-    var selectedPrediction: GMSAutocompletePrediction?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,15 +76,14 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         schPlaceBar.txtSchField.becomeFirstResponder()
         searchedLoc = LocManager.shared.curtLoc
-        getPlaceInfo()
-        
         searchCompleter.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        var delay: Double = 0
         
+        /**
+        var delay: Double = 0
         for i in 0..<6 {
             UIView.animate(withDuration: 0.8, delay: delay, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                 self.btnPlaces[i].frame.size = CGSize(width: 58, height: 58)
@@ -107,6 +105,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             }, completion: nil)
             delay += 0.1
         }
+         */
     }
     
     // shows "no results"
@@ -152,7 +151,11 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        schLocationBar.txtSchField.text = "Current Location"
+        if Key.shared.selectedPrediction != nil {
+            schLocationBar.txtSchField.attributedText = Key.shared.selectedPrediction?.faeSearchBarAttributedText()
+        } else {
+            schLocationBar.txtSchField.text = "Current Location"
+        }
         schLocationBar.txtSchField.returnKeyType = .next
         uiviewSearch.addSubview(schLocationBar)
         
@@ -170,6 +173,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
         
+        /**
         for _ in 0..<6 {
             btnPlaces.append(UIButton(frame: CGRect(x: 52 + 29, y: 20 + 29, width: 0, height: 0)))
             lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
@@ -206,7 +210,7 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             lblPlaces[i].textColor = UIColor._138138138()
             lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
         }
-        /*
+         */
         for _ in 0..<6 {
             btnPlaces.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
             lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
@@ -241,7 +245,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
             lblPlaces[i].textColor = UIColor._138138138()
             lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
         }
-         */
     }
     
     func loadTable() {
@@ -278,241 +281,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
         tblLocationRes.register(LocationListCell.self, forCellReuseIdentifier: "SearchLocation")
     }
     
-    // FaeSearchBarTestDelegate
-    func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
-        if searchBar == schPlaceBar {   // search places
-            cellStatus = 0
-        } else {   // search locations
-            cellStatus = 1
-            if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
-                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
-                searchBar.txtSchField.text = ""
-                searchBar.btnClose.isHidden = true
-            }
-        }
-        showOrHideViews(searchText: searchBar.txtSchField.text!)
-    }
-    
-    // FaeSearchBarTestDelegate
-    func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
-        if searchBar == schLocationBar {
-            cellStatus = 1
-            if searchText == "" {
-                showOrHideViews(searchText: searchText)
-            }
-//            searchCompleter.queryFragment = searchText
-            placeAutocomplete(searchText)
-        } else {
-            cellStatus = 0
-            getPlaceInfo(content: searchText.lowercased())
-        }
-    }
-    
-    // FaeSearchBarTestDelegate
-    func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
-        if searchBar == schPlaceBar {
-            searchBar.txtSchField.resignFirstResponder()
-            if searchBar.txtSchField.text == "" {
-                lookUpForCoordinate()
-            } else {
-                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
-                navigationController?.popViewController(animated: false)
-            }
-        } else {
-            if googlePredictions.count > 0 {
-                schLocationBar.txtSchField.attributedText = googlePredictions[0].attributedFullText
-                selectedPrediction = googlePredictions[0]
-                googlePredictions.removeAll()
-                showOrHideViews(searchText: "")
-                schPlaceBar.txtSchField.becomeFirstResponder()
-            }
-        }
-    }
-    
-    // FaeSearchBarTestDelegate
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
-        searchBar.txtSchField.becomeFirstResponder()
-    }
-    
-    // GMSLookUpPlaceForCoordinate
-    func lookUpForCoordinate() {
-        if let placeId = selectedPrediction?.placeID {
-            GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
-                if let error = error {
-                    print("lookup place id query error: \(error.localizedDescription)")
-                    return
-                }
-                guard let place = gmsPlace else {
-                    print("No place details for \(placeId)")
-                    return
-                }
-                let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
-                self.delegate?.jumpToLocation?(region: region)
-                self.navigationController?.popViewController(animated: false)
-            })
-        }
-    }
-    
-    // GMSAutocompleteFilter
-    func placeAutocomplete(_ searchText: String) {
-        selectedPrediction = nil
-        googleFilter.type = .city
-        GMSPlacesClient.shared().autocompleteQuery(searchText, bounds: nil, filter: googleFilter, callback: {(results, error) -> Void in
-            if let error = error {
-                joshprint("Autocomplete error \(error)")
-                self.googlePredictions.removeAll(keepingCapacity: true)
-                self.showOrHideViews(searchText: searchText)
-                return
-            }
-            if let results = results {
-                self.googlePredictions = results
-            }
-            self.showOrHideViews(searchText: searchText)
-        })
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        searchResults = completer.results
-        filteredLocations = searchResults.map({ $0.title })
-        tblLocationRes.reloadData()
-        showOrHideViews(searchText: completer.queryFragment)
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        // handle error
-    }
-    
-    
-    
-    // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
-    func showOrHideViews(searchText: String) {
-        // search places
-        if cellStatus == 0 {
-            uiviewSchLocResBg.isHidden = true
-            // for uiviewPics & uiviewSchResBg
-            if searchText != "" && filteredPlaces.count != 0 {
-                uiviewPics.isHidden = true
-                uiviewSchResBg.isHidden = false
-                uiviewSchResBg.frame.origin.y = 124
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139, CGFloat(68 * filteredPlaces.count))
-                tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
-            } else {
-                uiviewPics.isHidden = false
-                uiviewSchResBg.isHidden = true
-                if searchText == "" {
-                    uiviewPics.frame.origin.y = 124
-                } else {
-                    uiviewPics.frame.origin.y = 124 + uiviewNoResults.frame.height + 5
-                }
-            }
-            
-            // for uiviewNoResults
-            if searchText != "" && filteredPlaces.count == 0 {
-                uiviewNoResults.isHidden = false
-            } else {
-                uiviewNoResults.isHidden = true
-            }
-            tblPlacesRes.isScrollEnabled = true
-        } else {  // search location
-            uiviewPics.isHidden = true
-            uiviewNoResults.isHidden = true
-            uiviewSchResBg.isHidden = false
-            uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
-            tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
-            
-            if searchText == "" || googlePredictions.count == 0 {
-                uiviewSchResBg.frame.origin.y = 124
-                uiviewSchLocResBg.isHidden = true
-            } else {
-                uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * googlePredictions.count))
-                tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
-                uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5
-            }
-            tblPlacesRes.isScrollEnabled = false
-            tblLocationRes.reloadData()
-        }
-        tblPlacesRes.reloadData()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // search location
-        if cellStatus == 1 {
-            if tableView == tblLocationRes {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-//                cell.lblLocationName.text = filteredLocations[indexPath.row]
-                cell.setValueForLocationPrediction(googlePredictions[indexPath.row])
-                cell.bottomLine.isHidden = false
-                if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
-                    cell.bottomLine.isHidden = true
-                }
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "MyFixedCell", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblLocationName.text = arrCurtLocList[indexPath.row]
-                cell.bottomLine.isHidden = false
-                if indexPath.row == arrCurtLocList.count - 1 {
-                    cell.bottomLine.isHidden = true
-                }
-                return cell
-            }
-        }
-        
-        // search places - cellStatus == 0
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
-        let place = filteredPlaces[indexPath.row]
-        
-        cell.setValueForPlace(place)
-        cell.bottomLine.isHidden = false
-
-        if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 {
-            cell.bottomLine.isHidden = true
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // cellStatus == 0 -> search places
-//        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
-        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellStatus == 0 ? 68 : 48
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // search location
-        if cellStatus == 1 {
-            if tableView == tblLocationRes {
-                schLocationBar.txtSchField.attributedText = googlePredictions[indexPath.row].attributedFullText
-                selectedPrediction = googlePredictions[indexPath.row]
-                schLocationBar.txtSchField.resignFirstResponder()
-                schPlaceBar.txtSchField.becomeFirstResponder()
-                schLocationBar.btnClose.isHidden = true
-            } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
-                schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                schLocationBar.txtSchField.resignFirstResponder()
-                schLocationBar.btnClose.isHidden = true
-                
-                if indexPath.row == 0 {
-                    searchedLoc = LocManager.shared.curtLoc
-                } else {
-                    let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-                    searchedLoc = CLLocation(latitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).latitude,
-                                             longitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).longitude)
-                }
-                getPlaceInfo()
-            }
-        } else { // search places
-            let selectedPlace = filteredPlaces[indexPath.row]
-            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
-            navigationController?.popViewController(animated: false)
-        }
-    }
-    
     func addShadow(_ uiview: UIView) {
         uiview.layer.shadowColor = UIColor._898989().cgColor
         uiview.layer.shadowRadius = 2.2
@@ -523,11 +291,6 @@ class MapSearchViewController: UIViewController, UITableViewDelegate, UITableVie
     func backToMap(_ sender: UIButton) {
 //        delegate?.backToMainMapFromMapSearch()
         navigationController?.popViewController(animated: false)
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        schPlaceBar.txtSchField.resignFirstResponder()
-        schLocationBar.txtSchField.resignFirstResponder()
     }
     
     func getPlaceInfo(content: String = "", source: String = "name") {
