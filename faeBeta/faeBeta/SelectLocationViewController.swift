@@ -116,7 +116,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         locationPinClusterManager.animator = self
         
         let camera = faeMapView.camera
-        camera.altitude = Key.shared.dblAltitude
         camera.centerCoordinate = Key.shared.selectedLoc
         // if mode == .part { camera.altitude = 35000 }
         // faeMapView.setCamera(camera, animated: false)
