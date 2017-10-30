@@ -547,7 +547,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Actions in Controller
     
-    func handleTap(_ tap: UITapGestureRecognizer) {
+    @objc func handleTap(_ tap: UITapGestureRecognizer) {
         /* guard routeAddress != nil else { return }
          navigationController?.popViewController(animated: false)
          delegate?.sendLocationBack?(address: routeAddress) */
@@ -570,11 +570,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
     
-    func actionSelfPosition(_ sender: UIButton!) {
+    @objc func actionSelfPosition(_ sender: UIButton!) {
         let camera = faeMapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         faeMapView.setCamera(camera, animated: false)

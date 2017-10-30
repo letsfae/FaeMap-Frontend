@@ -136,19 +136,19 @@ class SetDeactiveViewController: UIViewController {
         
     }
     
-    func showAlertDeactive(_ sender: UIButton) {
+    @objc func showAlertDeactive(_ sender: UIButton) {
         uiviewBackground.isHidden = false
     }
     
-    func showMainView(_ sender: UIButton) {
+    @objc func showMainView(_ sender: UIButton) {
         uiviewBackground.isHidden = true
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func DeactiveAccount(_ sender: UIButton) {
+    @objc func DeactiveAccount(_ sender: UIButton) {
         
     }
 }

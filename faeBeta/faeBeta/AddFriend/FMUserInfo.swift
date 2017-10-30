@@ -367,20 +367,20 @@ class FMUserInfo: UIViewController {
     // setupUI end
     
     // actions
-    func showPinMoreButtonDetails(_ sender: UIButton!) {
+    @objc func showPinMoreButtonDetails(_ sender: UIButton!) {
         print("in more details")
     }
     
-    func actionBack(_ sender: UIButton!) {
+    @objc func actionBack(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
 //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
     }
     
-    func belowEnterChat(_ sender: UIButton!) {
+    @objc func belowEnterChat(_ sender: UIButton!) {
         print("enter Chat")
     }
     
-    func belowAddFriend(_ sender: UIButton!) {
+    @objc func belowAddFriend(_ sender: UIButton!) {
         uiviewBlurMainScreen.isHidden = false
         animationBlurMainScreen(action: "show")
         getActionInfo()
@@ -390,7 +390,7 @@ class FMUserInfo: UIViewController {
         uiviewAction.isHidden = false
     }
     
-    func sentActFirstRequest(_ sender: UIButton!) {
+    @objc func sentActFirstRequest(_ sender: UIButton!) {
         if sender.tag == ADD_FRIEND_ACT {   // "Add Friend" button pressed
             triggerSendActRequest(type: ADD_FRIEND_ACT)
         } else if sender.tag == WITHDRAW_ACT {     // "Withdraw" button pressed
@@ -398,7 +398,7 @@ class FMUserInfo: UIViewController {
         }
     }
     
-    func sentActSecondRequest(_ sender: UIButton!) {
+    @objc func sentActSecondRequest(_ sender: UIButton!) {
         if sender.tag == FOLLOW_ACT {
             triggerSendActRequest(type: FOLLOW_ACT)
         } else if sender.tag == RESEND_ACT {
@@ -406,10 +406,10 @@ class FMUserInfo: UIViewController {
         }
     }
     
-    func actionCancel(_ sender: UIButton!) {
+    @objc func actionCancel(_ sender: UIButton!) {
         animationBlurMainScreen(action: "hide")
     }
-    func actionFinish(_ sender: UIButton!) {
+    @objc func actionFinish(_ sender: UIButton!) {
         uiviewBlurMainScreen.isHidden = true
         switch sender.tag {
         case 0:
@@ -588,7 +588,7 @@ class FMUserInfo: UIViewController {
         }
     }
     
-    func animationRedSlidingLine(_ sender: UIButton!) {
+    @objc func animationRedSlidingLine(_ sender: UIButton!) {
         if sender.tag == 1 {
             UIView.animate(withDuration: 0.3, animations: {
                 self.view.frame.size.height = screenHeight

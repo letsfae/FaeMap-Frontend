@@ -86,7 +86,7 @@ class FMChooseLocs: UIView {
         lblDestination.text = name
     }
     
-    func actionBackBtn() {
+    @objc func actionBackBtn() {
         delegate?.hideRouteCalculatorComponents()
     }
     

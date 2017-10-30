@@ -81,7 +81,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -283,7 +283,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         return headerView
     }
     
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarFromContacts.txtSchField.resignFirstResponder()
     }
 
@@ -331,7 +331,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         view.addSubview(uiviewNotAllowed)
     }
     
-    func actionAllowAccess(_ sender: UIButton) {
+    @objc func actionAllowAccess(_ sender: UIButton) {
         let entityType = CNEntityType.contacts
         let authStatus = CNContactStore.authorizationStatus(for: entityType)
         if authStatus == .denied {

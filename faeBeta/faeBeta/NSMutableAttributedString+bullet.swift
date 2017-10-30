@@ -10,22 +10,22 @@
 import Foundation
 extension NSMutableAttributedString {
     func appendDefaultString(_ string: String, bold: Bool = false, red: Bool = false) {
-        let astrContent = NSAttributedString(string: string, attributes: [NSForegroundColorAttributeName: red ? UIColor._2499090() : UIColor._898989(), NSFontAttributeName: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
+        let astrContent = NSAttributedString(string: string, attributes: [NSAttributedStringKey.foregroundColor: red ? UIColor._2499090() : UIColor._898989(), NSAttributedStringKey.font: UIFont(name: bold ? "AvenirNext-DemiBold": "AvenirNext-Medium", size: 12)!])
         self.append(astrContent)
     }
     
-    func appendRegularBullet(_ string: String, attributes: [String:Any]? = nil, level: Int, boldFirstSentence: Bool = false) {
+    func appendRegularBullet(_ string: String, attributes: [NSAttributedStringKey: Any]? = nil, level: Int, boldFirstSentence: Bool = false) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
         paragraphStyle.firstLineHeadIndent = CGFloat(level * 24 - 24)
         paragraphStyle.headIndent = CGFloat((level-1) * 24 + 24)
         
         var attr = self.attributes(at: 0, effectiveRange: nil)
-        attr[NSFontAttributeName] = UIFont(name: "AvenirNext-Medium", size: 12)!
+        attr[NSAttributedStringKey.font] = UIFont(name: "AvenirNext-Medium", size: 12)!
         if let attributes = attributes {
             attr = attributes
         }
-        attr[NSParagraphStyleAttributeName] = paragraphStyle
+        attr[NSAttributedStringKey.paragraphStyle] = paragraphStyle
         let title = NSMutableAttributedString(string: "\(string)\n",
             attributes: attr)
         
@@ -33,7 +33,8 @@ extension NSMutableAttributedString {
             var length = 0
             let startIndex = title.string.index(title.string.startIndex, offsetBy: 0)
             
-            for c in title.string.substring(from: startIndex) {
+            for c in title.string[startIndex...] {
+                
                 if c != "."{
                     length += 1
                 } else {
@@ -41,12 +42,12 @@ extension NSMutableAttributedString {
                 }
             }
             let range = NSRange(location: 0, length: length)
-            title.addAttributes([NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
+            title.addAttributes([NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
         }
         self.append(title)
     }
     
-    func appendDotBullet(_ string: String, attributes: [String:Any]? = nil, level: Int, oneLine: Bool = false, boldFirstSentence: Bool = false) {
+    func appendDotBullet(_ string: String, attributes: [NSAttributedStringKey:Any]? = nil, level: Int, oneLine: Bool = false, boldFirstSentence: Bool = false) {
         let bulletPoints  = "  •    "
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
@@ -54,11 +55,11 @@ extension NSMutableAttributedString {
         paragraphStyle.headIndent = CGFloat((level-1) * 24 + 24)
         
         var attr = self.attributes(at: 0, effectiveRange: nil)
-        attr[NSFontAttributeName] = UIFont(name:"AvenirNext-Medium", size: 12)!
+        attr[NSAttributedStringKey.font] = UIFont(name:"AvenirNext-Medium", size: 12)!
         if let attributes = attributes {
             attr = attributes
         }
-        attr[NSParagraphStyleAttributeName] = paragraphStyle
+        attr[NSAttributedStringKey.paragraphStyle] = paragraphStyle
         let changeLineSymbol = oneLine ? "\n" : "\n\n"
         let title = NSMutableAttributedString(string: "\(bulletPoints)\(string)\(changeLineSymbol)", attributes: attr)
         
@@ -66,7 +67,7 @@ extension NSMutableAttributedString {
             var length = 0
             let startIndex = title.string.index(title.string.startIndex, offsetBy: 0)
             
-            for c in title.string.substring(from: startIndex) {
+            for c in title.string[startIndex...] {
                 if c != "."{
                     length += 1
                 } else {
@@ -74,12 +75,12 @@ extension NSMutableAttributedString {
                 }
             }
             let range = NSRange(location: 0, length: length)
-            title.addAttributes([NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
+            title.addAttributes([NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 12)!], range: range)
         }
         self.append(title)
     }
     
-    func appendIndexBullet(_ string: String, index: Int, attributes: [String:Any]? = nil, level: Int, underlineFirstSentence: Bool = false) {
+    func appendIndexBullet(_ string: String, index: Int, attributes: [NSAttributedStringKey:Any]? = nil, level: Int, underlineFirstSentence: Bool = false) {
         let bulletPoints  = "\(index).   "
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
@@ -87,11 +88,11 @@ extension NSMutableAttributedString {
         paragraphStyle.headIndent = CGFloat((level-1) * 24 + 24)
         
         var attr = self.attributes(at: 0, effectiveRange: nil)
-        attr[NSFontAttributeName] = UIFont(name:"AvenirNext-Medium", size: 12)!
+        attr[NSAttributedStringKey.font] = UIFont(name:"AvenirNext-Medium", size: 12)!
         if let attributes = attributes {
             attr = attributes
         }
-        attr[NSParagraphStyleAttributeName] = paragraphStyle
+        attr[NSAttributedStringKey.paragraphStyle] = paragraphStyle
         let title = NSMutableAttributedString(string: "\(bulletPoints)\(string)\n\n",
             attributes: attr)
         
@@ -99,7 +100,7 @@ extension NSMutableAttributedString {
             var length = 0
             let startIndex = title.string.index(title.string.startIndex, offsetBy: 5)
 
-            for c in title.string.substring(from: startIndex) {
+            for c in title.string[startIndex...] {
                 if c != "." {
                     length += 1
                 } else {
@@ -107,12 +108,12 @@ extension NSMutableAttributedString {
                 }
             }
             let range = NSRange(location: 5, length: length)
-            title.addAttributes([NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue], range: range)
+            title.addAttributes([NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue], range: range)
         }
         self.append(title)
     }
     
-    func appendLetterBullet(_ string: String, letter: String, attributes: [String:Any]? = nil , level: Int, underlineFirstSentence: Bool = false) {
+    func appendLetterBullet(_ string: String, letter: String, attributes: [NSAttributedStringKey:Any]? = nil , level: Int, underlineFirstSentence: Bool = false) {
         let bulletPoints  = "  \(letter).   "
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
@@ -120,11 +121,11 @@ extension NSMutableAttributedString {
         paragraphStyle.headIndent = CGFloat((level-1)*24 + 24)
         
         var attr = self.attributes(at: 0, effectiveRange: nil)
-        attr[NSFontAttributeName] = UIFont(name:"AvenirNext-Medium", size: 12)!
+        attr[NSAttributedStringKey.font] = UIFont(name:"AvenirNext-Medium", size: 12)!
         if let attributes = attributes {
             attr = attributes
         }
-        attr[NSParagraphStyleAttributeName] = paragraphStyle
+        attr[NSAttributedStringKey.paragraphStyle] = paragraphStyle
         let title = NSMutableAttributedString(string: "\(bulletPoints)\(string)\n\n",
             attributes: attr)
         
@@ -132,7 +133,7 @@ extension NSMutableAttributedString {
             var length = 0
             let startIndex = title.string.index(title.string.startIndex, offsetBy: 5)
             
-            for c in title.string.substring(from: startIndex) {
+            for c in title.string[startIndex...] {
                 if c != "." {
                     length += 1
                 } else {
@@ -140,7 +141,7 @@ extension NSMutableAttributedString {
                 }
             }
             let range = NSRange(location: 5, length: length)
-            title.addAttributes([NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue], range: range)
+            title.addAttributes([NSAttributedStringKey.underlineStyle: NSUnderlineStyle.styleSingle.rawValue], range: range)
         }
         self.append(title)
     }

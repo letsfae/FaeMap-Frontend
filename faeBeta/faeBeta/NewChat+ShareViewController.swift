@@ -127,11 +127,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(navigationRightItemTapped), for: .touchUpInside)
     }
     
-    func navigationLeftItemTapped() {
+    @objc func navigationLeftItemTapped() {
         navigationController?.popViewController(animated: true)
     }
     
-    func navigationRightItemTapped() {
+    @objc func navigationRightItemTapped() {
         if friendListMode == .chat {
             chatWithUsers(IDs: [arrFriends[arrIntSelected[0]].userID])
         } else {
@@ -143,13 +143,13 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     func chatWithUsers(IDs: [String]) {
         let vcChat = ChatViewController()
         if IDs.count == 1 {
-            let realm = try! Realm()
+            //let realm = try! Realm()
             vcChat.arrUserIDs.append("\(Key.shared.user_id)")
             vcChat.arrUserIDs.append("\(IDs[0])")
             //let chatSelf = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(Key.shared.user_id)'").first!
             //vcChat.arrRealmUsers.append(chatSelf)
             //let chatWithUser = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(IDs[0])'").first!
-            let chatWithUser = realm.filterUser("\(Key.shared.user_id)", id: "\(IDs[0])")!
+            //let chatWithUser = realm.filterUser("\(Key.shared.user_id)", id: "\(IDs[0])")!
             //vcChat.arrRealmUsers.append(chatWithUser)
             //vcChat.realmWithUser = chatWithUser
             //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
@@ -678,7 +678,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func getLabelWidth(text: String) -> CGFloat {
-        let size = text.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT)), options: [], attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size
+        let size = text.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT)), options: [], attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size
         return size.width
     }
     

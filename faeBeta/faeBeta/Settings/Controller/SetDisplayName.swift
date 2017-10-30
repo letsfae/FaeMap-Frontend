@@ -61,11 +61,11 @@ class SetDisplayName: UIViewController {
         btnSave.addTarget(self, action: #selector(actionSaveName(_ :)), for: .touchUpInside)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSaveName(_ sender: UIButton) {
+    @objc func actionSaveName(_ sender: UIButton) {
         delegate?.protSaveName(txtName: txtField.text)
         actionGoBack(sender)
     }

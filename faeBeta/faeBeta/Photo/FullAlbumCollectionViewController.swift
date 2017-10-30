@@ -155,9 +155,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         userAlbumsOptions.predicate = NSPredicate(format: "estimatedAssetCount > 0")
         
         let userAlbums = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.album, subtype: PHAssetCollectionSubtype.any, options: userAlbumsOptions)
-        
-        userAlbums.enumerateObjects({
-            let collection = $0.0
+        userAlbums.enumerateObjects { (collection, _, _) in
             print("album title: \(String(describing: collection.localizedTitle))")
             //For each PHAssetCollection that is returned from userAlbums: PHFetchResult you can fetch PHAssets like so (you can even limit results to include only photo assets):
             let onlyImagesOptions = PHFetchOptions()
@@ -165,8 +163,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             if let result = PHAsset.fetchKeyAssets(in: collection, options: nil) {
                 print("Images count: \(result.count)")
             }
-            
-        })
+        }
     }
     
     func navigationBarSet() {
@@ -192,7 +189,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         lblTitle = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 30))
         let attributedStrM: NSMutableAttributedString = NSMutableAttributedString()
-        let albumName = NSAttributedString(string: viewPhotoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        let albumName = NSAttributedString(string: viewPhotoPicker.currentAlbum.albumName, attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!])
         attributedStrM.append(albumName)
         let arrowAttachment: NSTextAttachment = NSTextAttachment()
         arrowAttachment.image = UIImage(named: "arrow_down")
@@ -211,7 +208,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         }
         
         btnSend = UIButton()
-        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
         btnSend.setAttributedTitle(attributedText, for: UIControlState())
         btnSend.contentHorizontalAlignment = .right
         btnSend.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
@@ -221,7 +218,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         uiviewNavBar.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: btnSend)
         
         btnCancel = UIButton()
-        let attributedText2 = NSAttributedString(string: "Cancel", attributes: [NSForegroundColorAttributeName: UIColor._496372(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText2 = NSAttributedString(string: "Cancel", attributes: [NSAttributedStringKey.foregroundColor: UIColor._496372(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
         btnCancel.setAttributedTitle(attributedText2, for: UIControlState())
         btnCancel.contentHorizontalAlignment = .left
         btnCancel.addTarget(self, action: #selector(self.cancelSend), for: .touchUpInside)
@@ -292,10 +289,10 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         let fileUrl = exportSession!.outputURL
         // e.g .mov type
-        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
+        exportSession!.outputFileType = AVFileType.mov
         
         exportSession!.exportAsynchronously {
-            _ in
+            
             switch exportSession!.status {
             case AVAssetExportSessionStatus.failed:
                 print("failed import video: \(String(describing: exportSession!.error))")
@@ -375,7 +372,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             strSendBtn = "Done"
         }
         btnSend.isEnabled = viewPhotoPicker.videoAsset != nil || viewPhotoPicker.assetIndexDict.count != 0
-        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSForegroundColorAttributeName: btnSend.isEnabled ? UIColor._2499090() : UIColor._255160160(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!])
+        let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSAttributedStringKey.foregroundColor: btnSend.isEnabled ? UIColor._2499090() : UIColor._255160160(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
         btnSend.setAttributedTitle(attributedText, for: UIControlState())
     }
     
@@ -618,7 +615,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     // MARK: set the title of navigation bar
     func setupNavTitle(_ albumIsOpen: Bool) {
         let attributedStrM: NSMutableAttributedString = NSMutableAttributedString()
-        let albumName = NSAttributedString(string: viewPhotoPicker.currentAlbum.albumName, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        let albumName = NSAttributedString(string: viewPhotoPicker.currentAlbum.albumName, attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!])
         attributedStrM.append(albumName)
         let arrowAttachment: NSTextAttachment = NSTextAttachment()
         if albumIsOpen {

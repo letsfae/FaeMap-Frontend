@@ -20,7 +20,7 @@ class EmailTextField: UITextField {
         self.clearButtonMode = UITextFieldViewMode.never
     }
     
-    func clearClicked(_ sender:UIButton) {
+    @objc func clearClicked(_ sender:UIButton) {
         self.text = ""
     }
     

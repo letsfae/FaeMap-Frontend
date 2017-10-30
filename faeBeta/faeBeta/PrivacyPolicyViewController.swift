@@ -51,10 +51,10 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
         let attrRange1 = NSRange(location: 0, length: 14)
         let attrRange2 = NSRange(location: 15, length: 8)
         
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._898989(), range: attrRange1)
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._115115115(), range: attrRange2)
-        astrTitle.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
-        astrTitle.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
+        astrTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._898989(), range: attrRange1)
+        astrTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._115115115(), range: attrRange2)
+        astrTitle.addAttribute(NSAttributedStringKey.font, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
+        astrTitle.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
         titleLabel.attributedText = astrTitle
         
         scrollView.addSubview(titleLabel)
@@ -77,7 +77,7 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func backButtonTapped(_ sender:UIButton) {
+    @objc func backButtonTapped(_ sender:UIButton) {
         if boolPush {
             navigationController?.popViewController(animated: true)
         } else {
@@ -90,7 +90,7 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
             return "        \(num).  "
         }
         
-        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
+        let astrContent = NSAttributedString(string: "", attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
         astrContent.appendDefaultString("Last Updated: Dec 6, 2017\n\n", bold: true)
         astrContent.appendDefaultString("Welcome to Fae Maps! We drafted this Privacy Policy (“Policy”) for Fae Map (“Software”) to describe how we collect, store, use, protect and share your information, including what we will share and with whom we share it.\n\n")
         astrContent.appendDefaultString("Your access to and use of the Software and our Services (“Services”) is conditioned on your acceptance of and compliance with our")

@@ -64,14 +64,14 @@ class RegisterNameViewController: RegisterBaseViewController {
         let createAlreadyGotAnAccountView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 25))
         //Already got an Account? 
         let lblGotAccount = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 94, y: 0, width: 155, height: 25))
-        lblGotAccount.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!,
-            NSForegroundColorAttributeName: UIColor._138138138()]
+        lblGotAccount.attributedText = NSAttributedString(string: "Already got an Account? ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            NSAttributedStringKey.foregroundColor: UIColor._138138138()]
         )
         createAlreadyGotAnAccountView.addSubview(lblGotAccount)
         
         let btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 54, y: 0, width: 45, height: 25))
         let astrTitle = "Log In!"
-        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
         
         btnLogin.setAttributedTitle(attrLogin, for: UIControlState())
@@ -104,7 +104,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         faeUser?.whereKey("last_name", value: lastName!)
     }
     
-    func loginButtonTapped() {
+    @objc func loginButtonTapped() {
         let boardLoginController = LogInViewController()
         self.navigationController?.pushViewController(boardLoginController, animated: true)
     }

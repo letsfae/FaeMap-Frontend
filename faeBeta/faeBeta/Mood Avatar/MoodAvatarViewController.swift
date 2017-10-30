@@ -133,11 +133,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSave(_ sender: UIButton) {
+    @objc func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
         LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)

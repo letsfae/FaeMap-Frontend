@@ -126,7 +126,7 @@ class FaePinAnnotation: MKPointAnnotation {
     }
     
     // change the position of user pin given the five fake coordinates from Fae-API
-    func changePosition() {
+    @objc func changePosition() {
         guard isValid else { return }
         if count >= 5 {
             count = 0
@@ -228,7 +228,7 @@ class SelfAnnotationView: MKAnnotationView {
         animations()
     }
     
-    func invisibleOn() {
+    @objc func invisibleOn() {
         LocManager.shared.locManager.startUpdatingHeading()
         timer?.invalidate()
         timer = nil
@@ -239,7 +239,7 @@ class SelfAnnotationView: MKAnnotationView {
         img.isHidden = false
     }
     
-    func invisibleOff() {
+    @objc func invisibleOff() {
         guard Key.shared.onlineStatus != 5 else { return }
         LocManager.shared.locManager.stopUpdatingHeading()
         timer?.invalidate()
@@ -250,18 +250,18 @@ class SelfAnnotationView: MKAnnotationView {
         img.isHidden = false
     }
     
-    func updateHeading() {
+    @objc func updateHeading() {
         UIView.animate(withDuration: 0.5, animations: {
             self.inner.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * LocManager.shared.curtHeading) / 180.0)
         }, completion: nil)
     }
     
-    func changeAvatar() {
+    @objc func changeAvatar() {
         guard Key.shared.onlineStatus != 5 else { return }
         mapAvatar = Key.shared.userMiniAvatar
     }
     
-    func getSelfAccountInfo() {
+    @objc func getSelfAccountInfo() {
         let getSelfInfo = FaeUser()
         getSelfInfo.getAccountBasicInfo({ (status, message) in
             guard status / 100 == 2 else {
@@ -440,7 +440,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_place"), object: nil)
     }
     
-    func showSavedNoti() {
+    @objc func showSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
@@ -449,7 +449,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    @objc func hideSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
@@ -582,7 +582,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func action(_ sender: UIButton, animated: Bool = false) {
+    @objc func action(_ sender: UIButton, animated: Bool = false) {
         
         guard animated else { chooseAction(sender); return }
         
@@ -797,7 +797,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func showSavedNoti(_ sender: Notification) {
+    @objc func showSavedNoti(_ sender: Notification) {
         if let id = sender.object as? Int {
             self.locationId = id
         }
@@ -814,7 +814,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    @objc func hideSavedNoti() {
         guard imgSaved != nil else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
@@ -822,7 +822,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    func action(_ sender: UIButton, animated: Bool = false) {
+    @objc func action(_ sender: UIButton, animated: Bool = false) {
         
         guard animated else { chooseAction(sender); return }
         

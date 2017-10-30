@@ -199,7 +199,7 @@ class FaeAddUsernameCell: UITableViewCell {
 //        setButtonImage()
     }
     
-    func changeButtonPic(_ sender: UIButton) {
+    @objc func changeButtonPic(_ sender: UIButton) {
         if sender.currentImage == #imageLiteral(resourceName: "addButton") {
             delegate.addFriend(indexPath: indexPath, user_id: userId)
             
@@ -208,7 +208,7 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    func acceptResendRequest(_ sender: UIButton) {
+    @objc func acceptResendRequest(_ sender: UIButton) {
         print("request_id \(self.requestId)")
         if friendStatus == .pending {
             delegate.resendRequest(indexPath: indexPath, user_id: userId)
@@ -219,7 +219,7 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    func refuseWithdrawRequest(_ sender: UIButton) {
+    @objc func refuseWithdrawRequest(_ sender: UIButton) {
         print("request_id \(self.requestId)")
         if friendStatus == .pending {
             delegate.withdrawRequest(indexPath: indexPath, request_id: requestId)

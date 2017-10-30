@@ -44,7 +44,7 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
         tblMaps.estimatedRowHeight = 60
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

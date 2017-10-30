@@ -74,19 +74,19 @@ extension ContactsViewController {
     }
     
     // this function stops revealing both the "noti" UI and the "chooseNoti" UI by calling both functions.
-    func closeBoth() {
+    @objc func closeBoth() {
         closeNoti()
         closeChooseNoti()
     }
     
     // this function stops revealing the "noti" UI, and makes it invisible.
-    func closeNoti() {
+    @objc func closeNoti() {
         uiviewNotification.alpha = 0
         uiviewOverlayGrayOpaque.alpha = 0
     }
     
     // this function stops revealing the "chooseNoti" UI, and makes it invisible.
-    func closeChooseNoti() {
+    @objc func closeChooseNoti() {
         uiviewChooseAction.alpha = 0
         uiviewOverlayGrayOpaque.alpha = 0
     }
@@ -213,7 +213,7 @@ extension ContactsViewController {
     
     // triggered when "yes" button is clicked.
     // 0 is for block, 1 is for withdrawing a request, and 2 is to resend a request.
-    func yesButtonFunction(button: UIButton) {
+    @objc func yesButtonFunction(button: UIButton) {
         if button.tag == OK {
             closeNoti()
         } else {
@@ -222,7 +222,7 @@ extension ContactsViewController {
         }
     }
     
-    func sentActRequest(_ sender: UIButton) {
+    @objc func sentActRequest(_ sender: UIButton) {
         switch sender.tag {
         case IGNORE: // first button - IGNORE
             indicatorView.startAnimating()

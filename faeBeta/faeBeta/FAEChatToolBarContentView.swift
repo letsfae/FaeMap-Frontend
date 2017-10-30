@@ -344,7 +344,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         }
     }
     
-    func showFullAlbum() {
+    @objc func showFullAlbum() {
         self.delegate.showFullAlbum()
     }
     
@@ -413,7 +413,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         boolPhotoInitialized = false
         boolStickerInitialized = false
         boolMiniMapInitialized = false
-        print("clear tool bar views")
+        felixprint("clear tool bar views")
     }
     
     // MARK: helper
@@ -465,11 +465,11 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     
     // MARK: photoPicker Collection View Delegate
     //photoes preview layout
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+    @objc func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
         return 10
     }
     
@@ -641,7 +641,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     }
     
     // MARK: - Quick image picker delegate
-    func sendImageFromQuickPicker() {
+    @objc func sendImageFromQuickPicker() {
         if viewPhotoPicker.videoAsset != nil {
             sendVideoFromQuickPicker()
             return
@@ -685,10 +685,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
 
         let fileUrl = exportSession!.outputURL
         // e.g .mov type
-        exportSession!.outputFileType = AVFileTypeQuickTimeMovie
-        
-        exportSession!.exportAsynchronously {
-            Void in
+        exportSession!.outputFileType = AVFileType.mov
+        exportSession?.exportAsynchronously {
             switch exportSession!.status {
             case  AVAssetExportSessionStatus.failed:
                 print("failed import video: \(String(describing: exportSession!.error))")

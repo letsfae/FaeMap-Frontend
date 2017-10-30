@@ -91,7 +91,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         
         let downAttachment = InlineTextAttachment()
@@ -155,16 +155,16 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     fileprivate func updateCount() {
         countPlaces = arrPlaces.count
         let attributedStr1 = NSMutableAttributedString()
-        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr1.append(strPlaces)
         attributedStr1.append(countP)
         lblPlaces.attributedText = attributedStr1
         
         countLocations = arrLocations.count
         let attributedStr2 = NSMutableAttributedString()
-        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr2.append(strLocations)
         attributedStr2.append(countL)
         lblLocations.attributedText = attributedStr2
@@ -214,11 +214,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         navBarMenuBtnClicked = false
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func navBarMenuAct(_ sender: UIButton) {
+    @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
@@ -232,12 +232,12 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     // function for hide the drop down menu when tap on table
-    func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
+    @objc func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
         hideDropDownMenu()
     }
     
     // function for buttons in drop down menu
-    func dropDownMenuAct(_ sender: UIButton) {
+    @objc func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = "Places"

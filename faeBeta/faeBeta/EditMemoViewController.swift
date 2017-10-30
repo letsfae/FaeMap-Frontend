@@ -76,11 +76,11 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     }
     
     
-    func actionCancel(_ sender: Any) {
+    @objc func actionCancel(_ sender: Any) {
         hideMemoView()
     }
     
-    func actionSave(_ sender: UIButton) {
+    @objc func actionSave(_ sender: UIButton) {
         txtMemo = textviewMemo.textColor == UIColor._182182182() ? "" : textviewMemo.text
         FaeCollection.shared.whereKey("content", value: txtMemo)
         FaeCollection.shared.createMemo(enterMode.rawValue, pinID: String(pinId)) {(status: Int, message: Any?) in
@@ -149,7 +149,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue

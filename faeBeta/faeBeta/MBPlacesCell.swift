@@ -81,7 +81,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
         delegate?.jumpToPlaceDetail(place: places[indexPath.row])
     }
     
-    func btnSeeAllTapped(_ sender: UIButton) {
+    @objc func btnSeeAllTapped(_ sender: UIButton) {
         delegate?.jumpToAllPlaces(places: places, title: title)
     }
     

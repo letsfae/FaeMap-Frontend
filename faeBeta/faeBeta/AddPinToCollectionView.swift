@@ -255,16 +255,16 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func timerFunc() {
+    @objc func timerFunc() {
         uiviewAfterAdded.hide()
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         print("actionCancel")
         delegate?.cancelAddPlace()
     }
     
-    func actionNew(_ sender: UIButton) {
+    @objc func actionNew(_ sender: UIButton) {
         delegate?.createColList()
     }
 }
@@ -324,7 +324,7 @@ class AfterAddedToListView: UIView {
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
     }
     
-    func undoCollecting() {
+    @objc func undoCollecting() {
         guard let col = selectedCollection, pinIdInAction != -1 else { return }
         self.hide()
         FaeCollection.shared.unsaveFromCollection(col.colType, collectionID: String(col.colId), pinID: String(pinIdInAction)) { (status, message) in
@@ -335,7 +335,7 @@ class AfterAddedToListView: UIView {
         }
     }
     
-    func goToList() {
+    @objc func goToList() {
         delegate?.seeList()
     }
     

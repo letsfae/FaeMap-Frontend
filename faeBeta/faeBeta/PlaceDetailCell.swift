@@ -142,7 +142,7 @@ class PlaceDetailMapCell: PlaceDetailCell {
         imgViewMap.addSubview(imgPlaceIcon)
     }
     
-    func handleMapTap() {
+    @objc func handleMapTap() {
         delegate?.jumpToMainMapWithPlace()
     }
     

@@ -239,7 +239,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         loadAddtoCollection()
     }
     
-    func showSavedNoti() {
+    @objc func showSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
             self.imgSaved.alpha = 1
@@ -302,12 +302,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func backToMapBoard(_ sender: UIButton) {
+    @objc func backToMapBoard(_ sender: UIButton) {
         navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
         navigationController?.popViewController(animated: false)
     }
     
-    func saveThisPin() {
+    @objc func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .place
             uiviewSavedList.loadCollectionData()
@@ -323,12 +323,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func routeToThisPin() {
+    @objc func routeToThisPin() {
         featureDelegate?.getRouteToPin()
         navigationController?.popViewController(animated: false)
     }
     
-    func shareThisPin() {
+    @objc func shareThisPin() {
         let vcShareCollection = NewChatShareController(friendListMode: .place)
         vcShareCollection.placeDetail = place
         navigationController?.pushViewController(vcShareCollection, animated: true)

@@ -173,7 +173,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         view.addSubview(tblUsernames)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

@@ -50,7 +50,7 @@ class DisconnectionViewController: UIViewController {
         UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
-    func actionReconnect(_ sender: UIButton) {
+    @objc func actionReconnect(_ sender: UIButton) {
         if reachability.isReachable {
             print("[reachabilityChanged] Network reachable")
             dismiss(animated: true, completion: nil)

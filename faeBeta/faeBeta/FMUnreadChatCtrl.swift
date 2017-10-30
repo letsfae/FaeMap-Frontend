@@ -25,7 +25,7 @@ extension FaeMapViewController {
         }
     }
     
-    func updateMessages() {
+    @objc func updateMessages() {
         faeChat.getMessageFromServer()
     }
     
@@ -80,7 +80,7 @@ extension FaeMapViewController {
         chatVC.hidesBottomBarWhenPushed = true
         
         //            chatVC.recent = recent
-        chatVC.strChatRoomId = Key.shared.user_id < Int(withUserId) ? "\(Key.shared.user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(Key.shared.user_id)"
+        chatVC.strChatRoomId = Key.shared.user_id < Int(truncating: withUserId) ? "\(Key.shared.user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(Key.shared.user_id)"
         //        chatVC.chat_id = recent["chat_id"].number?.stringValue
         //        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
         

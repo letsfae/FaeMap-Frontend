@@ -57,7 +57,7 @@ class GeneralTitleCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func actionSwitchFunc(_ sender: UISwitch) {
+    @objc func actionSwitchFunc(_ sender: UISwitch) {
         print(sender.tag)
         switch sender.tag {
         case 101:
@@ -178,10 +178,10 @@ class GeneralSubTitleCell: UITableViewCell {
         
         let fullAttrStr = NSMutableAttributedString()
         
-        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
         let title_0_attr = NSMutableAttributedString(string: array[0] + " ", attributes: attrs_0)
         
-        let attrs_1 = [NSForegroundColorAttributeName: UIColor._168168168(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._168168168(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
         let title_1_attr = NSMutableAttributedString(string: array[1] + "  ", attributes: attrs_1)
         
         fullAttrStr.append(title_0_attr)

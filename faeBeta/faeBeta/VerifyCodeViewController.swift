@@ -77,7 +77,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.addSubview(verificationCodeView)
         
         btnResendCode = UIButton(frame: CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67, width: screenWidth - 174, height: 18))
-        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnResendCode.contentHorizontalAlignment = .center
         btnResendCode.sizeToFit()
         btnResendCode.center.x = screenWidth / 2
@@ -144,7 +144,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.bringSubview(toFront: indicatorView)
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         if enterPhoneMode == .contacts {
             dismiss(animated: false)
         } else {
@@ -152,7 +152,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
-    func actionVerifyCode(_ sender: UIButton) {
+    @objc func actionVerifyCode(_ sender: UIButton) {
         indicatorView.startAnimating()
         if enterMode == .email {
             faeUser.whereKey("email", value: strEmail)
@@ -269,25 +269,25 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     }
 
     func startTimer() {
-        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
     
-    func updateTime() {
+    @objc func updateTime() {
         if(remainingTime > 0) {
-            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
             remainingTime = remainingTime - 1
         }
         else {
             remainingTime = 59
             timer.invalidate()
             timer = nil
-            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
             self.btnResendCode.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside )
         }
     }
     
-    func resendVerificationCode() {
+    @objc func resendVerificationCode() {
         if enterMode == .email {
             postToURL("reset_login/code", parameter: ["email": strEmail as AnyObject], authentication: nil, completion: {(statusCode, result) in })
         } else {
