@@ -55,7 +55,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var uiviewKeyboard: UIView!
     
     
-    var ref = Database.database().reference().child(fireBaseRef) // reference to all chat room
+    var ref = Database.database().reference().child(Key.shared.fireBaseRef) // reference to all chat room
     var roomRef: DatabaseReference?
     var _refHandle: DatabaseHandle?
     var dictArrInitMessages: [NSDictionary] = [] // load latest 15 messages before showing chatting

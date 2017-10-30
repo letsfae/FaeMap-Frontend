@@ -41,6 +41,15 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var arrListSavedThisPin = [Int]()
     var boolSavedListLoaded = false
     var uiviewWhite: UIView!
+    // Place Detail Pop Transition
+    let pdTransition: CATransition = {
+        let transition = CATransition()
+        transition.duration = 0.4
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromRight
+        return transition
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,8 +82,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             })
         })
         PlaceDetailCell.boolFold = true
-        
-//        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -296,7 +303,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func backToMapBoard(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
+        navigationController?.popViewController(animated: false)
     }
     
     func saveThisPin() {

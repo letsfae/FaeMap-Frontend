@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
         } catch {}*/
         
-        headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
+        Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
         _ = LocalStorageManager.shared.readLogInfo()
         
@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for i in 0..<deviceToken.count {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
-        headerDeviceID = token
+        Key.shared.headerDeviceID = token
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {

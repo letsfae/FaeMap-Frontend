@@ -20,6 +20,11 @@ enum NavOpenMode {
     case welcomeFirst
 }
 
+enum ServerType {
+    case development
+    case production
+}
+
 class Key: NSObject { //  singleton class
     
     static let shared = Key()
@@ -28,13 +33,8 @@ class Key: NSObject { //  singleton class
     var vickyDebug: Bool = false
     var felixDebug: Bool = false
     
-    private enum SERVERTYPE {
-        case development
-        case production
-    }
-    
     // change this to .production to switch to production mode
-    private let server = SERVERTYPE.development
+    private let server = ServerType.development
     
     var baseURL: String {
         get {
@@ -129,4 +129,18 @@ class Key: NSObject { //  singleton class
             })
         }
     }
+}
+
+func headerAuthentication() -> [String: AnyObject] {
+    if Key.shared.userTokenEncode != "" {
+        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
+    }
+    if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
+    }
+    if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+        Key.shared.userTokenEncode = encode
+        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
+    }
+    return [:]
 }

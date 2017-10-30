@@ -183,7 +183,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
         boolLoadedTalkPage = true
-        userInvisible(isOn: userStatus == 5)
+        userInvisible(isOn: Key.shared.userStatus == 5)
     }
     
     func setGestureRecognizer() -> UITapGestureRecognizer {

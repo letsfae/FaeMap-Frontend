@@ -53,24 +53,24 @@ class FaeUser: NSObject {
     
     fileprivate func saveUserSignUpInfo() {
         let keyValueJSON = JSON(keyValue)
-        userEmail = keyValueJSON["email"].stringValue
-        userPassword = keyValueJSON["password"].stringValue
-        userFirstname = keyValueJSON["first_name"].stringValue
-        userLastname = keyValueJSON["last_name"].stringValue
-        userBirthday = keyValueJSON["birthday"].stringValue
+        Key.shared.userEmail = keyValueJSON["email"].stringValue
+        Key.shared.userPassword = keyValueJSON["password"].stringValue
+        Key.shared.userFirstname = keyValueJSON["first_name"].stringValue
+        Key.shared.userLastname = keyValueJSON["last_name"].stringValue
+        Key.shared.userBirthday = keyValueJSON["birthday"].stringValue
         let gender = keyValueJSON["gender"].stringValue
         Key.shared.gender = gender
         if gender == "male" {
-            userGender = 0
+            Key.shared.userGender = 0
         } else {
-            userGender = 1
+            Key.shared.userGender = 1
         }
-        LocalStorageManager.shared.saveString("userEmail", value: userEmail)
-        LocalStorageManager.shared.saveString("userPassword", value: userPassword)
-        LocalStorageManager.shared.saveString("userFirstname", value: userFirstname)
-        LocalStorageManager.shared.saveString("userLastname", value: userLastname)
-        LocalStorageManager.shared.saveString("userBirthday", value: userBirthday)
-        LocalStorageManager.shared.saveInt("userGender", value: userGender)
+        LocalStorageManager.shared.saveString("userEmail", value: Key.shared.userEmail)
+        LocalStorageManager.shared.saveString("userPassword", value: Key.shared.userPassword)
+        LocalStorageManager.shared.saveString("userFirstname", value: Key.shared.userFirstname)
+        LocalStorageManager.shared.saveString("userLastname", value: Key.shared.userLastname)
+        LocalStorageManager.shared.saveString("userBirthday", value: Key.shared.userBirthday)
+        LocalStorageManager.shared.saveInt("userGender", value: Key.shared.userGender)
     }
     
     /* faeuser log in function
@@ -88,18 +88,18 @@ class FaeUser: NSObject {
                         return
                     }
                     let userInfoJSON = JSON(userInfo)
-                    userEmail = userInfoJSON["email"].stringValue
+                    Key.shared.userEmail = userInfoJSON["email"].stringValue
                     Key.shared.username = userInfoJSON["user_name"].stringValue
-                    userFirstname = userInfoJSON["first_name"].stringValue
-                    userLastname = userInfoJSON["last_name"].stringValue
+                    Key.shared.userFirstname = userInfoJSON["first_name"].stringValue
+                    Key.shared.userLastname = userInfoJSON["last_name"].stringValue
                     let gender = userInfoJSON["gender"].stringValue
                     if gender == "male" {
-                        userGender = 0
+                        Key.shared.userGender = 0
                     } else {
-                        userGender = 1
+                        Key.shared.userGender = 1
                     }
-                    userBirthday = userInfoJSON["birthday"].stringValue
-                    userPhoneNumber = userInfoJSON["phone"].stringValue
+                    Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
+                    Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
                     LocalStorageManager.shared.getAccountStorage()
                 }
             } else {
@@ -118,17 +118,17 @@ class FaeUser: NSObject {
         let session = messageJSON["session_id"].intValue
         let user = messageJSON["user_id"].intValue
         let authentication = "\(user):\(str):\(session)"
-        session_id = session
+        Key.shared.session_id = session
         Key.shared.user_id = user
         
         let utf8str = authentication.data(using: String.Encoding.utf8)
         let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         let encode = "FAE " + base64Encoded
-        userToken = str
-        userTokenEncode = encode
+        Key.shared.userToken = str
+        Key.shared.userTokenEncode = encode
         Key.shared.is_Login = 1
-        userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
-        userPassword = keyValue["password"] as! String
+        Key.shared.userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
+        Key.shared.userPassword = keyValue["password"] as! String
         
         LocalStorageManager.shared.logInStorage()
     }
@@ -152,12 +152,12 @@ class FaeUser: NSObject {
     }
     
     func clearLogInInfo() {
-        userToken = ""
-        userTokenEncode = ""
-        session_id = -1
+        Key.shared.userToken = ""
+        Key.shared.userTokenEncode = ""
+        Key.shared.session_id = -1
         Key.shared.user_id = -1
         Key.shared.is_Login = 0
-        userStatus = 1
+        Key.shared.userStatus = 1
         LocalStorageManager.shared.saveInt("is_Login", value: 0)
     }
     
@@ -226,8 +226,8 @@ class FaeUser: NSObject {
         postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             
             if let password = self.keyValue["password"]?.string {
-                userPassword = password
-                print("[changePassword]", userPassword)
+                Key.shared.userPassword = password
+                print("[changePassword]", Key.shared.userPassword)
                 _ = LocalStorageManager.shared.savePassword()
             }
             self.clearKeyValue()
@@ -256,9 +256,9 @@ class FaeUser: NSObject {
                 let gender = userInfoJSON["gender"].stringValue
                 Key.shared.gender = gender
                 if gender == "male" {
-                    userGender = 0
+                    Key.shared.userGender = 0
                 } else {
-                    userGender = 1
+                    Key.shared.userGender = 1
                 }
                 Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                 Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
@@ -287,9 +287,9 @@ class FaeUser: NSObject {
                 let gender = userInfoJSON["gender"].stringValue
                 Key.shared.gender = gender
                 if gender == "male" {
-                    userGender = 0
+                    Key.shared.userGender = 0
                 } else {
-                    userGender = 1
+                    Key.shared.userGender = 1
                 }
                 Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                 LocalStorageManager.shared.getAccountStorage()
@@ -318,7 +318,7 @@ class FaeUser: NSObject {
             if status / 100 == 2 {
                 // changed successfully
                 if let newPassword = self.keyValue["new_password"] {
-                    userPassword = newPassword as! String
+                    Key.shared.userPassword = newPassword as! String
                     _ = LocalStorageManager.shared.savePassword()
                 }
             }
@@ -346,10 +346,10 @@ class FaeUser: NSObject {
             if status / 100 == 2 {
                 
                 if let newEmail = self.keyValue["email"] {
-                    userEmail = newEmail as! String
+                    Key.shared.userEmail = newEmail as! String
                     LocalStorageManager.shared.saveEmail()
                     print("new email")
-                    print(userEmail)
+                    print(Key.shared.userEmail)
                 }
             }
             completion(status, message)
@@ -374,7 +374,7 @@ class FaeUser: NSObject {
         postToURL("users/account/phone/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 if let newPhoneNumber = self.keyValue["phone"] {
-                    userPhoneNumber = newPhoneNumber as? String
+                    Key.shared.userPhoneNumber = newPhoneNumber as? String
                     _ = LocalStorageManager.shared.savePhoneNumber()
                     print("new phone number")
                     //                    print(userPhoneNumber)
