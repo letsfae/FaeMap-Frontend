@@ -181,7 +181,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             cell.switchRight.addTarget(self, action: #selector(self.mapBoardSwitch(_:)), for: .valueChanged)
             cell.switchRight.setOn(LeftSlidingMenuViewController.boolMapBoardIsOn, animated: false)
         } else if indexPath.row == 1 {
-            cell.switchRight.setOn(Key.shared.userStatus == 5, animated: false)
+            cell.switchRight.setOn(Key.shared.onlineStatus == 5, animated: false)
             cell.switchRight.addTarget(self, action: #selector(self.invisibleSwitch(_:)), for: .valueChanged)
         }
         return cell
@@ -298,7 +298,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.delegate?.switchMapMode()
                     break
                 case .goInvisible:
-                    if Key.shared.userStatus == 5 {
+                    if Key.shared.onlineStatus == 5 {
                         self.tableSelections = .none
                         self.delegate?.userInvisible(isOn: true)
                     }
@@ -350,10 +350,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             switchToInvisible.whereKey("status", value: "5")
             switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
-                    Key.shared.userStatus = 5
+                    Key.shared.onlineStatus = 5
                     self.tableSelections = .goInvisible
                     let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(Key.shared.userStatus, forKey: "userStatus")
+                    storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
                     print("Successfully switch to invisible")
                     self.actionCloseMenu(self.btnBackground)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
@@ -366,10 +366,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
             switchToInvisible.whereKey("status", value: "1")
             switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
-                    Key.shared.userStatus = 1
+                    Key.shared.onlineStatus = 1
                     self.delegate?.userInvisible(isOn: false)
                     let storageForUserStatus = UserDefaults.standard
-                    storageForUserStatus.set(Key.shared.userStatus, forKey: "userStatus")
+                    storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
                     print("Successfully switch to online")
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
                 } else {

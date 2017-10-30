@@ -27,7 +27,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     }
     
     func getPeoplePage() {
-        vickyPrint("userStatus \(Key.shared.userStatus)")
+        vickyPrint("userStatus \(Key.shared.onlineStatus)")
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             tblMapBoard.isHidden = true
             uiviewBubbleHint.isHidden = false

@@ -74,7 +74,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
             renewSelfLocation()
             return
         }
-        if Key.shared.userStatus == 5 {
+        if Key.shared.onlineStatus == 5 {
             invisibleMode()
         } else {
 //            NotificationCenter.default.post(name: Notification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
