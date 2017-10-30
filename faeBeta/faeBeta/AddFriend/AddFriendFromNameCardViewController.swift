@@ -223,7 +223,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     }
     
     // actions
-    func sentActRequest(_ sender: UIButton!) {
+    @objc func sentActRequest(_ sender: UIButton!) {
         if !(sender.tag == REPORT_ACT || sender.tag == EDIT_NAME_CARD || sender.tag == INFO_SETTING) {
             print(sender.tag)
             uiviewChooseAction.isHidden = true
@@ -357,16 +357,16 @@ class AddFriendFromNameCardViewController: UIViewController {
         }
     }
     
-    func actionCancel(_ sender: Any?) {
+    @objc func actionCancel(_ sender: Any?) {
         animationHideSelf()
     }
     
-    func actionFinish(_ sender: UIButton!) {
+    @objc func actionFinish(_ sender: UIButton!) {
         delegate?.passFriendStatusFromView(status: statusMode)
         animationHideSelf()
     }
     
-    func actionOK(_ sender: UIButton) {
+    @objc func actionOK(_ sender: UIButton) {
         if sender.tag == OK {
             delegate?.passFriendStatusFromView(status: statusMode)
             animationHideSelf()

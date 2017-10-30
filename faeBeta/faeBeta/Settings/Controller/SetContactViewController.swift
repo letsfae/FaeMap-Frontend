@@ -33,7 +33,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         tblContact.allowsSelection = false
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

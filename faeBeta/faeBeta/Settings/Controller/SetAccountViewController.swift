@@ -35,7 +35,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         view.addConstraintsWithFormat("V:|-65-[v0]-0-|", options: [], views: tblAccount)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -55,7 +55,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         excla.fontDescender = -2
         excla.image = #imageLiteral(resourceName: "Settings_exclamation")
         
-        let attr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 15)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let attr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         
         switch indexPath.row {
         case 0:

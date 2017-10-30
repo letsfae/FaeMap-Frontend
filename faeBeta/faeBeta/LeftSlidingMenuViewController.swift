@@ -218,7 +218,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         return 81 // 67
     }
     
-    func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {
+    @objc func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             let location = pan.location(in: view)
@@ -283,7 +283,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func actionCloseMenu(_ sender: UIButton) {
+    @objc func actionCloseMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.btnBackground.alpha = 0
             self.tblLeftSlide.center.x -= 290
@@ -333,17 +333,17 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func actionJumpToMainPage() {
+    @objc func actionJumpToMainPage() {
 //        tableSelections = .myFaeMainPage
 //        actionCloseMenu(btnBackground)
         addProfileAvatar()
     }
     
-    func mapBoardSwitch(_ sender: UISwitch) {
+    @objc func mapBoardSwitch(_ sender: UISwitch) {
         tableSelections = .mapBoard
         actionCloseMenu(btnBackground)
     }
-    func invisibleSwitch(_ sender: UISwitch) {
+    @objc func invisibleSwitch(_ sender: UISwitch) {
         let switchToInvisible = FaeUser()
         if sender.isOn {
             print("sender.on")

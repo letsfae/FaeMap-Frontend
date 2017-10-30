@@ -113,7 +113,7 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
     
-    func backToMapBoard(_ sender: UIButton) {
+    @objc func backToMapBoard(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     

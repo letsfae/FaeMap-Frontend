@@ -178,22 +178,22 @@ class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationMana
     
     //MARK: - button actions
     
-    func buttonMiddleRightAction(_ sender: UIButton!){
+    @objc func buttonMiddleRightAction(_ sender: UIButton!){
         let camera = faeMapView.camera
         camera.centerCoordinate = CLLocationCoordinate2D(latitude: chatLatitude, longitude: chatLongitude)
         faeMapView.setCamera(camera, animated: false)
         startUpdatingLocation = true
     }
     
-    func buttonTopRightAction(_ sender: UIButton!){
+    @objc func buttonTopRightAction(_ sender: UIButton!){
         viewPopUp.isHidden = false
     }
     
-    func buttonBottomLeftAction(_ sender: UIButton!){
+    @objc func buttonBottomLeftAction(_ sender: UIButton!){
         _ = self.navigationController?.popViewController(animated: true)
     }
     
-    func buttonBottomRightAction(_ sender: UIButton!){
+    @objc func buttonBottomRightAction(_ sender: UIButton!){
         currentLocation = locManager.location
         currentLatitude = currentLocation.coordinate.latitude
         currentLongitude = currentLocation.coordinate.longitude
@@ -202,11 +202,11 @@ class ChatMapViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         faeMapView.setCamera(camera, animated: false)
     }
     
-    func buttonShareAction(_ sender: UIButton!){
+    @objc func buttonShareAction(_ sender: UIButton!){
         print("Share")
     }
     
-    func buttonSaveAction(_ sender: UIButton!){
+    @objc func buttonSaveAction(_ sender: UIButton!){
         print("Save")
     }
     

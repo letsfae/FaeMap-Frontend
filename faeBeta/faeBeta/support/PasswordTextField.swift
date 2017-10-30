@@ -43,7 +43,7 @@ class PasswordTexField: UITextField {
         self.clearButtonMode = UITextFieldViewMode.never
     }
     
-    func rightButtonClicked(_ sender: UIButton) {
+    @objc func rightButtonClicked(_ sender: UIButton) {
         self.isSecureTextEntry = !self.isSecureTextEntry
         self.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         if imageName == "check_eye_close_red" {
@@ -67,7 +67,7 @@ class PasswordTexField: UITextField {
         }
     }
     
-    func decideButtonImage() {
+    @objc func decideButtonImage() {
         if self.text?.count < 8 {
             if self.isSecureTextEntry {
                 btnRight.setImage(UIImage(named: "check_eye_close_yellow")!, for: UIControlState())

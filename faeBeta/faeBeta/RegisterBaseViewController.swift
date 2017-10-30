@@ -45,7 +45,7 @@ class RegisterBaseViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func handleTap(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
     }
     
@@ -74,7 +74,7 @@ extension RegisterBaseViewController {
         view.addSubview(uiviewTop)
     }
     
-    func backButtonPressed() {}
+    @objc func backButtonPressed() {}
     
     func createBottomView(_ subview: UIView) {
         uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
@@ -95,7 +95,7 @@ extension RegisterBaseViewController {
         view.addSubview(uiviewBottom)
     }
     
-    func continueButtonPressed() {}
+    @objc func continueButtonPressed() {}
     
     func enableContinueButton(_ enable: Bool) {
         btnContinue.isEnabled = enable
@@ -159,7 +159,7 @@ extension RegisterBaseViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         var frameBottom = uiviewBottom.frame
@@ -179,7 +179,7 @@ extension RegisterBaseViewController {
         })
     }
     
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         var frameBottom = uiviewBottom.frame
         frameBottom.origin.y = view.frame.height - frameBottom.size.height
         

@@ -269,7 +269,7 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     //MARK: handle delete button tapped
-    func deleteButtonTapped(_ sender: UIButton) {
+    @objc func deleteButtonTapped(_ sender: UIButton) {
         self.delegate.deleteButtonTapped(self)
     }
     

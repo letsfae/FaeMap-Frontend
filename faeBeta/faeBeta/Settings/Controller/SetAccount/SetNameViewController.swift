@@ -201,11 +201,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         lblWrongPswd.isHidden = true
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSave(_ sender: UIButton) {
+    @objc func actionSave(_ sender: UIButton) {
         indicatorView.startAnimating()
         switch enterMode {
         case .name:
@@ -256,11 +256,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    func maleButtonTapped() {
+    @objc func maleButtonTapped() {
         showGenderSelected("male")
     }
     
-    func femaleButtonTapped() {
+    @objc func femaleButtonTapped() {
         showGenderSelected("female")
     }
     
@@ -271,7 +271,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         btnFemale.isSelected = !isMaleSelected
     }
     
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         print("enter")
         if enterMode == .name {
             print(textFName.text!)
@@ -290,7 +290,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    func actionForgot(_ sender: UIButton) {
+    @objc func actionForgot(_ sender: UIButton) {
         
     }
     
@@ -355,7 +355,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue

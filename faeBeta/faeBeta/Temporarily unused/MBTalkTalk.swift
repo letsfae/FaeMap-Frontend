@@ -93,7 +93,7 @@ extension MapBoardViewController {
         btnTalkMypost.addTarget(self, action: #selector(self.getTalkTableMode(_:)), for: .touchUpInside)
     }
     
-    func getTalkTableMode(_ sender: UIButton) {
+    @objc func getTalkTableMode(_ sender: UIButton) {
         if sender.tag == 0 {
             talkTableMode = .feed
         } else if sender.tag == 1 {
@@ -138,11 +138,11 @@ extension MapBoardViewController {
     }
     
     // function for add talk feed when press upper right plus button in talk mode
-    func addTalkFeed(_ sender: UIButton) {
+    @objc func addTalkFeed(_ sender: UIButton) {
         print("addTalkFeed")
     }
     
-    func switchBetweenTalkAndComment(_ sender: UIButton) {
+    @objc func switchBetweenTalkAndComment(_ sender: UIButton) {
         var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             talkPostTableMode = .talk
@@ -169,7 +169,7 @@ extension MapBoardViewController {
         reloadTableMapBoard()
     }
     
-    func incDecVoteCount(_ sender: UIButton) {
+    @objc func incDecVoteCount(_ sender: UIButton) {
         if sender.tag == 0 {
             print("0")
         } else if sender.tag == 1 {

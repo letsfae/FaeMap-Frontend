@@ -128,11 +128,11 @@ class RegisterInfoViewController: RegisterBaseViewController {
         
     }
     
-    func maleButtonTapped() {
+    @objc func maleButtonTapped() {
         showGenderSelected("male")
     }
     
-    func femaleButtonTapped() {
+    @objc func femaleButtonTapped() {
         showGenderSelected("female")
     }
     

@@ -104,7 +104,7 @@ class SignInEmailViewController: UIViewController {
         
         // set up the "We can’t find an account with this Email!" label
         btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67 , width: screenWidth - 175, height: 18))
-        btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnInfo.contentHorizontalAlignment = .center
         btnInfo.sizeToFit()
         btnInfo.center.x = screenWidth / 2
@@ -145,7 +145,7 @@ class SignInEmailViewController: UIViewController {
         view.bringSubview(toFront: indicatorView)
     }
     
-    func sendCodeButtonTapped() {
+    @objc func sendCodeButtonTapped() {
         indicatorView.startAnimating()
         self.view.endEditing(true)
 
@@ -169,13 +169,13 @@ class SignInEmailViewController: UIViewController {
         txtEmail.addTarget(self, action: #selector(self.textfieldDidChange(_:)), for: .editingChanged)
     }
 
-    func navBarLeftButtonTapped() {
+    @objc func navBarLeftButtonTapped() {
         _ = self.navigationController?.popViewController(animated: true)
     }
     // MARK: - keyboard
     
     // This is just a temporary method to make the login button clickable
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
@@ -185,7 +185,7 @@ class SignInEmailViewController: UIViewController {
         })
     }
     
-    func keyboardWillHide(_ notification:Notification) {
+    @objc func keyboardWillHide(_ notification:Notification) {
         if boolWillDisappear {
             return
         }
@@ -196,7 +196,7 @@ class SignInEmailViewController: UIViewController {
     }
     
     //MARK: - helper
-    func handleTap() {
+    @objc func handleTap() {
         self.view.endEditing(true)
     }
     
@@ -207,7 +207,7 @@ class SignInEmailViewController: UIViewController {
         return result
     }
     
-    func textfieldDidChange(_ textfield: UITextField) {
+    @objc func textfieldDidChange(_ textfield: UITextField) {
         if isValidEmail(textfield.text!) {
             btnSendCode.isEnabled = true
             btnSendCode.backgroundColor = UIColor._2499090()

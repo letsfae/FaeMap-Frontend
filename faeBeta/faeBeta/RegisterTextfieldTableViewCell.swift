@@ -107,7 +107,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
 }
 
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
-    func textFieldDidChange(_ textField: UITextField) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)
     }
     

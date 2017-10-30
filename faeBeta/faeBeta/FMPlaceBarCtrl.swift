@@ -29,7 +29,7 @@ extension FaeMapViewController: PlaceViewDelegate {
         btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)
     }
     
-    func handleTapPlaceBar() {
+    @objc func handleTapPlaceBar() {
         placePinAction(action: .detail)
     }
     

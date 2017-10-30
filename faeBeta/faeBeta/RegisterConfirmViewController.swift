@@ -56,18 +56,18 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         lblTermsOfService.textAlignment = .center
         
         let strTermofService = "To use Fae Maps, you agree to its Terms of Service\nand Privacy Policy."
-        let attrTermofService = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let attrTermofService = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
         let attrAgreeString = NSMutableAttributedString(string: strTermofService, attributes: attrTermofService)
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor._138138138(), range: NSRange(location: 0, length: strTermofService.count))
+        attrAgreeString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._138138138(), range: NSRange(location: 0, length: strTermofService.count))
         
         let rangeAttr1 = NSRange(location: 34, length: 16)
         let rangeAttr2 = NSRange(location: 55, length: 15)
         
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor._2499090(), range: rangeAttr1)
-        attrAgreeString.addAttribute(NSForegroundColorAttributeName, value: UIColor._2499090(), range: rangeAttr2)
+        attrAgreeString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._2499090(), range: rangeAttr1)
+        attrAgreeString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._2499090(), range: rangeAttr2)
         
-        attrAgreeString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 13)!, range: rangeAttr1)
-        attrAgreeString.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-Bold", size: 13)!, range: rangeAttr2)
+        attrAgreeString.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "AvenirNext-Bold", size: 13)!, range: rangeAttr1)
+        attrAgreeString.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "AvenirNext-Bold", size: 13)!, range: rangeAttr2)
         
         lblTermsOfService.attributedText = attrAgreeString
         
@@ -91,25 +91,21 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         view.bringSubview(toFront: btnBack)
     }
     
-    func termOfServiceButtonTapped(_ sender: UIButton) {
+    @objc func termOfServiceButtonTapped(_ sender: UIButton) {
         let vcTermsofService = TermsOfServiceViewController()
-        self.present(vcTermsofService, animated: true, completion: {
-            _ in
-        })
+        self.present(vcTermsofService, animated: true, completion: nil)
     }
     
-    func privacyPolicyButtonTapped(_ sender: UIButton) {
+    @objc func privacyPolicyButtonTapped(_ sender: UIButton) {
         let vcPrivacy = PrivacyPolicyViewController()
-        self.present(vcPrivacy, animated: true, completion: {
-            _ in
-        })
+        self.present(vcPrivacy, animated: true, completion: nil)
     }
     
     override func backButtonPressed() {
         _ = navigationController?.popViewController(animated: true)
     }
     
-    func finishButtonPressed() {
+    @objc func finishButtonPressed() {
         self.signUpUser()
     }
     

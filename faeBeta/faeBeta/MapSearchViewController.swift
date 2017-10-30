@@ -288,7 +288,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiview.layer.shadowOpacity = 0.6
     }
     
-    func backToMap(_ sender: UIButton) {
+    @objc func backToMap(_ sender: UIButton) {
 //        delegate?.backToMainMapFromMapSearch()
         navigationController?.popViewController(animated: false)
     }
@@ -318,7 +318,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         }
     }
     
-    func searchByCategories(_ sender: UIButton) {
+    @objc func searchByCategories(_ sender: UIButton) {
         // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
         // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
         // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]

@@ -110,14 +110,14 @@ class MemoViewController: UIViewController, UITextViewDelegate {
     }
     
     //dismiss current view
-    func actionDismissCurrentView(_ sender: UIButton) {
+    @objc func actionDismissCurrentView(_ sender: UIButton) {
         self.delegate?.memoContent(save: false, content: "")
         self.txtMemo.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
     }
     
     // save button action
-    func actionSaveBtn(_ sender: UIButton) {
+    @objc func actionSaveBtn(_ sender: UIButton) {
         self.delegate?.memoContent(save: true, content: txtMemo.text)
         self.txtMemo.resignFirstResponder()
         self.dismiss(animated: true, completion: nil)
@@ -128,7 +128,7 @@ class MemoViewController: UIViewController, UITextViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     //resize the height of the view when the keyboard will show
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height

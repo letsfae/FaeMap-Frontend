@@ -64,7 +64,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     }
     
     // Dismiss current View
-    func actionDismissCurrentView(_ sender: UIButton) {
+    @objc func actionDismissCurrentView(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -326,7 +326,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     }
     
     // Action fuction when the edit button is tapped
-    func actionEditCurrentTable(_ sender: UIButton) {
+    @objc func actionEditCurrentTable(_ sender: UIButton) {
         if !tblResult.isEditing {
             btnEdit.setTitle("Done", for: .normal)
             //            isbtnEdittaped = true
@@ -419,7 +419,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     }
     
     // Creat the search view when tap the fake searchbar
-    func searchBarTapDown(_ sender: UITapGestureRecognizer) {
+    @objc func searchBarTapDown(_ sender: UITapGestureRecognizer) {
         let vcSearch = CollectionSearchViewController()
         vcSearch.modalPresentationStyle = .overCurrentContext
         present(vcSearch, animated: false, completion: nil)
@@ -427,7 +427,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         vcSearch.arrData = placeAndLocationDataArr as [[String: AnyObject]]
     }
     
-    func searchBarTapDownDisable(_ sender: UITapGestureRecognizer) {
+    @objc func searchBarTapDownDisable(_ sender: UITapGestureRecognizer) {
     }
     
     override func didReceiveMemoryWarning() {
@@ -436,7 +436,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
     }
     
     // This function is the action function for the select button in the cell when the table is editable
-    func actionSelectBtnInCell(_ sender: UIButton) {
+    @objc func actionSelectBtnInCell(_ sender: UIButton) {
         
         let sectionId = sender.tag
         let path: IndexPath = IndexPath(row: 0, section: sectionId)
@@ -481,11 +481,11 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         
     }
     
-    func actionBtnShare(_ sender: UIButton) {
+    @objc func actionBtnShare(_ sender: UIButton) {
         // share
     }
     
-    func actionBtnMemo(_ sender: UIButton) {
+    @objc func actionBtnMemo(_ sender: UIButton) {
         // memo
         let memoVC = MemoViewController()
         memoVC.modalPresentationStyle = .overCurrentContext
@@ -509,7 +509,7 @@ class PlacesAndLocationsViewController: UIViewController, UISearchBarDelegate, U
         }
     }
     
-    func actionBtnRemove(_ sender: UIButton) {
+    @objc func actionBtnRemove(_ sender: UIButton) {
         // Remove
         arrSelectedItem.sort { $0 > $1 } // 倒序排序，这样保证原数据删除的时候是倒着删 不打乱顺序
         

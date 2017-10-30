@@ -40,12 +40,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         imgPinOnMap.isHidden = true
     }
     
-    func handleStartPointTap(_ tap: UITapGestureRecognizer) {
+    @objc func handleStartPointTap(_ tap: UITapGestureRecognizer) {
         BoardsSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
-    func handleDestinationTap(_ tap: UITapGestureRecognizer) {
+    @objc func handleDestinationTap(_ tap: UITapGestureRecognizer) {
         BoardsSearchViewController.boolToDestination = true
         routingHandleTap()
     }
@@ -59,7 +59,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         navigationController?.pushViewController(chooseLocsVC, animated: false)
     }
     
-    func handleSelectLocationTap(_ tap: UITapGestureRecognizer) {
+    @objc func handleSelectLocationTap(_ tap: UITapGestureRecognizer) {
         guard routeAddress != nil else { return }
         sendLocationBack(address: routeAddress)
     }

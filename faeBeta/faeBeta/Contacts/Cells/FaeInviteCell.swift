@@ -62,7 +62,7 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
         
     }
     
-    func changeInviteStatus(_ sender: UIButton) {
+    @objc func changeInviteStatus(_ sender: UIButton) {
         if !hasInvite {
             let msgVC = MFMessageComposeViewController()
             msgVC.messageComposeDelegate = self

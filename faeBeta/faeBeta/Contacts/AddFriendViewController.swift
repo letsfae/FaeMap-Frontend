@@ -29,7 +29,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         loadTable()
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

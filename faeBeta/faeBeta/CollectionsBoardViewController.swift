@@ -40,7 +40,7 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         getPinCounts()
     }
     
-    func actionDismissCurrentView(_ sender: UIButton) {
+    @objc func actionDismissCurrentView(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -207,25 +207,25 @@ class CollectionsBoardViewController: UIViewController, CollectionsBoardDelegate
         return count
     }
     
-    func actionCreatedPins(_ sender: UIButton) {
+    @objc func actionCreatedPins(_ sender: UIButton) {
         let vcCreatedPin = CreatedPinsViewController()
         vcCreatedPin.delegateBackBoard = self
         navigationController?.pushViewController(vcCreatedPin, animated: true)
     }
     
-    func actionSavedPins(_ sender: UIButton) {
+    @objc func actionSavedPins(_ sender: UIButton) {
         let vcSavedPin = SavedPinsViewController()
         vcSavedPin.delegateBackBoard = self
         navigationController?.pushViewController(vcSavedPin, animated: true)
     }
     
-    func actionSavedPlaces(_ sender: UIButton) {
+    @objc func actionSavedPlaces(_ sender: UIButton) {
         let vcSavedPlace = PlacesAndLocationsViewController()
         vcSavedPlace.strTableTitle = "Saved Places"
         navigationController?.pushViewController(vcSavedPlace, animated: true)
     }
     
-    func actionSavedLocations(_ sender: UIButton) {
+    @objc func actionSavedLocations(_ sender: UIButton) {
         let vcSavedLocations = PlacesAndLocationsViewController()
         vcSavedLocations.strTableTitle = "Saved Locations"
         navigationController?.pushViewController(vcSavedLocations, animated: true)

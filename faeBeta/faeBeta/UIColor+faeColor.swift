@@ -18,7 +18,7 @@ extension UIColor {
         self.init(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
     }
     
-    class func _2499090() -> UIColor {
+    @objc class func _2499090() -> UIColor {
         return UIColor(r: 249, g: 90, b: 90, alpha: 100)
     }
     

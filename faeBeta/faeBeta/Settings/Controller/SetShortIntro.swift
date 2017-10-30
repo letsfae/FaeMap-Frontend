@@ -59,12 +59,12 @@ class SetShortIntro: UIViewController {
         lblEditIntro.textColor = UIColor._2499090()
     }
     
-    func actionSaveIntro(_ sender: UIButton) {
+    @objc func actionSaveIntro(_ sender: UIButton) {
         delegate?.protSaveIntro(txtIntro: txtField.text)
         navigationController?.popViewController(animated: true)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
 }

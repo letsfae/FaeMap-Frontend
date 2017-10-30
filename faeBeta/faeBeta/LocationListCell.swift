@@ -64,10 +64,10 @@ class LocationListCell: UITableViewCell {
 extension GMSAutocompletePrediction {
     func faeSearchBarAttributedText() -> NSAttributedString {
         let fullText: NSMutableAttributedString = NSMutableAttributedString()
-        var attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._898989()]
+        var attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let primaryText = NSAttributedString(string: self.attributedPrimaryText.string + " ", attributes: attribute)
         fullText.append(primaryText)
-        attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._138138138()]
+        attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
         if let secondary = self.attributedSecondaryText?.string {
             let secondaryText = NSAttributedString(string: secondary, attributes: attribute)
             fullText.append(secondaryText)

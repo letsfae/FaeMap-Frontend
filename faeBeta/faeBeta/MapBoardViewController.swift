@@ -134,7 +134,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     let myTalk_valTalkTime: Array = ["Yesterday", "Yesterday", "Mar 28, 2017"]
     let myTalk_valReplyCount: Array = [12, 0, 999]
     let myTalk_valContent: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOMECOMECOMECOMECOMECOMECOME"]
-    let myTalk_valTopic: Array = ["general", "relationships", "singlereadaytomingle"]
+    let myTalk_valTopic: Array = ["general", "relationships", "sin@objc @objc @objc glereadaytomingle"]
     let myTalk_valVoteCount: Array = [1, 888, 1]
     
     // data for talk Comments table
@@ -246,7 +246,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadPlaceSearchHeader()
     }
     
-    func actionLeftWindowShow(_ sender: UIButton) {
+    @objc func actionLeftWindowShow(_ sender: UIButton) {
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.delegate = self
         leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
@@ -255,7 +255,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         
         let downAttachment = InlineTextAttachment()
@@ -418,7 +418,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     // function for drop down menu button, to show / hide the drop down menu
-    func navBarMenuAct(_ sender: UIButton) {
+    @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
@@ -436,13 +436,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     // function for hide the drop down menu when tap on table
-    func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
+    @objc func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
         hideDropDownMenu()
         rollUpFilter()
     }
     
     // function for buttons in drop down menu
-    func dropDownMenuAct(_ sender: UIButton) {
+    @objc func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = titleArray[0]

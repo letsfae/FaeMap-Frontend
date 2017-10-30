@@ -41,7 +41,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
         }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -142,7 +142,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
     }
     
-    func logOut(_ sender: UIButton) {
+    @objc func logOut(_ sender: UIButton) {
         let logOut = FaeUser()
         logOut.logOut { (status: Int?, _: Any?) in
             self.jumpToWelcomeView(animated: true)
@@ -160,7 +160,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         //}
     }
     
-    func showMainView(_ sender: UIButton) {
+    @objc func showMainView(_ sender: UIButton) {
         uiviewBackground.isHidden = true
     }
     
