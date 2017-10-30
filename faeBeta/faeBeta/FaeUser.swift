@@ -122,10 +122,7 @@ class FaeUser: NSObject {
         Key.shared.user_id = user
         
         let utf8str = authentication.data(using: String.Encoding.utf8)
-        print(authentication)
         let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-        print("Encoded:  \(base64Encoded)")
-        print("FAE " + base64Encoded)
         let encode = "FAE " + base64Encoded
         userToken = str
         userTokenEncode = encode

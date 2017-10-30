@@ -135,8 +135,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print(error)
         if error._code == 3010 { // work at simulate do nothing here
+            print(error)
             print("simulator doesn't have token id")
         }
         //        self.openSettings()

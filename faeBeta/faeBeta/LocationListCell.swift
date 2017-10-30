@@ -31,7 +31,7 @@ class LocationListCell: UITableViewCell {
     
     func setValueForLocationPrediction(_ pred: GMSAutocompletePrediction) {
         prediction = pred
-        lblLocationName.attributedText = pred.attributedFullText
+        lblLocationName.attributedText = pred.faeSearchBarAttributedText()
     }
     
     fileprivate func loadRecommendedCellContent() {
@@ -59,4 +59,19 @@ class LocationListCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
+}
+
+extension GMSAutocompletePrediction {
+    func faeSearchBarAttributedText() -> NSAttributedString {
+        let fullText: NSMutableAttributedString = NSMutableAttributedString()
+        var attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let primaryText = NSAttributedString(string: self.attributedPrimaryText.string + " ", attributes: attribute)
+        fullText.append(primaryText)
+        attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._138138138()]
+        if let secondary = self.attributedSecondaryText?.string {
+            let secondaryText = NSAttributedString(string: secondary, attributes: attribute)
+            fullText.append(secondaryText)
+        }
+        return fullText
+    }
 }
