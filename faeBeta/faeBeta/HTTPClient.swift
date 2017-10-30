@@ -13,12 +13,12 @@ import SwiftyJSON
 import RealmSwift
 
 func postImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
         //        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
+        "Accept": Key.shared.headerAccept,
         //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil {
@@ -61,12 +61,12 @@ func postImageToURL(_ className: String, parameter: [String: Any]?, authenticati
 }
 
 func postCoverImageToURL(_ className: String, parameter: [String: AnyObject]?, authentication: [String: AnyObject]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
         //        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
+        "Accept": Key.shared.headerAccept,
         //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil {
@@ -105,12 +105,12 @@ func postCoverImageToURL(_ className: String, parameter: [String: AnyObject]?, a
 }
 
 func searchToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Device-ID": headerDeviceID,
-        "Accept": headerAccept,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Device-ID": Key.shared.headerDeviceID,
+        "Accept": Key.shared.headerAccept,
         "Content-Type": "application/json",
         ]
     if authentication != nil {
@@ -142,13 +142,13 @@ func searchToURL(_ className: String, parameter: [String: Any]?, authentication:
 }
 
 func postToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Device-ID": headerDeviceID,
-        "Accept": headerAccept,
-        "Content-Type": headerContentType,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Device-ID": Key.shared.headerDeviceID,
+        "Accept": Key.shared.headerAccept,
+        "Content-Type": Key.shared.headerContentType,
     ]
     if authentication != nil {
         for (key, value) in authentication! {
@@ -180,13 +180,13 @@ func postToURL(_ className: String, parameter: [String: Any]?, authentication: [
 
 func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
     
-    let url = baseURL + "/" + className
+    let url = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Device-ID": headerDeviceID,
-        "Accept": headerAccept,
-        "Content-Type": headerContentType,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Device-ID": Key.shared.headerDeviceID,
+        "Accept": Key.shared.headerAccept,
+        "Content-Type": Key.shared.headerContentType,
     ]
     if authentication != nil {
         for (key, value) in authentication! {
@@ -218,12 +218,12 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
 }
 
 func deleteFromURL(_ className: String, parameter: [String: Any], authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "Accept": headerAccept,
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Device-ID": headerDeviceID,
+        "Accept": Key.shared.headerAccept,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Device-ID": Key.shared.headerDeviceID,
     ]
     if authentication == nil {
         completion(500, "we must get the authentication number" as AnyObject?)
@@ -246,13 +246,13 @@ func deleteFromURL(_ className: String, parameter: [String: Any], authentication
 
 func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
-    guard let url = URL(string: "\(baseURL)/files/users/\(userID)/avatar/\(type)") else { return }
+    guard let url = URL(string: "\(Key.shared.baseURL)/files/users/\(userID)/avatar/\(type)") else { return }
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = "GET"
     urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-    urlRequest.setValue(headerUserAgent, forHTTPHeaderField: "User-Agent")
-    urlRequest.setValue(headerClientVersion, forHTTPHeaderField: "Fae-Client-Version")
-    urlRequest.setValue(headerAccept, forHTTPHeaderField: "Accept")
+    urlRequest.setValue(Key.shared.headerUserAgent, forHTTPHeaderField: "User-Agent")
+    urlRequest.setValue(Key.shared.headerClientVersion, forHTTPHeaderField: "Fae-Client-Version")
+    urlRequest.setValue(Key.shared.headerAccept, forHTTPHeaderField: "Accept")
     for (key, value) in authentication {
         if let val = value as? String {
             urlRequest.setValue(val, forHTTPHeaderField: key)
@@ -328,11 +328,11 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
 
 func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
-    let URL = isChatRoom ? "\(baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(baseURL)/files/\(fileID)/data"
+    let URL = isChatRoom ? "\(Key.shared.baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(Key.shared.baseURL)/files/\(fileID)/data"
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Accept": headerAccept,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Accept": Key.shared.headerAccept,
     ]
     for (key, value) in authentication {
         headers[key] = value as? String
@@ -377,12 +377,12 @@ func downloadImage(URL: String, completion: @escaping (Data?) -> Void) {
 }
 
 func postFileToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
-        "Accept": headerAccept,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
+        "Accept": Key.shared.headerAccept,
     ]
     
     if authentication != nil {
@@ -426,12 +426,12 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
 }
 
 func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = baseURL + "/" + className
+    let URL = Key.shared.baseURL + "/" + className
     var headers = [
-        "User-Agent": headerUserAgent,
-        "Fae-Client-Version": headerClientVersion,
+        "User-Agent": Key.shared.headerUserAgent,
+        "Fae-Client-Version": Key.shared.headerClientVersion,
         //        "Device-ID" : headerDeviceID,
-        "Accept": headerAccept,
+        "Accept": Key.shared.headerAccept,
         //        "Content-Type" : "application/form-data"
     ]
     if authentication != nil {

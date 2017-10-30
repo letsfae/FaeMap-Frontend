@@ -155,7 +155,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             imgPinOnMap.isHidden = mapMode != .selecting
             btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
-            userStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
+            Key.shared.userStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
             if mapMode == .routing || mapMode == .selecting {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
             } else {
@@ -206,6 +206,17 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     var desiredCount = 0
+    
+    // Place Detail Push Transition
+    let pdTransition: CATransition = {
+        let transition = CATransition()
+        transition.duration = 0.4
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
+        transition.type = kCATransitionPush
+        transition.subtype = kCATransitionFromLeft
+        return transition
+    }()
+    
     
     // System Functions
     override func viewDidLoad() {
@@ -270,7 +281,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func getUserStatus() {
         guard let user_status = LocalStorageManager.shared.readByKey("userStatus") as? Int else { return }
-        userStatus = user_status
+        Key.shared.userStatus = user_status
     }
     
     func jumpToMyFaeMainPage() {
@@ -356,10 +367,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             females.append(i + 18)
         }
         let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
-        userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
-        userAvatarMap = "miniAvatar_\(userMiniAvatar)"
-        LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
-        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar - 1)")
+        Key.shared.userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
+        Key.shared.userAvatarMap = "miniAvatar_\(Key.shared.userMiniAvatar)"
+        LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")

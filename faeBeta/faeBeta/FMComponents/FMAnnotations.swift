@@ -240,7 +240,7 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func invisibleOff() {
-        guard userStatus != 5 else { return }
+        guard Key.shared.userStatus != 5 else { return }
         LocManager.shared.locManager.stopUpdatingHeading()
         timer?.invalidate()
         timer = nil
@@ -257,8 +257,8 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     func changeAvatar() {
-        guard userStatus != 5 else { return }
-        mapAvatar = userMiniAvatar
+        guard Key.shared.userStatus != 5 else { return }
+        mapAvatar = Key.shared.userMiniAvatar
     }
     
     func getSelfAccountInfo() {
@@ -270,8 +270,8 @@ class SelfAnnotationView: MKAnnotationView {
                 return
             }
             let selfUserInfoJSON = JSON(message!)
-            userFirstname = selfUserInfoJSON["first_name"].stringValue
-            userLastname = selfUserInfoJSON["last_name"].stringValue
+            Key.shared.userFirstname = selfUserInfoJSON["first_name"].stringValue
+            Key.shared.userLastname = selfUserInfoJSON["last_name"].stringValue
             Key.shared.userBirthday = selfUserInfoJSON["birthday"].stringValue
             Key.shared.gender = selfUserInfoJSON["gender"].stringValue
             Key.shared.username = selfUserInfoJSON["user_name"].stringValue
@@ -279,10 +279,10 @@ class SelfAnnotationView: MKAnnotationView {
             Key.shared.userEmailVerified = selfUserInfoJSON["email_verified"].boolValue
             Key.shared.userPhoneNumber = selfUserInfoJSON["phone"].stringValue
             Key.shared.userPhoneVerified = selfUserInfoJSON["phone_verified"].boolValue
-            userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
-            LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
+            Key.shared.userMiniAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
+            LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
             self.mapAvatar = selfUserInfoJSON["mini_avatar"].intValue + 1
-            if userStatus == 5 {
+            if Key.shared.userStatus == 5 {
                 return
             }
             self.invisibleOff()

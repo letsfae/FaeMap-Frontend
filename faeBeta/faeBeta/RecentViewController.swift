@@ -22,7 +22,7 @@ public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this s
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SwipeableCellDelegate {
     
-    private let firebase = Database.database().reference().child(fireBaseRef)
+    private let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     // MARK: - properties
     var uiviewNavBar: FaeNavBar!

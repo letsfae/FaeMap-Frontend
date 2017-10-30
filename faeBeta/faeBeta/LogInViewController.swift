@@ -190,7 +190,7 @@ class LogInViewController: UIViewController {
             user.whereKey("user_name", value: txtUsername.text!)
         }
         user.whereKey("password", value: txtPassword.text!)
-        user.whereKey("device_id", value: headerDeviceID)
+        user.whereKey("device_id", value: Key.shared.headerDeviceID)
         user.whereKey("is_mobile", value: "true")
         user.logInBackground { (status: Int, message: Any?) in
             if status / 100 == 2 {
