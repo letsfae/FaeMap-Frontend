@@ -157,7 +157,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcPlaceDetail.place = placeData
                 vcPlaceDetail.featureDelegate = self
                 vcPlaceDetail.delegate = self
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
+                navigationController?.pushViewController(vcPlaceDetail, animated: false)
             }
             break
         case .collect:

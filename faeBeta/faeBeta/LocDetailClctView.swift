@@ -55,7 +55,7 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
         delegateSeeAll?.jumpToPlaceDetail(place: arrNearbyPlaces[indexPath.row])
     }
     
-    func btnSeeAllTapped(_ sender: UIButton) {
+    @objc func btnSeeAllTapped(_ sender: UIButton) {
         delegateSeeAll?.jumpToAllPlaces(places: arrNearbyPlaces, title: "Near this Location")
     }
 }

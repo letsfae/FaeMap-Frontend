@@ -116,7 +116,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         view.addSubview(uiviewPlaceTab)
     }
     
-    func changePage(_ sender: Any?) {
+    @objc func changePage(_ sender: Any?) {
         scrollViewPlaceHeader.contentOffset.x = screenWidth * CGFloat(pageCtrlPlace.currentPage)
     }
     
@@ -124,11 +124,11 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         pageCtrlPlace.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
     }
     
-    func searchByCategories(_ sender: UIButton) {
+    @objc func searchByCategories(_ sender: UIButton) {
         print(sender.tag)
     }
     
-    func searchAllPlaces(_ sender: UIButton) {
+    @objc func searchAllPlaces(_ sender: UIButton) {
         let searchVC = BoardsSearchViewController()
         searchVC.enterMode = .place
         searchVC.delegate = self
@@ -137,7 +137,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         navigationController?.pushViewController(searchVC, animated: true)
     }
     
-    func actionClearSearchResults(_ sender: UIButton) {
+    @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
         mbPlaces = arrAllPlaces

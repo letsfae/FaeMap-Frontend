@@ -425,7 +425,7 @@ class EXPClctTypeCell: UICollectionViewCell {
         addConstraintsWithFormat("V:[v0(36)]-0-|", options: [], views: btnType)
     }
     
-    func actionSearch() {
+    @objc func actionSearch() {
         guard indexPath != nil else { return }
         delegate?.search(category: category, indexPath: indexPath)
     }

@@ -71,7 +71,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         uiviewNavBar.addSubview(btnBack)
     }
     
-    func backToMap(_ sender: UIButton) {
+    @objc func backToMap(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -180,7 +180,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         scroll.addSubview(btnFeedback)
     }
     
-    func showPhotoSelected(_ sender: UIGestureRecognizer) {
+    @objc func showPhotoSelected(_ sender: UIGestureRecognizer) {
         let alertMenu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         alertMenu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { (_: UIAlertAction) in
@@ -235,7 +235,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
 //    }
     
     //MARK: add jump to feedback report view
-    func jumpToFeedback() {
+    @objc func jumpToFeedback() {
         let reportCommentPinVC = ReportViewController()
         reportCommentPinVC.reportType = 1
         self.present(reportCommentPinVC, animated: true, completion: nil)
@@ -286,7 +286,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     }
     
     fileprivate func checkCameraAccessStatus() {
-        let cameraStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        let cameraStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         switch cameraStatus {
         case .authorized:
             let imagePicker = UIImagePickerController()
@@ -297,8 +297,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
             self.alertToEncourageAccess("camera")
             return
         case .notDetermined:
-            if AVCaptureDevice.devices(withMediaType: AVMediaTypeVideo).count > 0 {
-                AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { _ in
+            if AVCaptureDevice.devices(for: AVMediaType.video).count > 0 {
+                AVCaptureDevice.requestAccess(for: AVMediaType.video) { _ in
                     DispatchQueue.main.async() {
                         self.checkCameraAccessStatus()
                     }

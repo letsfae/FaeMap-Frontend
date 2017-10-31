@@ -106,8 +106,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     }
     
     fileprivate func setHintRedLabel() {
-        let attr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
-        let attrBold = [NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]
+        let attr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let attrBold = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]
         let txt = NSMutableAttributedString()
         
         if !Key.shared.userEmailVerified {
@@ -135,8 +135,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         
         let lblUsrname = FaeLabel(CGRect(x: 0, y: 213 * screenHeightFactor, width: screenWidth, height: 30), .center, .regular, 22, UIColor._155155155())
         view.addSubview(lblUsrname)
-        let attr = [NSForegroundColorAttributeName: UIColor._155155155()]
-        let attrEmail = [NSForegroundColorAttributeName: UIColor._898989()]
+        let attr = [NSAttributedStringKey.foregroundColor: UIColor._155155155()]
+        let attrEmail = [NSAttributedStringKey.foregroundColor: UIColor._898989()]
         
         let txt = NSMutableAttributedString()
         txt.append(NSAttributedString(string: "@", attributes: attr))
@@ -217,7 +217,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         view.bringSubview(toFront: indicatorView)
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         if enterMode == .email {
             delegate?.updateEmail()
         } else if enterMode == .phone {
@@ -235,7 +235,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         navigationController?.popViewController(animated: true)
     }
         
-    func actionUpdate(_ sender: UIButton) {
+    @objc func actionUpdate(_ sender: UIButton) {
         switch enterMode {
         case .email:
             let vc = SetNameViewController()
@@ -256,15 +256,15 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         }
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         animationHideView()
     }
     
-    func actionYes(_ sender: UIButton) {
+    @objc func actionYes(_ sender: UIButton) {
         animationHideView()
     }
 
-    func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
+    @objc func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
         let vc = VerifyCodeViewController()
         vc.delegate = self
         vc.enterMode = .email

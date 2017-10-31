@@ -25,7 +25,7 @@ extension FaeMapViewController {
         }
     }
     
-    func actionMainScreenSearch(_ sender: UIButton) {
+    @objc func actionMainScreenSearch(_ sender: UIButton) {
         btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
@@ -38,7 +38,7 @@ extension FaeMapViewController {
         navigationController?.pushViewController(searchVC, animated: false)
     }
     
-    func actionClearSearchResults(_ sender: UIButton) {
+    @objc func actionClearSearchResults(_ sender: UIButton) {
         btnZoom.smallMode()
         if createLocation == .create {
             createLocation = .cancel
@@ -79,7 +79,7 @@ extension FaeMapViewController {
         }
     }
     
-    func actionLeftWindowShow(_ sender: UIButton) {
+    @objc func actionLeftWindowShow(_ sender: UIButton) {
         btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
@@ -91,7 +91,7 @@ extension FaeMapViewController {
         present(leftMenuVC, animated: false, completion: nil)
     }
     
-    func actionShowResultTbl(_ sender: UIButton) {
+    @objc func actionShowResultTbl(_ sender: UIButton) {
         btnZoom.smallMode()
         if sender.tag == 0 {
             sender.tag = 1
@@ -111,7 +111,7 @@ extension FaeMapViewController {
         }
     }
     
-    func actionChatWindowShow(_ sender: UIButton) {
+    @objc func actionChatWindowShow(_ sender: UIButton) {
         btnZoom.smallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
@@ -127,7 +127,7 @@ extension FaeMapViewController {
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
-    func actionOpenExplore(_ sender: UIButton) {
+    @objc func actionOpenExplore(_ sender: UIButton) {
         btnZoom.smallMode()
         uiviewNameCard.hide {}
         let vcExp = ExploreViewController()
@@ -136,13 +136,13 @@ extension FaeMapViewController {
         navigationController?.pushViewController(vcExp, animated: true)
     }
     
-    func actionCancelSelecting() {
+    @objc func actionCancelSelecting() {
         btnZoom.smallMode()
         mapMode = .routing
         uiviewChooseLocs.show()
     }
     
-    func actionBackTo(_ sender: UIButton) {
+    @objc func actionBackTo(_ sender: UIButton) {
         btnZoom.smallMode()
         if mapMode == .explore {
             let vcExp = ExploreViewController()

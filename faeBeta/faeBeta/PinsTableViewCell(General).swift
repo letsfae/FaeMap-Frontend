@@ -336,7 +336,7 @@ class PinsTableViewCell: UITableViewCell {
     }
     
     // handle function of pan gesture
-    func handlePan(recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(recognizer: UIPanGestureRecognizer) {
         // when the gesture begins, record the current center location
         if recognizer.state == .began {
             pointOriginalCenter = uiviewCellView.center

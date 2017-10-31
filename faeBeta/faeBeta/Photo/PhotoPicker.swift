@@ -45,8 +45,7 @@ final class PhotoPicker {
         let smartAlbums = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
         let allPhotosOptions = PHFetchOptions()
         allPhotosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        smartAlbums.enumerateObjects( {
-            let assetCollection = $0.0
+        smartAlbums.enumerateObjects { (assetCollection, _, _) in
             let assetsFetchResult = PHAsset.fetchAssets(in: assetCollection, options: allPhotosOptions)
             let numberOfAssets = assetsFetchResult.count
             if numberOfAssets != 0 {
@@ -56,8 +55,7 @@ final class PhotoPicker {
                     self.currentAlbum = self.cameraRoll
                 }
             }
-            
-        })
+        }
         calculateVideoDuration()
     }
     

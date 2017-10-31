@@ -13,6 +13,8 @@ import Firebase
 import FirebaseDatabase
 import RealmSwift
 
+import GooglePlaces
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -30,6 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        GMSPlacesClient.provideAPIKey("AIzaSyBqxJcAYqy28IZL_wleL7kJr2yEiynXdMQ")
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
         
@@ -62,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
         } catch {}*/
         
-        headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
+        Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
         _ = LocalStorageManager.shared.readLogInfo()
         
@@ -82,14 +86,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // MARK: - Network Check
-    func reachabilityChanged(notification: Notification) {
+    @objc func reachabilityChanged(notification: Notification) {
         let reach = notification.object as! Reachability
         if reach.isReachable && reachaVCPresented {
-            joshprint("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
+            // joshprint("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
             DisconnectionViewController.shared.dismiss(animated: true, completion: nil)
             reachaVCPresented = false
         } else if !reach.isReachable && !reachaVCPresented {
-            joshprint("[AppDelegate | reachabilityChanged] Network not reachable")
+            // joshprint("[AppDelegate | reachabilityChanged] Network not reachable")
             reachaVCPresented = true
             window?.makeKeyAndVisible()
             window?.visibleViewController?.present(DisconnectionViewController.shared, animated: true, completion: nil)
@@ -115,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for i in 0..<deviceToken.count {
             token += String(format: "%02.2hhx", deviceToken[i] as CVarArg)
         }
-        headerDeviceID = token
+        Key.shared.headerDeviceID = token
     }
     
     func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
@@ -131,9 +135,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print(error)
         if error._code == 3010 { // work at simulate do nothing here
-            print("simulator doesn't have token id")
+            // print(error)
+            // print("simulator doesn't have token id")
         }
         //        self.openSettings()
     }
@@ -141,29 +145,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-        print("[applicationWillResignActive]")
+        // print("[applicationWillResignActive]")
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        print("[applicationDidEnterBackground]")
+        // print("[applicationDidEnterBackground]")
     }
     
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "appWillEnterForeground"), object: nil)
-        print("[applicationWillEnterForeground]")
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userAvatarAnimationRestart"), object: nil)
+        // print("[applicationWillEnterForeground]")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         
-//        _ = LocalStorageManager.shared.readLogInfo()
-//
-//        let isFirstLaunch = shareAPI.isFirstPushLaunch()
-        print("[applicationDidBecomeActive]")
+        // print("[applicationDidBecomeActive]")
         
         if EnableNotificationViewController.boolCurtVCisNoti {
             checkNotificationStatus()

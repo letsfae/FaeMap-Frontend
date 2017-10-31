@@ -47,7 +47,7 @@ extension FaeMapViewController {
         loadActivityIndicator()
     }
     
-    func handleLocInfoBarTap() {
+    @objc func handleLocInfoBarTap() {
 //        if createLocation == .create {
 //            locAnnoView?.hideButtons()
 //            let vcLocDetail = LocDetailViewController()

@@ -82,11 +82,11 @@ class FaeReceivedCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAgreeRequest)
     }
     
-    func refuseRequest(_ sender: UIButton) {
+    @objc func refuseRequest(_ sender: UIButton) {
         self.delegate?.refuseRequest(requestId: requestId, indexPath: indexPath)
     }
     
-    func acceptRequest(_ sender: UIButton) {
+    @objc func acceptRequest(_ sender: UIButton) {
         self.delegate?.acceptRequest(requestId: requestId, indexPath: indexPath)
     }
 }

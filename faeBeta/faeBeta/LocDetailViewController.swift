@@ -174,7 +174,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func handleMapTap() {
+    @objc func handleMapTap() {
         
     }
     
@@ -249,7 +249,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         loadAddtoCollection()
     }
     
-    func showSavedNoti(_ sender: Notification) {
+    @objc func showSavedNoti(_ sender: Notification) {
         if let id = sender.object as? Int {
             self.locationId = id
         }
@@ -283,11 +283,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    func backToMapBoard(_ sender: UIButton) {
+    @objc func backToMapBoard(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func saveThisPin() {
+    @objc func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .location
             uiviewSavedList.loadCollectionData()
@@ -305,12 +305,12 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func routeToThisPin() {
+    @objc func routeToThisPin() {
         featureDelegate?.getRouteToPin()
         navigationController?.popViewController(animated: false)
     }
     
-    func shareThisPin() {
+    @objc func shareThisPin() {
         let vcShareCollection = NewChatShareController(friendListMode: .location)
         vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
         navigationController?.pushViewController(vcShareCollection, animated: true)

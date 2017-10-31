@@ -14,13 +14,13 @@ func joshprint(_ items: Any...) {
     }
 }
 
-func vickyPrint(_ items: Any...) {
+func vickyprint(_ items: Any...) {
     if Key.shared.vickyDebug {
         print(items)
     }
 }
 
-func felixPrint(_ items: Any...) {
+func felixprint(_ items: Any...) {
     if Key.shared.felixDebug {
         print(items)
     }

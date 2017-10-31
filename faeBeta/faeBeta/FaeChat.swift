@@ -68,7 +68,7 @@ class FaeChat {
                         case .initial:
                             // print("initial")
                             break
-                        case .update(_, let deletions, let insertions, let modifications):
+                        case .update(_, _, let insertions, _):
                             // print("update")
                             for insert in insertions {
                                 // print(insert)
@@ -118,8 +118,8 @@ class FaeChat {
             let json = try JSONSerialization.data(withJSONObject: message, options: [])
             postToURL("chats_v2", parameter: ["receiver_id": members[1] as AnyObject, "message": String(data: json, encoding: .utf8)!, "type": "text"], authentication: headerAuthentication(), completion: { statusCode, result in
                 if statusCode / 100 == 2 {
-                    if let resultDic = result as? NSDictionary {
-                        print("\(statusCode) \(message["index"])")
+                    if (result as? NSDictionary) != nil {
+                        print("\(statusCode) \(String(describing: message["index"]))")
                     }
                 } else {
                     print("failed")

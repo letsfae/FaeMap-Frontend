@@ -55,8 +55,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         btnFFF = UIButton()
 //        btnFFF.setImage(#imageLiteral(resourceName: "FFFunselected"), for: .normal)
 //        btnFFF.setImage(#imageLiteral(resourceName: "FFFselected"), for: .selected)
-        btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSForegroundColorAttributeName: UIColor._146146146(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
-        btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
+        btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSAttributedStringKey.foregroundColor: UIColor._146146146(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
+        btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
         btnFFF.isSelected = true
         btnFFF.addTarget(self, action: #selector(pressbtnFFF(button:)), for: .touchUpInside)
         btnFFF.imageEdgeInsets = UIEdgeInsetsMake(0, 40, 0, 0)
@@ -67,8 +67,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         btnRR = UIButton()
 //        btnRR.setImage(#imageLiteral(resourceName: "RRunselected"), for: .normal)
 //        btnRR.setImage(#imageLiteral(resourceName: "RRselected"), for: .selected)
-        btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSForegroundColorAttributeName: UIColor._146146146(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
-        btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
+        btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSAttributedStringKey.foregroundColor: UIColor._146146146(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
+        btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
         btnRR.addTarget(self, action: #selector(pressbtnRR(button:)), for: .touchUpInside)
         btnRR.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40)
         uiviewBottomNav.addSubview(btnRR)
@@ -178,7 +178,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     // button press functionalities
-    func pressbtnFFF(button: UIButton) {
+    @objc func pressbtnFFF(button: UIButton) {
         if btnRR.isSelected {
             getReceivedRequests()
             btnRR.isSelected = false
@@ -196,7 +196,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.reloadData()
     }
     
-    func pressbtnRR(button: UIButton) {
+    @objc func pressbtnRR(button: UIButton) {
         if btnFFF.isSelected {
             getSentRequests()
             btnFFF.isSelected = false

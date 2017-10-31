@@ -177,19 +177,19 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func showMainView(_ sender: UIButton) {
+    @objc func showMainView(_ sender: UIButton) {
         uiviewBackground.isHidden = true
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func showAlert(_ sender: UIButton) {
+    @objc func showAlert(_ sender: UIButton) {
         uiviewBackground.isHidden = false
     }
     
-    func CloseAccount(_ sender: UIButton) {
+    @objc func CloseAccount(_ sender: UIButton) {
         
     }
 }

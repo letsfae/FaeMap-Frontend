@@ -65,11 +65,11 @@ class FaeMapView: MKMapView {
         }
     }
     
-    func handleSingleTapTwo(_ tapGesture: UITapGestureRecognizer) {
+    @objc func handleSingleTapTwo(_ tapGesture: UITapGestureRecognizer) {
         
     }
     
-    func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
+    @objc func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
         guard slcMapCtrler == nil else { return }
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
@@ -113,7 +113,7 @@ class FaeMapView: MKMapView {
         faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
     
-    func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
+    @objc func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
         
         guard faeMapCtrler?.mapMode != .routing || slcMapCtrler != nil else { return }
         
@@ -190,7 +190,7 @@ class FaeMapView: MKMapView {
         faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
     }
 
-    func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard faeMapCtrler?.mapMode != .routing || slcMapCtrler != nil else { return }
         guard blockTap == false else { return }

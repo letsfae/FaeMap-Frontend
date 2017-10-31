@@ -191,12 +191,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         btnMore.isHidden = boolFromChat
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
-    func tabButtonPressed(_ sender: UIButton) {
+    @objc func tabButtonPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0: // map view
             var arrCtrlers = navigationController?.viewControllers
@@ -221,7 +221,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-    func moreButtonPressed(_ sender: UIButton) {
+    @objc func moreButtonPressed(_ sender: UIButton) {
         animationShowOptions()
     }
     
@@ -468,8 +468,8 @@ class ColListDetailHeader: UITableViewCell {
         
         btnReadMore = UIButton()
         btnReadMore.backgroundColor = .white
-        let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
-        let moreAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
+        let moreAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let strReadMore = NSMutableAttributedString(string: "... ", attributes: despAttr)
         let more = NSMutableAttributedString(string: "Read More", attributes: moreAttr)
         strReadMore.append(more)
@@ -501,8 +501,8 @@ class ColListDetailHeader: UITableViewCell {
             self.imgAvatar.isUserInteractionEnabled = true
         }
         
-        let attribute = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!, NSForegroundColorAttributeName: UIColor._146146146()]
-        let nameAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._146146146()]
+        let nameAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
         
         FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
@@ -516,7 +516,7 @@ class ColListDetailHeader: UITableViewCell {
         
         lblName.text = colInfo.colName
         
-        let despAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!, NSForegroundColorAttributeName: UIColor._115115115()]
+        let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
         lblDesp.attributedText = NSAttributedString(string: colInfo.colDesp, attributes: despAttr)
         
         var lineCount: Int = 0
@@ -541,7 +541,7 @@ class ColListDetailHeader: UITableViewCell {
         }
     }
     
-    func getFullDesp(_ sender: UIButton) {
+    @objc func getFullDesp(_ sender: UIButton) {
         ColListDetailHeader.boolExpandMore = true
         delegate?.readMore()
     }
@@ -671,11 +671,11 @@ extension CollectionsListDetailViewController {
         view.addSubview(uiviewMsgHint)
     }
     
-    func actionCancel(_ sender: Any) {
+    @objc func actionCancel(_ sender: Any) {
         animationHideOptions()
     }
     
-    func actionChooseOption(_ sender: UIButton) {
+    @objc func actionChooseOption(_ sender: UIButton) {
         switch sender.tag {
         case 0: // manage
             animationHideOptions()
@@ -704,7 +704,7 @@ extension CollectionsListDetailViewController {
         }
     }
     
-    func actionYes(_ sender: UIButton) {
+    @objc func actionYes(_ sender: UIButton) {
         FaeCollection.shared.deleteOneCollection(String(colId)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.animationHideOptions()

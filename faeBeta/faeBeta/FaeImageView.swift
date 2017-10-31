@@ -65,7 +65,7 @@ class FaeImageView: UIImageView {
         }
     }
     
-    func openThisMedia(_ sender: UIGestureRecognizer) {
+    @objc func openThisMedia(_ sender: UIGestureRecognizer) {
         let realm = try! Realm()
         // If previous avatar does exist in realm
         if let avatarRealm = realm.objects(UserAvatar.self).filter("user_id == @%", "\(fileID)").first {

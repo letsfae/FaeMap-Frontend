@@ -46,7 +46,7 @@ extension AddUsernameController: UIScrollViewDelegate {
         
         // get the first index of cell label and get the initial of the cell
         let index = prefix.index(prefix.startIndex, offsetBy: 1)
-        lblPrefix.text = prefix.substring(to: index)
+        lblPrefix.text = String(prefix[index...])
         
         // serveral times of adjustment, the following is the best match
         // every time scrolling, the custom indicator's position is set

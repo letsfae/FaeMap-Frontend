@@ -353,23 +353,23 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     fileprivate func updateCount() {
         countPlaces = arrPlaces.count
         let attributedStr1 = NSMutableAttributedString()
-        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        let strPlaces = NSAttributedString(string: "Places ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr1.append(strPlaces)
         attributedStr1.append(countP)
         lblPlaces.attributedText = attributedStr1
         
         countLocations = arrLocations.count
         let attributedStr2 = NSMutableAttributedString()
-        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        let strLocations = NSAttributedString(string: "Locations ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr2.append(strLocations)
         attributedStr2.append(countL)
         lblLocations.attributedText = attributedStr2
     }
     
     func setView2CurtTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         
         let downAttachment = InlineTextAttachment()
@@ -391,7 +391,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         navBarMenuBtnClicked = false
     }
     
-    func navBarMenuAct(_ sender: UIButton) {
+    @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
@@ -405,7 +405,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     // function for buttons in drop down menu
-    func dropDownMenuAct(_ sender: UIButton) {
+    @objc func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = "Places"
@@ -425,7 +425,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         tblPlaceLoc.reloadData()
     }
     
-    func changePage(_ sender: Any?) {
+    @objc func changePage(_ sender: Any?) {
         scrollViewFilterMenu.contentOffset.x = screenWidth * CGFloat(pageMapOptions.currentPage)
     }
     
@@ -435,25 +435,25 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     
-    func switchBetweenDisAndSocial(_ sender: UIButton) {
+    @objc func switchBetweenDisAndSocial(_ sender: UIButton) {
     }
     
-    func switchAutoRefresh(_ sender: UISwitch) {
+    @objc func switchAutoRefresh(_ sender: UISwitch) {
         lblRefresh.textColor = switchRefresh.isOn ? UIColor._115115115() : UIColor._146146146()
         delegate?.autoReresh?(isOn: switchRefresh.isOn)
     }
     
-    func switchAutoCyclePins(_ sender: UISwitch) {
+    @objc func switchAutoCyclePins(_ sender: UISwitch) {
         lblCyclePins.textColor = switchCyclePins.isOn ? UIColor._115115115() : UIColor._146146146()
         delegate?.autoCyclePins?(isOn: switchCyclePins.isOn)
     }
     
-    func switchShowAvatars(_ sender: UISwitch) {
+    @objc func switchShowAvatars(_ sender: UISwitch) {
         lblHideAvatars.textColor = switchHideAvatars.isOn ? UIColor._115115115() : UIColor._146146146()
         delegate?.hideAvatars?(isOn: switchHideAvatars.isOn)
     }
     
-    func hide() {
+    @objc func hide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.origin.y = screenHeight
             if self.btnFilterIcon.center.y < screenHeight - 25 {

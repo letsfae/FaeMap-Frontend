@@ -237,12 +237,12 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         }
     }
     
-    func actionReplyToThisPin(_ sender: AnyObject) {
+    @objc func actionReplyToThisPin(_ sender: AnyObject) {
         let boolReply = sender.tag != nil
         delegate?.replyToThisPin(indexPath: indexForCurtCell, boolReply: boolReply)
     }
     
-    func actionLikeThisPin(_ sender: UIButton) {
+    @objc func actionLikeThisPin(_ sender: UIButton) {
         delegate?.likeThisPin(indexPath: indexForCurtCell, strPinId: strPinId)
     }
 }

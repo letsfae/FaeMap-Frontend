@@ -23,7 +23,7 @@ extension String {
     // Calculate text height in all cases
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {
         let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
         
         return boundingBox.height
     }
@@ -139,7 +139,7 @@ extension String {
         var endIndex = 0
         
         if let match = self.range(of: "(?<=<a>@)[^.]+(?=</a>)", options: .regularExpression) {
-            username = "@\(self.substring(with: match))"
+            username = "@\(String(self[match]))"
             endIndex = username.count + 8
         }
         //        else {
@@ -147,9 +147,9 @@ extension String {
         //        }
         
         let index = self.index(self.startIndex, offsetBy: endIndex)
-        let restContent = " \(self.substring(from: index))"
+        let restContent = " \(self[index...])"
         
-        let attrsUsername = [NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSForegroundColorAttributeName: UIColor._2499090()]
+        let attrsUsername = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18.0)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         
         let usernameString = NSMutableAttributedString(string: username, attributes: attrsUsername)
         let regularString = restContent.convertStringWithEmoji()
@@ -160,14 +160,14 @@ extension String {
     
     func getFaeStickerName() -> String? {
         if let match = self.range(of: "(?<=<faeSticker>)[^.]+(?=</faeSticker>)", options: .regularExpression) {
-            return "\(self.substring(with: match))"
+            return String(self[match])
         }
         return nil
     }
     
     func getFaeImageName() -> String? {
         if let match = self.range(of: "(?<=<faeImg>)[^.]+(?=</faeImg>)", options: .regularExpression) {
-            return "\(self.substring(with: match))"
+            return String(self[match])
         }
         return nil
     }
@@ -177,14 +177,13 @@ extension String {
         var finalString = ""
         
         if previous.count > 0 && previous.last != "]" {
-            finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -1))
+            finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -1)])
         } else if previous.count > 0 && previous.last == "]" {
             var i = 1
             var findEmoji = false
             while i <= previous.count {
                 if previous[previous.index(previous.endIndex, offsetBy: -i)] == "[" {
-                    let between = previous.substring(with:
-                        previous.index(previous.endIndex, offsetBy: -(i - 1)) ..< previous.index(previous.endIndex, offsetBy: -1))
+                    let between = String(previous[previous.index(previous.endIndex, offsetBy: -(i - 1)) ..< previous.index(previous.endIndex, offsetBy: -1)])
                     if (StickerInfoStrcut.stickerDictionary["faeEmoji"]?.contains(between))! {
                         findEmoji = true
                         break
@@ -194,9 +193,9 @@ extension String {
             }
             
             if findEmoji {
-                finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -i))
+                finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -i)])
             } else {
-                finalString = previous.substring(to: previous.index(previous.endIndex, offsetBy: -1))
+                finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -1)])
             }
         }
         return finalString
@@ -217,19 +216,19 @@ extension String {
                 let tmpContent = content
                 startIndex = content.distance(from: content.startIndex, to: range.lowerBound)
                 let index = content.index(content.startIndex, offsetBy: startIndex)
-                finalText = "\(finalText)\(tmpContent.substring(to: index))"
-                content = "\(tmpContent.substring(from: index))"
-                let attrStringWithString = NSAttributedString(string: "\(tmpContent.substring(to: index))", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+                finalText = "\(finalText)\(tmpContent[...index])"
+                content = "\(tmpContent[index...])"
+                let attrStringWithString = NSAttributedString(string: "\(tmpContent[...index])", attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!])
                 retString.append(attrStringWithString)
             }
             if let match = content.range(of: "(?<=\\[)(.*?)(?=\\])", options: .regularExpression) {
                 //                isProcessed = true
                 let tmpContent = content
-                emojiText = "\(content.substring(with: match))"
+                emojiText = String(content[match])
                 //                print("Target: \(emojiText)")
                 endIndex = emojiText.count + 2
                 let index = tmpContent.index(tmpContent.startIndex, offsetBy: endIndex)
-                content = "\(tmpContent.substring(from: index))"
+                content = "\(tmpContent[index...])"
                 //                print("  Rest: \(content)")
                 finalText = "\(finalText)\(emojiText)"
                 
@@ -245,7 +244,7 @@ extension String {
             }
         }
         finalText = finalText + content
-        let attrStringWithString = NSAttributedString(string: content, attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18)!])
+        let attrStringWithString = NSAttributedString(string: content, attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!])
         retString.append(attrStringWithString)
         return retString
     }

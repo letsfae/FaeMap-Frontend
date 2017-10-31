@@ -53,7 +53,7 @@ class PlaceTabView: UIView {
         btnPlaceTabLeft.isSelected = true
     }
     
-    func switchBetweenRecommendAndSearch(_ sender: UIButton) {
+    @objc func switchBetweenRecommendAndSearch(_ sender: UIButton) {
         if sender.tag == 0 {  // Recommended place
             btnPlaceTabLeft.isSelected = true
             btnPlaceTabRight.isSelected = false

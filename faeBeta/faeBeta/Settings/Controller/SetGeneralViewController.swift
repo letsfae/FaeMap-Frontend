@@ -240,7 +240,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func switchEmailSubscription(_ sender: UISwitch) {
+    @objc func switchEmailSubscription(_ sender: UISwitch) {
         if sender.isOn == true {
             sender.isOn = false
             uiviewBackground.isHidden = false
@@ -251,7 +251,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func showMainView(_ sender: UIImageView) {
+    @objc func showMainView(_ sender: UIImageView) {
         uiviewBackground.isHidden = true
     }
     
@@ -260,7 +260,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     }
 
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -275,7 +275,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         }
         
-        switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) {
+        switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
         case .authorized:
             dictPermissions["Camera"] = true
             break
@@ -313,7 +313,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func appBecomeActive() {
+    @objc func appBecomeActive() {
         getPermissionStatus()
         tblGeneral.reloadData()
     }

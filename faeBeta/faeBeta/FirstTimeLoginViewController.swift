@@ -105,7 +105,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         textFieldDisplayName = UITextField(frame: CGRect(x: 0, y: 203, w: 160, h: 34))
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
         //textFieldDisplayName.placeholder = "Display Name"
-        textFieldDisplayName.attributedPlaceholder = NSAttributedString(string: "Display Name", attributes: [NSForegroundColorAttributeName: UIColor._155155155()])
+        textFieldDisplayName.attributedPlaceholder = NSAttributedString(string: "Display Name", attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155()])
         textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
         textFieldDisplayName.tintColor = UIColor._2499090()
         textFieldDisplayName.textColor = UIColor._2499090()
@@ -125,7 +125,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         buttonFinish.addTarget(self, action: #selector(self.buttonFinishClicked(_:)), for: .touchUpInside)
     }
     
-    func buttonFinishClicked(_ sender: UIButton) {
+    @objc func buttonFinishClicked(_ sender: UIButton) {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -170,10 +170,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     UIView.animate(withDuration: 0.3, animations: {
                         self.dimBackground.alpha = 0
                     }) {_ in
-                        self.dismiss(animated: false, completion: {_ in
-                            //self.delegate?.jumpToEnableNotification()
-                            // move to RegisterConfirmViewController.swift
-                        })
+                        self.dismiss(animated: false, completion: nil)
                     }
                 } else {
                     self.activityIndicator.stopAnimating()
@@ -193,7 +190,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
-    func displayNameValueChanged(_ sender: UITextField) {
+    @objc func displayNameValueChanged(_ sender: UITextField) {
         if(sender.text != "") {
             buttonFinish.backgroundColor = UIColor._2499090()
             buttonFinish.isEnabled = true
@@ -203,7 +200,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
-    func addProfileAvatar(_ sender: UIButton) {
+    @objc func addProfileAvatar(_ sender: UIButton) {
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in

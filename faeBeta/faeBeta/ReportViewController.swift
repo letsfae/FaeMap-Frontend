@@ -73,7 +73,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         let font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         buttonSendReport = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         buttonSendReport.center.x = screenWidth / 2
-        buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: font!]), for: UIControlState())
+        buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: font!]), for: UIControlState())
         buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
         buttonSendReport.backgroundColor = UIColor._2499090()
         buttonSendReport.addTarget(self, action: #selector(ReportViewController.actionSendReport(_:)), for: .touchUpInside)
@@ -108,17 +108,17 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         textViewReportContent.addSubview(lableTextViewPlaceholder)
     }
     
-    func actionBackToCommentPinDetail(_ sender: UIButton) {
+    @objc func actionBackToCommentPinDetail(_ sender: UIButton) {
         textViewReportContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
-    func actionSendReport(_ sender: UIButton) {
+    @objc func actionSendReport(_ sender: UIButton) {
         textViewReportContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
-    func handleTap() {
+    @objc func handleTap() {
         view.endEditing(true)
     }
     
@@ -129,7 +129,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         view.addGestureRecognizer(tapGesture)
     }
     
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
@@ -138,13 +138,13 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         })
     }
     
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.buttonSendReport.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
         })
     }
     
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         textViewReportContent.endEditing(true)
     }
     

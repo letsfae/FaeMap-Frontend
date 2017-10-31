@@ -22,7 +22,7 @@ public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this s
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SwipeableCellDelegate {
     
-    private let firebase = Database.database().reference().child(fireBaseRef)
+    private let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     // MARK: - properties
     var uiviewNavBar: FaeNavBar!
@@ -197,18 +197,18 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //tblRecents.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeAllCell)))
     }
     
-    func navigationLeftItemTapped() {
+    @objc func navigationLeftItemTapped() {
         //backClosure!(5)
         //self.dismiss(animated: true, completion: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
-    func navigationRightItemTapped() {
+    @objc func navigationRightItemTapped() {
         let vc = NewChatShareController(friendListMode: .chat)
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func confirmDetele() {
+    @objc func confirmDetele() {
         let indexPath = indexToDelete
         let recentToDeleted = resultRealmRecents[indexPath.row]
         let chat_id = recentToDeleted.chat_id
@@ -233,7 +233,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }        
     }
     
-    func dismissDelete() {
+    @objc func dismissDelete() {
         uiviewBackground.isHidden = true
         let cell = tblRecents.cellForRow(at: indexToDelete) as! RecentTableViewCell
         cell.closeCell()
@@ -413,11 +413,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         notificationToken = resultRealmRecents.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
-                print("initial")
+                felixprint("initial")
                 tableview.reloadData()
                 break
             case .update(_, let deletions, let insertions, let modifications):
-                print("recent update")
+                felixprint("recent update")
                 UIView.setAnimationsEnabled(false)
                 tableview.beginUpdates()
                 tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
@@ -460,7 +460,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     // MARK: handle tap gesture
-    func closeAllCell(_ recognizer: UITapGestureRecognizer) {
+    @objc func closeAllCell(_ recognizer: UITapGestureRecognizer) {
         //print(recognizer.state)
         if recognizer.state == .ended {
             let point = recognizer.location(in: tblRecents)
@@ -480,7 +480,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func handleLongPress(_ recognizer: UILongPressGestureRecognizer) {
         let point = recognizer.location(in: tblRecents)
         switch recognizer.state {
         case .began:

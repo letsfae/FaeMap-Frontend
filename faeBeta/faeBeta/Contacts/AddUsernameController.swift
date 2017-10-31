@@ -117,7 +117,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     */
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -337,7 +337,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         return 74
     }
     
-    func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarUsernames.txtSchField.resignFirstResponder()
     }
     

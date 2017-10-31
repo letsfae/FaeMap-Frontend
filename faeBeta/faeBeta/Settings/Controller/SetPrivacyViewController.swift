@@ -245,7 +245,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func getintoHiddenModel(_ sender: UISwitch) {
+    @objc func getintoHiddenModel(_ sender: UISwitch) {
         if sender.isOn == true {
             sender.isOn = false
         }
@@ -256,11 +256,11 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func showMainView(_ sender: UIButton) {
+    @objc func showMainView(_ sender: UIButton) {
         uiviewHidden.isHidden = true
         uiviewBackground.isHidden = true
     }
@@ -277,7 +277,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
-    func getintoNextClear(_ sender: UIButton) {
+    @objc func getintoNextClear(_ sender: UIButton) {
         tag = 1
         loaduiviewAlert()
     }

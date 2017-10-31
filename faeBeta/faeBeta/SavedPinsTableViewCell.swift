@@ -73,12 +73,12 @@ class SavedPinsTableViewCell: PinsTableViewCell {
     }
     
     // delete current cell
-    func actionUnsaveCurrentCell(_ sender: UIButton) {
+    @objc func actionUnsaveCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemUnsaved(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     
     // share current cell
-    func actionShareCurrentCell(_ sender: UIButton) {
+    @objc func actionShareCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemShared(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     

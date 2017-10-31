@@ -73,27 +73,27 @@ class CreatedPinsTableViewCell: PinsTableViewCell {
     }
     
     // delete current cell
-    func actionRemoveCurrentCell(_ sender: UIButton) {
+    @objc func actionRemoveCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemRemoved(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     
     // edit current cell
-    func actionEditCurrentCell(_ sender: UIButton) {
+    @objc func actionEditCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemEdit(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     
     // share current cell
-    func actionShareCurrentCell(_ sender: UIButton) {
+    @objc func actionShareCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemShared(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     
     // make current cell visible or invisible
-    func actionVisibleCurrentCell(_ sender: UIButton) {
+    @objc func actionVisibleCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemVisible(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     
     // locate current cell
-    func actionLocateCurrentCell(_ sender: UIButton) {
+    @objc func actionLocateCurrentCell(_ sender: UIButton) {
         delegate?.toDoItemLocated(indexCell: indexForCurrentCell, pinId: intPinId, pinType: strPinType)
     }
     

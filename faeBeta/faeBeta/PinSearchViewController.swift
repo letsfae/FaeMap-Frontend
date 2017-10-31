@@ -28,7 +28,7 @@ class PinSearchViewController: CollectionSearchViewController, PinTableViewCellD
         gesturerecognizerTouch.delegate = self
     }
     
-    func handleAfterTouch(recognizer: TouchGestureRecognizer) {
+    @objc func handleAfterTouch(recognizer: TouchGestureRecognizer) {
         //remove the gesture after cell backs, or the gesture will always collect touches in the table
         tblSearchResults.removeGestureRecognizer(gesturerecognizerTouch)
     }

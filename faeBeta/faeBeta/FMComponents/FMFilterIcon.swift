@@ -61,7 +61,7 @@ class FMFilterIcon: UIButton {
         startAnimation()
     }
     
-    func startAnimation() {
+    @objc func startAnimation() {
         animateInsideCircles()
         animateMapFilterArrow()
     }

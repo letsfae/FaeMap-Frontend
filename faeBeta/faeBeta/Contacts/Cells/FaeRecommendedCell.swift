@@ -80,7 +80,7 @@ class FaeRecommendedCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
-    func changeButtonPic(_ sender: UIButton) {
+    @objc func changeButtonPic(_ sender: UIButton) {
         if !hasAddFriend {
             btnAddFriend.setImage(#imageLiteral(resourceName: "btnAdded"), for: .normal)
             hasAddFriend = true
