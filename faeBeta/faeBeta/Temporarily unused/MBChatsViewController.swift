@@ -79,7 +79,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.addSubview(btnBackNavBar)
     }
     
-    func switchBetweenChatSpotsAndBubbles(_ sender: UIButton) {
+    @objc func switchBetweenChatSpotsAndBubbles(_ sender: UIButton) {
         var targetCenter: CGFloat = 0
         if sender.tag == 0 {
             tableMode = .chatSpots
@@ -140,7 +140,7 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.view.addSubview(tblChats)
     }
     
-    func backToMapBoard(_ sender: UIButton) {
+    @objc func backToMapBoard(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

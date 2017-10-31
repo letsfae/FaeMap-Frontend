@@ -122,7 +122,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         if enterMode == .nameCard {
             dismiss(animated: true)
         } else {

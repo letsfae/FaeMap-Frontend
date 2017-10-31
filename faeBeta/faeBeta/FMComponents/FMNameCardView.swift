@@ -136,11 +136,11 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         self.lblUserName.alpha = 1
     }
     
-    func openFaeUsrInfo() {
+    @objc func openFaeUsrInfo() {
         delegate?.openFaeUsrInfo()
     }
     
-    func btnChatAction() {
+    @objc func btnChatAction() {
         delegate?.chatUser(id: userId)
     }
     
@@ -148,7 +148,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         delegate?.reportUser(id: userId)
     }
     
-    func hideOptions(_ sender: UIButton) {
+    @objc func hideOptions(_ sender: UIButton) {
         guard boolOptionsOpened else { return }
         boolOptionsOpened = false
         btnOptions.isSelected = false
@@ -167,7 +167,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         }), completion: nil)
     }
     
-    func showOptions(_ sender: UIButton) {
+    @objc func showOptions(_ sender: UIButton) {
         var thisIsMe = false
         if userId == Int(Key.shared.user_id) {
             print("[showNameCardOptions] this is me")
@@ -505,7 +505,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         addSubview(btnBottomPart)
     }
     
-    func hideSelf() {
+    @objc func hideSelf() {
         self.hide {}
     }
     
@@ -553,7 +553,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         }
     }
     
-    func chooseFriendActions(_ sender: UIButton) {
+    @objc func chooseFriendActions(_ sender: UIButton) {
         delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
     }
     

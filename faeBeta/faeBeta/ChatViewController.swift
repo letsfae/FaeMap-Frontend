@@ -55,7 +55,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var uiviewKeyboard: UIView!
     
     
-    var ref = Database.database().reference().child(fireBaseRef) // reference to all chat room
+    var ref = Database.database().reference().child(Key.shared.fireBaseRef) // reference to all chat room
     var roomRef: DatabaseReference?
     var _refHandle: DatabaseHandle?
     var dictArrInitMessages: [NSDictionary] = [] // load latest 15 messages before showing chatting
@@ -317,7 +317,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(uiviewNameCard)
     }
     
-    func navigationLeftItemTapped() {
+    @objc func navigationLeftItemTapped() {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -366,7 +366,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     //MARK: input bar tapped events
-    func showKeyboard() {
+    @objc func showKeyboard() {
         resetToolbarButtonIcon()
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         inputToolbar.contentView.textView.becomeFirstResponder()
@@ -374,7 +374,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //scrollToBottom(false)
     }
     
-    func showStikcer() {
+    @objc func showStikcer() {
         view.endEditing(true)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
@@ -384,7 +384,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    func showLibrary() {
+    @objc func showLibrary() {
         view.endEditing(true)
         let status = PHPhotoLibrary.authorizationStatus()
         if status != .authorized {
@@ -401,7 +401,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    func showCamera() {
+    @objc func showCamera() {
         view.endEditing(true)
         uiviewLocationExtend.isHidden = true
         boolGoToFullContent = true
@@ -412,7 +412,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         camera.presentPhotoCamera(self, canEdit: false)
     }
     
-    func showRecord() {
+    @objc func showRecord() {
         view.endEditing(true)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
@@ -422,7 +422,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    func showMiniMap() {
+    @objc func showMiniMap() {
         view.endEditing(true)
         resetToolbarButtonIcon()
         btnLocation.setImage(UIImage(named: "locationChosen"), for: UIControlState())
@@ -432,7 +432,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    func sendMessageButtonTapped() {
+    @objc func sendMessageButtonTapped() {
         if uiviewLocationExtend.isHidden {
             sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
             //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
@@ -510,16 +510,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // MARK: keyboard delegate
-    func keyboardWillShow(_ notification: NSNotification) {
+    @objc func keyboardWillShow(_ notification: NSNotification) {
         keyboardFrameChange(notification)
     }
     
-    func keyboardDidShow(_ notification: NSNotification) {
+    @objc func keyboardDidShow(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = true
         setProxyKeyboardView()
     }
 
-    func keyboardWillHide(_ notification: NSNotification) {
+    @objc func keyboardWillHide(_ notification: NSNotification) {
         if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
             return
         }
@@ -530,7 +530,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         keyboardFrameChange(notification)
     }
     
-    func keyboardDidHide(_ notification: NSNotification) {
+    @objc func keyboardDidHide(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = false
         uiviewKeyboard = nil
     }
@@ -720,12 +720,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // after saving the photo, refresh the album
-    func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
         appWillEnterForeground()
     }
     
     // MARK: mini-map picker
-    func showFullLocationView(_ sender: UIButton) {
+    @objc func showFullLocationView(_ sender: UIButton) {
         // TODO
         closeToolbarContentView()
         boolGoToFullContent = true
@@ -775,7 +775,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    func closeLocExtendView() {
+    @objc func closeLocExtendView() {
         uiviewLocationExtend.isHidden = true
         let insets = UIEdgeInsetsMake(0.0, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
         self.collectionView.contentInset = insets
@@ -783,7 +783,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
-    func sendLocationMessageFromMini(_ sender: UIButton) {
+    @objc func sendLocationMessageFromMini(_ sender: UIButton) {
         if let mapview = toolbarContentView.viewMiniLoc.mapView {
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
@@ -980,7 +980,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // allow adding timestamp to message (used in SendLoadMessages)
-    func enableTimeStamp() {
+    @objc func enableTimeStamp() {
         boolSentInLast5s = false
     }
     
@@ -992,7 +992,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
  
     // need to refresh the album because user might take a photo outside the app
-    func appWillEnterForeground() {
+    @objc func appWillEnterForeground() {
         collectionView.reloadData()
         toolbarContentView.reloadPhotoAlbum()
     }

@@ -62,7 +62,7 @@ extension ContactsViewController {
         
     }
     
-    func switchTabs(_ sender: UIButton) {
+    @objc func switchTabs(_ sender: UIButton) {
         var targetCenter: CGFloat = 0
         if(sender.tag == 1) {
             cellStatus = 3

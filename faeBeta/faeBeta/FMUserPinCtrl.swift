@@ -47,7 +47,7 @@ extension FaeMapViewController {
         timerUserPin = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(self.updateUserPins), userInfo: nil, repeats: true)
     }
 
-    func updateUserPins() {
+    @objc func updateUserPins() {
         guard !HIDE_AVATARS else { return }
         guard boolCanUpdateUserPin else { return }
         let coorDistance = cameraDiagonalDistance()

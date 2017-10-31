@@ -32,7 +32,7 @@ class SetWebViewController: UIViewController, UIWebViewDelegate {
 
     }
     
-    func leftBtnTapped() {
+    @objc func leftBtnTapped() {
         navigationController?.popViewController(animated: true)
     }
 }

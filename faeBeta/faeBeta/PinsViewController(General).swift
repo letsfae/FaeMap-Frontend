@@ -71,7 +71,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         loadNavBar()
     }
     
-    func handleAfterTouch(recognizer: TouchGestureRecognizer) {
+    @objc func handleAfterTouch(recognizer: TouchGestureRecognizer) {
         // remove the gesture after cell backs, or the gesture will always collect touches in the table
         tblPinsData.removeGestureRecognizer(gesturerecognizerTouch)
     }
@@ -84,7 +84,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
         return true
     }
     
-    func actionDismissCurrentView(_ sender: UIButton) {
+    @objc func actionDismissCurrentView(_ sender: UIButton) {
         delegateBackBoard?.backToBoard(count: arrPinData.count)
         navigationController?.popViewController(animated: true)
     }
@@ -124,7 +124,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     }
     
     // Creat the search view when tap the fake searchbar
-    func searchBarTapDown(_ sender: UITapGestureRecognizer) {
+    @objc func searchBarTapDown(_ sender: UITapGestureRecognizer) {
         let vcSearch = PinSearchViewController()
         vcSearch.modalPresentationStyle = .overCurrentContext
         present(vcSearch, animated: false, completion: nil)
@@ -180,7 +180,7 @@ class PinsViewController: UIViewController, UISearchBarDelegate, UITableViewDele
     }
     
     // Only one row for one section in the table
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
     

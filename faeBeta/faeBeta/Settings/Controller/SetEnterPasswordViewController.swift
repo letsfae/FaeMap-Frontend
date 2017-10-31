@@ -26,7 +26,7 @@ class SetEnterPasswordViewController: UIViewController {
         
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     

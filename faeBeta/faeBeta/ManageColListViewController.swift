@@ -114,7 +114,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         uiviewTabBar.addSubview(btnRemove)
     }
     
-    func actionDone(_ sender: UIButton) {
+    @objc func actionDone(_ sender: UIButton) {
         delegate?.returnValBack()//savedItems: arrColList)
         dismiss(animated: true)
     }
@@ -129,7 +129,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    func actionOperateList(_ sender: UIButton) {
+    @objc func actionOperateList(_ sender: UIButton) {
         switch sender.tag {
         case SHARE:
             // TODO jichao

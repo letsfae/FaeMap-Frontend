@@ -92,8 +92,8 @@ extension ContactsViewController {
     
     fileprivate func updateFriendCount() {
         let attributedStr = NSMutableAttributedString()
-        let strFriends = NSAttributedString(string: "Friends ", attributes: [NSForegroundColorAttributeName : UIColor._898989()])
-        let count = NSAttributedString(string: "(\(countFriends))", attributes: [NSForegroundColorAttributeName : UIColor._155155155()])
+        let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let count = NSAttributedString(string: "(\(countFriends))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr.append(strFriends)
         attributedStr.append(count)
         
@@ -108,7 +108,7 @@ extension ContactsViewController {
         return tapRecognizer
     }
     
-    func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
+    @objc func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -39
         })
@@ -117,7 +117,7 @@ extension ContactsViewController {
     }
     
     // function for drop down menu button, to show / hide the drop down menu (UIVisualView)
-    func navBarMenuAct(_ sender: UIButton) {
+    @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 64
@@ -134,12 +134,12 @@ extension ContactsViewController {
         }
     }
     
-    func backToMenu(_ sender: UIButton) {
+    @objc func backToMenu(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
     // function to move onto addFriendViewController swift scene
-    func goToAddFriendView(_ sender: UIButton) {
+    @objc func goToAddFriendView(_ sender: UIButton) {
         let vc = AddFriendViewController()
         vc.arrFriends = arrFriends
         vc.arrReceivedRequests = arrReceivedRequests
@@ -157,7 +157,7 @@ extension ContactsViewController {
     }
     
     // function for buttons in drop down menu
-    func dropDownMenuAct(_ sender: UIButton) {
+    @objc func dropDownMenuAct(_ sender: UIButton) {
         curtTitle = titleArray[sender.tag]
         
         if sender.tag == 0 {
@@ -199,7 +199,7 @@ extension ContactsViewController {
 //    }
     
     fileprivate func btnNavBarSetTitle() {
-        let curtTitleAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         let downAttachment = InlineTextAttachment()
         downAttachment.fontDescender = 1

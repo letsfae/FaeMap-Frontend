@@ -191,7 +191,7 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         buttonSetLocationOnMap.addTarget(self, action: #selector(ChatSendLocationController.actionSetLocationForComment(_:)), for: UIControlEvents.touchUpInside)
     }
     
-    func actionSelfPosition(_ sender: UIButton!) {
+    @objc func actionSelfPosition(_ sender: UIButton!) {
         if(CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
             currentLocation = locManager.location
         }
@@ -204,11 +204,11 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         }
     }
     
-    func actionCancelSelectLocation(_ sender: UIButton!) {
+    @objc func actionCancelSelectLocation(_ sender: UIButton!) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSetLocationForComment(_ sender: UIButton!) {
+    @objc func actionSetLocationForComment(_ sender: UIButton!) {
         UIGraphicsBeginImageContext(self.faeMapView.frame.size)
         self.faeMapView.layer.render(in: UIGraphicsGetCurrentContext()!)
         if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext(){
@@ -217,7 +217,7 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         }
     }
     
-    func actionActiveSearchBar(_ sender: UIButton!) {
+    @objc func actionActiveSearchBar(_ sender: UIButton!) {
         self.faeSearchController.faeSearchBar.becomeFirstResponder()
     }
     

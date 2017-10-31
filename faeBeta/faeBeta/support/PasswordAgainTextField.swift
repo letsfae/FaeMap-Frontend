@@ -25,7 +25,7 @@ class PasswordAgainTextField: UITextField {
         self.clearButtonMode = UITextFieldViewMode.never
     }
     
-    func rightButtonClicked(_ sender:UIButton) {
+    @objc func rightButtonClicked(_ sender:UIButton) {
         self.isSecureTextEntry = !self.isSecureTextEntry
         self.font = UIFont(name: "AvenirNext-Regular", size: 18.0)
         if imageName == "check_eye_close_red" {

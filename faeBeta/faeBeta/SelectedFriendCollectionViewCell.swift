@@ -61,7 +61,7 @@ class SelectedFriendCollectionViewCell: UICollectionViewCell, UIKeyInput {
     }
     
     func width() -> CGFloat {
-        let size = lblSelected.text!.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT)), options: [], attributes: [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size
+        let size = lblSelected.text!.boundingRect(with: CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT)), options: [], attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size
         return size.width
     }
     

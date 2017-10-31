@@ -178,16 +178,16 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     // MARK: helper
-    func loginButtonTapped() {
+    @objc func loginButtonTapped() {
         let boardLogin = LogInViewController()
         navigationController?.pushViewController(boardLogin, animated: true)
     }
-    func jumpToSignUp() {
+    @objc func jumpToSignUp() {
         let boardRegister = RegisterNameViewController()
         navigationController?.pushViewController(boardRegister, animated: true)
     }
     
-    func actionLookAround(_ sender: UIButton) {
+    @objc func actionLookAround(_ sender: UIButton) {
 //        let vc = ()
 //        navigationController?.pushViewController(vc, animated: true)
     }

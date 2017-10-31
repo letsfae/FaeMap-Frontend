@@ -31,7 +31,7 @@ class FMZoomButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         let numberOfTouches = sender.numberOfTouches
         guard numberOfTouches == 1 else { return }
@@ -85,7 +85,7 @@ class FMZoomButton: UIButton {
         mapView.setRegion(region, animated: false)
     }
     
-    func largeMode() {
+    @objc func largeMode() {
         guard !self.isSelected else { return }
         self.isSelected = true
         UIView.animate(withDuration: 0.2) {
@@ -107,7 +107,7 @@ class FMZoomButton: UIButton {
         }
     }
     
-    func zoomIn() {
+    @objc func zoomIn() {
         var region = mapView.region
         var span = mapView.region.span
         span.latitudeDelta *= 0.5
@@ -116,7 +116,7 @@ class FMZoomButton: UIButton {
         mapView.setRegion(region, animated: true)
     }
     
-    func zoomOut() {
+    @objc func zoomOut() {
         var region = mapView.region
         var span = mapView.region.span
         span.latitudeDelta *= 2
@@ -178,7 +178,7 @@ class FMLocateSelf: UIButton {
         adjustsImageWhenHighlighted = false
     }
     
-    func actionLocateSelf(_ sender: UIButton) {
+    @objc func actionLocateSelf(_ sender: UIButton) {
         FaeSearch.shared.search { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }

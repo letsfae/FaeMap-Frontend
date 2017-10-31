@@ -399,7 +399,7 @@ class AudioRecorderView: UIView {
     
     //MARK: helper
     func setInfoLabel(_ text:String, color: UIColor) {
-        let attributedText = NSAttributedString(string:text, attributes: [NSForegroundColorAttributeName: color, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
+        let attributedText = NSAttributedString(string:text, attributes: [NSAttributedStringKey.foregroundColor: color, NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
         lblInfo.attributedText = attributedText
         lblInfo.textAlignment = .center
         lblInfo.sizeToFit()

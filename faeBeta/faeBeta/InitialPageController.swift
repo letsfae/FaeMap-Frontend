@@ -11,7 +11,7 @@ import Firebase
 
 class InitialPageController: UIPageViewController {
     
-    let firebase = Database.database().reference().child(fireBaseRef)
+    let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     lazy var arrViewCtrl: [UIViewController] = {
         let faeMap = FaeMapViewController()

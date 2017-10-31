@@ -48,7 +48,7 @@ extension FaeMapViewController {
         refreshMap(pins: false, users: true, places: true)
     }
     
-    func firstUpdateLocation() {
+    @objc func firstUpdateLocation() {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
         faeMapView.setRegion(coordinateRegion, animated: false)
         refreshMap(pins: false, users: true, places: true)
@@ -197,8 +197,8 @@ extension FaeMapViewController {
     func setTitle(type: String) {
         let title_0 = type
         let title_1 = " Around Me"
-        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
-        let attrs_1 = [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!]
         let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
         let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
         title_0_attr.append(title_1_attr)
@@ -208,7 +208,7 @@ extension FaeMapViewController {
     
     func setCollectionTitle(type: String) {
         let title_0 = type
-        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 18)!]
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!]
         let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
         lblExpContent.attributedText = title_0_attr
     }

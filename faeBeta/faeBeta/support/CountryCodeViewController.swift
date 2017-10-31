@@ -82,7 +82,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         lblTitle.text = "Countries"
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         schbarCountryCode.txtSchField.resignFirstResponder()
         dismiss(animated: true)
     }

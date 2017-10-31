@@ -85,11 +85,11 @@ class FaeRequestedCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnCancelRequest, btnResendRequest)
     }
     
-    func cancelRequest(_ sender: UIButton) {
+    @objc func cancelRequest(_ sender: UIButton) {
         self.delegate?.withdrawRequest(requestId: requestId, indexPath: indexPath)
     }
     
-    func resendRequest(_ sender: UIButton) {
+    @objc func resendRequest(_ sender: UIButton) {
         self.delegate?.resendRequest(userId: userId, indexPath: indexPath)
 
     }

@@ -61,17 +61,17 @@ class SetDisplayName: UIViewController {
         btnSave.addTarget(self, action: #selector(actionSaveName(_ :)), for: .touchUpInside)
     }
     
-    func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             txtField.resignFirstResponder()
         }
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSaveName(_ sender: UIButton) {
+    @objc func actionSaveName(_ sender: UIButton) {
         delegate?.protSaveName(txtName: txtField.text)
         actionGoBack(sender)
     }

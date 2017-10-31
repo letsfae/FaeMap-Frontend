@@ -57,7 +57,7 @@ class FAETextField: UITextField {
         set {
             _placeholder = newValue!
             let font = UIFont(name: "AvenirNext-Regular", size: fontSize)
-            self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
+            self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155(), NSAttributedStringKey.font:font!])
         }
         get {
             return _placeholder
@@ -108,11 +108,11 @@ class FAETextField: UITextField {
     
     fileprivate func setupUsernameTextField() {
         lblLeft = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
-        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSForegroundColorAttributeName: UIColor._155155155(), NSFontAttributeName:font!])
+        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155(), NSAttributedStringKey.font:font!])
         uiviewLeftPlaceHolderView.addSubview(lblLeft)
     }
     
-    func rightButtonTapped() {
+    @objc func rightButtonTapped() {
         isSecureTextEntry = !isSecureTextEntry
         if isSecureTextEntry {
             btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())

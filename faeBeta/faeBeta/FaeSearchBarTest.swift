@@ -64,14 +64,14 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         txtSchField.addTarget(self, action: #selector(self.actionTextFieldDidChange(_:)), for: .editingChanged)
     }
     
-    func actionDeleteSearchTxt(_ sender: UIButton) {
+    @objc func actionDeleteSearchTxt(_ sender: UIButton) {
         txtSchField.text = ""
         btnClose.isHidden = true
         delegate?.searchBar(self, textDidChange: "")
         delegate?.searchBarCancelButtonClicked(self)
     }
     
-    func actionTextFieldDidChange(_ textField: UITextField) {
+    @objc func actionTextFieldDidChange(_ textField: UITextField) {
         if textField.text != "" {
             btnClose.isHidden = false
         } else {

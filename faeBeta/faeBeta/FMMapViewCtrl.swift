@@ -119,7 +119,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             boolCanOpenPin = false
             mapGesture(isOn: false)
             uiviewNameCard.userId = Key.shared.user_id
-            uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(userMiniAvatar)") ?? UIImage())  {
+            uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(Key.shared.userMiniAvatar)") ?? UIImage())  {
                 self.boolCanOpenPin = true
             }
         }
@@ -136,7 +136,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            if userStatus == 5 {
+            if Key.shared.onlineStatus == 5 {
                 anView.invisibleOn()
             }
             return anView

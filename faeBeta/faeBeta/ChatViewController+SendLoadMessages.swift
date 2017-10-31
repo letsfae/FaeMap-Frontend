@@ -234,9 +234,9 @@ extension ChatViewController: OutgoingMessageProtocol {
         notificationToken = resultRealmMessages.observe { [weak self] (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
-                print("initial")
+                felixprint("initial")
                 break
-            case .update(_, let deletions, let insertions, let modifications):
+            case .update(_, _, let insertions, _):
                 print("chat update")
                 if insertions.count > 0 {
                     let insertMessage = self!.resultRealmMessages[insertions[0]]
@@ -336,7 +336,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     }
     
     func insertMessage_v2(_ message: RealmMessage_v2) -> Bool {
-        let incomingMessage = IncomingMessage(collectionView_: self.collectionView!)
+        _ = IncomingMessage(collectionView_: self.collectionView!)
         return false
     }
     

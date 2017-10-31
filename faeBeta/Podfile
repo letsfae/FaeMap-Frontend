@@ -19,6 +19,7 @@ target 'faeBeta' do
     pod 'Gifu'
     pod 'CCHMapClusterController'
     pod 'IVBezierPathRenderer'
+    pod 'GooglePlaces'
 end
 
 post_install do |installer|

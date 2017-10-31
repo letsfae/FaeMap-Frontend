@@ -32,7 +32,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
         uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
     }
     
-    func actionFilterIcon(_ sender: UIButton) {
+    @objc func actionFilterIcon(_ sender: UIButton) {
         PLACE_ENABLE = true
         for user in faeUserPins {
             user.isValid = false
@@ -160,7 +160,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
         })
     }
     
-    func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
+    @objc func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             uiviewNameCard.hide() {

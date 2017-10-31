@@ -50,7 +50,7 @@ class FaeAvatarView: UIImageView {
         }
     }
 
-    func openThisMedia(_ sender: UIGestureRecognizer) {
+    @objc func openThisMedia(_ sender: UIGestureRecognizer) {
         getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
             guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }

@@ -48,11 +48,11 @@ extension FaeMapViewController {
         uiViewGuestMode.addSubview(buttonGuestCreateCount)
     }
     
-    func buttonGuestLogInClicked(_ sender: UIButton) {
+    @objc func buttonGuestLogInClicked(_ sender: UIButton) {
         print("guest log in")
     }
     
-    func buttonGuestCreateCountClicked(_ sender: UIButton) {
+    @objc func buttonGuestCreateCountClicked(_ sender: UIButton) {
         print("Create an account")
     }
 }

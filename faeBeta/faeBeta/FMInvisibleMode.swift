@@ -55,7 +55,7 @@ extension FaeMapViewController {
         }
     }
     
-    func invisibleModeDimClicked(_ sender: UIButton) {
+    @objc func invisibleModeDimClicked(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             sender.alpha = 0
         }, completion: { _ in
@@ -63,7 +63,7 @@ extension FaeMapViewController {
         })
     }
     
-    func invisibleModeGotItClicked(_ sender: UIButton) {
+    @objc func invisibleModeGotItClicked(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             sender.superview?.superview?.alpha = 0
         }, completion: { _ in

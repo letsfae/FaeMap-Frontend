@@ -10,21 +10,21 @@ import Foundation
 import RealmSwift
 
 class RealmMessage_v2: Object {
-    dynamic var primary_key: String = "" // login_user_id, is_group, chat_id, index
-    dynamic var login_user_id: String = ""
-    dynamic var is_group: Int = 0
-    dynamic var chat_id: String = "" // for private chat, chat_id is the id of the other user
+    @objc dynamic var primary_key: String = "" // login_user_id, is_group, chat_id, index
+    @objc dynamic var login_user_id: String = ""
+    @objc dynamic var is_group: Int = 0
+    @objc dynamic var chat_id: String = "" // for private chat, chat_id is the id of the other user
                                      // for group chat, chat_id is the id of the group chatroom
-    dynamic var index: Int = -1
-    dynamic var sender: RealmUser? = nil
+    @objc dynamic var index: Int = -1
+    @objc dynamic var sender: RealmUser? = nil
     let members = List<RealmUser>()
-    dynamic var created_at: String = ""
-    dynamic var type: String = ""
-    dynamic var text: String = ""
-    dynamic var media: NSData? = nil
-    dynamic var upload_to_server: Bool = false
-    dynamic var delivered_to_user: Bool = false
-    dynamic var unread_count: Int = 0
+    @objc dynamic var created_at: String = ""
+    @objc dynamic var type: String = ""
+    @objc dynamic var text: String = ""
+    @objc dynamic var media: NSData? = nil
+    @objc dynamic var upload_to_server: Bool = false
+    @objc dynamic var delivered_to_user: Bool = false
+    @objc dynamic var unread_count: Int = 0
     
     override static func primaryKey() -> String? {
         return "primary_key"
@@ -40,14 +40,14 @@ class RealmMessage_v2: Object {
 }
 
 class RealmRecent_v2: Object {
-    dynamic var primary_key: String = "" //loginUserID_chatID
-    dynamic var login_user_id: String = ""
-    dynamic var is_group: Int = 0
-    dynamic var chat_id: String = ""
-    dynamic var chat_name: String = ""
+    @objc dynamic var primary_key: String = "" //loginUserID_chatID
+    @objc dynamic var login_user_id: String = ""
+    @objc dynamic var is_group: Int = 0
+    @objc dynamic var chat_id: String = ""
+    @objc dynamic var chat_name: String = ""
     //dynamic var latest_message: String = ""
-    dynamic var created_at: String = ""
-    dynamic var unread_count: Int = 0
+    @objc dynamic var created_at: String = ""
+    @objc dynamic var unread_count: Int = 0
     
     var latest_message: RealmMessage_v2? {
         return realm?.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@", String(Key.shared.user_id), is_group, self.chat_id).sorted(byKeyPath: "index").last
@@ -106,26 +106,26 @@ extension Realm {
 
 class RealmMessage: Object {
     //messageID's format: senderID_date
-    dynamic var messageID : String = ""
-    dynamic var withUserID : String = ""
-    dynamic var senderID : String = ""
-    dynamic var senderName : String = ""
-    dynamic var date : String = ""
-    dynamic var message : String = ""
-    dynamic var delivered = false
-    dynamic var hasTimeStamp = false
-    dynamic var data : NSData? = nil
-    dynamic var type : String = ""
-    dynamic var status: String = ""
-    dynamic var snapImage : NSData? = nil
+    @objc dynamic var messageID : String = ""
+    @objc dynamic var withUserID : String = ""
+    @objc dynamic var senderID : String = ""
+    @objc dynamic var senderName : String = ""
+    @objc dynamic var date : String = ""
+    @objc dynamic var message : String = ""
+    @objc dynamic var delivered = false
+    @objc dynamic var hasTimeStamp = false
+    @objc dynamic var data : NSData? = nil
+    @objc dynamic var type : String = ""
+    @objc dynamic var status: String = ""
+    @objc dynamic var snapImage : NSData? = nil
     var longitude = RealmOptional<Double>()
     var latitude = RealmOptional<Double>()
-    dynamic var place: String? = ""
+    @objc dynamic var place: String? = ""
     //dynamic var latitude : String? = nil
     
     // int cannot be optional
     var videoDuration = RealmOptional<Int>()
-    dynamic var isHeartSticker : Bool = false
+    @objc dynamic var isHeartSticker : Bool = false
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()
     }
@@ -137,12 +137,12 @@ class RealmMessage: Object {
 }
 
 class RealmRecent: Object {
-    dynamic var withUserID : String = ""
-    dynamic var withUserNickName : String = ""
-    dynamic var date = NSDate()
+    @objc dynamic var withUserID : String = ""
+    @objc dynamic var withUserNickName : String = ""
+    @objc dynamic var date = NSDate()
     //dynamic var avatar : NSData? = nil
-    dynamic var message : String = ""
-    dynamic var unread : Int = 0
+    @objc dynamic var message : String = ""
+    @objc dynamic var unread : Int = 0
     
     override static func indexedProperties() -> [String] {
         return ["date"].reversed()

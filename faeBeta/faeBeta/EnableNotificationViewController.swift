@@ -36,7 +36,7 @@ class EnableNotificationViewController: UIViewController {
         self.view.addSubview(imageView)
         
         titleLabel = UILabel(frame: CGRect(x: 15, y: 460 * screenHeightFactor, width: screenWidth - 30, height: 27))
-        titleLabel.attributedText = NSAttributedString(string:"Stay Updated with Notifications", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!])
+        titleLabel.attributedText = NSAttributedString(string:"Stay Updated with Notifications", attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!])
         titleLabel.textAlignment = .center
         titleLabel.sizeToFit()
         titleLabel.center.x = screenWidth / 2
@@ -45,7 +45,7 @@ class EnableNotificationViewController: UIViewController {
         
         descriptionLabel = UILabel(frame: CGRect(x: 15, y: 514 * screenHeightFactor, width: screenWidth - 30, height: 44))
         descriptionLabel.numberOfLines = 2
-        descriptionLabel.attributedText = NSAttributedString(string: "Get Notified for Chats, interesting \nPlaces nearby, and More!", attributes: [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!])
+        descriptionLabel.attributedText = NSAttributedString(string: "Get Notified for Chats, interesting \nPlaces nearby, and More!", attributes: [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!])
         descriptionLabel.textAlignment = .center
         descriptionLabel.adjustsFontSizeToFitWidth = true
         view.addSubview(descriptionLabel)
@@ -53,7 +53,7 @@ class EnableNotificationViewController: UIViewController {
         enableNotificationButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         enableNotificationButton.center.x = screenWidth / 2
 
-        enableNotificationButton.setAttributedTitle(NSAttributedString(string: "Enable Notifications", attributes: [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
+        enableNotificationButton.setAttributedTitle(NSAttributedString(string: "Enable Notifications", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 20)!]), for:UIControlState())
         enableNotificationButton.layer.cornerRadius = 25 * screenHeightFactor
         enableNotificationButton.backgroundColor = UIColor._2499090()
         enableNotificationButton.addTarget(self, action: #selector(enableNotificationButtonTapped), for: .touchUpInside)
@@ -61,19 +61,19 @@ class EnableNotificationViewController: UIViewController {
         
         notNowButton = UIButton(frame: CGRect(x: 0, y: screenHeight - 38 * screenHeightFactor - 18, width: 60, height: 18))
         notNowButton.center.x = screenWidth / 2
-        notNowButton.setAttributedTitle(NSAttributedString(string: "Not Now", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+        notNowButton.setAttributedTitle(NSAttributedString(string: "Not Now", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
         notNowButton.addTarget(self, action: #selector(self.notNowButtonTapped), for: .touchUpInside)
         self.view.addSubview(notNowButton)
     }
     
-    func enableNotificationButtonTapped() {
+    @objc func enableNotificationButtonTapped() {
         let notificationType = UIApplication.shared.currentUserNotificationSettings
         if notificationType?.types == UIUserNotificationType() {
             UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
         }
     }
 
-    func notNowButtonTapped() {
+    @objc func notNowButtonTapped() {
         self.dismiss(animated: true, completion: nil)
     }
 }

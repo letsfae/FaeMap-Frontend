@@ -137,7 +137,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     }
     
     fileprivate func setCountryName() {
-        let curtCountryAttr = [NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 22)!, NSForegroundColorAttributeName: UIColor._898989()]
+        let curtCountryAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 22)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtCountryStr = NSMutableAttributedString(string: "", attributes: curtCountryAttr)
         
         let downAttachment = InlineTextAttachment()
@@ -177,7 +177,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         view.bringSubview(toFront: indicatorView)
     }
     
-    func actionSendCode() {
+    @objc func actionSendCode() {
         indicatorView.startAnimating()
         self.view.endEditing(true)
         user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
@@ -220,7 +220,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
             pointer += 1
         } else if num < 0 && pointer > 0 {
             pointer -= 1
-            phoneNumber = phoneNumber.substring(to: phoneNumber.index(phoneNumber.startIndex, offsetBy: pointer))
+            phoneNumber = String(phoneNumber[...phoneNumber.index(phoneNumber.startIndex, offsetBy: pointer)])
         }
         if phoneNumber == "" {
             lblPhone.text = "Phone Number"
@@ -240,7 +240,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         }
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         if enterMode == .contacts {
             delegate?.backToContacts()
             dismiss(animated: true)
@@ -256,7 +256,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         return result
     }
     
-    func actionSelectCountry(_ sender: UIButton) {
+    @objc func actionSelectCountry(_ sender: UIButton) {
         let vc = CountryCodeViewController()
         vc.delegate = self
         present(vc, animated: true)

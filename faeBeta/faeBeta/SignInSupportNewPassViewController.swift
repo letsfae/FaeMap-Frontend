@@ -102,7 +102,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                     let user = FaeUser()
                     user.whereKey("email", value: self.email!)
                     user.whereKey("password", value: self.password!)
-                    user.whereKey("device_id", value: headerDeviceID)
+                    user.whereKey("device_id", value: Key.shared.headerDeviceID)
                     user.whereKey("is_mobile", value: "true")
                     user.logInBackground { (status: Int, message: Any?) in
                         self.shouldShowActivityIndicator(false)
@@ -134,7 +134,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                     let user = FaeUser()
                     user.whereKey("phone", value: self.phone!)
                     user.whereKey("password", value: self.password!)
-                    user.whereKey("device_id", value: headerDeviceID)
+                    user.whereKey("device_id", value: Key.shared.headerDeviceID)
                     user.whereKey("is_mobile", value: "true")
                     user.logInBackground { (status: Int, message: Any?) in
                         self.shouldShowActivityIndicator(false)

@@ -268,18 +268,18 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func actionExpMap() {
+    @objc func actionExpMap() {
         let loc = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         delegate?.jumpToPlaces?(searchText: "fromEXP", places: arrPlaceData, selectedLoc: loc)
         navigationController?.popViewController(animated: false)
     }
     
-    func actionSave(_ sender: UIButton) {
+    @objc func actionSave(_ sender: UIButton) {
         uiviewSavedList.show()
         uiviewSavedList.loadCollectionData()
     }
     
-    func showSavedNoti() {
+    @objc func showSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
             self.imgSaved.alpha = 1
@@ -293,7 +293,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }, completion: nil)
     }
     
-    func actionSwitchPage(_ sender: UIButton) {
+    @objc func actionSwitchPage(_ sender: UIButton) {
         var numPage = intCurtPage
         if sender == btnGoLeft {
             numPage -= 1
@@ -310,7 +310,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         checkSavedStatus(id: intCurtPage)
     }
     
-    func actionBack(_ sender: UIButton) {
+    @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
@@ -453,7 +453,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewBtnSub.addConstraintsWithFormat("V:|-0-[v0(78)]", options: [], views: btnGoRight)
     }
     
-    func actionRefresh() {
+    @objc func actionRefresh() {
         guard coordinate != nil else { return }
         loadPlaces(center: coordinate!)
     }
@@ -471,7 +471,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
     
-    func handleTap(_ tap: UITapGestureRecognizer) {
+    @objc func handleTap(_ tap: UITapGestureRecognizer) {
         let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
@@ -511,11 +511,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         second_attch.fontDescender = -1
         second_attch.image = UIImage(cgImage: (secondImg.cgImage)!, scale: 3, orientation: .up)
         let secondImg_attach = NSAttributedString(attachment: second_attch)
-        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
 //        let attrs_0 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
         
-        let attrs_1 = [NSForegroundColorAttributeName: UIColor._138138138(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
 //        let attrs_1 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
         let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
         
@@ -636,8 +636,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let title_0 = "Explore "
         let title_1 = "Around Me"
-        let attrs_0 = [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!]
-        let attrs_1 = [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 20)!]
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
         let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
         let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
         title_0_attr.append(title_1_attr)

@@ -26,11 +26,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
         if LocalStorageManager.shared.readByKey("userMiniAvatar") != nil {
-            userMiniAvatar = LocalStorageManager.shared.readByKey("userMiniAvatar") as! Int
+            Key.shared.userMiniAvatar = LocalStorageManager.shared.readByKey("userMiniAvatar") as! Int
         } else {
-            userMiniAvatar = 1
+            Key.shared.userMiniAvatar = 1
         }
-        intCurtAvatar = userMiniAvatar
+        intCurtAvatar = Key.shared.userMiniAvatar
         navigationBarSetting()
         loadAvatarHeader()
         loadTableView()
@@ -83,7 +83,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         NSLayoutConstraint(item: lblCurtAvatar, attribute: .centerX, relatedBy: .equal, toItem: uiviewHeader, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
         
         imgCurtAvatar = UIImageView()
-        imgCurtAvatar.image = UIImage(named: "miniAvatar_\(userMiniAvatar)")
+        imgCurtAvatar.image = UIImage(named: "miniAvatar_\(Key.shared.userMiniAvatar)")
         uiviewHeader.addSubview(imgCurtAvatar)
         uiviewHeader.addConstraintsWithFormat("H:[v0(74)]", options: [], views: imgCurtAvatar)
         uiviewHeader.addConstraintsWithFormat("V:[v0(74)]-25-|", options: [], views: imgCurtAvatar)
@@ -133,15 +133,15 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    func actionCancel(_ sender: UIButton) {
+    @objc func actionCancel(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func actionSave(_ sender: UIButton) {
+    @objc func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
-        userAvatarMap = "miniAvatar_\(userMiniAvatar)"
-        LocalStorageManager.shared.saveInt("userMiniAvatar", value: userMiniAvatar)
-        updateMiniAvatar.whereKey("mini_avatar", value: "\(userMiniAvatar-1)")
+        Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
+        LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar-1)")
         updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
@@ -156,7 +156,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func changeAvatar(tag: Int) {
         btnSave.isEnabled = true
-        userMiniAvatar = tag
+        Key.shared.userMiniAvatar = tag
         intCurtAvatar = tag
         tblView.reloadData()
         imgCurtAvatar.image = UIImage(named: "miniAvatar_\(tag)")

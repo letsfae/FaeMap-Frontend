@@ -49,12 +49,12 @@ class LocalStorageManager: NSObject {
         return true
     }
     func saveEmail() {
-        saveString("userEmail", value: userEmail)
+        saveString("userEmail", value: Key.shared.userEmail)
     }
     func readEmail() -> Bool {
-        if userEmail == "" {
+        if Key.shared.userEmail == "" {
             if let useremail = readByKey("userEmail") {
-                userEmail = useremail as! String
+                Key.shared.userEmail = useremail as! String
                 return true
             }
             // should we need to read from internet
@@ -63,16 +63,16 @@ class LocalStorageManager: NSObject {
         return true
     }
     func savePhoneNumber() -> Bool {
-        if userPhoneNumber != nil {
-            saveString("userPhoneNumber", value: userPhoneNumber!)
+        if Key.shared.userPhoneNumber != nil {
+            saveString("userPhoneNumber", value: Key.shared.userPhoneNumber!)
             return true
         }
         return false
     }
     func readPhoneNumber() -> Bool {
-        if userPhoneNumber == nil {
+        if Key.shared.userPhoneNumber == nil {
             if let userephonenumber = readByKey("userPhoneNumber") {
-                userPhoneNumber = userephonenumber as? String
+                Key.shared.userPhoneNumber = userephonenumber as? String
                 return true
             }
             // should we need to read from internet
@@ -82,16 +82,16 @@ class LocalStorageManager: NSObject {
     }
     
     func savePassword() -> Bool {
-        if userPassword != "" {
-            saveString("userPassword", value: userPassword)
+        if Key.shared.userPassword != "" {
+            saveString("userPassword", value: Key.shared.userPassword)
             return true
         }
         return false
     }
     func readPassword() -> Bool {
-        if userPassword == "" {
+        if Key.shared.userPassword == "" {
             if let userpassword = readByKey("userPassword") {
-                userPassword = userpassword as! String
+                Key.shared.userPassword = userpassword as! String
                 return true
             }
             // should we need to read from internet
@@ -100,23 +100,23 @@ class LocalStorageManager: NSObject {
         return true
     }
     func logInStorage() {
-        saveString("userToken", value: userToken)
-        saveString("userTokenEncode", value: userTokenEncode)
-        saveInt("session_id", value: session_id)
+        saveString("userToken", value: Key.shared.userToken)
+        saveString("userTokenEncode", value: Key.shared.userTokenEncode)
+        saveInt("session_id", value: Key.shared.session_id)
         saveInt("user_id", value: Key.shared.user_id)
         saveInt("is_Login", value: Key.shared.is_Login)
-        saveString("userEmail", value: userEmail)
-        saveString("userPassword", value: userPassword)
+        saveString("userEmail", value: Key.shared.userEmail)
+        saveString("userPassword", value: Key.shared.userPassword)
     }
     
     func getAccountStorage() {
         
-        saveString("userEmail", value: userEmail)
+        saveString("userEmail", value: Key.shared.userEmail)
         saveString("username", value: Key.shared.username)
-        saveString("userFirstname", value: userFirstname)
-        saveString("userLastname", value: userLastname)
-        saveString("userBirthday", value: userBirthday)
-        saveInt("userGender", value: userGender)
+        saveString("userFirstname", value: Key.shared.userFirstname)
+        saveString("userLastname", value: Key.shared.userLastname)
+        saveString("userBirthday", value: Key.shared.userBirthday)
+        saveInt("userGender", value: Key.shared.userGender)
     }
     
     func readLogInfo() -> Bool {
@@ -128,19 +128,19 @@ class LocalStorageManager: NSObject {
             if login == 0 {
                 return false
             } else {
-                userToken = readByKey("userToken") as! String
-                userTokenEncode = readByKey("userTokenEncode") as! String
-                session_id = readByKey("session_id") as! Int
+                Key.shared.userToken = readByKey("userToken") as! String
+                Key.shared.userTokenEncode = readByKey("userTokenEncode") as! String
+                Key.shared.session_id = readByKey("session_id") as! Int
                 Key.shared.user_id = readByKey("user_id") as! Int
                 Key.shared.is_Login = readByKey("is_Login") as! Int
-                userEmail = readByKey("userEmail") as! String
-                userPassword = readByKey("userPassword") as! String
-                userFirstname = readByKey("userFirstname") as! String
-                userLastname = readByKey("userLastname") as! String
-                userBirthday = readByKey("userBirthday") as! String
-                userGender = readByKey("userGender") as! Int
+                Key.shared.userEmail = readByKey("userEmail") as! String
+                Key.shared.userPassword = readByKey("userPassword") as! String
+                Key.shared.userFirstname = readByKey("userFirstname") as! String
+                Key.shared.userLastname = readByKey("userLastname") as! String
+                Key.shared.userBirthday = readByKey("userBirthday") as! String
+                Key.shared.userGender = readByKey("userGender") as! Int
                 if readByKey("userMiniAvatar") != nil {
-                    userMiniAvatar = readByKey("userMiniAvatar") as! Int
+                    Key.shared.userMiniAvatar = readByKey("userMiniAvatar") as! Int
                 }
             }
         }

@@ -27,7 +27,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     }
     
     func getPeoplePage() {
-        vickyPrint("userStatus \(userStatus)")
+        vickyprint("userStatus \(Key.shared.onlineStatus)")
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             tblMapBoard.isHidden = true
             uiviewBubbleHint.isHidden = false
@@ -43,7 +43,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     
     // LeftSlidingMenuDelegate
     func userInvisible(isOn: Bool) {
-        vickyPrint("isOn \(isOn)")
+        vickyprint("isOn \(isOn)")
         if (isOn) {
             boolUsrVisibleIsOn = false
         } else {
@@ -53,7 +53,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     }
     
     // function for button on upper right of People table mode
-    func chooseNearbyPeopleInfo(_ sender: UIButton) {
+    @objc func chooseNearbyPeopleInfo(_ sender: UIButton) {
         // in people page
         if sender.tag == 1 {
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
@@ -75,7 +75,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }
     }
     
-    func rollUpPeopleLocPage(_ sender: AnyObject) {
+    @objc func rollUpPeopleLocPage(_ sender: AnyObject) {
         rollUpFilter()
     }
     
@@ -258,7 +258,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         btnUpArrow.addTarget(self, action: #selector(self.rollUpPeopleLocPage(_:)), for: .touchUpInside)
     }
     
-    func selectGender(_ sender: UIButton) {
+    @objc func selectGender(_ sender: UIButton) {
         if sender.tag == 0 {
             selectedGender = "Both"
         } else if sender.tag == 1 {
@@ -285,7 +285,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }
     }
 
-    func changeDisRange(_ sender: UISlider) {
+    @objc func changeDisRange(_ sender: UISlider) {
         disVal = String(format: "%.1f", sender.value)
         lblDisVal.text = "\(disVal) km"
     }

@@ -47,7 +47,7 @@ class FAENumberKeyboard: UIView {
     fileprivate func setup() {
         for button in numberButtons {
             button.backgroundColor = UIColor.clear
-            button.setAttributedTitle(NSAttributedString(string: "\(button.tag)", attributes: [NSForegroundColorAttributeName: UIColor._2499090(), NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 38)!]), for: UIControlState())
+            button.setAttributedTitle(NSAttributedString(string: "\(button.tag)", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 38)!]), for: UIControlState())
             button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
         }
         let imgDeleteIcon = UIImageView(frame: CGRect(x: screenWidth / 6 - 20, y: 20 * screenHeightFactor * screenHeightFactor, width: 31, height: 22))
@@ -56,7 +56,7 @@ class FAENumberKeyboard: UIView {
         deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
     }
     
-    func numberButtonTapped(_ sender:AnyObject) {
+    @objc func numberButtonTapped(_ sender:AnyObject) {
         let button = sender as! UIButton
         if delegate != nil {
             delegate.keyboardButtonTapped(button.tag)

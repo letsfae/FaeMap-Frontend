@@ -229,7 +229,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     }
     
     // actions
-    func sentActRequest(_ sender: UIButton!) {
+    @objc func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
             faeContact.ignoreFriendRequest(requestId: String(requestId)) {(status: Int, message: Any?) in
@@ -259,15 +259,15 @@ class FriendOperationFromContactsViewController: UIViewController {
         }
     }
     
-    func actionCancel(_ sender: Any?) {
+    @objc func actionCancel(_ sender: Any?) {
         animationHideSelf()
     }
     
-    func actionFinish(_ sender: UIButton!) {
+    @objc func actionFinish(_ sender: UIButton!) {
         animationHideSelf()
     }
     
-    func actionOK(_ sender: UIButton) {
+    @objc func actionOK(_ sender: UIButton) {
         uiviewMsgSent.frame.size.height = 161 * screenHeightFactor
         if sender.tag == OK {
             animationHideSelf()

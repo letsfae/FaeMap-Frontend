@@ -178,7 +178,7 @@ class LogInViewController: UIViewController {
         view.bringSubview(toFront: indicatorActivity)
     }
     
-    func loginButtonTapped() {
+    @objc func loginButtonTapped() {
         indicatorActivity.startAnimating()
         view.endEditing(true)
         lblLoginResult.isHidden = true
@@ -190,7 +190,7 @@ class LogInViewController: UIViewController {
             user.whereKey("user_name", value: txtUsername.text!)
         }
         user.whereKey("password", value: txtPassword.text!)
-        user.whereKey("device_id", value: headerDeviceID)
+        user.whereKey("device_id", value: Key.shared.headerDeviceID)
         user.whereKey("is_mobile", value: "true")
         user.logInBackground { (status: Int, message: Any?) in
             if status / 100 == 2 {
@@ -226,7 +226,7 @@ class LogInViewController: UIViewController {
         lblLoginResult.isHidden = false
     }
     
-    func supportButtonTapped() {
+    @objc func supportButtonTapped() {
         view.endEditing(true)
         animationShowSelf()
 //        let vc = SignInSupportViewController()
@@ -236,13 +236,13 @@ class LogInViewController: UIViewController {
     }
     
     // MARK: - Navigation
-    func navBarLeftButtonTapped() {
+    @objc func navBarLeftButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
     
     // MARK: - keyboard
     // This is just a temporary method to make the login button clickable
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         if boolWillDisappear {
             return
         }
@@ -255,7 +255,7 @@ class LogInViewController: UIViewController {
         })
     }
     
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         if boolWillDisappear {
             return
         }
@@ -267,11 +267,11 @@ class LogInViewController: UIViewController {
     }
     
     // deal with button position when entering foreground
-    func appBecomeActive() {
+    @objc func appBecomeActive() {
         txtUsername.becomeFirstResponder()
     }
     // MARK: - helper
-    func handleTap() {
+    @objc func handleTap() {
         view.endEditing(true)
     }
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -281,7 +281,7 @@ class LogInViewController: UIViewController {
     }
     
     // MARK: - textfield
-    func textfieldDidChange(_ textfield: UITextField) {
+    @objc func textfieldDidChange(_ textfield: UITextField) {
         if txtUsername.text!.count > 0 && txtPassword.text?.count >= 8 {
             btnLogin.backgroundColor = UIColor._2499090()
             btnLogin.isEnabled = true
@@ -377,11 +377,11 @@ extension LogInViewController {
         view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
     }
     
-    func actionCancel(_ sender: Any?) {
+    @objc func actionCancel(_ sender: Any?) {
         animationHideSelf()
     }
     
-    func actionChooseMethod(_ sender: UIButton) {
+    @objc func actionChooseMethod(_ sender: UIButton) {
         if sender.tag == 0 {  // use phone
             let vc = SignInPhoneViewController()
             vc.enterMode = .signInSupport

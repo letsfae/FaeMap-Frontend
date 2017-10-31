@@ -19,7 +19,7 @@ protocol OutgoingMessageProtocol {
 // this class is used to box information of one message user sent and send them to firebase.
 class OutgoingMessage {
     
-    private let firebase = Database.database().reference().child(fireBaseRef)
+    private let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     private let messageDictionary : NSMutableDictionary
     

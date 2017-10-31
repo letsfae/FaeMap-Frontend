@@ -79,7 +79,7 @@ class MoodAvatarTableViewCell: UITableViewCell {
         btnRight.addTarget(self, action: #selector(changeAvatar(_:)), for: .touchUpInside)
     }
     
-    func changeAvatar(_ sender: UIButton) {
+    @objc func changeAvatar(_ sender: UIButton) {
         delegate?.changeAvatar(tag: sender.tag)
     }
     

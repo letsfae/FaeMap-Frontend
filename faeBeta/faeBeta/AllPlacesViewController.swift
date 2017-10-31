@@ -129,11 +129,11 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(uiviewFooterTab)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    func jumpToMapPlaces(_ sender: UIButton) {
+    @objc func jumpToMapPlaces(_ sender: UIButton) {
         
     }
     
@@ -146,14 +146,14 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    func actionClearSearchResults(_ sender: UIButton) {
+    @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
         searchedPlaces = arrAllPlaces
         tblAllPlaces.reloadData()
     }
     
-    func searchAllPlaces(_ sender: UIButton) {
+    @objc func searchAllPlaces(_ sender: UIButton) {
         let searchVC = BoardsSearchViewController()
         searchVC.enterMode = .place
         searchVC.delegate = self

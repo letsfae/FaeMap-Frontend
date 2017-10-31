@@ -83,18 +83,18 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         lblPlaceholder.isHidden = count != 0
     }
     
-    func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             textView.resignFirstResponder()
         }
     }
     
-    func actionSaveIntro(_ sender: UIButton) {
+    @objc func actionSaveIntro(_ sender: UIButton) {
         delegate?.protSaveIntro(txtIntro: textView.text)
         navigationController?.popViewController(animated: true)
     }
     
-    func actionGoBack(_ sender: UIButton) {
+    @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
 }

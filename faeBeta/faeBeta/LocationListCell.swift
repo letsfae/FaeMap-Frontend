@@ -8,12 +8,14 @@
 
 import UIKit
 
+import GooglePlaces
+
 class LocationListCell: UITableViewCell {
     
     var imgIcon: UIImageView!
     var lblLocationName: UILabel!
     var bottomLine: UIView!
-    
+    var prediction: GMSAutocompletePrediction!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -25,6 +27,11 @@ class LocationListCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setValueForLocationPrediction(_ pred: GMSAutocompletePrediction) {
+        prediction = pred
+        lblLocationName.attributedText = pred.faeSearchBarAttributedText()
     }
     
     fileprivate func loadRecommendedCellContent() {
@@ -50,9 +57,21 @@ class LocationListCell: UITableViewCell {
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-39-[v0]-39-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-        
-        
     }
     
-    
+}
+
+extension GMSAutocompletePrediction {
+    func faeSearchBarAttributedText() -> NSAttributedString {
+        let fullText: NSMutableAttributedString = NSMutableAttributedString()
+        var attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
+        let primaryText = NSAttributedString(string: self.attributedPrimaryText.string + " ", attributes: attribute)
+        fullText.append(primaryText)
+        attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
+        if let secondary = self.attributedSecondaryText?.string {
+            let secondaryText = NSAttributedString(string: secondary, attributes: attribute)
+            fullText.append(secondaryText)
+        }
+        return fullText
+    }
 }

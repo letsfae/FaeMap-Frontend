@@ -51,7 +51,7 @@ class FinishViewController: UIViewController {
         view.addSubview(lblWelcomeTitle)
     }
     
-    func backButtonPressed() {
+    @objc func backButtonPressed() {
         _ = navigationController?.popViewController(animated: true)
     }
 

@@ -33,7 +33,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         generateScrollView()
     }
     
-    func backButtonTapped(_ sender:UIButton) {
+    @objc func backButtonTapped(_ sender:UIButton) {
         if boolPush {
             navigationController?.popViewController(animated: true)
         } else {
@@ -62,10 +62,10 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         let attrRange1 = NSRange(location: 0, length: 16)
         let attrRange2 = NSRange(location: 17, length: 8)
 
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._898989(), range: attrRange1)
-        astrTitle.addAttribute(NSForegroundColorAttributeName, value: UIColor._115115115(), range: attrRange2)
-        astrTitle.addAttribute(NSFontAttributeName, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
-        astrTitle.addAttribute(NSFontAttributeName, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
+        astrTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._898989(), range: attrRange1)
+        astrTitle.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._115115115(), range: attrRange2)
+        astrTitle.addAttribute(NSAttributedStringKey.font, value:UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange1)
+        astrTitle.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "AvenirNext-DemiBold", size: 13)!, range: attrRange2)
         titleLabel.attributedText = astrTitle
         scrollView.addSubview(titleLabel)
 
@@ -83,7 +83,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         scrollView.indicatorStyle = .white
         scrollView.delegate = self
     }
-    func jumpToPrivacyPolicy(_ sender: Any) {
+    @objc func jumpToPrivacyPolicy(_ sender: Any) {
         if textView.textColor == UIColor._2499090() {
             print("jumpToPrivacyPolicy")
         }
@@ -104,7 +104,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
             return "        \(num).  "
         }
         
-        let astrContent = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: UIColor._898989(), NSFontAttributeName: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
+        let astrContent = NSAttributedString(string: "", attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 12)!]).mutableCopy() as! NSMutableAttributedString
         astrContent.appendDefaultString("Last Updated: Dec 6, 2017", bold: true)
         astrContent.appendDefaultString("\n\nWelcome to Fae Maps! We drafted these Terms of Service (the “Terms”) for Fae Map (the “Software”) a product of Faevorite Inc., a Delaware Corporation (“Faevorite” is intentionally spelled that way).  These Terms and our ")
 

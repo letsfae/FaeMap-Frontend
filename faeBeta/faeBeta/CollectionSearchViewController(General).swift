@@ -136,11 +136,11 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
         uiviewSearchBarSubview.addSubview(uiviewCommentPinUnderLine)
     }
     
-    func actionDimissSearchBar(_ sender: UIButton) {
+    @objc func actionDimissSearchBar(_ sender: UIButton) {
         dismiss(animated: false, completion: nil)
     }
     
-    func actionClearSearchBar(_ sender: UIButton) {
+    @objc func actionClearSearchBar(_ sender: UIButton) {
         faeSearchController.faeSearchBar.text = ""
         arrMapPinFiltered.removeAll()
         btnClearSearchBar.isHidden = true
@@ -164,7 +164,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     // resize the height of the view when the keyboard will show
-    func keyboardWillShow(notification: NSNotification) {
+    @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
             keyboardHeight = keyboardSize.height
             tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight - keyboardHeight - 66)
@@ -173,7 +173,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     // resize the height of the view when the keyboard will hide
-    func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             tblSearchResults.frame = CGRect(x: 0, y: 66, width: screenWidth, height: screenHeight - 66)
         }
@@ -232,7 +232,7 @@ class CollectionSearchViewController: UIViewController, UISearchResultsUpdating,
     }
     
     // MARK: UITableView Delegate and Datasource functions
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 }

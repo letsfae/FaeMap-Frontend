@@ -216,7 +216,7 @@ class FMPlaceInfoBar: UIView {
     
     var end: CGFloat = 0
     
-    func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+    @objc func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             end = pan.location(in: self).x

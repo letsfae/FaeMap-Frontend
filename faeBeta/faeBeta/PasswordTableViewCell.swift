@@ -69,13 +69,13 @@ class PasswordTableViewCell: UITableViewCell {
         textView.resignFirstResponder()
     }
     
-    func showPasswordButtonTapped(_ sender: AnyObject) {
+    @objc func showPasswordButtonTapped(_ sender: AnyObject) {
         showText = !showText
         changeColorOFImage(textEntered)
         showPasswordButton.setImage(UIImage(named: showPasswordButtonImageName), for: UIControlState())
         
         let font = UIFont(name: "AvenirNext-Regular", size:22)
-        let myAttribute = [ NSFontAttributeName: font!]
+        let myAttribute = [ NSAttributedStringKey.font: font!]
         
         if showText {
             textView.text = textEntered
@@ -132,7 +132,7 @@ extension PasswordTableViewCell: UITextViewDelegate {
     func setTextToDot(_ text: String) {
         
         let font = UIFont(name: "AvenirNext-Regular", size:22)
-        let myAttribute = [ NSFontAttributeName: font!]
+        let myAttribute = [ NSAttributedStringKey.font: font!]
         let textAttachment = NSTextAttachment()
         textAttachment.image = UIImage(named: imageName)!
         var attributedString = NSMutableAttributedString()
