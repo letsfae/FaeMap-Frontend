@@ -148,6 +148,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         tblAlbums.delegate = self
         tblAlbums.dataSource = self
         tblAlbums.alwaysBounceVertical = false
+        tblAlbums.bounces = false
     }
     
     func getUserAlbumSet() {
