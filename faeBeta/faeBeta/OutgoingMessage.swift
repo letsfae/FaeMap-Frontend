@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Firebase
-import FirebaseDatabase
 import AVFoundation
 
 protocol OutgoingMessageProtocol {
@@ -18,8 +16,6 @@ protocol OutgoingMessageProtocol {
 
 // this class is used to box information of one message user sent and send them to firebase.
 class OutgoingMessage {
-    
-    private let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     private let messageDictionary : NSMutableDictionary
     
@@ -70,7 +66,7 @@ class OutgoingMessage {
         messageDictionary = NSMutableDictionary(objects: [message, video, snap,senderId, senderName, dateFormatter().string(from: date), status, type, index, hasTimeStamp, duration], forKeys: ["message" as NSCopying, "data" as NSCopying,"snapImage" as NSCopying,"senderId" as NSCopying, "senderName" as NSCopying, "date" as NSCopying, "status" as NSCopying, "type" as NSCopying, "index" as NSCopying, "hasTimeStamp" as NSCopying,"videoDuration" as NSCopying])
     }
     //Bryan
-    func sendMessage(_ chatRoomId : String, withUser user: RealmUser) {
+    /*func sendMessage(_ chatRoomId : String, withUser user: RealmUser) {
     //ENDBryan
         
         let item = self.messageDictionary
@@ -100,5 +96,5 @@ class OutgoingMessage {
         let item = self.messageDictionary
         let reference = firebase.child(chatRoomId).childByAutoId()        
         item["messageId"] = reference.key
-    }
+    }*/
 }

@@ -123,7 +123,6 @@
 		B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0A2AC9F1CE3A3C7002E0C9D /* faeBeta.xcdatamodeld */; };
 		B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA21CE3A3C7002E0C9D /* Assets.xcassets */; };
 		B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */; };
-		B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */; };
 		B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */; };
 		B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355C1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.m */; };
 		B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = B0BF355E1D8DC8D600B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m */; };
@@ -443,7 +442,6 @@
 		B0A2ACA51CE3A3C7002E0C9D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B0A2ACA71CE3A3C7002E0C9D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0B95B4B1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFaeMainPageViewController.swift; sourceTree = "<group>"; };
-		B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0BF35591D8DC8D600B0540B /* JSQLocationMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQLocationMediaItemCustom.h; sourceTree = "<group>"; };
 		B0BF355A1D8DC8D600B0540B /* JSQLocationMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQLocationMediaItemCustom.m; sourceTree = "<group>"; };
 		B0BF355B1D8DC8D600B0540B /* JSQMessagesBubbleImageFactoryCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQMessagesBubbleImageFactoryCustom.h; sourceTree = "<group>"; };
@@ -860,7 +858,6 @@
 			children = (
 				DCC59D101F8C279A00B2A27F /* ContactsPicker */,
 				C1DE0DE71E9F00C6003188BE /* Realm */,
-				B0BF35491D8DC7E200B0540B /* GoogleService-Info.plist */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
 				B0714DC71D5E474600356705 /* Location */,
 				DCBE69091DB60EED00BFF46C /* Audio */,
@@ -1599,7 +1596,6 @@
 				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
 				B85474ED1EFB556900D40E2E /* GIF_alpha.gif in Resources */,
 				B0BF35841D8DC8D700B0540B /* JSQMessagesViewControllerCustom.xib in Resources */,
-				B0BF354D1D8DC7E200B0540B /* GoogleService-Info.plist in Resources */,
 				B39C1E451F6DE2EE0075CF59 /* CountryCode.json in Resources */,
 				B064EF171D6E353E00C078F5 /* WelcomeContentContainerFace.xib in Resources */,
 				B0BF357E1D8DC8D700B0540B /* JSQMessagesToolbarContentViewCustom.xib in Resources */,

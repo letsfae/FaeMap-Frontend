@@ -9,8 +9,6 @@
 import UIKit
 import CoreData
 import CoreLocation
-import Firebase
-import FirebaseDatabase
 import RealmSwift
 
 import GooglePlaces
@@ -25,10 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var reachaVCPresented = false 
     var reachaVC = DisconnectionViewController()
     var reachability: Reachability!
-    
-    let APP_ID = "60A2681A-584D-1FFF-FF96-54077F888200"
-    let SECRET_KEY = "E6A7F879-B983-84D0-FFE4-B4140D42FC00"
-    let VERSION_NUM = "v1"
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -46,9 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
-        
-        FirebaseApp.configure()
-        Database.database().isPersistenceEnabled = true
         
         // Config Realm Database
         Realm.Configuration.defaultConfiguration = Realm.Configuration(

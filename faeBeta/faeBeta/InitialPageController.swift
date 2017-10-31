@@ -7,11 +7,8 @@
 //
 
 import UIKit
-import Firebase
 
 class InitialPageController: UIPageViewController {
-    
-    let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     lazy var arrViewCtrl: [UIViewController] = {
         let faeMap = FaeMapViewController()
@@ -45,18 +42,6 @@ class InitialPageController: UIPageViewController {
     func goToMapBoard() {
         if let mapBoard = arrViewCtrl.last {
             self.setViewControllers([mapBoard], direction: .forward, animated: true, completion: nil)
-        }
-    }
-    
-    func loadRecents() {
-        getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { _, result in
-            if let cacheRecent = result as? NSArray {
-                for item in cacheRecent {
-                    let recent: NSDictionary = item as! NSDictionary
-                    let chatRoomId = Key.shared.user_id < recent["with_user_id"] as! Int ? "\(Key.shared.user_id)-\(recent["with_user_id"] ?? "")" : "\(recent["with_user_id"] ?? "")-\(Key.shared.user_id)"
-                    self.firebase.child(chatRoomId).keepSynced(true)
-                }
-            }
         }
     }
     
