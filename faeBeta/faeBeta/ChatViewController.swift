@@ -102,7 +102,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     let floatLocExtendHeight: CGFloat = 76
-    let floatInputBarHeight: CGFloat = 90
+    //let floatInputBarHeight: CGFloat = 90
+    var floatInputBarHeight: CGFloat {
+        get {
+            return self.toolbarHeightConstraint.constant
+        }
+    }
     let floatToolBarContentHeight: CGFloat = 271
   
     //let realm = try! Realm()
@@ -342,6 +347,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let newString = (change![NSKeyValueChangeKey.newKey]! as! String)
             btnSend.isEnabled = newString.count > 0
         }
+        if inputToolbar.contentView.textView.sizeChanged {
+            scrollToBottom(false)
+            inputToolbar.contentView.textView.sizeChanged = false
+        }
     }
     
     func removeObservers() {
@@ -562,6 +571,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
         floatDistanceInputBarToBottom = distance
         uiviewLocationExtend.frame.origin.y = screenHeight - distance - floatInputBarHeight - floatLocExtendHeight
+        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight
         if !notToolBar {
             toolbarContentView.frame.origin.y = screenHeight - distance
         }
@@ -595,6 +605,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: scroll view delegate
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if inputToolbar.contentView.textView.sizeChanged && toolbarContentView.boolKeyboardShow {
+            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)            
+            return
+        }
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             var dragDistanceY = scrollViewCurrentOffset - floatScrollViewOriginOffset
@@ -606,6 +620,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight {
                         return
                     }
+                    /*if inputToolbar.contentView.textView.sizeChanged {
+                        setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+                        inputToolbar.contentView.textView.sizeChanged = false
+                        return
+                    }*/
                     let keyboardHeight = uiviewKeyboard.frame.height
                     if -dragDistanceY > keyboardHeight {
                         dragDistanceY = -keyboardHeight

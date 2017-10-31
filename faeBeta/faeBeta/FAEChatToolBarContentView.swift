@@ -217,23 +217,26 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     // MARK: show different content
     func showKeyboard() {
         self.isHidden = true
-        if boolStickerViewShow {
-            viewStickerPicker.isHidden = true
-            boolStickerViewShow = false
-        }
-        if boolImageQuickPickerShow {
-            cllcPhotoQuick.isHidden = true
-            btnMoreImage.isHidden = true
-            btnQuickSendImage.isHidden = true
-            boolImageQuickPickerShow = false
-        }
-        if boolRecordShow {
-            viewAudioRecorder.isHidden = true
-            boolRecordShow = false
-        }
-        if boolMiniLocationShow {
-            boolMiniLocationShow = false
-            viewMiniLoc.isHidden = true
+        if !boolKeyboardShow {
+            if boolStickerViewShow {
+                viewStickerPicker.isHidden = true
+                boolStickerViewShow = false
+            }
+            if boolImageQuickPickerShow {
+                cllcPhotoQuick.isHidden = true
+                btnMoreImage.isHidden = true
+                btnQuickSendImage.isHidden = true
+                boolImageQuickPickerShow = false
+            }
+            if boolRecordShow {
+                viewAudioRecorder.isHidden = true
+                boolRecordShow = false
+            }
+            if boolMiniLocationShow {
+                boolMiniLocationShow = false
+                viewMiniLoc.isHidden = true
+            }
+            boolKeyboardShow = true
         }
     }
     
@@ -259,6 +262,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else if boolKeyboardShow {
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
             self.boolStickerViewShow = true
@@ -289,6 +293,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
             
@@ -330,6 +335,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
                 self.btnQuickSendImage.alpha = 1
                 self.btnMoreImage.alpha = 1
