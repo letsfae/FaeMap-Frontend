@@ -8,8 +8,6 @@
 
 import UIKit
 import JSQMessagesViewController
-import Firebase
-import FirebaseDatabase
 import Photos
 import MobileCoreServices
 import CoreMedia
@@ -54,10 +52,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // the proxy of the keyboard
     var uiviewKeyboard: UIView!
     
-    
-    var ref = Database.database().reference().child(Key.shared.fireBaseRef) // reference to all chat room
-    var roomRef: DatabaseReference?
-    var _refHandle: DatabaseHandle?
     var dictArrInitMessages: [NSDictionary] = [] // load latest 15 messages before showing chatting
     var arrJSQMessages: [JSQMessage] = [] // data source of collectionView
     var arrStrMessagesKey: [String] = [] // the key of each message to tell whether it is loaded

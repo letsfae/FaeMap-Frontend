@@ -8,8 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-import Firebase
-import FirebaseDatabase
 import RealmSwift
 
 struct cellFriendData {
@@ -200,7 +198,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         navigationController?.setViewControllers(arrViewControllers!, animated: true)
     }
     
-    func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
+    /*func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
         let chatVC = ChatViewController()
         chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
         chatVC.strChatId = chat_id
@@ -243,6 +241,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             navigationController?.setViewControllers(arrViewControllers!, animated: true)
         }
     }
+ */
     
     func shareWithUsers() {
         navigationLeftItemTapped()

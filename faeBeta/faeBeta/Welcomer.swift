@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Firebase
-import FirebaseDatabase
 import AVFoundation
 import RealmSwift
 
