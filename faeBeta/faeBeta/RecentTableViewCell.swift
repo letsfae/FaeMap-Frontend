@@ -175,7 +175,7 @@ class RecentTableViewCell: UITableViewCell {
             lblLastMessage.text = latest.type
         }        
         
-        if latest.unread_count > 0 {
+        if recent.unread_count > 0 {
             lblCounter.isHidden = false
             lblCounter.text = latest.unread_count > 99 ? "•••" : "\(recent.unread_count)"
             if lblCounter.text?.count >= 2 {
