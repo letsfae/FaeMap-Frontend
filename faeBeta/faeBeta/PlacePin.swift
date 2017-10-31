@@ -55,14 +55,8 @@ class PlacePin: NSObject {
         class_1 = json["categories"]["class1"].stringValue
         imageURL = json["img"].stringValue
         url = json["url"].stringValue
-        if url == "" {
-            url = "N/A"
-        }
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
-        if phone == "" {
-            phone = "N/A"
-        }
         for (key, subJson) in json["hour"] {
             hours = hours + processHours(day: key, hour: subJson.stringValue)
         }

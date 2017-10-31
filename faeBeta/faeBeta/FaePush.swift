@@ -10,6 +10,8 @@ import Foundation
 
 class FaePush: NSObject {
     
+    static let shared = FaePush()
+    
     var keyValue = [String: AnyObject]()
     
     override init () {

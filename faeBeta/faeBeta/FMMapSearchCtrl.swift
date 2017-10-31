@@ -23,7 +23,8 @@ extension FaeMapViewController: MapSearchDelegate {
             mapMode = .pinDetail
             let pin_self = FaePinAnnotation(type: "place", data: place)
             pin_self.coordinate = LocManager.shared.curtLoc.coordinate
-            zoomToFitAllAnnotations(annotations: [pin, pin_self])
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
+            faeMapView.setRegion(coordinateRegion, animated: false)
             animateMainItems(show: true, animated: false)
             faeMapView.blockTap = true
             lblExpContent.text = "Map View"

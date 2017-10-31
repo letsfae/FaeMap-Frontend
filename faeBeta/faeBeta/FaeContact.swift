@@ -10,6 +10,8 @@ import UIKit
 
 class FaeContact {
     
+    static let shared = FaeContact()
+    
     var keyValue = [String:AnyObject]()
     func whereKey(_ key: String, value: String?) -> Void {
         keyValue[key] = value as AnyObject?

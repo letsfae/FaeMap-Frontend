@@ -97,7 +97,7 @@ class PlaceDetailCell: UITableViewCell {
     func setValueForCell(place: PlacePin) {}
 }
 
-protocol PlaceDetailSmallMapCellDelegate: class {
+protocol PlaceDetailMapCellDelegate: class {
     func jumpToMainMapWithPlace()
 }
 
@@ -107,7 +107,7 @@ class PlaceDetailMapCell: PlaceDetailCell {
     var boolPlaceAdded = false
     var imgViewMap: UIImageView!
     var imgPlaceIcon: UIImageView!
-    weak var delegate: PlaceDetailSmallMapCellDelegate?
+    weak var delegate: PlaceDetailMapCellDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -216,7 +216,7 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
 //        tblOpeningHours.addGestureRecognizer(foldCell)
         
         lblHint = UILabel()
-        lblHint.text = "Holiday might affect these hours."
+        lblHint.text = "Holidays may affect these hours"
         lblHint.textColor = UIColor._182182182()
         lblHint.font = UIFont(name: "AvenirNext-MediumItalic", size: 15)
         uiviewHiddenCell.addSubview(lblHint)
@@ -251,7 +251,8 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
 }
 
 class PlaceDetailSection3Cell: PlaceDetailCell {
-    var row: Int = 0
+    
+    var isURL = true
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -263,8 +264,8 @@ class PlaceDetailSection3Cell: PlaceDetailCell {
     
     override func setValueForCell(place: PlacePin) {
         imgDownArrow.isHidden = true
-        imgIcon.image = row == 0 ? #imageLiteral(resourceName: "place_web") : #imageLiteral(resourceName: "place_call")
-        lblContent.text = row == 0 ? place.url : place.phone
+        imgIcon.image = isURL ? #imageLiteral(resourceName: "place_web") : #imageLiteral(resourceName: "place_call")
+        lblContent.text = isURL ? place.url : place.phone
     }
 }
 

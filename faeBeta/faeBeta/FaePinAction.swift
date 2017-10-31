@@ -10,6 +10,8 @@ import Foundation
 
 class FaePinAction : NSObject {
 
+    static let shared = FaePinAction()
+    
     var keyValue = [String:AnyObject]()
     
     func whereKey(_ key:String, value:String) -> Void {

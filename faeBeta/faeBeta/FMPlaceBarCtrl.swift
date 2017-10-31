@@ -9,7 +9,17 @@
 import UIKit
 import CCHMapClusterController
 
-extension FaeMapViewController: PlaceViewDelegate {
+extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
+    
+    // FMPlaceTableDelegate
+    func selectPlaceFromTable(_ placeData: PlacePin) {
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = placeData
+        vcPlaceDetail.featureDelegate = self
+        vcPlaceDetail.delegate = self
+        navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
+        navigationController?.pushViewController(vcPlaceDetail, animated: false)
+    }
     
     func loadPlaceDetail() {
         view.addSubview(uiviewPlaceBar)
@@ -17,6 +27,8 @@ extension FaeMapViewController: PlaceViewDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
         uiviewPlaceBar.addGestureRecognizer(tapGesture)
         
+        tblPlaceResult = FMPlacesTable()
+        tblPlaceResult.delegate = self
         view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = UIButton()

@@ -50,6 +50,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         transition.subtype = kCATransitionFromRight
         return transition
     }()
+    var intHaveHour = 1
+    var intHaveWebPhone = 1
+    var intCellCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +64,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         view.bringSubview(toFront: uiviewSavedList)
         view.bringSubview(toFront: uiviewAfterAdded)
         checkSavedStatus() {}
-        
+        setCellCount()
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
     }
     
@@ -95,6 +98,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+    }
+    
+    func setCellCount() {
+        guard place != nil else { return }
+        intHaveHour = place.hours.count > 0 ? 1 : 0
+        intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
+        intCellCount = intHaveHour + intHaveWebPhone + 2
     }
     
     func checkSavedStatus(_ completion: @escaping () -> ()) {
@@ -179,8 +189,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
-        tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailSection1Cell")
-        tblPlaceDetail.register(PlaceDetailHoursCell.self, forCellReuseIdentifier: "PlaceDetailSection2Cell")
+        tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
+        tblPlaceDetail.register(PlaceDetailHoursCell.self, forCellReuseIdentifier: "PlaceDetailHoursCell")
         tblPlaceDetail.register(PlaceDetailSection3Cell.self, forCellReuseIdentifier: "PlaceDetailSection3Cell")
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
         tblPlaceDetail.separatorStyle = .none
