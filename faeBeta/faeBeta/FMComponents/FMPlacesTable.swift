@@ -8,8 +8,13 @@
 
 import UIKit
 
+protocol FMPlaceTableDelegate: class {
+    func selectPlaceFromTable(_ placeData: PlacePin)
+}
+
 class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
+    weak var delegate: FMPlaceTableDelegate?
     var tblResults: UITableView!
     var arrPlaces = [PlacePin]()
     var lblNumResults: UILabel!
@@ -54,7 +59,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     fileprivate func loadContent() {
-        
         let imgBack = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 164 * screenHeightFactor))
         imgBack.image = #imageLiteral(resourceName: "placeResultTbl_shadow")
         imgBack.contentMode = .scaleAspectFit
@@ -82,6 +86,12 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         footView.addSubview(lblNumResults)
         footView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblNumResults)
         footView.addConstraintsWithFormat("V:[v0(\(21*screenHeightFactor))]-\(13*screenHeightFactor)-|", options: [], views: lblNumResults)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let placeData = arrPlaces[indexPath.row]
+        delegate?.selectPlaceFromTable(placeData)
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

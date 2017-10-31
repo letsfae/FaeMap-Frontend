@@ -91,7 +91,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
-    var tblPlaceResult = FMPlacesTable()
+    var tblPlaceResult: FMPlacesTable!
     var placesFromSearch = [FaePinAnnotation]()
     
     // Name Card

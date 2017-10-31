@@ -15,6 +15,11 @@ extension String {
         return String(self.filter { okayChars.contains($0) })
     }
     
+    func onlyNumbers() -> String {
+        let okayChars: Set<Character> = Set("1234567890")
+        return String(self.filter { okayChars.contains($0) })
+    }
+    
     // Trim newline in the beginning and ending of string
     func trim() -> String {
         return self.trimmingCharacters(in: CharacterSet.newlines)
