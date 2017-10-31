@@ -122,6 +122,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var showAvatar: Bool = true //false not show avatar, true show avatar
     var firstLoad: Bool? // whether it is the first time to load this room.
     
+    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -335,8 +336,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
         //inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeInputMode), name: NSNotification.Name.UITextInputCurrentInputModeDidChange, object: nil)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -526,6 +529,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc func keyboardDidShow(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = true
         setProxyKeyboardView()
+        //if UITextInputMode.activeInputModes.filter
+        
     }
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -542,6 +547,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc func keyboardDidHide(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = false
         uiviewKeyboard = nil
+    }
+    
+    @objc func changeInputMode(_ notification: NSNotification) {
+        // TODO
+        //print("method change")
+        //inputToolbar.contentView.textView.resignFirstResponder()
+        //inputToolbar.contentView.textView.becomeFirstResponder()
+        setProxyKeyboardView()
+        if uiviewKeyboard != nil {
+            //print(uiviewKeyboard.frame.height)
+            //setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+            //if uiviewKeyboard.frame.height != 258
+        }
+        if let currentMode = inputToolbar.contentView.textView.textInputMode {
+            let _ = NSStringFromClass(type(of: currentMode))
+            //print(className)
+        }
+    }
+    
+    @objc func keyboardDidChangeFrame(_ notification: NSNotification) {
+        print("frame changed")
+        if uiviewKeyboard != nil {
+            //print(uiviewKeyboard.frame.height)
+            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+        }
     }
     
     @objc func keyboardFrameChange(_ notification: NSNotification) {
