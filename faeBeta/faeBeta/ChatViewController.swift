@@ -561,10 +561,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc func keyboardDidChangeFrame(_ notification: NSNotification) {
-        print("frame changed")
+        //print("frame changed")
         if uiviewKeyboard != nil {
             //print(uiviewKeyboard.frame.height)
-            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+            //setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
         }
     }
     
