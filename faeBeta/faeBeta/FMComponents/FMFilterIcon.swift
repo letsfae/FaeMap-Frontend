@@ -20,6 +20,8 @@ class FMFilterIcon: UIButton {
     
     var mapFilterArrow: UIImageView!
     
+    var isSpinning = false
+    
     var boolHideInsides: Bool = false {
         didSet {
             guard filterCircle_1 != nil else { return }
@@ -130,20 +132,21 @@ class FMFilterIcon: UIButton {
             if self.center.y == screenHeight - 25 {
                 self.polygonOutside.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
             }
-            
         }) { _ in
             if self.polygonInside != nil {
                 self.polygonInside.layer.removeAllAnimations()
                 self.polygonInside.removeFromSuperview()
             }
+            self.isSpinning = false
         }
     }
     
     func startIconSpin() {
         guard self.center.y == screenHeight - 25 else { return }
-        
+        guard isSpinning == false else { return }
         self.boolHideInsides = true
         self.isEnabled = false
+        self.isSpinning = true
         
         if self.polygonInside != nil {
             self.polygonInside.alpha = 0

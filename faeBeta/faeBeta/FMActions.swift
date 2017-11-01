@@ -26,7 +26,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionMainScreenSearch(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -39,7 +39,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionClearSearchResults(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         if createLocation == .create {
             createLocation = .cancel
             return
@@ -80,7 +80,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionLeftWindowShow(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -92,7 +92,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionShowResultTbl(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.show {
@@ -112,7 +112,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionChatWindowShow(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -128,7 +128,7 @@ extension FaeMapViewController {
     }
     
     @objc func actionOpenExplore(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         uiviewNameCard.hide {}
         let vcExp = ExploreViewController()
         vcExp.delegate = self
@@ -136,13 +136,13 @@ extension FaeMapViewController {
     }
     
     @objc func actionCancelSelecting() {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         mapMode = .routing
         uiviewChooseLocs.show()
     }
     
     @objc func actionBackTo(_ sender: UIButton) {
-        btnZoom.smallMode()
+        btnZoom.tapToSmallMode()
         switch mapMode {
         case .explore:
             let vcExp = ExploreViewController()

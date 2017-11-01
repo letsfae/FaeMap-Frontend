@@ -134,16 +134,27 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrCtrlers = [UIViewController]()
     var boolFromMap = true
     
+    var boolNotiSent = false
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }
-            if mapMode == .allPlaces {
-                btnLeftWindow.isHidden = true
-                imgExpbarShadow.isHidden = false
-                return
+            
+            imgAddressIcon.isHidden = mapMode == .normal
+            btnCancelSelect.isHidden = mapMode == .normal
+            
+            if mapMode == .selecting {
+                btnDistIndicator.lblDistance.text = "Select"
+            } else {
+                lblSearchContent.text = "Search Fae Map"
+                btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance
             }
+            imgPinOnMap.isHidden = mapMode != .selecting
             imgSearchIcon.isHidden = mapMode == .selecting
+            btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
+            lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
+            
+            clctViewMap.isHidden = mapMode != .explore
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
             imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail || mapMode == .collection
             btnZoom.isHidden = mapMode == .explore
@@ -151,15 +162,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnOpenChat.isHidden = mapMode == .explore
             btnFilterIcon.isHidden = mapMode == .explore
             btnDiscovery.isHidden = mapMode == .explore
-            clctViewMap.isHidden = mapMode != .explore
-            imgAddressIcon.isHidden = mapMode == .selecting || mapMode == .normal
-            btnCancelSelect.isHidden = mapMode == .selecting || mapMode == .normal
-            lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
-            if mapMode != .selecting { lblSearchContent.text = "Search Fae Map" }
-            if mapMode == .selecting { btnDistIndicator.lblDistance.text = "Select" }
-            else { btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance }
-            imgPinOnMap.isHidden = mapMode != .selecting
-            btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
+            
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
             Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
             if mapMode == .routing || mapMode == .selecting {
@@ -167,13 +170,18 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
             }
+            
+            if mapMode == .allPlaces {
+                btnLeftWindow.isHidden = true
+                imgExpbarShadow.isHidden = false
+                return
+            }
         }
     }
     
     var createLocation: CreateLocation = .cancel {
         didSet {
             guard fullyLoaded else { return }
-            btnClearSearchRes.isHidden = createLocation == .cancel
             if createLocation == .cancel {
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
@@ -416,6 +424,30 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         if places {
             updateTimerForLoadRegionPlacePin()
+        }
+    }
+    
+    func removePlaceUserPins(_ placeComp: (() -> ())? = nil, _ userComp: (() -> ())? = nil) {
+        removePlacePins {
+            placeComp?()
+        }
+        removeUserPins {
+            userComp?()
+        }
+    }
+    
+    func removePlacePins(_ completion: (() -> ())? = nil) {
+        placeClusterManager.removeAnnotations(faePlacePins) {
+            completion?()
+        }
+    }
+    
+    func removeUserPins(_ completion: (() -> ())? = nil) {
+        for user in faeUserPins {
+            user.isValid = false
+        }
+        userClusterManager.removeAnnotations(faeUserPins) {
+            completion?()
         }
     }
 }

@@ -34,17 +34,14 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     
     @objc func actionFilterIcon(_ sender: UIButton) {
         PLACE_ENABLE = true
-        for user in faeUserPins {
-            user.isValid = false
-        }
-        userClusterManager.removeAnnotations(faeUserPins) {
-            self.faeUserPins.removeAll(keepingCapacity: true)
-            self.updateTimerForUserPin()
-        }
-        placeClusterManager.removeAnnotations(faePlacePins) {
+        btnFilterIcon.startIconSpin()
+        removePlaceUserPins({
             self.faePlacePins.removeAll(keepingCapacity: true)
             self.setPlacePins.removeAll(keepingCapacity: true)
             self.updateTimerForLoadRegionPlacePin()
+        }) {
+            self.faeUserPins.removeAll(keepingCapacity: true)
+            self.updateTimerForUserPin()
         }
     }
     

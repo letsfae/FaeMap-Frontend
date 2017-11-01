@@ -169,7 +169,7 @@ class FaeMapView: MKMapView {
                 Key.shared.FMVCtrler?.mapGesture(isOn: true)
             }
             Key.shared.FMVCtrler?.uiviewSavedList.hide()
-            Key.shared.FMVCtrler?.btnZoom.smallMode()
+            Key.shared.FMVCtrler?.btnZoom.tapToSmallMode()
             if v is FMLocationInfoBar {
                 
             } else {

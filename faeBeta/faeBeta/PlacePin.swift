@@ -31,7 +31,6 @@ class PlacePin: NSObject {
     
     init(json: JSON) {
         id = json["place_id"].intValue
-        // self.imageURL = json["image_url"].stringValue
         name = json["name"].stringValue
         address1 = json["location"]["address"].stringValue
         address2 = json["location"]["city"].stringValue + ", " + json["location"]["state"].stringValue + " " + json["location"]["zip_code"].stringValue + ", " + json["location"]["country"].stringValue

@@ -335,12 +335,17 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 self.btnFilterIcon.stopIconSpin()
             })
         }
-        
-        guard PLACE_ENABLE else { return }
-        guard boolNextUpdate else { return }
+        let time_0 = DispatchTime.now()
+        guard PLACE_ENABLE else {
+            stopIconSpin(delay: getDelay(prevTime: time_0))
+            return
+        }
+        guard boolNextUpdate else {
+            stopIconSpin(delay: getDelay(prevTime: time_0))
+            return
+        }
         boolNextUpdate = false
         btnFilterIcon.startIconSpin()
-        let time_0 = DispatchTime.now()
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)

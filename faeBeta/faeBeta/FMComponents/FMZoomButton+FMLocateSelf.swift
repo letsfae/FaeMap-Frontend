@@ -17,13 +17,18 @@ class FMZoomButton: UIButton {
     var btnZoomOut: UIButton!
     var prevRegion: MKCoordinateRegion!
     var prev_y: CGFloat = 0
+    var gesLongPress: UILongPressGestureRecognizer!
+    var gesPan: UIPanGestureRecognizer!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153, width: 60, height: 60))
         loadContent()
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
-        longPress.minimumPressDuration = 0.2
-        addGestureRecognizer(longPress)
+        gesLongPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        gesLongPress.minimumPressDuration = 0.1
+        addGestureRecognizer(gesLongPress)
+        gesPan = UIPanGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        addGestureRecognizer(gesPan)
+        gesPan.isEnabled = false
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -91,7 +96,7 @@ class FMZoomButton: UIButton {
             self.btnSmall.alpha = 0
             self.btnLarge.alpha = 1
             let origin_y = self.frame.origin.y
-            self.frame = CGRect(x: screenWidth - 82, y: origin_y - 61 * screenHeightFactor, width: 60, height: 122)
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y - 63 * screenHeightFactor, width: 60, height: 122)
         }
     }
     
@@ -102,7 +107,7 @@ class FMZoomButton: UIButton {
             self.btnSmall.alpha = 1
             self.btnLarge.alpha = 0
             let origin_y = self.frame.origin.y
-            self.frame = CGRect(x: screenWidth - 82, y: origin_y + 61 * screenHeightFactor, width: 60, height: 60)
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y + 63 * screenHeightFactor, width: 60, height: 60)
         }
     }
     
@@ -124,6 +129,18 @@ class FMZoomButton: UIButton {
         mapView.setRegion(region, animated: true)
     }
     
+    @objc func tapToLargeMode() {
+        gesLongPress.isEnabled = false
+        gesPan.isEnabled = true
+        largeMode()
+    }
+    
+    @objc func tapToSmallMode() {
+        gesLongPress.isEnabled = true
+        gesPan.isEnabled = false
+        smallMode()
+    }
+    
     private func loadContent() {
         layer.zPosition = 500
         adjustsImageWhenHighlighted = false
@@ -131,7 +148,7 @@ class FMZoomButton: UIButton {
         btnSmall = UIButton()
         addSubview(btnSmall)
         btnSmall.alpha = 1
-        btnSmall.addTarget(self, action: #selector(largeMode), for: [.touchUpInside])
+        btnSmall.addTarget(self, action: #selector(tapToLargeMode), for: [.touchUpInside])
         btnSmall.setImage(#imageLiteral(resourceName: "main_map_zoom_sm"), for: .normal)
         btnSmall.adjustsImageWhenHighlighted = false
         addConstraintsWithFormat("H:|-0-[v0(60)]", options: [], views: btnSmall)
