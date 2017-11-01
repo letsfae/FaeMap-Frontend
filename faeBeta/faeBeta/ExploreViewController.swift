@@ -14,8 +14,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     weak var delegate: MapSearchDelegate?
     
-    var faeMapCtrler: FaeMapViewController?
-    
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
     var clctViewPics: UICollectionView!

@@ -105,6 +105,9 @@ class Key: NSObject { //  singleton class
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
     
+    var FMVCtrler: FaeMapViewController?
+    var mapHeadTitle: String = ""
+    
     func getUserInfo() {
         getGenderAge()
     }

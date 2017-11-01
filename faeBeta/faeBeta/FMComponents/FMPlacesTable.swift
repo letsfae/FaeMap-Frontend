@@ -143,27 +143,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
 //        lblHours.text = placeInfo.hours
-        if placeInfo.imageURL == "" {
-            imgSavedItem.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-            imgSavedItem.backgroundColor = .white
-        } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
-                self.imgSavedItem.image = placeImgFromCache
-                self.imgSavedItem.backgroundColor = UIColor._2499090()
-                return
-            }
-            downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                guard let data = rawData else { return }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    guard let placeImg = UIImage(data: data) else { return }
-                    DispatchQueue.main.async {
-                        self.imgSavedItem.image = placeImg
-                        self.imgSavedItem.backgroundColor = UIColor._2499090()
-                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                    }
-                }
-            }
-        }
+        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     
     fileprivate func loadContent() {

@@ -61,6 +61,12 @@ extension FaeMapViewController: MapSearchDelegate {
             setTitle(type: "Random")
             arrExpPlace = places
             clctViewMap.reloadData()
+        } else if searchText == "fromAllPlaces" {
+            animateMainItems(show: true, animated: false)
+            uiviewPlaceBar.places = places
+            uiviewPlaceBar.hide()
+            mapMode = .allPlaces
+            lblExpContent.text = Key.shared.mapHeadTitle
         } else {
             updateUI(searchText: searchText)
             swipingState = .multipleSearch

@@ -33,7 +33,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var tblPlaceDetail: UITableView!
     let arrTitle = ["Similar Places", "Near this Place"]
     var arrRelatedPlaces = [[PlacePin]]()
-    let faeMap = FaeMap()
+    var arrSimilarPlaces = [PlacePin]()
+    var arrNearbyPlaces = [PlacePin]()
     let faePinAction = FaePinAction()
     var boolSaved: Bool = false
     var uiviewSavedList: AddPinToCollectionView!
@@ -50,9 +51,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         transition.subtype = kCATransitionFromRight
         return transition
     }()
-    var intHaveHour = 1
-    var intHaveWebPhone = 1
+    var intHaveHour = 0
+    var intHaveWebPhone = 0
     var intCellCount = 0
+    var intSimilar = 0
+    var intNearby = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,13 +80,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSubHeader.setValue(place: place)
         uiviewFixedHeader.setValue(place: place)
         tblPlaceDetail.reloadData()
-        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 500000, isSimilar: true, completion: { arrPlaces in
-            self.arrRelatedPlaces.append(arrPlaces)
-            self.getRelatedPlaces(lat: String(self.place.coordinate.latitude), long: String(self.place.coordinate.longitude), radius: 5000, isSimilar: false, completion: { arrPlaces in
-                self.arrRelatedPlaces.append(arrPlaces)
+        let lat = String(place.coordinate.latitude)
+        let long = String(place.coordinate.longitude)
+        getRelatedPlaces(lat, long, isSimilar: true) {
+            self.getRelatedPlaces(lat, long, isSimilar: false, {
                 self.tblPlaceDetail.reloadData()
             })
-        })
+        }
         PlaceDetailCell.boolFold = true
     }
     
@@ -136,30 +139,50 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion: @escaping ([PlacePin]) -> Void) {
-        faeMap.whereKey("geo_latitude", value: "\(lat)")
-        faeMap.whereKey("geo_longitude", value: "\(long)")
-        faeMap.whereKey("radius", value: "\(radius)")
-        faeMap.whereKey("type", value: "place")
-        faeMap.whereKey("max_count", value: "20")
-        faeMap.getMapInformation { (status: Int, message: Any?) in
-            var arrPlaces = [PlacePin]()
-            arrPlaces.removeAll()
-            if status / 100 == 2 {
+    func getRelatedPlaces(_ lat: String, _ long: String, isSimilar: Bool, _ completion: @escaping () -> Void) {
+        if isSimilar {
+            arrSimilarPlaces.removeAll()
+            FaeSearch.shared.whereKey("content", value: place.class_2 == "" ? place.class_1 : place.class_2)
+            FaeSearch.shared.whereKey("source", value: "categories")
+            FaeSearch.shared.whereKey("type", value: "place")
+            FaeSearch.shared.whereKey("size", value: "20")
+            FaeSearch.shared.whereKey("radius", value: "20000")
+            FaeSearch.shared.whereKey("offset", value: "0")
+            FaeSearch.shared.search { (status, message) in
+                guard status / 100 == 2 && message != nil else {
+                    print("Get Related Places Fail \(status) \(message!)")
+                    self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+                    completion()
+                    return
+                }
                 let json = JSON(message!)
                 guard let placeJson = json.array else { return }
-                for pl in placeJson {
-                    let placePin = PlacePin(json: pl)
-                    if arrPlaces.count < 15 && placePin.id != self.place.id {
-                        if isSimilar && placePin.class_1 == self.place.class_1 || !isSimilar {
-                            arrPlaces.append(placePin)
-                        }
-                    }
-                }
-            } else {
-                print("Get Related Places Fail \(status) \(message!)")
+                self.arrSimilarPlaces = placeJson.map({ PlacePin(json: $0) })
+                self.arrSimilarPlaces = self.arrSimilarPlaces.filter({ $0.id != self.place.id })
+                self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+                completion()
             }
-            completion(arrPlaces)
+        } else { // Near this Location
+            arrNearbyPlaces.removeAll()
+            FaeMap.shared.whereKey("geo_latitude", value: lat)
+            FaeMap.shared.whereKey("geo_longitude", value: long)
+            FaeMap.shared.whereKey("radius", value: "5000")
+            FaeMap.shared.whereKey("type", value: "place")
+            FaeMap.shared.whereKey("max_count", value: "20")
+            FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+                guard status / 100 == 2 && message != nil else {
+                    print("Get Related Places Fail \(status) \(message!)")
+                    self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
+                    completion()
+                    return
+                }
+                let json = JSON(message!)
+                guard let placeJson = json.array else { return }
+                self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
+                self.arrNearbyPlaces = self.arrNearbyPlaces.filter({ $0.id != self.place.id })
+                self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
+                completion()
+            }
         }
     }
     

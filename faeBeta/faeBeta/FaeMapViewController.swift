@@ -19,6 +19,7 @@ enum MapMode {
     case selecting
     case explore
     case collection
+    case allPlaces
 }
 
 enum CreateLocation {
@@ -136,6 +137,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }
+            if mapMode == .allPlaces {
+                btnLeftWindow.isHidden = true
+                imgExpbarShadow.isHidden = false
+                return
+            }
             imgSearchIcon.isHidden = mapMode == .selecting
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
@@ -221,6 +227,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        Key.shared.FMVCtrler = self
+        
         isUserLoggedIn()
         getUserStatus()
         

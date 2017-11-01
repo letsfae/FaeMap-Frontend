@@ -9,7 +9,15 @@
 import UIKit
 import SwiftyJSON
 
+enum AllPlacesEnterMode: Int {
+    case mapboard = 1
+    case placeDetail = 2
+}
+
 class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, MapBoardPlaceTabDelegate, BoardsSearchDelegate {
+    
+    weak var delegate: MapSearchDelegate?
+    
     var uiviewNavBar: FaeNavBar!
     var tblAllPlaces: UITableView!
     var strTitle: String! = ""
@@ -36,6 +44,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         loadTable()
         loadFooter()
         searchedLoc = LocManager.shared.curtLoc
+        // 如果是从place detail进来的话，以下这行是不是可以做个判断以免加载了未用信息？
         getPlaceInfo()
     }
     
@@ -130,11 +139,25 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: false)
     }
     
     @objc func jumpToMapPlaces(_ sender: UIButton) {
-        
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        self.delegate = Key.shared.FMVCtrler
+        if placeTableMode == .recommend {
+            delegate?.jumpToPlaces?(searchText: "fromAllPlaces", places: recommendedPlaces, selectedLoc: CLLocation())
+        } else {
+            delegate?.jumpToPlaces?(searchText: "fromAllPlaces", places: searchedPlaces, selectedLoc: CLLocation())
+        }
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     func SearchLocation(_ sender: UIButton) {

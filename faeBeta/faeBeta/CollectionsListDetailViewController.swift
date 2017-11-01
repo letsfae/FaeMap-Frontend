@@ -62,10 +62,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     var boolFromChat: Bool = false
     
-    var intRemoveCount = 2
-    
-    var faeMapCtrler: FaeMapViewController?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -200,11 +196,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         switch sender.tag {
         case 0: // map view
             var arrCtrlers = navigationController?.viewControllers
-            if let ctrler = faeMapCtrler {
+            if let ctrler = Key.shared.FMVCtrler {
                 ctrler.arrCtrlers = arrCtrlers!
                 ctrler.boolFromMap = false
             }
-            for _ in 0..<intRemoveCount {
+            while !(arrCtrlers?.last is InitialPageController) {
                 arrCtrlers?.removeLast()
             }
             featureDelegate?.showSavedPins(type: arrColDetails.colType, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.colName)

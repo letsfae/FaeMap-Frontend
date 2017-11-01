@@ -199,6 +199,7 @@ class GeneralSubTitleCell: UITableViewCell {
         btnSelect = UIButton()
         btnSelect.setImage(#imageLiteral(resourceName: "Settings_choose"), for: .selected)
         btnSelect.setImage(#imageLiteral(resourceName: "Settings_notChoose"), for: .normal)
+        btnSelect.adjustsImageWhenHighlighted = false
         addSubview(btnSelect)
         addConstraintsWithFormat("H:[v0(22)]-27-|", options: [], views: btnSelect)
         addConstraintsWithFormat("V:|-0-[v0(22)]", options: [], views: btnSelect)

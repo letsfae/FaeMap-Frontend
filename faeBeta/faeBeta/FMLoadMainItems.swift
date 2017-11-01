@@ -16,7 +16,6 @@ extension FaeMapViewController {
     func loadMapView() {
         faeMapView = FaeMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.delegate = self
-        faeMapView.faeMapCtrler = self
         view.addSubview(faeMapView)
         view.sendSubview(toBack: faeMapView)
         faeMapView.showsPointsOfInterest = false
@@ -128,13 +127,11 @@ extension FaeMapViewController {
         // Click to back to zoom
         btnZoom = FMZoomButton()
         btnZoom.mapView = faeMapView
-        btnZoom.faeMapCtrler = self
         view.addSubview(btnZoom)
         
         // Click to locate the current location
         btnLocateSelf = FMLocateSelf()
         btnLocateSelf.mapView = faeMapView
-        btnLocateSelf.faeMapCtrler = self
         view.addSubview(btnLocateSelf)
         btnLocateSelf.nameCard = uiviewNameCard
         
