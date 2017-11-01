@@ -484,9 +484,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         btnCloseOptions.alpha = 0
         btnCloseOptions.addTarget(self, action: #selector(hideOptions(_:)), for: .touchUpInside)
         
-        imgAvatar.isUserInteractionEnabled = false
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
-        imgAvatar.addGestureRecognizer(tapGesture)
+        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openFaeUsrInfo))
+        //imgAvatar.addGestureRecognizer(tapGesture)
         
         btnLeftPart = UIButton(frame: initialFrame)
         btnLeftPart.addTarget(self, action: #selector(hideSelf), for: .touchUpInside)
