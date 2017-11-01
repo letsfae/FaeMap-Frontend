@@ -127,8 +127,10 @@ class GeneralTitleCell: UITableViewCell {
         
     }
     
-    func setContraintsForDes() {
-        lblDesContraint = returnConstraintsWithFormat("V:|-50-[v0]-20-|", options: [], views: lblDes)
+    func setContraintsForDes(desp exist: Bool = true) {
+        if exist {
+            lblDesContraint = returnConstraintsWithFormat("V:|-50-[v0]-20-|", options: [], views: lblDes)            
+        }
         lblNameContraint = returnConstraintsWithFormat("V:|-20-[v0(25)]", options: [], views: lblName)
     }
     

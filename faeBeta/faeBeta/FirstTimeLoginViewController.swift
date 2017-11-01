@@ -214,14 +214,16 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     }
                     let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                     imagePicker.imageDelegate = self
-                    imagePicker.boolCreateStoryPin = false
+                    imagePicker.vcComeFromType = .firstTimeLogin
+                    imagePicker.vcComeFrom = self
                     imagePicker._maximumSelectedPhotoNum = 1
                     self.present(imagePicker, animated: true, completion: nil)
                 })
             } else {
                 let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 albumPicker.imageDelegate = self
-                albumPicker.boolCreateStoryPin = false
+                albumPicker.vcComeFromType = .firstTimeLogin
+                albumPicker.vcComeFrom = self
                 albumPicker._maximumSelectedPhotoNum = 1
                 self.present(albumPicker, animated: true, completion: nil)
             }

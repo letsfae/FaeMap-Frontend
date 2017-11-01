@@ -214,7 +214,21 @@ class FaeChat {
                     messageRealm.sender = userRealm
                 }
             } else {
-                
+                getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+                    if status / 100 == 2 && result != nil {
+                        let profileJSON = JSON(result!)
+                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, false, "", ""])
+                        try! realm.write {
+                            realm.add(newUser, update: true)
+                        }
+                        General.shared.avatar(userid: user.int!) { (avatarImage) in
+                        }
+                        messageRealm.members.append(newUser)
+                        if newUser.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
+                            messageRealm.sender = newUser
+                        }
+                    }
+                }
             }
         }
         messageRealm.created_at = messageJSON["created_at"].string!

@@ -235,6 +235,8 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             boolMiniLocationShow = false
             viewMiniLoc.isHidden = true
         }
+        //boolKeyboardShow = true
+
     }
     
     
@@ -259,6 +261,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else if boolKeyboardShow {
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
             self.boolStickerViewShow = true
@@ -289,6 +292,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
             
@@ -330,6 +334,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             } else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
                 self.delegate.endEdit?()
+                //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
                 self.btnQuickSendImage.alpha = 1
                 self.btnMoreImage.alpha = 1
@@ -407,6 +412,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         boolStickerViewShow = false
         boolImageQuickPickerShow = false
         cllcPhotoQuick = nil
+        viewPhotoPicker.cleanup()
         viewAudioRecorder = nil
         boolRecordShow = false
         boolAudioInitialized = false
@@ -454,8 +460,13 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         //self.cllcPhotoQuick.reloadData()
         for (asset, indexPath) in viewPhotoPicker.assetIndexpath {
             let indicatorNum = viewPhotoPicker.assetIndexDict[asset]
-            let cell = cllcPhotoQuick.cellForItem(at: indexPath) as! QuickPhotoPickerCollectionViewCell
-            cell.selectCell(indicatorNum!)
+            if let cell = cllcPhotoQuick.cellForItem(at: indexPath) {
+                let modifyCell = cell as! QuickPhotoPickerCollectionViewCell
+                modifyCell.selectCell(indicatorNum!)
+            } else {
+                /*let cell = cllcPhotoQuick.dequeueReusableCell(withReuseIdentifier: photoQuickCollectionReuseIdentifier, for: indexPath) as! QuickPhotoPickerCollectionViewCell
+                cell.selectCell(indicatorNum!)*/
+            }
         }
     }
     
@@ -568,8 +579,10 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
                         highQRequestOption.resizeMode = .exact
                         highQRequestOption.deliveryMode = .highQualityFormat //high pixel
                         highQRequestOption.isSynchronous = true
-                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 210,height: 150), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
-                            self.viewPhotoPicker.videoImage = result
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFill, options: highQRequestOption) { (result, info) in
+                            if result != nil {
+                                self.viewPhotoPicker.videoImage = result
+                            }
                         }
                     }
                     cell.selectCell(max(viewPhotoPicker.indexImageDict.count - 1, 0))

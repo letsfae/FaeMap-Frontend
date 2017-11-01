@@ -8,8 +8,6 @@
 
 import UIKit
 import JSQMessagesViewController
-import Firebase
-import FirebaseDatabase
 import Photos
 import MobileCoreServices
 import CoreMedia
@@ -54,10 +52,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // the proxy of the keyboard
     var uiviewKeyboard: UIView!
     
-    
-    var ref = Database.database().reference().child(Key.shared.fireBaseRef) // reference to all chat room
-    var roomRef: DatabaseReference?
-    var _refHandle: DatabaseHandle?
     var dictArrInitMessages: [NSDictionary] = [] // load latest 15 messages before showing chatting
     var arrJSQMessages: [JSQMessage] = [] // data source of collectionView
     var arrStrMessagesKey: [String] = [] // the key of each message to tell whether it is loaded
@@ -102,7 +96,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     let floatLocExtendHeight: CGFloat = 76
-    let floatInputBarHeight: CGFloat = 90
+    //let floatInputBarHeight: CGFloat = 90
+    var floatInputBarHeight: CGFloat {
+        get {
+            return self.toolbarHeightConstraint.constant
+        }
+    }
     let floatToolBarContentHeight: CGFloat = 271
   
     //let realm = try! Realm()
@@ -116,6 +115,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let userDefaults = UserDefaults.standard
     var showAvatar: Bool = true //false not show avatar, true show avatar
     var firstLoad: Bool? // whether it is the first time to load this room.
+    
     
     // MARK: lifecycle
     override func viewDidLoad() {
@@ -330,8 +330,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
         //inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeInputMode), name: NSNotification.Name.UITextInputCurrentInputModeDidChange, object: nil)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -341,6 +343,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             
             let newString = (change![NSKeyValueChangeKey.newKey]! as! String)
             btnSend.isEnabled = newString.count > 0
+        }
+        if inputToolbar.contentView.textView.sizeChanged {
+            scrollToBottom(false)
+            inputToolbar.contentView.textView.sizeChanged = false
         }
     }
     
@@ -517,6 +523,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc func keyboardDidShow(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = true
         setProxyKeyboardView()
+        //if UITextInputMode.activeInputModes.filter
+        
     }
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
@@ -533,6 +541,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc func keyboardDidHide(_ notification: NSNotification) {
         toolbarContentView.boolKeyboardShow = false
         uiviewKeyboard = nil
+    }
+    
+    @objc func changeInputMode(_ notification: NSNotification) {
+        // TODO
+        //print("method change")
+        //inputToolbar.contentView.textView.resignFirstResponder()
+        //inputToolbar.contentView.textView.becomeFirstResponder()
+        setProxyKeyboardView()
+        if uiviewKeyboard != nil {
+            //print(uiviewKeyboard.frame.height)
+            //setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+            //if uiviewKeyboard.frame.height != 258
+        }
+        if let currentMode = inputToolbar.contentView.textView.textInputMode {
+            let _ = NSStringFromClass(type(of: currentMode))
+            //print(className)
+        }
+    }
+    
+    @objc func keyboardDidChangeFrame(_ notification: NSNotification) {
+        //print("frame changed")
+        if uiviewKeyboard != nil {
+            //print(uiviewKeyboard.frame.height)
+            //setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+        }
     }
     
     @objc func keyboardFrameChange(_ notification: NSNotification) {
@@ -562,6 +595,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
         floatDistanceInputBarToBottom = distance
         uiviewLocationExtend.frame.origin.y = screenHeight - distance - floatInputBarHeight - floatLocExtendHeight
+        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight
         if !notToolBar {
             toolbarContentView.frame.origin.y = screenHeight - distance
         }
@@ -595,6 +629,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     // MARK: scroll view delegate
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if inputToolbar.contentView.textView.sizeChanged && toolbarContentView.boolKeyboardShow {
+            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)            
+            return
+        }
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             var dragDistanceY = scrollViewCurrentOffset - floatScrollViewOriginOffset
@@ -606,6 +644,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight {
                         return
                     }
+                    /*if inputToolbar.contentView.textView.sizeChanged {
+                        setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+                        inputToolbar.contentView.textView.sizeChanged = false
+                        return
+                    }*/
                     let keyboardHeight = uiviewKeyboard.frame.height
                     if -dragDistanceY > keyboardHeight {
                         dragDistanceY = -keyboardHeight

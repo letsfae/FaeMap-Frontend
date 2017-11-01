@@ -112,13 +112,15 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func loaduiviewAlert() {
-        let uiviewAlertX = 290/414*screenWidth
-        uiviewAlert = UIView(frame: CGRect(x: (screenWidth-uiviewAlertX)/2, y: 200/736*screenHeight, width: 290/414*screenWidth, height: 161))
+        //let uiviewAlertX = 290/414*screenWidth
+        //uiviewAlert = UIView(frame: CGRect(x: (screenWidth-uiviewAlertX)/2, y: 200/736*screenHeight, width: 290/414*screenWidth, height: 161))
+        uiviewAlert = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewAlert.center.x = screenWidth / 2
         uiviewAlert.backgroundColor = .white
-        uiviewAlert.layer.cornerRadius = 19
+        uiviewAlert.layer.cornerRadius = 19 * screenHeightFactor
         uiviewBackground.addSubview(uiviewAlert)
         
-        let btnAlertX = 210/414*screenWidth
+        //let btnAlertX = 210/414*screenWidth
         lblAlert = UILabel(frame: CGRect(x: 0, y: 30, w: 205, h: 50))
         lblAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(lblAlert)
@@ -134,10 +136,13 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         lblAlert.numberOfLines = 0
         lblAlert.lineBreakMode = .byWordWrapping
         
-        btnAlert = UIButton(frame: CGRect(x: (uiviewAlertX-btnAlertX)/2, y: 102/736*screenHeight, width: btnAlertX, height: 39))
+        //btnAlert = UIButton(frame: CGRect(x: (uiviewAlertX-btnAlertX)/2, y: 102/736*screenHeight, width: btnAlertX, height: 39))
+        btnAlert = UIButton(frame: CGRect(x: 0, y: 102, w: 210, h: 39))
+        btnAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(btnAlert)
         btnAlert.titleLabel?.textColor = .white
         btnAlert.titleLabel?.textAlignment = .center
+        btnAlert.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
         if tag == 0 {
             btnAlert.setTitle("Yes", for: .normal)
             btnAlert.addTarget(self, action: #selector(getintoNextClear(_:)), for: .touchUpInside)
@@ -147,9 +152,10 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             btnAlert.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         }
         btnAlert.backgroundColor = UIColor._2499090()
-        btnAlert.layer.cornerRadius = 19
+        btnAlert.layer.cornerRadius = 19 * screenHeightFactor
         
-        btnDelete = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 15/736*screenHeight, width: 17/414*screenWidth, height: 17/414*screenWidth))
+        //btnDelete = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 15/736*screenHeight, width: 17/414*screenWidth, height: 17/414*screenWidth))
+        btnDelete = UIButton(frame: CGRect(x: 0, y: 0, w: 47, h: 45))
         uiviewAlert.addSubview(btnDelete)
         btnDelete.setImage(#imageLiteral(resourceName: "Settings_delete"), for: .normal)
         btnDelete.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
@@ -226,6 +232,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.switchIcon.isOn = true
                 uiviewBackground.isHidden = false
                 uiviewAlert.isHidden = true
+                uiviewHidden.isHidden = false
             }
         }
         else if section == 3 { // TODO
