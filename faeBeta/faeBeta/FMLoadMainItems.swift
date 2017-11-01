@@ -22,6 +22,7 @@ extension FaeMapViewController {
         faeMapView.showsCompass = true
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
+        faeMapView.faeMapCtrler = self
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
