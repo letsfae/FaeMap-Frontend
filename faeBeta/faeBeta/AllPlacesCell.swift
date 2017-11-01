@@ -66,27 +66,6 @@ class AllPlacesCell: UITableViewCell {
         lblOpeninghour.text = place.class_1
         lblPrice.text = place.price
         imgPlaceIcon.backgroundColor = .white
-        
-        if place.imageURL == "" {
-            imgPlaceIcon.image = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-            imgPlaceIcon.backgroundColor = .white
-        } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: place.imageURL as AnyObject) as? UIImage {
-                self.imgPlaceIcon.image = placeImgFromCache
-                self.imgPlaceIcon.backgroundColor = UIColor._2499090()
-            } else {
-                downloadImage(URL: place.imageURL) { (rawData) in
-                    guard let data = rawData else { return }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        guard let placeImg = UIImage(data: data) else { return }
-                        DispatchQueue.main.async {
-                            self.imgPlaceIcon.image = placeImg
-                            self.imgPlaceIcon.backgroundColor = UIColor._2499090()
-                            placeInfoBarImageCache.setObject(placeImg, forKey: place.imageURL as AnyObject)
-                        }
-                    }
-                }
-            }
-        }
+        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPlaceIcon)
     }
 }

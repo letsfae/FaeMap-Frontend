@@ -150,4 +150,30 @@ class General: NSObject {
             completion(status, mapPlaceJSON)
         }
     }
+    
+    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
+        if url == "" {
+            imgPic.image = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+            imgPic.backgroundColor = .white
+            imgPic.contentMode = .center
+        } else {
+            imgPic.contentMode = .scaleAspectFill
+            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: url as AnyObject) as? UIImage {
+                imgPic.image = placeImgFromCache
+                imgPic.backgroundColor = UIColor._2499090()
+            } else {
+                downloadImage(URL: url) { (rawData) in
+                    guard let data = rawData else { return }
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        guard let placeImg = UIImage(data: data) else { return }
+                        DispatchQueue.main.async {
+                            imgPic.image = placeImg
+                            imgPic.backgroundColor = UIColor._2499090()
+                            placeInfoBarImageCache.setObject(placeImg, forKey: url as AnyObject)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

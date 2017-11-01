@@ -58,27 +58,27 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func loadBackground() {
-        btnBackground = UIButton(frame: self.view.frame)
-        //btnBackground.addTarget(self, action: #selector(notouch(_:)), for: .touchUpInside)
+        btnBackground = UIButton(frame: view.frame)
+        // btnBackground.addTarget(self, action: #selector(notouch(_:)), for: .touchUpInside)
         view.addSubview(btnBackground)
         
-        uiviewBackground = UIView(frame: self.view.frame)
+        uiviewBackground = UIView(frame: view.frame)
         view.addSubview(uiviewBackground)
         uiviewBackground.backgroundColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 0.5)
         uiviewBackground.addSubview(btnBackground)
     }
     
     func loaduiviewAlert() {
-        let alertWidth = 290/414*screenWidth
-        let alertY = 200/736*screenHeight
-        uiviewAlert = UIView(frame: CGRect(x: (screenWidth-alertWidth)/2, y: alertY, width: alertWidth, height: 161))
+        let alertWidth = 290 / 414 * screenWidth
+        let alertY = 200 / 736 * screenHeight
+        uiviewAlert = UIView(frame: CGRect(x: (screenWidth - alertWidth) / 2, y: alertY, width: alertWidth, height: 161))
         uiviewBackground.addSubview(uiviewAlert)
         uiviewAlert.backgroundColor = .white
         uiviewAlert.layer.cornerRadius = 21
         
-        let alertLabelWidth = 210/414*screenWidth
-        let alertLabelY = 30/736*screenHeight
-        lblAlert = UILabel(frame: CGRect(x: 41/414*screenWidth, y: alertLabelY, width: alertLabelWidth, height: 60))
+        let alertLabelWidth = 210 / 414 * screenWidth
+        let alertLabelY = 30 / 736 * screenHeight
+        lblAlert = UILabel(frame: CGRect(x: 41 / 414 * screenWidth, y: alertLabelY, width: alertLabelWidth, height: 60))
         uiviewAlert.addSubview(lblAlert)
         lblAlert.numberOfLines = 2
         lblAlert.text = "Oops, please verify your\nEmail to Subscribe!"
@@ -86,9 +86,9 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         lblAlert.textColor = UIColor._898989()
         lblAlert.font = UIFont(name: "AvenirNext-Medium", size: 18)
         
-        let alertActionWidth = 208/414*screenWidth
-        let alertActionY = 102/736*screenHeight
-        btnAlertAction = UIButton(frame: CGRect(x: 41/414*screenWidth, y: alertActionY, width: alertActionWidth, height: 39))
+        let alertActionWidth = 208 / 414 * screenWidth
+        let alertActionY = 102 / 736 * screenHeight
+        btnAlertAction = UIButton(frame: CGRect(x: 41 / 414 * screenWidth, y: alertActionY, width: alertActionWidth, height: 39))
         uiviewAlert.addSubview(btnAlertAction)
         btnAlertAction.titleLabel?.textColor = .white
         btnAlertAction.titleLabel?.textAlignment = .center
@@ -97,9 +97,9 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         btnAlertAction.layer.cornerRadius = 19
         btnAlertAction.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         
-        let imgviewAlertWidth = 21/414*screenWidth
-        let imgviewAlertY = 13/736*screenHeight
-        imgviewAlertDelete = UIImageView(frame: CGRect(x: 12/414*screenWidth, y: imgviewAlertY, width: imgviewAlertWidth, height: 21))
+        let imgviewAlertWidth = 21 / 414 * screenWidth
+        let imgviewAlertY = 13 / 736 * screenHeight
+        imgviewAlertDelete = UIImageView(frame: CGRect(x: 12 / 414 * screenWidth, y: imgviewAlertY, width: imgviewAlertWidth, height: 21))
         uiviewAlert.addSubview(imgviewAlertDelete)
         imgviewAlertDelete.image = #imageLiteral(resourceName: "Settings_delete")
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showMainView(_:)))
@@ -137,9 +137,9 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         let sec = indexPath.section
         let row = indexPath.row
         
-        //sec==0 is MeasureMent part
+        // sec==0 is MeasureMent part
         if sec == 0 {
-            //row==0 is title "Measurement Unit"
+            // row==0 is title "Measurement Unit"
             if row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "general_title", for: indexPath as IndexPath) as! GeneralTitleCell
                 cell.lblName.text = arrNames["\(sec)\(row)"]
@@ -158,10 +158,11 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.switchIcon.isHidden = true
             cell.btnSelect.isHidden = false
             cell.imgView.isHidden = true
-            cell.btnSelect.isSelected = row == 1
+            let isMetric = NSLocale.current.usesMetricSystem
+            cell.btnSelect.isSelected = isMetric ? row == 2 : row == 1
             return cell
         } else if sec == 1 {
-            //sec==1 is Permission part
+            // sec==1 is Permission part
             if row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "general_title", for: indexPath as IndexPath) as! GeneralTitleCell
                 cell.lblName.text = arrNames["\(sec)\(row)"]
@@ -206,34 +207,35 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
         let row = indexPath.row
+        /**
         if section == 0 {
-            //section == 0 exchange Imperial & Metric
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as!GeneralSubTitleCell
+            // section == 0 exchange Imperial & Metric
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralSubTitleCell
             if row == 1 {
                 if cell.btnSelect.isSelected == false {
                     cell.btnSelect.isSelected = true
-                    let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as!GeneralSubTitleCell
+                    let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
                 }
-            }
-            else if row == 2 {
+            } else if row == 2 {
                 if cell.btnSelect.isSelected == false {
                     cell.btnSelect.isSelected = true
-                    let cell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as!GeneralSubTitleCell
+                    let cell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
                 }
             }
-        } else if section == 1 {
+        } else
+         */
+        if section == 1 {
             if row != 1 {
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
             }
         } else if section == 3 {
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as!GeneralTitleCell
+            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralTitleCell
             if cell.switchIcon.isOn == true {
                 cell.switchIcon.isOn = false
                 uiviewBackground.isHidden = false
-            }
-            else {
+            } else {
                 cell.switchIcon.isOn = true
                 uiviewBackground.isHidden = true
             }
@@ -244,8 +246,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         if sender.isOn == true {
             sender.isOn = false
             uiviewBackground.isHidden = false
-        }
-        else {
+        } else {
             sender.isOn = true
             uiviewBackground.isHidden = true
         }
@@ -258,10 +259,9 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     func showEmailAlert(_ sender: UIButton) {
         
     }
-
     
     @objc func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     func getPermissionStatus() {
@@ -305,7 +305,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             dictPermissions["Push Notifications"] = true
         }
         
-        switch UIApplication.shared.backgroundRefreshStatus {// TODO
+        switch UIApplication.shared.backgroundRefreshStatus { // TODO:
         case .available:
             dictPermissions["Background Location"] = true
         default:

@@ -15,11 +15,23 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        func similarNearbyCount() -> Int {
+            let count = intSimilar + intNearby
+            if count == 0 {
+                return 0
+            } else if count == 1 {
+                return 1
+            } else {
+                return 2
+            }
+        }
+        
         if intHaveHour == 0 && intHaveWebPhone == 0 {
             if section == 0 {
                 return 1
             } else {
-                return 2
+                return similarNearbyCount()
             }
         } else if intHaveHour == 0 && intHaveWebPhone == 1 {
             if section == 0 {
@@ -29,23 +41,23 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
                 if place.url == "" { return 1 }
                 return 2
             } else {
-                return 2
+                return similarNearbyCount()
             }
         } else if intHaveHour == 1 && intHaveWebPhone == 0  {
-            if section < 2 {
+            if section <= 1 {
                 return 1
             } else {
-                return 2  // fixed
+                return similarNearbyCount()
             }
         } else {
-            if section < 2 {
+            if section <= 1 {
                 return 1
             } else if section == 2 {
                 if place.phone == "" { return 1 }
                 if place.url == "" { return 1 }
                 return 2
             } else {
-                return 2  // fixed
+                return similarNearbyCount()
             }
         }
     }
@@ -60,24 +72,14 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
             } else {
                 return 222
             }
-        } else if intHaveHour == 0 && intHaveWebPhone == 1 {
-            if section == 0 {
-                return tblPlaceDetail.rowHeight
-            } else if section == 1 {
-                return tblPlaceDetail.rowHeight
-            } else {
-                return 222
-            }
-        } else if intHaveHour == 1 && intHaveWebPhone == 0  {
-            if section < 2 {
+        } else if intHaveHour == 1 && intHaveWebPhone == 1 {
+            if section <= 2 {
                 return tblPlaceDetail.rowHeight
             } else {
                 return 222
             }
         } else {
-            if section < 2 {
-                return tblPlaceDetail.rowHeight
-            } else if section == 2 {
+            if section <= 1 {
                 return tblPlaceDetail.rowHeight
             } else {
                 return 222
@@ -98,11 +100,11 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
             if section == 0 {
                 return getMapCell(tableView, indexPath)
             } else if section == 1 {
-                if place.phone == "" && row == 1 {
+                if place.phone == "" && row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: true)
-                } else if place.url == "" && row == 1 {
+                } else if place.url == "" && row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: false)
-                } else if indexPath.row == 1 {
+                } else if indexPath.row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: true)
                 } else {
                     return getWebPhoneCell(tableView, indexPath, isURL: false)
@@ -111,8 +113,8 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
                 return getMBCell(tableView, indexPath)
             }
         } else if intHaveHour == 1 && intHaveWebPhone == 0  {
-            if section < 2 {
-                if section == 1 {
+            if section <= 1 {
+                if section == 0 {
                     return getMapCell(tableView, indexPath)
                 }
                 return getHoursCell(tableView, indexPath)
@@ -120,17 +122,17 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
                 return getMBCell(tableView, indexPath)
             }
         } else {
-            if section < 2 {
-                if section == 1 {
+            if section <= 1 {
+                if section == 0 {
                     return getMapCell(tableView, indexPath)
                 }
                 return getHoursCell(tableView, indexPath)
             } else if section == 2 {
-                if place.phone == "" && row == 1 {
+                if place.phone == "" && row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: true)
-                } else if place.url == "" && row == 1 {
+                } else if place.url == "" && row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: false)
-                } else if indexPath.row == 1 {
+                } else if indexPath.row == 0 {
                     return getWebPhoneCell(tableView, indexPath, isURL: true)
                 } else {
                     return getWebPhoneCell(tableView, indexPath, isURL: false)
@@ -142,12 +144,12 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let section = indexPath.section
-        if section == 0 || section == 1 {
+        func tapMapOrHour() {
             let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
             PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
             tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-        } else if section == 2 {   // open place website / call place phone number
+        }
+        func tapWebOrPhone() {
             let phoneNum = place.phone.onlyNumbers()
             let strURL = indexPath.row == 0 ? place.url : "tel://\(phoneNum)"
             if let url = URL(string: strURL), UIApplication.shared.canOpenURL(url) {
@@ -158,14 +160,46 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
                 }
             }
         }
+        let section = indexPath.section
+        if intHaveHour == 0 && intHaveWebPhone == 0 {
+            if section == 0 {
+                tapMapOrHour()
+            }
+        } else if intHaveHour == 0 && intHaveWebPhone == 1 {
+            if section == 0 {
+                tapMapOrHour()
+            } else if section == 1 {
+                tapWebOrPhone()
+            }
+        } else if intHaveHour == 1 && intHaveWebPhone == 0  {
+            if section <= 1 {
+                tapMapOrHour()
+            }
+        } else {
+            if section <= 1 {
+                tapMapOrHour()
+            } else if section == 2 {
+                tapWebOrPhone()
+            }
+        }
     }
     
     func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> MBPlacesCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
-        if arrRelatedPlaces.count != 0 {
-            cell.delegate = self
-            let places = arrRelatedPlaces[indexPath.row]
-            cell.setValueForCell(title: arrTitle[indexPath.row], places: places)
+        cell.delegate = self
+        let count = intSimilar + intNearby
+        if count == 1 {
+            if intSimilar == 1 {
+                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+            } else {
+                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+            }
+        } else {
+            if indexPath.row == 0 {
+                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+            } else {
+                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+            }
         }
         return cell
     }

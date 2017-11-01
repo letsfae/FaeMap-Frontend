@@ -11,7 +11,6 @@ import UIKit
 class FMZoomButton: UIButton {
     
     var mapView: FaeMapView!
-    var faeMapCtrler: FaeMapViewController?
     var btnSmall: UIButton!
     var btnLarge: UIButton!
     var btnZoomIn: UIButton!
@@ -39,15 +38,15 @@ class FMZoomButton: UIButton {
             largeMode()
             prevRegion = mapView.region
             guard prevRegion != nil else { return }
-            faeMapCtrler?.placeClusterManager.canUpdate = false
-            faeMapCtrler?.userClusterManager.canUpdate = false
+            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
+            Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             smallMode()
-            faeMapCtrler?.placeClusterManager.canUpdate = true
-            faeMapCtrler?.userClusterManager.canUpdate = true
-            faeMapCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-            faeMapCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
@@ -160,7 +159,6 @@ class FMLocateSelf: UIButton {
     
     var mapView: MKMapView!
     var nameCard = FMNameCardView()
-    var faeMapCtrler: FaeMapViewController?
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 21, y: screenHeight - 153, width: 60, height: 60))
@@ -183,12 +181,12 @@ class FMLocateSelf: UIButton {
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
         }
-        faeMapCtrler?.btnZoom.smallMode()
+        Key.shared.FMVCtrler?.btnZoom.smallMode()
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         mapView.setCamera(camera, animated: true)
         nameCard.hide() {
-            self.faeMapCtrler?.mapGesture(isOn: true)
+            Key.shared.FMVCtrler?.mapGesture(isOn: true)
         }
     }
 }

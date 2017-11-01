@@ -76,20 +76,8 @@ class FMPlaceInfoBar: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
-    func loadPlaceImage(imgView: PlaceView, placeInfo: PlacePin) {
-        if placeInfo.imageURL == "" {
-            imgView.imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-        } else {
-            downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                guard let data = rawData else { return }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let placeImg = UIImage(data: data)
-                    DispatchQueue.main.async {
-                        imgView.imgType.image = placeImg
-                    }
-                }
-            }
-        }
+    func loadPlaceImage(placeView: PlaceView, placeInfo: PlacePin) {
+        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: placeView.imgType)
     }
     
     func load(for placeInfo: PlacePin) {
@@ -276,27 +264,7 @@ class PlaceView: UIImageView {
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .white
 //        lblHours.text = placeInfo.hours
-        if placeInfo.imageURL == "" {
-            imgType.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-            imgType.backgroundColor = .white
-        } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
-                self.imgType.image = placeImgFromCache
-                self.imgType.backgroundColor = UIColor._2499090()
-            } else {
-                downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                    guard let data = rawData else { return }
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        guard let placeImg = UIImage(data: data) else { return }
-                        DispatchQueue.main.async {
-                            self.imgType.image = placeImg
-                            self.imgType.backgroundColor = UIColor._2499090()
-                            placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                        }
-                    }
-                }
-            }
-        }
+        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
     
     private func loadContent() {

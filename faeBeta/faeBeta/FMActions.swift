@@ -132,7 +132,6 @@ extension FaeMapViewController {
         uiviewNameCard.hide {}
         let vcExp = ExploreViewController()
         vcExp.delegate = self
-        vcExp.faeMapCtrler = self
         navigationController?.pushViewController(vcExp, animated: true)
     }
     
@@ -144,11 +143,13 @@ extension FaeMapViewController {
     
     @objc func actionBackTo(_ sender: UIButton) {
         btnZoom.smallMode()
-        if mapMode == .explore {
+        switch mapMode {
+        case .explore:
             let vcExp = ExploreViewController()
             vcExp.delegate = self
             navigationController?.pushViewController(vcExp, animated: false)
-        } else if mapMode == .pinDetail {
+            break
+        case .pinDetail:
             if let ann = selectedPlace {
                 guard let placePin = ann.pinInfo as? PlacePin else { return }
                 selectedPlaceView?.hideButtons()
@@ -159,12 +160,20 @@ extension FaeMapViewController {
             }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
-        } else if mapMode == .collection {
+            break
+        case .collection:
             animateMainItems(show: false, animated: boolFromMap)
             if boolFromMap == false {
                 boolFromMap = true
                 navigationController?.setViewControllers(arrCtrlers, animated: false)
             }
+            break
+        case .allPlaces:
+            animateMainItems(show: false, animated: false)
+            navigationController?.setViewControllers(arrCtrlers, animated: false)
+            break
+        default:
+            break
         }
         PLACE_ENABLE = true
         mapMode = .normal
@@ -172,7 +181,7 @@ extension FaeMapViewController {
         placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: nil)
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
-        arrExpPlace.removeAll(keepingCapacity: true)
+        arrExpPlace.removeAll()
         clctViewMap.reloadData()
     }
 }

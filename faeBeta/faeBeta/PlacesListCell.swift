@@ -29,30 +29,10 @@ class PlacesListCell: UITableViewCell {
     }
     
     func setValueForPlace(_ placeInfo: PlacePin) {
-        self.lblPlaceName.text = placeInfo.name
-        self.lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
-        self.imgPic.backgroundColor = .white
-        if placeInfo.imageURL == "" {
-            imgPic.image = UIImage(named: "place_result_\(placeInfo.class_2_icon_id)") ?? UIImage(named: "place_result_48")
-            imgPic.backgroundColor = .white
-        } else {
-            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: placeInfo.imageURL as AnyObject) as? UIImage {
-                self.imgPic.image = placeImgFromCache
-                self.imgPic.backgroundColor = UIColor._2499090()
-                return
-            }
-            downloadImage(URL: placeInfo.imageURL) { (rawData) in
-                guard let data = rawData else { return }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    guard let placeImg = UIImage(data: data) else { return }
-                    DispatchQueue.main.async {
-                        self.imgPic.image = placeImg
-                        self.imgPic.backgroundColor = UIColor._2499090()
-                        placeInfoBarImageCache.setObject(placeImg, forKey: placeInfo.imageURL as AnyObject)
-                    }
-                }
-            }
-        }
+        lblPlaceName.text = placeInfo.name
+        lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
+        imgPic.backgroundColor = .white
+        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgPic)
     }
     
     fileprivate func loadRecommendedCellContent() {
