@@ -90,6 +90,9 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewChooseLoc = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
         uiviewChooseLoc.backgroundColor = .white
         view.addSubview(uiviewChooseLoc)
+        uiviewChooseLoc.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(chooseLocation(_:)))
+        uiviewChooseLoc.addGestureRecognizer(tapGesture)
         
         imgIconChooseLoc = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
         imgIconChooseLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
@@ -99,6 +102,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         lblChooseLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblChooseLoc.textColor = UIColor._107107107()
         imgPeopleLocDetail = UIImageView()
+        imgPeopleLocDetail.contentMode = .center
         imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
         uiviewChooseLoc.addSubview(imgPeopleLocDetail)
         uiviewChooseLoc.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
@@ -133,7 +137,13 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.popViewController(animated: true)
     }
     
+    // TODO: Yue
     @objc func jumpToMapPlaces(_ sender: UIButton) {
+        
+    }
+    
+    // TODO: Yue
+    @objc func chooseLocation(_ sender: UIButton) {
         
     }
     
