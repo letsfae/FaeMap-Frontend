@@ -27,7 +27,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     var location: PlacePin!
     var allPlaces = [PlacePin]()
-    var coordinate: CLLocationCoordinate2D?
+    var coordinate: CLLocationCoordinate2D!
+    
     var uiviewHeader: UIView!
     var uiviewSubHeader: FixedHeader!
     var uiviewFooter: UIView!
@@ -94,10 +95,16 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
-            self.arrNearbyPlaces = arrPlaces
+//        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
+//            self.arrNearbyPlaces = arrPlaces
+//            self.clctNearby.reloadData()
+//        })
+        guard coordinate != nil else { return }
+        let lat = String(coordinate.latitude)
+        let long = String(coordinate.longitude)
+        self.getNearbyPlaces(lat, long) {
             self.clctNearby.reloadData()
-        })
+        }
     }
     
     func updateLocation() {
@@ -131,6 +138,26 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             if ids.count != 0 {
                 self.savedNotiAnimation()
             }
+            completion()
+        }
+    }
+    
+    func getNearbyPlaces(_ lat: String, _ long: String, _ completion: @escaping () -> Void) {
+        arrNearbyPlaces.removeAll()
+        FaeMap.shared.whereKey("geo_latitude", value: lat)
+        FaeMap.shared.whereKey("geo_longitude", value: long)
+        FaeMap.shared.whereKey("radius", value: "5000")
+        FaeMap.shared.whereKey("type", value: "place")
+        FaeMap.shared.whereKey("max_count", value: "20")
+        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+            guard status / 100 == 2 && message != nil else {
+                print("Get Related Places Fail \(status) \(message!)")
+                completion()
+                return
+            }
+            let json = JSON(message!)
+            guard let placeJson = json.array else { return }
+            self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
             completion()
         }
     }
