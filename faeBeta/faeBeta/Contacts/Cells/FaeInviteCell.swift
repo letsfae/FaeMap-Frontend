@@ -28,6 +28,11 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        btnInvite.setImage(nil, for: .normal)
+//    }
+    
     func loadInviteContent() {
         lblName = UILabel()
         lblName.textAlignment = .left

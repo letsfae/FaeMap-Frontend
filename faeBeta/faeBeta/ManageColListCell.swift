@@ -81,8 +81,6 @@ class ColListPlaceCell: UITableViewCell {
         
         lblColMemo =  FaeLabel(CGRect.zero, .left, .demiBoldItalic, 12, UIColor._107105105())
         lblColMemo.numberOfLines = 0
-//        lblColMemo.text = "123456"
-//        lblColMemo.backgroundColor = .red
         addSubview(lblColMemo)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColMemo)
         memoConstraint = returnConstraintsWithFormat("V:|-69-[v0(0)]", options: [], views: lblColMemo)
@@ -91,7 +89,6 @@ class ColListPlaceCell: UITableViewCell {
         btnSelect.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
         btnSelect.setImage(#imageLiteral(resourceName: "mb_btnOvalSelected"), for: .selected)
         btnSelect.isUserInteractionEnabled = false
-//        btnSelect.addTarget(self, action: #selector(actionSelect(_:)), for: .touchUpInside)
         addSubview(btnSelect)
         addConstraintsWithFormat("H:[v0(50)]-0-|", options: [], views: btnSelect)
         addConstraintsWithFormat("V:|-20-[v0(50)]", options: [], views: btnSelect)

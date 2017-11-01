@@ -221,10 +221,12 @@ class FriendOperationFromContactsViewController: UIViewController {
             btnOK.setTitle("Yes", for: .normal)
             lblMsgSent.text = "Are you sure you want \nto resend this request?"
             btnOK.tag = RESEND_ACT
+            animationActionView()
         } else if action == "withdraw" {
             btnOK.setTitle("Yes", for: .normal)
             lblMsgSent.text = "Are you sure you want \nto withdraw this request?"
             btnOK.tag = WITHDRAW_ACT
+            animationActionView()
         }
     }
     

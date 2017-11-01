@@ -33,6 +33,8 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     var lblMyScreenname: UILabel!
     var lblMyScreennameField: UILabel!
     var imgGhost: UIImageView!
+    var boolSearched: Bool = false
+    var indicatorView: UIActivityIndicatorView!
     
     let lblPrefix: UILabel = {
         let label = UILabel(frame: CGRect(x: 10, y: 3, width: 20, height: 25))
@@ -61,7 +63,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     
     var indicatorState: IndicatorState = .end
     var filtered = [UserNameCard]()
-    var arrUsers = [MBPeopleStruct]() //["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
     var arrFriends = [Friends]()
     var arrReceivedRequests = [Friends]()
     var arrRequested = [Friends]()
@@ -70,55 +71,23 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         loadSearchTable()
         loadNavBar()
-        //definesPresentationContext = true
-        //view.addSubview(btnIndicator)
         view.backgroundColor = .white
-        
-        // Vicky 07/28/17
+        createActivityIndicator()
         schbarUsernames.txtSchField.becomeFirstResponder()
-        // Vicky 07/28/17 End
-        //getUserList(nil)
-        
-        // Add pan gesture to custom indicator
-        //let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panGestureIndicator(_:)))
-        //btnIndicator.addGestureRecognizer(panGesture)
     }
-    
-    /*
-    func getUserList(_ completion: ((Int) -> ())?) {
-        let userList = FaeMap()
-        
-        userList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
-        userList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
-        userList.whereKey("radius", value: "9999999")
-        userList.whereKey("type", value: "user")
-        userList.getMapInformation { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
-                print("[loadMBPeopleInfo] status/100 != 2")
-                return
-            }
-            let peopleInfoJSON = JSON(message!)
-            guard let peopleInfoJsonArray = peopleInfoJSON.array else {
-                print("[loadMBPeopleInfo] fail to parse mapboard people info")
-                return
-            }
-            if peopleInfoJsonArray.count <= 0 {
-                print("[loadMBPeopleInfo] array is nil")
-                return
-            }
-            
-            for res in peopleInfoJsonArray {
-                let user = MBPeopleStruct(json: res)
-                self.arrUsers.append(user)
-            }
-            self.arrUsers.sort{ $0.displayName < $1.displayName }
-            completion?(self.arrUsers.count)
-        }
-    }
-    */
     
     @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = view.center
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        
+        view.addSubview(indicatorView)
     }
     
     func loadSearchTable() {
@@ -181,10 +150,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         view.addConstraintsWithFormat("V:|-229-[v0]", options: [], views: lblMyScreenname)
         view.addConstraintsWithFormat("V:|-249-[v0]", options: [], views: lblMyScreennameField)
         
-        /* Joshua 06/16/17
-         y should be 114 not 113
-         tblUsernames' height should be screenHeight - 65 - height of schbar
-         */
         tblUsernames = UITableView()
         tblUsernames.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
         tblUsernames.dataSource = self
@@ -197,9 +162,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         tblUsernames.separatorStyle = .none
         view.addSubview(tblUsernames)
         
-        /* ghostBubble Functionality
-         to show up when search returns 0 and schBar is not ""
-        */
         imgGhost = UIImageView()
         imgGhost.frame = CGRect(x: screenWidth/5, y: 3*screenHeight/10, width: 252, height: 209)
         imgGhost.contentMode = .scaleAspectFit
@@ -225,7 +187,9 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         schbarUsernames.txtSchField.becomeFirstResponder()
     }
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
-        filter(searchText: searchBar.txtSchField.text!)
+        if !boolSearched {
+            filter(searchText: searchBar.txtSchField.text!)
+        }
     }
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         filter(searchText: "")
@@ -233,18 +197,24 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String) {
+        boolSearched = true
         filtered.removeAll()
         if searchText == "" {
             self.tblUsernames.reloadData()
+            boolSearched = false
             return
         }
+        
         let faeUser = FaeUser()
         faeUser.whereKey("user_name", value: searchText)
+        indicatorView.startAnimating()
         faeUser.checkUserExistence() {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
                 if !json["existence"].boolValue {
                     self.tblUsernames.reloadData()
+                    self.boolSearched = false
+                    self.indicatorView.stopAnimating()
                     return
                 }
                 let userId = json["user_id"].intValue
@@ -257,9 +227,13 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
                     } else {
                         print("[get user name card fail] \(status) \(message!)")
                     }
+                    self.boolSearched = false
+                    self.indicatorView.stopAnimating()
                 }
             } else {
                 print("[check user existence fail] \(status) \(message!)")
+                self.boolSearched = false
+                self.indicatorView.stopAnimating()
             }
         }
     }
@@ -330,7 +304,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row) and item \(arrUsers[indexPath.row])")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
