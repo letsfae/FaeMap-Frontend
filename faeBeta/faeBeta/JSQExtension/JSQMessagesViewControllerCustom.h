@@ -44,6 +44,7 @@
  *  This view controller is the toolbar's delegate.
  */
 @property (weak, nonatomic, readonly) JSQMessagesInputToolbarCustom *inputToolbar;
+@property (weak, nonatomic, readonly) NSLayoutConstraint *toolbarHeightConstraint;
 @property (weak, nonatomic, readonly) NSLayoutConstraint *toolbarBottomLayoutGuide;
 
 /**

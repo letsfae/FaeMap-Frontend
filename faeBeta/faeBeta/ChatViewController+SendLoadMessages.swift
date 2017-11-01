@@ -8,8 +8,6 @@
 
 import UIKit
 import JSQMessagesViewController
-import Firebase
-import FirebaseDatabase
 import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
@@ -58,7 +56,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         finishSendingMessage()
     }
     // MARK: - send message
-    func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
+    /*func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {
         
         var outgoingMessage: OutgoingMessage?
         // Bryan
@@ -178,7 +176,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         _ = insertMessage(dictMessageSent)
         intNumberOfMessagesLoaded += 1
         self.finishSendingMessage(animated: true, cleanTextView: text != nil)
-    }
+    }*/
     
     func fakeCompletion() {}
     // ENDBryan
@@ -292,7 +290,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     // MARK: handle messages
     // open an observer on firebase to load new messages
-    func loadNewMessage() {
+    /*func loadNewMessage() {
         roomRef = ref.child(strChatRoomId)
         _refHandle = roomRef?.queryLimited(toLast: 15).observe(.childAdded, with: { (snapshot: DataSnapshot) in
             let item = (snapshot.value as? NSDictionary)!
@@ -333,7 +331,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         } else {
             self.boolLoadingPreviousMessages = false
         }
-    }
+    }*/
     
     func insertMessage_v2(_ message: RealmMessage_v2) -> Bool {
         _ = IncomingMessage(collectionView_: self.collectionView!)

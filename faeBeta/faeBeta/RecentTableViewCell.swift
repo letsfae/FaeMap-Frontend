@@ -154,10 +154,11 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     // MARK: bind data to the cell
-    func bindData_v2(_ latest : RealmMessage_v2) {
+    func bindData_v2(_ recent: RealmRecent_v2) {
         /*if let myInteger = Int(latest.withUserID) {
             imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
         }*/
+        let latest = recent.latest_message!
         for user in latest.members {
             if user.id != user.login_user_id || latest.chat_id == user.login_user_id {
                 lblName.text = user.display_name
@@ -174,9 +175,9 @@ class RecentTableViewCell: UITableViewCell {
             lblLastMessage.text = latest.type
         }        
         
-        if latest.unread_count > 0 {
+        if recent.unread_count > 0 {
             lblCounter.isHidden = false
-            lblCounter.text = latest.unread_count > 99 ? "•••" : "\(latest.unread_count)"
+            lblCounter.text = latest.unread_count > 99 ? "•••" : "\(recent.unread_count)"
             if lblCounter.text?.count >= 2 {
                 uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
                 uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)

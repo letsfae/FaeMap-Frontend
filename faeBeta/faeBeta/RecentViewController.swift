@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
-import Firebase
 
 typealias BackClosure = (Int) -> Void
 
@@ -21,8 +20,6 @@ public var avatarDic = [Int: UIImage]() // an dictionary to store avatar, this s
 // ENDBryan
 
 class RecentViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, SwipeableCellDelegate {
-    
-    private let firebase = Database.database().reference().child(Key.shared.fireBaseRef)
     
     // MARK: - properties
     var uiviewNavBar: FaeNavBar!
@@ -136,7 +133,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func loadDeleteConfirm() {
         uiviewBackground = UIView(frame: CGRect(x:0, y:0, width: screenWidth, height: screenHeight))
-        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
         
         uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
         uiviewDeleteConfirm.center.x = screenWidth / 2
@@ -320,7 +317,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         //let recentRealm = arrRecentsRealm[indexPath.row]
         //cell.bindData_v2(recentRealm)
         let recentRealm = resultRealmRecents[indexPath.row]
-        cell.bindData_v2(recentRealm.latest_message!)
+        cell.bindData_v2(recentRealm)
         
         //if cellsCurrentlyEditing.contains(indexPath) {
             //cell.openCell()
@@ -342,7 +339,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
     }
     
-    func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
+    /*func gotoChatFromRecent(selectedRowAt indexPath: IndexPath) {
         let vcChat = ChatViewController()
         vcChat.hidesBottomBarWhenPushed = true
         let recent = recents![indexPath.row]
@@ -371,11 +368,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             self.navigationController?.pushViewController(vcChat, animated: true)
         })
         
-    }
+    }*/
     
-    @objc private func startCheckingRecent() {
+    /*@objc private func startCheckingRecent() {
         loadRecents(false, removeIndexPaths: nil)
-    }
+    }*/
     
     // download current user's avatar from server
     private func downloadCurrentUserAvatar() {
@@ -435,7 +432,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     /// - Parameters:
     ///   - animated: update the table with/without animation
     ///   - indexPathSet: the specific indexpath set needed to update, set nil if you want to update the whole recent list
-    private func loadRecents(_ animated: Bool, removeIndexPaths indexPathSet: [IndexPath]?) {
+    /*private func loadRecents(_ animated: Bool, removeIndexPaths indexPathSet: [IndexPath]?) {
         getFromURL("chats", parameter: nil, authentication: headerAuthentication()) { _, result in
             if let cacheRecent = result as? NSArray {
                 let json = JSON(result!)
@@ -457,7 +454,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 self.recents = JSON([])
             }
         }
-    }
+    }*/
     
     // MARK: handle tap gesture
     @objc func closeAllCell(_ recognizer: UITapGestureRecognizer) {

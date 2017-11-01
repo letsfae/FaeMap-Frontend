@@ -168,6 +168,7 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         lblDes.numberOfLines = 0
     }
     
+<<<<<<< HEAD
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
             indicator.backgroundColor = UIColor._2499090()
@@ -177,7 +178,10 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func showMainView(_ sender: UIButton) {
+=======
     @objc func showMainView(_ sender: UIButton) {
+>>>>>>> master
         uiviewBackground.isHidden = true
     }
     

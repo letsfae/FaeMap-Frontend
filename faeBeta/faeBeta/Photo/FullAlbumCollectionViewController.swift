@@ -104,6 +104,16 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     fileprivate var sizeThumbnail: CGSize!
     fileprivate var rectPreviousPreheat = CGRect.zero
     
+    enum ComeFromType {
+        case lefeSlidingMenu
+        case firstTimeLogin
+        case setInfoNamecardAvatar
+        case setInfoNamecardCover
+        case chat
+    }
+    var vcComeFromType: ComeFromType = .chat
+    var vcComeFrom: UIViewController?
+    
     //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,6 +158,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         tblAlbums.delegate = self
         tblAlbums.dataSource = self
         tblAlbums.alwaysBounceVertical = false
+        tblAlbums.bounces = false
     }
     
     func getUserAlbumSet() {
@@ -203,8 +214,8 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if boolCreateStoryPin {
             strSendBtn = "Select"
         }
-        if boolSelectingAvatar {
-            strSendBtn = "Done"
+        if vcComeFromType != .chat {
+            strSendBtn = "Camera"
         }
         
         btnSend = UIButton()
@@ -214,7 +225,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         btnSend.addTarget(self, action: #selector(self.sendImages), for: .touchUpInside)
         btnSend.isEnabled = false
         uiviewNavBar.addSubview(btnSend)
-        uiviewNavBar.addConstraintsWithFormat("H:[v0(60)]-15-|", options: [], views: btnSend)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(70)]-15-|", options: [], views: btnSend)
         uiviewNavBar.addConstraintsWithFormat("V:|-30-[v0(25)]", options: [], views: btnSend)
         
         btnCancel = UIButton()
@@ -253,6 +264,42 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
             sendVideoFromQuickPicker()
         } else if viewPhotoPicker.gifAssetDict.count != 0 && sendGifFromQuickPicker() {
             
+        } else if vcComeFromType != .chat {
+            let imagePicker = UIImagePickerController()
+            //imagePicker.delegate = arrViewController
+            imagePicker.sourceType = .camera
+            switch vcComeFromType {
+            case .lefeSlidingMenu:
+                imagePicker.delegate = vcComeFrom as! LeftSlidingMenuViewController
+                break
+            case .firstTimeLogin:
+                imagePicker.delegate = vcComeFrom as! FirstTimeLoginViewController
+                break
+            case .setInfoNamecardAvatar:
+                break
+            case .setInfoNamecardCover:
+                break
+            default:
+                break
+            }
+            var photoStatus = PHPhotoLibrary.authorizationStatus()
+            if photoStatus != .authorized {
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    photoStatus = status
+                    if photoStatus != .authorized {
+                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access")
+                        return
+                    }
+                    self.dismiss(animated: true, completion: nil)
+                    self.vcComeFrom?.present(imagePicker, animated: true, completion: nil)
+                    return
+                })
+            } else {
+                dismiss(animated: true, completion: nil)
+                vcComeFrom?.present(imagePicker, animated: true, completion: nil)
+                return
+                //self.dismiss(animated: true, completion: nil)
+            }
         } else {
             var images = [UIImage]()
             for (_, image) in viewPhotoPicker.indexImageDict {
@@ -346,8 +393,12 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         for (asset, indexPath) in viewPhotoPicker.assetIndexpath {
             let indicatorNum = viewPhotoPicker.assetIndexDict[asset]
-            let cell = collectionView?.cellForItem(at: indexPath) as! FullPhotoPickerCollectionViewCell
-            cell.selectCell(indicatorNum!)
+            if let cell = collectionView?.cellForItem(at: indexPath) {
+                let modifyCell = cell as! FullPhotoPickerCollectionViewCell
+                modifyCell.selectCell(indicatorNum!)
+            }
+            /*let cell = collectionView?.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! FullPhotoPickerCollectionViewCell
+            cell.selectCell(indicatorNum!)*/
         }
         // TODO blinking
         /*UIView.animate(withDuration: 0.1, animations: {
@@ -368,12 +419,19 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         if boolCreateStoryPin {
             strSendBtn = "Select"
         }
-        if boolSelectingAvatar {
-            strSendBtn = "Done"
+        if vcComeFromType != .chat {
+            strSendBtn = "Camera"
         }
-        btnSend.isEnabled = viewPhotoPicker.videoAsset != nil || viewPhotoPicker.assetIndexDict.count != 0
+        btnSend.isEnabled = viewPhotoPicker.videoAsset != nil || viewPhotoPicker.assetIndexDict.count != 0 || vcComeFromType != .chat
         let attributedText = NSAttributedString(string: strSendBtn, attributes: [NSAttributedStringKey.foregroundColor: btnSend.isEnabled ? UIColor._2499090() : UIColor._255160160(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
         btnSend.setAttributedTitle(attributedText, for: UIControlState())
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
     
     // MARK: observe value
@@ -390,6 +448,19 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         let asset: PHAsset = self.viewPhotoPicker.currentAlbum.albumContent[indexPath.row]
         
         if !cell.photoSelected {
+            if vcComeFromType != .chat {
+                let highQRequestOption = PHImageRequestOptions()
+                highQRequestOption.resizeMode = .none
+                highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                highQRequestOption.isSynchronous = true
+                PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFill, options: highQRequestOption, resultHandler: { image, _ in
+                    if image != nil {
+                        self.imageDelegate.sendImages([image!])
+                        self.cancelSend()
+                    }
+                })
+                return
+            }
             if viewPhotoPicker.indexAssetDict.count == maximumSelectedPhotoNum {
                 if boolCreateStoryPin {
                     showAlertView(withWarning: "You can only have up to 6 items for your story")
@@ -409,10 +480,10 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                     let resources = PHAssetResource.assetResources(for: asset)
                     let orgFilename = (resources[0]).originalFilename
                     if orgFilename.lowercased().contains(".gif") {
-                        let imageManager = PHCachingImageManager()
+                        //let imageManager = PHCachingImageManager()
                         let options = PHImageRequestOptions()
                         options.resizeMode = .fast
-                        imageManager.requestImageData(for: asset, options: options, resultHandler: { imageData, _, _, _ in
+                        PHCachingImageManager.default().requestImageData(for: asset, options: options, resultHandler: { imageData, _, _, _ in
                             if let data = imageData {
                                 self.viewPhotoPicker.gifAssetDict[asset] = data
                             }
@@ -427,9 +498,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                     highQRequestOption.resizeMode = .none
                     highQRequestOption.deliveryMode = .highQualityFormat //high pixel
                     highQRequestOption.isSynchronous = true
-                    PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: 1500, height: 1500), contentMode: .aspectFill, options: highQRequestOption) { result, _ in
-                        self.viewPhotoPicker.indexImageDict[count] = result
-                    }
+                    PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFill, options: highQRequestOption, resultHandler: { image, _ in
+                        if image != nil {
+                            self.viewPhotoPicker.indexImageDict[count] = image
+                        }
+                    })
                 } else {
                     if self.viewPhotoPicker.indexImageDict.count != 0 || viewPhotoPicker.gifAssetDict.count != 0 {
                         showAlertView(withWarning: "Sorry Videos must be sent alone!")
@@ -502,6 +575,10 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: photoPickerCellIdentifier, for: indexPath) as! FullPhotoPickerCollectionViewCell
         
+        if vcComeFromType != .chat {
+            cell.imgChosenIndicator.isHidden = true
+        }
+        
         //get image from PHFetchResult
         let asset: PHAsset = self.viewPhotoPicker.currentAlbum.albumContent[indexPath.row]
         //let asset : PHAsset = fetchAllPhotos.object(at: indexPath.row)
@@ -515,7 +592,7 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         DispatchQueue.main.async {
             // Request an image for the asset from the PHCachingImageManager.
             cell.representedAssetIdentifier = asset.localIdentifier
-            self.imageManager.requestImage(for: asset, targetSize: self.sizeThumbnail, contentMode: .aspectFill, options: nil, resultHandler: { image, _ in
+            PHCachingImageManager.default().requestImage(for: asset, targetSize: self.sizeThumbnail, contentMode: .aspectFill, options: nil, resultHandler: { image, _ in
                 // The cell may have been recycled by the time this handler gets called;
                 // set the cell's thumbnail image only if it's still showing the same asset.
                 if cell.representedAssetIdentifier == asset.localIdentifier && image != nil {

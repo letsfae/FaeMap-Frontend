@@ -155,6 +155,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+<<<<<<< HEAD
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
             indicator.backgroundColor = UIColor._2499090()
@@ -164,7 +165,10 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    func showAlertDeactive(_ sender: UIButton) {
+=======
     @objc func showAlertDeactive(_ sender: UIButton) {
+>>>>>>> master
         uiviewBackground.isHidden = false
     }
     
