@@ -11,13 +11,28 @@ import Contacts
 import ContactsUI
 import SwiftyJSON
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate {
+struct RegisteredUser {
+    let userId: Int
+    let phone: String
+    let relation: Relations
+    let nameCard: UserNameCard
+    init(userId: Int, phone: String, nameCard: UserNameCard, relation: Relations) {
+        self.userId = userId
+        self.phone = phone
+        self.nameCard = nameCard
+        self.relation = relation
+    }
+}
+
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarFromContacts: FaeSearchBarTest!
     var tblFromContacts: UITableView!
-    var filtered: [UserNameCard] = [] // for search bar results
-    var testArray = [UserNameCard]()
+    var filteredUnregistered = [UserNameCard]()
+    var arrUnregistered = [UserNameCard]()
+    var filteredRegistered = [RegisteredUser]()
+    var arrRegistered = [RegisteredUser]()
     var uiviewNotAllowed: UIView!
     var imgGhost: UIImageView!
     var lblPrompt: UILabel!
@@ -26,7 +41,8 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     var boolAllowAccess = false
     var contactStore = CNContactStore()
     var phoneNumbers: String = ""
-    var arrCountries = [CountryCodeStruct]()
+    var dictCountryCode: Dictionary = [String : CountryCodeStruct]()
+    var dictPhone: Dictionary = [String: UserNameCard]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -111,7 +127,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
         tblFromContacts.addGestureRecognizer(tapToDismissKeyboard)
         tblFromContacts.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")
-        tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "myInviteCell")
+        tblFromContacts.register(FaeInviteCell.self, forCellReuseIdentifier: "FaeInviteCell")
         tblFromContacts.isHidden = false
         tblFromContacts.indicatorStyle = .white
         tblFromContacts.separatorStyle = .none
@@ -134,44 +150,47 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     // End of FaeSearchBarTestDelegate
     
     func filter(searchText: String, scope: String = "All") {
-        filtered = testArray.filter { text in
-            (text.userName.lowercased()).range(of: searchText.lowercased()) != nil
+        filteredUnregistered = arrUnregistered.filter { text in
+            (text.displayName.lowercased()).range(of: searchText.lowercased()) != nil
+        }
+        filteredRegistered = arrRegistered.filter { text in
+            (text.nameCard.userName.lowercased()).range(of: searchText.lowercased()) != nil
         }
         tblFromContacts.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if schbarFromContacts.txtSchField.text != "" {
-            return filtered.count
+        if section == 0 {
+            return schbarFromContacts.txtSchField.text != "" ? filteredRegistered.count : arrRegistered.count
         } else {
-            return testArray.count
+            return schbarFromContacts.txtSchField.text != "" ? filteredRegistered.count : arrUnregistered.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
-            if schbarFromContacts.txtSchField.text != "" {
-                cell.lblUserName.text = filtered[indexPath.row].displayName
-                cell.lblUserSaying.text = filtered[indexPath.row].userName
-            } else {
-                cell.lblUserName.text = testArray[indexPath.row].displayName
-            }
+            let registered = schbarFromContacts.txtSchField.text != "" ? filteredRegistered[indexPath.row] : arrRegistered[indexPath.row]
+            cell.delegate = self
+            cell.userId = registered.userId
+            cell.indexPath = indexPath
+            cell.setValueForCell(user: registered.nameCard)
+            cell.getFromRelations(id: registered.userId, relation: registered.relation)
             if indexPath.row == tblFromContacts.numberOfRows(inSection: 0)-1 {
+                print(indexPath.row)
                 cell.bottomLine.isHidden = true
             }
             return cell
         }
         else {
-            let cell = FaeInviteCell(style: UITableViewCellStyle.default, reuseIdentifier: "myInviteCell")
-            cell.lblName.text = testArray[indexPath.row].displayName
-            cell.lblTel.text = testArray[indexPath.row].userName
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FaeInviteCell", for: indexPath) as! FaeInviteCell
+            cell.lblName.text = arrUnregistered[indexPath.row].displayName
+            cell.lblTel.text = arrUnregistered[indexPath.row].userName
             return cell
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row) and item \(testArray[indexPath.row])")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -186,73 +205,9 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         return 2
     }
     
-    func openContacts() {
-        let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
-        let jsonData = NSData(contentsOfFile: path!)
-        let phoneJson = JSON(data: jsonData! as Data)["data"]
-        
-        for each in phoneJson.array! {
-            let country = CountryCodeStruct(json: each)
-            arrCountries.append(country)
-        }
-        
-        let keys = [CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey]
-        let req = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-        self.testArray = []
-        
-        try! CNContactStore().enumerateContacts(with: req) {
-            contact, error in
-            /*
-            for phone in contact.phoneNumbers {
-                let code = phone.value.value(forKey: "countryCode")
-                let phoneNo = phone.value.value(forKey: "digits")
-//                print("\(code!) \(phone!)")
-                
-                let data = self.arrCountries.filter{$0.countryCode.uppercased() == "\(code!)".uppercased()}
-                var areaCode: String! = ""
-                if data.count != 0 {
-                    areaCode = data[0].phoneCode
-                }
-                
-                if "\(phoneNo!)".first == "+" {
-                    let sub = ("\(phoneNo!)" as NSString).substring(from: areaCode.count + 1)
-                    self.phoneNumbers.append("(\(areaCode!))\(sub);")
-                } else {
-                    self.phoneNumbers.append("(\(areaCode!))\(phoneNo!);")
-                }
-            }
-            print(self.phoneNumbers)
-            
-            let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
-            let faeUser = FaeUser()
-            faeUser.whereKey("phone", value: "(1)15927250906;(1)13397190906;(1)18086104610;(86)15810139390;(1)18009152660;(1)13309152660;(1)09157823181;(1)18681860625;(1)6197015409;(1)2134222248;(1)18511548911;(1)4086697450;(1)6155126877;(1)2135509641;(1)2138809613;(1)2134488701;(1)2139097189;(1)18609155011;(1)09153223213;(1)13209152660;(1)15909155536;(1)13892020000;(1)15600562736;(1)13552061643;(1)8615929152966;(1)15389159588;(1)6505565282;(1)8007770133;(1)3103517509;(1)18943414640;(1)6263478822;(1)15769256167;(1)18600576775;(1)18665834932;(1)3144203487;(1)18801467552;(1)8476246433;(1)2483089714;(1)18600795079;(1)15600562735;(1)15600562737;(1)2134466132;(1)2137061882;(1)13981713014;(1)01058812234;(1)18911897053;(1)15991361518;(1)15510010269;(1)18622185660;(1)15210584712;(1)13991555355;(1)13426004657;(1)13520915968;(1)13401175061;(1)15633817204;(1)18511184170;(1)0909146492;(1)18910111793;(1)18996359040;(1)2136753980;(86)13891581281;(1)09157810190;(1)13810217585;(1)18109156180;(1)3107177181;(1)8478684308;(1)09153115819;(1)5106106322;(1)01058812272;(1)2136753980;(1)2133092068;(1)2135198036;(1)15201294776;(1)15210902168;(1)2138106174;(1)12138060545;(1)6692460575;(1)13242786234")
-            faeUser.checkPhoneExistence {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    let json = JSON(message!)
-                    for i in 0..<json.count {
-                        let id = json[i]["user_id"].stringValue
-                        print(id)
-                    }
-                } else {
-                    print("check phone existence failed \(status) \(message!)")
-                }
-            }
-            */
-            let contactName = contact.givenName + " " + contact.familyName
-            if contact.phoneNumbers.count <= 0 {
-                return
-            }
-            
-            let phoneStr = contact.phoneNumbers[0].value.value(forKey: "digits")
-            
-            let arrInfo = UserNameCard(user_id: -1, nick_name: contactName.trim(), user_name: "\(phoneStr!)")
-            self.testArray.append(arrInfo)
-        }
-    }
-    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        if schbarFromContacts.txtSchField.text != "" && filtered.count == 0 {
+        if schbarFromContacts.txtSchField.text != "" && filteredRegistered.count == 0 {
             return headerView
         }
         headerView.backgroundColor = UIColor._248248248()
@@ -281,6 +236,94 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         headerView.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: label)
         headerView.addConstraintsWithFormat("H:|-15-[v0]", options: [], views: label)
         return headerView
+    }
+    
+    func openContacts() {
+        let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
+        let jsonData = NSData(contentsOfFile: path!)
+        let phoneJson = JSON(data: jsonData! as Data)["data"]
+        
+        for each in phoneJson.array! {
+            let country = CountryCodeStruct(json: each)
+            dictCountryCode[country.countryCode] = country
+        }
+        //        print(dictCountryCode)
+        
+        let keys = [CNContactPhoneNumbersKey, CNContactFamilyNameKey, CNContactGivenNameKey]
+        let req = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+        
+        try! CNContactStore().enumerateContacts(with: req) {
+            contact, error in
+            
+            let contactName = contact.givenName == "" ? contact.familyName : contact.givenName + " " + contact.familyName
+            if contact.phoneNumbers.count <= 0 {
+                return
+            }
+            
+            let code = contact.phoneNumbers[0].value.value(forKey: "countryCode")
+            let phoneNo = contact.phoneNumbers[0].value.value(forKey: "digits")
+            
+            let countryInfo = self.dictCountryCode["\(code!)".uppercased()]
+            var areaCode = ""
+            if countryInfo != nil {
+                areaCode = (countryInfo?.phoneCode)!
+            }
+            
+            var phoneStr = ""
+            if "\(phoneNo!)".first == "+" {
+                let sub = ("\(phoneNo!)" as NSString).substring(from: areaCode.count + 1)
+                phoneStr = "(\(areaCode))\(sub)"
+                self.phoneNumbers.append("\(phoneStr);")
+            } else {
+                phoneStr = "(\(areaCode))\(phoneNo!)"
+                self.phoneNumbers.append("\(phoneStr);")
+            }
+            
+            let arrInfo = UserNameCard(user_id: -1, nick_name: contactName.trim(), user_name: "\(phoneNo!)")
+            self.dictPhone[phoneStr] = arrInfo
+            
+            self.arrUnregistered.append(arrInfo)
+        }
+        
+        let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
+        //        print(val)
+        let faeUser = FaeUser()
+        faeUser.whereKey("phone", value: "(1)2138060545;(1)13397190906;(1)18086104610;(1)2133092068")
+        faeUser.checkPhoneExistence {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                print(json)
+                
+                for i in 0..<json.count {
+                    let userId = json[i]["user_id"].intValue
+                    let phone = json[i]["phone"].stringValue
+                    let relation = Relations(json: json[i]["relation"])
+                    self.dictPhone.removeValue(forKey: phone)
+                    
+                    faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                        if status / 100 == 2 {
+                            let json = JSON(message!)
+                            print("json.count \(json.count)")
+                            let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
+                            let arrInfo = RegisteredUser(userId: userId, phone: phone, nameCard: userInfo, relation: relation)
+                            self.arrRegistered.append(arrInfo)
+                            //                            self.tblFromContacts.reloadData()
+                            
+                            print("\(self.arrRegistered.count) \(json.count)")
+                            if self.arrRegistered.count == 2 { // json.count {
+                                self.tblFromContacts.reloadData()
+                            }
+                        } else {
+                            print("[get user name card fail] \(status) \(message!)")
+                        }
+                    }
+                }
+                self.arrUnregistered = self.dictPhone.values.sorted{ $0.displayName < $1.displayName }
+                self.tblFromContacts.reloadData()
+            } else {
+                print("check phone existence failed \(status) \(message!)")
+            }
+        }
     }
     
     @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
@@ -347,4 +390,62 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     func backToAddFromContacts() {
         showView()
     }
+    
+    // FaeAddUsernameDelegate
+    func addFriend(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "add"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func resendRequest(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "resend"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func acceptRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "accept"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func ignoreRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "ignore"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func withdrawRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "withdraw"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    // FaeAddUsernameDelegate End
+    
+    // FriendOperationFromContactsDelegate
+    func passFriendStatusBack(indexPath: IndexPath) {
+        tblFromContacts.reloadRows(at: [indexPath], with: .none)
+    }
+    // FriendOperationFromContactsDelegate End
 }

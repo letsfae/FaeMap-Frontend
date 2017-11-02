@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 
+// TODO: Yue
 @objc protocol BoardsSearchDelegate: class {
     //    func backToPlaceSearchView()
     //    func backToLocationSearchView()
@@ -26,8 +27,6 @@ enum EnterMode: String {
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
     var enterMode: EnterMode!
     weak var delegate: BoardsSearchDelegate?
-    var arrLocList: [String] = ["Los Angeles CA, United States", "Long Beach CA, United States", "London ON, Canada", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United Statesssss", "Los Angeles CA, United States", "Los Angeles CA, United States", "Los Angeles CA, United States", "Long Beach CA, United States", "San Francisco CA, United States"]
-    //    var cityList = ["CA, United States", "CA, United States", "CA, United States", ""]
     var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
     
     var searchedPlaces = [PlacePin]()

@@ -11,7 +11,7 @@ import SwiftyJSON
 
 protocol CollectionsListDetailDelegate: class {
     func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath)
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int)
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int)
 }
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate, ColListCellDelegate {
@@ -84,7 +84,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         colId = arrColDetails.colId
         txtName = arrColDetails.colName
         txtDesp = arrColDetails.colDesp
-        txtTime = arrColDetails.colTime
+        txtTime = arrColDetails.lastUpdate
         numItems = arrColDetails.itemsCount
         btnMapView.isEnabled = false
         self.getSavedItems(colId: self.colId)
@@ -188,7 +188,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     @objc func actionBack(_ sender: UIButton) {
-        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, numItems: numItems)
+        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, desp: txtDesp, time: txtTime, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
@@ -389,7 +389,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtTime = date[1] + "/" + date[0]
         arrColDetails.colName = txtName
         arrColDetails.colDesp = txtDesp
-        arrColDetails.colTime = txtTime
+        arrColDetails.lastUpdate = txtTime
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
@@ -503,7 +503,7 @@ class ColListDetailHeader: UITableViewCell {
         
         FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
             let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
-            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.colTime)", attributes: attribute)
+            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.lastUpdate)", attributes: attribute)
             curtStr.append(nameStr)
             curtStr.append(updateStr)
             
