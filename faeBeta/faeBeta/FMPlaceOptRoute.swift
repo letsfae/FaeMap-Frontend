@@ -157,11 +157,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         animateMainItems(show: false)
         faeMapView.removeAnnotations(addressAnnotations)
         locationPinClusterManager.removeAnnotations(tempFaePins) {
-            for user in self.faeUserPins {
-                user.isValid = true
-            }
-            self.userClusterManager.addAnnotations(self.faeUserPins, withCompletionHandler: nil)
-            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: nil)
+            self.reAddUserPins()
+            self.reAddPlacePins()
         }
         deselectAllLocations()
         deselectAllAnnotations()
@@ -229,7 +226,10 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         let directions = MKDirections(request: request)
         
         directions.calculate { [unowned self] response, error in
-            guard let unwrappedResponse = response else { return }
+            guard let unwrappedResponse = response else {
+                self.showAlert(title: "Sorry! This route is too long to draw.", message: "please try again")
+                return
+            }
             var totalDistance: CLLocationDistance = 0
             for route in unwrappedResponse.routes {
                 self.arrRoutes.append(route.polyline)
@@ -237,12 +237,17 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             }
             totalDistance /= 1000
             totalDistance *= 0.621371
+            if totalDistance > 3000 {
+                self.showAlert(title: "Sorry! This route is too long to draw.", message: "please try again")
+                return
+            }
             self.showRouteCalculatorComponents(distance: totalDistance)
             // fit all route overlays
             if let first = self.arrRoutes.first {
                 let rect = self.arrRoutes.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)})
                 self.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
             }
+            joshprint("route count:", self.arrRoutes.count)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                 self.faeMapView.addOverlays(self.arrRoutes, level: MKOverlayLevel.aboveRoads)
             })
