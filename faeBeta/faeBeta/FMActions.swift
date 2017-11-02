@@ -167,6 +167,13 @@ extension FaeMapViewController {
                 boolFromMap = true
                 navigationController?.setViewControllers(arrCtrlers, animated: false)
             }
+            if let idxPath = uiviewFilterMenu.selectedIndexPath {
+                if let cell = uiviewFilterMenu.tblPlaceLoc.cellForRow(at: idxPath) as? CollectionsListCell {
+                    cell.imgIsIn.isHidden = true
+                    uiviewFilterMenu.selectedIndexPath = nil
+                }
+            }
+
             break
         case .allPlaces:
             animateMainItems(show: false, animated: false)

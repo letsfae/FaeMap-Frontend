@@ -142,6 +142,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
+        // TODO: Yue - Hours update
 //        lblHours.text = placeInfo.hours
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
