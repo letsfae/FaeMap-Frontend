@@ -237,6 +237,7 @@ class FriendOperationFromContactsViewController: UIViewController {
             faeContact.ignoreFriendRequest(requestId: String(requestId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
+                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                 } else {
                     self.lblMsgSent.text = "Ignore Request \nFail!"
                     print("[Ignore Request Fail] - \(status) \(message!)")

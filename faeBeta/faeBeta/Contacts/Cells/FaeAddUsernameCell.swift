@@ -70,9 +70,9 @@ class FaeAddUsernameCell: UITableViewCell {
     
     func getFromRelations(id: Int, relation: Relations) {
         if id == Key.shared.user_id {
-            self.friendStatus = .accepted
+            self.friendStatus = .blocked_by
         }
-        print(relation)
+//        print(relation)
         if relation.blocked {   // blocked & blocked_by
             self.friendStatus = .blocked
         } else if relation.blocked_by {
@@ -109,7 +109,6 @@ class FaeAddUsernameCell: UITableViewCell {
     }
     
     fileprivate func setButtonImage() {
-        print(friendStatus)
         switch friendStatus {
         case .defaultMode:
             lblStatus.text = ""
