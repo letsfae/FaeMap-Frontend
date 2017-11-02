@@ -58,6 +58,7 @@ class PlacePin: NSObject {
         phone = json["phone"].stringValue
         for (key, subJson) in json["hour"] {
             hours = hours + processHours(day: key, hour: subJson.stringValue)
+            print(subJson.stringValue)
         }
         
         memo = json["user_pin_operations"]["memo"].stringValue
@@ -76,6 +77,9 @@ class PlacePin: NSObject {
     }
 }
 
+
+
+// Make dictionary type 'plusable' or 'addable'
 func +<Key, Value> (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {
     var result = lhs
     rhs.forEach{ result[$0] = $1 }
@@ -129,6 +133,7 @@ func processHours(day: String, hour: String) -> [String: String] {
     return dayDict
 }
 
+// Get a continuous list of days, ex. Mon-Wed will be returned as [Mon, Tue, Wed]
 func getDays(_ day_0: String, _ day_1: String) -> [String] {
     let fixDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     var idx_0 = -1

@@ -740,6 +740,15 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
+		50B45C611FAAFDF2001B5EE8 /* PlugIns */ = {
+			isa = PBXGroup;
+			children = (
+				B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */,
+				B0714D7D1D5E43DA00356705 /* FaeSearchBar */,
+			);
+			name = PlugIns;
+			sourceTree = "<group>";
+		};
 		50E940821F79B37000269945 /* LocationDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1389,8 +1398,6 @@
 		B8FBD48C1EE3825D0002955C /* Classes+Structs */ = {
 			isa = PBXGroup;
 			children = (
-				B0714D7D1D5E43DA00356705 /* FaeSearchBar */,
-				B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */,
 				DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */,
 				B820B1A41EBE91D100F2C28C /* FaeAvatarView.swift */,
 				690452871F032A9900B58982 /* FaeGenderView.swift */,
@@ -1510,6 +1517,7 @@
 		DCEB8CA01DEFBE5A00B516E9 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				50B45C611FAAFDF2001B5EE8 /* PlugIns */,
 				506D1FE01F2B1863004119EA /* Protocols */,
 				B8FBD48A1EE382140002955C /* Extensions */,
 				B8FBD48B1EE382350002955C /* Basics */,

@@ -248,6 +248,8 @@ class PlaceView: UIImageView {
     var lblAddr: UILabel!
     var lblHours: UILabel!
     var lblPrice: UILabel!
+    var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
+    var arrHour = [String]()
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 102))
@@ -263,7 +265,33 @@ class PlaceView: UIImageView {
         lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .white
-//        lblHours.text = placeInfo.hours
+        if placeInfo.hours.count > 0 {
+            arrHour.removeAll()
+            for day in arrDay {
+                if placeInfo.hours.index(forKey: day) == nil {
+                    arrHour.append("N/A")
+                } else {
+                    arrHour.append(placeInfo.hours[day]!)
+                }
+            }
+            let date = Date()
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.weekday], from: date)
+            
+            if let weekday = components.weekday {
+                if weekday == 7 {
+                    lblHours.text = arrDay[0] + ": " + arrHour[0]
+                } else if weekday == 8 {
+                    lblHours.text = arrDay[1] + ": " + arrHour[1]
+                } else {
+                    lblHours.text = arrDay[weekday] + ": " + arrHour[weekday]
+                }
+            } else {
+                lblHours.text = nil
+            }
+        } else {
+            lblHours.text = nil
+        }
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
     

@@ -10,8 +10,7 @@ import UIKit
 
 class FAEAlertController: UIAlertController {
     
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
         self.view.tintColor = UIColor._2499090()
     }
@@ -19,15 +18,15 @@ class FAEAlertController: UIAlertController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //set background color to white
+        // set background color to white
         let subview = self.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
         alertContentView.backgroundColor = .white
         alertContentView.layer.cornerRadius = 15
         
-        //update the title font
-        let attributedTitle = NSAttributedString(string:self.title!, attributes: [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!])
+        // update the title font
+        let attributedTitle = NSAttributedString(string: self.title!, attributes: [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!])
         self.setValue(attributedTitle, forKey: "attributedTitle")
     }
-
+    
 }

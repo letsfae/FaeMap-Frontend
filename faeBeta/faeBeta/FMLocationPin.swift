@@ -48,15 +48,6 @@ extension FaeMapViewController {
     }
     
     @objc func handleLocInfoBarTap() {
-//        if createLocation == .create {
-//            locAnnoView?.hideButtons()
-//            let vcLocDetail = LocDetailViewController()
-//            vcLocDetail.coordinate = selectedLocation?.coordinate
-//            vcLocDetail.delegate = self
-//            vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
-//            vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
-//            navigationController?.pushViewController(vcLocDetail, animated: true)
-//        }
         placePinAction(action: .detail)
     }
     
