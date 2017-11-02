@@ -47,7 +47,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         faeCollection.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
-                
+                print(collections)
                 guard let colArray = collections.array else {
                     print("[loadCollectionData] fail to parse collections info")
                     return
@@ -325,12 +325,12 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         if enterMode == .place {
             arrPlaces[indexPath.row].colName = name
             arrPlaces[indexPath.row].colDesp = desp
-            arrPlaces[indexPath.row].colTime = time
+            arrPlaces[indexPath.row].lastUpdate = time
             arrPlaces[indexPath.row].itemsCount = numItems
         } else {
             arrLocations[indexPath.row].colName = name
             arrLocations[indexPath.row].colDesp = desp
-            arrLocations[indexPath.row].colTime = time
+            arrLocations[indexPath.row].lastUpdate = time
             arrLocations[indexPath.row].itemsCount = numItems
         }
         tblCollections.reloadRows(at: [indexPath], with: .none)
