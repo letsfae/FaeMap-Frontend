@@ -31,7 +31,9 @@ struct PinCollection {
         let date = time.split(separator: " ")[0].split(separator: "-")
         colTime = date[1] + "/" + date[0]
         itemsCount = json["count"].intValue
-        lastUpdate = json["last_updated_at"].stringValue
+        let updateTime = json["last_updated_at"].stringValue
+        let updateDate = updateTime.split(separator: " ")[0].split(separator: "-")
+        lastUpdate = updateDate[1] + "/" + updateDate[0]
         let ids = json["pins"].arrayValue //.map({Int($0.stringValue)})
         if ids.count != 0 {
             for id in ids {

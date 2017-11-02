@@ -88,7 +88,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         colId = arrColDetails.colId
         txtName = arrColDetails.colName
         txtDesp = arrColDetails.colDesp
-        txtTime = arrColDetails.colTime
+        txtTime = arrColDetails.lastUpdate
         numItems = arrColDetails.itemsCount
         btnMapView.isEnabled = false
         self.getSavedItems(colId: self.colId)
@@ -393,7 +393,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         txtTime = date[1] + "/" + date[0]
         arrColDetails.colName = txtName
         arrColDetails.colDesp = txtDesp
-        arrColDetails.colTime = txtTime
+        arrColDetails.lastUpdate = txtTime
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
     
@@ -507,7 +507,7 @@ class ColListDetailHeader: UITableViewCell {
         
         FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
             let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
-            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.colTime)", attributes: attribute)
+            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.lastUpdate)", attributes: attribute)
             curtStr.append(nameStr)
             curtStr.append(updateStr)
             
