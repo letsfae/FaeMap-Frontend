@@ -61,6 +61,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     weak var featureDelegate: MapFilterMenuDelegate?
     
     var boolFromChat: Bool = false
+    var boolReadMore: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -279,11 +280,19 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ColListDetailHeader", for: indexPath) as! ColListDetailHeader
+            var cell: ColListDetailHeader
+            if boolReadMore {
+                cell = tblColListDetail.cellForRow(at: IndexPath(row: 0, section: 0)) as! ColListDetailHeader
+                cell.loadDescription(colInfo: arrColDetails)
+                boolReadMore = false
+                return cell
+            }
+            cell = tableView.dequeueReusableCell(withIdentifier: "ColListDetailHeader", for: indexPath) as! ColListDetailHeader
             cell.delegate = self
             let img = enterMode == .place ? #imageLiteral(resourceName: "collection_placeHeader") : #imageLiteral(resourceName: "collection_locationHeader")
             cell.setValueForCell(img: img)
             cell.updateValueForCell(colInfo: arrColDetails)
+            cell.loadDescription(colInfo: arrColDetails)
             return cell
         } else {
             if arrSavedPinIds.count == 0 {
@@ -371,8 +380,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     // ColListDetailHeaderDelegate
     func readMore() {
-        let section = IndexSet(integer: 0)
-        tblColListDetail.reloadSections(section, with: .none)
+        //let cell = tblColListDetail.cellForRow(at: IndexPath(row: 0, section: 0)) as! ColListDetailHeader
+        //cell.loadDescription(colInfo: arrColDetails)
+        boolReadMore = true
+        UIView.setAnimationsEnabled(false)
+        tblColListDetail.reloadSections(IndexSet(integer: 0), with: .none)
+        UIView.setAnimationsEnabled(true)
     }
     // ColListDetailHeaderDelegate End
     
@@ -410,7 +423,7 @@ class ColListDetailHeader: UITableViewCell {
     var lblTime: UILabel!
     var lblDesp: UILabel!
     var line: UIView!
-    var btnReadMore: UIButton!
+    var uiviewReadMore: UIView!
     static var boolExpandMore = false
     weak var delegate: ColListDetailHeaderDelegate?
     
@@ -461,20 +474,13 @@ class ColListDetailHeader: UITableViewCell {
         lblDesp.numberOfLines = 0
         addSubview(lblDesp)
         addConstraintsWithFormat("H:|-25-[v0]-25-|", options: [], views: lblDesp)
-        
-        btnReadMore = UIButton()
-        btnReadMore.backgroundColor = .white
-        let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
-        let moreAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
-        let strReadMore = NSMutableAttributedString(string: "... ", attributes: despAttr)
-        let more = NSMutableAttributedString(string: "Read More", attributes: moreAttr)
-        strReadMore.append(more)
-        btnReadMore.setAttributedTitle(strReadMore, for: .normal)
-        btnReadMore.addTarget(self, action: #selector(getFullDesp(_:)), for: .touchUpInside)
-        lblDesp.addSubview(btnReadMore)
+
+        uiviewReadMore = UIView()
+        lblDesp.addSubview(uiviewReadMore)
+        lblDesp.addConstraintsWithFormat("V:|-50-[v0(25)]", options: [], views: uiviewReadMore)
+        lblDesp.addConstraintsWithFormat("H:[v0(115)]-2-|", options: [], views: uiviewReadMore)
+        uiviewReadMore.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(getFullDesp(_:))))
         lblDesp.isUserInteractionEnabled = true
-        lblDesp.addConstraintsWithFormat("V:|-50-[v0(25)]", options: [], views: btnReadMore)
-        lblDesp.addConstraintsWithFormat("H:[v0(115)]-2-|", options: [], views: btnReadMore)
         
         line = UIView()
         line.backgroundColor = UIColor._241241241()
@@ -511,35 +517,46 @@ class ColListDetailHeader: UITableViewCell {
         }
         
         lblName.text = colInfo.colName
-        
+    }
+    
+    func loadDescription(colInfo: PinCollection) {
         let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
         lblDesp.attributedText = NSAttributedString(string: colInfo.colDesp, attributes: despAttr)
         
-        var lineCount: Int = 0
-        let textSize = CGSize(width: screenWidth - 50, height: CGFloat(MAXFLOAT))
-        let rHeight = Float(lblDesp.sizeThatFits(textSize).height)
-        let charSize = Float(lblDesp.font.lineHeight)
-        lineCount = lroundf(rHeight / charSize)
-        //        print("textsize: \(textSize)")
-        //        print("rHeight: \(rHeight)")
-        //        print("charSize: \(charSize)")
-        //        print("No of lines: \(lineCount)")
-        
-        //        print(lineCount)
-        //        print(ColListDetailHeader.boolExpandMore)
+        let (lineCount, newDesp) = getReadMoreDesp(colInfo.colDesp)
         if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
-            btnReadMore.isHidden = true
+            uiviewReadMore.isHidden = true
             lblDesp.numberOfLines = 0
+            addConstraintsWithFormat("V:|-212-[v0]-5-[v1(22)]-10-[v2]-20-[v3(5)]-0-|", options: [], views: lblName, lblTime, lblDesp, line)
         } else {
+            let moreAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
+            let newDesp = NSMutableAttributedString(string: newDesp + "... ", attributes: despAttr)
+            newDesp.append(NSAttributedString(string: "Read More", attributes: moreAttr))
+            lblDesp.attributedText = newDesp
             lblDesp.numberOfLines = 3
-            btnReadMore.backgroundColor = .white
-            btnReadMore.isHidden = false
         }
     }
+
     
-    @objc func getFullDesp(_ sender: UIButton) {
-        ColListDetailHeader.boolExpandMore = true
-        delegate?.readMore()
+    func getReadMoreDesp(_ desp: String) -> (Int, String) {
+        for endIndex in 0..<desp.count {
+            let newDesp = (desp as NSString).substring(to: endIndex) + "... Read More"
+            let height = newDesp.boundingRect(with: CGSize(width: screenWidth - 50, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!], context: nil).size.height
+            if height > 74.0 { // 3 lines
+                return (4, (desp as NSString).substring(to: endIndex - 1))
+            }
+            if endIndex == desp.count - 1 {
+                return (1, desp)
+            }
+        }
+        return (0, "")
+    }
+    
+    @objc func getFullDesp(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            ColListDetailHeader.boolExpandMore = true
+            delegate?.readMore()
+        }
     }
 }
 
