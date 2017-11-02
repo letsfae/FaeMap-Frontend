@@ -24,6 +24,7 @@ enum FriendStatus: String {
     case defaultMode
     case accepted
     case blocked
+    case blocked_by
     case pending
     case requested
     case nameCardOther

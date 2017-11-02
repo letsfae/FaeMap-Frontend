@@ -177,7 +177,6 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             cell.setValueForCell(user: registered.nameCard)
             cell.getFromRelations(id: registered.userId, relation: registered.relation)
             if indexPath.row == tblFromContacts.numberOfRows(inSection: 0)-1 {
-                print(indexPath.row)
                 cell.bottomLine.isHidden = true
             }
             return cell
@@ -286,31 +285,26 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         }
         
         let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
-        //        print(val)
         let faeUser = FaeUser()
-        faeUser.whereKey("phone", value: "(1)2138060545;(1)13397190906;(1)18086104610;(1)2133092068")
+        faeUser.whereKey("phone", value: val)
         faeUser.checkPhoneExistence {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                let json = JSON(message!)
-                print(json)
+                let phoneJson = JSON(message!)
                 
-                for i in 0..<json.count {
-                    let userId = json[i]["user_id"].intValue
-                    let phone = json[i]["phone"].stringValue
-                    let relation = Relations(json: json[i]["relation"])
+                for i in 0..<phoneJson.count {
+                    let userId = phoneJson[i]["user_id"].intValue
+                    let phone = phoneJson[i]["phone"].stringValue
+                    let relation = Relations(json: phoneJson[i]["relation"])
                     self.dictPhone.removeValue(forKey: phone)
                     
                     faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
                         if status / 100 == 2 {
                             let json = JSON(message!)
-                            print("json.count \(json.count)")
                             let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
                             let arrInfo = RegisteredUser(userId: userId, phone: phone, nameCard: userInfo, relation: relation)
                             self.arrRegistered.append(arrInfo)
-                            //                            self.tblFromContacts.reloadData()
                             
-                            print("\(self.arrRegistered.count) \(json.count)")
-                            if self.arrRegistered.count == 2 { // json.count {
+                            if  self.arrRegistered.count == phoneJson.count {
                                 self.tblFromContacts.reloadData()
                             }
                         } else {
