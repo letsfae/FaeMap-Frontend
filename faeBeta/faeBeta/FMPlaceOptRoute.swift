@@ -153,6 +153,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         removeAllRoutes()
         btnDistIndicator.hide()
         uiviewChooseLocs.hide()
+        btnZoom.tapToSmallMode()
         animateMainItems(show: false)
         faeMapView.removeAnnotations(addressAnnotations)
         locationPinClusterManager.removeAnnotations(tempFaePins) {

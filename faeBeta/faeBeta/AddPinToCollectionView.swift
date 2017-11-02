@@ -87,10 +87,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 58))
         addSubview(uiviewHeader)
         
-        //        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
-        //        swipeGesture.direction = .down
-        //        uiviewHeader.addGestureRecognizer(swipeGesture)
-        
         let upperLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
         upperLine.backgroundColor = UIColor._200199204()
         uiviewHeader.addSubview(upperLine)
@@ -150,7 +146,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        joshprint(arrCollection[indexPath.row])
+        //joshprint(arrCollection[indexPath.row])
         let colInfo = arrCollection[indexPath.row]
         uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
@@ -234,9 +230,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         
         snapShotter.start { (snapShot, error) in
             guard let snap = snapShot else { return }
-//            let imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 66, height: 66))
-//            imgView.image = snapShot?.image
-//            UIApplication.shared.keyWindow?.addSubview(imgView)
+            
             let imgMap = snap.image
             if icon == false {
                 completion(imgMap)

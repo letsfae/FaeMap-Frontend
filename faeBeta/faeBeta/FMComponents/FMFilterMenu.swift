@@ -38,7 +38,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var curtTitle: String = "Choose a Collection..."
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
-    
+    var selectedIndexPath: IndexPath?
     
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
@@ -479,6 +479,15 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let idxPath = selectedIndexPath {
+            if let cell = tableView.cellForRow(at: idxPath) as? CollectionsListCell {
+                cell.imgIsIn.isHidden = true
+            }
+        }
+        if let cell = tableView.cellForRow(at: indexPath) as? CollectionsListCell {
+            cell.imgIsIn.isHidden = false
+            selectedIndexPath = indexPath
+        }
         let colInfo = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
         FaeCollection.shared.getOneCollection(String(colInfo.colId)) { (status, message) in
             guard status / 100 == 2 else { return }

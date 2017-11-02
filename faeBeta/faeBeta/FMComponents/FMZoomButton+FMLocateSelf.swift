@@ -26,7 +26,7 @@ class FMZoomButton: UIButton {
         gesLongPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         gesLongPress.minimumPressDuration = 0.1
         addGestureRecognizer(gesLongPress)
-        gesPan = UIPanGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        gesPan = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         addGestureRecognizer(gesPan)
         gesPan.isEnabled = false
     }
@@ -36,9 +36,6 @@ class FMZoomButton: UIButton {
     }
     
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
-        
-        let numberOfTouches = sender.numberOfTouches
-        guard numberOfTouches == 1 else { return }
         if sender.state == .began {
             largeMode()
             prevRegion = mapView.region
@@ -48,6 +45,25 @@ class FMZoomButton: UIButton {
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             smallMode()
+            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+        } else if sender.state == .changed {
+            let point = sender.location(in: self)
+            let m = Double(point.y - prev_y)
+            zoom(multiplier: m * 0.05)
+        }
+    }
+    
+    @objc func handlePan(_ sender: UIPanGestureRecognizer) {
+        if sender.state == .began {
+            prevRegion = mapView.region
+            guard prevRegion != nil else { return }
+            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
+            Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
+            prev_y = sender.location(in: self).y
+        } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
             Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()

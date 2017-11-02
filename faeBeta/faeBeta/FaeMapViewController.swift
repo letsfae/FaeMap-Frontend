@@ -437,6 +437,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func removePlacePins(_ completion: (() -> ())? = nil) {
+        //let placesNeedToRemove = faePlacePins.filter({ $0 != selectedPlace })
         placeClusterManager.removeAnnotations(faePlacePins) {
             completion?()
         }
