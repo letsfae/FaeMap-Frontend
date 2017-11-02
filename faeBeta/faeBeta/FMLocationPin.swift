@@ -86,6 +86,7 @@ extension FaeMapViewController {
         activityIndicator.center = CGPoint(x: screenWidth / 2, y: 110)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor._2499090()
+        activityIndicator.layer.zPosition = 2000
         view.addSubview(activityIndicator)
     }
     
@@ -95,7 +96,6 @@ extension FaeMapViewController {
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
             locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-//            faeMapView.removeAnnotation(locationPin!)
             selectedLocation = nil
         }
         uiviewPlaceBar.hide()
