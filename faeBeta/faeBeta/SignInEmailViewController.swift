@@ -129,8 +129,9 @@ class SignInEmailViewController: UIViewController {
         let vc = VerifyCodeViewController()
         vc.enterMode = .email
         vc.enterEmailMode = .signInSupport
+        vc.enterPhoneMode = .signInSupport
         vc.strEmail = txtEmail.text!
-        self.view.endEditing(true)
+        //self.view.endEditing(true)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -147,7 +148,7 @@ class SignInEmailViewController: UIViewController {
     
     @objc func sendCodeButtonTapped() {
         indicatorView.startAnimating()
-        self.view.endEditing(true)
+        //self.view.endEditing(true)
 
         faeUser.whereKey("email", value: txtEmail.text!)
         faeUser.sendCodeToEmail{ (statusCode, result) in
