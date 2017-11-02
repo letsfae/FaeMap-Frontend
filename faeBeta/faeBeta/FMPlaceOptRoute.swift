@@ -56,6 +56,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         chooseLocsVC.enterMode = .location
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
+        chooseLocsVC.boolFromRouting = true
         navigationController?.pushViewController(chooseLocsVC, animated: false)
     }
     

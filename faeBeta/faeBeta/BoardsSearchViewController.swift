@@ -61,6 +61,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // Joshua: Send label text back to start point or destination
     static var boolToDestination = false
     var boolCurtLocSelected = false
+    var boolFromRouting = false
     
     // MapKit address autocompletion
     var searchCompleter = MKLocalSearchCompleter()
@@ -458,6 +459,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                     delegate?.sendLocationBack?(address: address)
                     navigationController?.popViewController(animated: false)
                 } else {
+                    if boolFromRouting {
+                        navigationController?.popViewController(animated: false)
+                        delegate?.chooseLocationOnMap?()
+                        return
+                    }
                     //navigationController?.popViewController(animated: false)
                     //delegate?.chooseLocationOnMap?()
                     let vc = SelectLocationViewController()
@@ -465,11 +471,21 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                     //navigationController?.pushViewController(vc, animated: true)
                     var arrViewControllers = navigationController?.viewControllers
                     arrViewControllers!.removeLast()
-                    let lastVC = arrViewControllers?.last as! InitialPageController
-                    let vcMB = lastVC.arrViewCtrl.last as! MapBoardViewController
-                    vc.delegate = vcMB
-                    vc.boolFromBoard = true
-                    arrViewControllers!.append(vc)
+                    if let lastVC = arrViewControllers?.last as? InitialPageController {
+                        if let vcMB = lastVC.arrViewCtrl.last as? MapBoardViewController {
+                            vc.delegate = vcMB
+                            vc.boolFromBoard = true
+                            arrViewControllers!.append(vc)
+                        } else if let vcFM = lastVC.arrViewCtrl.first as? FaeMapViewController {
+                            vc.delegate = vcFM
+                            vc.boolFromBoard = true
+                            arrViewControllers!.append(vc)
+                        }
+                    } else if let lastVC = arrViewControllers?.last as? AllPlacesViewController {
+                        vc.delegate = lastVC
+                        vc.boolFromBoard = true
+                        arrViewControllers!.append(vc)
+                    }
                     navigationController?.setViewControllers(arrViewControllers!, animated: true)
                 }
             }
