@@ -199,23 +199,5 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
 //        getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
 //        tblMapBoard.reloadData()
     }
-    
-//    func backToPlaceSearchView() {
-//        btnClearSearchRes.isHidden = true
-//        lblSearchContent.text = "All Places"
-//        mbPlaces = arrAllPlaces
-//        tblMapBoard.reloadData()
-//    }
-//
-//    func backToLocationSearchView() {
-//
-//    }
-    
-    // BoardsSearchDelegate End
-    
-//    func updateUI(searchText: String) {
-//        btnClearSearchRes.isHidden = false
-//        lblSearchContent.text = searchText
-//    }
 }
 
