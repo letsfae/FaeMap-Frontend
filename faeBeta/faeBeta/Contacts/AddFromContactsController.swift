@@ -10,6 +10,7 @@ import UIKit
 import Contacts
 import ContactsUI
 import SwiftyJSON
+import MessageUI
 
 struct RegisteredUser {
     let userId: Int
@@ -24,7 +25,8 @@ struct RegisteredUser {
     }
 }
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate, ContactsInviteDelegate, MFMessageComposeViewControllerDelegate {
+    
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarFromContacts: FaeSearchBarTest!
@@ -43,6 +45,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     var phoneNumbers: String = ""
     var dictCountryCode: Dictionary = [String : CountryCodeStruct]()
     var dictPhone: Dictionary = [String: UserNameCard]()
+    var selectedIdx = [IndexPath]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,8 +186,11 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeInviteCell", for: indexPath) as! FaeInviteCell
+            cell.indexPath = indexPath
+            cell.delegate = self
             cell.lblName.text = arrUnregistered[indexPath.row].displayName
             cell.lblTel.text = arrUnregistered[indexPath.row].userName
+            cell.btnInvite.isSelected = selectedIdx.contains(indexPath)
             return cell
         }
     }
@@ -442,4 +448,36 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         tblFromContacts.reloadRows(at: [indexPath], with: .none)
     }
     // FriendOperationFromContactsDelegate End
+    
+    // ContactsInviteDelegate
+    func inviteToFaevorite(indexPath: IndexPath) {
+        // 1. 此处考虑将已发送过invite请求的号码存入本地数据？下一次将不会再显示Intvite button, 而是Invited
+        // 2. 检测到已发送过号码的显示Invited，而不是进入了发送短信页面回来就显示Invited（有可能用户点了cancel并没有发送短信邀请）
+        let cell = tblFromContacts.cellForRow(at: indexPath) as! FaeInviteCell
+        if !cell.btnInvite.isSelected {
+            if MFMessageComposeViewController.canSendText() {
+                let msgVC = MFMessageComposeViewController()
+                msgVC.messageComposeDelegate = self
+                let msg = "Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username) https://www.xxx.com"
+                msgVC.body = msg
+                msgVC.recipients = ["\(cell.lblTel.text!)"]
+                present(msgVC, animated: true, completion: {
+                    cell.btnInvite.isSelected = true
+                    self.selectedIdx.append(indexPath)
+                })
+            } else {
+                let title = "Cannot Send Text Message"
+                let message = "Your device is not able to send text messages."
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    // MFMessageComposeViewControllerDelegate
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true)
+    }
 }
