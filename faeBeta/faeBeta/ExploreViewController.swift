@@ -546,6 +546,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.updateTitle(type: testTypes[indexPath.row])
             cell.delegate = self
             cell.indexPath = indexPath
+            if selectedTypeIdx != nil {
+                cell.setButtonColor(selected: indexPath == selectedTypeIdx)
+            }
             return cell
         } else {
             let cell = UICollectionViewCell()
@@ -555,7 +558,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var lastCategory = ""
     
-    // ExploreCategorySearch
+    // MARK: - ExploreCategorySearch
     func search(category: String, indexPath: IndexPath) {
         
         if selectedTypeIdx != nil {

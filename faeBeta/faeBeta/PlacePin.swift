@@ -58,7 +58,7 @@ class PlacePin: NSObject {
         phone = json["phone"].stringValue
         for (key, subJson) in json["hour"] {
             hours = hours + processHours(day: key, hour: subJson.stringValue)
-            print(subJson.stringValue)
+            //print(subJson.stringValue)
         }
         
         memo = json["user_pin_operations"]["memo"].stringValue

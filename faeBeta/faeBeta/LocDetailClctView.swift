@@ -11,20 +11,21 @@ import UIKit
 extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func loadCollectionView() {
-        let uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49, width: screenWidth, height: 234))
+        uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49, width: screenWidth, height: 234))
+        uiviewClctView.isHidden = true
         view.addSubview(uiviewClctView)
         
         lblClctViewTitle = UILabel(frame: CGRect(x: 15, y: 15, width: 150, height: 20))
-        uiviewClctView.addSubview(lblClctViewTitle)
         lblClctViewTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         lblClctViewTitle.textColor = UIColor._138138138()
         lblClctViewTitle.text = "Near this Location"
+        uiviewClctView.addSubview(lblClctViewTitle)
         
         btnSeeAll = UIButton(frame: CGRect(x: screenWidth - 78, y: 5, width: 78, height: 40))
-        uiviewClctView.addSubview(btnSeeAll)
         btnSeeAll.setTitleColor(UIColor._155155155(), for: .normal)
         btnSeeAll.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 15)
         btnSeeAll.addTarget(self, action: #selector(btnSeeAllTapped(_:)), for: .touchUpInside)
+        uiviewClctView.addSubview(btnSeeAll)
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 122, height: 222 - 45)
@@ -36,8 +37,8 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
         clctNearby.delegate = self
         clctNearby.dataSource = self
         clctNearby.register(PlacesCollectionCell.self, forCellWithReuseIdentifier: "PlacesCollectionCell")
-        uiviewClctView.addSubview(clctNearby)
         clctNearby.backgroundColor = .clear
+        uiviewClctView.addSubview(clctNearby)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

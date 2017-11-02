@@ -166,10 +166,10 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // TODO: Yue
     @objc func chooseLocation(_ sender: UIButton) {
-        
+        searchLocation()
     }
     
-    func SearchLocation(_ sender: UIButton) {
+    func searchLocation() {
         let vc = BoardsSearchViewController()
         vc.strPlaceholder = lblChooseLoc.text
         vc.enterMode = .location

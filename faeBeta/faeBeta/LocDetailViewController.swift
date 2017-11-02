@@ -52,7 +52,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     var lblClctViewTitle: UILabel!
     var btnSeeAll: UIButton!
     var clctNearby: UICollectionView!
-    //    var places = [PlacePin]()
+    var uiviewClctView: UIView!
     weak var delegateSeeAll: SeeAllPlacesDelegate?
     
     var strLocName = ""
@@ -95,10 +95,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        getRelatedPlaces(lat: String(LocManager.shared.curtLat), long: String(LocManager.shared.curtLong), radius: 5000, isSimilar: false, completion: { (arrPlaces) in
-//            self.arrNearbyPlaces = arrPlaces
-//            self.clctNearby.reloadData()
-//        })
         guard coordinate != nil else { return }
         let lat = String(coordinate.latitude)
         let long = String(coordinate.longitude)
@@ -158,6 +154,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             let json = JSON(message!)
             guard let placeJson = json.array else { return }
             self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
+            self.uiviewClctView.isHidden = self.arrNearbyPlaces.count == 0
             completion()
         }
     }
