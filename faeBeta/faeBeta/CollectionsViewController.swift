@@ -26,7 +26,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var countPlaces: Int = 0
     var countLocations: Int = 0
     var tableMode: CollectionTableMode = .place
-    var curtTitle: String = "Choose a Collection..."
+    var curtTitle: String = "Places"
     var navBarMenuBtnClicked: Bool = false
     var arrPlaces = [PinCollection]()
     var arrLocations = [PinCollection]()
@@ -47,7 +47,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         faeCollection.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
-                print(collections)
                 guard let colArray = collections.array else {
                     print("[loadCollectionData] fail to parse collections info")
                     return
@@ -63,7 +62,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                     }
                 }
                 
-                print(self.arrPlaces)
                 self.arrPlaces.sort {$0.colId < $1.colId}
                 self.arrLocations.sort {$0.colId < $1.colId}
                 self.countPlaces = self.arrPlaces.count
@@ -85,10 +83,10 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         
         btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
-        btnNavBarMenu.setTitle(curtTitle, for: .normal)
         btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
         btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
+        btnNavBarSetTitle()
     }
     
     fileprivate func btnNavBarSetTitle() {
@@ -206,6 +204,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func hideDropDownMenu() {
+        btnNavBarSetTitle()
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -36
         }, completion: { _ in
@@ -221,6 +220,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
+            btnNavBarMenu.setAttributedTitle(nil, for: .normal)
+            btnNavBarMenu.setTitle("Choose a Collection...", for: .normal)
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 65

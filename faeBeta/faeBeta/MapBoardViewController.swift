@@ -48,7 +48,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var btnTalkFeed: UIButton!
     var btnTalkMypost: UIButton!
     var btnTalkTopic: UIButton!
-    var curtTitle: String = "Choose a Board..."
+    var curtTitle: String = "Places"
     var disVal: String = "23.0"
     var imgBubbleHint: UIImageView!
     var imgIconBeforeAllCom: UIImageView!
@@ -237,9 +237,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
-        btnNavBarMenu.setTitle(curtTitle, for: .normal)
         btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
         btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        btnNavBarSetTitle()
         
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         
@@ -421,6 +421,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             uiviewDropDownMenu.isHidden = false
+            btnNavBarMenu.setAttributedTitle(nil, for: .normal)
+            btnNavBarMenu.setTitle("Choose a Board...", for: .normal)
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 65
             })
@@ -472,6 +474,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func hideDropDownMenu() {
+        btnNavBarSetTitle()
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -36
         }, completion: { _ in
