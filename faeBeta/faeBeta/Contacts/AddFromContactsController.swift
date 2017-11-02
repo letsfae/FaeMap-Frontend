@@ -285,7 +285,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             self.arrUnregistered.append(arrInfo)
         }
         
-        let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
+        //let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
         //        print(val)
         let faeUser = FaeUser()
         faeUser.whereKey("phone", value: "(1)2138060545;(1)13397190906;(1)18086104610;(1)2133092068")
