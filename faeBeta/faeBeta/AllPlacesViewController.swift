@@ -146,7 +146,6 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.popViewController(animated: false)
     }
     
-    // TODO: Yue
     @objc func jumpToMapPlaces(_ sender: UIButton) {
         var arrCtrlers = navigationController?.viewControllers
         if let ctrler = Key.shared.FMVCtrler {
