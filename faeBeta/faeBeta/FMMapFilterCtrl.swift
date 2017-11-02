@@ -148,7 +148,7 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     // CollectionsListDetailDelegate
     func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath) {}
     
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int) {
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int) {
         
     }
     // CollectionsListDetailDelegate End
