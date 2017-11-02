@@ -11,7 +11,7 @@ import SwiftyJSON
 
 protocol CollectionsListDetailDelegate: class {
     func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath)
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int)
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int)
 }
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate, ColListCellDelegate {
@@ -192,7 +192,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     @objc func actionBack(_ sender: UIButton) {
-        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, numItems: numItems)
+        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, desp: txtDesp, time: txtTime, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     

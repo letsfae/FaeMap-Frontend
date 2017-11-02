@@ -63,6 +63,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                     }
                 }
                 
+                print(self.arrPlaces)
                 self.arrPlaces.sort {$0.colId < $1.colId}
                 self.arrLocations.sort {$0.colId < $1.colId}
                 self.countPlaces = self.arrPlaces.count
@@ -320,12 +321,16 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         reloadAfterDelete(indexPath: indexPath)
     }
     
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, numItems: Int) {
+    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int) {
         if enterMode == .place {
             arrPlaces[indexPath.row].colName = name
+            arrPlaces[indexPath.row].colDesp = desp
+            arrPlaces[indexPath.row].colTime = time
             arrPlaces[indexPath.row].itemsCount = numItems
         } else {
             arrLocations[indexPath.row].colName = name
+            arrLocations[indexPath.row].colDesp = desp
+            arrLocations[indexPath.row].colTime = time
             arrLocations[indexPath.row].itemsCount = numItems
         }
         tblCollections.reloadRows(at: [indexPath], with: .none)
