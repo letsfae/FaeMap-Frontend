@@ -427,6 +427,24 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    func reAddPlacePins(_ completion: (() -> ())? = nil) {
+        for user in faeUserPins {
+            user.isValid = true
+        }
+        userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: {
+            completion?()
+        })
+    }
+    
+    func reAddUserPins(_ completion: (() -> ())? = nil) {
+        for user in faeUserPins {
+            user.isValid = true
+        }
+        placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: {
+            completion?()
+        })
+    }
+    
     func removePlaceUserPins(_ placeComp: (() -> ())? = nil, _ userComp: (() -> ())? = nil) {
         removePlacePins {
             placeComp?()
@@ -450,5 +468,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         userClusterManager.removeAnnotations(faeUserPins) {
             completion?()
         }
+    }
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+        alertController.addAction(okAction)
+        self.present(alertController, animated: true, completion: nil)
     }
 }
