@@ -35,7 +35,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var pageMapOptions: UIPageControl!
     var scrollViewFilterMenu: UIScrollView!
     var btnPlaceLoc: UIButton!
-    var curtTitle: String = "Choose a Collection..."
+    var curtTitle: String = "Places"
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
     
@@ -292,10 +292,11 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnPlaceLoc.backgroundColor = .white
         uiviewPlaceLoc.addSubview(btnPlaceLoc)
         btnPlaceLoc.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
-        btnPlaceLoc.setTitle(curtTitle, for: .normal)
         btnPlaceLoc.setTitleColor(UIColor._898989(), for: .normal)
         btnPlaceLoc.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
+        setView2CurtTitle()
         
+        updateCount()
         let line = UIView(frame: CGRect(x: 0, y: 36 * screenHeightFactor, width: screenWidth, height: 1))
         line.backgroundColor = UIColor._200199204()
         btnPlaceLoc.addSubview(line)
@@ -346,8 +347,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         let uiviewDropMenuFirstLine = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuFirstLine)
         uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
-        
-        updateCount()
     }
     
     fileprivate func updateCount() {
@@ -382,6 +381,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     fileprivate func hideDropDownMenu() {
+        setView2CurtTitle()
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = 36 * screenHeightFactor - 101
         }, completion: { _ in
@@ -393,6 +393,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
+            btnPlaceLoc.setAttributedTitle(nil, for: .normal)
+            btnPlaceLoc.setTitle("Choose a Collection...", for: .normal)
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 36 * screenHeightFactor + 1
