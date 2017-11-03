@@ -13,20 +13,10 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     // GMSLookUpPlaceForCoordinate
     func lookUpForCoordinate() {
-        if let placeId = Key.shared.selectedPrediction?.placeID {
-            GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
-                if let error = error {
-                    print("lookup place id query error: \(error.localizedDescription)")
-                    return
-                }
-                guard let place = gmsPlace else {
-                    print("No place details for \(placeId)")
-                    return
-                }
-                let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
-                self.delegate?.jumpToLocation?(region: region)
-                self.navigationController?.popViewController(animated: false)
-            })
+        General.shared.lookUpForCoordinate { (place) in
+            let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
+            self.delegate?.jumpToLocation?(region: region)
+            self.navigationController?.popViewController(animated: false)
         }
     }
     

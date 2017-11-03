@@ -30,7 +30,7 @@ extension FaeMapViewController {
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
         guard firstAnn.id != -1 else { return }
         guard firstAnn.type == "user" else { return }
-        boolCanUpdateUserPin = false
+        boolCanUpdateUsers = false
         boolCanOpenPin = false
         mapGesture(isOn: false)
         uiviewNameCard.userId = firstAnn.id
@@ -49,9 +49,9 @@ extension FaeMapViewController {
 
     @objc func updateUserPins() {
         guard !HIDE_AVATARS else { return }
-        guard boolCanUpdateUserPin else { return }
+        guard boolCanUpdateUsers else { return }
         let coorDistance = cameraDiagonalDistance()
-        boolCanUpdateUserPin = false
+        boolCanUpdateUsers = false
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -65,17 +65,17 @@ extension FaeMapViewController {
         getMapUserInfo.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
-                self.boolCanUpdateUserPin = true
+                self.boolCanUpdateUsers = true
                 return
             }
             let mapUserJSON = JSON(message!)
             guard let mapUserJsonArray = mapUserJSON.array else {
                 print("[getMapUserInfo] fail to parse pin comments")
-                self.boolCanUpdateUserPin = true
+                self.boolCanUpdateUsers = true
                 return
             }
             if mapUserJsonArray.count <= 0 {
-                self.boolCanUpdateUserPin = true
+                self.boolCanUpdateUsers = true
                 return
             }
             var userPins = [FaePinAnnotation]()
@@ -99,7 +99,7 @@ extension FaeMapViewController {
                     }
                 }
                 guard userPins.count > 0 else {
-                    self.boolCanUpdateUserPin = true
+                    self.boolCanUpdateUsers = true
                     return
                 }
                 DispatchQueue.main.async {
@@ -107,7 +107,7 @@ extension FaeMapViewController {
                     for user in userPins {
                         user.isValid = true
                     }
-                    self.boolCanUpdateUserPin = true
+                    self.boolCanUpdateUsers = true
                 }
             }
         }

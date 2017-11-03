@@ -196,7 +196,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    var boolCanUpdateUserPin = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
+    var boolCanUpdateUsers = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     let FILTER_ENABLE = true
     var PLACE_ENABLE = true
@@ -206,7 +206,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var AUTO_CIRCLE_PINS = true
     var HIDE_AVATARS = false
     var fullyLoaded = false // indicate if all components are fully loaded
-    var boolNextUpdate = true
+    var boolCanUpdatePlaces = true
     
     var unreadNotiToken: NotificationToken? = nil
     
@@ -401,7 +401,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func updateTimerForAllPins() {
         updateTimerForLoadRegionPin()
         updateTimerForUserPin()
-        updateTimerForLoadRegionPlacePin()
+        updatePlacePins()
     }
     
     func jumpToWelcomeView(animated: Bool) {
@@ -423,7 +423,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             updateTimerForLoadRegionPin()
         }
         if places {
-            updateTimerForLoadRegionPlacePin()
+            updatePlacePins()
         }
     }
     
