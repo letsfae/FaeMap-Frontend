@@ -29,9 +29,9 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = true
+    var joshDebug: Bool = false
     var vickyDebug: Bool = false
-    var felixDebug: Bool = false
+    var felixDebug: Bool = true
     
     // change this to .production to switch to production mode
     private let server = ServerType.development

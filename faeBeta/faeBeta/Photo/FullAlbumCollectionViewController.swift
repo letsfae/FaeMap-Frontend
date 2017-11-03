@@ -446,14 +446,16 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
         
         let cell = collectionView.cellForItem(at: indexPath) as! FullPhotoPickerCollectionViewCell
         let asset: PHAsset = self.viewPhotoPicker.currentAlbum.albumContent[indexPath.row]
-        
+        // TODO high quality photo
         if !cell.photoSelected {
             if vcComeFromType != .chat {
                 let highQRequestOption = PHImageRequestOptions()
                 highQRequestOption.resizeMode = .none
-                highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                //highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                highQRequestOption.deliveryMode = .fastFormat
                 highQRequestOption.isSynchronous = true
-                PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFill, options: highQRequestOption, resultHandler: { image, _ in
+                highQRequestOption.isNetworkAccessAllowed = false
+                PHCachingImageManager.default().requestImage(for: asset, targetSize: sizeThumbnail, contentMode: .aspectFill, options: highQRequestOption, resultHandler: { image, _ in
                     if image != nil {
                         self.imageDelegate.sendImages([image!])
                         self.cancelSend()
@@ -496,9 +498,11 @@ class FullAlbumCollectionViewController: UICollectionViewController, UICollectio
                     
                     let highQRequestOption = PHImageRequestOptions()
                     highQRequestOption.resizeMode = .none
-                    highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                    //highQRequestOption.deliveryMode = .highQualityFormat //high pixel
+                    highQRequestOption.deliveryMode = .fastFormat
                     highQRequestOption.isSynchronous = true
-                    PHCachingImageManager.default().requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFill, options: highQRequestOption, resultHandler: { image, _ in
+                    highQRequestOption.isNetworkAccessAllowed = false
+                    PHCachingImageManager.default().requestImage(for: asset, targetSize: sizeThumbnail/*CGSize(width: asset.pixelWidth / 2, height: asset.pixelHeight / 2)*/, contentMode: .aspectFill, options: nil, resultHandler: { image, _ in
                         if image != nil {
                             self.viewPhotoPicker.indexImageDict[count] = image
                         }

@@ -24,8 +24,8 @@ func sendWelcomeMessage() {
     //ENDBryan
     let realm = try! Realm()
     let login_user_id = String(Key.shared.user_id)
-    let fae = realm.filterUser(login_user_id, id: "1")!
-    let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
+    let fae = realm.filterUser(id: "1")!
+    let selfUser = realm.filterUser(id: login_user_id)!
     if let _ = fae.message {
     } else {
         let chat_id = "1"
@@ -47,7 +47,7 @@ func sendWelcomeMessage() {
             realm.add(recentRealm, update: true)
         }
     }
-    if realm.filterAllMessages(login_user_id, 0, login_user_id).count == 0 {
+    if realm.filterAllMessages(0, login_user_id).count == 0 {
         let newMessage = RealmMessage_v2()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, login_user_id, -1)
         newMessage.sender = selfUser
