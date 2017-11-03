@@ -30,6 +30,7 @@ class FaeAddUsernameCell: UITableViewCell {
     var btnAddorAdded: UIButton! // btn that can substitute as the add button or the "added" button.
     var btnAcceptRequest: UIButton!
     var btnRefuseRequest: UIButton!
+    var lblStatus: UILabel!
     var faeContact = FaeContact()
     var indexPath: IndexPath!
     weak var delegate: FaeAddUsernameDelegate!
@@ -44,6 +45,8 @@ class FaeAddUsernameCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        friendStatus = .defaultMode
+        lblStatus.text = ""
         btnAddorAdded.setImage(nil, for: .normal)
         btnAcceptRequest.setImage(nil, for: .normal)
         btnRefuseRequest.setImage(nil, for: .normal)
@@ -67,10 +70,18 @@ class FaeAddUsernameCell: UITableViewCell {
     
     func getFromRelations(id: Int, relation: Relations) {
         if id == Key.shared.user_id {
-            self.friendStatus = .accepted
+            self.friendStatus = .blocked_by
         }
-        
-        if relation.is_friend {
+//        print(relation)
+        if relation.blocked {   // blocked & blocked_by
+            self.friendStatus = .blocked
+        } else if relation.blocked_by {
+            if relation.is_friend {
+                self.friendStatus = .accepted
+            } else {
+                self.friendStatus = .blocked_by
+            }
+        } else if relation.is_friend {
             self.friendStatus = .accepted
         } else if relation.requested {
             self.friendStatus = .pending
@@ -92,8 +103,6 @@ class FaeAddUsernameCell: UITableViewCell {
                     }
                 }
             }
-        } else if relation.blocked || relation.blocked_by {   // blocked & blocked_by
-            self.friendStatus = .blocked
         }
         
         self.setButtonImage()
@@ -102,17 +111,20 @@ class FaeAddUsernameCell: UITableViewCell {
     fileprivate func setButtonImage() {
         switch friendStatus {
         case .defaultMode:
+            lblStatus.text = ""
             btnAddorAdded.setImage(#imageLiteral(resourceName: "addButton"), for: .normal)
             btnAddorAdded.isHidden = false
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
             break
         case .accepted:
+            lblStatus.text = "Friends"
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
             break
         case .pending:
+            lblStatus.text = ""
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = false
             btnRefuseRequest.isHidden = false
@@ -120,6 +132,7 @@ class FaeAddUsernameCell: UITableViewCell {
             btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
             break
         case .requested:
+            lblStatus.text = ""
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = false
             btnRefuseRequest.isHidden = false
@@ -127,10 +140,16 @@ class FaeAddUsernameCell: UITableViewCell {
             btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
             break
         case .blocked:
+            lblStatus.text = "Blocked"
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
             break
+        case .blocked_by:
+            lblStatus.text = ""
+            btnAddorAdded.isHidden = true
+            btnAcceptRequest.isHidden = true
+            btnRefuseRequest.isHidden = true
         default:
             break
         }
@@ -186,6 +205,9 @@ class FaeAddUsernameCell: UITableViewCell {
         addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnAcceptRequest)
         addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnRefuseRequest)
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAcceptRequest)
+        
+        lblStatus = FaeLabel(CGRect(x: screenWidth - 65, y: 29, width: 50, height: 18), .right, .demiBold, 13, UIColor._155155155())
+        addSubview(lblStatus)
     }
     
     func setValueForCell(user: UserNameCard) {

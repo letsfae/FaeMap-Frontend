@@ -9,12 +9,17 @@
 import UIKit
 import MessageUI
 
-class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
+protocol ContactsInviteDelegate: class {
+    func inviteToFaevorite(indexPath: IndexPath)
+}
+
+class FaeInviteCell: UITableViewCell {
     var lblName: UILabel!
     var lblTel: UILabel!
     var btnInvite: UIButton!
     var bottomLine: UIView!
-    var hasInvite = false
+    var indexPath: IndexPath!
+    weak var delegate: ContactsInviteDelegate!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -52,6 +57,7 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
         btnInvite = UIButton()
         addSubview(btnInvite)
         btnInvite.setImage(#imageLiteral(resourceName: "btnInvite"), for: .normal)
+        btnInvite.setImage(#imageLiteral(resourceName: "btnInvited"), for: .selected)
         btnInvite.addTarget(self, action: #selector(self.changeInviteStatus(_:)), for: .touchUpInside)
         addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnInvite)
         addConstraintsWithFormat("H:[v0(86)]-17-|", options: [], views: btnInvite)
@@ -63,25 +69,7 @@ class FaeInviteCell: UITableViewCell, MFMessageComposeViewControllerDelegate {
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
-    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        
-    }
-    
     @objc func changeInviteStatus(_ sender: UIButton) {
-        if !hasInvite {
-            let msgVC = MFMessageComposeViewController()
-            msgVC.messageComposeDelegate = self
-            let msg = "Discover amazing places with me on Fae Maps! Add my Username: linlin https://www.xxx.com"
-            msgVC.body = msg
-            msgVC.recipients = ["2132969405"]
-            msgVC.present(msgVC, animated: true, completion: nil)
-            if MFMessageComposeViewController.canSendText() {
-                btnInvite.setImage(#imageLiteral(resourceName: "btnInvited"), for: .normal)
-                hasInvite = true
-            }
-        } else {
-            btnInvite.setImage(#imageLiteral(resourceName: "btnInvite"), for: .normal)
-            hasInvite = false
-        }
+        delegate?.inviteToFaevorite(indexPath: indexPath)
     }
 }

@@ -334,17 +334,21 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeContactsCell", for: indexPath as IndexPath) as! FaeContactsCell
             if schbarContacts.txtSchField.text != "" {
+                cell.userId = filtered[indexPath.row].userId
                 General.shared.avatar(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
                 cell.lblUserName.text = filtered[indexPath.row].displayName
                 cell.lblUserSaying.text = filtered[indexPath.row].userName
+                cell.getFriendStatus(id: cell.userId)
             } else {
+                cell.userId = arrFriends[indexPath.row].userId
                 General.shared.avatar(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
                 cell.lblUserName.text = arrFriends[indexPath.row].displayName
                 cell.lblUserSaying.text = arrFriends[indexPath.row].userName
+                cell.getFriendStatus(id: cell.userId)
             }
             
             /*

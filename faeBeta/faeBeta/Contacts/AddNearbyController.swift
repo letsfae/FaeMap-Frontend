@@ -7,67 +7,83 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
     var uiviewNavBar: FaeNavBar!
     var lblScanTitle: UILabel!
     var lblScanSubtitle: UILabel!
-    var imgBigCircle: UIImageView!
-    var imgScan: UIImageView!
-    var imgAvatar: UIImageView!
-    var imgScan2: UIImageView!
-    var imgScan3: UIImageView!
+    var imgAvatar: FaeAvatarView!
     var tblUsernames: UITableView!
-    var btnRight: UIButton!
-    //change ShowScanedResult to true can get into tableView
-    var ShowScanedResult = false
-    
-    // Joshua: array with more than 30 items will cause sourcekitservice to consume too much cpu and memory resource
-//    var testArray = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegowina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "Brunei Darussalam", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Congo, the Democratic Republic of the", "Cook Islands", "Costa Rica", "Cote d'Ivoire", "Croatia (Hrvatska)", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea"]
-    var testArray = ["Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba"]
+    var uiviewAvatarWaveSub: UIView!
+    var filterCircle_1: UIImageView!
+    var filterCircle_2: UIImageView!
+    var filterCircle_3: UIImageView!
+    var filterCircle_4: UIImageView!
+    var arrNearby = [UserNameCard]()
     
     override func viewDidLoad() {
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
         loadNavBar()
         loadTextView()
-        loadImgView()
         loadTable()
-        loadScanAnimation()
-        if ShowScanedResult {
-            lblScanTitle.isHidden = true
-            lblScanSubtitle.isHidden = true
-            imgScan.isHidden = true
-            imgScan2.isHidden = true
-            imgScan3.isHidden = true
-            imgAvatar.isHidden = true
-            tblUsernames.isHidden = false
+        loadAvatarWave()
+        loadWaves()
+        
+        loadNearbyPeople {(count: Int) in
+            UIView.animate(withDuration: 0, delay: 10, options: .curveEaseOut, animations: {
+                self.tblUsernames.reloadData()
+                self.uiviewAvatarWaveSub.alpha = 0
+                self.lblScanTitle.alpha = 0
+                self.lblScanSubtitle.alpha = 0
+                self.uiviewNavBar.rightBtn.alpha = 1
+                self.tblUsernames.alpha = 1
+            }, completion: nil)
         }
-        else {
-            lblScanTitle.isHidden = false
-            lblScanSubtitle.isHidden = false
-            imgScan.isHidden = false
-            imgScan2.isHidden = false
-            imgScan3.isHidden = false
-            imgAvatar.isHidden = false
-            tblUsernames.isHidden = true
+    }
+    
+    func loadNearbyPeople(_ completion: ((Int) -> ())?) {
+        let faeMap = FaeMap()
+        faeMap.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+        faeMap.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
+        faeMap.whereKey("radius", value: "9999999")
+        faeMap.whereKey("type", value: "user")
+        faeMap.getMapInformation { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                print("[loadNearbyPeople] status/100 != 2")
+                return
+            }
+            let json = JSON(message!)
+            if json.count <= 0 {
+                print("[loadNearbyPeople] array is nil")
+                return
+            }
+            print(json)
+            
+            for i in 0..<json.count {
+                let nearby = UserNameCard(user_id: json[i]["user_id"].intValue, nick_name: json[i]["user_nick_name"].stringValue, user_name: json[i]["user_name"].stringValue, short_intro: json[i]["short_intro"].stringValue)
+                self.arrNearby.append(nearby)
+            }
+            
+//            self.mbPeople.sort{ $0.dis < $1.dis }
+            completion?(self.arrNearby.count)
         }
     }
     
     func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
-        uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.lblTitle.text = "Add Nearby"
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
-        if ShowScanedResult {
-            uiviewNavBar.rightBtn.isHidden = false
-            uiviewNavBar.rightBtn.setImage(nil, for: .normal)
-            uiviewNavBar.rightBtn.setTitle("Refresh", for: .normal)
-            uiviewNavBar.rightBtn.setTitleColor(UIColor._2499090(), for: .normal)
-            uiviewNavBar.rightBtn.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-            uiviewNavBar.rightBtn.addConstraintsWithFormat("H:|-0-[v0(64)]", options: [], views: uiviewNavBar.rightBtn.titleLabel!)
-        }
+
+        uiviewNavBar.rightBtn.setImage(nil, for: .normal)
+        uiviewNavBar.rightBtn.setTitle("Refresh", for: .normal)
+        uiviewNavBar.rightBtn.setTitleColor(UIColor._2499090(), for: .normal)
+        uiviewNavBar.rightBtn.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        uiviewNavBar.rightBtn.addConstraintsWithFormat("H:|-0-[v0(64)]", options: [], views: uiviewNavBar.rightBtn.titleLabel!)
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(actionRefresh(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.alpha = 0
     }
     
     func loadTextView() {
@@ -92,75 +108,84 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         view.addConstraintsWithFormat("V:|-140-[v0]", options: [], views: lblScanSubtitle)
     }
     
-    func loadImgView() {
-        if imgScan != nil {
-            imgScan.removeFromSuperview()
-            imgScan2.removeFromSuperview()
-            imgScan3.removeFromSuperview()
-        }
-        imgScan = UIImageView()
-        imgScan.frame = CGRect(x: 117*screenWidthFactor, y: 278, width: 180*screenWidthFactor, height: 180*screenHeightFactor)
-        imgScan.layer.cornerRadius = 90
-        imgScan.contentMode = .scaleAspectFill
+    func loadAvatarWave() {
+        let xAxis: CGFloat = screenWidth / 2
+        let yAxis: CGFloat = 368 * screenHeightFactor
         
-        imgScan2 = UIImageView()
-        imgScan2.frame = CGRect(x: 117*screenWidthFactor, y: 278, width: 180*screenWidthFactor, height: 180*screenHeightFactor)
-        imgScan2.layer.cornerRadius = 90
-        imgScan2.contentMode = .scaleAspectFill
+        uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenWidth))
+        uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
+        view.addSubview(uiviewAvatarWaveSub)
         
-        imgScan3 = UIImageView()
-        imgScan3.frame = CGRect(x: 117*screenWidthFactor, y: 278, width: 180*screenWidthFactor, height: 180*screenHeightFactor)
-        imgScan3.layer.cornerRadius = 90
-        imgScan3.contentMode = .scaleToFill
-
+        let imgAvatarSub = UIImageView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        imgAvatarSub.contentMode = .scaleAspectFill
+        imgAvatarSub.image = #imageLiteral(resourceName: "exp_avatar_border")
+        imgAvatarSub.center = CGPoint(x: xAxis, y: xAxis)
+        uiviewAvatarWaveSub.addSubview(imgAvatarSub)
         
-        view.addSubview(imgScan3)
-        view.addSubview(imgScan2)
-        view.addSubview(imgScan)
-        imgScan.layer.zPosition = 0
-        imgScan2.layer.zPosition = 1
-        imgScan3.layer.zPosition = 2
-        imgScan.isUserInteractionEnabled = false
-        imgScan2.isUserInteractionEnabled = false
-        imgScan3.isUserInteractionEnabled = false
-        imgScan.image = UIImage(named: "imgScan")
-        imgScan2.image = UIImage(named: "imgScan")
-        imgScan3.image = UIImage(named: "imgScan")
-        
-        imgAvatar = UIImageView(frame: CGRect(x: 167*screenWidthFactor, y: 328, width: 80*screenWidthFactor, height: 80*screenHeightFactor))
-        imgAvatar.layer.cornerRadius = 40 * screenWidthFactor
+        imgAvatar = FaeAvatarView(frame: CGRect(x: 0, y: 0, width: 70, height: 70))
+        imgAvatar.layer.cornerRadius = 35
         imgAvatar.contentMode = .scaleAspectFill
-        view.addSubview(imgAvatar)
-        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
-            self.imgAvatar.image = avatarImage
-        })
-        imgAvatar.layer.borderWidth = 5
-        imgAvatar.layer.borderColor = UIColor.white.cgColor
-        imgAvatar.layer.zPosition = 3
+        imgAvatar.center = CGPoint(x: xAxis, y: xAxis)
+        imgAvatar.isUserInteractionEnabled = false
         imgAvatar.clipsToBounds = true
+        uiviewAvatarWaveSub.addSubview(imgAvatar)
+        imgAvatar.userID = Key.shared.user_id
+        imgAvatar.loadAvatar(id: Key.shared.user_id)
     }
     
-    func loadScanAnimation() {
-        UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn], animations: ({
-            if self.imgScan != nil {
-                self.imgScan.alpha = 0.0
-                self.imgScan.frame = CGRect(x: 32*screenWidthFactor, y: 193, width: 350*screenWidthFactor, height: 350*screenHeightFactor)
-            }
-        }), completion: nil)
+    func loadWaves() {
+        func createFilterCircle() -> UIImageView {
+            let xAxis: CGFloat = screenWidth / 2
+            let imgView = UIImageView(frame: CGRect.zero)
+            imgView.frame.size = CGSize(width: 80, height: 80)
+            imgView.center = CGPoint(x: xAxis, y: xAxis)
+            imgView.image = #imageLiteral(resourceName: "exp_wave")
+            imgView.tag = 0
+            return imgView
+        }
+        if filterCircle_1 != nil {
+            filterCircle_1.removeFromSuperview()
+            filterCircle_2.removeFromSuperview()
+            filterCircle_3.removeFromSuperview()
+            filterCircle_4.removeFromSuperview()
+        }
+        filterCircle_1 = createFilterCircle()
+        filterCircle_2 = createFilterCircle()
+        filterCircle_3 = createFilterCircle()
+        filterCircle_4 = createFilterCircle()
+        uiviewAvatarWaveSub.addSubview(filterCircle_1)
+        uiviewAvatarWaveSub.addSubview(filterCircle_2)
+        uiviewAvatarWaveSub.addSubview(filterCircle_3)
+        uiviewAvatarWaveSub.addSubview(filterCircle_4)
+        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_1)
+        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_2)
+        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_3)
+        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_4)
+
+        animation(circle: filterCircle_1, delay: 0)
+        animation(circle: filterCircle_2, delay: 0.5)
+        animation(circle: filterCircle_3, delay: 2)
+        animation(circle: filterCircle_4, delay: 2.5)
+    }
+    
+    func animation(circle: UIImageView, delay: Double) {
+        let animateTime: Double = 3
+        let radius: CGFloat = screenWidth
+        let newFrame = CGRect(x: 0, y: 0, width: radius, height: radius)
         
-        UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn], animations: ({
-            if self.imgScan2 != nil {
-                self.imgScan2.alpha = 0.0
-                self.imgScan2.frame = CGRect(x: 32*screenWidthFactor, y: 193, width: 350*screenWidthFactor, height: 350*screenHeightFactor)
-            }
-        }), completion: nil)
+        let xAxis: CGFloat = screenWidth / 2
+        circle.frame.size = CGSize(width: 80, height: 80)
+        circle.center = CGPoint(x: xAxis, y: xAxis)
+        circle.alpha = 1
         
-        UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn], animations: ({
-            if self.imgScan3 != nil {
-                self.imgScan3.alpha = 0.0
-                self.imgScan3.frame = CGRect(x: 32*screenWidthFactor, y: 193, width: 350*screenWidthFactor, height: 350*screenHeightFactor)
-            }
-        }), completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            UIView.animate(withDuration: animateTime, delay: 0, options: [.curveEaseOut], animations: ({
+                circle.alpha = 0.0
+                circle.frame = newFrame
+            }), completion: { _ in
+                self.animation(circle: circle, delay: 0.75)
+            })
+        }
     }
     
     func loadTable() {
@@ -168,31 +193,98 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         tblUsernames.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
-        tblUsernames.register(FaeContactsCell.self, forCellReuseIdentifier: "FaeContactsCell")
+        tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")
         tblUsernames.indicatorStyle = .white
+        tblUsernames.separatorStyle = .none
         view.addSubview(tblUsernames)
+        tblUsernames.alpha = 0
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @objc func actionRefresh(_ sender: UIButton) {
+        
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return testArray.count
+        return arrNearby.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
-        cell.lblUserName.text = testArray[indexPath.row]
-        cell.lblUserSaying.text = testArray[indexPath.row]
+        let nearby = arrNearby[indexPath.row]
+        cell.delegate = self
+        cell.indexPath = indexPath
+        cell.setValueForCell(user: nearby)
+        cell.userId = nearby.userId
+        cell.getFriendStatus(id: cell.userId)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("User selected table row \(indexPath.row) and item \(testArray[indexPath.row])")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
     }
+    
+    // FaeAddUsernameDelegate
+    func addFriend(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "add"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func resendRequest(indexPath: IndexPath, user_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "resend"
+        vc.userId = user_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func acceptRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "accept"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func ignoreRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "ignore"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    
+    func withdrawRequest(indexPath: IndexPath, request_id: Int) {
+        let vc = FriendOperationFromContactsViewController()
+        vc.delegate = self
+        vc.action = "withdraw"
+        vc.requestId = request_id
+        vc.indexPath = indexPath
+        vc.modalPresentationStyle = .overCurrentContext
+        present(vc, animated: false)
+    }
+    // FaeAddUsernameDelegate End
+    
+    // FriendOperationFromContactsDelegate
+    func passFriendStatusBack(indexPath: IndexPath) {
+        tblUsernames.reloadRows(at: [indexPath], with: .none)
+    }
+    // FriendOperationFromContactsDelegate End
 }
