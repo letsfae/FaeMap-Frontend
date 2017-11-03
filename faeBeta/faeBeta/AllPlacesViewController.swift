@@ -173,9 +173,10 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         let vc = BoardsSearchViewController()
         vc.strPlaceholder = lblChooseLoc.text
         vc.enterMode = .location
+        vc.isCitySearch = true
         vc.delegate = self
         vc.strPlaceholder = lblChooseLoc.text
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     @objc func actionClearSearchResults(_ sender: UIButton) {

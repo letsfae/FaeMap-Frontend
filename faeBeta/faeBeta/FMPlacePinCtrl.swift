@@ -306,10 +306,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
     }
     
-    func updateTimerForLoadRegionPlacePin() {
-        updatePlacePins()
-    }
-    
     func updatePlacePins() {
         let coorDistance = cameraDiagonalDistance()
         refreshPlacePins(radius: coorDistance)
@@ -340,11 +336,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             stopIconSpin(delay: getDelay(prevTime: time_0))
             return
         }
-        guard boolNextUpdate else {
+        guard boolCanUpdatePlaces else {
             stopIconSpin(delay: getDelay(prevTime: time_0))
             return
         }
-        boolNextUpdate = false
+        boolCanUpdatePlaces = false
         btnFilterIcon.startIconSpin()
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
@@ -358,18 +354,18 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
-                self.boolNextUpdate = true
+                self.boolCanUpdatePlaces = true
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
-                self.boolNextUpdate = true
+                self.boolCanUpdatePlaces = true
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
-                self.boolNextUpdate = true
+                self.boolCanUpdatePlaces = true
                 return
             }
             var placePins = [FaePinAnnotation]()
@@ -385,7 +381,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                     let placeData = PlacePin(json: placeJson)
                     let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
                     if self.setPlacePins.contains(placeJson["place_id"].intValue) {
-//                        joshprint(i, "inserted fail")
                     } else {
                         self.setPlacePins.insert(placeJson["place_id"].intValue)
                         placePins.append(place)
@@ -393,12 +388,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                     }
                     i += 1
                 }
-                self.boolNextUpdate = true
-//                joshprint(" ")
-                guard placePins.count > 0 else { return }
-//                joshprint(self.faePlacePins.count)
+                self.boolCanUpdatePlaces = true
+                guard placePins.count > 0 else {
+                    return
+                }
                 DispatchQueue.main.async {
-                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
+                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: {
+                        
+                    })
                 }
             }
             stopIconSpin(delay: getDelay(prevTime: time_0))

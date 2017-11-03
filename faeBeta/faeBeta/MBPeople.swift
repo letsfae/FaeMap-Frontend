@@ -70,6 +70,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             let vc = BoardsSearchViewController()
             vc.strPlaceholder = lblAllCom.text
             vc.enterMode = .location
+            vc.isCitySearch = true
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
         }

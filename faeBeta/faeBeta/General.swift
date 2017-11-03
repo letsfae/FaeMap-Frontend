@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import GooglePlaces
 
 class General: NSObject {
     
@@ -174,6 +175,23 @@ class General: NSObject {
                     }
                 }
             }
+        }
+    }
+    
+    // GMSLookUpPlaceForCoordinate
+    func lookUpForCoordinate(_ completion: @escaping (GMSPlace) -> ()) {
+        if let placeId = Key.shared.selectedPrediction?.placeID {
+            GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
+                if let error = error {
+                    print("lookup place id query error: \(error.localizedDescription)")
+                    return
+                }
+                guard let place = gmsPlace else {
+                    print("No place details for \(placeId)")
+                    return
+                }
+                completion(place)
+            })
         }
     }
 }

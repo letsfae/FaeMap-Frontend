@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import GooglePlaces
 
 // TODO: Yue
 @objc protocol BoardsSearchDelegate: class {
@@ -19,6 +20,7 @@ import SwiftyJSON
     @objc optional func sendLocationBack(address: RouteAddress)
     @objc optional func sendPlaceBack(placeData: PlacePin)
 }
+
 enum EnterMode: String {
     case place = "place"
     case location = "location"
@@ -67,6 +69,13 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var searchCompleter = MKLocalSearchCompleter()
     var searchResults = [MKLocalSearchCompletion]()
     
+    // Google address autocompletion
+    var googleFilter = GMSAutocompleteFilter()
+    var googlePredictions = [GMSAutocompletePrediction]()
+    
+    // Switch between two google city search or address search
+    var isCitySearch = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // navigationController?.isNavigationBarHidden = true
@@ -75,7 +84,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         loadPlaceBtns()
         loadTable()
         loadNoResultsView()
-        
+        joshprint("BoardVC is called")
         schBar.txtSchField.becomeFirstResponder()
         searchedLoc = LocManager.shared.curtLoc
         getPlaceInfo()
@@ -113,7 +122,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // MKLocalSearchCompleterDelegate
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         searchResults = completer.results
-        filteredLocations = searchResults.map({ $0.title })
+        filteredLocations = searchResults.map({ $0.title + ", " + $0.subtitle })
         self.tblLocationRes.reloadData()
         if self.searchResults.count > 0 {
             showOrHideViews(searchText: completer.queryFragment)
@@ -280,19 +289,19 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
             break
         case .location:
-//            filteredLocations.removeAll()
-//            for location in arrLocList {
-//                if location.lowercased().range(of: searchText.lowercased()) != nil {
-//                    filteredLocations.append(location)
-//                }
-//            }
-            searchCompleter.queryFragment = searchText
+            if searchText == "" {
+                showOrHideViews(searchText: searchText)
+            }
+            if isCitySearch {
+                placeAutocomplete(searchText)
+            } else {
+                searchCompleter.queryFragment = searchText
+                showOrHideViews(searchText: searchText)
+            }
             break
         default:
             break
         }
-        
-        showOrHideViews(searchText: searchText)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
@@ -354,12 +363,14 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
-            if searchText == "" || filteredLocations.count == 0 {
+            let count = isCitySearch ? googlePredictions.count : filteredLocations.count
+            
+            if searchText == "" || count == 0 {
                 uiviewSchResBg.frame.origin.y = 124 - 48
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * filteredLocations.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 - 48 + uiviewSchLocResBg.frame.height + 5
             }
@@ -374,7 +385,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblLocationName.text = filteredLocations[indexPath.row]
+                if isCitySearch {
+                    cell.lblLocationName.attributedText = googlePredictions[indexPath.row].faeSearchBarAttributedText()
+                } else {
+                    cell.lblLocationName.text = filteredLocations[indexPath.row]
+                }
                 cell.bottomLine.isHidden = false
                 if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
                     cell.bottomLine.isHidden = true
@@ -415,7 +430,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             return filteredPlaces.count
         } else {
             if tableView == tblLocationRes {
-                return filteredLocations.count
+                return isCitySearch ? googlePredictions.count : filteredLocations.count
             } else {
                 if boolCurtLocSelected {
                     return 1
@@ -437,16 +452,28 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             schBar.txtSchField.resignFirstResponder()
             if tableView == tblLocationRes {
-                let searchRequest = MKLocalSearchRequest(completion: searchResults[indexPath.row])
-                let search = MKLocalSearch(request: searchRequest)
-                search.start { (response, error) in
-                    guard let coordinate = response?.mapItems[0].placemark.coordinate else { return }
-                    let address = RouteAddress(name: self.filteredLocations[indexPath.row])
-                    self.delegate?.sendLocationBack?(address: address)
-                    self.delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: self.filteredLocations[indexPath.row], location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
-                    self.navigationController?.popViewController(animated: false)
+                if isCitySearch {
+                    let slctPred = googlePredictions[indexPath.row]
+                    Key.shared.selectedPrediction = googlePredictions[indexPath.row]
+                    General.shared.lookUpForCoordinate({ (place) in
+                        let address = RouteAddress(name: slctPred.attributedFullText.string)
+                        address.coordinate = place.coordinate
+                        self.delegate?.sendLocationBack?(address: address)
+                        self.delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: slctPred.attributedFullText.string, location: CLLocation(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude))
+                        self.navigationController?.popViewController(animated: false)
+                    })
+                } else {
+                    let searchRequest = MKLocalSearchRequest(completion: searchResults[indexPath.row])
+                    let search = MKLocalSearch(request: searchRequest)
+                    search.start { (response, error) in
+                        guard let coordinate = response?.mapItems[0].placemark.coordinate else { return }
+                        let address = RouteAddress(name: self.filteredLocations[indexPath.row])
+                        address.coordinate = coordinate
+                        self.delegate?.sendLocationBack?(address: address)
+                        self.delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mapSearchCurrentLocation"), searchText: self.filteredLocations[indexPath.row], location: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude))
+                        self.navigationController?.popViewController(animated: false)
+                    }
                 }
-                
             } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
                     if boolCurtLocSelected {
@@ -477,6 +504,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                             vc.boolFromBoard = true
                             arrViewControllers!.append(vc)
                         } else if let vcFM = lastVC.arrViewCtrl.first as? FaeMapViewController {
+                            // will never be excuted
+                            // because FaeMapVC will reuse self to do location selecting
                             vc.delegate = vcFM
                             vc.boolFromBoard = true
                             arrViewControllers!.append(vc)
@@ -518,6 +547,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     func getPlaceInfo() {
+        guard enterMode == .place else { return }
+        
         let placesList = FaeMap()
         placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")
         placesList.whereKey("geo_longitude", value: "\(searchedLoc.coordinate.longitude)")
@@ -545,7 +576,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 let placeData = PlacePin(json: result)
                 self.searchedPlaces.append(placeData)
             }
-            print(self.searchedPlaces.count)
+            //print(self.searchedPlaces.count)
         }
     }
     
@@ -569,5 +600,23 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         default:
             break
         }
+    }
+    
+    // MARK: - GMSAutocompleteFilter
+    func placeAutocomplete(_ searchText: String) {
+        Key.shared.selectedPrediction = nil
+        googleFilter.type = .city
+        GMSPlacesClient.shared().autocompleteQuery(searchText, bounds: nil, filter: googleFilter, callback: {(results, error) -> Void in
+            if let error = error {
+                joshprint("Autocomplete error \(error)")
+                self.googlePredictions.removeAll(keepingCapacity: true)
+                self.showOrHideViews(searchText: searchText)
+                return
+            }
+            if let results = results {
+                self.googlePredictions = results
+            }
+            self.showOrHideViews(searchText: searchText)
+        })
     }
 }

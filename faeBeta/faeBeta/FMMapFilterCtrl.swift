@@ -34,11 +34,12 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
     
     @objc func actionFilterIcon(_ sender: UIButton) {
         PLACE_ENABLE = true
+        guard boolCanUpdatePlaces && boolCanUpdateUsers else { return }
         btnFilterIcon.startIconSpin()
         removePlaceUserPins({
             self.faePlacePins.removeAll(keepingCapacity: true)
             self.setPlacePins.removeAll(keepingCapacity: true)
-            self.updateTimerForLoadRegionPlacePin()
+            self.updatePlacePins()
         }) {
             self.faeUserPins.removeAll(keepingCapacity: true)
             self.updateTimerForUserPin()
