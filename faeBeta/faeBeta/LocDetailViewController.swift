@@ -312,8 +312,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     @objc func shareThisPin() {
         let vcShareCollection = NewChatShareController(friendListMode: .location)
-        vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
-        navigationController?.pushViewController(vcShareCollection, animated: true)
+        AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+            vcShareCollection.locationDetail = "\(self.coordinate?.latitude ?? 0.0),\(self.coordinate?.longitude ?? 0.0),\(self.strLocName),\(self.strLocAddr)"
+            vcShareCollection.locationSnapImage = snapShotImage
+            self.navigationController?.pushViewController(vcShareCollection, animated: true)
+        }
     }
     
     func showAddCollectionView() {

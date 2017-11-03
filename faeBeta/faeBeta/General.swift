@@ -33,11 +33,12 @@ class General: NSObject {
                 return
             }
             guard status / 100 == 2 || status / 100 == 3 else { return }
-            DispatchQueue.main.async(execute: {
+            /*DispatchQueue.main.async(execute: {
                 guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
                 faeImageCache.setObject(imageToCache, forKey: userid as AnyObject)
                 completion(imageToCache)
-            })
+            })*/
+            completion(UIImage(data: imageRawData!)!)
         }
     }
     

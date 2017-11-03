@@ -18,6 +18,13 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         textName = txtName
         // Vicky 09/17/17 在delegate=self之后，你的值是可以传回来了，那你这步操作是在干嘛？你需要更新的label是在table里面，不是在View里面，所以table需要重新reloadData才可以显示值，试试把这句话注释掉的结果。同样，这样地方table命名改一下吧，tblNameCard?或者其他的  以tbl开头
         tblNameCard.reloadData()
+        let user = FaeUser()
+        user.whereKey("nick_name", value: textName!)
+        user.updateNameCard { (status:Int, objects:Any?) in
+            if status / 100 != 2 {
+                felixprint("update display name failed")
+            }
+        }
     }
     
     func protSaveIntro(txtIntro: String?) {
