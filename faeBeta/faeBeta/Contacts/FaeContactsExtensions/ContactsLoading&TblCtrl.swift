@@ -156,20 +156,25 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         print("changeContactsTable")
         switch action {
         case ACCEPT:
-            self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
             break
         case IGNORE:
-            self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
+            arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
             break
         case WITHDRAW:
-            self.arrRequested.remove(at: self.indexPathGlobal.row)
+            //self.arrRequested.remove(at: self.indexPathGlobal.row)
+            arrRealmRequested.remove(at: indexPathGlobal.row)
             break
         case REMOVE:
-            self.arrFriends.remove(at: self.indexPathGlobal.row)
+            //self.arrFriends.remove(at: self.indexPathGlobal.row)
+            arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
             break
         case BLOCK:
-            self.arrFriends.remove(at: self.indexPathGlobal.row)
+            //self.arrFriends.remove(at: self.indexPathGlobal.row)
+            arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
             break
         default:
@@ -458,14 +463,20 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         // received
         indexPathGlobal = indexPath
         if cellStatus == 1 {
-            uiviewNameCard.userId = arrReceivedRequests[indexPath.row].userId
+            //uiviewNameCard.userId = arrReceivedRequests[indexPath.row].userId
+            uiviewNameCard.userId = Int(arrRealmReceivedRequests[indexPath.row].id)!
+            uiviewNameCard.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
         } else if cellStatus == 2 {   // requested
-            uiviewNameCard.userId = arrRequested[indexPath.row].userId
+            //uiviewNameCard.userId = arrRequested[indexPath.row].userId
+            uiviewNameCard.userId = Int(arrRealmRequested[indexPath.row].id)!
+            uiviewNameCard.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
         } else {
             if schbarContacts.txtSchField.text != "" {
-                uiviewNameCard.userId = filtered[indexPath.row].userId
+                //uiviewNameCard.userId = filtered[indexPath.row].userId                
+                uiviewNameCard.userId = Int(filteredRealm[indexPath.row].id)!
             } else {
-                uiviewNameCard.userId = arrFriends[indexPath.row].userId
+                //uiviewNameCard.userId = arrFriends[indexPath.row].userId
+                uiviewNameCard.userId = Int(arrRealmFriends[indexPath.row].id)!
             }
         }
         uiviewNameCard.show {}
@@ -488,6 +499,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     let realm = try! Realm()
                     try! realm.write {
                         self.arrRealmRequested[self.indexPathGlobal.row].relation = NO_RELATION
+                        self.arrRealmRequested[self.indexPathGlobal.row].created_at = ""
+                        self.arrRealmRequested[self.indexPathGlobal.row].request_id = ""
                     }
                     self.arrRealmRequested.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
@@ -524,6 +537,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     let realm = try! Realm()
                     try! realm.write {
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
+                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
+                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
                     //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
@@ -543,6 +558,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     let realm = try! Realm()
                     try! realm.write {
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = IS_FRIEND
+                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
+                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
                     //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)

@@ -221,7 +221,7 @@ class FaeChat {
                         try! realm.write {
                             realm.add(newUser, update: true)
                         }
-                        General.shared.avatar(userid: user.int!) { (avatarImage) in
+                        General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
                         }
                         messageRealm.members.append(newUser)
                         if newUser.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
