@@ -10,6 +10,7 @@ import UIKit
 import Contacts
 import ContactsUI
 import SwiftyJSON
+import MessageUI
 
 struct RegisteredUser {
     let userId: Int
@@ -24,7 +25,8 @@ struct RegisteredUser {
     }
 }
 
-class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
+class AddFromContactsController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, SignInPhoneDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate, ContactsInviteDelegate, MFMessageComposeViewControllerDelegate {
+    
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarFromContacts: FaeSearchBarTest!
@@ -43,6 +45,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     var phoneNumbers: String = ""
     var dictCountryCode: Dictionary = [String : CountryCodeStruct]()
     var dictPhone: Dictionary = [String: UserNameCard]()
+    var selectedIdx = [IndexPath]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -177,15 +180,17 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             cell.setValueForCell(user: registered.nameCard)
             cell.getFromRelations(id: registered.userId, relation: registered.relation)
             if indexPath.row == tblFromContacts.numberOfRows(inSection: 0)-1 {
-                print(indexPath.row)
                 cell.bottomLine.isHidden = true
             }
             return cell
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeInviteCell", for: indexPath) as! FaeInviteCell
+            cell.indexPath = indexPath
+            cell.delegate = self
             cell.lblName.text = arrUnregistered[indexPath.row].displayName
             cell.lblTel.text = arrUnregistered[indexPath.row].userName
+            cell.btnInvite.isSelected = selectedIdx.contains(indexPath)
             return cell
         }
     }
@@ -288,29 +293,25 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         //let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
         //        print(val)
         let faeUser = FaeUser()
-        faeUser.whereKey("phone", value: "(1)2138060545;(1)13397190906;(1)18086104610;(1)2133092068")
+        faeUser.whereKey("phone", value: val)
         faeUser.checkPhoneExistence {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                let json = JSON(message!)
-                print(json)
+                let phoneJson = JSON(message!)
                 
-                for i in 0..<json.count {
-                    let userId = json[i]["user_id"].intValue
-                    let phone = json[i]["phone"].stringValue
-                    let relation = Relations(json: json[i]["relation"])
+                for i in 0..<phoneJson.count {
+                    let userId = phoneJson[i]["user_id"].intValue
+                    let phone = phoneJson[i]["phone"].stringValue
+                    let relation = Relations(json: phoneJson[i]["relation"])
                     self.dictPhone.removeValue(forKey: phone)
                     
                     faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
                         if status / 100 == 2 {
                             let json = JSON(message!)
-                            print("json.count \(json.count)")
                             let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
                             let arrInfo = RegisteredUser(userId: userId, phone: phone, nameCard: userInfo, relation: relation)
                             self.arrRegistered.append(arrInfo)
-                            //                            self.tblFromContacts.reloadData()
                             
-                            print("\(self.arrRegistered.count) \(json.count)")
-                            if self.arrRegistered.count == 2 { // json.count {
+                            if  self.arrRegistered.count == phoneJson.count {
                                 self.tblFromContacts.reloadData()
                             }
                         } else {
@@ -448,4 +449,36 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         tblFromContacts.reloadRows(at: [indexPath], with: .none)
     }
     // FriendOperationFromContactsDelegate End
+    
+    // ContactsInviteDelegate
+    func inviteToFaevorite(indexPath: IndexPath) {
+        // 1. 此处考虑将已发送过invite请求的号码存入本地数据？下一次将不会再显示Intvite button, 而是Invited
+        // 2. 检测到已发送过号码的显示Invited，而不是进入了发送短信页面回来就显示Invited（有可能用户点了cancel并没有发送短信邀请）
+        let cell = tblFromContacts.cellForRow(at: indexPath) as! FaeInviteCell
+        if !cell.btnInvite.isSelected {
+            if MFMessageComposeViewController.canSendText() {
+                let msgVC = MFMessageComposeViewController()
+                msgVC.messageComposeDelegate = self
+                let msg = "Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username) https://www.xxx.com"
+                msgVC.body = msg
+                msgVC.recipients = ["\(cell.lblTel.text!)"]
+                present(msgVC, animated: true, completion: {
+                    cell.btnInvite.isSelected = true
+                    self.selectedIdx.append(indexPath)
+                })
+            } else {
+                let title = "Cannot Send Text Message"
+                let message = "Your device is not able to send text messages."
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+                let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    // MFMessageComposeViewControllerDelegate
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true)
+    }
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class FaeContactsCell: UITableViewCell {
     
@@ -14,6 +15,9 @@ class FaeContactsCell: UITableViewCell {
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
     var bottomLine: UIView!
+    var userId: Int = -1
+    var lblStatus: UILabel!
+    var friendStatus: FriendStatus = .accepted
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -25,6 +29,27 @@ class FaeContactsCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        friendStatus = .accepted
+        lblStatus.text = ""
+    }
+    
+    func getFriendStatus(id: Int) {
+        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let json = JSON(message!)
+                let relation = Relations(json: json)
+                if relation.blocked {   // blocked & blocked_by
+                    self.friendStatus = .blocked
+                    self.lblStatus.text = "Blocked"
+                }
+            } else {
+                print("[get friend status fail] - \(status) \(message!)")
+            }
+        }
     }
     
     fileprivate func loadFriendsCellContent() {
@@ -54,5 +79,8 @@ class FaeContactsCell: UITableViewCell {
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
+        
+        lblStatus = FaeLabel(CGRect(x: screenWidth - 65, y: 29, width: 50, height: 18), .right, .demiBold, 13, UIColor._155155155())
+        addSubview(lblStatus)
     }
 }

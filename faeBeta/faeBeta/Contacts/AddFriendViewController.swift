@@ -103,7 +103,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
                 let vc = AddNearbyController()
                 self.navigationController?.pushViewController(vc, animated: true)
             } else {
-                let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: linlin https://www.xxx.com"], applicationActivities: nil)
+                let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username) https://www.xxx.com"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 self.present(activityVC, animated: true, completion: nil)
             }
