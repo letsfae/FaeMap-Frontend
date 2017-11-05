@@ -289,9 +289,9 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     
     @objc func resendVerificationCode() {
         if enterMode == .email {
-            postToURL("reset_login/code", parameter: ["email": strEmail as AnyObject], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
         } else {
-            postToURL("reset_login/code", parameter: ["phone": "(" + strCountryCode + ")" + strPhoneNumber as AnyObject], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["phone": "(" + strCountryCode + ")" + strPhoneNumber], authentication: nil, completion: {(statusCode, result) in })
         }
         startTimer()
         btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)

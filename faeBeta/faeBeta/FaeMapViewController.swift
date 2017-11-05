@@ -221,17 +221,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     var desiredCount = 0
     
-    // Place Detail Push Transition
-    let pdTransition: CATransition = {
-        let transition = CATransition()
-        transition.duration = 0.4
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        return transition
-    }()
-    
-    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -323,7 +312,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func checkDisplayNameExisitency() {
-        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+        getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {

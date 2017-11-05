@@ -10,26 +10,26 @@ import Foundation
 import SwiftyJSON
 
 struct PinCollection {
-    let colId: Int
-    var colName: String
-    var colDesp: String
-    let colType: String
+    let id: Int
+    var name: String
+    var desp: String
+    let type: String
     var boolPri: Bool
-    var colTime: String
+    var time: String
     var itemsCount: Int = 0
     var pinIds = [Int]()
     var lastUpdate: String
     var creatorId: Int
     
     init(json: JSON) {
-        colId = json["collection_id"].intValue
-        colName = json["name"].stringValue
-        colDesp = json["description"].stringValue
-        colType = json["type"].stringValue
+        id = json["collection_id"].intValue
+        name = json["name"].stringValue
+        desp = json["description"].stringValue
+        type = json["type"].stringValue
         boolPri = json["is_private"].boolValue
-        let time = json["created_at"].stringValue
-        let date = time.split(separator: " ")[0].split(separator: "-")
-        colTime = date[1] + "/" + date[0]
+        let time_raw = json["created_at"].stringValue
+        let date = time_raw.split(separator: " ")[0].split(separator: "-")
+        time = date[1] + "/" + date[0]
         itemsCount = json["count"].intValue
         let updateTime = json["last_updated_at"].stringValue
         let updateDate = updateTime.split(separator: " ")[0].split(separator: "-")

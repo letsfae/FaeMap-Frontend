@@ -538,13 +538,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
     }
     func switchMapMode() {
-        if let vc = self.navigationController?.viewControllers.first {
-            if vc is InitialPageController {
-                if let vcRoot = vc as? InitialPageController {
-                    vcRoot.goToFaeMap()
-                    LeftSlidingMenuViewController.boolMapBoardIsOn = false
-                }
-            }
+        guard let vc = self.navigationController?.viewControllers.first else { return }
+        guard vc is InitialPageController else { return }
+        if let vcRoot = vc as? InitialPageController {
+            vcRoot.goToFaeMap()
+            LeftSlidingMenuViewController.boolMapBoardIsOn = false
         }
     }
 }

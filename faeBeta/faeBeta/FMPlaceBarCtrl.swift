@@ -17,8 +17,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         vcPlaceDetail.place = placeData
         vcPlaceDetail.featureDelegate = self
         vcPlaceDetail.delegate = self
-        navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
-        navigationController?.pushViewController(vcPlaceDetail, animated: false)
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
     func loadPlaceDetail() {

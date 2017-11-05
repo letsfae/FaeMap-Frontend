@@ -65,7 +65,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         deselectAllLocations()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colId = uiviewAfterAdded.selectedCollection.id
         vcList.colInfo = uiviewAfterAdded.selectedCollection
         vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         vcList.featureDelegate = self
@@ -155,8 +155,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcPlaceDetail.place = placeData
                 vcPlaceDetail.featureDelegate = self
                 vcPlaceDetail.delegate = self
-                navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
-                navigationController?.pushViewController(vcPlaceDetail, animated: false)
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
             break
         case .collect:

@@ -42,15 +42,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var arrListSavedThisPin = [Int]()
     var boolSavedListLoaded = false
     var uiviewWhite: UIView!
-    // Place Detail Pop Transition
-    let pdTransition: CATransition = {
-        let transition = CATransition()
-        transition.duration = 0.4
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        return transition
-    }()
     var intHaveHour = 0
     var intHaveWebPhone = 0
     var intCellCount = 0
@@ -336,8 +327,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc func backToMapBoard(_ sender: UIButton) {
-        navigationController?.view.layer.add(pdTransition, forKey: kCATransition)
-        navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func saveThisPin() {
@@ -410,7 +400,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colId = uiviewAfterAdded.selectedCollection.id
         vcList.colInfo = uiviewAfterAdded.selectedCollection
         vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)

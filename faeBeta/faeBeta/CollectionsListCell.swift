@@ -61,11 +61,11 @@ class CollectionsListCell: UITableViewCell {
     }
     
     func setValueForCell(cols: PinCollection, isIn: Bool = false) {
-        imgPic.image = cols.colType == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
+        imgPic.image = cols.type == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
         General.shared.avatar(userid: cols.creatorId, completion: { avatarImage in
             self.imgAvatar.image = avatarImage
         })
-        lblListName.text = cols.colName
+        lblListName.text = cols.name
         lblListNum.text = cols.itemsCount <= 1 ? "\(cols.itemsCount) item" : "\(cols.itemsCount) items"
         imgIsIn.isHidden = !isIn
     }

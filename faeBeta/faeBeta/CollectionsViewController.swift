@@ -53,16 +53,16 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 
                 for col in colArray {
                     let data = PinCollection(json: col)
-                    if data.colType == "place" {
+                    if data.type == "place" {
                         self.arrPlaces.append(data)
                     }
-                    if data.colType == "location" {
+                    if data.type == "location" {
                         self.arrLocations.append(data)
                     }
                 }
                 
-                self.arrPlaces.sort {$0.colId < $1.colId}
-                self.arrLocations.sort {$0.colId < $1.colId}
+                self.arrPlaces.sort {$0.id < $1.id}
+                self.arrLocations.sort {$0.id < $1.id}
                 self.countPlaces = self.arrPlaces.count
                 self.countLocations = self.arrLocations.count
                 self.tblCollections.reloadData()
@@ -298,7 +298,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             vc.indexPath = indexPath
             vc.enterMode = tableMode
             vc.arrColDetails = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-            joshprint(vc.arrColDetails.colId)
+            joshprint(vc.arrColDetails.id)
             if let ctrler = Key.shared.FMVCtrler {
                 vc.featureDelegate = ctrler
             }
@@ -322,13 +322,13 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int) {
         if enterMode == .place {
-            arrPlaces[indexPath.row].colName = name
-            arrPlaces[indexPath.row].colDesp = desp
+            arrPlaces[indexPath.row].name = name
+            arrPlaces[indexPath.row].desp = desp
             arrPlaces[indexPath.row].lastUpdate = time
             arrPlaces[indexPath.row].itemsCount = numItems
         } else {
-            arrLocations[indexPath.row].colName = name
-            arrLocations[indexPath.row].colDesp = desp
+            arrLocations[indexPath.row].name = name
+            arrLocations[indexPath.row].desp = desp
             arrLocations[indexPath.row].lastUpdate = time
             arrLocations[indexPath.row].itemsCount = numItems
         }
@@ -345,7 +345,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     // CreateColListDelegate
     func updateCols(col: PinCollection) {
-        if col.colType == "place" {
+        if col.type == "place" {
             arrPlaces.append(col)
         } else {
             arrLocations.append(col)

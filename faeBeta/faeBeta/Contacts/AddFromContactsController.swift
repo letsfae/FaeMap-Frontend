@@ -290,14 +290,17 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             self.arrUnregistered.append(arrInfo)
         }
         
-        //let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
+        let val = (self.phoneNumbers as NSString).substring(to: self.phoneNumbers.count - 1)
         //        print(val)
         let faeUser = FaeUser()
         faeUser.whereKey("phone", value: val)
         faeUser.checkPhoneExistence {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let phoneJson = JSON(message!)
-                
+            guard status / 100 == 2 else {
+                print("check phone existence failed \(status) \(message!)")
+                return
+            }
+            if let result = message {
+                let phoneJson = JSON(result)
                 for i in 0..<phoneJson.count {
                     let userId = phoneJson[i]["user_id"].intValue
                     let phone = phoneJson[i]["phone"].stringValue
@@ -311,7 +314,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
                             let arrInfo = RegisteredUser(userId: userId, phone: phone, nameCard: userInfo, relation: relation)
                             self.arrRegistered.append(arrInfo)
                             
-                            if  self.arrRegistered.count == phoneJson.count {
+                            if self.arrRegistered.count == phoneJson.count {
                                 self.tblFromContacts.reloadData()
                             }
                         } else {
@@ -319,11 +322,9 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
                         }
                     }
                 }
-                self.arrUnregistered = self.dictPhone.values.sorted{ $0.displayName < $1.displayName }
-                self.tblFromContacts.reloadData()
-            } else {
-                print("check phone existence failed \(status) \(message!)")
             }
+            self.arrUnregistered = self.dictPhone.values.sorted{ $0.displayName < $1.displayName }
+            self.tblFromContacts.reloadData()
         }
     }
     
