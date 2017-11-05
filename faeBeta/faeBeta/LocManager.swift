@@ -32,8 +32,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     func updateCurtLoc() {
         locManager = CLLocationManager()
         locManager.delegate = self
-        locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-//        locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         
         if CLLocationManager.locationServicesEnabled() {
             locManager.startUpdatingLocation()

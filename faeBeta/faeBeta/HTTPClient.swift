@@ -8,119 +8,57 @@
 
 import UIKit
 import Alamofire
-import SDWebImage
 import SwiftyJSON
 import RealmSwift
 
-func postImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        //        "Content-Type" : "application/form-data"
-    ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
-    
-    if parameter != nil {
-        let imageData = parameter!["avatar"] as! Data
-        
-        Alamofire.upload(multipartFormData: {
-            MultipartFormData in
-            MultipartFormData.append(imageData, withName: "avatar", fileName: "avatar.jpg", mimeType: "image/jpeg")
-        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { encodingResult in
-            switch encodingResult {
-            case .success(let upload, _, _):
-                upload.responseJSON { response in
-                    print(response.response.debugDescription)
-                    if response.response != nil {
-                        if let resMess = response.result.value {
-                            completion(response.response!.statusCode, resMess)
-                        } else {
-                            // bug here
-                            completion(response.response!.statusCode, "no Json body")
-                        }
-                    } else {
-                        completion(-500, "Internet error")
-                    }
-                    
-                }
-            case .failure(let encodingError):
-                completion(-400, "failure")
-                print(encodingError)
-            }
-        })
-        
-    }
-    
+enum PostMethod: String {
+    case avatar = "files/users/avatar"
+    case cover = "files/users/name_card_cover"
+    case search = "search"
+    case bulkSearch = "search/bulk"
+    case chat = "chats_v2"
+    case chat_read = "chats/read"
+    case sign_up = "users"
+    case log_in = "authentication"
+    case reset_login_email = "reset_login/code"
+    case reset_login_email_verify = "reset_login/code/verify"
+    case reset_password = "reset_login/password"
+    case update_account = "users/account"
 }
 
-func postCoverImageToURL(_ className: String, parameter: [String: AnyObject]?, authentication: [String: AnyObject]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        //        "Content-Type" : "application/form-data"
-    ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
+func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int, Any?) -> Void) {
     
-    if parameter != nil {
-        let imageData = parameter!["name_card_cover"] as! Data
-        
-        Alamofire.upload(multipartFormData: { MultipartFormData in
-            MultipartFormData.append(imageData, withName: "name_card_cover", fileName: "name_card_cover", mimeType: "image/jpeg")
-        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { encodingResult in
-            switch encodingResult {
-            case .success(let upload, _, _):
-                upload.responseJSON { response in
-                    if response.response != nil {
-                        if let resMess = response.result.value {
-                            completion(response.response!.statusCode, resMess)
-                        } else {
-                            // bug here
-                            completion(response.response!.statusCode, "no Json body")
-                        }
-                    } else {
-                        completion(-500, "Internet error")
-                    }
-                    
+    let fullURL = Key.shared.baseURL + "/" + method.rawValue
+    let headers = Key.shared.header(auth: true, type: .data)
+    let name = method == .avatar ? "avatar" : "cover"
+    
+    Alamofire.upload(multipartFormData: {
+        MultipartFormData in
+        MultipartFormData.append(imageData, withName: name, fileName: name + ".jpg", mimeType: "image/jpeg")
+    }, usingThreshold: 100, to: fullURL, method: .post, headers: headers, encodingCompletion: { encodingResult in
+        switch encodingResult {
+        case .success(let upload, _, _):
+            upload.responseJSON { response in
+                print(response.response.debugDescription)
+                guard let resMess = response.result.value else {
+                    completion(response.response!.statusCode, "no Json body")
+                    return
                 }
-            case .failure(let encodingError):
-                completion(-400, "failure")
-                print(encodingError)
+                completion(response.response!.statusCode, resMess)
             }
-        })
-    }
+        case .failure(let encodingError):
+            completion(-400, "failure")
+            print(encodingError)
+        }
+    })
 }
 
-func searchToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        "Device-ID": Key.shared.headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        "Content-Type": "application/json",
-        ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
+func searchToURL(_ method: PostMethod, parameter: [String: String], completion: @escaping (Int, Any?) -> Void) {
     
-    guard parameter != nil else { return }
-    Alamofire.request(URL, method: .post, parameters: parameter!, encoding: JSONEncoding.default, headers: headers)
+    let fullURL = Key.shared.baseURL + "/" + method.rawValue
+    let headers = Key.shared.header(auth: true, type: .json)
+    
+    Alamofire.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "Internet error")
@@ -135,29 +73,17 @@ func searchToURL(_ className: String, parameter: [String: Any]?, authentication:
             if let resMess = response.result.value {
                 completion(response.response!.statusCode, resMess)
             } else {
-                // MARK: bug here
                 completion(response.response!.statusCode, "no Json body")
             }
     }
 }
 
-func postToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        "Device-ID": Key.shared.headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        "Content-Type": Key.shared.headerContentType,
-    ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
+func postToURL(_ className: String, parameter: [String: String], authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
     
-    guard parameter != nil else { return }
-    Alamofire.request(URL, method: .post, parameters: parameter!, headers: headers)
+    let fullURL = Key.shared.baseURL + "/" + className
+    let headers = Key.shared.header(auth: authentication != nil, type: .normal)
+    
+    Alamofire.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "Internet error")
@@ -172,30 +98,18 @@ func postToURL(_ className: String, parameter: [String: Any]?, authentication: [
             if let resMess = response.result.value {
                 completion(response.response!.statusCode, resMess)
             } else {
-                // MARK: bug here
                 completion(response.response!.statusCode, "no Json body")
             }
     }
 }
 
-func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
     
-    let url = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        "Device-ID": Key.shared.headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        "Content-Type": Key.shared.headerContentType,
-    ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
+    let fullURL = Key.shared.baseURL + "/" + className
+    let headers = Key.shared.header(auth: authentication != nil, type: .normal)
     
     if parameter == nil {
-        Alamofire.request(url, method: .get, headers: headers)
+        Alamofire.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
                 // print(response.response!.statusCode)
                 if response.response != nil {
@@ -205,7 +119,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
                 }
             }
     } else {
-        Alamofire.request(url, method: .get, parameters: parameter!, headers: headers)
+        Alamofire.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
@@ -217,24 +131,12 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     
 }
 
-func deleteFromURL(_ className: String, parameter: [String: Any], authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "Accept": Key.shared.headerAccept,
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        "Device-ID": Key.shared.headerDeviceID,
-    ]
-    if authentication == nil {
-        completion(500, "we must get the authentication number" as AnyObject?)
-    }
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value as? String
-        }
-    }
+func deleteFromURL(_ className: String, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) {
     
-    Alamofire.request(URL, method: .delete, headers: headers)
+    let fullURL = Key.shared.baseURL + "/" + className
+    let headers = Key.shared.header(auth: true, type: .normal)
+    
+    Alamofire.request(fullURL, method: .delete, headers: headers)
         .responseJSON { response in
             if response.response != nil {
                 completion(response.response!.statusCode, "nothing here")
@@ -244,7 +146,7 @@ func deleteFromURL(_ className: String, parameter: [String: Any], authentication
         }
 }
 
-func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
+func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
     guard let url = URL(string: "\(Key.shared.baseURL)/files/users/\(userID)/avatar/\(type)") else { return }
     var urlRequest = URLRequest(url: url)
@@ -254,9 +156,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
     urlRequest.setValue(Key.shared.headerClientVersion, forHTTPHeaderField: "Fae-Client-Version")
     urlRequest.setValue(Key.shared.headerAccept, forHTTPHeaderField: "Accept")
     for (key, value) in authentication {
-        if let val = value as? String {
-            urlRequest.setValue(val, forHTTPHeaderField: key)
-        }
+        urlRequest.setValue(value, forHTTPHeaderField: key)
     }
     
     var avatarInRealm: Data?
@@ -265,7 +165,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
     if let avatarRealm = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
         if let etag = type == 2 ? avatarRealm.smallAvatarEtag : avatarRealm.largeAvatarEtag {
             urlRequest.setValue(etag, forHTTPHeaderField: "If-None-Match")
-//            joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
+            //joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
         }
         avatarInRealm = type == 2 ? avatarRealm.userSmallAvatar as Data? : avatarRealm.userLargeAvatar as Data?
     }
@@ -285,15 +185,15 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
                     completion(statusCode, "", nil)
                     return
                 }
-//                joshprint("[getAvatar - \(userID)] before", etag)
+                //joshprint("[getAvatar - \(userID)] before", etag)
                 etag = etag.removeSpecialChars()
-//                joshprint("[getAvatar - \(userID)] after ", etag)
+                //joshprint("[getAvatar - \(userID)] after ", etag)
                 if statusCode / 100 == 3 {
                     completion(304, etag, avatarInRealm)
-//                    joshprint("[getAvatar - \(userID)] 304")
+                    //joshprint("[getAvatar - \(userID)] 304")
                     return
                 }
-//                joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
+                //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
                 if let realmUser = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
                     try! realm.write {
                         if type == 0 {
@@ -326,7 +226,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: Any] = headerA
         }
 }
 
-func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: Any] = headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
+func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
     
     let URL = isChatRoom ? "\(Key.shared.baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(Key.shared.baseURL)/files/\(fileID)/data"
     var headers = [
@@ -335,7 +235,7 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
         "Accept": Key.shared.headerAccept,
     ]
     for (key, value) in authentication {
-        headers[key] = value as? String
+        headers[key] = value
     }
     
     Alamofire.request(URL, headers: headers)
@@ -376,7 +276,7 @@ func downloadImage(URL: String, completion: @escaping (Data?) -> Void) {
     }
 }
 
-func postFileToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+func postFileToURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = Key.shared.baseURL + "/" + className
     
     var headers = [
@@ -387,7 +287,7 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
     
     if authentication != nil {
         for (key, value) in authentication! {
-            headers[key] = value as? String
+            headers[key] = value
         }
     }
     
@@ -425,7 +325,7 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
     }) }
 }
 
-func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: Any]?, completion: @escaping (Int, Any?) -> Void) {
+func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
     let URL = Key.shared.baseURL + "/" + className
     var headers = [
         "User-Agent": Key.shared.headerUserAgent,
@@ -436,7 +336,7 @@ func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?,
     ]
     if authentication != nil {
         for (key, value) in authentication! {
-            headers[key] = value as? String
+            headers[key] = value
         }
     }
     

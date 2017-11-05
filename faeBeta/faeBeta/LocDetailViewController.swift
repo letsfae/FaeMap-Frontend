@@ -379,7 +379,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colId = uiviewAfterAdded.selectedCollection.id
         vcList.colInfo = uiviewAfterAdded.selectedCollection
         vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
