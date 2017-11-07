@@ -35,7 +35,7 @@ class StickerScrollView : UIScrollView {
     ///   - row: number of rows per page
     ///   - col: number of cols per page
     func createNewAlbums(name: String, row: Int, col: Int) {
-        intCumulativePage += arrStickerAlbums.last != nil ? max(arrStickerAlbums.last!.intPageNumber ,1) : 0
+        intCumulativePage += arrStickerAlbums.last != nil ? max(arrStickerAlbums.last!.intPageNumber, 1) : 0
         let album = StickerAlbum(name: name, row: row, col: col, basePage: intCumulativePage)
         arrStickerAlbums.append(album)
         
@@ -47,7 +47,7 @@ class StickerScrollView : UIScrollView {
     }
     
     func attachButton() {
-        let totalPages = StickerInfoStrcut.pageNumDictionary.reduce(0,{$0 + $1.value})
+        let totalPages = StickerInfoStrcut.pageNumDictionary.reduce(0, {$0 + $1.value})
         
         self.contentSize = CGSize(width: self.frame.size.width * max(1, CGFloat(totalPages)), height: self.frame.size.height)
 
