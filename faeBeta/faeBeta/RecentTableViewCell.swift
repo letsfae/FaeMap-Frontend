@@ -108,13 +108,13 @@ class RecentTableViewCell: UITableViewCell {
         lblLastMessage.text = ""
         lblLastMessage.textAlignment = .left
         lblLastMessage.textColor = UIColor._146146146()
-        lblLastMessage.lineBreakMode = NSLineBreakMode.byTruncatingTail
-        lblLastMessage.numberOfLines = 2
+        //lblLastMessage.lineBreakMode = .byWordWrapping
+        lblLastMessage.numberOfLines = 0
         
         lblLastMessage.font = UIFont(name: "AvenirNext-Medium", size: 15)
         uiviewMain.addSubview(lblLastMessage)
         uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
-        uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
+        //uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
         
         lblDate = UILabel()
         lblDate.text = ""
@@ -169,11 +169,39 @@ class RecentTableViewCell: UITableViewCell {
                 }
             }
         }
-        if latest.type == "text" {
-            lblLastMessage.text = latest.text
+        var latestContent: String = ""
+        if latest.sender?.id == "\(Key.shared.user_id)" {
+            latestContent = "You"
         } else {
-            lblLastMessage.text = latest.type
-        }        
+            latestContent = (latest.sender?.display_name)!
+        }
+        latestContent += " shared a "
+        switch latest.type {
+        case "text":
+            latestContent = latest.text
+            break
+        case "[Location]":
+            latestContent += "Location."
+            break
+        case "[Place]":
+            latestContent += "Place."
+            break
+        case "[Collection]":
+            latestContent += "Collection."
+            break
+        default:
+            latestContent = latest.type
+            break
+        }
+        lblLastMessage.text = latestContent
+        let height = latestContent.boundingRect(with: CGSize(width: screenWidth - 89 - 56, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!], context: nil).size.height
+        let onelineHeight = "oneLine".boundingRect(with: CGSize(width: screenWidth - 89 - 56, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!], context: nil).size.height
+        if height > onelineHeight {
+            uiviewMain.addConstraintsWithFormat("V:|-29-[v0(41)]", options: [], views: lblLastMessage)
+            //lblLastMessage.numberOfLines = 2
+        } else {
+            uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
+        }
         
         if recent.unread_count > 0 {
             lblCounter.isHidden = false
