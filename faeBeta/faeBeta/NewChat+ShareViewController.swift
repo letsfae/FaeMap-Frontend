@@ -276,7 +276,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 break
             case .collection:
                 type = "[Collection]"
-                text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+                text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.itemsCount)\", \"creator\":\"\(collectionDetail!.creatorId)\"}"
                 vcChat.sendMeaages_v2(type: type, text: text)
                 break
             case .place:
