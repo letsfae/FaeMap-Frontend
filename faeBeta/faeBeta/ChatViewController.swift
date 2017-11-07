@@ -157,6 +157,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.moveDownInputBar()
         }
         setupNameCard()
+        inputToolbar.contentView.textView.becomeFirstResponder()
+        inputToolbar.contentView.textView.resignFirstResponder()
         
         /*for message in dictArrInitMessages {
             _ = insertMessage(message)

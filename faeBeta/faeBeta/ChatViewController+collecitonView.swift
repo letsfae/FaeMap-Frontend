@@ -192,7 +192,7 @@ extension ChatViewController {
                     let player = AVPlayer(url: videoURL)
                     let playerController = AVPlayerViewController()
                     playerController.player = player
-                    boolGoToFullContent = true
+                    //boolGoToFullContent = true
                     present(playerController, animated: true) {
                         player.play()
                     }
