@@ -178,7 +178,9 @@ extension ChatViewController {
     //taped bubble
     // function when user tap the bubble, like image, location
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
-        closeToolbarContentView()
+        if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
+            closeToolbarContentView()
+        }
         let message = arrRealmMessages[indexPath.row]
         if ["[Picture]", "[Gif]"].contains(message.type) {
             let photo = IDMPhoto.photos(withImages: [UIImage(data: message.media! as Data)!])
@@ -227,11 +229,18 @@ extension ChatViewController {
             let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let dataCollection = strCollectionDetail.data(using: .utf8)
             let jsonCollection = JSON(data: dataCollection!)
-            let vcCollection = CollectionsListDetailViewController()
-            vcCollection.enterMode = .place
-            vcCollection.boolFromChat = true
-            vcCollection.colId = jsonCollection["id"].intValue
-            navigationController?.pushViewController(vcCollection, animated: true)
+            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let resultJson = JSON(message!)
+                    let collectionDetail = PinCollection(json: resultJson)
+                    let vcCollection = CollectionsListDetailViewController()
+                    vcCollection.arrColDetails = collectionDetail
+                    vcCollection.enterMode = .place
+                    vcCollection.boolFromChat = true
+                    vcCollection.colId = jsonCollection["id"].intValue
+                    self.navigationController?.pushViewController(vcCollection, animated: true)
+                }
+            })
         }
         
     }
