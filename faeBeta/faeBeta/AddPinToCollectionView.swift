@@ -275,6 +275,10 @@ class AfterAddedToListView: UIView {
     var pinIdInAction: Int = -1
     var selectedCollection: PinCollection!
     
+    var lblSaved: UILabel!
+    var btnUndo: UIButton!
+    var btnSeeList: UIButton!
+    
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
         loadContent()
@@ -293,11 +297,11 @@ class AfterAddedToListView: UIView {
         blurEffectView.frame = self.bounds
         addSubview(blurEffectView)
         
-        let lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
+        lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
         lblSaved.text = "Collocted to List!"
         addSubview(lblSaved)
         
-        let btnUndo = UIButton()
+        btnUndo = UIButton()
         btnUndo.setTitle("Undo", for: .normal)
         btnUndo.setTitleColor(.white, for: .normal)
         btnUndo.setTitleColor(.lightGray, for: .highlighted)
@@ -307,7 +311,7 @@ class AfterAddedToListView: UIView {
         addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
         
-        let btnSeeList = UIButton()
+        btnSeeList = UIButton()
         btnSeeList.setTitle("See List", for: .normal)
         btnSeeList.setTitleColor(.white, for: .normal)
         btnSeeList.setTitleColor(.lightGray, for: .highlighted)

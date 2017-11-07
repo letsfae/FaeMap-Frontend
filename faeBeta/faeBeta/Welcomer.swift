@@ -12,7 +12,7 @@ import RealmSwift
 
 func sendWelcomeMessage() {
     
-    let text = "Hey there! Welcome to Fae Map! Super Happy to see you. We are here to ensure that you have the best experience on our platform. Let us know of any problems you encounter or what we can do to make your experience better. We'll be hitting you up with favorite places, recommendations, cool deals, and surprises from time to time. Feel free to chat with us here about anything. Let's Fae!"
+    let text = "Hey there! Welcome to Faevorite Map! We are here to ensure that you have the best experience on our new platform. Kindly let us know if you encounter any problems or what we can do to make your experience better. Feel free to chat with us here. Happy Discovering!"
     
     //_ = OutgoingMessage.init(message : text, senderId : "1", senderName : "Fae Map Crew", date: Date(), status : "Delivered", type : "text", index : 1, hasTimeStamp: true)
     
@@ -47,7 +47,7 @@ func sendWelcomeMessage() {
             realm.add(recentRealm, update: true)
         }
     }
-    if realm.filterAllMessages(login_user_id, 0, login_user_id).count == 0 {
+    /*if realm.filterAllMessages(login_user_id, 0, login_user_id).count == 0 {
         let newMessage = RealmMessage_v2()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, login_user_id, -1)
         newMessage.sender = selfUser
@@ -65,6 +65,6 @@ func sendWelcomeMessage() {
             realm.add(newMessage)
             realm.add(recentRealm, update: true)
         }
-    }
+    }*/
     
 }

@@ -72,6 +72,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
+    var boolShared: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -100,6 +102,23 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         let long = String(coordinate.longitude)
         self.getNearbyPlaces(lat, long) {
             self.clctNearby.reloadData()
+        }
+        if boolShared {
+            uiviewAfterAdded.lblSaved.text = "You shared a Location."
+            uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
+            uiviewAfterAdded.btnUndo.isHidden = true
+            uiviewAfterAdded.btnSeeList.isHidden = true
+            uiviewAfterAdded.show()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.uiviewAfterAdded.hide()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.3) {
+                self.uiviewAfterAdded.lblSaved.text = "Collocted to List!"
+                self.uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 150, height: 25)
+                self.uiviewAfterAdded.btnUndo.isHidden = false
+                self.uiviewAfterAdded.btnSeeList.isHidden = false
+            }
+            boolShared = false
         }
     }
     
@@ -335,9 +354,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func shareThisPin() {
-        let vcShareCollection = NewChatShareController(friendListMode: .location)
-        vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(strLocName),\(strLocAddr)"
-        navigationController?.pushViewController(vcShareCollection, animated: true)
+        let vcShareLoc = NewChatShareController(friendListMode: .location)
+        AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+            vcShareLoc.locationDetail = "\(self.coordinate?.latitude ?? 0.0),\(self.coordinate?.longitude ?? 0.0),\(self.strLocName),\(self.strLocAddr)"
+            vcShareLoc.locationSnapImage = snapShotImage
+            vcShareLoc.boolFromLocDetail = true
+            self.navigationController?.pushViewController(vcShareLoc, animated: true)
+        }
     }
     
     func showAddCollectionView() {

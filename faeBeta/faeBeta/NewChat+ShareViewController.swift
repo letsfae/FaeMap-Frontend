@@ -67,6 +67,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var collectionDetail: PinCollection?
     var placeDetail: PlacePin?
     
+    var boolFromLocDetail: Bool = false
+    var boolFromPlaceDetail: Bool = false
+    
     let apiCalls = FaeContact()
     
     //var placeDetail: PlacePin?
@@ -126,6 +129,15 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     @objc func navigationLeftItemTapped() {
+        let arrVCs = navigationController?.viewControllers
+        if boolFromPlaceDetail {
+            let vcPlaceDetail = arrVCs![arrVCs!.count - 2] as! PlaceDetailViewController
+            vcPlaceDetail.boolShared = true
+        }
+        if boolFromLocDetail {
+            let vcLocDetail = arrVCs![arrVCs!.count - 2] as! LocDetailViewController
+            vcLocDetail.boolShared = true
+        }
         navigationController?.popViewController(animated: true)
     }
     
