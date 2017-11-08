@@ -131,6 +131,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         btnLogout.titleLabel?.textColor = .white
         btnLogout.titleLabel?.textAlignment = .center
         btnLogout.setTitle("Log Out", for: .normal)
+        btnLogout.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 18)
         btnLogout.backgroundColor = UIColor._2499090()
         btnLogout.layer.cornerRadius = 19
         btnLogout.addTarget(self, action: #selector(logOut(_:)), for: .touchUpInside)
@@ -157,6 +158,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(welcomeVC, animated: animated)
             navigationController?.viewControllers = [welcomeVC]
             Key.shared.navOpenMode = .welcomeFirst
+            Key.shared.is_Login = 0
         //}
     }
     

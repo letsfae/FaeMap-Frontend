@@ -116,6 +116,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var showAvatar: Bool = true //false not show avatar, true show avatar
     var firstLoad: Bool? // whether it is the first time to load this room.
     
+    let vcLocDetail = LocDetailViewController()
+    let vcPlaceDetail = PlaceDetailViewController()
+    let vcCollection = CollectionsListDetailViewController()
     
     // MARK: lifecycle
     override func viewDidLoad() {
@@ -192,11 +195,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             scrollToBottom(false)
             boolInitialLoadComplete = true
         }
-        
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
-        DispatchQueue.main.async {
-            self.toolbarContentView.setup(initializeType)
-        }
+        //DispatchQueue.main.async {
+        self.toolbarContentView.setup(initializeType)
+        //}
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
