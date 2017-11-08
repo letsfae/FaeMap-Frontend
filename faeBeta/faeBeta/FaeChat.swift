@@ -136,6 +136,16 @@ class FaeChat {
     
     func getMessageFromServer() {
         getFromURL("chats_v2/unread", parameter: nil, authentication: headerAuthentication()) { status, result in
+            if status == 401 {
+                if let root = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
+                    if Key.shared.is_Login != 0 {
+                        let welcomeVC = WelcomeViewController()
+                        root.viewControllers = [welcomeVC]
+                        Key.shared.navOpenMode = .welcomeFirst
+                        Key.shared.is_Login = 0
+                    }
+                }
+            }
             if let unreadList = result as? NSArray {
                 for item in unreadList {
                     let dictItem: NSDictionary = item as! NSDictionary
@@ -221,7 +231,7 @@ class FaeChat {
                         try! realm.write {
                             realm.add(newUser, update: true)
                         }
-                        General.shared.avatar(userid: user.int!) { (avatarImage) in
+                        General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
                         }
                         messageRealm.members.append(newUser)
                         if newUser.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {

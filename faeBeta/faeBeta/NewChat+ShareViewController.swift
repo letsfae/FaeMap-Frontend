@@ -565,7 +565,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             cllcSelected.deleteItems(at: [IndexPath(row: indexInCollection, section: 0)])
             UIView.setAnimationsEnabled(true)
         } else {
-            arrIntSelected.append(indexPath.row)
+            arrIntSelected.append(currentIndex)
             UIView.setAnimationsEnabled(false)
             cllcSelected.insertItems(at: [IndexPath(row: arrIntSelected.count - 1, section: 0)])
             UIView.setAnimationsEnabled(true)
