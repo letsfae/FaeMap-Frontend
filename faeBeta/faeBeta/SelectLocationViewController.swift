@@ -18,7 +18,7 @@ enum SelectLoctionMode {
     case part
 }
 
-class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer, PlaceViewDelegate {
+class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer, PlaceViewDelegate, MapSearchDelegate {
     
     // MARK: - Variables Declarations
     
@@ -32,6 +32,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // Address parsing & display
     var lblSearchContent: UILabel!
+    var btnSearch: UIButton!
     var routeAddress: RouteAddress!
     var mode: SelectLoctionMode = .full
     
@@ -141,19 +142,26 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnLeftWindow.adjustsImageWhenDisabled = false
         
         let imgSearchIcon = UIImageView()
-        imgSearchIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        imgSearchIcon.image = #imageLiteral(resourceName: "searchBarIcon")
         imgSchbarShadow.addSubview(imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
         lblSearchContent = UILabel()
+        lblSearchContent.text = "Search Place or Address"
         lblSearchContent.textAlignment = .left
         lblSearchContent.lineBreakMode = .byTruncatingTail
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.textColor = UIColor._898989()
+        lblSearchContent.textColor = UIColor._182182182()
         imgSchbarShadow.addSubview(lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblSearchContent)
+        
+        btnSearch = UIButton()
+        imgSchbarShadow.addSubview(btnSearch)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnSearch)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnSearch)
+        btnSearch.addTarget(self, action: #selector(self.actionSearch(_:)), for: .touchUpInside)
     }
     
     func loadButtons() {
@@ -240,17 +248,17 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             General.shared.getAddress(location: location) { address in
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
-                    self.lblSearchContent.text = addr
+                    //self.lblSearchContent.text = addr
                     self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
                 }
             }
         } else {
-            General.shared.getAddress(location: location, full: false) { address in
+            /*General.shared.getAddress(location: location, full: false) { address in
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
                     self.lblSearchContent.text = addr
                 }
-            }
+            }*/
         }
     }
     
@@ -659,5 +667,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     func getTopCenterCoordinate() -> CLLocationCoordinate2D {
         // to get coordinate from CGPoint of your map
         return faeMapView.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
+    }
+    
+    @objc func actionSearch(_ sender: UIButton) {
+        let searchVC = MapSearchViewController()
+        searchVC.faeMapView = faeMapView
+        searchVC.delegate = self
+        searchVC.schPlaceBar.txtSchField.placeholder = lblSearchContent.text
+        navigationController?.pushViewController(searchVC, animated: false)
     }
 }

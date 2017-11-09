@@ -113,7 +113,7 @@ class RecentTableViewCell: UITableViewCell {
         
         lblLastMessage.font = UIFont(name: "AvenirNext-Medium", size: 15)
         uiviewMain.addSubview(lblLastMessage)
-        uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
+        //uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
         //uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
         
         lblDate = UILabel()
@@ -150,7 +150,8 @@ class RecentTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        //self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+        lblLastMessage.removeConstraints(lblLastMessage.constraints)
     }
     
     // MARK: bind data to the cell
@@ -197,9 +198,11 @@ class RecentTableViewCell: UITableViewCell {
         let height = latestContent.boundingRect(with: CGSize(width: screenWidth - 89 - 56, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!], context: nil).size.height
         let onelineHeight = "oneLine".boundingRect(with: CGSize(width: screenWidth - 89 - 56, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!], context: nil).size.height
         if height > onelineHeight {
+            uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
             uiviewMain.addConstraintsWithFormat("V:|-29-[v0(41)]", options: [], views: lblLastMessage)
             //lblLastMessage.numberOfLines = 2
         } else {
+            uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
             uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
         }
         
