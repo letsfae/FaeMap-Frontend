@@ -102,10 +102,10 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 103))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
-        uiviewDropDownMenu.frame.origin.y = -37 // 65 - 102
+        uiviewDropDownMenu.frame.origin.y = -36 // 65 - 101
         uiviewDropDownMenu.isHidden = true
         
         let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 1))
@@ -117,15 +117,15 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         btnPlaces.tag = 0
         btnPlaces.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        btnLocations = UIButton(frame: CGRect(x: 0, y: 52, width: screenWidth, height: 50))
+        btnLocations = UIButton(frame: CGRect(x: 0, y: 51, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnLocations)
         btnLocations.tag = 1
         btnLocations.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnPlaces.addSubview(lblPlaces)
         
-        lblLocations = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblLocations = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnLocations.addSubview(lblLocations)
         
         let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))

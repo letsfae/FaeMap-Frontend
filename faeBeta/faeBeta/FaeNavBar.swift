@@ -11,6 +11,7 @@ import UIKit
 class FaeNavBar: UIView {
 
     var leftBtnWidth = 10.5
+    var leftBtnPadding = 30.0
     var leftBtn = UIButton()
     var rightBtn = UIButton()
     var lblTitle = UILabel()
@@ -47,7 +48,7 @@ class FaeNavBar: UIView {
     }
     
     func loadBtnConstraints() {
-        addConstraintsWithFormat("H:|-0-[v0(\(30+leftBtnWidth))]", options: [], views: leftBtn)
+        addConstraintsWithFormat("H:|-0-[v0(\(leftBtnPadding+leftBtnWidth))]", options: [], views: leftBtn)
         addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: leftBtn)
         addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: rightBtn)
         addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: rightBtn)
