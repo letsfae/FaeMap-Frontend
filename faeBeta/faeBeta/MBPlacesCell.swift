@@ -32,7 +32,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
     }
     
     fileprivate func loadCellContent() {
-        lblTitle = UILabel(frame: CGRect(x: 15, y: 15, width: 150, height: 20))
+        lblTitle = UILabel(frame: CGRect(x: 15, y: 15, width: 250, height: 20))
         addSubview(lblTitle)
         lblTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
         lblTitle.textColor = UIColor._138138138()
@@ -42,6 +42,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
         btnSeeAll.setTitleColor(UIColor._155155155(), for: .normal)
         btnSeeAll.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 15)
         btnSeeAll.addTarget(self, action: #selector(btnSeeAllTapped(_:)), for: .touchUpInside)
+        btnSeeAll.setTitle("See All", for: .normal)
         
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.itemSize = CGSize(width: 122, height: 222 - 45)
@@ -60,7 +61,6 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
     func setValueForCell(title: String, places: [PlacePin]) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
         self.title = title
         lblTitle.text = title
-        btnSeeAll.setTitle("See All", for: .normal)
         
         self.places = places
         colInfo.reloadData()

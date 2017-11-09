@@ -306,7 +306,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if cellStatus == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeReceivedCell", for: indexPath as IndexPath) as! FaeReceivedCell
-            print("get into cell2")
             cell.userId = arrReceivedRequests[indexPath.row].userId
             cell.requestId = arrReceivedRequests[indexPath.row].requestId
             
