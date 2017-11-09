@@ -143,6 +143,10 @@ class FaeChat {
                         root.viewControllers = [welcomeVC]
                         Key.shared.navOpenMode = .welcomeFirst
                         Key.shared.is_Login = 0
+                        let alertController = UIAlertController(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", preferredStyle: UIAlertControllerStyle.alert)
+                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
+                        alertController.addAction(okAction)
+                        root.present(alertController, animated: true, completion: nil)
                     }
                 }
             }
@@ -196,78 +200,87 @@ class FaeChat {
         // print("\(message)")
         guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
         let messageJSON = JSON(data: messageData)
-        let messageRealm = RealmMessage_v2()
         let login_user_id = "\(Key.shared.user_id)"
-        // messageRealm.login_user_id = login_user_id
-        let chat_id = "\(chatID)"
-        // messageRealm.chat_id = chat_id
         let realm = try! Realm()
-        let messagesInThisChat = realm.filterAllMessages(login_user_id, is_group, chat_id) // realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
-        var newIndex = 0
-        var unread_count = 1
-        if messagesInThisChat.count > 0 {
-            newIndex = (messagesInThisChat.last?.index)! + 1
-            unread_count = (messagesInThisChat.last?.unread_count)! + 1
-        }
-        // messageRealm.index = newIndex
-        messageRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id, newIndex)
-        // let primaryKey = "\(login_user_id)_\(chat_id)_\(newIndex)"
-        // messageRealm.loginUserID_chatID_index = primaryKey
+        let callGroup = DispatchGroup()
         for user in messageJSON["members"].arrayValue {
-            if let userRealm = realm.filterUser(login_user_id, id: user.string!) { // objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
-                if user.string! == login_user_id {
-                    messageRealm.members.insert(userRealm, at: 0)
-                } else {
-                    messageRealm.members.append(userRealm)
-                }
-                if userRealm.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
-                    messageRealm.sender = userRealm
-                }
+            callGroup.enter()
+            if let _ = realm.filterUser(login_user_id, id: user.string!) {
+                callGroup.leave()
             } else {
                 getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
                     if status / 100 == 2 && result != nil {
                         let profileJSON = JSON(result!)
-                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, false, "", ""])
+                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, false, "", ""])
                         try! realm.write {
                             realm.add(newUser, update: true)
                         }
                         General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
                         }
-                        messageRealm.members.append(newUser)
-                        if newUser.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
-                            messageRealm.sender = newUser
-                        }
+                        callGroup.leave()
                     }
                 }
             }
         }
-        messageRealm.created_at = messageJSON["created_at"].string!
-        messageRealm.type = messageJSON["type"].string!
-        messageRealm.text = messageJSON["text"].string!
-        switch messageRealm.type {
-        case "[Place]":
-            downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
-            break
-        default:
-            break
-        }
-        if let media = messageJSON["media"].string {
-            if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue: 0)) {
-                messageRealm.media = decodeData as NSData
+        callGroup.notify(queue: .main) {
+            let messageRealm = RealmMessage_v2()
+            // messageRealm.login_user_id = login_user_id
+            let chat_id = "\(chatID)"
+            // messageRealm.chat_id = chat_id
+            
+            let messagesInThisChat = realm.filterAllMessages(login_user_id, is_group, chat_id) // realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
+            var newIndex = 0
+            var unread_count = 1
+            if messagesInThisChat.count > 0 {
+                newIndex = (messagesInThisChat.last?.index)! + 1
+                unread_count = (messagesInThisChat.last?.unread_count)! + 1
             }
-        }
-        messageRealm.unread_count = unread_count
-        
-        let recentRealm = RealmRecent_v2()
-        // recentRealm.login_user_id = login_user_id
-        // recentRealm.chat_id = chat_id
-        recentRealm.created_at = messageJSON["created_at"].string!
-        recentRealm.unread_count = unread_count
-        // recentRealm.loginUserID_chatID = "\(login_user_id)_\(chat_id)"
-        recentRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id)
-        try! realm.write {
-            realm.add(messageRealm, update: false)
-            realm.add(recentRealm, update: true)
+            // messageRealm.index = newIndex
+            messageRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id, newIndex)
+            // let primaryKey = "\(login_user_id)_\(chat_id)_\(newIndex)"
+            // messageRealm.loginUserID_chatID_index = primaryKey
+            for user in messageJSON["members"].arrayValue {
+                if let userRealm = realm.filterUser(login_user_id, id: user.string!) { // objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
+                    if user.string! == login_user_id {
+                        messageRealm.members.insert(userRealm, at: 0)
+                    } else {
+                        messageRealm.members.append(userRealm)
+                    }
+                    if userRealm.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
+                        messageRealm.sender = userRealm
+                    }
+                } else {
+                    
+                }
+            }
+            messageRealm.created_at = messageJSON["created_at"].string!
+            messageRealm.type = messageJSON["type"].string!
+            messageRealm.text = messageJSON["text"].string!
+            switch messageRealm.type {
+            case "[Place]":
+                self.downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
+                break
+            default:
+                break
+            }
+            if let media = messageJSON["media"].string {
+                if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue: 0)) {
+                    messageRealm.media = decodeData as NSData
+                }
+            }
+            messageRealm.unread_count = unread_count
+            
+            let recentRealm = RealmRecent_v2()
+            // recentRealm.login_user_id = login_user_id
+            // recentRealm.chat_id = chat_id
+            recentRealm.created_at = messageJSON["created_at"].string!
+            recentRealm.unread_count = unread_count
+            // recentRealm.loginUserID_chatID = "\(login_user_id)_\(chat_id)"
+            recentRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id)
+            try! realm.write {
+                realm.add(messageRealm, update: false)
+                realm.add(recentRealm, update: true)
+            }
         }
     }
     
