@@ -31,8 +31,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     var btnSelect: FMDistIndicator!
     
     // Address parsing & display
+    var imgSchbarShadow: UIImageView!
     var lblSearchContent: UILabel!
     var btnSearch: UIButton!
+    var btnClearSearchRes: UIButton!
     var routeAddress: RouteAddress!
     var mode: SelectLoctionMode = .full
     
@@ -48,6 +50,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // Boolean values
     var fullyLoaded = false // if all ui components are fully loaded
     var boolFromBoard = false // if called from BoardSearchViewController
+    
+    var placesFromSearch = [FaePinAnnotation]()
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
@@ -125,7 +129,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func loadSearchBar() {
-        let imgSchbarShadow = UIImageView()
+        imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgSchbarShadow)
@@ -188,6 +192,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         faeMapView.cgfloatCompassOffset = 134
         faeMapView.layoutSubviews()
+        
+        btnClearSearchRes = UIButton()
+        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClearSearchRes.isHidden = true
+        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
+        imgSchbarShadow.addSubview(btnClearSearchRes)
+        imgSchbarShadow.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
     }
     
     func loadLocationView() {
@@ -673,7 +685,46 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = faeMapView
         searchVC.delegate = self
-        searchVC.schPlaceBar.txtSchField.placeholder = lblSearchContent.text
+        searchVC.boolFromChat = true
         navigationController?.pushViewController(searchVC, animated: false)
     }
+    
+    @objc func jumpToOnePlace(searchText: String, place: PlacePin) { // TODO
+        let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: place)
+        lblSearchContent.text = searchText
+        lblSearchContent.textColor = UIColor._898989()
+        btnClearSearchRes.isHidden = false
+        let camera = faeMapView.camera
+        camera.centerCoordinate = place.coordinate
+        faeMapView.setCamera(camera, animated: false)
+        uiviewPlaceBar.load(for: place)
+        placesFromSearch.append(pin)
+        removePlacePins({
+            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+        })
+        selectedPlace = pin
+        btnSelect.lblDistance.textColor = UIColor._2499090()
+        btnSelect.isUserInteractionEnabled = true
+    }
+    
+    func removePlacePins(_ completion: (() -> ())? = nil) {
+        //let placesNeedToRemove = faePlacePins.filter({ $0 != selectedPlace })
+        placeClusterManager.removeAnnotations(faePlacePins) {
+            completion?()
+        }
+    }
+    
+    @objc func actionClearSearchResults(_ sender: UIButton) {
+        lblSearchContent.text = "Search Place or Address"
+        lblSearchContent.textColor = UIColor._182182182()
+        btnClearSearchRes.isHidden = true
+        uiviewPlaceBar.alpha = 0
+        uiviewPlaceBar.state = .map
+        deselectAllAnnotations()
+        placeClusterManager.removeAnnotations(placesFromSearch) {
+            self.placesFromSearch.removeAll(keepingCapacity: true)
+        }
+        placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
+    }
+
 }
