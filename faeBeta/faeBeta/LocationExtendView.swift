@@ -35,24 +35,29 @@ class LocationExtendView : UIView {
         self.addSubview(imageView)
         
         // address label
-        LabelLine1 = UILabel(frame: CGRect(x: 94, y: 17, width: 267, height: 22))
+        LabelLine1 = UILabel(frame: CGRect(x: 94, y: 17, width: 267 * screenWidthFactor, height: 22))
         LabelLine1.text = "2714 S. HOOVER STREET"
         LabelLine1.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        LabelLine1.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
+        LabelLine1.textColor = UIColor._898989()
         self.addSubview(LabelLine1)
+        //addConstraintsWithFormat("H:|-94-[v0]-54-|", options: [], views: LabelLine1)
+        //addConstraintsWithFormat("V:|-17-[v0(22)]", options: [], views: LabelLine1)
         
-        LabelLine2 = UILabel(frame: CGRect(x: 94, y: 37, width: 267, height: 16))
+        LabelLine2 = UILabel(frame: CGRect(x: 94, y: 37, width: 267 * screenWidthFactor, height: 16))
         LabelLine2.text = "LOS ANGELES, CA 90007"
-        
         LabelLine2.font = UIFont(name: "AvenirNext-Medium", size: 12)
         LabelLine2.textColor = UIColor._107105105()
         self.addSubview(LabelLine2)
+        //addConstraintsWithFormat("H:|-94-[v0]-54-|", options: [], views: LabelLine2)
+        //addConstraintsWithFormat("V:|-39-[v0(22)]", options: [], views: LabelLine2)
         
-        LabelLine3 = UILabel(frame: CGRect(x: 94, y: 55, width: 267, height: 16))
+        LabelLine3 = UILabel(frame: CGRect(x: 94, y: 55, width: 267 * screenWidthFactor, height: 16))
         LabelLine3.text = "UNITED STATES"
         LabelLine3.font = UIFont(name: "AvenirNext-Medium", size: 12)
         LabelLine3.textColor = UIColor._107105105()
         self.addSubview(LabelLine3)
+        //addConstraintsWithFormat("H:|-94-[v0]-54-|", options: [], views: LabelLine3)
+        //addConstraintsWithFormat("V:|-55-[v0(22)]", options: [], views: LabelLine3)
         
         //cancel button
         buttonCancel = UIButton(frame: CGRect(x: screenWidth - 43, y: 17, width: 16.5, height: 16.5))
@@ -95,15 +100,15 @@ class LocationExtendView : UIView {
     }
     
     func setToLocation() {
-        LabelLine1.frame = CGRect(x: 94, y: 17, width: 267, height: 22)
-        LabelLine2.frame = CGRect(x: 94, y: 37, width: 267, height: 16)
+        LabelLine1.frame = CGRect(x: 94, y: 17, width: 267 * screenWidthFactor, height: 22)
+        LabelLine2.frame = CGRect(x: 94, y: 37, width: 267 * screenWidthFactor, height: 16)
         LabelLine3.isHidden = false
         strType = "Location"
     }
     
     func setToPlace() {
-        LabelLine1.frame = CGRect(x: 94, y: 25, width: 267, height: 22)
-        LabelLine2.frame = CGRect(x: 94, y: 47, width: 267, height: 16)
+        LabelLine1.frame = CGRect(x: 94, y: 25, width: 267 * screenWidthFactor, height: 22)
+        LabelLine2.frame = CGRect(x: 94, y: 47, width: 267 * screenWidthFactor, height: 16)
         if let place = placeData {
             LabelLine1.text = place.name
             LabelLine2.text = "\(place.address1), \(place.address2)"
