@@ -21,7 +21,7 @@ class FMZoomButton: UIButton {
     var gesPan: UIPanGestureRecognizer!
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153, width: 60, height: 60))
+        super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153 - device_offset_bot, width: 60, height: 60))
         loadContent()
         gesLongPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         gesLongPress.minimumPressDuration = 0.1
@@ -112,7 +112,7 @@ class FMZoomButton: UIButton {
             self.btnSmall.alpha = 0
             self.btnLarge.alpha = 1
             let origin_y = self.frame.origin.y
-            self.frame = CGRect(x: screenWidth - 82, y: origin_y - 63 * screenHeightFactor, width: 60, height: 122)
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y - 63, width: 60, height: 122)
         }
     }
     
@@ -123,7 +123,7 @@ class FMZoomButton: UIButton {
             self.btnSmall.alpha = 1
             self.btnLarge.alpha = 0
             let origin_y = self.frame.origin.y
-            self.frame = CGRect(x: screenWidth - 82, y: origin_y + 63 * screenHeightFactor, width: 60, height: 60)
+            self.frame = CGRect(x: screenWidth - 82, y: origin_y + 63, width: 60, height: 60)
         }
     }
     
@@ -194,7 +194,7 @@ class FMLocateSelf: UIButton {
     var nameCard = FMNameCardView()
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 21, y: screenHeight - 153, width: 60, height: 60))
+        super.init(frame: CGRect(x: 21, y: screenHeight - 153 - device_offset_bot, width: 60, height: 60))
         loadContent()
     }
     

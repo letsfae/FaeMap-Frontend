@@ -389,7 +389,7 @@ class UserPinAnnotationView: MKAnnotationView {
 }
 
 protocol PlacePinAnnotationDelegate: class {
-    func placePinAction(action: PlacePinAction)
+    func placePinAction(action: PlacePinAction, mode: CollectionTableMode)
 }
 
 enum PlacePinAction: String {
@@ -626,13 +626,13 @@ class PlacePinAnnotationView: MKAnnotationView {
     func chooseAction(_ sender: UIButton = UIButton()) {
         guard arrBtns.count == 4 else { return }
         if btnDetail.isSelected || sender == btnDetail {
-            delegate?.placePinAction(action: .detail)
+            delegate?.placePinAction(action: .detail, mode: .place)
         } else if btnCollect.isSelected || sender == btnCollect {
-            delegate?.placePinAction(action: .collect)
+            delegate?.placePinAction(action: .collect, mode: .place)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route)
+            delegate?.placePinAction(action: .route, mode: .place)
         } else if btnShare.isSelected || sender == btnShare {
-            delegate?.placePinAction(action: .share)
+            delegate?.placePinAction(action: .share, mode: .place)
         }
     }
 }
@@ -866,13 +866,13 @@ class LocPinAnnotationView: MKAnnotationView {
     func chooseAction(_ sender: UIButton = UIButton()) {
         guard arrBtns.count == 4 else { return }
         if btnDetail.isSelected || sender == btnDetail {
-            delegate?.placePinAction(action: .detail)
+            delegate?.placePinAction(action: .detail, mode: .location)
         } else if btnCollect.isSelected || sender == btnCollect {
-            delegate?.placePinAction(action: .collect)
+            delegate?.placePinAction(action: .collect, mode: .location)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route)
+            delegate?.placePinAction(action: .route, mode: .location)
         } else if btnShare.isSelected || sender == btnShare {
-            delegate?.placePinAction(action: .share)
+            delegate?.placePinAction(action: .share, mode: .location)
         }
     }
 }

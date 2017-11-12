@@ -67,6 +67,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
         }
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
         
     }
     
@@ -77,6 +78,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
     }
     
     func loadContent() {
@@ -150,26 +152,31 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.pushViewController(vcList, animated: true)
     }
     // AfterAddedToListDelegate
-    func undoCollect(colId: Int) {
+    func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()
-        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
-            let arrListIds = uiviewSavedList.arrListSavedThisPin
-            arrListSavedThisPin = arrListIds.filter { $0 != colId }
-            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+            break
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+            break
         }
-        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        hideSavedNoti()
+        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+            hideSavedNoti()
+        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+            showSavedNoti()
+        }
     }
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
         present(vc, animated: true)
-    }
-    // AddPlacetoCollectionDelegate
-    func cancelAddPlace() {
-        uiviewSavedList.hide()
     }
     
     func loadPlaceListView() {
@@ -188,7 +195,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func loadAvatarWave() {
         let xAxis: CGFloat = screenWidth / 2
-        let yAxis: CGFloat = 324.5 * screenHeightFactor
+        var yAxis: CGFloat = 324.5 * screenHeightFactor
+        yAxis += screenHeight == 812 ? 80 : 0
         
         uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenWidth))
         uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
@@ -284,7 +292,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    @objc func hideSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 50, y: 16, width: 0, height: 0)
             self.imgSaved.alpha = 0
@@ -364,7 +372,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             let width = label.intrinsicContentSize.width
             return CGSize(width: width + 3.0, height: 36)
         }
-        return CGSize(width: screenWidth, height: screenHeight - 116 - 156)
+        return CGSize(width: screenWidth, height: screenHeight - 116 - 156 - device_offset_top - device_offset_bot)
     }
     
     func loadTopTypesCollection() {
@@ -384,7 +392,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         clctViewTypes.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         view.addSubview(clctViewTypes)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewTypes)
-        view.addConstraintsWithFormat("V:|-73-[v0(36)]", options: [], views: clctViewTypes)
+        view.addConstraintsWithFormat("V:|-\(73+device_offset_top)-[v0(36)]", options: [], views: clctViewTypes)
     }
     
     func loadPicCollections() {
@@ -404,11 +412,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         clctViewPics.alpha = 0
         view.addSubview(clctViewPics)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewPics)
-        view.addConstraintsWithFormat("V:|-116-[v0]-156-|", options: [], views: clctViewPics)
+        view.addConstraintsWithFormat("V:|-\(116+device_offset_top)-[v0]-\(156+device_offset_bot)-|", options: [], views: clctViewPics)
     }
     
     func loadButtons() {
-        let uiviewBtnSub = UIView(frame: CGRect(x: (screenWidth - 370) / 2, y: screenHeight - 138, width: 370, height: 78))
+        let uiviewBtnSub = UIView(frame: CGRect(x: (screenWidth - 370) / 2, y: screenHeight - 138 - device_offset_bot, width: 370, height: 78))
         view.addSubview(uiviewBtnSub)
         
         btnGoLeft = UIButton()
@@ -463,7 +471,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblBottomLocation.isUserInteractionEnabled = true
         view.addSubview(lblBottomLocation)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblBottomLocation)
-        view.addConstraintsWithFormat("V:[v0(25)]-19-|", options: [], views: lblBottomLocation)
+        view.addConstraintsWithFormat("V:[v0(25)]-\(19+device_offset_bot)-|", options: [], views: lblBottomLocation)
         lblBottomLocation.isHidden = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         lblBottomLocation.addGestureRecognizer(tapGesture)

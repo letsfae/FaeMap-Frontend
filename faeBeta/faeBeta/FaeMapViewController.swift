@@ -75,7 +75,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
-    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
+    let floatFilterHeight = 471 * screenHeightFactor + device_offset_bot // Map Filter height
     
     // Selected Place Control
     var selectedPlaceView: PlacePinAnnotationView?
@@ -117,9 +117,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewChooseLocs: FMChooseLocs!
     var routeAddress: RouteAddress!
     
-    // Selecting Location Mode
-    var imgPinOnMap: UIImageView!
-    
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: FMLocationInfoBar!
@@ -148,7 +145,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 lblSearchContent.text = "Search Fae Map"
                 btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance
             }
-            imgPinOnMap.isHidden = mapMode != .selecting
             imgSearchIcon.isHidden = mapMode == .selecting
             btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
@@ -251,7 +247,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         fullyLoaded = true
         
-//        let line = UIView(frame: CGRect(x: 0, y: btnZoom.frame.origin.y+60-4, width: screenWidth, height: 1))
+//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35, width: screenWidth, height: 1))
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
 //        view.addSubview(line)

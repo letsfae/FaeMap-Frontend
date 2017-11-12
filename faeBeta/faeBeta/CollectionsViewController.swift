@@ -78,7 +78,9 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(92)]-(-22)-|", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(createNewList), for: .touchUpInside)
         
         btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
@@ -263,36 +265,46 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 1 {
-            return 1
-        } else {
-            return tableMode == .place ? arrPlaces.count : arrLocations.count
+        switch tableMode {
+        case .place:
+            return arrPlaces.count == 0 ? 1 : arrPlaces.count
+        case .location:
+            return arrLocations.count == 0 ? 1 : arrLocations.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsEmptyListCell", for: indexPath) as! CollectionsEmptyListCell
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-            let collection = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-            cell.setValueForCell(cols: collection)
-            return cell
+        switch tableMode {
+        case .place:
+            if arrPlaces.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsEmptyListCell", for: indexPath) as! CollectionsEmptyListCell
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
+                let collection = arrPlaces[indexPath.row]
+                cell.setValueForCell(cols: collection)
+                return cell
+            }
+        case .location:
+            if arrLocations.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsEmptyListCell", for: indexPath) as! CollectionsEmptyListCell
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
+                let collection = arrLocations[indexPath.row]
+                cell.setValueForCell(cols: collection)
+                return cell
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
-            let vc = CreateColListViewController()
-            vc.delegate = self
-            vc.enterMode = tableMode
-            present(vc, animated: true)
-        } else {
+        
+        func gotoListDetail() {
             let vc = CollectionsListDetailViewController()
             vc.delegate = self
             vc.indexPath = indexPath
@@ -304,6 +316,28 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             }
             navigationController?.pushViewController(vc, animated: true)
         }
+        
+        switch tableMode {
+        case .place:
+            if arrPlaces.count == 0 {
+                createNewList()
+            } else {
+                gotoListDetail()
+            }
+        case .location:
+            if arrLocations.count == 0 {
+                createNewList()
+            } else {
+                gotoListDetail()
+            }
+        }
+    }
+    
+    @objc func createNewList() {
+        let vc = CreateColListViewController()
+        vc.delegate = self
+        vc.enterMode = tableMode
+        present(vc, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

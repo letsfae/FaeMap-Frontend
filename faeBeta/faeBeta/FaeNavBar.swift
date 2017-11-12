@@ -17,13 +17,13 @@ class FaeNavBar: UIView {
     var bottomLine = UIView()
     
     override init(frame: CGRect = CGRect.zero) {
-        let newFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: screenWidth, height: 65))
+        let newFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: screenWidth, height: 65 + device_offset_top))
         super.init(frame: newFrame)
         
         backgroundColor = .white
         
         // Line at y = 64
-        bottomLine = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        bottomLine = UIView(frame: CGRect(x: 0, y: 64 + device_offset_top, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
         bottomLine.layer.borderColor = UIColor._200199204cg()
         addSubview(bottomLine)
@@ -43,14 +43,14 @@ class FaeNavBar: UIView {
         addConstraintsWithFormat("H:|-70-[v0]-70-|", options: [], views: lblTitle)
         // Vicky 07/28/17 End
         //addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: lblTitle)
-        addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: lblTitle)
+        addConstraintsWithFormat("V:|-(\(28+device_offset_top))-[v0(27)]", options: [], views: lblTitle)
     }
     
     func loadBtnConstraints() {
         addConstraintsWithFormat("H:|-0-[v0(\(30+leftBtnWidth))]", options: [], views: leftBtn)
-        addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: leftBtn)
+        addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: leftBtn)
         addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: rightBtn)
-        addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: rightBtn)
+        addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: rightBtn)
     }
     
     func setBtnTitle() {

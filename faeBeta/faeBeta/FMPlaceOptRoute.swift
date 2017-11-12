@@ -34,10 +34,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleDestinationTap(_:)))
         uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapGes_0)
         uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
-        
-        imgPinOnMap = UIImageView(frame: CGRect(x: screenWidth / 2 - 24, y: screenHeight / 2 - 52, width: 48, height: 52))
-        view.addSubview(imgPinOnMap)
-        imgPinOnMap.isHidden = true
     }
     
     @objc func handleStartPointTap(_ tap: UITapGestureRecognizer) {
@@ -51,7 +47,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     func routingHandleTap() {
-        imgPinOnMap.image = BoardsSearchViewController.boolToDestination ? #imageLiteral(resourceName: "icon_destination") : #imageLiteral(resourceName: "icon_startpoint")
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
         chooseLocsVC.delegate = self
@@ -171,15 +166,15 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         if show {
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-                    self.btnZoom.frame.origin.y = 664 * screenHeightFactor
-                    self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
+                    self.btnZoom.frame.origin.y = screenHeight - 72 - device_offset_bot
+                    self.btnLocateSelf.frame.origin.y = screenHeight - 72 - device_offset_bot
                     self.btnOpenChat.frame.origin.y = screenHeight + 10
                     self.btnDiscovery.frame.origin.y = screenHeight + 10
                     self.btnFilterIcon.frame.origin.y = screenHeight + 10
                 }, completion: nil)
             } else {
-                self.btnZoom.frame.origin.y = 664 * screenHeightFactor
-                self.btnLocateSelf.frame.origin.y = 664 * screenHeightFactor
+                self.btnZoom.frame.origin.y = screenHeight - 72 - device_offset_bot
+                self.btnLocateSelf.frame.origin.y = screenHeight - 72 - device_offset_bot
                 self.btnOpenChat.frame.origin.y = screenHeight + 10
                 self.btnDiscovery.frame.origin.y = screenHeight + 10
                 self.btnFilterIcon.frame.origin.y = screenHeight + 10
@@ -189,18 +184,18 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         } else {
             if animated {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-                    self.btnZoom.frame.origin.y = 582 * screenHeightFactor
-                    self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
-                    self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
-                    self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
-                    self.btnFilterIcon.center.y = screenHeight - 25
+                    self.btnZoom.frame.origin.y = screenHeight - 154 - device_offset_bot
+                    self.btnLocateSelf.frame.origin.y = screenHeight - 154 - device_offset_bot
+                    self.btnOpenChat.frame.origin.y = screenHeight - 90 - device_offset_bot
+                    self.btnDiscovery.frame.origin.y = screenHeight - 90 - device_offset_bot
+                    self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
                 }, completion: nil)
             } else {
-                self.btnZoom.frame.origin.y = 582 * screenHeightFactor
-                self.btnLocateSelf.frame.origin.y = 582 * screenHeightFactor
-                self.btnOpenChat.frame.origin.y = 646 * screenHeightFactor
-                self.btnDiscovery.frame.origin.y = 646 * screenHeightFactor
-                self.btnFilterIcon.center.y = screenHeight - 25
+                self.btnZoom.frame.origin.y = screenHeight - 154 - device_offset_bot
+                self.btnLocateSelf.frame.origin.y = screenHeight - 154 - device_offset_bot
+                self.btnOpenChat.frame.origin.y = screenHeight - 90 - device_offset_bot
+                self.btnDiscovery.frame.origin.y = screenHeight - 90 - device_offset_bot
+                self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
             }
             faeMapView.cgfloatCompassOffset = 215
             faeMapView.layoutSubviews()

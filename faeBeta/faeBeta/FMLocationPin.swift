@@ -48,7 +48,7 @@ extension FaeMapViewController {
     }
     
     @objc func handleLocInfoBarTap() {
-        placePinAction(action: .detail)
+        placePinAction(action: .detail, mode: .location)
     }
     
     func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
@@ -74,7 +74,7 @@ extension FaeMapViewController {
     func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .gray
-        activityIndicator.center = CGPoint(x: screenWidth / 2, y: 110)
+        activityIndicator.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor._2499090()
         activityIndicator.layer.zPosition = 2000

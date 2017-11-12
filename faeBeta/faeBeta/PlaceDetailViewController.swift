@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 protocol PlaceDetailDelegate: class {
-    func getRouteToPin()
+    func getRouteToPin(mode: CollectionTableMode)
 }
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
@@ -60,10 +60,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         checkSavedStatus() {}
         setCellCount()
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -270,7 +272,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    @objc func hideSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
             self.imgSaved.alpha = 0
@@ -347,7 +349,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin()
+        featureDelegate?.getRouteToPin(mode: .place)
         navigationController?.popViewController(animated: false)
     }
     
@@ -384,11 +386,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     // AddPlacetoCollectionDelegate
-    func cancelAddPlace() {
-        hideAddCollectionView()
-    }
-    
-    // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
@@ -407,16 +404,25 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     // AfterAddedToListDelegate
-    func undoCollect(colId: Int) {
+    func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()
-        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
-            let arrListIds = uiviewSavedList.arrListSavedThisPin
-            arrListSavedThisPin = arrListIds.filter { $0 != colId }
-            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+            break
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+            break
         }
-        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        hideSavedNoti()
+        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+            hideSavedNoti()
+        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+            showSavedNoti()
+        }
     }
 }
 

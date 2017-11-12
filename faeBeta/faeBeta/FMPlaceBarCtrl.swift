@@ -41,7 +41,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     }
     
     @objc func handleTapPlaceBar() {
-        placePinAction(action: .detail)
+        placePinAction(action: .detail, mode: .location)
     }
     
     // PlaceViewDelegate
