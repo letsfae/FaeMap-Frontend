@@ -291,7 +291,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     func dismissMainBtns() {
         UIView.animate(withDuration: 0.2, animations: {
             if self.FILTER_ENABLE {
-                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25, width: 0, height: 0)
+                self.btnFilterIcon.frame = CGRect(x: screenWidth / 2, y: screenHeight - 25 - device_offset_bot, width: 0, height: 0)
             }
             self.btnZoom.frame = CGRect(x: 51.5, y: 611.5 * screenWidthFactor, width: 0, height: 0)
             self.btnLocateSelf.frame = CGRect(x: 362.5 * screenWidthFactor, y: 611.5 * screenWidthFactor, width: 0, height: 0)

@@ -113,7 +113,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         view.addSubview(uiviewBackBottom)
         uiviewBackBottom.center.x -= 290
         
-        uiviewLeftWindow = UIView(frame: CGRect(x: 0, y: 0, width: 290, height: 241.5))
+        uiviewLeftWindow = UIView(frame: CGRect(x: 0, y: device_offset_top, width: 290, height: 241.5))
         uiviewLeftWindow.backgroundColor = UIColor.white
         
         imgLeftSlideUp = UIImageView(frame: CGRect(x: 0, y: 0, width: 290, height: 238))
@@ -145,7 +145,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         imgLeftSlideMiddle.image = #imageLiteral(resourceName: "leftMenuCloud")
         uiviewLeftWindow.addSubview(imgLeftSlideMiddle)
         
-        tblLeftSlide = UITableView(frame: CGRect(x: 0, y: 0, width: 290, height: screenHeight))
+        tblLeftSlide = UITableView(frame: CGRect(x: 0, y: device_offset_top, width: 290, height: screenHeight))
         tblLeftSlide.delegate = self
         tblLeftSlide.dataSource = self
         tblLeftSlide.register(LeftSlideWindowCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
@@ -167,7 +167,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblLeftSlide.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
         // "Log Out" will be replaced by "Setting"
-        let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Mood Avatars", "Settings"]
+        let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Map Avatars", "Settings"]
         //  "Activities",
         cell.imgLeft.image = UIImage(named: "leftSlideMenuImage\(indexPath.row)")
         cell.lblMiddle.text = array[indexPath.row]

@@ -13,8 +13,8 @@ import CCHMapClusterController
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
     
     // PlaceDetailDelegate
-    func getRouteToPin() {
-        placePinAction(action: .route)
+    func getRouteToPin(mode: CollectionTableMode) {
+        placePinAction(action: .route, mode: mode)
     }
     
     // CreateColListDelegate
@@ -23,6 +23,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func updateCols(col: PinCollection) {
         uiviewSavedList.arrCollection.append(col)
         uiviewSavedList.tblAddCollection.reloadData()
+        uiviewAfterAdded.selectedCollection = col
+        uiviewSavedList.timer?.invalidate()
+        uiviewSavedList.timer = nil
+        uiviewSavedList.savePlaceTo(collection: col)
     }
     
     // AddPlacetoCollectionDelegate
@@ -33,26 +37,36 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         present(vc, animated: true)
     }
     
-    // AddPlacetoCollectionDelegate
-    func cancelAddPlace() {
-        uiviewSavedList.hide()
-    }
-    
     // AfterAddedToListDelegate
-    func undoCollect(colId: Int) {
+    func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()
-        joshprint("count before:", uiviewSavedList.arrListSavedThisPin.count)
-        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
-            let arrListIds = uiviewSavedList.arrListSavedThisPin
-            uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+            break
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+            break
         }
-        joshprint("count after:", uiviewSavedList.arrListSavedThisPin.count)
-        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        if uiviewSavedList.tableMode == .location {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
-        } else if uiviewSavedList.tableMode == .place {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+        switch uiviewSavedList.tableMode {
+        case .location:
+            if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
+            } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: nil)
+            }
+            break
+        case .place:
+            if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+            } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
+            }
+            break
         }
     }
     
@@ -133,7 +147,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     // PlacePinAnnotationDelegate
-    func placePinAction(action: PlacePinAction) {
+    func placePinAction(action: PlacePinAction, mode: CollectionTableMode) {
         switch action {
         case .detail:
             if createLocation == .create {
@@ -161,18 +175,18 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         case .collect:
             uiviewSavedList.show()
             locAnnoView?.optionsToNormal()
-            if createLocation == .create {
-                uiviewSavedList.tableMode = .location
-                uiviewSavedList.loadCollectionData()
-                guard let locPin = selectedLocation else { return }
-                uiviewSavedList.pinToSave = locPin
-            } else {
-                uiviewSavedList.tableMode = .place
-                uiviewSavedList.loadCollectionData()
+            uiviewSavedList.tableMode = mode
+            uiviewSavedList.loadCollectionData()
+            switch mode {
+            case .place:
                 guard let placePin = selectedPlace else { return }
                 uiviewSavedList.pinToSave = placePin
+                break
+            case .location:
+                guard let locPin = selectedLocation else { return }
+                uiviewSavedList.pinToSave = locPin
+                break
             }
-            break
         case .route:
             if selectedLocation != nil {
                 routingLocation()

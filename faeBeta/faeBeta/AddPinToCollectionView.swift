@@ -11,7 +11,6 @@ import SwiftyJSON
 
 protocol AddPinToCollectionDelegate: class {
     func createColList()
-    func cancelAddPlace()
 }
 
 class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
@@ -36,7 +35,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     var fullLoaded = false
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor))
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor + device_offset_bot_v2))
         backgroundColor = .white
         loadContent()
         loadCollectionData()
@@ -162,7 +161,12 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             }
             break
         case .location:
-            saveLocationTo(collection: colInfo)
+            if isInThisList {
+                let locationId = self.uiviewAfterAdded.pinIdInAction
+                unsaveLocationFrom(colInfo, locationId)
+            } else {
+                saveLocationTo(collection: colInfo)
+            }
             break
         }
     }
@@ -308,8 +312,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     @objc func actionCancel(_ sender: UIButton) {
-        print("actionCancel")
-        delegate?.cancelAddPlace()
+        self.hide()
     }
     
     @objc func actionNew(_ sender: UIButton) {
@@ -319,7 +322,12 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
 
 protocol AfterAddedToListDelegate: class {
     func seeList()
-    func undoCollect(colId: Int)
+    func undoCollect(colId: Int, mode: UndoMode)
+}
+
+enum UndoMode {
+    case save
+    case unsave
 }
 
 class AfterAddedToListView: UIView {
@@ -329,6 +337,7 @@ class AfterAddedToListView: UIView {
     var pinIdInAction: Int = -1
     var selectedCollection: PinCollection!
     var lblSaved: FaeLabel!
+    var mode: UndoMode = .save
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
@@ -348,7 +357,7 @@ class AfterAddedToListView: UIView {
         blurEffectView.frame = self.bounds
         addSubview(blurEffectView)
         
-        lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 150, height: 25), .left, .medium, 18, .white)
+        lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 170, height: 25), .left, .medium, 18, .white)
         lblSaved.text = "Collected to List!"
         addSubview(lblSaved)
         
@@ -376,11 +385,23 @@ class AfterAddedToListView: UIView {
     @objc func undoCollecting() {
         guard let col = selectedCollection, pinIdInAction != -1 else { return }
         self.hide()
-        FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.id), pinID: String(pinIdInAction)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            joshprint("[undoCollecting] successfully undo saving")
-            self.selectedCollection = nil
-            self.delegate?.undoCollect(colId: col.id)
+        switch mode {
+        case .save:
+            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.id), pinID: String(pinIdInAction)) { (status, message) in
+                guard status / 100 == 2 else { return }
+                joshprint("[undoCollecting] successfully saved again")
+                self.selectedCollection = nil
+                self.delegate?.undoCollect(colId: col.id, mode: self.mode)
+            }
+            break
+        case .unsave:
+            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.id), pinID: String(pinIdInAction)) { (status, message) in
+                guard status / 100 == 2 else { return }
+                joshprint("[undoCollecting] successfully unsave this pin")
+                self.selectedCollection = nil
+                self.delegate?.undoCollect(colId: col.id, mode: self.mode)
+            }
+            break
         }
     }
     
@@ -390,6 +411,7 @@ class AfterAddedToListView: UIView {
     
     func show(save: Bool = true) {
         lblSaved.text = save ? "Collected to List!" : "Removed from List!"
+        mode = !save ? .save : .unsave
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - self.frame.size.height
         }, completion: nil)

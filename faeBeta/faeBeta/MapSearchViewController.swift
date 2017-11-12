@@ -110,7 +110,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     // shows "no results"
     func loadNoResultsView() {
-        uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124, width: screenWidth - 16, height: 100))
+        uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         view.addSubview(uiviewNoResults)
         lblNoResults = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
@@ -130,7 +130,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         view.addSubview(uiviewSearch)
         uiviewSearch.backgroundColor = .white
         view.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: uiviewSearch)
-        view.addConstraintsWithFormat("V:|-23-[v0(96)]", options: [], views: uiviewSearch)
+        view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(96)]", options: [], views: uiviewSearch)
         uiviewSearch.layer.cornerRadius = 2
         addShadow(uiviewSearch)
         
@@ -167,7 +167,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     // load six buttons
     func loadPlaceBtns() {
-        uiviewPics = UIView(frame: CGRect(x: 8, y: 124, width: screenWidth - 16, height: 214))
+        uiviewPics = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 214))
         uiviewPics.backgroundColor = .white
         view.addSubview(uiviewPics)
         uiviewPics.layer.cornerRadius = 2
@@ -249,11 +249,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     func loadTable() {
         // background view with shadow of table tblPlacesRes
-        uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124, width: screenWidth - 16, height: screenHeight - 139)) // 124 + 15
+        uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
         addShadow(uiviewSchResBg)
         
-        tblPlacesRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 139))
+        tblPlacesRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top - device_offset_bot_v2))
         tblPlacesRes.dataSource = self
         tblPlacesRes.delegate = self
         uiviewSchResBg.addSubview(tblPlacesRes)
@@ -265,12 +265,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         tblPlacesRes.register(LocationListCell.self, forCellReuseIdentifier: "MyFixedCell")
         
         // background view with shadow of table tblLocationRes
-        uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124, width: screenWidth - 16, height: screenHeight - 240)) // 124 + 20 + 2 * 48
+        uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 240 - device_offset_top - device_offset_bot_v2)) // 124 + 20 + 2 * 48
         uiviewSchLocResBg.backgroundColor = .clear
         view.addSubview(uiviewSchLocResBg)
         addShadow(uiviewSchLocResBg)
         
-        tblLocationRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 240))
+        tblLocationRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 240 - device_offset_top - device_offset_bot_v2))
         tblLocationRes.dataSource = self
         tblLocationRes.delegate = self
         uiviewSchLocResBg.addSubview(tblLocationRes)
