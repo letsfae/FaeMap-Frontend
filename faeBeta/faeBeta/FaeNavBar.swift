@@ -48,7 +48,7 @@ class FaeNavBar: UIView {
     }
     
     func loadBtnConstraints() {
-        addConstraintsWithFormat("H:|-0-[v0(\(30+leftBtnWidth))]", options: [], views: leftBtn)
+        addConstraintsWithFormat("H:|-0-[v0(\(leftBtnPadding+leftBtnWidth))]", options: [], views: leftBtn)
         addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: leftBtn)
         addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: rightBtn)
         addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: rightBtn)
