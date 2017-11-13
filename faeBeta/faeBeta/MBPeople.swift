@@ -245,7 +245,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         sliderAgeFilter.selectedHandleDiameterMultiplier = 1.0
         sliderAgeFilter.hideLabels = true
         sliderAgeFilter.minValue = 18
-        sliderAgeFilter.maxValue = 55
+        sliderAgeFilter.maxValue = 50
         sliderAgeFilter.selectedMinimum = Float(ageLBVal)
         sliderAgeFilter.selectedMaximum = Float(ageUBVal)
         
@@ -294,7 +294,13 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     func rangeSlider(_ sender: TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum: Float, andMaximumValue selectedMaximum: Float) {
         ageLBVal = Int(selectedMinimum)
         ageUBVal = Int(selectedMaximum)
-        lblAgeVal.text = "\(ageLBVal)-\(ageUBVal)"
+        if ageLBVal == 18 && ageUBVal == 50 {
+            lblAgeVal.text = "All"
+        } else if ageUBVal == 50 {
+            lblAgeVal.text = "\(ageLBVal)-50+"
+        } else {
+            lblAgeVal.text = "\(ageLBVal)-\(ageUBVal)"
+        }
     }
     
     func searchLoc(_ sender: UIButton) {

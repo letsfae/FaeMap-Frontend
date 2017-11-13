@@ -34,8 +34,9 @@ fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 class SignInSupportNewPassViewController: RegisterBaseViewController {
     
     var cellPassword: RegisterTextfieldTableViewCell!
+    var oldPassword: String?
     var password: String?
-    var faeUser: FaeUser!
+    var faeUser = FaeUser()
     var email: String?
     var phone: String?
     var code: String?
@@ -125,7 +126,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }
-        } else {
+        } else if enterMode == .phone {
             let param = ["phone": phone!,
                          "code": code!,
                          "password": password!]
@@ -153,6 +154,23 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                         //                _ = self.navigationController?.popToRootViewController(animated: true)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
                     }
+                } else {
+                    print("[Fail to Reset Password] \(status) \(message!)")
+                }
+            }
+        } else {  // enterMode == .oldPswd
+            faeUser.whereKey("old_password", value: oldPassword!)
+            faeUser.whereKey("new_password", value: password!)
+            faeUser.updatePassword {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let vc = SetAccountViewController()
+                    vc.boolResetPswd = true
+                    var arrViewControllers = self.navigationController?.viewControllers
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.append(vc)
+                    self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
                 } else {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }

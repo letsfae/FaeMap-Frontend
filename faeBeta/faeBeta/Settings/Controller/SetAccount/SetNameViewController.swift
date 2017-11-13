@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol SetNameBirthGenderDelegate: class {
     func updateInfo()
@@ -23,6 +24,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     var textLName: FAETextField!
     var textBirth: FAETextField!
     var textPswd: FAETextField!
+    var textNewEmail: FAETextField!
     var dateOfBirth: String? = ""
     var numKeyPad: FAENumberKeyboard!
     var gender: String? = ""
@@ -33,6 +35,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     var keyboardHeight: CGFloat!
     var btnForgot: UIButton!
     var lblWrongPswd: FaeLabel!
+    var lblWrongEmail: FaeLabel!
     var indicatorView: UIActivityIndicatorView!
     
     weak var delegate: SetNameBirthGenderDelegate?
@@ -42,6 +45,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         case birth
         case gender
         case password
+        case newEmail
     }
     
     enum PasswordEnterMode {
@@ -100,12 +104,15 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                 lblTitle.text = "Please Enter your\nPassword to Continue"
             }
             loadPassword()
+        case .newEmail:
+            lblTitle.text = "\nYour New Email"
+            loadChangeEmailPage()
             break
         default:
             break
         }
         
-        if enterMode == .name || enterMode == .password {
+        if enterMode == .name || enterMode == .password || enterMode == .newEmail {
             NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         }
     }
@@ -193,12 +200,30 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         textPswd.isSecureTextEntry = true
         textPswd.becomeFirstResponder()
         view.addSubview(textPswd)
+        textPswd.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
         lblWrongPswd = FaeLabel(CGRect(x: 0, y: 272 * screenHeightFactor, width: screenWidth, height: 36), .center, .medium, 13, UIColor._2499090())
         lblWrongPswd.numberOfLines = 0
         lblWrongPswd.text = "That's not the Correct Password!\nPlease Check your Password!"
         view.addSubview(lblWrongPswd)
         lblWrongPswd.isHidden = true
+    }
+    
+    fileprivate func loadChangeEmailPage() {
+        btnSave.setTitle("Save", for: .normal)
+        enableSaveButton(false)
+        
+        textNewEmail = FAETextField(frame: CGRect(x: 15, y: 177, width: screenWidth - 30, height: 30))
+        textNewEmail.placeholder = "Email Address"
+        textNewEmail.becomeFirstResponder()
+        view.addSubview(textNewEmail)
+        textNewEmail.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        lblWrongEmail = FaeLabel(CGRect(x: 0, y: 272 * screenHeightFactor, width: screenWidth, height: 36), .center, .medium, 13, UIColor._2499090())
+        lblWrongEmail.numberOfLines = 0
+        lblWrongEmail.text = "The email is already in Use!"
+        view.addSubview(lblWrongEmail)
+        lblWrongEmail.isHidden = true
     }
     
     @objc func actionBack(_ sender: UIButton) {
@@ -230,18 +255,53 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
             faeUser.verifyPassword({(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     let vc = SignInSupportNewPassViewController()
+                    vc.enterMode = .oldPswd
+                    vc.oldPassword = self.textPswd.text!
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
                     self.lblWrongPswd.isHidden = false
                 }
                 self.indicatorView.stopAnimating()
             })
+        case .newEmail:
+            faeUser.whereKey("email", value: textNewEmail.text!)
+            faeUser.checkEmailExistence {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let json = JSON(message!)
+                    if json == JSON.null {
+                        self.indicatorView.stopAnimating()
+                        return
+                    }
+                    if json["existence"].boolValue {
+                        self.lblWrongEmail.isHidden = false
+                        self.indicatorView.stopAnimating()
+                    } else {
+                        self.faeUser.whereKey("email", value: self.textNewEmail.text!)
+                        self.faeUser.updateEmail {(status: Int, message: Any?) in
+                            if status / 100 == 2 {
+                                let vc = VerifyCodeViewController()
+                                vc.enterMode = .email
+                                vc.enterEmailMode = .settings
+                                vc.boolUpdateEmail = true
+                                vc.strEmail = self.textNewEmail.text!
+                                self.navigationController?.pushViewController(vc, animated: true)
+                            } else {
+                                print("[Update Email Fail] \(status) \(message!)")
+                            }
+                            self.indicatorView.stopAnimating()
+                        }
+                    }
+                } else {
+                    self.indicatorView.stopAnimating()
+                   print("[Check Email Existence Fail] \(status) \(message!)")
+                }
+            }
             break
         default:
             break
         }
         
-        if enterMode != .password {
+        if enterMode != .password && enterMode != .newEmail {
             faeUser.updateAccountBasicInfo({(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     print("Successfully update basic info")
@@ -272,7 +332,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-        print("enter")
         if enterMode == .name {
             print(textFName.text!)
             if textFName.text == "" || textLName.text == "" {
@@ -281,12 +340,13 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                 enableSaveButton(true)
             }
         } else if enterMode == .password {
-            print("length \((textPswd.text?.count)!)")
             if (textPswd.text?.count)! < 8 {
                 enableSaveButton(false)
             } else {
                 enableSaveButton(true)
             }
+        } else if enterMode == .newEmail {
+            enableSaveButton(isValidEmail(textNewEmail.text!))
         }
     }
     
@@ -346,6 +406,13 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         enableSaveButton(boolIsValid)
     }
     
+    func isValidEmail(_ testStr:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let range = testStr.range(of: emailRegEx, options: .regularExpression)
+        let result = range != nil ? true : false
+        return result
+    }
+    
     func enableSaveButton(_ enable: Bool) {
         btnSave.isEnabled = enable
         if enable {
@@ -364,6 +431,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         btnSave.frame.origin.y = screenHeight - keyboardHeight - 17 - 50 * screenHeightFactor
         if enterMode == .password {
             btnForgot.frame.origin.y = screenHeight - keyboardHeight - 53 - 50 * screenHeightFactor
+        } else if enterMode == .newEmail {
+            lblWrongEmail.frame.origin.y = screenHeight - keyboardHeight - 53 - 50 * screenHeightFactor
         }
     }
     

@@ -323,10 +323,10 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnLocations.tag = 1
         btnLocations.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnPlaces.addSubview(lblPlaces)
         
-        lblLocations = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblLocations = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnLocations.addSubview(lblLocations)
         
         let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))

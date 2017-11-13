@@ -100,15 +100,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var arrPlaceNames1: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var imgPlaces2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
     var arrPlaceNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
-    let arrTitle = ["Most Popular", "Recommended", "Nearby Food", "Nearby Drinks", "Shopping", "Outdoors", "Recreation"]
+    let arrTitle = ["Most Popular", "Recommended", "Nearby Food & Drinks", "Shopping", "Outdoors & Recreation"]
     var testArrPlaces = [[PlacePin]]()
     var testArrPopular = [PlacePin]()
     var testArrRecommend = [PlacePin]()
     var testArrFood = [PlacePin]()
-    var testArrDrinks = [PlacePin]()
     var testArrShopping = [PlacePin]()
     var testArrOutdoors = [PlacePin]()
-    var testArrRecreation = [PlacePin]()
     
     // data for social table
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
@@ -228,6 +226,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
+        uiviewNavBar.leftBtnWidth = 30
+        uiviewNavBar.leftBtnPadding = 20
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "mb_menu"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
@@ -288,11 +288,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnPeople.tag = 1
         btnPeople.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
 
-        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 14, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
         lblPlaces.text = "Places"
         btnPlaces.addSubview(lblPlaces)
         
-        lblPeople = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPeople = FaeLabel(CGRect(x: 104, y: 14, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
         lblPeople.text = "People"
         btnPeople.addSubview(lblPeople)
         

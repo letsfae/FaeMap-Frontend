@@ -11,6 +11,7 @@ import UIKit
 class FaeNavBar: UIView {
 
     var leftBtnWidth = 10.5
+    var leftBtnPadding = 30.0
     var leftBtn = UIButton()
     var rightBtn = UIButton()
     var lblTitle = UILabel()

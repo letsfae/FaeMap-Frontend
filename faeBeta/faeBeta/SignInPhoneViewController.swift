@@ -113,6 +113,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         numberKeyboard = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor, width: screenWidth, height: 244 * screenHeightFactor))
         view.addSubview(numberKeyboard)
         numberKeyboard.delegate = self
+        numberKeyboard.numMode = "phoneNum"
         numberKeyboard.transform = CGAffineTransform(translationX: 0, y: 0)
         
         if enterMode == .signInSupport {
@@ -193,21 +194,29 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                 self.indicatorView.stopAnimating()
             }
         } else {
-            user.checkPhoneExistence{(status, message) in
-                print("\(status) \(message!)")
+            user.checkPhoneExistence{(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     if let numbers = message as? NSArray {
                         if numbers.count == 0 {
+                            self.indicatorView.stopAnimating()
                             // this number has no linked account
                             self.lblCannotFind.alpha = 1
                         } else {
-                            self.setupEnteringVerificationCode()
+                            self.user.whereKey("phone", value: "(" + self.phoneCode + ")" + self.phoneNumber)
+                            self.user.sendCodeToEmail {(status: Int, message: Any?) in
+                                if status / 100 == 2 {
+                                    self.setupEnteringVerificationCode()
+                                } else {
+                                    print("[SendCodeToPhone Fail] \(status) \(message!)")
+                                }
+                                self.indicatorView.stopAnimating()
+                            }
                         }
                     }
                 } else {
+                    self.indicatorView.stopAnimating()
                     print("checkPhoneNumExist failed")
                 }
-                self.indicatorView.stopAnimating()
             }
         }
     }
@@ -220,7 +229,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
             pointer += 1
         } else if num < 0 && pointer > 0 {
             pointer -= 1
-            phoneNumber = String(phoneNumber[...phoneNumber.index(phoneNumber.startIndex, offsetBy: pointer)])
+            phoneNumber = (phoneNumber as NSString).substring(to: pointer)
         }
         if phoneNumber == "" {
             lblPhone.text = "Phone Number"
@@ -235,6 +244,17 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
             btnSendCode.isEnabled = true
             btnSendCode.backgroundColor = UIColor._2499090()
         } else {
+            btnSendCode.isEnabled = false
+            btnSendCode.backgroundColor = UIColor._255160160()
+        }
+    }
+    
+    func deleteAll() {
+        if phoneNumber != "" {
+            phoneNumber = ""
+            pointer = 0
+            lblPhone.text = "Phone Number"
+            lblPhone.textColor = UIColor._155155155()
             btnSendCode.isEnabled = false
             btnSendCode.backgroundColor = UIColor._255160160()
         }
@@ -274,6 +294,4 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     func verifyPhoneSucceed() {
         boolClosePage = true
     }
-    
-    func verifyEmailSucceed() {}
 }
