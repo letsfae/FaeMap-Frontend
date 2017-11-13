@@ -239,8 +239,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         switch enterMode {
         case .email:
             let vc = SetNameViewController()
-            vc.enterMode = .password
-            vc.pswdEnterMode = .other
+            vc.enterMode = .newEmail
             navigationController?.pushViewController(vc, animated: true)
             break
         case .usrname:
@@ -269,6 +268,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         vc.delegate = self
         vc.enterMode = .email
         vc.enterEmailMode = .settings
+        vc.strEmail = strEmail!
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
         faeUser.updateEmail{ (statusCode, result) in
@@ -303,7 +303,6 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     // animations end
 
     // VerifyCodeDelegate
-    func verifyPhoneSucceed() {}
     func verifyEmailSucceed() {
         setHintRedLabel()
     }

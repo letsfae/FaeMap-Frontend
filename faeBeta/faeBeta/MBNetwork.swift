@@ -97,17 +97,11 @@ extension MapBoardViewController {
                 if mbPlaceData.class_1.contains("Food") && testArrFood.count < 15 {
                     testArrFood.append(mbPlaceData)
                 }
-                if mbPlaceData.class_1.contains("Drink") && testArrDrinks.count < 15 {
-                    testArrDrinks.append(mbPlaceData)
-                }
                 if mbPlaceData.class_1.contains("Shopping") && testArrShopping.count < 15 {
                     testArrShopping.append(mbPlaceData)
                 }
                 if mbPlaceData.class_1.contains("Outdoors") && testArrOutdoors.count < 15 {
                     testArrOutdoors.append(mbPlaceData)
-                }
-                if mbPlaceData.class_1.contains("Recreation") && testArrRecreation.count < 15 {
-                    testArrRecreation.append(mbPlaceData)
                 }
                 break
             case "people":
@@ -161,10 +155,8 @@ extension MapBoardViewController {
             self.testArrPopular.removeAll()
             self.testArrRecommend.removeAll()
             self.testArrFood.removeAll()
-            self.testArrDrinks.removeAll()
             self.testArrShopping.removeAll()
             self.testArrOutdoors.removeAll()
-            self.testArrRecreation.removeAll()
             
             self.processMBInfo(results: placeInfoJsonArray, socialType: "place")
 //            self.mbPlaces.sort { $0.dis < $1.dis }
@@ -172,10 +164,8 @@ extension MapBoardViewController {
             self.testArrPlaces.append(self.testArrPopular)
             self.testArrPlaces.append(self.testArrRecommend)
             self.testArrPlaces.append(self.testArrFood)
-            self.testArrPlaces.append(self.testArrDrinks)
             self.testArrPlaces.append(self.testArrShopping)
             self.testArrPlaces.append(self.testArrOutdoors)
-            self.testArrPlaces.append(self.testArrRecreation)
             
             self.arrAllPlaces = self.mbPlaces
             self.tblMapBoard.reloadData()
