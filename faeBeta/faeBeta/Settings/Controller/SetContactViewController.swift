@@ -15,6 +15,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
     var arrContact: [String] = ["Say Hello", "Support & Help", "Report Problem", "Provide Feedback", "Questions", "Join Us"]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         uiviewNavbar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavbar)
@@ -30,7 +31,6 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         tblContact.dataSource = self
         tblContact.separatorStyle = .none
         tblContact.register(GeneralTitleCell.self, forCellReuseIdentifier: "GeneralTitleCell")
-        tblContact.allowsSelection = false
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
@@ -53,5 +53,29 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.switchIcon.isHidden = true
         cell.lblName.text = arrContact[indexPath.row]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            let vcChat = ChatViewController()
+            vcChat.arrUserIDs.append("\(Key.shared.user_id)")
+            vcChat.arrUserIDs.append("1")
+            vcChat.strChatId = "1"
+            navigationController?.pushViewController(vcChat, animated: true)
+            break
+        case 1, 2, 3, 4:
+            let vcDetail = SetContactDetailViewController()
+            vcDetail.detailType = SetContactDetailType(rawValue: indexPath.row)!
+            navigationController?.pushViewController(vcDetail, animated: true)
+            break
+        case 5:
+            let vcJoin = SetWebViewController()
+            vcJoin.strURL = "https://www.faemaps.com/career/"
+            navigationController?.pushViewController(vcJoin, animated: true)
+            break
+        default:
+            break
+        }
     }
 }

@@ -324,7 +324,7 @@ extension LogInViewController {
     func loadResetPassword() {
         uiviewGrayBg = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         view.addSubview(uiviewGrayBg)
-        uiviewGrayBg.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        uiviewGrayBg.backgroundColor = UIColor._107105105_a50()
         loadContent()
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))

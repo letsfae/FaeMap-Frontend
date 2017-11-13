@@ -24,6 +24,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     var boolWillDisappear: Bool = false
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         addObersers()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
@@ -67,13 +68,22 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
         btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
-        btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
+        btnSave.titleLabel?.textColor = .white
+        btnSave.titleLabel?.textAlignment = .center
+        btnSave.setTitle("Send", for: .normal)
+        btnSave.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        btnSave.backgroundColor = UIColor._2499090()
+        btnSave.layer.cornerRadius = 25
         btnSave.addTarget(self, action: #selector(actionSaveIntro(_: )), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         boolWillDisappear = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         textView.becomeFirstResponder()
     }
     
