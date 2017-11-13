@@ -11,8 +11,10 @@ import UIKit
 class SetWebViewController: UIViewController, UIWebViewDelegate {
     var uiviewNavBar: FaeNavBar!
     var webView: UIWebView!
+    var strURL: String = "https://www.faemaps.com"
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         
         uiviewNavBar = FaeNavBar(frame: .zero)
@@ -22,14 +24,14 @@ class SetWebViewController: UIViewController, UIWebViewDelegate {
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         
-        webView = UIWebView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight))
+        webView = UIWebView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        webView.backgroundColor = .white
         webView.delegate = self
         view.addSubview(webView)
-        if let url = URL(string: "https://www.faemaps.com") {
+        if let url = URL(string: strURL) {
             let request = URLRequest(url: url)
             webView.loadRequest(request)
         }
-
     }
     
     @objc func leftBtnTapped() {

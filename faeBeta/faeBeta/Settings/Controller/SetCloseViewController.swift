@@ -31,6 +31,7 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
     var btnAlert: UIButton!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = .white
         scrollview = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
@@ -38,19 +39,16 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         scrollview.isPagingEnabled = false
         scrollview.contentSize.height = 714
         scrollview.delegate = self
-        
         loadContent()
-        
         loaduiviewBackground()
         loadAlertClose()
     }
     
     func loaduiviewBackground() {
         btnBackground = UIButton(frame: self.view.frame)
-        
         uiviewBackground = UIView(frame: self.view.frame)
         view.addSubview(uiviewBackground)
-        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
         uiviewBackground.isHidden = true
     }
@@ -91,14 +89,13 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         btnAlert.setTitle("Yes, Close", for: .normal)
         btnAlert.backgroundColor = UIColor._2499090()
         btnAlert.layer.cornerRadius = 19 * screenHeightFactor
-        btnAlert.addTarget(self, action: #selector(CloseAccount(_:)), for: .touchUpInside)
-        
+        btnAlert.addTarget(self, action: #selector(CloseAccount(_:)), for: .touchUpInside)        
     }
 
     
     func loadContent() {
         //btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
-        btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
@@ -153,7 +150,7 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         btnClose.setTitle("Close Account", for: .normal)
         btnClose.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnClose.backgroundColor = UIColor._2499090()
-        btnClose.layer.cornerRadius = 19
+        btnClose.layer.cornerRadius = 25
         btnClose.addTarget(self, action: #selector(showAlert(_:)), for: .touchUpInside)
         
         //lblDes = UILabel(frame: CGRect(x: (screenWidth-contentX)/2, y: 635, width: contentX, height: 54))

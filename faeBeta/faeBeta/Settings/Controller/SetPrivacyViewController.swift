@@ -34,6 +34,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     var tag = 0
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
         loadNavBar()
@@ -105,7 +106,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         
         uiviewBackground = UIView(frame: self.view.frame)
         view.addSubview(uiviewBackground)
-        uiviewBackground.backgroundColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 0.5)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
         
         uiviewBackground.isHidden = true

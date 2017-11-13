@@ -18,13 +18,14 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     var uiviewAlert: UIView!
     var lblAlert: UILabel!
     var btnAlertAction: UIButton!
-    var imgviewAlertDelete: UIImageView!
+    var btnClose: UIButton!
     var btnBackground: UIButton!
     var uiviewBackground: UIView!
     
     var dictPermissions: [String: Bool] = [:]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         // Vicky 09/17/17 把所有ViewController的背景色置为白色，我这里给你添加了一个作为例子，其他文件也都全部加上，我不知道在你从Settings主页面点击General等滑动动画时候有没有一个transition的问题，是因为你所有view的backgroundColor都没有赋值。
         view.backgroundColor = .white
         // Vicky 09/17/17 End
@@ -64,47 +65,49 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         
         uiviewBackground = UIView(frame: view.frame)
         view.addSubview(uiviewBackground)
-        uiviewBackground.backgroundColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 0.5)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
     }
     
     func loaduiviewAlert() {
-        let alertWidth = 290 / 414 * screenWidth
-        let alertY = 200 / 736 * screenHeight
-        uiviewAlert = UIView(frame: CGRect(x: (screenWidth - alertWidth) / 2, y: alertY, width: alertWidth, height: 161))
+        //let alertWidth = 290 / 414 * screenWidth
+        //let alertY = 200 / 736 * screenHeight
+        //uiviewAlert = UIView(frame: CGRect(x: (screenWidth - alertWidth) / 2, y: alertY, width: alertWidth, height: 161))
+        uiviewAlert = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewAlert.center.x = screenWidth / 2
         uiviewBackground.addSubview(uiviewAlert)
         uiviewAlert.backgroundColor = .white
-        uiviewAlert.layer.cornerRadius = 21
+        uiviewAlert.layer.cornerRadius = 21 * screenWidthFactor
         
-        let alertLabelWidth = 210 / 414 * screenWidth
-        let alertLabelY = 30 / 736 * screenHeight
-        lblAlert = UILabel(frame: CGRect(x: 41 / 414 * screenWidth, y: alertLabelY, width: alertLabelWidth, height: 60))
+        //let alertLabelWidth = 210 / 414 * screenWidth
+        //let alertLabelY = 30 / 736 * screenHeight
+        //lblAlert = UILabel(frame: CGRect(x: 41 / 414 * screenWidth, y: alertLabelY, width: alertLabelWidth, height: 60))
+        lblAlert = UILabel(frame: CGRect(x: 0, y: 30, w: 260, h: 60))
+        lblAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(lblAlert)
         lblAlert.numberOfLines = 2
         lblAlert.text = "Oops, please verify your\nEmail to Subscribe!"
         lblAlert.textAlignment = .center
         lblAlert.textColor = UIColor._898989()
-        lblAlert.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblAlert.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
         
-        let alertActionWidth = 208 / 414 * screenWidth
-        let alertActionY = 102 / 736 * screenHeight
-        btnAlertAction = UIButton(frame: CGRect(x: 41 / 414 * screenWidth, y: alertActionY, width: alertActionWidth, height: 39))
+        //let alertActionWidth = 208 / 414 * screenWidth
+        //let alertActionY = 102 / 736 * screenHeight
+        //btnAlertAction = UIButton(frame: CGRect(x: 41 / 414 * screenWidth, y: alertActionY, width: alertActionWidth, height: 39))
+        btnAlertAction = UIButton(frame: CGRect(x: 0, y: 102, w: 208, h: 39))
+        btnAlertAction.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(btnAlertAction)
         btnAlertAction.titleLabel?.textColor = .white
         btnAlertAction.titleLabel?.textAlignment = .center
         btnAlertAction.setTitle("Got it!", for: .normal)
         btnAlertAction.backgroundColor = UIColor._2499090()
-        btnAlertAction.layer.cornerRadius = 19
+        btnAlertAction.layer.cornerRadius = 19 * screenWidthFactor
         btnAlertAction.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         
-        let imgviewAlertWidth = 21 / 414 * screenWidth
-        let imgviewAlertY = 13 / 736 * screenHeight
-        imgviewAlertDelete = UIImageView(frame: CGRect(x: 12 / 414 * screenWidth, y: imgviewAlertY, width: imgviewAlertWidth, height: 21))
-        uiviewAlert.addSubview(imgviewAlertDelete)
-        imgviewAlertDelete.image = #imageLiteral(resourceName: "Settings_delete")
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showMainView(_:)))
-        imgviewAlertDelete.addGestureRecognizer(tapGesture)
-        imgviewAlertDelete.isUserInteractionEnabled = true
+        btnClose = UIButton(frame: CGRect(x: 0, y: 0, width: 47, height: 47))
+        uiviewAlert.addSubview(btnClose)
+        btnClose.setImage(#imageLiteral(resourceName: "Settings_delete"), for: .normal)
+        btnClose.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         
         uiviewBackground.isHidden = true
     }
@@ -125,7 +128,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let uiview = UIView()
-        uiview.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
+        uiview.backgroundColor = UIColor._241241241()
         return uiview
     }
     
