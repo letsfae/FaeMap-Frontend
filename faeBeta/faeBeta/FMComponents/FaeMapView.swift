@@ -56,7 +56,7 @@ class FaeMapView: MKMapView {
     func cancelCreatingLocationPin() {
         if faeMapCtrler?.createLocation == .create {
             faeMapCtrler?.createLocation = .cancel
-        } else {
+        } else if faeMapCtrler?.createLocation == .cancel {
             faeMapCtrler?.locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
             faeMapCtrler?.deselectAllLocations()
         }

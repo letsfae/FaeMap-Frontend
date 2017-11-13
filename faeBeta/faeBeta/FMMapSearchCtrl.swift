@@ -38,13 +38,6 @@ extension FaeMapViewController: MapSearchDelegate {
         removePlaceUserPins({
             self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
         }, nil)
-//        placeClusterManager.removeAnnotations(faePlacePins) {
-//            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-//        }
-//        for user in faeUserPins {
-//            user.isValid = false
-//        }
-//        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
