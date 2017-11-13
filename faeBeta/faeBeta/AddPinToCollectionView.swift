@@ -338,8 +338,6 @@ class AfterAddedToListView: UIView {
     var selectedCollection: PinCollection!
     var lblSaved: FaeLabel!
     var mode: UndoMode = .save
-    
-    var lblSaved: UILabel!
     var btnUndo: UIButton!
     var btnSeeList: UIButton!
     

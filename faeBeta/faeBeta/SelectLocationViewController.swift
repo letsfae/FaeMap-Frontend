@@ -133,8 +133,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func loadSearchBar() {
-        let imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
+        imgSchbarShadow = UIImageView()
+        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500

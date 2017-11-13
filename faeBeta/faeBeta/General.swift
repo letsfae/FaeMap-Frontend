@@ -146,16 +146,16 @@ class General: NSObject {
         getPlaces.whereKey("max_count", value: "\(count)")
         getPlaces.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             completion(status, mapPlaceJSON)
