@@ -56,6 +56,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgExpbarShadow: UIImageView!
     var lblExpContent: UILabel!
     var arrExpPlace = [PlacePin]()
+    var intCurtPage = 0
     
     // Compass and Locating Self
     var btnZoom: FMZoomButton!
@@ -150,6 +151,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
             
+            placeClusterManager.maxZoomLevelForClustering = mapMode == .explore ? 0 : Double.greatestFiniteMagnitude
             clctViewMap.isHidden = mapMode != .explore
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
             imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail || mapMode == .collection

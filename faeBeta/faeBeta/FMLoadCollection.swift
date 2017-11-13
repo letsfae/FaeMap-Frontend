@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
     func loadSmallClctView() {
         let layout = CenterCellCollectionViewFlowLayout()
@@ -47,5 +47,12 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let cell = UICollectionViewCell()
             return cell
         }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth: CGFloat = 250
+        joshprint(clctViewMap.contentOffset.x)
+        intCurtPage = Int(clctViewMap.contentOffset.x / pageWidth)
+        joshprint(intCurtPage)
     }
 }

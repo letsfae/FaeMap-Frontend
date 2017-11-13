@@ -281,6 +281,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         selectedPlaceView = anView
         selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
         selectedPlaceView?.layer.zPosition = 1001
+        guard mapMode != .explore else { return }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         uiviewSavedList.arrListSavedThisPin.removeAll()
