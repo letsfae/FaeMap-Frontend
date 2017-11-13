@@ -8,13 +8,13 @@
 
 import UIKit
 
-class SetEnterPasswordViewController: UIViewController {
+class SetEnterPasswordViewController: UIViewController { // UNUSED
     
     var btnBack: UIButton!
     var lblEnterLabel: UILabel!
     
     override func viewDidLoad() {
-        btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)

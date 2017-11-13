@@ -29,6 +29,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
     var btnDelete: UIButton!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = .white
         scrollview = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
@@ -45,7 +46,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
     
     func loadContent() {
         //btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
-        btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
@@ -100,7 +101,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         btnDeactive.setTitle("Deactivate Account", for: .normal)
         btnDeactive.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnDeactive.backgroundColor = UIColor._2499090()
-        btnDeactive.layer.cornerRadius = 19
+        btnDeactive.layer.cornerRadius = 25
         btnDeactive.addTarget(self, action: #selector(showAlertDeactive(_:)), for: .touchUpInside)
 
     }
@@ -110,7 +111,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         
         uiviewBackground = UIView(frame: self.view.frame)
         view.addSubview(uiviewBackground)
-        uiviewBackground.backgroundColor = UIColor(red: 107.0 / 255.0, green: 105.0 / 255.0, blue: 105.0 / 255.0, alpha: 0.5)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
         uiviewBackground.isHidden = true
     }

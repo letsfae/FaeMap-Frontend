@@ -178,7 +178,9 @@ extension ChatViewController {
     //taped bubble
     // function when user tap the bubble, like image, location
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
-        closeToolbarContentView()
+        if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
+            closeToolbarContentView()
+        }
         let message = arrRealmMessages[indexPath.row]
         if ["[Picture]", "[Gif]"].contains(message.type) {
             let photo = IDMPhoto.photos(withImages: [UIImage(data: message.media! as Data)!])
@@ -192,7 +194,7 @@ extension ChatViewController {
                     let player = AVPlayer(url: videoURL)
                     let playerController = AVPlayerViewController()
                     playerController.player = player
-                    boolGoToFullContent = true
+                    //boolGoToFullContent = true
                     present(playerController, animated: true) {
                         player.play()
                     }
@@ -202,12 +204,12 @@ extension ChatViewController {
         if message.type == "[Location]" {
             let strLocDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
-            let vcLocDetail = LocDetailViewController()
-            vcLocDetail.coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
+            //let vcLocDetail = LocDetailViewController()
+            self.vcLocDetail.coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
             // TODO: capital first letter
-            vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue
-            vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
-            navigationController?.pushViewController(vcLocDetail, animated: true)
+            self.vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue
+            self.vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
+            navigationController?.pushViewController(self.vcLocDetail, animated: true)
         }
         if message.type == "[Place]" {
             let strPlaceDetail = message.text.replacingOccurrences(of: "\\", with: "")
@@ -217,9 +219,9 @@ extension ChatViewController {
                 if status / 100 == 2 {
                     guard let placeInfo = message else { return }
                     let jsonPlace = JSON(placeInfo)
-                    let vcPlaceDetail = PlaceDetailViewController()
-                    vcPlaceDetail.place = PlacePin(json: jsonPlace)
-                    self.navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                    //let vcPlaceDetail = PlaceDetailViewController()
+                    self.vcPlaceDetail.place = PlacePin(json: jsonPlace)
+                    self.navigationController?.pushViewController(self.vcPlaceDetail, animated: true)
                 }
             }
         }
@@ -227,11 +229,18 @@ extension ChatViewController {
             let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let dataCollection = strCollectionDetail.data(using: .utf8)
             let jsonCollection = JSON(data: dataCollection!)
-            let vcCollection = CollectionsListDetailViewController()
-            vcCollection.enterMode = .place
-            vcCollection.boolFromChat = true
-            vcCollection.colId = jsonCollection["id"].intValue
-            navigationController?.pushViewController(vcCollection, animated: true)
+            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let resultJson = JSON(message!)
+                    let collectionDetail = PinCollection(json: resultJson)
+                    //let vcCollection = CollectionsListDetailViewController()
+                    self.vcCollection.arrColDetails = collectionDetail
+                    self.vcCollection.enterMode = .place
+                    self.vcCollection.boolFromChat = true
+                    self.vcCollection.colId = jsonCollection["id"].intValue
+                    self.navigationController?.pushViewController(self.vcCollection, animated: true)
+                }
+            })
         }
         
     }

@@ -7,22 +7,40 @@
 //
 
 import UIKit
+import SwiftyJSON
+
 enum SetInfoEnterMode {
     case nameCard
     case settings
 }
 
-class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate {
+class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate, UIImagePickerControllerDelegate, SendMutipleImagesDelegate {
     
     func protSaveName(txtName: String?) {
-        textName = txtName
-        // Vicky 09/17/17 在delegate=self之后，你的值是可以传回来了，那你这步操作是在干嘛？你需要更新的label是在table里面，不是在View里面，所以table需要重新reloadData才可以显示值，试试把这句话注释掉的结果。同样，这样地方table命名改一下吧，tblNameCard?或者其他的  以tbl开头
-        tblNameCard.reloadData()
+        strDisplayName = txtName
+        let user = FaeUser()
+        user.whereKey("nick_name", value: txtName!)
+        user.updateNameCard { (status:Int, objects:Any?) in
+            if status / 100 != 2 {
+                felixprint("update short intro failed")
+            } else {
+                self.uiviewNameCard.lblNickName.text = txtName
+                self.tblNameCard.reloadData()
+            }
+        }
     }
     
     func protSaveIntro(txtIntro: String?) {
-        textIntro = txtIntro
-        tblNameCard.reloadData()
+        strShortIntro = txtIntro
+        let user = FaeUser()
+        user.whereKey("short_intro", value: txtIntro!)
+        user.updateNameCard { (status:Int, objects:Any?) in
+            if status / 100 != 2 {
+                felixprint("update short intro failed")
+            } else {
+                self.tblNameCard.reloadData()
+            }
+        }
     }
     
     var faeNavBar: FaeNavBar!
@@ -30,11 +48,13 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
     var uiviewInterval: UIView!
     var tblNameCard: UITableView!
     var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
-    var textName: String?
-    var textIntro: String?
+    var strDisplayName: String?
+    var strShortIntro: String?
     var enterMode: SetInfoEnterMode!
     // Vicky 09/17/71 不要在这个地方单独操作，当你进入SetDisplayName()的时候，有一个push操作，直接在那个地方delegate=self。你在这个地方，是给了SetDisplayName()一个叫做vc的引用，在viewDidLoad里给这个引用的delegate=self,但你在pushViewController里是push了另一个引用，那个引用里需要将vc.delegate=self，否则是无效的。如果还不理解，周一再问我。
     //    var vc = SetDisplayName()
+    
+    var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         // super.viewDidLoad() missing here
@@ -42,6 +62,8 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         //        vc.delegate = self
         view.backgroundColor = .white
         loadContent()
+        loadActivityIndicator()
+        updateInfo()
     }
     
     func loadContent() {
@@ -75,6 +97,26 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
 //        view.addSubview(line)
     }
     
+    func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
+    }
+    
+    func updateInfo() {
+        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+            guard status / 100 == 2 else { return }
+            let rsltJSON = JSON(result!)
+            self.strDisplayName = rsltJSON["nick_name"].stringValue
+            self.strShortIntro = rsltJSON["short_intro"].stringValue
+            self.tblNameCard.reloadData()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrInfo.count
     }
@@ -86,10 +128,10 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as! SetAccountCell
         cell.lblTitle.text = arrInfo[indexPath.row]
         if indexPath.row == 0 {
-            cell.lblContent.text = textName
+            cell.lblContent.text = strDisplayName
         }
         if indexPath.row == 1 {
-            cell.lblContent.text = textIntro
+            cell.lblContent.text = strShortIntro
         }
         return cell
     }
@@ -108,6 +150,9 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
             break
+        case 2:
+            SetAvatar.addProfileAvatar(vc: self, type: "setNamecard")
+            break
         default:
             break
         }
@@ -119,5 +164,27 @@ class SetInfoNamecard: UIViewController, UITableViewDelegate, UITableViewDataSou
         } else {
             navigationController?.popViewController(animated: true)
         }
+    }
+    
+    // SendMutipleImagesDelegate
+    func sendImages(_ images: [UIImage]) {
+        print("send image for avatar")
+        if let image = images.first {
+            //uploadProfileAvatar(image: image)
+            SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "setNamecard")
+        }
+    }
+    
+    // UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            picker.dismiss(animated: true, completion: nil)
+            //showAlert(title: "Taking Photo Failed", message: "please try again")
+            SetAvatar.showAlert(title: "Taking Photo Failed", message: "please try again", vc: self)
+            return
+        }
+        picker.dismiss(animated: true, completion: nil)
+        //uploadProfileAvatar(image: image)
+        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "setNamecard")
     }
 }

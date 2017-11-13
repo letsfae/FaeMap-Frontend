@@ -587,7 +587,7 @@ class ColListEmptyCell: UITableViewCell {
 extension CollectionsListDetailViewController {
     fileprivate func loadChooseOption() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewShadowBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        uiviewShadowBG.backgroundColor = UIColor._107105105_a50()
         view.addSubview(uiviewShadowBG)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
         uiviewShadowBG.addGestureRecognizer(tapGesture)

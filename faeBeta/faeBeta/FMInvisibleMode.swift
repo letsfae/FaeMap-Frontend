@@ -11,7 +11,7 @@ import UIKit
 extension FaeMapViewController {
     func invisibleMode() {
         let dimBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        dimBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
+        dimBackground.backgroundColor = UIColor._107105105_a50()
         dimBackground.alpha = 0
         dimBackground.layer.zPosition = 999
         view.addSubview(dimBackground)

@@ -11,11 +11,12 @@ import JSQMessagesViewController
 
 //this is a class that subclass JSQPhotoMediaItem, to show sticker in a chat bubble.
 // it overrided the size of chat bubble
-class JSQStickerMediaItem: JSQPhotoMediaItem {
+class JSQStickerMediaItem: JSQPhotoMediaItemCustom {
     //inheritance from JSQPhoto
     var imgCached: UIImageView!
     var sizeCustomize : CGSize!
     var floatHeartButtonTopOffset: CGFloat = 5
+    var boolIncoming: Bool = false
     
     override func mediaView() -> UIView! {
         if self.image == nil {
@@ -23,9 +24,13 @@ class JSQStickerMediaItem: JSQPhotoMediaItem {
         }
         if sizeCustomize != nil {
             let imageSize = self.mediaViewDisplaySize()
+            var floatToAvatar: CGFloat = -8.0
+            if boolIncoming {
+                floatToAvatar = 8.0
+            }
             let view = UIImageView(frame: CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height))
             let imageView = UIImageView(image: self.image)
-            imageView.frame = CGRect(x: 0, y: floatHeartButtonTopOffset, width: imageSize.width, height: imageSize.height - floatHeartButtonTopOffset * 2)
+            imageView.frame = CGRect(x: floatToAvatar, y: floatHeartButtonTopOffset, width: imageSize.width, height: imageSize.height - floatHeartButtonTopOffset * 2)
             imageView.contentMode = .scaleAspectFit
             view.addSubview(imageView)
             self.imgCached = view 

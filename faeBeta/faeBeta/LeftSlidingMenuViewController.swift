@@ -268,6 +268,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func loadUserInfo() {
+        General.shared.avatarCached(userid: Key.shared.user_id, completion:  { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
         General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
         })
@@ -336,7 +339,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     @objc func actionJumpToMainPage() {
 //        tableSelections = .myFaeMainPage
 //        actionCloseMenu(btnBackground)
-        addProfileAvatar()
+        //addProfileAvatar()
+        SetAvatar.addProfileAvatar(vc: self, type: "leftSliding")
     }
     
     @objc func mapBoardSwitch(_ sender: UISwitch) {

@@ -16,6 +16,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
     let faeUser = FaeUser()
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         uiviewNavBar = FaeNavBar(frame:.zero)
         self.navigationController?.isNavigationBarHidden = true

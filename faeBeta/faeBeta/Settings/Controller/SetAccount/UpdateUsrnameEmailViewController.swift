@@ -153,7 +153,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     
     fileprivate func loadUserNameShadow() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewShadowBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
+        uiviewShadowBG.backgroundColor = UIColor._107105105_a50()
         view.addSubview(uiviewShadowBG)
         
         uiviewMsg = UIView(frame: CGRect(x: 0, y: 200, width: 290, height: 208))

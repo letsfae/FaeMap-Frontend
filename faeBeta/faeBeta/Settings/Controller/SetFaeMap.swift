@@ -19,6 +19,7 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
     var textView: UITextView!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = .white
         scrollview = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
@@ -34,7 +35,7 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
     func loadContent() {
         
         //btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
-        btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
@@ -70,6 +71,7 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         textView.center.x = screenWidth / 2
         textView.isEditable = false
         textView.isScrollEnabled = false
+        textView.tintColor = UIColor._2499090()
         textView.attributedText = NSAttributedString(string: text, attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 12)!])
         textView.sizeToFit()
         scrollview.addSubview(textView)

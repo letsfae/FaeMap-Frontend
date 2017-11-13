@@ -48,6 +48,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var intSimilar = 0
     var intNearby = 0
     
+    var boolShared: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -81,6 +83,23 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             })
         }
         PlaceDetailCell.boolFold = true
+        if boolShared {
+            uiviewAfterAdded.lblSaved.text = "You shared a Place."
+            uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
+            uiviewAfterAdded.btnUndo.isHidden = true
+            uiviewAfterAdded.btnSeeList.isHidden = true
+            uiviewAfterAdded.show()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.uiviewAfterAdded.hide()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.3) {
+                self.uiviewAfterAdded.lblSaved.text = "Collocted to List!"
+                self.uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 150, height: 25)
+                self.uiviewAfterAdded.btnUndo.isHidden = false
+                self.uiviewAfterAdded.btnSeeList.isHidden = false
+            }
+            boolShared = false
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,6 +108,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
             UIApplication.shared.statusBarStyle = .default
         }
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -356,6 +376,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     @objc func shareThisPin() {
         let vcShareCollection = NewChatShareController(friendListMode: .place)
         vcShareCollection.placeDetail = place
+        vcShareCollection.boolFromPlaceDetail = true
         navigationController?.pushViewController(vcShareCollection, animated: true)
     }
     

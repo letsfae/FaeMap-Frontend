@@ -7,9 +7,9 @@
 //
 
 import UIKit
-// Vicky 09/17/17 所有cell的selectionStyle = .none 避免点击cell出现灰色背景问题
+
 class SettingsCell: UITableViewCell {
-    var icon: UIImageView!
+    var imgIcon: UIImageView!
     var lblSetting: UILabel!
     var btnNext: UIButton!
     
@@ -17,26 +17,21 @@ class SettingsCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         
-        icon = UIImageView()
-        icon.contentMode = .scaleAspectFill
-        addSubview(icon)
+        imgIcon = UIImageView(frame: CGRect(x: 22, y: 20, width: 26, height: 26))
+        imgIcon.contentMode = .scaleAspectFill
+        addSubview(imgIcon)
         
-        lblSetting = UILabel()
+        lblSetting = UILabel(frame: CGRect(x: 65, y: 0, width: screenWidth - 65 - 29, height: 24))
         addSubview(lblSetting)
         lblSetting.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSetting.textColor = UIColor._898989()
         lblSetting.textAlignment = .left
+        lblSetting.center.y = imgIcon.center.y
         
-        btnNext = UIButton()
+        btnNext = UIButton(frame: CGRect(x: screenWidth - 29, y: 0, width: 9, height: 17))
         addSubview(btnNext)
         btnNext.setImage(#imageLiteral(resourceName: "Settings_next"), for: .normal)
-        
-        addConstraintsWithFormat("H:|-22-[v0(24)]", options: [], views: icon)
-        addConstraintsWithFormat("V:|-20-[v0(24)]", options: [], views: icon)
-        addConstraintsWithFormat("H:|-65-[v0]-29-|", options: [], views: lblSetting)
-        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSetting)
-        addConstraintsWithFormat("H:[v0(9)]-29-|", options: [], views: btnNext)
-        addConstraintsWithFormat("V:|-19-[v0(17)]", options: [], views: btnNext)
+        btnNext.center.y = imgIcon.center.y
     }
     
     required init?(coder aDecoder: NSCoder) {
