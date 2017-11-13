@@ -213,7 +213,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Vicky 09/17/17 按照Sketch文件，Log Out那栏右边的箭头需要隐藏？点击后应该是直接退出，所以不需要箭头
         let cell = tableView.dequeueReusableCell(withIdentifier: "settingsCell", for: indexPath as IndexPath) as! SettingsCell
-        cell.icon.image = arrSettingsIcons[indexPath.row]
+        cell.imgIcon.image = arrSettingsIcons[indexPath.row]
         cell.lblSetting.text = arrSettingsText[indexPath.row]
         return cell
     }

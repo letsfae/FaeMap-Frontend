@@ -43,6 +43,7 @@ class SetFaeInc: UIViewController {
         lblContent.text = "Faevorite is a company that focuses on happiness and lifestyle. \n\nWe empower individuals to find wellness and inspiration through discovering more things they love.\n\nOur goal is to build a trustworthy lifestyle brand that guides people to a joyful and healthy way of living."
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblContent.textColor = UIColor._898989()
+        lblContent.tintColor = UIColor._2499090()
         lblContent.lineBreakMode = NSLineBreakMode.byWordWrapping
         lblContent.numberOfLines = 0
     }
