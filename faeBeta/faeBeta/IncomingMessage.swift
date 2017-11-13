@@ -136,6 +136,9 @@ class IncomingMessage {
     fileprivate func stickerJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
         let imgSticker = UIImage(named: realmMessage.text)
         let mediaItem = JSQStickerMediaItem(image: imgSticker)
+        if realmMessage.sender?.id != "\(Key.shared.user_id)" {
+            mediaItem?.boolIncoming = true
+        }
         if realmMessage.type == "[Heart]" {
             mediaItem?.sizeCustomize = CGSize(width: 61, height: 50)
         }

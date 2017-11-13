@@ -133,12 +133,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func loadDeleteConfirm() {
         uiviewBackground = UIView(frame: CGRect(x:0, y:0, width: screenWidth, height: screenHeight))
-        uiviewBackground.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 50)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
         
         uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
         uiviewDeleteConfirm.center.x = screenWidth / 2
         uiviewDeleteConfirm.backgroundColor = .white
-        uiviewDeleteConfirm.layer.cornerRadius = 20
+        uiviewDeleteConfirm.layer.cornerRadius = 21 * screenWidthFactor
         uiviewBackground.addSubview(uiviewDeleteConfirm)
         
         lblConfirmLine1 = UILabel(frame: CGRect(x: 0, y: 30, w: 185, h: 50))
@@ -170,7 +170,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         btnDeleteConfirm.addTarget(self, action: #selector(confirmDetele), for: .touchUpInside)
         btnDeleteConfirm.layer.borderWidth = 2
         btnDeleteConfirm.layer.borderColor = UIColor._2499090().cgColor
-        btnDeleteConfirm.layer.cornerRadius = 21 * screenWidthFactor
+        btnDeleteConfirm.layer.cornerRadius = 19 * screenWidthFactor
         uiviewDeleteConfirm.addSubview(btnDeleteConfirm)
         
         btnDismiss = UIButton(frame: CGRect(x: 15, y: 15, w: 17, h: 17))
@@ -294,7 +294,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 74
+        return 76
     }
     
     // MARK: UItableViewDataSource

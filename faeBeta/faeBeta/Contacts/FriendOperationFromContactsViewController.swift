@@ -52,7 +52,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        view.backgroundColor = UIColor._107105105_a50()
         view.alpha = 0
         createActivityIndicator()
         loadContent()

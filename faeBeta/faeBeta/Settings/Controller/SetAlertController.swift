@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SetalertController: UIViewController {
+class SetalertController: UIViewController { // UNUSED
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -15,6 +15,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     var arrStr: [String: String] = ["00":"Invite Friends!", "01":"From Contacts", "02":"From Facebook", "10":"Share Fae Map!", "11":"Send Message", "12":"Send Email", "13":"Share on Facebook", "14":"Share on Twitter", "15":"Other Options"]
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
         loadNavBar()
@@ -31,7 +32,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func loadTableView() {
-        tblSpLove = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight-65))
+        tblSpLove = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
         view.addSubview(tblSpLove)
         tblSpLove.separatorStyle = .none
         tblSpLove.delegate = self
@@ -48,7 +49,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let uiview = UIView()
-        uiview.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
+        uiview.backgroundColor = UIColor._241241241()
         return uiview
     }
     
@@ -61,8 +62,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
-    }
-    
+    }    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section

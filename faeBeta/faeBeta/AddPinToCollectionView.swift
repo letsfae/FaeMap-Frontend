@@ -339,6 +339,10 @@ class AfterAddedToListView: UIView {
     var lblSaved: FaeLabel!
     var mode: UndoMode = .save
     
+    var lblSaved: UILabel!
+    var btnUndo: UIButton!
+    var btnSeeList: UIButton!
+    
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
         loadContent()
@@ -361,7 +365,7 @@ class AfterAddedToListView: UIView {
         lblSaved.text = "Collected to List!"
         addSubview(lblSaved)
         
-        let btnUndo = UIButton()
+        btnUndo = UIButton()
         btnUndo.setTitle("Undo", for: .normal)
         btnUndo.setTitleColor(.white, for: .normal)
         btnUndo.setTitleColor(.lightGray, for: .highlighted)
@@ -371,7 +375,7 @@ class AfterAddedToListView: UIView {
         addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
         addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
         
-        let btnSeeList = UIButton()
+        btnSeeList = UIButton()
         btnSeeList.setTitle("See List", for: .normal)
         btnSeeList.setTitleColor(.white, for: .normal)
         btnSeeList.setTitleColor(.lightGray, for: .highlighted)

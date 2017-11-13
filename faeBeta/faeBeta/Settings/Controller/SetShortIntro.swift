@@ -21,9 +21,12 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     var textView: UITextView!
     var lblEditIntro: UILabel!
     var btnSave: UIButton!
+    var boolWillDisappear: Bool = false
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
+        addObersers()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
         
         btnBack = UIButton(frame: CGRect(x: 15, y: 36, width: 18, height: 18))
@@ -55,18 +58,43 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         lblPlaceholder.textColor = UIColor._155155155()
         lblPlaceholder.textAlignment = .center
         
-        lblEditIntro = UILabel(frame: CGRect(x: 0, y: 365, width: screenWidth, height: 18))
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 96 - 18, width: screenWidth, height: 18))
         view.addSubview(lblEditIntro)
         lblEditIntro.text = "30 Characters"
         lblEditIntro.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblEditIntro.textColor = UIColor._138138138()
         lblEditIntro.textAlignment = .center
         
-        btnSave = UIButton(frame: CGRect(x: 0, y: 399, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
         btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
-        btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
+        btnSave.titleLabel?.textColor = .white
+        btnSave.titleLabel?.textAlignment = .center
+        btnSave.setTitle("Send", for: .normal)
+        btnSave.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
+        btnSave.backgroundColor = UIColor._2499090()
+        btnSave.layer.cornerRadius = 25
         btnSave.addTarget(self, action: #selector(actionSaveIntro(_: )), for: .touchUpInside)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        boolWillDisappear = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textView.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        boolWillDisappear = true
+    }
+    
+    func addObersers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -96,5 +124,27 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     
     @objc func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
+        let info = notification.userInfo!
+        let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.lblEditIntro.frame.origin.y -= frameKeyboard.height - (30 - 14)
+            self.btnSave.frame.origin.y -= frameKeyboard.height - (30 - 14)
+        })
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.lblEditIntro.frame.origin.y = screenHeight - 80 - 18
+            self.btnSave.frame.origin.y = screenHeight - 30 - 50
+        })
     }
 }

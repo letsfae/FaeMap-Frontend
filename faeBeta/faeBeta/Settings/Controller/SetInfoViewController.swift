@@ -18,6 +18,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     var enterMode: SetInfoEnterMode!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
         loadNavBar()
@@ -77,7 +78,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let uiview = UIView()
-        uiview.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
+        uiview.backgroundColor = UIColor._241241241()
         return uiview
     }
     

@@ -58,8 +58,10 @@
 		8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 8660BBEF1D9063D000D4820C /* JSQMessagesCollectionViewCustom.m */; };
 		9F186F851F6A320F00D24E07 /* FaeChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F186F841F6A320F00D24E07 /* FaeChat.swift */; };
 		9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */; };
+		9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4736CC1FB811440058770C /* SetAvatar.swift */; };
 		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
 		9FC6AAFE1FA167BA0024B9B8 /* SetWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */; };
+		9FCE363E1FB958F1008CE5A1 /* SetContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
@@ -375,8 +377,10 @@
 		9F186F841F6A320F00D24E07 /* FaeChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeChat.swift; sourceTree = "<group>"; };
 		9F1D68C61F4E89100067EFF9 /* JSQPlaceCollectionMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceCollectionMediaItemCustom.h; sourceTree = "<group>"; };
 		9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceCollectionMediaItemCustom.m; sourceTree = "<group>"; };
+		9F4736CC1FB811440058770C /* SetAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAvatar.swift; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWebViewController.swift; sourceTree = "<group>"; };
+		9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContactDetailViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -1251,6 +1255,7 @@
 				B37E5DB41F831040008A6B4B /* SetAlertController.swift */,
 				B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */,
 				B37E5DAB1F83103F008A6B4B /* SetContactViewController.swift */,
+				9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */,
 				B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */,
 				B37E5DB01F83103F008A6B4B /* SetDisplayName.swift */,
 				B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */,
@@ -1422,6 +1427,7 @@
 				507BE10B1F5A4ABD0077A959 /* FaeFont.swift */,
 				500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */,
 				50E50C151F9EF861008645C8 /* LocationPin.swift */,
+				9F4736CC1FB811440058770C /* SetAvatar.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1649,7 +1655,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		E38391E68675FBBB7D07EF60 /* [CP] Embed Pods Frameworks */ = {
@@ -1794,6 +1800,7 @@
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
 				B8B7AF521E728BAF00BE92AB /* FMUserPinCtrl.swift in Sources */,
+				9FCE363E1FB958F1008CE5A1 /* SetContactDetailViewController.swift in Sources */,
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
 				B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */,
 				9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */,
@@ -1855,6 +1862,7 @@
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
 				B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */,
 				B8CAA03F1DDD941300DEC329 /* FMDelegateCtrl.swift in Sources */,
+				9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */,
 				B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */,
 				B33F8A001F3EB4E20033610D /* MBPlaceTabView.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,

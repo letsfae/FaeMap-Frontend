@@ -29,10 +29,10 @@ struct StickerInfoStrcut {
 ]
 
     // the tabs
-    static var stickerIndex = ["stickerHistory", "stickerLike", "faeEmoji","faeSticker","faeGuy", "steamBun"]
+    static var stickerIndex = ["stickerHistory", "stickerLike", "faeEmoji", "faeSticker", "faeGuy", "steamBun"]
 
     // store how many pages does each album need
-    static var pageNumDictionary = ["stickerMore": 0,
+    static var pageNumDictionary = [/*"stickerMore": 0,*/
                              "stickerHistory": 0,
                              "stickerLike": 0,
                              "faeEmoji": 0,

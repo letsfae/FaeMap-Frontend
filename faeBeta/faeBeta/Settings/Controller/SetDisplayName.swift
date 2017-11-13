@@ -18,16 +18,19 @@ class SetDisplayName: UIViewController {
     weak var delegate: ViewControllerNameDelegate?
     var btnBack: UIButton!
     var lblTitle: UILabel!
-    var txtField: FAETextField!
+    var textField: FAETextField!
     var lblEditIntro: UILabel!
     var btnSave: UIButton!
     var txtName: String!
+    var boolWillDisappear: Bool = false
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
+        addObersers()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
         
-        btnBack = UIButton(frame: CGRect(x: 15, y: 36, width: 18, height: 18))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
@@ -39,12 +42,13 @@ class SetDisplayName: UIViewController {
         lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         
-        txtField = FAETextField(frame: CGRect(x: screenWidth/2-104, y: 174, width: 207, height: 34))
-        view.addSubview(txtField)
-        txtField.textAlignment = .center
-        txtField.placeholder = "Display Name"
+        textField = FAETextField(frame: CGRect(x: 0, y: 174, width: screenWidth - 70, height: 34))
+        textField.center.x = screenWidth / 2
+        view.addSubview(textField)
+        textField.textAlignment = .center
+        textField.placeholder = "Display Name"
         
-        lblEditIntro = UILabel(frame: CGRect(x: 0, y: 344, width: 248, height: 36))
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 99 - 36, width: 248, height: 36))
         lblEditIntro.center.x = screenWidth / 2
         view.addSubview(lblEditIntro)
         lblEditIntro.text = "Unlike your Username, a Display Name is\njust for show. You can change it anytime!"
@@ -54,16 +58,36 @@ class SetDisplayName: UIViewController {
         lblEditIntro.lineBreakMode = .byWordWrapping
         lblEditIntro.numberOfLines = 0
         
-        btnSave = UIButton(frame: CGRect(x: 0, y: 399, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
         btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
         btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
         btnSave.addTarget(self, action: #selector(actionSaveName(_ :)), for: .touchUpInside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        boolWillDisappear = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        textField.becomeFirstResponder()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        boolWillDisappear = true
+    }
+    
+    func addObersers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
     @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
-            txtField.resignFirstResponder()
+            textField.resignFirstResponder()
         }
     }
     
@@ -72,7 +96,29 @@ class SetDisplayName: UIViewController {
     }
     
     @objc func actionSaveName(_ sender: UIButton) {
-        delegate?.protSaveName(txtName: txtField.text)
+        delegate?.protSaveName(txtName: textField.text)
         actionGoBack(sender)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
+        let info = notification.userInfo!
+        let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.lblEditIntro.frame.origin.y -= frameKeyboard.height - (30 - 14)
+            self.btnSave.frame.origin.y -= frameKeyboard.height - (30 - 14)
+        })
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        if boolWillDisappear {
+            return
+        }
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+            self.lblEditIntro.frame.origin.y = screenHeight - 99 - 36
+            self.btnSave.frame.origin.y = screenHeight - 30 - 50
+        })
     }
 }

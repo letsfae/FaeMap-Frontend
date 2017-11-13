@@ -58,7 +58,7 @@ extension FaeMapViewController: NameCardDelegate {
             getFromURL("users/\(id)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
                 if status / 100 == 2 && result != nil {
                     let profileJSON = JSON(result!)
-                    let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", String(Key.shared.user_id), "\(id)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, false, "", ""])
+                    let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", String(Key.shared.user_id), "\(id)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, false, "", ""])
                     try! realm.write {
                         realm.add(newUser, update: true)
                     }

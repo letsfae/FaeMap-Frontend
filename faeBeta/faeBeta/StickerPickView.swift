@@ -34,9 +34,9 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     private var boolInEmojiOnlyMode: Bool = false
     
     // MARK: init
-    override init(frame : CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
+        self.backgroundColor = UIColor._246246246()
         configureHistoryPage()
         configureScrollView()
         configurePageController()
@@ -44,13 +44,13 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         stickerTabView.switcher = self
         currentScrollView.delegate = self
 
-        switchSticker(3)
-        stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
+        switchSticker(2)
+        stickerTabView.updateTabIndicator(stickerTabView.tabButtons[2])
     }
     
-    init(frame : CGRect, emojiOnly : Bool) {
+    init(frame: CGRect, emojiOnly: Bool) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)//gray color
+        self.backgroundColor = UIColor._246246246()
         if !emojiOnly {
             boolInEmojiOnlyMode = false
             configureHistoryPage()
@@ -60,8 +60,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
             stickerTabView.switcher = self
             currentScrollView.delegate = self
             
-            switchSticker(3)
-            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[3])
+            switchSticker(2)
+            stickerTabView.updateTabIndicator(stickerTabView.tabButtons[2])
         } else {
             boolInEmojiOnlyMode = true
             configureScrollViewLite()
@@ -78,11 +78,11 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     
     // MARK: setup
     private func configureScrollView() {
-        var index = 0
+        //var index = 0
         let view = StickerScrollView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 195)) //fixed high for every screen
 
         for stickerName in StickerInfoStrcut.stickerIndex {
-            index += 1
+            //index += 1
             prepareAlbum(view, name: stickerName)
         }
         attachButton(view)
@@ -108,7 +108,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
         self.pageControl.currentPage = 0
         self.pageControl.pageIndicatorTintColor = UIColor._182182182()
         self.pageControl.currentPageIndicatorTintColor = UIColor._2499090()
-        self.pageControl.backgroundColor = UIColor(red: 246 / 255, green: 246 / 255, blue: 246 / 255, alpha: 1.0)
+        self.pageControl.backgroundColor = UIColor._246246246()
         self.pageControl.addTarget(self, action: #selector(StickerPickView.changePage(_:)), for: UIControlEvents.valueChanged)
         self.addSubview(pageControl)
     }
@@ -122,7 +122,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     // create an ablum with the name and add images into it
-    private func prepareAlbum(_ view : StickerScrollView, name : String) {
+    private func prepareAlbum(_ view: StickerScrollView, name: String) {
         if name != "faeEmoji" {
             view.createNewAlbums(name: name, row: 2, col: 4)
         } else {
@@ -134,12 +134,12 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
                 view.appendNewImage(image)
             }
         }
-        StickerInfoStrcut.pageNumDictionary[name] = max(view.arrStickerAlbums.last!.intPageNumber , 1)
+        StickerInfoStrcut.pageNumDictionary[name] = max(view.arrStickerAlbums.last!.intPageNumber, 1)
         view.arrStickerAlbums.last!.findStickerDelegate = self
     }
     
     // call this method after all the album is created and populated
-    private func attachButton(_ view : StickerScrollView) {
+    private func attachButton(_ view: StickerScrollView) {
         assert(view.arrStickerAlbums.count > 0, "call this method after all the album is created and populated")
         view.attachButton()
     }
@@ -150,8 +150,8 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     /// - Parameter index: the index of the tab in all tabs
     func switchSticker(_ index: Int) {
         if index > 0 && index <= currentScrollView.arrStickerAlbums.count {
-            scrollToPage(currentScrollView.arrStickerAlbums[index - 1].intBasePage )
-            currentScrollView.currentAlbum = currentScrollView.arrStickerAlbums[index - 1]
+            scrollToPage(currentScrollView.arrStickerAlbums[index].intBasePage)
+            currentScrollView.currentAlbum = currentScrollView.arrStickerAlbums[index]
             updatePageControl()
         }
     }
@@ -194,7 +194,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
                 let currentName = currentScrollView.currentAlbum.strAlbumName
                 self.currentScrollView.currentAlbum = self.currentScrollView.arrStickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1]
                 updatePageControl()
-                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)!])
+                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! - 1])
             } else {
                 pageControl.currentPage = 0
             }
@@ -203,7 +203,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
                 let currentName = currentScrollView.currentAlbum.strAlbumName
                 self.currentScrollView.currentAlbum = self.currentScrollView.arrStickerAlbums[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1]
                 updatePageControl()
-                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 2])
+                stickerTabView.updateTabIndicator(stickerTabView.tabButtons[StickerInfoStrcut.stickerIndex.index(of: currentName)! + 1])
             } else {
                 pageControl.currentPage = pageControl.numberOfPages - 1
             }

@@ -65,6 +65,8 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var googleFilter = GMSAutocompleteFilter()
     var googlePredictions = [GMSAutocompletePrediction]()
     
+    var boolFromChat: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //navigationController?.isNavigationBarHidden = true
@@ -141,11 +143,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
-        schPlaceBar.txtSchField.placeholder = "Search Fae Map"
-        if strSearchedPlace != "Search Fae Map" {
+        schPlaceBar.txtSchField.placeholder = !boolFromChat ? "Search Fae Map" : "Search Place or Address"
+        /*if strSearchedPlace != "Search Fae Map" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false
-        }
+        }*/
         uiviewSearch.addSubview(schPlaceBar)
         
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
@@ -172,6 +174,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         view.addSubview(uiviewPics)
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
+        
         
         /**
         for _ in 0..<6 {

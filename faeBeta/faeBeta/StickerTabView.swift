@@ -28,7 +28,7 @@ class StickerTabView: UIView {
     weak var switcher : SwitchStickerDelegate!
     
     //MARK: - init
-    override init(frame : CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         tabframe = frame
         self.backgroundColor = UIColor.white
@@ -38,17 +38,16 @@ class StickerTabView: UIView {
         uiviewHead.addSubview(tabIndicator)
     }
     
-    init (frame : CGRect, emojiOnly: Bool)
-    {
-        super.init(frame : frame)
-        if(!emojiOnly){
+    init(frame: CGRect, emojiOnly: Bool) {
+        super.init(frame: frame)
+        if !emojiOnly {
             tabframe = frame
             self.backgroundColor = UIColor.white
             configureTabIndicator()
             configureHeadGroupView()
             configureScrollView()
             uiviewHead.addSubview(tabIndicator)
-        }else{
+        } else {
             tabframe = frame
             self.backgroundColor = UIColor.white
             configureTabIndicator()
@@ -117,8 +116,8 @@ class StickerTabView: UIView {
         scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
         var x : CGFloat = 8
         let y : CGFloat = 6
-        var newStickerIndex = StickerInfoStrcut.stickerIndex
-        newStickerIndex.insert("stickerMore", at: 0)
+        let newStickerIndex = StickerInfoStrcut.stickerIndex
+        //newStickerIndex.insert("stickerMore", at: 0)
         
         for name in newStickerIndex {
             let imageView = UIImageView(frame: CGRect(x: x, y: y, width: floatBtnLength, height: floatBtnLength))
@@ -143,7 +142,7 @@ class StickerTabView: UIView {
     
     private func configureTabIndicator() {
         tabIndicator = UIView(frame: CGRect(x: 0, y: 37, width: 44, height: 3))
-        tabIndicator.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
+        tabIndicator.backgroundColor = UIColor._2499090()
     }
     
     // MARK: helper

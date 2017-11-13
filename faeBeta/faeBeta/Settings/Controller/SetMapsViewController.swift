@@ -17,6 +17,7 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
     var uiviewInterval: UIView!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         self.navigationController?.isNavigationBarHidden = true
         loadNavBar()
@@ -46,6 +47,16 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let uiview = UIView()
+        uiview.backgroundColor = UIColor._241241241()
+        return uiview
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 5
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

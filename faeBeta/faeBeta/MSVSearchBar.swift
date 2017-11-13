@@ -59,6 +59,9 @@ extension MapSearchViewController {
             tblLocationRes.reloadData()
         }
         tblPlacesRes.reloadData()
+        if boolFromChat {
+            uiviewPics.isHidden = true
+        }
     }
     
     // FaeSearchBarTestDelegate

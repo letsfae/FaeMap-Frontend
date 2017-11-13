@@ -257,6 +257,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     deinit {
         unreadNotiToken?.invalidate()
+        invalidateAllTimer()
     }
     
     override func viewWillAppear(_ animated: Bool) {

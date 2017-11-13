@@ -14,6 +14,7 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
     var tblAbout: UITableView!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .white
         uiviewNavBar = FaeNavBar(frame:.zero)
         view.addSubview(uiviewNavBar)
