@@ -16,7 +16,8 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
     func sendImages(_ images: [UIImage]) {
         print("send image for avatar")
         if let image = images.first {
-            uploadProfileAvatar(image: image)
+            //uploadProfileAvatar(image: image)
+            SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "leftSliding")
         }   
     }
     
@@ -24,13 +25,15 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             picker.dismiss(animated: true, completion: nil)
-            showAlert(title: "Taking Photo Failed", message: "please try again")
+            //showAlert(title: "Taking Photo Failed", message: "please try again")
+            SetAvatar.showAlert(title: "Taking Photo Failed", message: "please try again", vc: self)
             return
         }
         picker.dismiss(animated: true, completion: nil)
-        uploadProfileAvatar(image: image)
+        //uploadProfileAvatar(image: image)
+        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "leftSliding")
     }
-    
+    /*
     func uploadProfileAvatar(image: UIImage) {
         view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
@@ -120,5 +123,5 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
         menu.addAction(showCamera)
         menu.addAction(cancel)
         self.present(menu, animated: true, completion: nil)
-    }
+    }*/
 }

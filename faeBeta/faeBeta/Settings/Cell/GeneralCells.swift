@@ -116,7 +116,8 @@ class GeneralTitleCell: UITableViewCell {
         lblDes = FaeLabel(CGRect.zero, .left, .mediumItalic, 15, UIColor._168168168())
         addSubview(lblDes)
         lblDes.numberOfLines = 0
-        addConstraintsWithFormat("H:|-20-[v0]-26-|", options: [], views: lblDes)
+        lblDes.lineBreakMode = .byWordWrapping
+        addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDes)
         lblDes.isHidden = true
         
         imgView = UIImageView()

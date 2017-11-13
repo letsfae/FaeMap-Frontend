@@ -70,6 +70,7 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         textView.center.x = screenWidth / 2
         textView.isEditable = false
         textView.isScrollEnabled = false
+        textView.tintColor = UIColor._2499090()
         textView.attributedText = NSAttributedString(string: text, attributes: [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 12)!])
         textView.sizeToFit()
         scrollview.addSubview(textView)

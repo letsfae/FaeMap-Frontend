@@ -134,10 +134,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.view.addSubview(activityIndicator)
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
-        uploadProfileAvatar()
+        //uploadProfileAvatar()
+        SetAvatar.uploadProfileAvatar(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
     }
     
-    func uploadProfileAvatar() {
+    /*func uploadProfileAvatar() {
         let avatar = FaeImage()
         avatar.image = imageViewAvatar.image
         avatar.faeUploadProfilePic { (code: Int, message: Any?) in
@@ -151,7 +152,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                 return
             }
         }
-    }
+    }*/
     
     func modifyDisplayName() {
         let user = FaeUser()
@@ -201,7 +202,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     @objc func addProfileAvatar(_ sender: UIButton) {
-        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        SetAvatar.addProfileAvatar(vc: self, type: "firstTimeLogin")
+        /*let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
             var photoStatus = PHPhotoLibrary.authorizationStatus()
@@ -254,12 +256,13 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         menu.addAction(showLibrary)
         menu.addAction(showCamera)
         menu.addAction(cancel)
-        self.present(menu, animated: true, completion: nil)
+        self.present(menu, animated: true, completion: nil)*/
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.imageViewAvatar.image = image
-        uploadProfileAvatar()
+        //uploadProfileAvatar()
+        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "firstTimeLogin")
         picker.dismiss(animated: true, completion: nil)
     }
     
