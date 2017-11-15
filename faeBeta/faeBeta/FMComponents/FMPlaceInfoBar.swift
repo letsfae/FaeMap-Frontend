@@ -48,7 +48,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 70, width: screenWidth, height: 102))
+        super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: screenWidth, height: 102))
         loadContent()
         tag = 0
         alpha = 0
@@ -349,7 +349,7 @@ class FMLocationInfoBar: UIView {
     var lblAddr: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 70, width: 414 * screenWidthFactor, height: 80))
+        super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: 414 * screenWidthFactor, height: 80))
         loadContent()
     }
     

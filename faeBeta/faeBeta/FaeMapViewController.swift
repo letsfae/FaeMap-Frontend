@@ -56,6 +56,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var imgExpbarShadow: UIImageView!
     var lblExpContent: UILabel!
     var arrExpPlace = [PlacePin]()
+    var intCurtPage = 0
     
     // Compass and Locating Self
     var btnZoom: FMZoomButton!
@@ -75,7 +76,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
-    let floatFilterHeight = 471 * screenHeightFactor // Map Filter height
+    let floatFilterHeight = 471 * screenHeightFactor + device_offset_bot // Map Filter height
     
     // Selected Place Control
     var selectedPlaceView: PlacePinAnnotationView?
@@ -117,9 +118,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var uiviewChooseLocs: FMChooseLocs!
     var routeAddress: RouteAddress!
     
-    // Selecting Location Mode
-    var imgPinOnMap: UIImageView!
-    
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: FMLocationInfoBar!
@@ -148,12 +146,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 lblSearchContent.text = "Search Fae Map"
                 btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance
             }
-            imgPinOnMap.isHidden = mapMode != .selecting
             imgSearchIcon.isHidden = mapMode == .selecting
             btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
             btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
             
+            placeClusterManager.maxZoomLevelForClustering = mapMode == .explore ? 0 : Double.greatestFiniteMagnitude
             clctViewMap.isHidden = mapMode != .explore
             imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
             imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail || mapMode == .collection
@@ -221,17 +219,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     var desiredCount = 0
     
-    // Place Detail Push Transition
-    let pdTransition: CATransition = {
-        let transition = CATransition()
-        transition.duration = 0.4
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionDefault)
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        return transition
-    }()
-    
-    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -262,7 +249,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         fullyLoaded = true
         
-//        let line = UIView(frame: CGRect(x: 0, y: btnZoom.frame.origin.y+60-4, width: screenWidth, height: 1))
+//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35, width: screenWidth, height: 1))
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
 //        view.addSubview(line)
@@ -324,7 +311,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func checkDisplayNameExisitency() {
-        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+        getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             if let _ = rsltJSON["nick_name"].string {

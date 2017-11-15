@@ -61,7 +61,7 @@ class FMDistIndicator: UIImageView {
     
     func show() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight - 74
+            self.frame.origin.y = screenHeight - 74 - device_offset_bot
         })
     }
 }

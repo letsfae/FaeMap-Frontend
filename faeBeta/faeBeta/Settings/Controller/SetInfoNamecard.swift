@@ -108,7 +108,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     }
     
     func updateInfo() {
-        getFromURL("users/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+        getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             self.strDisplayName = rsltJSON["nick_name"].stringValue

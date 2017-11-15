@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 import Alamofire
 
 typealias ImageView = UIImageView
@@ -57,7 +56,7 @@ class FaeImage: NSObject {
             let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
 
             DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postFileToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
+                postFileToURL("files", parameter: ["file": file as AnyObject, "type": self.type as AnyObject], authentication: Key.shared.headerAuthentication(), completion: { (code: Int, message: Any?) in
                     completion(code, message)
                 })
             })
@@ -69,14 +68,8 @@ class FaeImage: NSObject {
             completion(-400, "you need to save image first" as AnyObject?)
         } else {
             let file = compressImage(image)
-            let seconds = 1.0
-            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
-            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
-
-            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postImageToURL("files/users/avatar", parameter: ["avatar": file as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
-                    completion(code, message)
-                })
+            postImage(.avatar, imageData: file, completion: { (status, message) in
+                completion(status, message)
             })
         }
     }
@@ -86,14 +79,8 @@ class FaeImage: NSObject {
             completion(-400, "you need to save image first" as AnyObject?)
         } else {
             let file = compressImage(image)
-            let seconds = 1.0
-            let delay = seconds * Double(NSEC_PER_SEC) // nanoseconds per seconds
-            let dispatchTime = DispatchTime.now() + Double(Int64(delay)) / Double(NSEC_PER_SEC)
-
-            DispatchQueue.main.asyncAfter(deadline: dispatchTime, execute: {
-                postCoverImageToURL("files/users/name_card_cover", parameter: ["name_card_cover": file as AnyObject], authentication: headerAuthentication(), completion: { (code: Int, message: Any?) in
-                    completion(code, message)
-                })
+            postImage(.cover, imageData: file, completion: { (status, message) in
+                completion(status, message)
             })
         }
     }

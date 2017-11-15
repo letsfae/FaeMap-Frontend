@@ -9,33 +9,34 @@
 import UIKit
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+fileprivate func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
 // FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
 // Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
+fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l > r
+    default:
+        return rhs < lhs
+    }
 }
 
 class SignInSupportNewPassViewController: RegisterBaseViewController {
-
+    
     var cellPassword: RegisterTextfieldTableViewCell!
+    var oldPassword: String?
     var password: String?
-    var faeUser: FaeUser!
+    var faeUser = FaeUser()
     var email: String?
     var phone: String?
     var code: String?
@@ -73,12 +74,12 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     func jumpToRegisterInfo() {
         let boardLogin = RegisterInfoViewController()
         boardLogin.faeUser = faeUser
-        self.navigationController?.pushViewController(boardLogin, animated: false)
+        navigationController?.pushViewController(boardLogin, animated: false)
     }
     
     func getInfoView() -> UIView {
         let uiviewInfo = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
-        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
+        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width / 2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
         imgInfoPwd.image = UIImage(named: "InfoPassword")
         uiviewInfo.addSubview(imgInfoPwd)
         
@@ -94,11 +95,11 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     func updatePasswordInUser() {
         shouldShowActivityIndicator(true)
         if enterMode == .email {
-            let param = ["email":email!,
-                         "code":code!,
-                         "password":password!]
-            postToURL("/reset_login/password", parameter: param as [String : AnyObject]?, authentication: headerAuthentication()) {(status:Int, message: Any?) in
-                if(status / 100 == 2) {
+            let param = ["email": email!,
+                         "code": code!,
+                         "password": password!]
+            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+                if status / 100 == 2 {
                     let user = FaeUser()
                     user.whereKey("email", value: self.email!)
                     user.whereKey("password", value: self.password!)
@@ -118,19 +119,19 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                         } else {
                             print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                         }
-    //                _ = self.navigationController?.popToRootViewController(animated: true)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
+                        //                _ = self.navigationController?.popToRootViewController(animated: true)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
                     }
                 } else {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }
-        } else {
-            let param = ["phone":phone!,
-                         "code":code!,
-                         "password":password!]
-            postToURL("/reset_login/password", parameter: param as [String : AnyObject]?, authentication: headerAuthentication()) {(status:Int, message: Any?) in
-                if(status / 100 == 2) {
+        } else if enterMode == .phone {
+            let param = ["phone": phone!,
+                         "code": code!,
+                         "password": password!]
+            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+                if status / 100 == 2 {
                     let user = FaeUser()
                     user.whereKey("phone", value: self.phone!)
                     user.whereKey("password", value: self.password!)
@@ -157,6 +158,23 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }
+        } else {  // enterMode == .oldPswd
+            faeUser.whereKey("old_password", value: oldPassword!)
+            faeUser.whereKey("new_password", value: password!)
+            faeUser.updatePassword {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let vc = SetAccountViewController()
+                    vc.boolResetPswd = true
+                    var arrViewControllers = self.navigationController?.viewControllers
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.removeLast()
+                    arrViewControllers?.append(vc)
+                    self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
+                } else {
+                    print("[Fail to Reset Password] \(status) \(message!)")
+                }
+            }
         }
     }
     
@@ -165,7 +183,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
         tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -176,7 +194,7 @@ extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0:

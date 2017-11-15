@@ -5,7 +5,6 @@ use_frameworks!
 target 'faeBeta' do
     pod 'Alamofire’, '~> 4.1’
     pod 'SwiftyJSON'
-    pod 'SDWebImage', '~>3.8’
     pod 'JSQMessagesViewController'
     pod 'IDMPhotoBrowser'
     pod 'RealmSwift'

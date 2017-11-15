@@ -24,7 +24,7 @@ import SwiftyJSON
 ///   - completion: (status, result) -> Void
 func DeleteRecentItem(_ recent : JSON, completion: ((Int,Any?) -> Void)?) {
     let chat_room_id = recent["chat_id"].number
-    deleteFromURL("chats/\(chat_room_id!)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+    deleteFromURL("chats/\(chat_room_id!)", parameter: [:], completion: { (statusCode, result) in
         if(completion != nil) {
             completion!(statusCode,result)
         }
@@ -37,7 +37,7 @@ func DeleteRecentItem(_ recent : JSON, completion: ((Int,Any?) -> Void)?) {
 /// - Parameter chatRoomId: id of the chat room that user's viewing
 func clearRecentCounter(_ chatRoomId : String?) {
     if let chatRoomId = chatRoomId{
-        postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: headerAuthentication(), completion: { (statusCode, result) in
+        postToURL("chats/read", parameter: ["chat_id": chatRoomId], authentication: Key.shared.headerAuthentication(), completion: { (statusCode, result) in
             
         })
     }

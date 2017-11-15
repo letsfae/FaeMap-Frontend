@@ -993,7 +993,7 @@
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
 				B0CFC9B51CED39CF00EC356A /* ServiceViewControllers */,
-				B0D8CC731D3D525C0030939E /* Mood Avatar */,
+				B0D8CC731D3D525C0030939E /* MapAvatar */,
 				B0714D7F1D5E463B00356705 /* Chat */,
 				8537A8861E08A2B10009C39B /* LeftSlidingMenu */,
 				B33FB22C1F267C0500EC6655 /* Contacts */,
@@ -1120,13 +1120,13 @@
 			name = MyFae;
 			sourceTree = "<group>";
 		};
-		B0D8CC731D3D525C0030939E /* Mood Avatar */ = {
+		B0D8CC731D3D525C0030939E /* MapAvatar */ = {
 			isa = PBXGroup;
 			children = (
 				B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */,
 				B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */,
 			);
-			path = "Mood Avatar";
+			path = MapAvatar;
 			sourceTree = "<group>";
 		};
 		B0F688F21CEA403D00D91CF9 /* Map */ = {

@@ -10,15 +10,17 @@
 import Foundation
 import UIKit
 
-protocol FAENumberKeyboardDelegate {
+@objc protocol FAENumberKeyboardDelegate {
     // num can be -1 ~ 9. -1 means delete.
     func keyboardButtonTapped(_ num:Int)
+    @objc optional func deleteAll()
 }
 
 class FAENumberKeyboard: UIView {
     // MARK: - Interface
     var uiview: UIView?
     var delegate: FAENumberKeyboardDelegate!
+    var numMode = ""
 
     @IBOutlet var numberButtons: [UIButton]!
     @IBOutlet weak var deleteButton: UIButton!
@@ -48,12 +50,15 @@ class FAENumberKeyboard: UIView {
         for button in numberButtons {
             button.backgroundColor = UIColor.clear
             button.setAttributedTitle(NSAttributedString(string: "\(button.tag)", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 38)!]), for: UIControlState())
-            button.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
+            button.addTarget(self, action: #selector(numberButtonTapped(_:)), for: .touchUpInside)
         }
         let imgDeleteIcon = UIImageView(frame: CGRect(x: screenWidth / 6 - 20, y: 20 * screenHeightFactor * screenHeightFactor, width: 31, height: 22))
         imgDeleteIcon.image = #imageLiteral(resourceName: "erase")
         deleteButton.addSubview(imgDeleteIcon)
-        deleteButton.addTarget(self, action: #selector(FAENumberKeyboard.numberButtonTapped(_:)), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(numberButtonTapped(_:)), for: .touchUpInside)
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPress.minimumPressDuration = 0.3
+        deleteButton.addGestureRecognizer(longPress)
     }
     
     @objc func numberButtonTapped(_ sender:AnyObject) {
@@ -61,5 +66,13 @@ class FAENumberKeyboard: UIView {
         if delegate != nil {
             delegate.keyboardButtonTapped(button.tag)
         }
+    }
+    
+    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+//        if sender.state == .changed {
+            if delegate != nil && numMode == "phoneNum" {
+                delegate.deleteAll!()
+            }
+//        }
     }
 }

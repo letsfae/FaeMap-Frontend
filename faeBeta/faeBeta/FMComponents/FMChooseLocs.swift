@@ -19,7 +19,7 @@ class FMChooseLocs: UIView {
     var lblDestination: UILabel!
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: -119, width: screenWidth, height: 119))
+        super.init(frame: CGRect(x: 0, y: -119 - device_offset_top, width: screenWidth, height: 119 + device_offset_top))
         loadContent()
         layer.zPosition = 1001
     }
@@ -36,7 +36,7 @@ class FMChooseLocs: UIView {
         leftBtn.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         addSubview(leftBtn)
         addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: leftBtn)
-        addConstraintsWithFormat("V:|-21-[v0(38)]", options: [], views: leftBtn)
+        addConstraintsWithFormat("V:|-\(21+device_offset_top)-[v0(38)]", options: [], views: leftBtn)
         leftBtn.addTarget(self, action: #selector(actionBackBtn), for: .touchUpInside)
         
         let imgLhsSign = UIImageView()
@@ -44,13 +44,13 @@ class FMChooseLocs: UIView {
         imgLhsSign.image = #imageLiteral(resourceName: "place_new_choose_locations_lhs")
         addSubview(imgLhsSign)
         addConstraintsWithFormat("H:|-46-[v0(19)]", options: [], views: imgLhsSign)
-        addConstraintsWithFormat("V:|-32-[v0(67)]", options: [], views: imgLhsSign)
+        addConstraintsWithFormat("V:|-\(32+device_offset_top)-[v0(67)]", options: [], views: imgLhsSign)
         
         let lineMid = UIView()
         lineMid.backgroundColor = UIColor._200199204()
         addSubview(lineMid)
         addConstraintsWithFormat("H:|-69-[v0]-68-|", options: [], views: lineMid)
-        addConstraintsWithFormat("V:|-64.5-[v0(1)]", options: [], views: lineMid)
+        addConstraintsWithFormat("V:|-\(64.5+device_offset_top)-[v0(1)]", options: [], views: lineMid)
         
         let lineBottom = UIView()
         lineBottom.backgroundColor = UIColor._200199204()
@@ -66,7 +66,7 @@ class FMChooseLocs: UIView {
         lblStartPoint.isUserInteractionEnabled = true
         addSubview(lblStartPoint)
         addConstraintsWithFormat("H:|-72-[v0]-68-|", options: [], views: lblStartPoint)
-        addConstraintsWithFormat("V:|-18.5-[v0(43)]", options: [], views: lblStartPoint)
+        addConstraintsWithFormat("V:|-\(18.5+device_offset_top)-[v0(43)]", options: [], views: lblStartPoint)
         
         lblDestination = UILabel()
         lblDestination.textColor = UIColor._898989()
@@ -75,7 +75,7 @@ class FMChooseLocs: UIView {
         lblDestination.isUserInteractionEnabled = true
         addSubview(lblDestination)
         addConstraintsWithFormat("H:|-72-[v0]-68-|", options: [], views: lblDestination)
-        addConstraintsWithFormat("V:|-69-[v0(43)]", options: [], views: lblDestination)
+        addConstraintsWithFormat("V:|-\(69+device_offset_top)-[v0(43)]", options: [], views: lblDestination)
     }
     
     func updateStartPoint(name: String) {

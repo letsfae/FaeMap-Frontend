@@ -88,10 +88,10 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 self.arrLocations.removeAll()
                 for col in colArray {
                     let data = PinCollection(json: col)
-                    if data.colType == "place" {
+                    if data.type == "place" {
                         self.arrPlaces.append(data)
                     }
-                    if data.colType == "location" {
+                    if data.type == "location" {
                         self.arrLocations.append(data)
                     }
                 }
@@ -323,10 +323,10 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnLocations.tag = 1
         btnLocations.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         
-        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnPlaces.addSubview(lblPlaces)
         
-        lblLocations = FaeLabel(CGRect(x: 104, y: 16, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblLocations = FaeLabel(CGRect(x: 104, y: 14, width: 180 , height: 25), .left, .medium, 18, UIColor._898989())
         btnLocations.addSubview(lblLocations)
         
         let imgPlaces = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
@@ -458,8 +458,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     @objc func hide() {
         UIView.animate(withDuration: 0.3, animations: {
             self.frame.origin.y = screenHeight
-            if self.btnFilterIcon.center.y < screenHeight - 25 {
-                self.btnFilterIcon.center.y = screenHeight - 25
+            if self.btnFilterIcon.center.y < screenHeight - 25 - device_offset_bot {
+                self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
             }
         })
     }
@@ -475,7 +475,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let collection = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.colId)
+        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.id)
         cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell
     }
@@ -491,13 +491,13 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             selectedIndexPath = indexPath
         }
         let colInfo = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-        FaeCollection.shared.getOneCollection(String(colInfo.colId)) { (status, message) in
+        FaeCollection.shared.getOneCollection(String(colInfo.id)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let arrLocPinId = resultJson["pins"].arrayValue
             let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
-            self.delegate?.showSavedPins(type: colInfo.colType, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.colName)
+            self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
         }
     }
     

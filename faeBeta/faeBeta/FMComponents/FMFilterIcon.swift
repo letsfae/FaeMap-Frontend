@@ -58,7 +58,7 @@ class FMFilterIcon: UIButton {
         adjustsImageWhenDisabled = false
         adjustsImageWhenHighlighted = false
         center.x = screenWidth / 2
-        center.y = screenHeight - 25
+        center.y = screenHeight - 25 - device_offset_bot
         
         startAnimation()
     }
@@ -129,7 +129,7 @@ class FMFilterIcon: UIButton {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.polygonInside.alpha = 0
             self.polygonOutside.transform = CGAffineTransform.identity
-            if self.center.y == screenHeight - 25 {
+            if self.center.y == screenHeight - 25 - device_offset_bot {
                 self.polygonOutside.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
             }
         }) { _ in
@@ -142,7 +142,7 @@ class FMFilterIcon: UIButton {
     }
     
     func startIconSpin() {
-        guard self.center.y == screenHeight - 25 else { return }
+        guard self.center.y == screenHeight - 25 - device_offset_bot else { return }
         guard isSpinning == false else { return }
         self.boolHideInsides = true
         self.isEnabled = false

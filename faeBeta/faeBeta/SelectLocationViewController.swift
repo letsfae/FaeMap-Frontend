@@ -89,6 +89,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadLocationView()
         loadPlaceInfoBar()
         fullyLoaded = true
+//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35 - 13, width: screenWidth, height: 1))
+//        line.layer.borderColor = UIColor.black.cgColor
+//        line.layer.borderWidth = 1
+//        view.addSubview(line)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -174,17 +178,18 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
         view.addSubview(btnLocat)
         view.addConstraintsWithFormat("H:|-21-[v0(60)]", options: [], views: btnLocat)
-        view.addConstraintsWithFormat("V:[v0(60)]-13-|", options: [], views: btnLocat)
+        view.addConstraintsWithFormat("V:[v0(60)]-\(13+device_offset_bot)-|", options: [], views: btnLocat)
         
         btnSelect = FMDistIndicator()
-        btnSelect.frame.origin.y = screenHeight - 74
+        btnSelect.frame.origin.y = screenHeight - 74 - device_offset_bot
         btnSelect.lblDistance.text = "Select"
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
         
         btnZoom = FMZoomButton()
-        btnZoom.frame.origin.y = 664 * screenHeightFactor
+        btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
+        btnZoom.mapView = faeMapView
         view.addSubview(btnZoom)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
