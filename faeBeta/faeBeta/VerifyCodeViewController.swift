@@ -9,14 +9,15 @@
 import UIKit
 
 
-protocol VerifyCodeDelegate {
-    func verifyPhoneSucceed()
-    func verifyEmailSucceed()
+@objc protocol VerifyCodeDelegate {
+    @objc optional func verifyPhoneSucceed()
+    @objc optional func verifyEmailSucceed()
 }
 
 enum EnterVerifyCodeMode {
     case email
     case phone
+    case oldPswd
 }
 
 enum EnterEmailMode {
@@ -39,6 +40,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     var strCountryCode = ""
     var strPhoneNumber = ""
     var strEmail = ""
+    var boolUpdateEmail = false
     var delegate: VerifyCodeDelegate!
     var updatePhoneDelegate: UpdateUsrnameEmailDelegate!
     var faeUser = FaeUser()
@@ -187,6 +189,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                 view.addSubview(btnOtherMethod)
             }
             break
+        default:
+            break
         }
     }
     
@@ -202,7 +206,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     }
     
     @objc func actionBack(_ sender: UIButton) {
-        if enterPhoneMode == .contacts {
+        if enterMode == .phone && enterPhoneMode == .contacts {
             dismiss(animated: false)
         } else {
             navigationController?.popViewController(animated: true)
@@ -229,6 +233,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             arrControllers?.append(vcEmail)
             navigationController?.setViewControllers(arrControllers!, animated: true)
             break
+        default:
+            break
         }
     }
     
@@ -237,115 +243,145 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         if enterMode == .email {
             faeUser.whereKey("email", value: strEmail)
             faeUser.whereKey("code", value: verificationCodeView.displayValue)
-            faeUser.validateCode{ (statusCode, result) in
-                if(statusCode / 100 == 2) {
-                    switch self.enterEmailMode {
-                    case .signInSupport:
-                        let controller = SignInSupportNewPassViewController()
-                        controller.enterMode = self.enterMode
-                        controller.email = self.strEmail
-                        controller.code = self.verificationCodeView.displayValue
-                        self.navigationController?.pushViewController(controller, animated: true)
-                        break
-                    case .settings:
-                        self.faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
-                            if(statusCode / 100 == 2) {
-                                print("Successfully get account info \(statusCode) \(result!)")
-                                Key.shared.userEmailVerified = true
-                                self.delegate?.verifyEmailSucceed()
-                                self.navigationController?.popViewController(animated: true)
-                            } else {
-                                print("Fail to get account info \(statusCode) \(result!)")
-                            }
+            print("email: \(strEmail) code: \(verificationCodeView.displayValue)")
+            // reset_login veify
+            switch enterEmailMode {
+            case .signInSupport, .signup:
+                faeUser.validateCode{ (statusCode, result) in
+                    if statusCode / 100 == 2 {
+                        if self.enterEmailMode == .signInSupport {
+                            let controller = SignInSupportNewPassViewController()
+                            controller.enterMode = self.enterMode
+                            controller.email = self.strEmail
+                            controller.code = self.verificationCodeView.displayValue
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        } else {
+                            let nextRegister = RegisterConfirmViewController()
+                            nextRegister.faeUser = self.faeUser
+                            self.navigationController?.pushViewController(nextRegister, animated: false)
                         }
-                        break
-                    case .signup:
-                        let nextRegister = RegisterConfirmViewController()
-                        nextRegister.faeUser = self.faeUser
-                        self.navigationController?.pushViewController(nextRegister, animated: false)
-                        break
+                    } else {
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
+                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnContinue.isEnabled = false
+                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
-                } else {
-                    for _ in 0..<6 {
-                        _ = self.verificationCodeView.addDigit(-1)
-                    }
-                    self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                    self.btnContinue.isEnabled = false
-                    self.btnContinue.backgroundColor = UIColor._255160160()
+                    self.indicatorView.stopAnimating()
                 }
-                self.indicatorView.stopAnimating()
+                break
+            case .settings:
+                faeUser.verifyEmail {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        Key.shared.userEmailVerified = true
+                        if self.boolUpdateEmail {
+                            let vc = UpdateUsrnameEmailViewController()
+                            vc.enterMode = .email
+                            vc.strEmail = self.strEmail
+                            var arrViewControllers = self.navigationController?.viewControllers
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
+                            arrViewControllers?.append(vc)
+                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                        } else {
+                            self.delegate?.verifyEmailSucceed!()
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    } else {
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
+                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnContinue.isEnabled = false
+                        self.btnContinue.backgroundColor = UIColor._255160160()
+                    }
+                    self.indicatorView.stopAnimating()
+                }
+                break
             }
         } else {
             faeUser.whereKey("phone", value: "(" + strCountryCode + ")" + strPhoneNumber)
             faeUser.whereKey("code", value: verificationCodeView.displayValue)
-            faeUser.verifyPhoneNumber {(status, message) in
-                print("[verify phone] \(status) \(message!)")
-                if(status / 100 == 2 ) {
-                    switch self.enterPhoneMode {
-                    case .signInSupport:
-                        let controller = SignInSupportNewPassViewController()
-                        controller.enterMode = self.enterMode
-                        controller.phone = "(" + self.strCountryCode + ")" + self.strPhoneNumber
-                        controller.code = self.verificationCodeView.displayValue
-                        self.navigationController?.pushViewController(controller, animated: true)
-                        break
-                    case .settings:
-                        let vc = UpdateUsrnameEmailViewController()
-                        vc.enterMode = .phone
-                        vc.strCountry = self.strCountry + " +" + self.strCountryCode
-                        vc.strPhone = self.strPhoneNumber
-                        var arrViewControllers = self.navigationController?.viewControllers
-                        arrViewControllers?.removeLast()
-                        arrViewControllers?.removeLast()
-                        vc.delegate = arrViewControllers?.last as! SetAccountViewController
-                        arrViewControllers?.append(vc)
-                        self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
-                        break
-                    case .settingsUpdate:
-                        let vc = UpdateUsrnameEmailViewController()
-                        vc.enterMode = .phone
-                        vc.strCountry = self.strCountry + " +" + self.strCountryCode
-                        vc.strPhone = self.strPhoneNumber
-                        var arrViewControllers = self.navigationController?.viewControllers
-                        arrViewControllers?.removeLast()
-                        arrViewControllers?.removeLast()
-                        arrViewControllers?.removeLast()
-                        vc.delegate = arrViewControllers?.last as! SetAccountViewController
-                        arrViewControllers?.append(vc)
-                        self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
-                        break
-                    case .contacts:
-                        self.delegate?.verifyPhoneSucceed()
-                        self.dismiss(animated: false)
-                        break
-                    case .signup:
-                        let nextRegister = RegisterConfirmViewController()
-                        nextRegister.faeUser = self.faeUser
-                        self.navigationController?.pushViewController(nextRegister, animated: false)
-                        break
-                    }
-//                        self.faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
-//                            if(statusCode / 100 == 2) {
-//                                print("Successfully get account info \(statusCode) \(result!)")
-//                                Key.shared.userPhoneVerified = true
-//                                self.updatePhoneDelegate?.updatePhone()
-//                            } else {
-//                                print("Fail to get account info \(statusCode) \(result!)")
-//                            }
-//                        }
-                } else {
-                    for _ in 0..<6 {
-                        _ = self.verificationCodeView.addDigit(-1)
-                    }
-                    if self.enterPhoneMode == .contacts {
-                        self.lblTitle.text = "Oops... That's not the right\ncode. Please try again!"
+            switch enterPhoneMode {
+            case .signInSupport, .signup:
+                faeUser.validateCode {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        if self.enterPhoneMode == .signInSupport {
+                            let controller = SignInSupportNewPassViewController()
+                            controller.enterMode = self.enterMode
+                            controller.phone = "(" + self.strCountryCode + ")" + self.strPhoneNumber
+                            controller.code = self.verificationCodeView.displayValue
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        } else {
+                            let nextRegister = RegisterConfirmViewController()
+                            nextRegister.faeUser = self.faeUser
+                            self.navigationController?.pushViewController(nextRegister, animated: false)
+                        }
                     } else {
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
                         self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        self.btnContinue.isEnabled = false
+                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
-                    self.btnContinue.isEnabled = false
-                    self.btnContinue.backgroundColor = UIColor._255160160()
+                    self.indicatorView.stopAnimating()
                 }
-                self.indicatorView.stopAnimating()
+                break
+            case .settings, .settingsUpdate, .contacts:
+                faeUser.verifyPhoneNumber {(status, message) in
+                    if status / 100 == 2 {
+                        switch self.enterPhoneMode {
+                        case .settings:
+                            let vc = UpdateUsrnameEmailViewController()
+                            vc.enterMode = .phone
+                            vc.strCountry = self.strCountry + " +" + self.strCountryCode
+                            vc.strPhone = self.strPhoneNumber
+                            var arrViewControllers = self.navigationController?.viewControllers
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
+                            arrViewControllers?.append(vc)
+                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                            break
+                        case .settingsUpdate:
+                            let vc = UpdateUsrnameEmailViewController()
+                            vc.enterMode = .phone
+                            vc.strCountry = self.strCountry + " +" + self.strCountryCode
+                            vc.strPhone = self.strPhoneNumber
+                            var arrViewControllers = self.navigationController?.viewControllers
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            arrViewControllers?.removeLast()
+                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
+                            arrViewControllers?.append(vc)
+                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                            break
+                        case .contacts:
+                            self.delegate?.verifyPhoneSucceed!()
+                            self.dismiss(animated: false)
+                            break
+                        default:
+                            break
+                        }
+                    } else {
+                        for _ in 0..<6 {
+                            _ = self.verificationCodeView.addDigit(-1)
+                        }
+                        if self.enterPhoneMode == .contacts {
+                            self.lblTitle.text = "Oops... That's not the right\ncode. Please try again!"
+                        } else {
+                            self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                        }
+                        self.btnContinue.isEnabled = false
+                        self.btnContinue.backgroundColor = UIColor._255160160()
+                    }
+                    self.indicatorView.stopAnimating()
+                }
+                break
             }
         }
     }
@@ -385,9 +421,9 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     
     @objc func resendVerificationCode() {
         if enterMode == .email {
-            postToURL("reset_login/code", parameter: ["email": strEmail as AnyObject], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
         } else {
-            postToURL("reset_login/code", parameter: ["phone": "(" + strCountryCode + ")" + strPhoneNumber as AnyObject], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["phone": "(" + strCountryCode + ")" + strPhoneNumber], authentication: nil, completion: {(statusCode, result) in })
         }
         startTimer()
         btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)

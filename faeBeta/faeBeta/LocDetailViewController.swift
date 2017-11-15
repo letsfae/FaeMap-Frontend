@@ -349,7 +349,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin()
+        featureDelegate?.getRouteToPin(mode: .location)
         navigationController?.popViewController(animated: false)
     }
     
@@ -385,11 +385,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // AddPlacetoCollectionDelegate
-    func cancelAddPlace() {
-        hideAddCollectionView()
-    }
-    
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .location
@@ -402,22 +397,31 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.colId
+        vcList.colId = uiviewAfterAdded.selectedCollection.id
         vcList.colInfo = uiviewAfterAdded.selectedCollection
         vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
     }
     
     // AfterAddedToListDelegate
-    func undoCollect(colId: Int) {
+    func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()
-        if uiviewSavedList.arrListSavedThisPin.contains(colId) {
-            let arrListIds = uiviewSavedList.arrListSavedThisPin
-            arrListSavedThisPin = arrListIds.filter { $0 != colId }
-            uiviewSavedList.arrListSavedThisPin = arrListSavedThisPin
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+            break
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+            break
         }
-        guard uiviewSavedList.arrListSavedThisPin.count <= 0 else { return }
-        hideSavedNoti()
+        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+            hideSavedNoti()
+        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+            savedNotiAnimation()
+        }
     }
 }

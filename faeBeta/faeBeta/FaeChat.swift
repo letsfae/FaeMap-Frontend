@@ -116,7 +116,7 @@ class FaeChat {
         message["sender"] = String(Key.shared.user_id)
         do {
             let json = try JSONSerialization.data(withJSONObject: message, options: [])
-            postToURL("chats_v2", parameter: ["receiver_id": members[1] as AnyObject, "message": String(data: json, encoding: .utf8)!, "type": "text"], authentication: headerAuthentication(), completion: { statusCode, result in
+            postToURL("chats_v2", parameter: ["receiver_id": members[1], "message": String(data: json, encoding: .utf8)!, "type": "text"], authentication: Key.shared.headerAuthentication(), completion: { statusCode, result in
                 if statusCode / 100 == 2 {
                     if (result as? NSDictionary) != nil {
                         print("\(statusCode) \(String(describing: message["index"]))")
@@ -135,7 +135,7 @@ class FaeChat {
     }
     
     func getMessageFromServer() {
-        getFromURL("chats_v2/unread", parameter: nil, authentication: headerAuthentication()) { status, result in
+        getFromURL("chats_v2/unread", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             if status == 401 {
                 if let root = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
                     if Key.shared.is_Login != 0 {
@@ -157,7 +157,7 @@ class FaeChat {
                     let unread_count = dictItem["unread_count"] as! Int
                     let chatIdOnServer = dictItem["chat_id"] as! Int
                     if chat_id == 1 {
-                        deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], authentication: headerAuthentication(), completion: { statusCode, _ in
+                        deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], completion: { statusCode, _ in
                             if statusCode / 100 == 2 {
                                 print("delete \(chatIdOnServer) successfully")
                             }
@@ -167,7 +167,7 @@ class FaeChat {
                         // while unread_count > 0 {
                         for _ in 0...unread_count / 50 {
                             callGroup.enter()
-                            getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) { _, result in
+                            getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) { _, result in
                                 if let response = result as? NSDictionary {
                                     // unread_count = response["unread_count"] as! Int
                                     let unreadMessages = response["messages"] as! NSArray
@@ -208,7 +208,7 @@ class FaeChat {
             if let _ = realm.filterUser(login_user_id, id: user.string!) {
                 callGroup.leave()
             } else {
-                getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
+                getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
                     if status / 100 == 2 && result != nil {
                         let profileJSON = JSON(result!)
                         let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, false, "", ""])

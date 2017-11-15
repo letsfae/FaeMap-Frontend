@@ -41,7 +41,7 @@ class FaeAvatarView: UIImageView {
             guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }
             DispatchQueue.main.async(execute: {
-                guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
+                guard let imageToCache = UIImage(data: imageRawData!) else { return }
                 if self.userID == id {
                     self.image = imageToCache
                 }
@@ -54,7 +54,7 @@ class FaeAvatarView: UIImageView {
         getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
             guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }
-            guard let image = UIImage.sd_image(with: imageRawData) else { return }
+            guard let image = UIImage(data: imageRawData!) else { return }
             let photos = IDMPhoto.photos(withImages: [image])
             self.presentPhotoBrowser(photos: photos)
         }

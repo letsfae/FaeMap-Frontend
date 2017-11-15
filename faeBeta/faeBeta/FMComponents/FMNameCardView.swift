@@ -48,9 +48,21 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var boolOptionsOpened = false
     
     let initialFrame = CGRect.zero
-    let secondaryFrame = CGRect(x: 160, y: 175, w: 0, h: 0) // y: 350
-    let initFrame = CGRect(x: 269, y: 180, w: 0, h: 0)
-    let nextFrame = CGRect(x: 105, y: 180, w: 164, h: 110)
+    let secondaryFrame: CGRect = {
+        return CGRect(x: 160, y: 175, w: 0, h: 0) // y: 350
+    }()
+    let initFrame: CGRect = {
+//        if screenHeight == 812 {
+//            return CGRect(x: 269, y: 180 / 736 * 812, w: 0, h: 0)
+//        }
+        return CGRect(x: 269, y: 180, w: 0, h: 0)
+    }()
+    let nextFrame: CGRect = {
+//        if screenHeight == 812 {
+//            return CGRect(x: 105, y: 180 / 736 * 812, w: 164, h: 110)
+//        }
+        return CGRect(x: 105, y: 180, w: 164, h: 110)
+    }()
     let firstBtnFrame = CGRect(x: 129, y: 220, w: 50, h: 51)
     let secondBtnFrame = CGRect(x: 198, y: 220, w: 50, h: 51)
     
@@ -84,6 +96,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     var uiviewBackground: UIButton!
     
+    var cgfloatCenter: CGFloat = {
+        return 276 / 736 * screenHeight
+    }()
+    
     var boolSmallSize: Bool = false {
         didSet {
             guard fullLoaded else { return }
@@ -105,7 +121,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         center.x = screenWidth / 2
-        center.y = 276 * screenHeightFactor // 451
+        center.y = cgfloatCenter // 451
         self.frame.size.width = 320 * screenWidthFactor
         loadContent()
         fullLoaded = true
@@ -116,7 +132,11 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func showFullNameCard() {
-        self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
+        var iPhone_X_offset: CGFloat = 129
+        if screenHeight == 812 {
+            iPhone_X_offset = 129 / 736 * 812 + 50
+        }
+        self.frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)
         self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
         self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
         self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
@@ -298,8 +318,12 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         } else {
             imgMoodAvatar.image = avatar
         }
+        var iPhone_X_offset: CGFloat = 129
+        if screenHeight == 812 {
+            iPhone_X_offset = 129 / 736 * 812
+        }
         UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.frame = CGRect(x: 47, y: 129, w: 320, h: 350)
+            self.frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: self.boolSmallSize ? 301 : 350) // height 301
             self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
             self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
@@ -369,7 +393,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.uiviewPrivacy.frame = self.initialFrame
             self.frame = CGRect.zero
             self.center.x = screenWidth / 2
-            self.center.y = 276 * screenWidthFactor // 451
+            self.center.y = self.cgfloatCenter // 451
             self.frame.size.width = 320 * screenWidthFactor
             self.imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
             self.imgMoodAvatar.image = nil

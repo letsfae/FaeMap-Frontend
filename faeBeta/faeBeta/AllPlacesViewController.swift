@@ -143,6 +143,10 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
+        let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
+        if mbIsOn {
+            Key.shared.initialCtrler?.goToMapBoard(animated: false)
+        }
         navigationController?.popViewController(animated: false)
     }
     
@@ -161,6 +165,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             delegate?.jumpToPlaces?(searchText: "fromAllPlaces", places: searchedPlaces, selectedLoc: CLLocation())
         }
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     

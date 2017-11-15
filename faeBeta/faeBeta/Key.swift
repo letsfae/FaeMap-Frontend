@@ -25,6 +25,12 @@ enum ServerType {
     case production
 }
 
+enum ContentType {
+    case json
+    case data
+    case normal
+}
+
 class Key: NSObject { //  singleton class
     
     static let shared = Key()
@@ -54,14 +60,6 @@ class Key: NSObject { //  singleton class
     var hideNameCardOptions: Bool = false
     var disableGender: Bool = false
     var disableAge: Bool = false
-    
-    // API Fetching Headers
-    var version = "x.faeapp.v1"
-    var headerAccept = "application/x.faeapp.v1+json"
-    var headerContentType = "application/x-www-form-urlencoded"
-    let headerClientVersion = "fae-ios-1.0.0"
-    var headerDeviceID = ""
-    var headerUserAgent = "iPhone"
     
     // API Authorizations
     var userToken = ""
@@ -105,6 +103,7 @@ class Key: NSObject { //  singleton class
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
     
+    var initialCtrler: InitialPageController?
     var FMVCtrler: FaeMapViewController?
     var mapHeadTitle: String = ""
     
@@ -129,18 +128,59 @@ class Key: NSObject { //  singleton class
             })
         }
     }
-}
-
-func headerAuthentication() -> [String: AnyObject] {
-    if Key.shared.userTokenEncode != "" {
-        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
+    
+    // API Fetching Headers
+    var version = "x.faeapp.v1"
+    var headerAccept = "application/x.faeapp.v1+json"
+    var headerContentType = "application/x-www-form-urlencoded"
+    let headerClientVersion = "fae-ios-1.0.0"
+    var headerDeviceID = ""
+    var headerUserAgent = "iPhone"
+    
+    func header(auth: Bool, type: ContentType) -> [String: String] {
+        var header = [
+            "User-Agent": Key.shared.headerUserAgent,
+            "Fae-Client-Version": Key.shared.headerClientVersion,
+            "Device-ID" : Key.shared.headerDeviceID,
+            "Accept": Key.shared.headerAccept,
+        ]
+        if auth {
+            if Key.shared.userTokenEncode != "" {
+                header["Authorization"] = Key.shared.userTokenEncode
+            }
+            else if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+                header["Authorization"] = Key.shared.userTokenEncode
+            }
+            else if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+                Key.shared.userTokenEncode = encode
+                header["Authorization"] = Key.shared.userTokenEncode
+            }
+        }
+        switch type {
+        case .normal:
+            header["Content-Type"] = "application/x-www-form-urlencoded"
+            break
+        case .data:
+            header["Content-Type"] = "application/form-data"
+            break
+        case .json:
+            header["Content-Type"] = "application/json"
+            break
+        }
+        return header
     }
-    if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
-        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
+    
+    func headerAuthentication() -> [String: String] {
+        if Key.shared.userTokenEncode != "" {
+            return ["Authorization": Key.shared.userTokenEncode]
+        }
+        if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+            return ["Authorization": Key.shared.userTokenEncode]
+        }
+        if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+            Key.shared.userTokenEncode = encode
+            return ["Authorization": Key.shared.userTokenEncode]
+        }
+        return [:]
     }
-    if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
-        Key.shared.userTokenEncode = encode
-        return ["Authorization": Key.shared.userTokenEncode as AnyObject]
-    }
-    return [:]
 }

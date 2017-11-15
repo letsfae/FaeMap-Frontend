@@ -18,7 +18,11 @@ extension ContactsViewController {
         // Initialize the navigation bar.
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         view.addSubview(uiviewNavBar)
-        uiviewNavBar.loadBtnConstraints()
+//        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         
@@ -36,12 +40,12 @@ extension ContactsViewController {
     }
     
     func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 103))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
-        uiviewDropDownMenu.frame.origin.y = -39 // 64 - 103
+        uiviewDropDownMenu.frame.origin.y = -36 // 65 - 101
         
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 103, width: screenWidth, height: 1))
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = screenWidth
         bottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewDropDownMenu.addSubview(bottomLine)
@@ -52,7 +56,7 @@ extension ContactsViewController {
         btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
         btnTop.backgroundColor = .clear
         
-        btnBottom = UIButton(frame: CGRect(x: 0, y: 52, width: screenWidth, height: 50))
+        btnBottom = UIButton(frame: CGRect(x: 0, y: 51, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnBottom)
         btnBottom.tag = 1
         btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
@@ -60,27 +64,26 @@ extension ContactsViewController {
         
         let imgTop = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
         let imgBottom = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
-        imgTop.image = #imageLiteral(resourceName: "FFFselected")
-        imgBottom.image = #imageLiteral(resourceName: "RRselected")
+        imgTop.image = #imageLiteral(resourceName: "contact_friends")
+        imgBottom.image = #imageLiteral(resourceName: "contact_requests")
         btnTop.addSubview(imgTop)
         btnBottom.addSubview(imgBottom)
         
-        lblTop = UILabel(frame: CGRect(x: 104, y: 16, width: 100, height: 25))
+        lblTop = UILabel(frame: CGRect(x: 104, y: 15, width: 150, height: 25))
         lblTop.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addSubview(lblTop)
-        updateFriendCount()
         
-        lblBottom = UILabel(frame: CGRect(x: 104, y: 16, width: 100, height: 25))
+        lblBottom = UILabel(frame: CGRect(x: 104, y: 15, width: 150, height: 25))
         lblBottom.textColor = UIColor._898989()
         lblBottom.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblBottom.text = "Requests"
         btnBottom.addSubview(lblBottom)
+        updateFriendCount()
         
         let uiviewDropMenuLineTop = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuLineTop)
         uiviewDropMenuLineTop.backgroundColor = UIColor._206203203()
         
-        imgTick = UIImageView(frame: CGRect(x: screenWidth - 75, y: 20, width: 16, height: 16))
+        imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
         uiviewDropDownMenu.addSubview(imgTick)
         
@@ -98,6 +101,21 @@ extension ContactsViewController {
         attributedStr.append(count)
         
         lblTop.attributedText = attributedStr
+        
+        let attributedStr2 = NSMutableAttributedString()
+        if cellStatus == 1 {
+            countRequests = countReceived
+        } else if cellStatus == 2 {
+            countRequests = countSent
+        } else {
+            countRequests = countReceived + countSent
+        }
+        let strRequests = NSAttributedString(string: "Requests ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let strTotal = NSAttributedString(string: "(\(countRequests))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
+        attributedStr2.append(strRequests)
+        attributedStr2.append(strTotal)
+        
+        lblBottom.attributedText = attributedStr2
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
@@ -110,7 +128,7 @@ extension ContactsViewController {
     
     @objc func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.2, animations: {
-            self.uiviewDropDownMenu.frame.origin.y = -39
+            self.uiviewDropDownMenu.frame.origin.y = -36
         })
         navBarMenuBtnClicked = false
         schbarContacts.txtSchField.resignFirstResponder()
@@ -120,14 +138,14 @@ extension ContactsViewController {
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = 64
+                self.uiviewDropDownMenu.frame.origin.y = 65
             })
             navBarMenuBtnClicked = true
             btnNavBarSetTitle()
             updateFriendCount()
         } else {
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = -39
+                self.uiviewDropDownMenu.frame.origin.y = -36
             })
             navBarMenuBtnClicked = false
             btnNavBarSetTitle()

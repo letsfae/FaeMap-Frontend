@@ -30,11 +30,12 @@ extension FaeMapViewController {
         placeClusterManager.minUniqueLocationsForClustering = 3
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
+        placeClusterManager.marginFactor = 0.0
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self
         userClusterManager.cellSize = 100
-        userClusterManager.marginFactor = 0.15
+        userClusterManager.marginFactor = 0.0
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
         locationPinClusterManager.delegate = self
@@ -58,7 +59,7 @@ extension FaeMapViewController {
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
         imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
+        imgSchbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgSchbarShadow)
         imgSchbarShadow.layer.zPosition = 500
@@ -137,7 +138,7 @@ extension FaeMapViewController {
         btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
-        btnOpenChat = UIButton(frame: CGRect(x: 12, y: screenHeight - 90, width: 79, height: 79))
+        btnOpenChat = UIButton(frame: CGRect(x: 12, y: screenHeight - 90 - device_offset_bot, width: 79, height: 79))
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
@@ -157,7 +158,7 @@ extension FaeMapViewController {
         btnOpenChat.addSubview(lblUnreadCount)
         
         // Create pin on main map
-        btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90, width: 79, height: 79))
+        btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90 - device_offset_bot, width: 79, height: 79))
         btnDiscovery.setImage(UIImage(named: "mainScreenDiscovery"), for: .normal)
         view.addSubview(btnDiscovery)
         btnDiscovery.addTarget(self, action: #selector(self.actionOpenExplore(_:)), for: .touchUpInside)
@@ -166,7 +167,7 @@ extension FaeMapViewController {
     
     func loadExploreBar() {
         imgExpbarShadow = UIImageView()
-        imgExpbarShadow.frame = CGRect(x: 2, y: 17, width: 410 * screenWidthFactor, height: 60)
+        imgExpbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
         imgExpbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
         view.addSubview(imgExpbarShadow)
         imgExpbarShadow.layer.zPosition = 500

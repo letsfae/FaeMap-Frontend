@@ -44,7 +44,8 @@ class General: NSObject {
             }
             guard status / 100 == 2 || status / 100 == 3 else { return }
             DispatchQueue.main.async(execute: {
-                guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
+                guard imageRawData != nil else { return }
+                guard let imageToCache = UIImage(data: imageRawData!) else { return }
                 faeImageCache.setObject(imageToCache, forKey: userid as AnyObject)
                 completion(imageToCache)
             })
@@ -145,16 +146,16 @@ class General: NSObject {
         getPlaces.whereKey("max_count", value: "\(count)")
         getPlaces.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
-                completion(status, JSON())
+                completion(status, JSON.null)
                 return
             }
             completion(status, mapPlaceJSON)

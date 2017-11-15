@@ -22,18 +22,14 @@ class FaeUser: NSObject {
     
     static let shared = FaeUser()
     
-    var keyValue = [String: AnyObject]()
-    
-    override init() {
-        
-    }
+    var keyValue = [String: String]()
     
     func whereKey(_ key: String, value: String) {
-        keyValue[key] = value as AnyObject?
+        keyValue[key] = value
     }
     
     func clearKeyValue() {
-        keyValue = [String: AnyObject]()
+        keyValue = [String: String]()
     }
     
     /* faeuser sign up function
@@ -129,8 +125,8 @@ class FaeUser: NSObject {
         Key.shared.userToken = str
         Key.shared.userTokenEncode = encode
         Key.shared.is_Login = 1
-        Key.shared.userEmail = keyValue["email"] != nil ? keyValue["email"] as! String : ""
-        Key.shared.userPassword = keyValue["password"] as! String
+        Key.shared.userEmail = keyValue["email"] ?? ""
+        Key.shared.userPassword = keyValue["password"]!
         
         LocalStorageManager.shared.logInStorage()
     }
@@ -140,9 +136,8 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func logOut(_ completion: @escaping (Int, Any?) -> Void) { // clear the login token is enough
-        let headerToken = headerAuthentication() //this code may set is_Login to 1
         clearLogInInfo()
-        deleteFromURL("authentication", parameter: [:], authentication: headerToken) { (status: Int, message: Any?) in
+        deleteFromURL("authentication", parameter: [:]) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 // success
             } else {
@@ -168,7 +163,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func checkEmailExistence(_ completion: @escaping (Int, Any?) -> Void) {
-        if let email = keyValue["email"] as? String {
+        if let email = keyValue["email"] {
             getFromURL("existence/email/" + email, parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
                 // self.clearKeyValue()
                 completion(status, message)
@@ -187,7 +182,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func checkUserExistence(_ completion: @escaping (Int, Any?) -> Void) {
-        if let username = keyValue["user_name"] as? String {
+        if let username = keyValue["user_name"] {
             getFromURL("existence/user_name/" + username, parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
                 completion(status, message)
             }
@@ -227,7 +222,7 @@ class FaeUser: NSObject {
     func changePassword(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("reset_login/password", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             
-            if let password = self.keyValue["password"]?.string {
+            if let password = self.keyValue["password"] {
                 Key.shared.userPassword = password
                 print("[changePassword]", Key.shared.userPassword)
                 _ = LocalStorageManager.shared.savePassword()
@@ -242,7 +237,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func getAccountBasicInfo(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/account", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             if status / 100 == 2 {
                 guard let userInfo = message else {
@@ -278,7 +273,7 @@ class FaeUser: NSObject {
      Optional parameters: first_name, last_name, user_name, birthday, gender
      */
     func updateAccountBasicInfo(_ completion: @escaping (Int, Any?) -> Void) { // update local storage
-        postToURL("users/account", parameter: keyValue, authentication: headerAuthentication(), completion: { (status: Int, message: Any?) in
+        postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 guard let userInfo = message else {
                     print("[logInBackground] get log in info fail")
@@ -308,7 +303,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func verifyPassword(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/account/password/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/account/password/verify", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
@@ -318,11 +313,11 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func updatePassword(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/account/password", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/account/password", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 // changed successfully
                 if let newPassword = self.keyValue["new_password"] {
-                    Key.shared.userPassword = newPassword as! String
+                    Key.shared.userPassword = newPassword
                     _ = LocalStorageManager.shared.savePassword()
                 }
             }
@@ -335,7 +330,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func updateEmail(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/account/email", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/account/email", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
@@ -345,12 +340,12 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func verifyEmail(_ completion: @escaping (Int, Any?) -> Void) {
-        print(headerAuthentication())
-        postToURL("users/account/email/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        print(Key.shared.headerAuthentication())
+        postToURL("users/account/email/verify", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 
                 if let newEmail = self.keyValue["email"] {
-                    Key.shared.userEmail = newEmail as! String
+                    Key.shared.userEmail = newEmail 
                     LocalStorageManager.shared.saveEmail()
                     print("new email")
                     print(Key.shared.userEmail)
@@ -365,7 +360,7 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func updatePhoneNumber(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/account/phone", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/account/phone", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
@@ -375,10 +370,10 @@ class FaeUser: NSObject {
      Optional parameters: nil
      */
     func verifyPhoneNumber(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/account/phone/verify", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/account/phone/verify", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 if let newPhoneNumber = self.keyValue["phone"] {
-                    Key.shared.userPhoneNumber = newPhoneNumber as? String
+                    Key.shared.userPhoneNumber = newPhoneNumber
                     _ = LocalStorageManager.shared.savePhoneNumber()
                     print("new phone number")
                     //                    print(userPhoneNumber)
@@ -389,7 +384,7 @@ class FaeUser: NSObject {
     }
     
     func getSelfProfile(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/profile", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             // print(self.keyValue)
             // self.clearKeyValue()
             // print(message)
@@ -398,46 +393,46 @@ class FaeUser: NSObject {
     }
     
     func getOthersProfile(_ otherUser: String, completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/\(otherUser)/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/\(otherUser)/profile", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             // self.clearKeyValue()
             completion(status, message)
         }
     }
     
     func updateProfile(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("/users/profile", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("/users/profile", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             // self.clearKeyValue()
             completion(status, message)
         }
     }
     
     func getUserCard(_ otherUser: String, completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/\(otherUser)/name_card", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
     
     func getSelfNamecard(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/name_card", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
     
     func updateNameCard(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("/users/name_card", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("/users/name_card", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             // self.clearKeyValue()
             completion(status, message)
         }
     }
     
     func getAllTags(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/name_card/tags", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/name_card/tags", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
     
     func getSelfStatus(_ completion: @escaping (Int, Any?) -> Void) { // 解包 //local storage
-        getFromURL("users/status", parameter: nil, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/status", parameter: nil, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
@@ -451,13 +446,13 @@ class FaeUser: NSObject {
      *         5:invisible
      */
     func setSelfStatus(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("users/status", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("users/status", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }
     
     func getUserRelation(_ user_id: String, completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("users/relation/\(user_id)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("users/relation/\(user_id)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             completion(status, message)
         }
     }

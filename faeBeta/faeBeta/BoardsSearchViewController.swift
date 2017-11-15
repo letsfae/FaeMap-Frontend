@@ -27,7 +27,7 @@ enum EnterMode: String {
 }
 
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
-    var enterMode: EnterMode!
+    var enterMode: CollectionTableMode!
     weak var delegate: BoardsSearchDelegate?
     var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
     
@@ -339,9 +339,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 uiviewPics.isHidden = false
                 uiviewSchResBg.isHidden = true
                 if searchText == "" {
-                    uiviewPics.frame.origin.y = 124 - 48
+                    uiviewPics.frame.origin.y = 124 - 48 + device_offset_top
                 } else {
-                    uiviewPics.frame.origin.y = 124 - 48 + uiviewNoResults.frame.height + 5
+                    uiviewPics.frame.origin.y = 124 - 48 + uiviewNoResults.frame.height + 5 + device_offset_top
                 }
             }
             
@@ -370,7 +370,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count)) - device_offset_top - device_offset_bot_v2
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 - 48 + uiviewSchLocResBg.frame.height + 5
             }

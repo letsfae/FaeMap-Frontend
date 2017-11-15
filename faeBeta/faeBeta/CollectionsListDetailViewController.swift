@@ -82,9 +82,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     fileprivate func loadColItems() {
         creatorId = arrColDetails.creatorId
-        colId = arrColDetails.colId
-        txtName = arrColDetails.colName
-        txtDesp = arrColDetails.colDesp
+        colId = arrColDetails.id
+        txtName = arrColDetails.name
+        txtDesp = arrColDetails.desp
         txtTime = arrColDetails.lastUpdate
         numItems = arrColDetails.itemsCount
         btnMapView.isEnabled = false
@@ -101,7 +101,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName.textColor = UIColor._898989()
         lblListName.text = txtName
         lblListName.lineBreakMode = .byTruncatingTail
-        lblListName.text = arrColDetails.colName
+        lblListName.text = arrColDetails.name
         uiviewFixedHeader.addSubview(lblListName)
         
         let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -204,7 +204,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             while !(arrCtrlers?.last is InitialPageController) {
                 arrCtrlers?.removeLast()
             }
-            featureDelegate?.showSavedPins(type: arrColDetails.colType, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.colName)
+            featureDelegate?.showSavedPins(type: arrColDetails.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.name)
             navigationController?.setViewControllers(arrCtrlers!, animated: false)
             break
         case 1: // share
@@ -400,8 +400,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         let date = dateformatter.string(from: curtDate).split(separator: " ")[0].split(separator: "-")
         txtTime = date[1] + "/" + date[0]
-        arrColDetails.colName = txtName
-        arrColDetails.colDesp = txtDesp
+        arrColDetails.name = txtName
+        arrColDetails.desp = txtDesp
         arrColDetails.lastUpdate = txtTime
         tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
     }
@@ -516,14 +516,14 @@ class ColListDetailHeader: UITableViewCell {
             self.lblTime.attributedText = curtStr
         }
         
-        lblName.text = colInfo.colName
+        lblName.text = colInfo.name
     }
     
     func loadDescription(colInfo: PinCollection) {
         let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
-        lblDesp.attributedText = NSAttributedString(string: colInfo.colDesp, attributes: despAttr)
+        lblDesp.attributedText = NSAttributedString(string: colInfo.desp, attributes: despAttr)
         
-        let (lineCount, newDesp) = getReadMoreDesp(colInfo.colDesp)
+        let (lineCount, newDesp) = getReadMoreDesp(colInfo.desp)
         if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
             uiviewReadMore.isHidden = true
             lblDesp.numberOfLines = 0

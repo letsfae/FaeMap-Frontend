@@ -100,15 +100,13 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var arrPlaceNames1: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var imgPlaces2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
     var arrPlaceNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
-    let arrTitle = ["Most Popular", "Recommended", "Nearby Food", "Nearby Drinks", "Shopping", "Outdoors", "Recreation"]
+    let arrTitle = ["Most Popular", "Recommended", "Nearby Food & Drinks", "Shopping", "Outdoors & Recreation"]
     var testArrPlaces = [[PlacePin]]()
     var testArrPopular = [PlacePin]()
     var testArrRecommend = [PlacePin]()
     var testArrFood = [PlacePin]()
-    var testArrDrinks = [PlacePin]()
     var testArrShopping = [PlacePin]()
     var testArrOutdoors = [PlacePin]()
-    var testArrRecreation = [PlacePin]()
     
     // data for social table
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
@@ -169,7 +167,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadCannotFindPeople()
         loadPlaceTabView()
         loadChooseNearbyPeopleView()
-        loadMidViewContent()
+        loadChooseLocation()
         loadNavBar()
         loadTalkTabView()
         uiviewBubbleHint.isHidden = true
@@ -228,6 +226,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
+        uiviewNavBar.leftBtnWidth = 30
+        uiviewNavBar.leftBtnPadding = 20
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "mb_menu"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
@@ -235,7 +235,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.addTalkFeed(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
         
-        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
+        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23 + device_offset_top, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
         btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
         btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
@@ -268,10 +268,10 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
-        uiviewDropDownMenu.frame.origin.y = -36 // 65 - 201
+        uiviewDropDownMenu.frame.origin.y = -36 + device_offset_top // 65 - 201
         uiviewDropDownMenu.isHidden = true
         
         let uiviewDropMenuBottomLine = UIView(frame: CGRect(x: 0, y: 100, width: screenWidth, height: 1))
@@ -288,11 +288,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnPeople.tag = 1
         btnPeople.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
 
-        lblPlaces = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPlaces = FaeLabel(CGRect(x: 104, y: 14, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
         lblPlaces.text = "Places"
         btnPlaces.addSubview(lblPlaces)
         
-        lblPeople = FaeLabel(CGRect(x: 104, y: 16, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
+        lblPeople = FaeLabel(CGRect(x: 104, y: 14, width: 200 , height: 25), .left, .medium, 18, UIColor._898989())
         lblPeople.text = "People"
         btnPeople.addSubview(lblPeople)
         
@@ -316,8 +316,8 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
     }
     
-    fileprivate func loadMidViewContent() {
-        uiviewAllCom = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+    fileprivate func loadChooseLocation() {
+        uiviewAllCom = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         uiviewAllCom.backgroundColor = .white
         view.addSubview(uiviewAllCom)
         
@@ -370,14 +370,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         if tableMode == .places {
             uiviewPlaceTab.isHidden = false
             tblMapBoard.tableHeaderView = uiviewPlaceHeader
-            tblMapBoard.frame.size.height = screenHeight - 163
+            tblMapBoard.frame.size.height = screenHeight - 163 - device_offset_top - device_offset_bot_v2
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
             btnSearchLoc.tag = 0
 //            switchPlaceTabPage()
         } else {
             uiviewPlaceTab.isHidden = true
             tblMapBoard.tableHeaderView = nil
-            tblMapBoard.frame.size.height = screenHeight - 114
+            tblMapBoard.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot_v2
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
             btnSearchLoc.tag = 1
         }
@@ -397,7 +397,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func loadTable() {
-        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 163), style: .plain)
+        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 163 - device_offset_top - device_offset_bot_v2), style: .plain)
         view.addSubview(tblMapBoard)
         tblMapBoard.backgroundColor = .white
         tblMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
@@ -424,7 +424,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
             btnNavBarMenu.setAttributedTitle(nil, for: .normal)
             btnNavBarMenu.setTitle("Choose a Board...", for: .normal)
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = 65
+                self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
             })
             navBarMenuBtnClicked = true
             if talkTableMode == .post {
@@ -476,7 +476,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     fileprivate func hideDropDownMenu() {
         btnNavBarSetTitle()
         UIView.animate(withDuration: 0.2, animations: {
-            self.uiviewDropDownMenu.frame.origin.y = -36
+            self.uiviewDropDownMenu.frame.origin.y = -36 + device_offset_top
         }, completion: { _ in
             self.uiviewDropDownMenu.isHidden = true
         })
@@ -538,13 +538,11 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         
     }
     func switchMapMode() {
-        if let vc = self.navigationController?.viewControllers.first {
-            if vc is InitialPageController {
-                if let vcRoot = vc as? InitialPageController {
-                    vcRoot.goToFaeMap()
-                    LeftSlidingMenuViewController.boolMapBoardIsOn = false
-                }
-            }
+        guard let vc = self.navigationController?.viewControllers.first else { return }
+        guard vc is InitialPageController else { return }
+        if let vcRoot = vc as? InitialPageController {
+            vcRoot.goToFaeMap()
+            LeftSlidingMenuViewController.boolMapBoardIsOn = false
         }
     }
 }

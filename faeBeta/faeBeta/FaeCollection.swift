@@ -12,19 +12,19 @@ class FaeCollection: NSObject {
     
     static let shared = FaeCollection()
     
-    var keyValue = [String: AnyObject]()
+    var keyValue = [String: String]()
     
     func whereKey(_ key: String, value: String) {
-        keyValue[key] = value as AnyObject?
+        keyValue[key] = value
     }
     
     func clearKeyValue() {
-        keyValue = [String: AnyObject]()
+        keyValue = [String: String]()
     }
     
     // Create collection
     func createCollection(_ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("collections", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("collections", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
@@ -32,7 +32,7 @@ class FaeCollection: NSObject {
     
     // Get collections
     func getCollections(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("collections", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        getFromURL("collections", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
@@ -41,7 +41,7 @@ class FaeCollection: NSObject {
     // Edit one collection
     func editOneCollection(_ collectionID: String?, completion: @escaping (Int, Any?) -> Void) {
         if collectionID != nil {
-            postToURL("collections/\(collectionID!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            postToURL("collections/\(collectionID!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -51,7 +51,7 @@ class FaeCollection: NSObject {
     // Get one collection
     func getOneCollection(_ collectionID: String?, completion: @escaping (Int, Any?) -> Void) {
         if collectionID != nil {
-            getFromURL("collections/\(collectionID!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            getFromURL("collections/\(collectionID!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -61,7 +61,7 @@ class FaeCollection: NSObject {
     // Delete one collection
     func deleteOneCollection(_ collectionID: String?, completion: @escaping (Int, Any?) -> Void) {
         if collectionID != nil {
-            deleteFromURL("collections/\(collectionID!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            deleteFromURL("collections/\(collectionID!)", parameter: keyValue) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -71,7 +71,7 @@ class FaeCollection: NSObject {
     // Save place/location pin to collections
     func saveToCollection(_ type: String?, collectionID: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && pinID != nil && collectionID != nil {
-            postToURL("collections/\(collectionID!)/save/\(type!)/\(pinID!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            postToURL("collections/\(collectionID!)/save/\(type!)/\(pinID!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -81,7 +81,7 @@ class FaeCollection: NSObject {
     // Unsave place/location pin from collections
     func unsaveFromCollection(_ type: String?, collectionID: String?, pinID: String?, completion: @escaping (Int, Any?) -> Void) {
         if type != nil && pinID != nil && collectionID != nil {
-            deleteFromURL("collections/\(collectionID!)/save/\(type!)/\(pinID!)", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+            deleteFromURL("collections/\(collectionID!)/save/\(type!)/\(pinID!)", parameter: keyValue) { (status: Int, message: Any?) in
                 self.clearKeyValue()
                 completion(status, message)
             }
@@ -89,14 +89,14 @@ class FaeCollection: NSObject {
     }
     
     func createMemo(_ type: String?, pinID: String?, _ completion: @escaping (Int, Any?) -> Void) {
-        postToURL("pins/\(type!)/\(pinID!)/memo", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        postToURL("pins/\(type!)/\(pinID!)/memo", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
     func deleteMemo(_ type: String?, pinID: String?, _ completion: @escaping (Int, Any?) -> Void) {
-        deleteFromURL("pins/\(type!)/\(pinID!)/memo", parameter: keyValue, authentication: headerAuthentication()) { (status: Int, message: Any?) in
+        deleteFromURL("pins/\(type!)/\(pinID!)/memo", parameter: keyValue) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }

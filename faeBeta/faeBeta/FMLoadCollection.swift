@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
     func loadSmallClctView() {
         let layout = CenterCellCollectionViewFlowLayout()
@@ -29,7 +29,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
         clctViewMap.layer.zPosition = 600
         view.addSubview(clctViewMap)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewMap)
-        view.addConstraintsWithFormat("V:[v0(310)]-4-|", options: [], views: clctViewMap)
+        view.addConstraintsWithFormat("V:[v0(310)]-\(4+device_offset_bot)-|", options: [], views: clctViewMap)
         
         clctViewMap.isHidden = true
     }
@@ -47,5 +47,12 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let cell = UICollectionViewCell()
             return cell
         }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth: CGFloat = 250
+        joshprint(clctViewMap.contentOffset.x)
+        intCurtPage = Int(clctViewMap.contentOffset.x / pageWidth)
+        joshprint(intCurtPage)
     }
 }

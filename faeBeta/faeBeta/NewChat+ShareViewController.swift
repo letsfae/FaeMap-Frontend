@@ -276,7 +276,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 break
             case .collection:
                 type = "[Collection]"
-                text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.itemsCount)\", \"creator\":\"\(collectionDetail!.creatorId)\"}"
+                text = "{\"id\":\"\(collectionDetail!.id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.itemsCount)\", \"creator\":\"\(collectionDetail!.creatorId)\"}"
                 vcChat.sendMeaages_v2(type: type, text: text)
                 break
             case .place:
@@ -363,7 +363,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             break
         case .collection:
             newMessage.type = "[Collection]"
-            newMessage.text = "{\"id\":\"\(collectionDetail!.colId)\", \"name\":\"\(collectionDetail!.colName)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+            newMessage.text = "{\"id\":\"\(collectionDetail!.id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
             break
         case .place:
             newMessage.type = "[Place]"

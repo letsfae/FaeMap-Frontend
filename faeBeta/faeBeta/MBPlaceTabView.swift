@@ -19,7 +19,7 @@ class PlaceTabView: UIView {
     var btnPlaceTabRight: UIButton!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        super.init(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot_v2, width: screenWidth, height: 49 + device_offset_bot_v2))
         backgroundColor = UIColor._248248248()
         setupUI()
     }

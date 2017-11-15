@@ -19,16 +19,16 @@ extension MapSearchViewController {
             if searchText != "" && filteredPlaces.count != 0 {
                 uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
-                uiviewSchResBg.frame.origin.y = 124
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139, CGFloat(68 * filteredPlaces.count))
+                uiviewSchResBg.frame.origin.y = 124 + device_offset_top
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot_v2, CGFloat(68 * filteredPlaces.count))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
                 uiviewPics.isHidden = false
                 uiviewSchResBg.isHidden = true
                 if searchText == "" {
-                    uiviewPics.frame.origin.y = 124
+                    uiviewPics.frame.origin.y = 124 + device_offset_top
                 } else {
-                    uiviewPics.frame.origin.y = 124 + uiviewNoResults.frame.height + 5
+                    uiviewPics.frame.origin.y = 124 + uiviewNoResults.frame.height + 5 + device_offset_top
                 }
             }
             
@@ -47,13 +47,13 @@ extension MapSearchViewController {
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
             if searchText == "" || googlePredictions.count == 0 {
-                uiviewSchResBg.frame.origin.y = 124
+                uiviewSchResBg.frame.origin.y = 124 + device_offset_top
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * googlePredictions.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot_v2, CGFloat(48 * googlePredictions.count))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
-                uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5
+                uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
             }
             tblPlacesRes.isScrollEnabled = false
             tblLocationRes.reloadData()

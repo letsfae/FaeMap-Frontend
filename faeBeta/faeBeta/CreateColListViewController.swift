@@ -15,6 +15,7 @@ protocol CreateColListDelegate: class {
 }
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
+    
     var enterMode: CollectionTableMode!
     var uiviewNavBar: UIView!
     var btnCancel: UIButton!
@@ -243,7 +244,6 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        joshprint(text)
         if text == "\n" {
             if textView == textviewListName {
                 textviewDesp.becomeFirstResponder()
@@ -272,8 +272,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        btnCreate.isEnabled = !textviewListName.text.isEmpty
         if textView == textviewListName {
+            btnCreate.isEnabled = textView.text != ""
             nameRemainChars = 60 - textView.text.count
             lblNameRemainChars.text = String(nameRemainChars)
             if screenWidth >= 375 {

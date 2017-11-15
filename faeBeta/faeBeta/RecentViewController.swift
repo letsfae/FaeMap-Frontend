@@ -216,11 +216,11 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         }
         uiviewBackground.isHidden = true
         cellsCurrentlyEditing.remove(indexPath)
-        getFromURL("chats_v2/users/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: headerAuthentication()) {statusCode, result in
+        getFromURL("chats_v2/users/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) {statusCode, result in
             if statusCode / 100 == 2 {
                 if let response = result as? NSDictionary {
                     let id = response["chat_id"] as! Int
-                    deleteFromURL("chats_v2/\(id)", parameter: [:], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                    deleteFromURL("chats_v2/\(id)", parameter: [:], completion: { (statusCode, result) in
                         if statusCode / 100 == 2 {
                             print("delete \(chat_id) successfully")
                         }

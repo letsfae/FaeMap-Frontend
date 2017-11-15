@@ -45,7 +45,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         let uiviewNavBar = FaeNavBar()
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.isHidden = true
-        uiviewNavBar.lblTitle.text = "Mood Avatars"
+        uiviewNavBar.lblTitle.text = "Map Avatars"
         view.addSubview(uiviewNavBar)
         
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)

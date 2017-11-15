@@ -53,8 +53,8 @@ class FaeImageView: UIImageView {
         
         getImage(fileID: fileID, type: 2, isChatRoom: isChatRoom) { (status, etag, imageRawData) in
             DispatchQueue.main.async(execute: {
-                
-                guard let imageToCache = UIImage.sd_image(with: imageRawData) else { return }
+                guard imageRawData != nil else { return }
+                guard let imageToCache = UIImage(data: imageRawData!) else { return }
                 
                 if self.fileID == id {
                     self.image = imageToCache
@@ -79,7 +79,8 @@ class FaeImageView: UIImageView {
                             avatarRealm.largeAvatarEtag = etag
                             avatarRealm.userLargeAvatar = imageRawData as NSData?
                         }
-                        guard let image = UIImage.sd_image(with: imageRawData) else { return }
+                        guard imageRawData != nil else { return }
+                        guard let image = UIImage(data: imageRawData!) else { return }
                         let photos = IDMPhoto.photos(withImages: [image])
                         self.presentPhotoBrowser(photos: photos)
                     } else {
@@ -94,7 +95,7 @@ class FaeImageView: UIImageView {
             } else {
                 // Otherwise use the large avatar stored in realm
                 print("[FaeAvatarView] large image exists")
-                guard let image = UIImage.sd_image(with: avatarRealm.userLargeAvatar as Data!) else { return }
+                guard let image = UIImage(data: avatarRealm.userLargeAvatar as Data!) else { return }
                 let photos = IDMPhoto.photos(withImages: [image])
                 self.presentPhotoBrowser(photos: photos)
             }

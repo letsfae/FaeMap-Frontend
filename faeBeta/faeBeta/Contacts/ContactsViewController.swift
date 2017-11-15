@@ -139,6 +139,9 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var indexPathGlobal: IndexPath!
     var idGlobal = -1
     var countFriends = 0
+    var countReceived = 0
+    var countSent = 0
+    var countRequests = 0
     
     let OK = 0
     let WITHDRAW = 3
@@ -229,6 +232,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                     self.arrRequested.append(Friends(displayName: json[i-1]["requested_user_nick_name"].stringValue, userName: json[i-1]["requested_user_name"].stringValue, userId: json[i-1]["requested_user_id"].intValue, requestId: json[i-1]["friend_request_id"].intValue))
                 }
             }
+            self.countSent = self.arrRequested.count
             self.tblContacts.reloadData()
         }
     }
@@ -243,6 +247,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 }
                 self.imgDot.isHidden = false
             }
+            self.countReceived = self.arrReceivedRequests.count
             self.tblContacts.reloadData()
         }
     }

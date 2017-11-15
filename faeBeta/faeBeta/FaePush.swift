@@ -27,7 +27,7 @@ class FaePush: NSObject {
     }
 
     func getSync(_ completion:@escaping (Int, Any?) -> Void) {
-        getFromURL("sync", parameter: nil, authentication: headerAuthentication()) {(status: Int, message: Any?) in
+        getFromURL("sync", parameter: nil, authentication: Key.shared.headerAuthentication()) {(status: Int, message: Any?) in
             completion(status, message)
         }
     }
