@@ -129,7 +129,7 @@ class SetContactDetailViewController: UIViewController {
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.btnSend.frame.origin.y -= frameKeyboard.height - (30 - 14)
+            self.btnSend.frame.origin.y = screenHeight - frameKeyboard.height - 14 - 50
         })
     }
     

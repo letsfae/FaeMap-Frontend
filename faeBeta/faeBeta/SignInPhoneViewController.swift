@@ -18,6 +18,7 @@ enum EnterPhoneMode {
     case signInSupport
     case settings
     case settingsUpdate
+    case signup
 }
 
 class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, CountryCodeDelegate, VerifyCodeDelegate {
