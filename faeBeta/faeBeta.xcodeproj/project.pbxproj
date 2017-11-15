@@ -59,6 +59,7 @@
 		9F186F851F6A320F00D24E07 /* FaeChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F186F841F6A320F00D24E07 /* FaeChat.swift */; };
 		9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */; };
 		9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4736CC1FB811440058770C /* SetAvatar.swift */; };
+		9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */; };
 		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
 		9FC6AAFE1FA167BA0024B9B8 /* SetWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */; };
 		9FCE363E1FB958F1008CE5A1 /* SetContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */; };
@@ -378,6 +379,7 @@
 		9F1D68C61F4E89100067EFF9 /* JSQPlaceCollectionMediaItemCustom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSQPlaceCollectionMediaItemCustom.h; sourceTree = "<group>"; };
 		9F1D68C71F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSQPlaceCollectionMediaItemCustom.m; sourceTree = "<group>"; };
 		9F4736CC1FB811440058770C /* SetAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAvatar.swift; sourceTree = "<group>"; };
+		9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneViewController.swift; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWebViewController.swift; sourceTree = "<group>"; };
 		9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContactDetailViewController.swift; sourceTree = "<group>"; };
@@ -1453,10 +1455,11 @@
 			children = (
 				B064EF241D74EB7300C078F5 /* RegisterBaseViewController.swift */,
 				B0714DF71D62520900356705 /* RegisterNameViewController.swift */,
-				B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */,
 				B0714DFF1D62525A00356705 /* RegisterUsernameViewController.swift */,
 				B0714E031D62527E00356705 /* RegisterPasswordViewController.swift */,
 				B0714E071D62529C00356705 /* RegisterInfoViewController.swift */,
+				B0714DFB1D62523500356705 /* RegisterEmailViewController.swift */,
+				9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */,
 				B0714E0B1D6252D400356705 /* RegisterConfirmViewController.swift */,
 			);
 			name = SignUp;
@@ -1988,6 +1991,7 @@
 				50181F0B1F688579004798B5 /* EXPCells.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */,
+				9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */,
 				B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */,

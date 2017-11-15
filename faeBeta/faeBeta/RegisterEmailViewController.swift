@@ -40,24 +40,28 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var cellTxtEmail: RegisterTextfieldTableViewCell!
     var email: String?
     var faeUser: FaeUser!
-    var uiviewEmailExist: UIView!
+    var uiviewAtBottom: UIView!
     var imgError: UIImageView!
     var lblCont: UILabel!
-    var lblAlreadyRegister: UILabel!
-    var btnLogin: UIButton!
+    var lblSecure: UILabel!
+    var btnOtherMethod: UIButton!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        createTopView("ProgressBar2")
-        createTableView(59 + 135 * screenHeightFactor)
-        uiviewEmailExist = thisEmailIsAlreadyView()
-        createBottomView(uiviewEmailExist)
-        registerCell()
+        createTopView("ProgressBar5")
         
+        createTableView(59 + 135 * screenHeightFactor)
+        registerCell()
         tableView.delegate = self
         tableView.dataSource = self
+        
+        uiviewAtBottom = setupBottomView()
+        createBottomView(uiviewAtBottom)
+        setUsingPhone()
+        
+        btnContinue.setTitle("Vevify", for: UIControlState())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -65,62 +69,81 @@ class RegisterEmailViewController: RegisterBaseViewController {
     }
     
     // MARK: - Functions
-    func thisEmailIsAlreadyView() -> UIView {
-        let uiviewEmailAlready = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+    func setupBottomView() -> UIView {
+        let uiviewBtm = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
         lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
         lblCont.numberOfLines = 2
         lblCont.textAlignment = .center
         lblCont.textColor = UIColor._138138138()
         lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblCont.text = "You need to Verify your Email in Account \nSettings to use it for Log In and more."
-        uiviewEmailAlready.addSubview(lblCont)
+        //lblCont.text = "You need to Verify your Email in Account \nSettings to use it for Log In and more."
         
-        lblAlreadyRegister = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 118, y: 18, width: 190, height: 25))
-        lblAlreadyRegister.attributedText = NSAttributedString(string: "This email is already registered! ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!,
-            NSAttributedStringKey.foregroundColor: UIColor._2499090()]
-        )
-        uiviewEmailAlready.addSubview(lblAlreadyRegister)
+        //uiviewEmailAlready.addSubview(lblCont)
         
-        btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 18, width: 45, height: 25))
-        let astrTitle = "Log In!"
-        let attribute = [ NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
-        let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
-        btnLogin.setAttributedTitle(attrLogin, for: UIControlState())
-        btnLogin.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
+        lblSecure = UILabel()
+        //lblAlreadyRegister = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 118, y: 18, width: 190, height: 25))
+        //lblAlreadyRegister.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!,
+            //NSAttributedStringKey.foregroundColor: UIColor._2499090()]
+        //)
+        uiviewBtm.addSubview(lblSecure)
         
-        lblAlreadyRegister.isHidden = true
-        btnLogin.isHidden = true
+        //btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 18, width: 45, height: 25))
+        //let astrTitle = "Phone."
+        //let attribute = [ NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
+        //let attrLogin = NSMutableAttributedString(string: astrTitle, attributes: attribute)
+        //btnLogin.setAttributedTitle(attrLogin, for: UIControlState())
+        //btnLogin.addTarget(self, action: #selector(self.loginButtonTapped), for: .touchUpInside)
         
-        uiviewEmailAlready.addSubview(btnLogin)
-        return uiviewEmailAlready
+        //lblAlreadyRegister.isHidden = true
+        //btnLogin.isHidden = true
+        btnOtherMethod = UIButton()
+        uiviewBtm.addSubview(btnOtherMethod)
+        return uiviewBtm
+    }
+    
+    func setUsingPhone() {
+        lblSecure.frame = CGRect(x: screenWidth / 2 - 77, y: 18, width: 109, height: 25)
+        lblSecure.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()])
+        
+        btnOtherMethod.frame = CGRect(x: screenWidth / 2 + 32, y: 18, width: 47, height: 25)
+        let attributedTitle = NSAttributedString(string: "Phone.", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
+        btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
+        btnOtherMethod.addTarget(self, action: #selector(usingPhoneTapped), for: .touchUpInside)
+    }
+    
+    func setEmailExists() {
+        lblSecure.frame = CGRect(x: screenWidth / 2 - 118, y: 18, width: 190, height: 25)
+        lblSecure.attributedText = NSAttributedString(string: "This Email is already registered! ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
+        
+        btnOtherMethod.frame = CGRect(x: screenWidth / 2 + 73, y: 18, width: 45, height: 25)
+        let attributedTitle = NSAttributedString(string: "Log In!", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
+        btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
+        btnOtherMethod.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func usingPhoneTapped() {
+        var arrControllers = navigationController?.viewControllers
+        arrControllers?.removeLast()
+        let vcPhone = RegisterPhoneViewController()
+        vcPhone.faeUser = faeUser
+        arrControllers?.append(vcPhone)
+        navigationController?.setViewControllers(arrControllers!, animated: true)
     }
     
     @objc func loginButtonTapped() {
-        let boardLoginController = LogInViewController()
-        self.navigationController?.pushViewController(boardLoginController, animated: true)
+        let vcLogin = LogInViewController()
+        navigationController?.pushViewController(vcLogin, animated: true)
     }
     
     override func backButtonPressed() {
         view.endEditing(true)
-        _ = navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
         checkForUniqueEmail()
     }
-    
-    func jumpToRegisterUsername() {
-        let boardRegister = RegisterUsernameViewController()
-        boardRegister.faeUser = faeUser!
-        self.navigationController?.pushViewController(boardRegister, animated: false)
-    }
-    
-    func validation() {
-        var boolIsValid = false
-        boolIsValid = email != nil && email?.count > 0 && isValidEmail(email!)
-        enableContinueButton(boolIsValid)
-    }
-    
+
     func checkForUniqueEmail() {
         faeUser.whereKey("email", value: email!)
         showActivityIndicator()
@@ -129,14 +152,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     let value = (message as! NSDictionary).value(forKey: "existence")
                     if (value != nil) {
                         if value as! NSNumber == 0 {
-                            self.lblCont.isHidden = false
-                            self.lblAlreadyRegister.isHidden = true
-                            self.btnLogin.isHidden = true
-                            self.checkForValidEmail(self.email!, completion: self.jumpToRegisterUsername)
+                            self.checkForValidEmail(self.email!, completion: self.jumpToEnterCode)
                         } else {
-                            self.lblCont.isHidden = true
-                            self.lblAlreadyRegister.isHidden = false
-                            self.btnLogin.isHidden = false
+                            self.setEmailExists()
                             self.hideActivityIndicator()
                         }
                     }
@@ -163,11 +181,15 @@ class RegisterEmailViewController: RegisterBaseViewController {
         }
     }
     
-    func isValidEmail(_ testStr:String) -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let range = testStr.range(of: emailRegEx, options:.regularExpression)
-        let result = range != nil ? true : false
-        return result
+    func jumpToEnterCode() {
+        //let boardRegister = RegisterUsernameViewController()
+        //boardRegister.faeUser = faeUser!
+        //self.navigationController?.pushViewController(boardRegister, animated: false)
+        let vc = VerifyCodeViewController()
+        vc.enterMode = .email
+        vc.enterEmailMode = .signup
+        vc.faeUser = faeUser
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func registerCell() {
@@ -192,11 +214,12 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TitleTableViewCellIdentifier") as! TitleTableViewCell
-            cell.setTitleLabelText("Use your Email to Log In \nand Verifications")
+            //cell.setTitleLabelText("Use your Email to Log In \nand Verifications")
+            cell.setTitleLabelText("Use your Email to Secure\nyour Account.")
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
-            cell.setSubTitleLabelText("Enter your Email Address")
+            //cell.setSubTitleLabelText("Enter your Email Address")
             return cell
         case 2:
             if cellTxtEmail == nil {
@@ -249,13 +272,23 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             email = text
-            lblAlreadyRegister.isHidden = true
-            btnLogin.isHidden = true
-            imgError.isHidden = true
-            lblCont.isHidden = false
+            setUsingPhone()
             break
         default: break
         }
         validation()
+    }
+    
+    func validation() {
+        var boolIsValid = false
+        boolIsValid = email != nil && email?.count > 0 && isValidEmail(email!)
+        enableContinueButton(boolIsValid)
+    }
+    
+    func isValidEmail(_ testStr:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let range = testStr.range(of: emailRegEx, options:.regularExpression)
+        let result = range != nil ? true : false
+        return result
     }
 }

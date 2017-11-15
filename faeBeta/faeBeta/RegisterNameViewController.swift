@@ -89,13 +89,16 @@ class RegisterNameViewController: RegisterBaseViewController {
     override func continueButtonPressed() {
         view.endEditing(true)
         createUser()
-        jumpToRegisterEmail()
+        jumpToRegisterNext()
     }
     
-    func jumpToRegisterEmail() {
-        let boardRegister = RegisterEmailViewController()
-        boardRegister.faeUser = faeUser
-        self.navigationController?.pushViewController(boardRegister, animated: false)
+    func jumpToRegisterNext() {
+        //let boardRegister = RegisterEmailViewController()
+        //boardRegister.faeUser = faeUser
+        //self.navigationController?.pushViewController(boardRegister, animated: false)
+        let nextRegister = RegisterUsernameViewController()
+        nextRegister.faeUser = faeUser
+        navigationController?.pushViewController(nextRegister, animated: false)
     }
     
     func createUser() {
