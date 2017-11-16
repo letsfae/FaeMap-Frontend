@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 protocol SetNameBirthGenderDelegate: class {
-    func updateInfo()
+    func updateInfo(target: String?)
 }
 
 class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UITextFieldDelegate {
@@ -174,7 +174,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         btnFemale.addTarget(self, action: #selector(femaleButtonTapped), for: .touchUpInside)
         view.addSubview(btnMale)
         view.addSubview(btnFemale)
-        
         btnMale.isSelected = gender == "male" ? true : false
         btnFemale.isSelected = gender == "female" ? true : false
         
@@ -232,12 +231,25 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     
     @objc func actionSave(_ sender: UIButton) {
         indicatorView.startAnimating()
+        var keyValue = [String: String]()
         switch enterMode {
         case .name:
             fName = textFName.text
             lName = textLName.text
-            faeUser.whereKey("first_name", value: fName!)
-            faeUser.whereKey("last_name", value: lName!)
+            keyValue["first_name"] = fName!
+            keyValue["last_name"] = lName!
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully update name")
+                    Key.shared.userFirstname = self.fName!
+                    Key.shared.userLastname = self.lName!
+                    self.delegate?.updateInfo(target: "name")
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    print("Fail to update name")
+                }
+                self.indicatorView.stopAnimating()
+            })
             break
         case .birth:
             let dateFormatter = DateFormatter()
@@ -245,10 +257,32 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
             let date = dateFormatter.date(from: dateOfBirth!)
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let dateString = dateFormatter.string(from: date!)
-            faeUser.whereKey("birthday", value: dateString)
+            keyValue["birthday"] = dateString
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully update birthday")
+                    Key.shared.userBirthday = dateString
+                    self.delegate?.updateInfo(target: "birth")
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    print("Fail to update birthday")
+                }
+                self.indicatorView.stopAnimating()
+            })
             break
         case .gender:
-            faeUser.whereKey("gender", value: gender!)
+            keyValue["gender"] = gender!
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    print("Successfully update gender")
+                    Key.shared.gender = self.gender!
+                    self.delegate?.updateInfo(target: "gender")
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    print("Fail to update gender")
+                }
+                self.indicatorView.stopAnimating()
+            })
             break
         case .password:
             faeUser.whereKey("password", value: textPswd.text!)
@@ -257,6 +291,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                     let vc = SignInSupportNewPassViewController()
                     vc.enterMode = .oldPswd
                     vc.oldPassword = self.textPswd.text!
+                    Key.shared.userPassword = self.textPswd.text!
                     self.navigationController?.pushViewController(vc, animated: true)
                 } else {
                     self.lblWrongPswd.isHidden = false
@@ -299,20 +334,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
             break
         default:
             break
-        }
-        
-        if enterMode != .password && enterMode != .newEmail {
-            faeUser.updateAccountBasicInfo({(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    print("Successfully update basic info")
-                    self.delegate?.updateInfo()
-                    self.navigationController?.popViewController(animated: true)
-                }
-                else {
-                    print("Fail to update basic info")
-                }
-                self.indicatorView.stopAnimating()
-            })
         }
     }
     

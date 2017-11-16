@@ -233,6 +233,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             } else {
                 faeUser.verifyPhoneNumber {(status, message) in
                     if status / 100 == 2 {
+                        Key.shared.userPhoneVerified = true
                         if self.enterPhoneMode == .settings {
                             let vc = UpdateUsrnameEmailViewController()
                             vc.enterMode = .phone

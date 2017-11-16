@@ -140,7 +140,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             let vc = SetNameViewController()
             vc.delegate = self
             vc.enterMode = .gender
-            vc.gender = Key.shared.gender
+            vc.gender = cell.lblContent.text
             navigationController?.pushViewController(vc, animated: true)
             break
         case 3:
@@ -191,16 +191,14 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     // SetNameBirthGenderDelegate
-    func updateInfo() {
-        faeUser.getAccountBasicInfo({(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                print(message!)
-                self.tblAccount.reloadData()
-            }
-            else {
-                print("Fail to get basic info")
-            }
-        })
+    func updateInfo(target: String?) {
+        if target == "name" {
+            tblAccount.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+        } else if target == "birth" {
+            tblAccount.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
+        } else if target == "gender" {
+            tblAccount.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
+        }
     }
     
     // UpdateUsrnameEmailDelegate

@@ -72,7 +72,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     fileprivate func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20, width: screenWidth - 50, height: 43))
-        btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "searchBarIcon"), for: .normal)
+        btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
         btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
         btnSearchAllPlaces.contentHorizontalAlignment = .left
         uiviewNavBar.addSubview(btnSearchAllPlaces)

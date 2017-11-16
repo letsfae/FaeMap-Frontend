@@ -33,7 +33,6 @@ class CollectionsListCell: UITableViewCell {
         imgPic = UIImageView(frame: CGRect(x: 11, y: 15, width: 72, height: 72))
         imgPic.clipsToBounds = true
         imgPic.contentMode = .scaleAspectFill
-        imgPic.layer.cornerRadius = 11
         addSubview(imgPic)
         
         imgAvatar = UIImageView(frame: CGRect(x: 64, y: 68, width: 25, height: 25))
