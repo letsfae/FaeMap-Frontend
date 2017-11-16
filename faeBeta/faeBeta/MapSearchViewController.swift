@@ -310,6 +310,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
                 return
             }
             let placeInfoJSON = JSON(message!)
+//            print(placeInfoJSON)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
 //                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
                 self.showOrHideViews(searchText: content)
@@ -317,7 +318,13 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             }
             self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
 //            print(self.filteredPlaces.count)
-            self.showOrHideViews(searchText: content)
+            
+            if source == "name" {
+                self.showOrHideViews(searchText: content)
+            } else {
+                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces, selectedLoc: self.searchedLoc)
+                self.navigationController?.popViewController(animated: false)
+            }
         }
     }
     
@@ -325,21 +332,29 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
         // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
         // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
+        var content = ""
         switch sender.tag {
         case 0:
+            content = "Restaurant"
             break
         case 1:
+            content = "Bar"
             break
         case 2:
+            content = "Shopping"
             break
         case 3:
+            content = "Coffee"
             break
         case 4:
+            content = "Park"
             break
         case 5:
+            content = "Hotel"
             break
         default:
             break
         }
+        getPlaceInfo(content: content, source: "categories")
     }
 }

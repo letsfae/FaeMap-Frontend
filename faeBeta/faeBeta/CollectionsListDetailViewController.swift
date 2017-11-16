@@ -19,6 +19,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
     var uiviewFixedSectionHeader: UIView!
+    var imgHeader: UIImageView!
+    var uiviewAvatarShadow: UIView!
+    var imgAvatar: UIImageView!
     var lblListName: UILabel!
     var lblItemsNum: UILabel!
     var numItems: Int = 0
@@ -67,6 +70,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         super.viewDidLoad()
         view.backgroundColor = .white
         loadTable()
+        loadHeaderImg()
         loadFooter()
         loadColItems()
         loadHiddenHeader()
@@ -89,6 +93,33 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         numItems = arrColDetails.itemsCount
         btnMapView.isEnabled = false
         self.getSavedItems(colId: self.colId)
+    }
+    
+    fileprivate func loadHeaderImg() {
+        imgHeader = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 180))
+        tblColListDetail.addSubview(imgHeader)
+        imgHeader.image = enterMode == .place ? #imageLiteral(resourceName: "collection_placeHeader") : #imageLiteral(resourceName: "collection_locationHeader")
+        
+        uiviewAvatarShadow = UIView(frame: CGRect(x: 20, y: 139, width: 78, height: 78))
+        uiviewAvatarShadow.layer.cornerRadius = 39
+        uiviewAvatarShadow.layer.shadowColor = UIColor._182182182().cgColor
+        uiviewAvatarShadow.layer.shadowOpacity = 1
+        uiviewAvatarShadow.layer.shadowRadius = 8
+        uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
+        
+        imgAvatar = UIImageView(frame: CGRect(x: 0, y: 0, width: 58, height: 58))
+        imgAvatar.layer.cornerRadius = 29
+        imgAvatar.contentMode = .scaleAspectFill
+        imgAvatar.clipsToBounds = true
+        imgAvatar.layer.borderWidth = 5
+        imgAvatar.layer.borderColor = UIColor.white.cgColor
+        General.shared.avatar(userid: creatorId) { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+            self.imgAvatar.isUserInteractionEnabled = true
+        }
+        
+        imgHeader.addSubview(uiviewAvatarShadow)
+        uiviewAvatarShadow.addSubview(imgAvatar)
     }
     
     fileprivate func loadHiddenHeader() {
@@ -289,8 +320,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             }
             cell = tableView.dequeueReusableCell(withIdentifier: "ColListDetailHeader", for: indexPath) as! ColListDetailHeader
             cell.delegate = self
-            let img = enterMode == .place ? #imageLiteral(resourceName: "collection_placeHeader") : #imageLiteral(resourceName: "collection_locationHeader")
-            cell.setValueForCell(img: img)
             cell.updateValueForCell(colInfo: arrColDetails)
             cell.loadDescription(colInfo: arrColDetails)
             return cell
@@ -330,6 +359,17 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if imgHeader != nil {
+            var frame = imgHeader.frame
+            if tblColListDetail.contentOffset.y < 0 * screenHeightFactor {
+                frame.origin.y = tblColListDetail.contentOffset.y
+                imgHeader.frame = frame
+            } else {
+                frame.origin.y = 0
+                imgHeader.frame = frame
+            }
+        }
+        
         if tblColListDetail.contentOffset.y >= 244 {
             uiviewFixedHeader.isHidden = false
         } else {
@@ -415,10 +455,6 @@ protocol ColListDetailHeaderDelegate: class {
 }
 
 class ColListDetailHeader: UITableViewCell {
-    var uiviewHiddenHeader: UIView!
-    var uiviewAvatarShadow: UIView!
-    var imgHeader: UIImageView!
-    var imgAvatar: UIImageView!
     var lblName: UILabel!
     var lblTime: UILabel!
     var lblDesp: UILabel!
@@ -438,26 +474,6 @@ class ColListDetailHeader: UITableViewCell {
     }
     
     fileprivate func loadCellContent() {
-        imgHeader = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 180))
-        addSubview(imgHeader)
-        
-        uiviewAvatarShadow = UIView(frame: CGRect(x: 20, y: 139, width: 78, height: 78))
-        uiviewAvatarShadow.layer.cornerRadius = 39
-        uiviewAvatarShadow.layer.shadowColor = UIColor._182182182().cgColor
-        uiviewAvatarShadow.layer.shadowOpacity = 1
-        uiviewAvatarShadow.layer.shadowRadius = 8
-        uiviewAvatarShadow.layer.shadowOffset = CGSize(width: 0, height: 1)
-        
-        imgAvatar = UIImageView(frame: CGRect(x: 0, y: 0, width: 58, height: 58))
-        imgAvatar.layer.cornerRadius = 29
-        imgAvatar.contentMode = .scaleAspectFill
-        imgAvatar.clipsToBounds = true
-        imgAvatar.layer.borderWidth = 5
-        imgAvatar.layer.borderColor = UIColor.white.cgColor
-        
-        addSubview(uiviewAvatarShadow)
-        uiviewAvatarShadow.addSubview(imgAvatar)
-        
         lblName = UILabel()
         lblName.numberOfLines = 0
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 20)
@@ -489,20 +505,7 @@ class ColListDetailHeader: UITableViewCell {
         addConstraintsWithFormat("V:|-212-[v0]-5-[v1(22)]-10-[v2]-20-[v3(5)]-0-|", options: [], views: lblName, lblTime, lblDesp, line)
     }
     
-    func setValueForCell(img: UIImage) {
-        imgHeader.image = img
-        General.shared.avatar(userid: Key.shared.user_id, completion: { avatarImage in
-            self.imgAvatar.image = avatarImage
-        })
-    }
-    
     func updateValueForCell(colInfo: PinCollection) {
-        
-        General.shared.avatar(userid: colInfo.creatorId) { (avatarImage) in
-            self.imgAvatar.image = avatarImage
-            self.imgAvatar.isUserInteractionEnabled = true
-        }
-        
         let attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._146146146()]
         let nameAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)

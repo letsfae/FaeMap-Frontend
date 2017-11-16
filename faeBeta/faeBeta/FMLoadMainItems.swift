@@ -82,13 +82,13 @@ extension FaeMapViewController {
         btnCancelSelect.isHidden = true
         
         imgSearchIcon = UIImageView()
-        imgSearchIcon.image = #imageLiteral(resourceName: "searchBarIcon")
+        imgSearchIcon.image = #imageLiteral(resourceName: "Search")
         imgSchbarShadow.addSubview(imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
         imgAddressIcon = UIImageView()
-        imgAddressIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        imgAddressIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation") 
         imgSchbarShadow.addSubview(imgAddressIcon)
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgAddressIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgAddressIcon)

@@ -1,5 +1,5 @@
 //
-//  AddFriendFromNameCardViewController.swift
+//  FriendOperationFromContactsViewController.swift
 //  faeBeta
 //
 //  Created by Vicky on 2017-10-26.

@@ -62,7 +62,7 @@ class PlacesListCell: UITableViewCell {
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
-        addConstraintsWithFormat("H:|-\(62*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
+        addConstraintsWithFormat("H:|-\(69*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
 }
