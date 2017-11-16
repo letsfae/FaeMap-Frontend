@@ -33,7 +33,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.dataSource = self
         tblContacts.delegate = self
         tblContacts.separatorStyle = .none
-        self.automaticallyAdjustsScrollViewInsets = false
+        tblContacts.showsVerticalScrollIndicator = false
+        automaticallyAdjustsScrollViewInsets = false
         tblContacts.addGestureRecognizer(setTapDismissDropdownMenu())
   
         tblContacts.register(FaeContactsCell.self, forCellReuseIdentifier: "FaeContactsCell")
