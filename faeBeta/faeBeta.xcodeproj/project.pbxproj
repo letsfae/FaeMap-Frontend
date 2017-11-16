@@ -1211,7 +1211,6 @@
 				B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */,
 				B33FB2321F267C0500EC6655 /* AddUsernameController.swift */,
 				B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */,
-				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
 				B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */,
 				B33FB2311F267C0500EC6655 /* AddNearbyController.swift */,
 			);
@@ -1225,6 +1224,7 @@
 				B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */,
 				B33FB23D1F267C0500EC6655 /* WenJia.swift */,
 				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
+				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
 			);
 			path = FaeContactsExtensions;
 			sourceTree = "<group>";
