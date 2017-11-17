@@ -46,7 +46,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        createTopView("ProgressBar3")
+        createTopView("ProgressBar2")
         createTableView(59 + 135 * screenHeightFactor)
         createBottomView(getErrorView())
         registerCell()
@@ -68,10 +68,10 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         checkForUniqueUsername()
     }
     
-    func jumpToRegisterPassword() {
-        let boardRegister = RegisterPasswordViewController()
-        boardRegister.faeUser = faeUser
-        self.navigationController?.pushViewController(boardRegister, animated: false)
+    func jumpToRegisterNext() {
+        let nextRegister = RegisterPasswordViewController()
+        nextRegister.faeUser = faeUser
+        navigationController?.pushViewController(nextRegister, animated: false)
     }
     
     func getErrorView() -> UIView {
@@ -105,7 +105,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                     let valueInfo = JSON(message!)
                     if let value = valueInfo["existence"].int {
                         if value == 0 {
-                            self.jumpToRegisterPassword()
+                            self.jumpToRegisterNext()
                             self.lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
                             self.lblError.textColor = UIColor._138138138()
                         } else {

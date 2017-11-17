@@ -46,7 +46,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        createTopView("ProgressBar5")
+        createTopView("ProgressBar4")
         createDateOfBirthView()
         createGenderView()
         createBottomView(UIView(frame: CGRect.zero))
@@ -69,13 +69,29 @@ class RegisterInfoViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         setValueInUser()
-        jumpToRegisterConfirm()
+        jumpToRegisterNext()
     }
     
-    func jumpToRegisterConfirm() {
-        let boardRegister = RegisterConfirmViewController()
-        boardRegister.faeUser = faeUser
-        navigationController?.pushViewController(boardRegister, animated: true)
+    func jumpToRegisterNext() {
+        //let boardRegister = RegisterConfirmViewController()
+        //boardRegister.faeUser = faeUser
+        //navigationController?.pushViewController(boardRegister, animated: true)
+        let secureMenu = UIAlertController(title: nil, message: "How do you want to secure your account?", preferredStyle: .actionSheet)
+        let useEmail = UIAlertAction(title: "Use Email", style: .default) { (alert: UIAlertAction) in
+            let secureByEmail = RegisterEmailViewController()
+            secureByEmail.faeUser = self.faeUser
+            self.navigationController?.pushViewController(secureByEmail, animated: true)
+        }
+        let usePhone = UIAlertAction(title: "Use Phone", style: .default) { (alert: UIAlertAction) in
+            let secureByPhone = RegisterPhoneViewController()
+            secureByPhone.faeUser = self.faeUser
+            self.navigationController?.pushViewController(secureByPhone, animated: true)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in }
+        secureMenu.addAction(useEmail)
+        secureMenu.addAction(usePhone)
+        secureMenu.addAction(cancel)
+        present(secureMenu, animated: true, completion: nil)
     }
     
     func createDateOfBirthView() {

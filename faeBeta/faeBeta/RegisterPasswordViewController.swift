@@ -45,7 +45,7 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         // Do any additional setup after loading the view.
         createBottomView(getInfoView())
         createTableView(59 + 135 * screenHeightFactor)
-        createTopView("ProgressBar4")
+        createTopView("ProgressBar3")
         registerCell()
         tableView.delegate = self
         tableView.dataSource = self
@@ -64,13 +64,13 @@ class RegisterPasswordViewController: RegisterBaseViewController {
     override func continueButtonPressed() {
         view.endEditing(true)
         savePasswordInUser()
-        jumpToRegisterInfo()
+        jumpToRegisterNext()
     }
     
-    func jumpToRegisterInfo() {
-        let boardRegister = RegisterInfoViewController()
-        boardRegister.faeUser = faeUser
-        self.navigationController?.pushViewController(boardRegister, animated: false)
+    func jumpToRegisterNext() {
+        let nextRegister = RegisterInfoViewController()
+        nextRegister.faeUser = faeUser
+        self.navigationController?.pushViewController(nextRegister, animated: false)
     }
     
     func getInfoView() -> UIView {

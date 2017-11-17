@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import MessageUI
+import Social
 
-class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
+  
     var uiviewNavBar: FaeNavBar!
     var tblSpLove: UITableView!
     var arrStr: [String: String] = ["00": "Invite Friends!", "01": "From Contacts", "02": "From Facebook", "10": "Share Fae Map!", "11": "Send Message", "12": "Send Email", "13": "Share on Facebook", "14": "Share on Twitter", "15": "Other Options"]
@@ -95,6 +97,72 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.lblName.text = arrStr["\(section)\(row)"]
         cell.lblName.textColor = UIColor._107105105()
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            
+        } else {
+            switch indexPath.row {
+            case 1:
+                if !MFMessageComposeViewController.canSendText() {
+                    felixprint("message not available")
+                    return
+                }
+                let messageVC = MFMessageComposeViewController()
+                messageVC.messageComposeDelegate = self
+                messageVC.body = "Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"
+                present(messageVC, animated: true, completion: nil)
+                break
+            case 2:
+                if !MFMailComposeViewController.canSendMail() {
+                    felixprint("mail service not available")
+                    return
+                }
+                let composeVC = MFMailComposeViewController()
+                composeVC.mailComposeDelegate = self
+                composeVC.setSubject("Awesome Place Discovery App to Check Out!")
+                composeVC.setMessageBody("Just a quick note to tell you about a cool app I’ve been using. Fae Map is a free place discovery and sharing app that I thought you might like. Check it out here: <a>faemaps.com</a>.\n\nDownload it <a href='https://www.faemaps.com/'>here</a> and let’s discover and go to amazing places together.", isHTML: true)
+                present(composeVC, animated: true, completion: nil)
+                break
+            case 3:
+                /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook) {
+                    felixprint("facebook not available")
+                    return
+                }
+                let fbVC = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+                fbVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
+                present(fbVC!, animated: true, completion: nil)*/
+                break
+            case 4:
+                if UIApplication.shared.canOpenURL(URL(string: "twitter://")!) {
+                    UIApplication.shared.openURL(URL(string: "twitter://post?message=hello%20world")!)
+                }
+                /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
+                    felixprint("twitter not available")
+                    return
+                }
+                let twitterVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+                twitterVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
+                present(twitterVC!, animated: true, completion: nil)*/
+                break
+            case 5:
+                let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"], applicationActivities: nil)
+                activityVC.popoverPresentationController?.sourceView = self.view
+                present(activityVC, animated: true, completion: nil)
+                break
+            default:
+                break
+            }
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        controller.dismiss(animated: true, completion: nil)
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
