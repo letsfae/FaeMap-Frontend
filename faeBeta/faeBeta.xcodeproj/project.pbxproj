@@ -1252,6 +1252,7 @@
 			isa = PBXGroup;
 			children = (
 				B3D106DC1F88916200A1725A /* SetAccount */,
+				B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */,
 				B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */,
 				B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */,
 				B37E5DAD1F83103F008A6B4B /* SetPrivacyViewController.swift */,
@@ -1271,7 +1272,6 @@
 				B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */,
 				B37E5DAE1F83103F008A6B4B /* SetShortIntro.swift */,
 				9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */,
-				B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
