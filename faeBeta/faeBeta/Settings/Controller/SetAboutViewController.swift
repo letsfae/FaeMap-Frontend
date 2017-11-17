@@ -24,7 +24,7 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         
-        tblAbout = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblAbout = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblAbout)
         tblAbout.separatorStyle = .none
         tblAbout.delegate = self
@@ -46,12 +46,13 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as!GeneralTitleCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as! GeneralTitleCell
         cell.switchIcon.isHidden = true
         cell.lblDes.isHidden = true
         cell.imgView.isHidden = false
         cell.setContraintsForDes(desp: false)
         cell.lblName.text = arrAboutString[indexPath.row]
+        cell.topGrayLine.isHidden = true
         return cell
     }
     

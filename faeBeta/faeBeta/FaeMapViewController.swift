@@ -57,6 +57,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var lblExpContent: UILabel!
     var arrExpPlace = [PlacePin]()
     var intCurtPage = 0
+    var visibleClusterPins = [CCHMapClusterAnnotation]()
     
     // Compass and Locating Self
     var btnZoom: FMZoomButton!

@@ -36,7 +36,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         tblAccount.register(SetAccountCell.self, forCellReuseIdentifier: "accountCell")
         tblAccount.separatorStyle = .none
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tblAccount)
-        view.addConstraintsWithFormat("V:|-65-[v0]-0-|", options: [], views: tblAccount)
+        view.addConstraintsWithFormat("V:|-\(65+device_offset_top)-[v0]-0-|", options: [], views: tblAccount)
         
         if boolResetPswd {
             loadResetPswdSucceedPage()

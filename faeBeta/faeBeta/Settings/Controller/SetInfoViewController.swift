@@ -58,7 +58,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func loadTableView() {
-        tblInfo = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblInfo = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblInfo)
         tblInfo.separatorStyle = .none
         tblInfo.delegate = self
@@ -76,16 +76,6 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         return 4
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let uiview = UIView()
-        uiview.backgroundColor = UIColor._241241241()
-        return uiview
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 5
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralTitleCell", for: indexPath as IndexPath) as! GeneralTitleCell
         cell.lblName.isHidden = false
@@ -95,6 +85,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.section == 0 {
             cell.switchIcon.isHidden = true
             cell.imgView.isHidden = false
+            cell.topGrayLine.isHidden = true
         }
         else {
             cell.switchIcon.isHidden = false
@@ -105,6 +96,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 cell.switchIcon.setOn(Key.shared.disableAge, animated: false)
             }
             cell.imgView.isHidden = true
+            cell.topGrayLine.isHidden = false
         }
         cell.lblDes.text = arrDetail[indexPath.section]
         cell.lblName.text = arrTitle[indexPath.section]

@@ -34,7 +34,7 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func loadTableView() {
-        tblMaps = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblMaps = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         tblMaps.separatorStyle = .none
         view.addSubview(tblMaps)
         tblMaps.dataSource = self
@@ -47,16 +47,6 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let uiview = UIView()
-        uiview.backgroundColor = UIColor._241241241()
-        return uiview
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 5
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,6 +69,7 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.lblDes.isHidden = true
             cell.removeContraintsForDes()
             cell.imgView.isHidden = true
+            cell.topGrayLine.isHidden = true
             return cell
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralSubTitleCell", for: indexPath as IndexPath) as! GeneralSubTitleCell

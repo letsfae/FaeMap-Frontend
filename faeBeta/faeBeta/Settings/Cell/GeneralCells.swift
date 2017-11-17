@@ -23,6 +23,7 @@ class GeneralTitleCell: UITableViewCell {
     var switchIcon: UISwitch!
     var lblDes: FaeLabel!
     var imgView: UIImageView!
+    var topGrayLine: UIView!
     
     internal var lblDesContraint = [NSLayoutConstraint]() {
         didSet {
@@ -99,6 +100,11 @@ class GeneralTitleCell: UITableViewCell {
     }
     
     fileprivate func loadContent() {
+        
+        topGrayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 5))
+        topGrayLine.backgroundColor = UIColor._241241241()
+        addSubview(topGrayLine)
+        
         lblName = FaeLabel(CGRect.zero, .left, .medium, 18, UIColor._898989())
         addSubview(lblName)
         addConstraintsWithFormat("H:|-20-[v0]-60-|", options: [], views: lblName)

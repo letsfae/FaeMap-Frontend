@@ -370,7 +370,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count)) - device_offset_top - device_offset_bot_v2
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count)) - device_offset_top - device_offset_bot
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 - 48 + uiviewSchLocResBg.frame.height + 5
             }

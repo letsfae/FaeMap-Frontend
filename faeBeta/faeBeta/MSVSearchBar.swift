@@ -20,7 +20,7 @@ extension MapSearchViewController {
                 uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot_v2, CGFloat(68 * filteredPlaces.count))
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * filteredPlaces.count))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
                 uiviewPics.isHidden = false
@@ -51,7 +51,7 @@ extension MapSearchViewController {
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot_v2, CGFloat(48 * googlePredictions.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * googlePredictions.count))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
             }

@@ -250,14 +250,14 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         }
     }
 
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = IVBezierPathRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor._206184231()
-        renderer.lineWidth = 8
-        renderer.lineCap = .round
-        renderer.lineJoin = .round
-        renderer.borderColor = UIColor._182150210()
-        renderer.borderMultiplier = 1.5
-        return renderer
-    }
+//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//        let renderer = IVBezierPathRenderer(overlay: overlay)
+//        renderer.strokeColor = UIColor._206184231()
+//        renderer.lineWidth = 8
+//        renderer.lineCap = .round
+//        renderer.lineJoin = .round
+//        renderer.borderColor = UIColor._182150210()
+//        renderer.borderMultiplier = 1.5
+//        return renderer
+//    }
 }

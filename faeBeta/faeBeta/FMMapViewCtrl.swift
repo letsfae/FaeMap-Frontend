@@ -36,9 +36,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.alpha = 0
                 anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
+                let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
                 DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
                         anView.alpha = 1
                     }, completion: nil)

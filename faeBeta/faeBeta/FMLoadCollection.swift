@@ -50,9 +50,36 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageWidth: CGFloat = 250
-        joshprint(clctViewMap.contentOffset.x)
-        intCurtPage = Int(clctViewMap.contentOffset.x / pageWidth)
-        joshprint(intCurtPage)
+        let pageWidth: CGFloat = 233
+        intCurtPage = Int((clctViewMap.contentOffset.x + 63) / pageWidth)
+        highlightPlace(intCurtPage)
+    }
+    
+    func highlightPlace(_ idx: Int) {
+        guard idx < arrExpPlace.count else { return }
+        deselectAllAnnotations()
+        let pinId = arrExpPlace[idx].id
+        for place in self.visibleClusterPins {
+            guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
+            guard firstAnn.id == pinId else { continue }
+            let idx = firstAnn.class_2_icon_id
+            firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
+            guard let anView = faeMapView.view(for: place) as? PlacePinAnnotationView else { continue }
+            anView.assignImage(firstAnn.icon)
+            selectedPlace = firstAnn
+            selectedPlaceView = anView
+            selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
+            selectedPlaceView?.layer.zPosition = 1001
+        }
+    }
+    
+    func scrollTo(_ id: Int) {
+        guard arrExpPlace.count > 0 else { return }
+        for i in 0..<arrExpPlace.count {
+            guard arrExpPlace[i].id == id else { continue }
+            var offset = clctViewMap.contentOffset
+            offset.x = CGFloat(233 * i) - 63
+            clctViewMap.setContentOffset(offset, animated: true)
+        }
     }
 }

@@ -88,7 +88,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func loadTextView() {
         lblScanTitle = UILabel()
-        lblScanTitle.text = "Scanning for people nerby!"
+        lblScanTitle.text = "Scanning for people nearby!"
         lblScanTitle.textAlignment = .center
         lblScanTitle.textColor = UIColor._898989()
         lblScanTitle.font = UIFont(name: "AvenirNext-Medium", size: 18)
@@ -104,13 +104,13 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblScanTitle)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblScanSubtitle)
-        view.addConstraintsWithFormat("V:|-110-[v0]", options: [], views: lblScanTitle)
-        view.addConstraintsWithFormat("V:|-140-[v0]", options: [], views: lblScanSubtitle)
+        view.addConstraintsWithFormat("V:|-\(110+device_offset_top)-[v0]", options: [], views: lblScanTitle)
+        view.addConstraintsWithFormat("V:|-\(140+device_offset_top)-[v0]", options: [], views: lblScanSubtitle)
     }
     
     func loadAvatarWave() {
         let xAxis: CGFloat = screenWidth / 2
-        let yAxis: CGFloat = 368 * screenHeightFactor
+        let yAxis: CGFloat = 368 * screenHeightFactor + device_offset_top + device_offset_top
         
         uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenWidth))
         uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
@@ -190,7 +190,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func loadTable() {
         tblUsernames = UITableView()
-        tblUsernames.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
+        tblUsernames.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
         tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")

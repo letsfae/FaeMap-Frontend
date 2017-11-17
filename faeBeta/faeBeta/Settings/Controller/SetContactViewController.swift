@@ -25,7 +25,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewNavbar.loadBtnConstraints()
         uiviewNavbar.rightBtn.setImage(nil, for: .normal)
         
-        tblContact = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblContact = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblContact)
         tblContact.delegate = self
         tblContact.dataSource = self
@@ -52,6 +52,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.lblDes.isHidden = true
         cell.switchIcon.isHidden = true
         cell.lblName.text = arrContact[indexPath.row]
+        cell.topGrayLine.isHidden = true
         return cell
     }
     
