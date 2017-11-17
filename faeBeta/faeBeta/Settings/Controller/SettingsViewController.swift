@@ -33,7 +33,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         setupFaeNav()
         setupTableView()
-        setupVersionView()
+//        setupVersionView()
         setupLogoutUIViewBackground()
         setupLogoutView()
     }
