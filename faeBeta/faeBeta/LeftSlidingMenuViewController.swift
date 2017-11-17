@@ -83,6 +83,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 self.uiviewBackTop.frame.origin.x = 0
                 self.uiviewBackBottom.frame.origin.x = 0
             }, completion: nil)
+            self.updateRedDot()
         }
     }
     
@@ -380,6 +381,20 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     print("Fail to switch to online")
                 }
             })
+        }
+    }
+    
+    func updateRedDot() {
+        FaeContact().getFriendRequests() {(status: Int, message: Any?) in
+            let json = JSON(message!)
+            if json.count > 0 {
+                let cell = self.tblLeftSlide.cellForRow(at: IndexPath(row: 2, section: 0)) as! LeftSlideWindowCell
+                cell.uiviewRedDot.isHidden = false
+            }
+        }
+        if !Key.shared.userEmailVerified && !Key.shared.userPhoneVerified {
+            let cell = tblLeftSlide.cellForRow(at: IndexPath(row: 5, section: 0)) as! LeftSlideWindowCell
+            cell.uiviewRedDot.isHidden = false
         }
     }
 }

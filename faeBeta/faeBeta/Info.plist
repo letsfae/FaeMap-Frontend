@@ -28,6 +28,8 @@
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>twitter</string>
+		<string>fb</string>
 		<string>comgooglemaps</string>
 		<string>googlechromes</string>
 	</array>

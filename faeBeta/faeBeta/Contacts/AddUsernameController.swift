@@ -36,32 +36,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     var boolSearched: Bool = false
     var indicatorView: UIActivityIndicatorView!
     
-    let lblPrefix: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 3, width: 20, height: 25))
-        label.textAlignment = .left
-        label.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
-        label.textColor = .white
-        label.tag = 0
-        return label
-    }()
-    
-    let btnIndicator: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 3, height: 30))
-        button.backgroundColor = UIColor._2499090()
-        button.layer.cornerRadius = 3
-        button.frame.origin.x = screenWidth - 8
-        button.frame.origin.y = 120
-        button.adjustsImageWhenHighlighted = false
-        return button
-    }()
-    
-    enum IndicatorState: String {
-        case began
-        case scrolling
-        case end
-    }
-    
-    var indicatorState: IndicatorState = .end
     var filtered = [UserNameCard]()
     var arrFriends = [Friends]()
     var arrReceivedRequests = [Friends]()

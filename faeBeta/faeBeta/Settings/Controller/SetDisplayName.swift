@@ -107,8 +107,8 @@ class SetDisplayName: UIViewController {
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.lblEditIntro.frame.origin.y -= frameKeyboard.height - (30 - 14)
-            self.btnSave.frame.origin.y -= frameKeyboard.height - (30 - 14)
+            self.lblEditIntro.frame.origin.y = screenHeight - frameKeyboard.height - 119
+            self.btnSave.frame.origin.y = screenHeight - frameKeyboard.height - 64
         })
     }
     

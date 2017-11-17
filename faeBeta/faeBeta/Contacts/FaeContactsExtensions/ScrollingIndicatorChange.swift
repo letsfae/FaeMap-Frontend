@@ -8,7 +8,13 @@
 
 import UIKit
 
-extension AddUsernameController: UIScrollViewDelegate {
+extension ContactsViewController: UIScrollViewDelegate {
+    
+    func setupScrollBar() {
+        view.addSubview(btnIndicator)
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(panGestureIndicator(_:)))
+        btnIndicator.addGestureRecognizer(panGesture)
+    }
     
     /* Joshua 06/18/17
      Print debug info of the following functions to console,
@@ -17,18 +23,33 @@ extension AddUsernameController: UIScrollViewDelegate {
     
     // UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("[scrollViewWillBeginDragging]")
+        felixprint("[scrollViewWillBeginDragging]")
         
-        animateIndicatorSize(type: 1)
+        //animateIndicatorSize(type: 1)
         
-        indicatorState = .began
+        //indicatorState = .began
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        schbarUsernames.txtSchField.resignFirstResponder()
+        //felixprint(scrollView.contentOffset.y)
+        schbarContacts.txtSchField.resignFirstResponder()
+        let currentOffset = scrollView.contentOffset.y
+        let tableHeight = scrollView.frame.size.height
+        let scrollHeight = scrollView.contentSize.height
+        let percentage = currentOffset / (scrollHeight - tableHeight)
+        //felixprint(percentage)
+        let btnRange = screenHeight - 120 - 30 - 6
+        if percentage <= 0 {
+            btnIndicator.frame.origin.y = 120
+        } else if percentage < 1 {
+            btnIndicator.frame.origin.y = 120 + btnRange * percentage
+        } else {
+            btnIndicator.frame.origin.y = 120 + btnRange
+        }
+        //animateIndicatorSize(type: 2)
         // scrollView's last subview is the scrolling indicator
         // this indicator exists when table is initialized
-        guard let indicator = tblUsernames.subviews.last as? UIImageView else { return }
+        /*guard let indicator = tblContacts.subviews.last as? UIImageView else { return }
         
         // clear the color of indicator
         indicator.backgroundColor = .clear
@@ -41,7 +62,7 @@ extension AddUsernameController: UIScrollViewDelegate {
         }
         
         // get first visible label, which is the first cell of visible cells on the screen
-        let cell = (tblUsernames.visibleCells.first) as? FaeAddUsernameCell
+        let cell = (tblContacts.visibleCells.first) as? FaeContactsCell
         guard let prefix = cell?.lblUserName?.text else { return }
         
         // get the first index of cell label and get the initial of the cell
@@ -56,45 +77,45 @@ extension AddUsernameController: UIScrollViewDelegate {
         // so here, I used an absolute value 'percentage' to get the percentage the indicator should be
         // since btnIndicator is added on view rather than table view (if on table view, the UI is weird)
         // btnIndicator's position.y is calculate by the percentage of the table view frame.size.height
-        var percentage = (indicator.frame.origin.y) / tblUsernames.contentSize.height
+        var percentage = (indicator.frame.origin.y) / tblContacts.contentSize.height
         // sometimes the percentage will pass beyond 1.0 or below 0.0, force it to be within 0.0-1.0
         if percentage > 1.0 { percentage = 1.0 }
         else if percentage < 0.0 { percentage = 0.0 }
         // 118.0 is the start point of the btnIndicator's origin.y
         // (for here, composes of 65 of navbar, 49 of schbar, and 4 of offset for aesthetic)
-        btnIndicator.frame.origin.y = tblUsernames.frame.size.height * percentage + 118.0
+        btnIndicator.frame.origin.y = tblContacts.frame.size.height * percentage + 118.0
         // if btnIndicator is beyond the end of table view's frame, force it to be within table view
         // 30 is the btnIndicator's height, and 4 of offset for aesthetic
         if btnIndicator.frame.origin.y > screenHeight - 30 - 4 {
             btnIndicator.frame.origin.y = screenHeight - 30 - 4
-        }
+        }*/
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("[scrollViewDidEndDragging]", decelerate)
+        felixprint("[scrollViewDidEndDragging]", decelerate)
         indicatorState = .end
         
         // check if you can find when will "decelerate" be set to true or false
-        if !decelerate {
+        /*if !decelerate {
             animateIndicatorSize(type: 2)
-        }
+        }*/
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         // highly suggest to check the console to see this line of print when trigger srolling
-        print("[scrollViewDidEndDecelerating]")
-        if indicatorState == .end {
+        felixprint("[scrollViewDidEndDecelerating]")
+        /*if indicatorState == .end {
             UIView.animate(withDuration: 0.2, animations: {
                 self.btnIndicator.frame.size.width = 3
                 self.btnIndicator.frame.origin.x = 406
             }) { _ in
                 self.btnIndicator.layer.cornerRadius = 3
             }
-        }
+        }*/
     }
     // End of UIScrollViewDelegate
     
-    func panGestureIndicator(_ pan: UIPanGestureRecognizer) {
+    @objc func panGestureIndicator(_ pan: UIPanGestureRecognizer) {
         if pan.state == .began {
             animateIndicatorSize(type: 0)
             indicatorState = .scrolling
@@ -102,7 +123,7 @@ extension AddUsernameController: UIScrollViewDelegate {
             indicatorState = .end
             animateIndicatorSize(type: 2)
             if btnIndicator.center.y >= screenHeight - 22 {
-                tblUsernames.scrollToRow(at: IndexPath(row: filtered.count - 1, section: 0), at: .bottom, animated: true)
+                tblContacts.scrollToRow(at: IndexPath(row: filtered.count - 1, section: 0), at: .bottom, animated: true)
             }
         } else {
             // when pan gesture recognized changing state
@@ -127,8 +148,8 @@ extension AddUsernameController: UIScrollViewDelegate {
             btnIndicator.center.y = loc_y
             
             // reverse what we've got in func scrollViewDidScroll
-            let percent = (btnIndicator.frame.origin.y - 118.0) / tblUsernames.frame.size.height
-            let indicator_y = tblUsernames.contentSize.height * percent
+            let percent = (btnIndicator.frame.origin.y - 118.0) / tblContacts.frame.size.height
+            let indicator_y = tblContacts.contentSize.height * percent
             // why is 0.85?
             // by research on the relationship between scrollView's indicator and its contentOffset
             // we found a value varies from 0.83 to 0.87, I chose a mid one, 0.85
@@ -136,7 +157,7 @@ extension AddUsernameController: UIScrollViewDelegate {
             let point_y = 0.85 * indicator_y
             let point = CGPoint(x: 0, y: point_y)
             
-            tblUsernames.setContentOffset(point, animated: false)
+            tblContacts.setContentOffset(point, animated: false)
         }
     }
     
