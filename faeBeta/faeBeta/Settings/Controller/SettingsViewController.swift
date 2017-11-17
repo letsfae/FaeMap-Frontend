@@ -29,11 +29,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var uiviewBackground: UIView!
     var btnBackground: UIButton!
     
+    var tblSettings: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupFaeNav()
         setupTableView()
-//        setupVersionView()
+        setupVersionView()
         setupLogoutUIViewBackground()
         setupLogoutView()
     }
@@ -44,20 +46,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func setupFaeNav() {
         view.backgroundColor = .white
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.lblTitle.text = "Settings"
         
-        // Vicky 09/17/17  为了显示FaeNavBar里左边的back button,需调用loadBtnConstraints方法
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
-        // Vicky 09/17/17 End
-        
-        uiviewInterval = UIView(frame: CGRect(x: 0, y: uiviewNavBar.bounds.height, width: screenWidth, height: 10))
-        uiviewInterval.backgroundColor = .white
-        view.addSubview(uiviewInterval)
     }
     
     func setupLogoutUIViewBackground() {
@@ -72,21 +68,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     fileprivate func setupTableView() {
-        // Vicky 09/17/17 table命名以tbl开始，可改为tblSettings
-        let tblSettings = UITableView()
+        tblSettings = UITableView()
         view.addSubview(tblSettings)
-        tblSettings.frame = CGRect(x: 0, y: uiviewNavBar.bounds.height+uiviewInterval.bounds.height, width: screenWidth, height: screenHeight-uiviewNavBar.bounds.height-uiviewInterval.bounds.height-30)
+        tblSettings.frame = CGRect(x: 0, y: uiviewNavBar.bounds.height, width: screenWidth, height: screenHeight - uiviewNavBar.bounds.height)
         tblSettings.separatorStyle = .none
-        //uitableviewSettings.allowsSelection = false
         tblSettings.delegate = self
         tblSettings.dataSource = self
         tblSettings.register(SettingsCell.self, forCellReuseIdentifier: "settingsCell")
+        var inset = tblSettings.contentInset
+        inset.top = 7
+        tblSettings.contentInset = inset
     }
     
     func setupVersionView() {
         uiviewVersion = UIView()
         view.addSubview(uiviewVersion)
-        uiviewVersion.center.x = screenWidth/2
+        uiviewVersion.center.x = screenWidth / 2
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewVersion)
         view.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: uiviewVersion)
         imgVersion = UIImageView()
@@ -98,7 +95,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         lblVersion.text = "Fae Map Version 0.5"
         lblVersion.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblVersion.textColor = UIColor._138138138()
-        uiviewVersion.addConstraintsWithFormat("H:|-\(136*screenWidth/414)-[v0(12)]-9-[v1(122)]", options: [], views: imgVersion, lblVersion)
+        uiviewVersion.addConstraintsWithFormat("H:|-\(136 * screenWidth / 414)-[v0(12)]-9-[v1(122)]", options: [], views: imgVersion, lblVersion)
         uiviewVersion.addConstraintsWithFormat("V:[v0(10)]-4-|", options: [], views: imgVersion)
         uiviewVersion.addConstraintsWithFormat("V:[v0(18)]-0-|", options: [], views: lblVersion)
     }
@@ -138,7 +135,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         btnLogout.backgroundColor = UIColor._2499090()
         btnLogout.layer.cornerRadius = 19 * screenWidthFactor
         btnLogout.addTarget(self, action: #selector(logOut(_:)), for: .touchUpInside)
-
+        
         btnClose = UIButton(frame: CGRect(x: 0, y: 0, width: 47, height: 47))
         uiviewLogout.addSubview(btnClose)
         btnClose.setImage(#imageLiteral(resourceName: "Settings_delete"), for: .normal)
@@ -148,7 +145,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func logOut(_ sender: UIButton) {
         let logOut = FaeUser()
-        logOut.logOut { (status: Int?, _: Any?) in
+        logOut.logOut { (_: Int?, _: Any?) in
             self.jumpToWelcomeView(animated: true)
         }
     }
@@ -157,11 +154,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         /*if Key.shared.navOpenMode == .welcomeFirst {
             navigationController?.popToRootViewController(animated: animated)
         } else {*/
-            let welcomeVC = WelcomeViewController()
-            navigationController?.pushViewController(welcomeVC, animated: animated)
-            navigationController?.viewControllers = [welcomeVC]
-            Key.shared.navOpenMode = .welcomeFirst
-            Key.shared.is_Login = 0
+        let welcomeVC = WelcomeViewController()
+        navigationController?.pushViewController(welcomeVC, animated: animated)
+        navigationController?.viewControllers = [welcomeVC]
+        Key.shared.navOpenMode = .welcomeFirst
+        Key.shared.is_Login = 0
         //}
     }
     
@@ -221,21 +218,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        if indexPath.row < settingsIcons.count {
-//            let vc = settingsController[indexPath.row]
-//            self.navigationController?.pushViewController(vc, animated: true)
-//            tableView.deselectRow(at: indexPath, animated: true)
-//        }
-//        
-//    }
+    //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    //        if indexPath.row < settingsIcons.count {
+    //            let vc = settingsController[indexPath.row]
+    //            self.navigationController?.pushViewController(vc, animated: true)
+    //            tableView.deselectRow(at: indexPath, animated: true)
+    //        }
+    //
+    //    }
     
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
 }
-

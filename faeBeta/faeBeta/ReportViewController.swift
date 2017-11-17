@@ -21,11 +21,11 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     let TAG = 2
     let colorPlaceHolder = UIColor(r: 155, g: 155, b: 155, alpha: 100)
     
-    var buttonBackToCommentDetail: UIButton!
-    var imageDescription: UIImageView!
-    var textViewReportContent: UITextView!
-    var buttonSendReport: UIButton!
-    var lableTextViewPlaceholder: UILabel!
+    var btnBack: UIButton!
+    var imgDesc: UIImageView!
+    var txtViewContent: UITextView!
+    var btnSend: UIButton!
+    var lblPlaceholder: UILabel!
     var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
@@ -44,7 +44,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textViewReportContent.becomeFirstResponder()
+        txtViewContent.becomeFirstResponder()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,68 +53,68 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     }
     
     func loadBasicItems() {
-        buttonBackToCommentDetail = UIButton()
-        buttonBackToCommentDetail.setImage(UIImage(named: "reportCommentBackToMap"), for: UIControlState())
-        view.addSubview(buttonBackToCommentDetail)
-        view.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: buttonBackToCommentDetail)
-        view.addConstraintsWithFormat("V:|-21-[v0(48)]", options: [], views: buttonBackToCommentDetail)
-        buttonBackToCommentDetail.addTarget(self,
+        btnBack = UIButton()
+        btnBack.setImage(UIImage(named: "reportCommentBackToMap"), for: UIControlState())
+        view.addSubview(btnBack)
+        view.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: btnBack)
+        view.addConstraintsWithFormat("V:|-\(21+device_offset_top)-[v0(48)]", options: [], views: btnBack)
+        btnBack.addTarget(self,
                                             action: #selector(ReportViewController.actionBackToCommentPinDetail(_:)),
                                             for: .touchUpInside)
         
-        imageDescription = UIImageView(frame: CGRect(x: 0, y: 72, width: 361 * screenWidthFactor, height: 54 * screenHeightFactor))
-        imageDescription.center.x = screenWidth / 2
-        imageDescription.contentMode = .scaleAspectFit
-        view.addSubview(imageDescription)
+        imgDesc = UIImageView(frame: CGRect(x: 0, y: 72 + device_offset_top, width: 361 * screenWidthFactor, height: 54 * screenHeightFactor))
+        imgDesc.center.x = screenWidth / 2
+        imgDesc.contentMode = .scaleAspectFit
+        view.addSubview(imgDesc)
         
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(ReportViewController.tapOutsideToDismissKeyboard(_:)))
         view.addGestureRecognizer(tapToDismissKeyboard)
         
         let font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        buttonSendReport = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
-        buttonSendReport.center.x = screenWidth / 2
-        buttonSendReport.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: font!]), for: UIControlState())
-        buttonSendReport.layer.cornerRadius = 25 * screenHeightFactor
-        buttonSendReport.backgroundColor = UIColor._2499090()
-        buttonSendReport.addTarget(self, action: #selector(ReportViewController.actionSendReport(_:)), for: .touchUpInside)
-        view.insertSubview(buttonSendReport, at: 0)
-        view.bringSubview(toFront: buttonSendReport)
+        btnSend = UIButton(frame: CGRect(x: 0, y: screenHeight - 176 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnSend.center.x = screenWidth / 2
+        btnSend.setAttributedTitle(NSAttributedString(string: "Send", attributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: font!]), for: UIControlState())
+        btnSend.layer.cornerRadius = 25 * screenHeightFactor
+        btnSend.backgroundColor = UIColor._2499090()
+        btnSend.addTarget(self, action: #selector(ReportViewController.actionSendReport(_:)), for: .touchUpInside)
+        view.insertSubview(btnSend, at: 0)
+        view.bringSubview(toFront: btnSend)
         
-        textViewReportContent = UITextView()
-        textViewReportContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        textViewReportContent.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
-        textViewReportContent.backgroundColor = UIColor.clear
-        textViewReportContent.tintColor = UIColor._2499090()
-        textViewReportContent.delegate = self
-        textViewReportContent.isScrollEnabled = false
-        view.addSubview(textViewReportContent)
-        view.addConstraintsWithFormat("H:[v0(294)]", options: [], views: textViewReportContent)
-        view.addConstraintsWithFormat("V:|-157-[v0(44)]", options: [], views: textViewReportContent)
-        NSLayoutConstraint(item: textViewReportContent, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
-        lableTextViewPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
-        lableTextViewPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
-        lableTextViewPlaceholder.textColor = UIColor._155155155()
+        txtViewContent = UITextView()
+        txtViewContent.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        txtViewContent.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1.0)
+        txtViewContent.backgroundColor = UIColor.clear
+        txtViewContent.tintColor = UIColor._2499090()
+        txtViewContent.delegate = self
+        txtViewContent.isScrollEnabled = false
+        view.addSubview(txtViewContent)
+        view.addConstraintsWithFormat("H:[v0(294)]", options: [], views: txtViewContent)
+        view.addConstraintsWithFormat("V:|-\(157+device_offset_top)-[v0(44)]", options: [], views: txtViewContent)
+        NSLayoutConstraint(item: txtViewContent, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1.0, constant: 0).isActive = true
+        lblPlaceholder = UILabel(frame: CGRect(x: 5, y: 8, width: 294, height: 27))
+        lblPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 20)
+        lblPlaceholder.textColor = UIColor._155155155()
         if reportType == REPORT {
-            lableTextViewPlaceholder.text = "Describe to us the case..."
-            imageDescription.image = UIImage(named: "reportViewDescription")
+            lblPlaceholder.text = "Describe to us the case..."
+            imgDesc.image = UIImage(named: "reportViewDescription")
         } else if reportType == FEEDBACK {
-            lableTextViewPlaceholder.text = "Your Feedback..."
-            imageDescription.image = UIImage(named: "reportYourFeedback")
+            lblPlaceholder.text = "Your Feedback..."
+            imgDesc.image = UIImage(named: "reportYourFeedback")
         } else if reportType == TAG {
-            lableTextViewPlaceholder.text = "New Tag(s)..."
-            imageDescription.image = UIImage(named: "reportNewTags")
+            lblPlaceholder.text = "New Tag(s)..."
+            imgDesc.image = UIImage(named: "reportNewTags")
         }
         
-        textViewReportContent.addSubview(lableTextViewPlaceholder)
+        txtViewContent.addSubview(lblPlaceholder)
     }
     
     @objc func actionBackToCommentPinDetail(_ sender: UIButton) {
-        textViewReportContent.endEditing(true)
+        txtViewContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
     @objc func actionSendReport(_ sender: UIButton) {
-        textViewReportContent.endEditing(true)
+        txtViewContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
@@ -134,32 +134,32 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.buttonSendReport.frame.origin.y += (screenHeight - keyboardFrame.height) - self.buttonSendReport.frame.origin.y - 50 * screenHeightFactor - 14
+            self.btnSend.frame.origin.y += (screenHeight - keyboardFrame.height) - self.btnSend.frame.origin.y - 50 * screenHeightFactor - 14
         })
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.buttonSendReport.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
+            self.btnSend.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
         })
     }
     
     @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        textViewReportContent.endEditing(true)
+        txtViewContent.endEditing(true)
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        if textView == textViewReportContent {
+        if textView == txtViewContent {
             let spacing = CharacterSet.whitespacesAndNewlines
             
-            if textViewReportContent.text.trimmingCharacters(in: spacing).isEmpty == false {
-                buttonSendReport.isEnabled = true
-                lableTextViewPlaceholder.isHidden = true
-                buttonSendReport.backgroundColor = UIColor._2499090()
+            if txtViewContent.text.trimmingCharacters(in: spacing).isEmpty == false {
+                btnSend.isEnabled = true
+                lblPlaceholder.isHidden = true
+                btnSend.backgroundColor = UIColor._2499090()
             } else {
-                buttonSendReport.isEnabled = false
-                lableTextViewPlaceholder.isHidden = false
-                buttonSendReport.backgroundColor = UIColor._255160160()
+                btnSend.isEnabled = false
+                lblPlaceholder.isHidden = false
+                btnSend.backgroundColor = UIColor._255160160()
             }
         }
         let numLines = Int(textView.contentSize.height / textView.font!.lineHeight)
@@ -177,9 +177,9 @@ class ReportViewController: UIViewController, UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if textView == textViewReportContent {
+        if textView == txtViewContent {
             if text == "\n" {
-                textViewReportContent.resignFirstResponder()
+                txtViewContent.resignFirstResponder()
                 return false
             }
         }

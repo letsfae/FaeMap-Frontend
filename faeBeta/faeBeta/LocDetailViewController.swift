@@ -195,7 +195,12 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     func loadMap() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 48))
+        mapView = MKMapView()
+        if screenHeight == 812 {
+            mapView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 352 + 60 + device_offset_top * 2)
+        } else {
+            mapView.frame = CGRect(x: 0, y: 0, w: 414, h: 352 + 48)
+        }
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isPitchEnabled = false
@@ -247,13 +252,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     func loadHeader() {
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor, width: screenWidth, height: 101 * screenHeightFactor))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
     
     func loadFooter() {
-        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
         let line = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
