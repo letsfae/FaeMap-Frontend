@@ -19,7 +19,7 @@ class FaeMapView: MKMapView {
     override func layoutSubviews() {
         super.layoutSubviews()
         if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
-            compassView.frame = CGRect(x: 21, y: screenHeight - cgfloatCompassOffset, width: 60, height: 60)
+            compassView.frame = CGRect(x: 21, y: screenHeight - cgfloatCompassOffset - device_offset_bot_main, width: 60, height: 60)
             if let imgView = compassView.subviews.first as? UIImageView {
                 imgView.image = #imageLiteral(resourceName: "mainScreenNorth")
             }

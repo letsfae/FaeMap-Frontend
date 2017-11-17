@@ -76,16 +76,17 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.showFullNameCard()
-        uiviewNameCard.frame.origin.y = 65 + 11
+        uiviewNameCard.frame.origin.y = 65 + 11 + device_offset_top
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.userId = Key.shared.user_id
         view.addSubview(uiviewNameCard)
         
-        uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, w: screenWidth / screenWidthFactor, h: 5))
+        uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, w: 414, h: 5 / screenHeightFactor))
+        uiviewInterval.frame.origin.y += device_offset_top
         view.addSubview(uiviewInterval)
         uiviewInterval.backgroundColor = UIColor._241241241()
         
-        tblNameCard = UITableView(frame: CGRect(x: 0, y: 395 * screenHeightFactor, width: screenWidth, height: 270))
+        tblNameCard = UITableView(frame: CGRect(x: 0, y: 390 * screenHeightFactor + 5 + device_offset_top, width: screenWidth, height: screenHeight - device_offset_top - 5 - 390 * screenHeightFactor))
         view.addSubview(tblNameCard)
         tblNameCard.delegate = self
         tblNameCard.dataSource = self

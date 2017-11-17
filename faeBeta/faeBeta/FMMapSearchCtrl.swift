@@ -44,19 +44,20 @@ extension FaeMapViewController: MapSearchDelegate {
         guard places.count > 0 else { return }
         PLACE_ENABLE = false
         placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
-        placeClusterManager.removeAnnotations(faePlacePins) {
-            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+        removePlaceUserPins({
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+                if searchText == "fromEXP" {
+                    self.visibleClusterPins = self.visiblePlaces(full: true)
+                    self.arrExpPlace = places
+                    self.clctViewMap.reloadData()
+                    self.highlightPlace(0)
+                }
+            })
             self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
-        }
-        for user in faeUserPins {
-            user.isValid = false
-        }
-        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        }, nil)
         if searchText == "fromEXP" {
             mapMode = .explore
             setTitle(type: "Random")
-            arrExpPlace = places
-            clctViewMap.reloadData()
         } else if searchText == "fromAllPlaces" {
             animateMainItems(show: true, animated: false)
             uiviewPlaceBar.places = places

@@ -48,7 +48,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func loadTableView() {
-        tblGeneral = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblGeneral = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblGeneral)
         tblGeneral.delegate = self
         tblGeneral.dataSource = self
@@ -126,15 +126,15 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         return 4
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let uiview = UIView()
-        uiview.backgroundColor = UIColor._241241241()
-        return uiview
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 5
-    }
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        let uiview = UIView()
+//        uiview.backgroundColor = UIColor._241241241()
+//        return uiview
+//    }
+//    
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 5
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sec = indexPath.section
@@ -150,6 +150,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.removeContraintsForDes()
                 cell.switchIcon.isHidden = true
                 cell.imgView.isHidden = true
+                cell.topGrayLine.isHidden = true
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "general_subtitle", for: indexPath as IndexPath) as! GeneralSubTitleCell
@@ -173,6 +174,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.removeContraintsForDes()
                 cell.switchIcon.isHidden = true
                 cell.imgView.isHidden = true
+                cell.topGrayLine.isHidden = false
                 return cell
             }
             let cell = tableView.dequeueReusableCell(withIdentifier: "general_subtitle", for: indexPath as IndexPath) as! GeneralSubTitleCell
@@ -194,6 +196,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.setContraintsForDes()
             cell.switchIcon.isHidden = false
             cell.imgView.isHidden = true
+            cell.topGrayLine.isHidden = false
             if sec == 2 {
                 cell.lblName.text = "Background Location"
                 cell.lblDes.text = "Enable for faster Discovery Performance at different locations and more accurate Local Recommendations."

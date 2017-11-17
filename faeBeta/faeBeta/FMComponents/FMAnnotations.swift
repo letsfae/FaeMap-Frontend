@@ -303,66 +303,6 @@ class SelfAnnotationView: MKAnnotationView {
             }, completion: nil)
         }
     }
-    
-    var selfIcon_invisible: UIImageView!
-    var outsideCircle_1: UIImageView!
-    var outsideCircle_2: UIImageView!
-    var outsideCircle_3: UIImageView!
-    
-    func outsideCircleAnimation() {
-        
-        if outsideCircle_1 != nil {
-            outsideCircle_1.removeFromSuperview()
-            outsideCircle_2.removeFromSuperview()
-            outsideCircle_3.removeFromSuperview()
-        }
-        
-        let initWidth: CGFloat = 20
-        
-        outsideCircle_1 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
-        outsideCircle_2 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
-        outsideCircle_3 = UIImageView(frame: CGRect(x: 0, y: 0, width: initWidth, height: initWidth))
-        outsideCircle_1.layer.zPosition = 0
-        outsideCircle_2.layer.zPosition = 1
-        outsideCircle_3.layer.zPosition = 2
-        outsideCircle_1.center = anchorPoint
-        outsideCircle_2.center = anchorPoint
-        outsideCircle_3.center = anchorPoint
-        outsideCircle_1.isUserInteractionEnabled = false
-        outsideCircle_2.isUserInteractionEnabled = false
-        outsideCircle_3.isUserInteractionEnabled = false
-        outsideCircle_1.image = #imageLiteral(resourceName: "myPosition_outside")
-        outsideCircle_2.image = #imageLiteral(resourceName: "myPosition_outside")
-        outsideCircle_3.image = #imageLiteral(resourceName: "myPosition_outside")
-        
-        addSubview(outsideCircle_3)
-        addSubview(outsideCircle_2)
-        addSubview(outsideCircle_1)
-        
-        let circleWidth: CGFloat = 100
-        let offSet: CGFloat = -(circleWidth - mapAvatarWidth) / 2
-        
-        UIView.animate(withDuration: 2.4, delay: 0, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.outsideCircle_1 != nil {
-                self.outsideCircle_1.alpha = 0.0
-                self.outsideCircle_1.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
-            }
-        }), completion: nil)
-        
-        UIView.animate(withDuration: 2.4, delay: 0.8, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.outsideCircle_2 != nil {
-                self.outsideCircle_2.alpha = 0.0
-                self.outsideCircle_2.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
-            }
-        }), completion: nil)
-        
-        UIView.animate(withDuration: 2.4, delay: 1.6, options: [.repeat, .curveEaseIn, .beginFromCurrentState], animations: ({
-            if self.outsideCircle_3 != nil {
-                self.outsideCircle_3.alpha = 0.0
-                self.outsideCircle_3.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
-            }
-        }), completion: nil)
-    }
 }
 
 class UserPinAnnotationView: MKAnnotationView {

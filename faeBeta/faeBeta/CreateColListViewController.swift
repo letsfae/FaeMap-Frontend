@@ -61,28 +61,28 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     fileprivate func loadNavBar() {
-        uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65 + device_offset_top))
         view.addSubview(uiviewNavBar)
         
-        let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        let line = UIView(frame: CGRect(x: 0, y: 64 + device_offset_top, width: screenWidth, height: 1))
         line.backgroundColor = UIColor._200199204()
         uiviewNavBar.addSubview(line)
         
-        btnCancel = UIButton(frame: CGRect(x: 0, y: 21, width: 87, height: 43))
+        btnCancel = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 87, height: 43))
         uiviewNavBar.addSubview(btnCancel)
         btnCancel.setTitle("Cancel", for: .normal)
         btnCancel.setTitleColor(UIColor._115115115(), for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnCancel.addTarget(self, action: #selector(self.actionCancel(_:)), for: .touchUpInside)
         
-        btnCreate = UIButton(frame: CGRect(x: screenWidth - 85, y: 21, width: 85, height: 43))
+        btnCreate = UIButton(frame: CGRect(x: screenWidth - 85, y: 21 + device_offset_top, width: 85, height: 43))
         uiviewNavBar.addSubview(btnCreate)
         btnCreate.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnCreate.addTarget(self, action: #selector(self.actionCreateList(_:)), for: .touchUpInside)
         btnCreate.setTitleColor(UIColor._2499090(), for: .normal)
         btnCreate.setTitleColor(UIColor._255160160(), for: .disabled)
         
-        let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
+        let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28 + device_offset_top, width: 145, height: 27))
         uiviewNavBar.addSubview(lblTitle)
         lblTitle.textAlignment = .center
         lblTitle.textColor = UIColor._898989()
@@ -101,7 +101,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func loadContent() {
-        let uiviewContent = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        let uiviewContent = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(uiviewContent)
         
         let lblListName = UILabel(frame: CGRect(x: 20, y: 20, width: 195, height: 22))

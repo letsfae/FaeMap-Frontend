@@ -18,7 +18,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     var lblCurtAvatar: UILabel!
     var btnSave: UIButton!
     
-    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous",  "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Shiba Inu"]
+    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous", "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Shiba Inu"]
     
     var shadowGray = UIColor._200199204()
     
@@ -54,13 +54,13 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         btnSave.setImage(UIImage(named: "saveEditCommentPin"), for: UIControlState())
         uiviewNavBar.addSubview(btnSave)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(38)]-15-|", options: [], views: btnSave)
-        uiviewNavBar.addConstraintsWithFormat("V:|-28-[v0(25)]", options: [], views: btnSave)
+        uiviewNavBar.addConstraintsWithFormat("V:|-\(28+device_offset_top)-[v0(25)]", options: [], views: btnSave)
         btnSave.addTarget(self, action: #selector(actionSave(_:)), for: .touchUpInside)
         btnSave.isEnabled = false
     }
     
     private func loadTableView() {
-        tblView = UITableView(frame: CGRect(x: 0, y: 206, width: screenWidth, height: screenHeight-206))
+        tblView = UITableView(frame: CGRect(x: 0, y: 206 + device_offset_top, width: screenWidth, height: screenHeight - 206 - device_offset_top))
         tblView.delegate = self
         tblView.dataSource = self
         tblView.allowsSelection = false
@@ -69,7 +69,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func loadAvatarHeader() {
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 141))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 141))
         view.addSubview(uiviewHeader)
         
         lblCurtAvatar = UILabel()
@@ -109,7 +109,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "moodAvatarCell", for: indexPath)as! MoodAvatarTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "moodAvatarCell", for: indexPath) as! MoodAvatarTableViewCell
         cell.delegate = self
         cell.lblAvatarDes.text = titles[indexPath.row]
         let indexMale = indexPath.row + 1
@@ -120,14 +120,12 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         cell.btnRight.tag = indexFemale
         if intCurtAvatar == cell.btnLeft.tag {
             cell.maleRedBtn.image = UIImage(named: "selectedMoodButton")
-        }
-        else {
+        } else {
             cell.maleRedBtn.image = UIImage(named: "unselectedMoodButton")
         }
         if intCurtAvatar == cell.btnRight.tag {
             cell.femaleRedBtn.image = UIImage(named: "selectedMoodButton")
-        }
-        else {
+        } else {
             cell.femaleRedBtn.image = UIImage(named: "unselectedMoodButton")
         }
         return cell
@@ -141,14 +139,13 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         let updateMiniAvatar = FaeUser()
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
         LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
-        updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar-1)")
-        updateMiniAvatar.updateAccountBasicInfo({(status: Int, message: Any?) in
+        updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
+        updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 self.navigationController?.popViewController(animated: true)
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
-            }
-            else {
+            } else {
                 print("Fail to update miniavatar")
             }
         })

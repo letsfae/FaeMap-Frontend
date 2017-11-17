@@ -27,10 +27,11 @@ extension FaeMapViewController {
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
         placeClusterManager.cellSize = 100
-        placeClusterManager.minUniqueLocationsForClustering = 3
+//        placeClusterManager.minUniqueLocationsForClustering = 3
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
         placeClusterManager.marginFactor = 0.0
+//        placeClusterManager.isDebuggingEnabled = true
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self
@@ -138,7 +139,7 @@ extension FaeMapViewController {
         btnLocateSelf.nameCard = uiviewNameCard
         
         // Open chat view
-        btnOpenChat = UIButton(frame: CGRect(x: 12, y: screenHeight - 90 - device_offset_bot, width: 79, height: 79))
+        btnOpenChat = UIButton(frame: CGRect(x: 12, y: screenHeight - 90 - device_offset_bot_main, width: 79, height: 79))
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenNoChat"), for: .normal)
         btnOpenChat.setImage(#imageLiteral(resourceName: "mainScreenHaveChat"), for: .selected)
         btnOpenChat.addTarget(self, action: #selector(self.actionChatWindowShow(_:)), for: .touchUpInside)
@@ -158,7 +159,7 @@ extension FaeMapViewController {
         btnOpenChat.addSubview(lblUnreadCount)
         
         // Create pin on main map
-        btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90 - device_offset_bot, width: 79, height: 79))
+        btnDiscovery = UIButton(frame: CGRect(x: screenWidth - 91, y: screenHeight - 90 - device_offset_bot_main, width: 79, height: 79))
         btnDiscovery.setImage(UIImage(named: "mainScreenDiscovery"), for: .normal)
         view.addSubview(btnDiscovery)
         btnDiscovery.addTarget(self, action: #selector(self.actionOpenExplore(_:)), for: .touchUpInside)

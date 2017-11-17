@@ -94,7 +94,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         /* Joshua 06/16/17
          tblUsernames' height should be screenHeight - 65 - height of schbar
          */
-        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
         schbarUsernames.txtSchField.placeholder = "Search Username"
         schbarUsernames.delegate = self
@@ -145,13 +145,13 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblMyScreenname)
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblMyScreennameField)
         
-        view.addConstraintsWithFormat("V:|-144-[v0]", options: [], views: lblMyUsername)
-        view.addConstraintsWithFormat("V:|-164-[v0]", options: [], views: lblMyUsernameField)
-        view.addConstraintsWithFormat("V:|-229-[v0]", options: [], views: lblMyScreenname)
-        view.addConstraintsWithFormat("V:|-249-[v0]", options: [], views: lblMyScreennameField)
+        view.addConstraintsWithFormat("V:|-\(144+device_offset_top)-[v0]", options: [], views: lblMyUsername)
+        view.addConstraintsWithFormat("V:|-\(164+device_offset_top)-[v0]", options: [], views: lblMyUsernameField)
+        view.addConstraintsWithFormat("V:|-\(229+device_offset_top)-[v0]", options: [], views: lblMyScreenname)
+        view.addConstraintsWithFormat("V:|-\(249+device_offset_top)-[v0]", options: [], views: lblMyScreennameField)
         
         tblUsernames = UITableView()
-        tblUsernames.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
+        tblUsernames.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))

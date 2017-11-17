@@ -35,7 +35,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     var fullLoaded = false
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor + device_offset_bot_v2))
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor + device_offset_bot))
         backgroundColor = .white
         loadContent()
         loadCollectionData()

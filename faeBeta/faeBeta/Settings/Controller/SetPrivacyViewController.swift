@@ -54,7 +54,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func loadTableView() {
-        tblPrivacy = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblPrivacy = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblPrivacy)
         tblPrivacy.delegate = self
         tblPrivacy.dataSource = self
@@ -175,17 +175,6 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         return 1
     }
     
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let uiview = UIView()
-        uiview.backgroundColor = UIColor(r: 241, g: 241, b: 241, alpha: 100)
-        return uiview
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 5
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         let row = indexPath.row
@@ -206,14 +195,17 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = false
             cell.switchIcon.addTarget(self, action: #selector(getintoHiddenModel(_:)), for: .valueChanged)
+            cell.topGrayLine.isHidden = true
         }
         else if section == 1 {
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = true
+            cell.topGrayLine.isHidden = false
         }
         else {
             cell.imgView.isHidden = false
             cell.switchIcon.isHidden = true
+            cell.topGrayLine.isHidden = false
         }
         cell.lblName.isHidden = false
         cell.lblDes.isHidden = false

@@ -13,7 +13,7 @@ import SwiftyJSON
 extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate, AddFriendFromNameCardDelegate {
     
     func loadSearchBar() {
-        uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+        uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         view.addSubview(uiviewSchbar)
         
         schbarContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
@@ -29,7 +29,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     func loadTable() {
         tblContacts = UITableView()
-        tblContacts.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114)
+        tblContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
         tblContacts.dataSource = self
         tblContacts.delegate = self
         tblContacts.separatorStyle = .none
@@ -43,7 +43,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     }
     
     func loadTabView() {
-        uiviewBottomNav = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        uiviewBottomNav = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         uiviewBottomNav.addGestureRecognizer(setTapDismissDropdownMenu())
         view.addSubview(uiviewBottomNav)
         uiviewBottomNav.isHidden = true
@@ -62,7 +62,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         btnFFF.imageEdgeInsets = UIEdgeInsetsMake(0, 40, 0, 0)
         uiviewBottomNav.addSubview(btnFFF)
         uiviewBottomNav.addConstraintsWithFormat("H:|-0-[v0]-" + String(describing: screenWidth / 2) + "-|", options: [], views: btnFFF)
-        uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnFFF)
+        uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-\(device_offset_bot)-|", options: [], views: btnFFF)
         
         btnRR = UIButton()
 //        btnRR.setImage(#imageLiteral(resourceName: "RRunselected"), for: .normal)
@@ -73,7 +73,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         btnRR.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40)
         uiviewBottomNav.addSubview(btnRR)
         uiviewBottomNav.addConstraintsWithFormat("H:|-\(screenWidth / 2)-[v0]-0-|", options: [], views: btnRR)
-        uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnRR)
+        uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-\(device_offset_bot)-|", options: [], views: btnRR)
     }
     
     func loadNameCard() {

@@ -248,10 +248,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         return anView
     }
     
-    func visiblePlaces() -> [CCHMapClusterAnnotation] {
+    func visiblePlaces(full: Bool = false) -> [CCHMapClusterAnnotation] {
         var mapRect = faeMapView.visibleMapRect
-        mapRect.origin.y += mapRect.size.height * 0.3
-        mapRect.size.height = mapRect.size.height * 0.7
+        if !full {
+            mapRect.origin.y += mapRect.size.height * 0.3
+            mapRect.size.height = mapRect.size.height * 0.7
+        }
         let visibleAnnos = faeMapView.annotations(in: mapRect)
         var places = [CCHMapClusterAnnotation]()
         for anno in visibleAnnos {
@@ -281,7 +283,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         selectedPlaceView = anView
         selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
         selectedPlaceView?.layer.zPosition = 1001
-        guard mapMode != .explore else { return }
+        guard mapMode != .explore else {
+            scrollTo(firstAnn.id)
+            return
+        }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         uiviewSavedList.arrListSavedThisPin.removeAll()

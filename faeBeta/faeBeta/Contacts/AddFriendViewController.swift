@@ -48,7 +48,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     func loadTable() {
         tblOptions = UITableView()
         tblOptions.separatorStyle = .none
-        tblOptions.frame = CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65)
+        tblOptions.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top)
         tblOptions.dataSource = self
         tblOptions.delegate = self
         tblOptions.register(FaeAddFriendOptionsCell.self, forCellReuseIdentifier: "FaeAddFriendOptionsCell")

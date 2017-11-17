@@ -20,9 +20,9 @@ extension ContactsViewController {
         view.addSubview(uiviewNavBar)
 //        uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: uiviewNavBar.leftBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-22-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-\(22+device_offset_top)-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: uiviewNavBar.rightBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-\(17+device_offset_top)-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         
@@ -31,7 +31,7 @@ extension ContactsViewController {
         btnNavBarMenu = UIButton()
         uiviewNavBar.addSubview(btnNavBarMenu)
         view.addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: btnNavBarMenu)
-        view.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: btnNavBarMenu)
+        view.addConstraintsWithFormat("V:|-\(28+device_offset_top)-[v0(27)]", options: [], views: btnNavBarMenu)
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMenu(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.goToAddFriendView(_:)), for: .touchUpInside)
@@ -40,7 +40,7 @@ extension ContactsViewController {
     }
     
     func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -36 // 65 - 101
@@ -138,14 +138,14 @@ extension ContactsViewController {
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = 65
+                self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
             })
             navBarMenuBtnClicked = true
             btnNavBarSetTitle()
             updateFriendCount()
         } else {
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = -36
+                self.uiviewDropDownMenu.frame.origin.y = -36 + device_offset_top
             })
             navBarMenuBtnClicked = false
             btnNavBarSetTitle()
@@ -184,14 +184,14 @@ extension ContactsViewController {
             uiviewNavBar.rightBtn.isHidden = false
             uiviewBottomNav.isHidden = true
             uiviewSchbar.isHidden = false
-            tblContacts.frame.origin.y = 114
+            tblContacts.frame.origin.y = 114 + device_offset_top
             cellStatus = 0
         } else {
             imgTick.frame.origin.y = 71
             uiviewNavBar.rightBtn.isHidden = true
             uiviewBottomNav.isHidden = false
             uiviewSchbar.isHidden = true
-            tblContacts.frame.origin.y = 65
+            tblContacts.frame.origin.y = 65 + device_offset_top
             cellStatus = btnFFF.isSelected ? 1 : 2
         }
         

@@ -35,7 +35,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        laodMyListView()
+        loadMyListView()
         loadTable()
         loadDropDownMenu()
         loadNavBar()
@@ -82,7 +82,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(createNewList), for: .touchUpInside)
         
-        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23, width: 260, height: 37))
+        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23 + device_offset_top, width: 260, height: 37))
         uiviewNavBar.addSubview(btnNavBarMenu)
         btnNavBarMenu.setTitleColor(UIColor._898989(), for: .normal)
         btnNavBarMenu.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
@@ -104,7 +104,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func loadDropDownMenu() {
-        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 101))
+        uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
         uiviewDropDownMenu.frame.origin.y = -36 // 65 - 101
@@ -170,8 +170,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         lblLocations.attributedText = attributedStr2
     }
     
-    fileprivate func laodMyListView() {
-        let uiviewMyList = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 25))
+    fileprivate func loadMyListView() {
+        let uiviewMyList = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 25))
         uiviewMyList.backgroundColor = UIColor._248248248()
         view.addSubview(uiviewMyList)
         
@@ -189,7 +189,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     fileprivate func loadTable() {
-        tblCollections = UITableView(frame: CGRect(x: 0, y: 90, width: screenWidth, height: screenHeight - 90), style: UITableViewStyle.plain)
+        tblCollections = UITableView(frame: CGRect(x: 0, y: 90 + device_offset_top, width: screenWidth, height: screenHeight - 90 - device_offset_top), style: UITableViewStyle.plain)
         view.addSubview(tblCollections)
         tblCollections.backgroundColor = .white
         tblCollections.register(CollectionsListCell.self, forCellReuseIdentifier: "CollectionsListCell")
@@ -207,7 +207,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     fileprivate func hideDropDownMenu() {
         btnNavBarSetTitle()
         UIView.animate(withDuration: 0.2, animations: {
-            self.uiviewDropDownMenu.frame.origin.y = -36
+            self.uiviewDropDownMenu.frame.origin.y = -36 + device_offset_top
         }, completion: { _ in
             self.uiviewDropDownMenu.isHidden = true
         })
@@ -225,7 +225,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             btnNavBarMenu.setTitle("Choose a Collection...", for: .normal)
             uiviewDropDownMenu.isHidden = false
             UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = 65
+                self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
             })
             navBarMenuBtnClicked = true
         } else {

@@ -370,14 +370,14 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         if tableMode == .places {
             uiviewPlaceTab.isHidden = false
             tblMapBoard.tableHeaderView = uiviewPlaceHeader
-            tblMapBoard.frame.size.height = screenHeight - 163 - device_offset_top - device_offset_bot_v2
+            tblMapBoard.frame.size.height = screenHeight - 163 - device_offset_top - device_offset_bot
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
             btnSearchLoc.tag = 0
 //            switchPlaceTabPage()
         } else {
             uiviewPlaceTab.isHidden = true
             tblMapBoard.tableHeaderView = nil
-            tblMapBoard.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot_v2
+            tblMapBoard.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
             btnSearchLoc.tag = 1
         }
@@ -397,7 +397,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     fileprivate func loadTable() {
-        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 163 - device_offset_top - device_offset_bot_v2), style: .plain)
+        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 163 - device_offset_top - device_offset_bot), style: .plain)
         view.addSubview(tblMapBoard)
         tblMapBoard.backgroundColor = .white
         tblMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
