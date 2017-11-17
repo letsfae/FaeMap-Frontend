@@ -71,7 +71,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadPlaceSearchHeader() {
-        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20, width: screenWidth - 50, height: 43))
+        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
         btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "searchBarIcon"), for: .normal)
         btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
         btnSearchAllPlaces.contentHorizontalAlignment = .left
@@ -96,7 +96,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadSearchLocationView() {
-        uiviewChooseLoc = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+        uiviewChooseLoc = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         uiviewChooseLoc.backgroundColor = .white
         view.addSubview(uiviewChooseLoc)
         uiviewChooseLoc.isUserInteractionEnabled = true
@@ -127,13 +127,16 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadTable() {
-        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 114))
+        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot))
         view.addSubview(tblAllPlaces)
         tblAllPlaces.delegate = self
         tblAllPlaces.dataSource = self
         tblAllPlaces.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
         tblAllPlaces.separatorStyle = .none
         tblAllPlaces.showsVerticalScrollIndicator = false
+        var inset = tblAllPlaces.contentInset
+        inset.bottom = -1
+        tblAllPlaces.contentInset = inset
     }
     
     fileprivate func loadFooter() {
@@ -206,8 +209,8 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewNavBar.lblTitle.isHidden = false
         uiviewNavBar.rightBtn.isHidden = false
         btnSearchAllPlaces.isHidden = true
-        tblAllPlaces.frame.origin.y = 65
-        tblAllPlaces.frame.size.height = screenHeight - 114
+        tblAllPlaces.frame.origin.y = 65 + device_offset_top
+        tblAllPlaces.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot
         tblAllPlaces.reloadData()
     }
     
@@ -216,8 +219,8 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewNavBar.lblTitle.isHidden = true
         uiviewNavBar.rightBtn.isHidden = true
         btnSearchAllPlaces.isHidden = false
-        tblAllPlaces.frame.origin.y = 114
-        tblAllPlaces.frame.size.height = screenHeight - 114 - 49
+        tblAllPlaces.frame.origin.y = 114 + device_offset_top
+        tblAllPlaces.frame.size.height = screenHeight - 114 - 49 - device_offset_top - device_offset_bot
         tblAllPlaces.reloadData()
     }
     // MapBoardPlaceTabDelegate End

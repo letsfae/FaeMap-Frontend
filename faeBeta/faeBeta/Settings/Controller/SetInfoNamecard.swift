@@ -76,7 +76,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.showFullNameCard()
-        uiviewNameCard.frame.origin.y = 65 + 11 + device_offset_top
+        uiviewNameCard.frame.origin.y = 65 + 11 + device_offset_top * screenHeightFactor
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.userId = Key.shared.user_id
         view.addSubview(uiviewNameCard)
@@ -92,10 +92,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         tblNameCard.dataSource = self
         tblNameCard.register(SetAccountCell.self, forCellReuseIdentifier: "cell")
         tblNameCard.separatorStyle = .none
-        
-//        let line = UIView(frame: CGRect(x: 0, y: 113, width: screenWidth, height: 1))
-//        line.backgroundColor = .black
-//        view.addSubview(line)
+        tblNameCard.alwaysBounceVertical = false
     }
     
     func loadActivityIndicator() {

@@ -200,9 +200,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadHeader() {
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top))
         
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101))
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
     }
@@ -219,7 +219,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadMidTable() {
-        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49), style: .plain)
+        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49 - device_offset_bot), style: .plain)
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
@@ -237,16 +237,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             automaticallyAdjustsScrollViewInsets = false
         }
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
+        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 1))
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
         uiviewScrollingPhotos.addSubview(bottomLine)
         uiviewScrollingPhotos.loadImages(place: place)
     }
     
     func loadFooter() {
-        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
         let line = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
@@ -317,7 +317,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if uiviewScrollingPhotos != nil {
             var frame = uiviewScrollingPhotos.frame
-            if tblPlaceDetail.contentOffset.y < 0 * screenHeightFactor {
+            if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewScrollingPhotos.frame = frame
             } else {
@@ -325,7 +325,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 uiviewScrollingPhotos.frame = frame
             }
         }
-        if tblPlaceDetail.contentOffset.y >= 186 * screenHeightFactor {
+        if tblPlaceDetail.contentOffset.y >= (186 + device_offset_top) * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
             if boolAnimateTo_1 {

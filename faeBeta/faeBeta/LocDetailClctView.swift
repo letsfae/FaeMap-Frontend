@@ -11,7 +11,7 @@ import UIKit
 extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func loadCollectionView() {
-        uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49, width: screenWidth, height: 234))
+        uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - device_offset_bot, width: screenWidth, height: 234))
         uiviewClctView.isHidden = true
         view.addSubview(uiviewClctView)
         
