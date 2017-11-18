@@ -102,7 +102,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             return self.toolbarHeightConstraint.constant
         }
     }
-    let floatToolBarContentHeight: CGFloat = 271
+    let floatToolBarContentHeight: CGFloat = 271 + device_offset_bot
   
     //let realm = try! Realm()
     var arrRealmMessages: [RealmMessage_v2] = []
@@ -124,6 +124,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = UIColor._241241241()
+        if #available(iOS 11.0, *) {
+            collectionView.contentInsetAdjustmentBehavior = .never
+        }
         senderId = "\(Key.shared.user_id)"
         //senderDisplayName = realmWithUser!.display_name
         
@@ -476,7 +479,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.isScrollEnabled = false
         if animated {
             toolbarContentView.frame.origin.y = screenHeight
-            floatDistanceInputBarToBottom = 0
+            floatDistanceInputBarToBottom = 0.0
             UIView.animate(withDuration: 0.3, animations: {
                 self.setContraintsWhenInputBarMove(inputBarToBottom: self.floatToolBarContentHeight, keyboard: false)
             }, completion: { (_) -> Void in
@@ -490,7 +493,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func moveDownInputBar() {
         view.endEditing(true)
-        setContraintsWhenInputBarMove(inputBarToBottom: 0, keyboard: false)
+        setContraintsWhenInputBarMove(inputBarToBottom: device_offset_bot, keyboard: false)
     }
     
     // MARK: input text field delegate
@@ -598,16 +601,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func setContraintsWhenInputBarMove(inputBarToBottom distance: CGFloat, keyboard notToolBar: Bool = true, isScrolling: Bool = false) {
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
-        floatDistanceInputBarToBottom = distance
+        floatDistanceInputBarToBottom = distance + 0.0
         uiviewLocationExtend.frame.origin.y = screenHeight - distance - floatInputBarHeight - floatLocExtendHeight
-        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight
+        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight - 0.0
         if !notToolBar {
             toolbarContentView.frame.origin.y = screenHeight - distance
         }
         view.setNeedsUpdateConstraints()
         view.layoutIfNeeded()
         if !isScrolling {
-            let insets = UIEdgeInsetsMake(0.0, 0.0, distance + floatInputBarHeight + extendHeight, 0.0)
+            let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + floatInputBarHeight + extendHeight, 0.0)
             self.collectionView.contentInset = insets
             self.collectionView.scrollIndicatorInsets = insets
         }
@@ -666,7 +669,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                     if -dragDistanceY > floatToolBarContentHeight {
                         dragDistanceY = -floatToolBarContentHeight
                     }
-                    setContraintsWhenInputBarMove(inputBarToBottom: floatToolBarContentHeight + dragDistanceY, keyboard: false, isScrolling: true)
+                    setContraintsWhenInputBarMove(inputBarToBottom: floatToolBarContentHeight + dragDistanceY + 0.0, keyboard: false, isScrolling: true)
                 }
             }
             if scrollViewCurrentOffset < 1 && !boolLoadingPreviousMessages {
@@ -692,7 +695,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 
                 boolClosingToolbarContentView = true
                 UIView.animate(withDuration: 0.1, animations: {
-                    self.setContraintsWhenInputBarMove(inputBarToBottom: 0, keyboard: false)
+                    self.setContraintsWhenInputBarMove(inputBarToBottom: device_offset_bot, keyboard: false)
                     if self.uiviewKeyboard != nil {
                         self.uiviewKeyboard.frame.origin.y = screenHeight
                     }
@@ -825,7 +828,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func closeLocExtendView() {
         uiviewLocationExtend.isHidden = true
-        let insets = UIEdgeInsetsMake(0.0, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
+        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
         self.collectionView.contentInset = insets
         self.collectionView.scrollIndicatorInsets = insets
         btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
@@ -993,7 +996,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func scrollToBottom(_ animated: Bool) {
         let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
-        let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - extendHeight
+        let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
         if currentHeight > currentVisibleHeight {
             collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
         }

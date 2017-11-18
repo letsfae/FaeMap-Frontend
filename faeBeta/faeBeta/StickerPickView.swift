@@ -114,7 +114,7 @@ class StickerPickView: UIView, SwitchStickerDelegate, UIScrollViewDelegate, find
     }
     
     private func configureTabView(emojiOnly: Bool) {
-        stickerTabView = StickerTabView(frame: CGRect(x: 0, y: 231, width: self.frame.width, height: 40), emojiOnly: emojiOnly)
+        stickerTabView = StickerTabView(frame: CGRect(x: 0, y: 231, width: self.frame.width, height: 40 + device_offset_bot), emojiOnly: emojiOnly)
         let border = UIView(frame: CGRect(x: 0, y: 230, width: self.frame.width, height: 1))
         border.backgroundColor = UIColor._210210210()
         self.addSubview(border)

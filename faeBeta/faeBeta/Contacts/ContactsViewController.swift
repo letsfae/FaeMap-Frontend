@@ -157,7 +157,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
         button.backgroundColor = UIColor._2499090()
         button.layer.cornerRadius = 3
         button.frame.origin.x = screenWidth - 8
-        button.frame.origin.y = 120
+        button.frame.origin.y = 120 + device_offset_top
         button.adjustsImageWhenHighlighted = false
         return button
     }()

@@ -101,9 +101,9 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         view.addSubview(uiviewNavBar)
         //uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-\(device_offset_top + 17)-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: uiviewNavBar.rightBtn)
-        uiviewNavBar.addConstraintsWithFormat("V:|-17-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
+        uiviewNavBar.addConstraintsWithFormat("V:|-\(device_offset_top + 17)-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
         //uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "locationPin"), for: .normal)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
@@ -113,7 +113,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     func loadRecentTable() {
         automaticallyAdjustsScrollViewInsets = false
-        tblRecents = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        tblRecents = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         tblRecents.dataSource = self
         tblRecents.delegate = self
         tblRecents.register(RecentTableViewCell.self, forCellReuseIdentifier: "Cell")

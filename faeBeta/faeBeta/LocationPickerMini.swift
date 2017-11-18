@@ -26,7 +26,7 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
     
     // MARK: init
     init() {
-        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
+        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271 + device_offset_bot))
         loadMapView()
         loadButton()
         loadPin()
@@ -38,7 +38,7 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
     
     // MARK: setup
     func loadMapView() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271))
+        mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271 + device_offset_bot))
         mapView.layer.zPosition = 100
         mapView.showsPointsOfInterest = false
         mapView.showsCompass = false
