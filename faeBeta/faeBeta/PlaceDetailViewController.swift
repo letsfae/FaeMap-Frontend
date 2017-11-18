@@ -44,6 +44,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var uiviewWhite: UIView!
     var intHaveHour = 0
     var intHaveWebPhone = 0
+    var boolHaveWeb = false
     var intCellCount = 0
     var intSimilar = 0
     var intNearby = 0
@@ -120,6 +121,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         guard place != nil else { return }
         intHaveHour = place.hours.count > 0 ? 1 : 0
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
+        boolHaveWeb = place.url != ""
         intCellCount = intHaveHour + intHaveWebPhone + 2
     }
     
@@ -369,8 +371,19 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc func routeToThisPin() {
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+            ctrler.routingMode = .fromPinDetail
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        featureDelegate = Key.shared.FMVCtrler
         featureDelegate?.getRouteToPin(mode: .place)
-        navigationController?.popViewController(animated: false)
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     @objc func shareThisPin() {

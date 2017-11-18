@@ -179,11 +179,10 @@ extension FaeMapViewController {
                     uiviewFilterMenu.selectedIndexPath = nil
                 }
             }
-
             break
         case .allPlaces:
             animateMainItems(show: false, animated: false)
-            navigationController?.setViewControllers(self.arrCtrlers, animated: false)
+            navigationController?.setViewControllers(arrCtrlers, animated: false)
             break
         default:
             break

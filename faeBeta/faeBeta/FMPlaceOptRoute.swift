@@ -144,6 +144,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     // FMRouteCalculateDelegate
     func hideRouteCalculatorComponents() {
         mapMode = .normal
+        
+        if routingMode == .fromPinDetail {
+            routingMode = .fromMap
+            navigationController?.setViewControllers(arrCtrlers, animated: false)
+        }
+        
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
         
         removeAllRoutes()
