@@ -152,17 +152,17 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
             let layout = UICollectionViewFlowLayout()
             //        layout.itemSize = CGSizeMake(220, 235)
             layout.scrollDirection = .horizontal
-            layout.itemSize = CGSize(width: 220, height: 271)
+            layout.itemSize = CGSize(width: 220, height: 271 + device_offset_bot)
             layout.sectionInset = UIEdgeInsetsMake(0, 1, 0, 1)
             cllcPhotoQuick = UICollectionView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), collectionViewLayout: layout)
             cllcPhotoQuick.register(QuickPhotoPickerCollectionViewCell.self, forCellWithReuseIdentifier: photoQuickCollectionReuseIdentifier)
             cllcPhotoQuick.backgroundColor = UIColor.white
             cllcPhotoQuick.delegate = self
             cllcPhotoQuick.dataSource = self
-            btnMoreImage = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52, width: 42, height: 42))
+            btnMoreImage = UIButton(frame: CGRect(x: 10, y: self.frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
             btnMoreImage.addTarget(self, action: #selector(self.showFullAlbum), for: .touchUpInside)
-            btnQuickSendImage = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52, width: 42, height: 42))
+            btnQuickSendImage = UIButton(frame: CGRect(x: self.frame.width - 52, y: self.frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnQuickSendImage.addTarget(self, action: #selector(self.sendImageFromQuickPicker), for: .touchUpInside)
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)

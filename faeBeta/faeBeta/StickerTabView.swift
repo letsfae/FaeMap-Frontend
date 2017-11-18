@@ -113,7 +113,7 @@ class StickerTabView: UIView {
     }
     
     private func configureScrollView() {
-        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height))
+        scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: 375, height: tabframe.height + device_offset_bot))
         var x : CGFloat = 8
         let y : CGFloat = 6
         let newStickerIndex = StickerInfoStrcut.stickerIndex

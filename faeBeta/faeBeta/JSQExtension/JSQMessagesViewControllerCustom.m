@@ -1091,6 +1091,12 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
 {
+    CGFloat device_offset_bot = 0.0;
+    CGFloat device_offset_top = 0.0;
+    if ([[UIScreen mainScreen] bounds].size.height == 812) {
+        device_offset_bot = 30.0;
+        device_offset_top = 24.0;
+    }
     UIEdgeInsets insets = UIEdgeInsetsMake(top, 0.0f, bottom, 0.0f);
     self.collectionView.contentInset = insets;
     self.collectionView.scrollIndicatorInsets = insets;

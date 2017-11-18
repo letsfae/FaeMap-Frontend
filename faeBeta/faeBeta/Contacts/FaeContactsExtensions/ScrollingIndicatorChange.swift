@@ -38,13 +38,13 @@ extension ContactsViewController: UIScrollViewDelegate {
         let scrollHeight = scrollView.contentSize.height
         let percentage = currentOffset / (scrollHeight - tableHeight)
         //felixprint(percentage)
-        let btnRange = screenHeight - 120 - 30 - 6
+        let btnRange = screenHeight - 120 - 30 - 6 - device_offset_top - device_offset_bot
         if percentage <= 0 {
-            btnIndicator.frame.origin.y = 120
+            btnIndicator.frame.origin.y = 120 + device_offset_top
         } else if percentage < 1 {
-            btnIndicator.frame.origin.y = 120 + btnRange * percentage
+            btnIndicator.frame.origin.y = 120 + btnRange * percentage + device_offset_top
         } else {
-            btnIndicator.frame.origin.y = 120 + btnRange
+            btnIndicator.frame.origin.y = 120 + btnRange + device_offset_top
         }
         //animateIndicatorSize(type: 2)
         // scrollView's last subview is the scrolling indicator
