@@ -120,6 +120,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let vcPlaceDetail = PlaceDetailViewController()
     let vcCollection = CollectionsListDetailViewController()
     
+    var uiviewSafeZone: UIView!
+    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -306,6 +308,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         contentView?.heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
         contentView?.heartButton.addTarget(self, action: #selector(actionHoldingLikeButton(_:)), for: .touchDown)
         contentView?.heartButton.addTarget(self, action: #selector(actionLeaveLikeButton(_:)), for: .touchDragOutside)
+        
+        uiviewSafeZone = UIView(frame: (CGRect(x:0, y: 90, width: screenWidth, height: 30)))
+        uiviewSafeZone.backgroundColor = .white
+        contentView?.addSubview(uiviewSafeZone)
         
         automaticallyAdjustsScrollViewInsets = false
     }
