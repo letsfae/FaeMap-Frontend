@@ -27,6 +27,11 @@ enum CreateLocation {
     case create
 }
 
+enum RoutingMode {
+    case fromMap
+    case fromPinDetail
+}
+
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MapView Data and Control
@@ -118,6 +123,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnDistIndicator: FMDistIndicator!
     var uiviewChooseLocs: FMChooseLocs!
     var routeAddress: RouteAddress!
+    var routingMode: RoutingMode = .fromMap
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
