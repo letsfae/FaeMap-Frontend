@@ -44,6 +44,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var setPlacePins = Set<Int>()
     var arrPlaceData = [PlacePin]()
     var timerLoadMessages: Timer?
+    var selfAnView: SelfAnnotationView?
     
     // Search Bar
     var imgSchbarShadow: UIImageView!
@@ -108,7 +109,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // MapView Offset Control
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var prevAltitude: CLLocationDistance = 0
-    var prevBearing: Double = 0
     
     // Collecting Pin Control
     var uiviewSavedList: AddPinToCollectionView!

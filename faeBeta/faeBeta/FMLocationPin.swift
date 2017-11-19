@@ -15,13 +15,9 @@ extension FaeMapViewController {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? LocPinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         anView.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         selectedLocation = firstAnn
         locAnnoView = anView
-        locAnnoView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        locAnnoView?.layer.zPosition = 1001
         guard firstAnn.type == "location" else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
         uiviewSavedList.arrListSavedThisPin.removeAll()

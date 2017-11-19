@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 protocol PlaceDetailDelegate: class {
-    func getRouteToPin(mode: CollectionTableMode)
+    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?)
 }
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
@@ -165,7 +165,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.search { (status, message) in
                 guard status / 100 == 2 && message != nil else {
-                    print("Get Related Places Fail \(status) \(message!)")
+                    //print("Get Related Places Fail \(status) \(message!)")
                     self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                     completion()
                     return
@@ -186,7 +186,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeMap.shared.whereKey("max_count", value: "20")
             FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
                 guard status / 100 == 2 && message != nil else {
-                    print("Get Related Places Fail \(status) \(message!)")
+                    //print("Get Related Places Fail \(status) \(message!)")
                     self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
                     completion()
                     return
@@ -381,7 +381,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             arrCtrlers?.removeLast()
         }
         featureDelegate = Key.shared.FMVCtrler
-        featureDelegate?.getRouteToPin(mode: .place)
+        featureDelegate?.getRouteToPin(mode: .place, placeInfo: place)
         Key.shared.initialCtrler?.goToFaeMap(animated: false)
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
