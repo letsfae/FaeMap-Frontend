@@ -369,15 +369,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
-        selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        selectedPlaceView?.layer.zPosition = 1001
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
@@ -635,7 +631,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
-            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
+            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 7)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
             selectedPlaceView?.optionsReady = false

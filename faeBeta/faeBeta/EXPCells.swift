@@ -9,7 +9,7 @@
 import UIKit
 
 protocol EXPCellDelegate: class {
-    
+    func jumpToPlaceDetail(_ placeInfo: PlacePin)
 }
 
 class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
@@ -91,6 +91,10 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.jumpToPlaceDetail(placeInfo)
+    }
+    
     func loadPageCtrl() {
         
         for uiview in arrPageDot {
@@ -146,6 +150,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         clctViewImages.backgroundColor = UIColor.clear
         clctViewImages.showsVerticalScrollIndicator = false
         clctViewImages.backgroundColor = .clear
+        clctViewImages.alwaysBounceVertical = false
         uiviewSub.addSubview(clctViewImages)
         uiviewSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewImages)
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
@@ -249,6 +254,10 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.jumpToPlaceDetail(placeInfo)
+    }
+    
     func loadPageCtrl() {
         
         for uiview in arrPageDot {
@@ -287,7 +296,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: screenWidth - 52, height: screenHeight - 116 - 156)
+        layout.itemSize = CGSize(width: screenWidth - 52, height: screenHeight - 116 - 156 - device_offset_bot - device_offset_top)
         
         clctViewImages = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         clctViewImages.register(EXPClctImgCell.self, forCellWithReuseIdentifier: "exp_img")

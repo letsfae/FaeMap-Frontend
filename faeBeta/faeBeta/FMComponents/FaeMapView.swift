@@ -264,7 +264,7 @@ class FaeMapView: MKMapView {
                 }
                 else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
                     anView.action(anView.btnRoute, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route(placeInfo: nil))
                 }
                 else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
                     anView.action(anView.btnShare, animated: true)
@@ -287,7 +287,7 @@ class FaeMapView: MKMapView {
                 }
                 else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
                     anView.action(anView.btnRoute, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route, .create)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route(placeInfo: nil), .create)
                 }
                 else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
                     anView.action(anView.btnShare, animated: true)

@@ -20,17 +20,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         return firstAnn.coordinate
     }
     
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        for annotationView in views {
-            guard let anView = annotationView as? PlacePinAnnotationView else { continue }
-            guard let annotation = anView.annotation as? FaePinAnnotation else { continue }
-            guard annotation.selected else { continue }
-            selectedPlaceView = anView
-            anView.optionsReady = true
-            anView.layer.zPosition = 500
-        }
-    }
-    
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
@@ -104,6 +93,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView.assignImage(firstAnn.icon)
             }
         }
+        if selfAnView != nil {
+            selfAnView?.superview?.bringSubview(toFront: selfAnView!)
+        }
+        if selectedPlaceView != nil {
+            selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
+            selectedPlaceView?.layer.zPosition = 11
+        }
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -133,8 +129,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
                 dequeuedView.annotation = annotation
                 anView = dequeuedView
+                selfAnView = anView
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                selfAnView = anView
             }
             if Key.shared.onlineStatus == 5 {
                 anView.invisibleOn()
@@ -207,7 +205,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
-            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
             selectedPlaceView?.optionsReady = false
@@ -258,14 +255,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
         if AUTO_REFRESH {
             calculateDistanceOffset()
         }
         
         if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
-        
-        self.prevBearing = mapView.camera.heading
         
         if mapMode == .selecting {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)

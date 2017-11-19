@@ -166,7 +166,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         FaeMap.shared.whereKey("max_count", value: "20")
         FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
-                print("Get Related Places Fail \(status) \(message!)")
+                //print("Get Related Places Fail \(status) \(message!)")
                 completion()
                 return
             }
@@ -245,7 +245,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
                     arrPlaces.append(placePin)
                 }
             } else {
-                print("Get Related Places Fail \(status) \(message!)")
+                //print("Get Related Places Fail \(status) \(message!)")
             }
             completion(arrPlaces)
         }
@@ -354,7 +354,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin(mode: .location)
+        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
         navigationController?.popViewController(animated: false)
     }
     

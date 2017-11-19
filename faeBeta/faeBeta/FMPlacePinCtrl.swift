@@ -13,8 +13,8 @@ import CCHMapClusterController
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
     
     // PlaceDetailDelegate
-    func getRouteToPin(mode: CollectionTableMode) {
-        placePinAction(action: .route, mode: mode)
+    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?) {
+        placePinAction(action: .route(placeInfo: placeInfo), mode: mode)
     }
     
     // CreateColListDelegate
@@ -187,12 +187,16 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 uiviewSavedList.pinToSave = locPin
                 break
             }
-        case .route:
+        case .route(let placeInfo):
             if selectedLocation != nil {
                 routingLocation()
             }
-            if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
-                routingPlace(placeInfo)
+            if let place = placeInfo {
+                routingPlace(place)
+            } else {
+                if let place = selectedPlace?.pinInfo as? PlacePin {
+                    routingPlace(place)
+                }
             }
             break
         case .share:
@@ -244,7 +248,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         anView.delegate = self
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
-        anView.layer.zPosition = 7
         return anView
     }
     
@@ -274,15 +277,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
-        selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        selectedPlaceView?.layer.zPosition = 1001
         guard mapMode != .explore else {
             scrollTo(firstAnn.id)
             return
