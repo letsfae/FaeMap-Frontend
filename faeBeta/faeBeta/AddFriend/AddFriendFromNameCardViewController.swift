@@ -358,6 +358,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     }
     
     @objc func actionCancel(_ sender: Any?) {
+        delegate?.updateNameCardAfterEditing()
         animationHideSelf()
     }
     
