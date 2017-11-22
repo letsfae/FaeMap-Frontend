@@ -123,7 +123,12 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        if let nav = navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            textView.resignFirstResponder()
+            dismiss(animated: true)
+        }
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
