@@ -86,6 +86,11 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
     Alamofire.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
+                print("POST NO RESPONSE")
+                print(response.debugDescription)
+                print(response.description)
+                print(response.error as Any)
+                print("POST NO RESPONSE END")
                 completion(-500, "Internet error")
                 return
             }
