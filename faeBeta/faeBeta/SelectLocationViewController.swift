@@ -66,14 +66,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
-                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-                    if locAnnoView != nil {
-                        locAnnoView?.hideButtons()
-                        locAnnoView?.optionsReady = false
-                        locAnnoView?.optionsOpened = false
-                        locAnnoView?.optionsOpeing = false
-                    }
-                    selectedLocation = nil
+                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                        if self.locAnnoView != nil {
+                            self.locAnnoView?.hideButtons()
+                            self.locAnnoView?.optionsReady = false
+                            self.locAnnoView?.optionsOpened = false
+                            self.locAnnoView?.optionsOpeing = false
+                        }
+                        self.selectedLocation = nil
+                    })
                 }
             }
         }
@@ -481,8 +482,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
-            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-            selectedLocation = nil
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                self.selectedLocation = nil
+            })
         }
         uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()

@@ -118,8 +118,9 @@ extension FaeMapViewController: LocDetailDelegate {
         }
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
-            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-            selectedLocation = nil
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                self.selectedLocation = nil
+            })
         }
         uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()

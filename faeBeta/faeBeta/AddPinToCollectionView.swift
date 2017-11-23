@@ -342,7 +342,8 @@ class AfterAddedToListView: UIView {
     var btnSeeList: UIButton!
     
     override init(frame: CGRect = .zero) {
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 60))
+        let height: CGFloat = screenHeight == 812 ? 49 + device_offset_bot : 60
+        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: height))
         loadContent()
     }
     

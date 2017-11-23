@@ -74,9 +74,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func seeList() {
         uiviewAfterAdded.hide()
         if let pin = selectedLocation {
-            locationPinClusterManager.removeAnnotations([pin], withCompletionHandler: nil)
+            locationPinClusterManager.removeAnnotations([pin], withCompletionHandler: {
+                self.deselectAllLocations()
+            })
         }
-        deselectAllLocations()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
         vcList.colId = uiviewAfterAdded.selectedCollection.id
