@@ -161,8 +161,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         locationPinClusterManager.removeAnnotations(tempFaePins) {
             self.reAddUserPins()
             self.reAddPlacePins()
+            self.deselectAllLocations()
         }
-        deselectAllLocations()
         deselectAllAnnotations()
         HIDE_AVATARS = false
         PLACE_ENABLE = true
