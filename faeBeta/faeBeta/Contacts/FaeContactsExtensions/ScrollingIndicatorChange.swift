@@ -11,7 +11,7 @@ import UIKit
 extension ContactsViewController: UIScrollViewDelegate {
     
     func setupScrollBar() {
-        if tblContacts.contentSize.height - 74 > screenHeight - 114 - device_offset_top {
+        if tblContacts.contentSize.height - 74 < screenHeight - 114 - device_offset_top {
             return
         }
         let uiviewScrollZone = UIView(frame: CGRect(x: screenWidth - 23, y: 120 + device_offset_top, width: 23, height: screenHeight - 120 - device_offset_top - 6))
@@ -47,6 +47,9 @@ extension ContactsViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //felixprint(scrollView.contentOffset.y)
         schbarContacts.txtSchField.resignFirstResponder()
+        if scrollView.contentSize.height - 74 < screenHeight - 114 - device_offset_top {
+            return
+        }
         let currentOffset = scrollView.contentOffset.y
         let tableHeight = scrollView.frame.size.height
         let scrollHeight = scrollView.contentSize.height
