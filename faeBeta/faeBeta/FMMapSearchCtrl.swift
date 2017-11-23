@@ -6,7 +6,7 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController: MapSearchDelegate {
     

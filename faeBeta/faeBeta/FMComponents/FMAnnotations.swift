@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 import MapKit
 
 let mapAvatarWidth: CGFloat = 35
@@ -34,7 +34,7 @@ class AddressAnnotationView: MKAnnotationView {
     }
 }
 
-class FaePinAnnotation: MKPointAnnotation {
+@objc class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
         guard let rhs = object as? FaePinAnnotation else { return false }
@@ -50,6 +50,7 @@ class FaePinAnnotation: MKPointAnnotation {
     var id: Int = -1
     var mapViewCluster: CCHMapClusterController?
     var animatable = true
+    var isSelected = false
     
     // location pin
     var address_1 = ""
@@ -314,7 +315,7 @@ class UserPinAnnotationView: MKAnnotationView {
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
         isEnabled = false
-        layer.zPosition = 199
+        layer.zPosition = 99
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -337,11 +338,11 @@ enum PlacePinAction {
     case share
 }
 
-class PlacePinAnnotationView: MKAnnotationView {
+@objc class PlacePinAnnotationView: MKAnnotationView {
     
     weak var delegate: PlacePinAnnotationDelegate?
     
-    var imgIcon: UIImageView!
+    @objc var imgIcon: UIImageView!
     
     var btnDetail: UIButton!
     var btnCollect: UIButton!
@@ -357,12 +358,16 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var boolShowSavedNoti = false
     
+    @objc var idx = -1
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
         boolShowSavedNoti = false
+        
+        layer.zPosition = -1
         
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
@@ -399,11 +404,11 @@ class PlacePinAnnotationView: MKAnnotationView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func assignImage(_ image: UIImage) {
+    @objc func assignImage(_ image: UIImage) {
         imgIcon.image = image
     }
     
-    fileprivate func loadButtons() {
+    func loadButtons() {
         btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 46, height: 46))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail_s"), for: .selected)

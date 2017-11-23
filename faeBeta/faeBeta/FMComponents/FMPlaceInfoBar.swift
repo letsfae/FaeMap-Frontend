@@ -8,7 +8,7 @@
 
 import UIKit
 import MapKit
-import CCHMapClusterController
+//import CCHMapClusterController
 
 protocol PlaceViewDelegate: class {
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?)

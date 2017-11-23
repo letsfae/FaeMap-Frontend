@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
     
@@ -230,6 +230,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
+        anView.idx = first.class_2_icon_id
         anView.assignImage(first.icon)
         anView.delegate = self
         return anView
@@ -279,9 +280,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let anView = view as? PlacePinAnnotationView else { return }
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
+        firstAnn.isSelected = true
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
+        selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
+        selectedPlaceView?.layer.zPosition = 199
         guard mapMode != .explore else {
             scrollTo(firstAnn.id)
             return

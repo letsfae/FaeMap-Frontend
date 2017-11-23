@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 // An enum type to return different geo -> address
 enum SelectLoctionMode {
@@ -343,11 +343,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> CLLocationCoordinate2D {
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> IsSelectedCoordinate {
         guard let firstAnn = annotations.first as? FaePinAnnotation else {
-            return CLLocationCoordinate2DMake(0, 0)
+            return IsSelectedCoordinate(isSelected: false, coordinate: CLLocationCoordinate2DMake(0, 0))
         }
-        return firstAnn.coordinate
+        return IsSelectedCoordinate(isSelected: false, coordinate: firstAnn.coordinate)
     }
     
     // MARK: - Place & Location Managements
