@@ -20,10 +20,16 @@ import SwiftyJSON
         2. when trainsitioning from collections, saved_status will be always true
         So, no need to check saved_status in back end
 */
+
+protocol LocDetailDelegate: class {
+    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool)
+}
+
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
     weak var featureDelegate: PlaceDetailDelegate?
+    weak var locationDelegate: LocDetailDelegate?
     
     var location: PlacePin!
     var allPlaces = [PlacePin]()
@@ -73,6 +79,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     var boolShared: Bool = false
+    var boolCreated: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -224,6 +231,18 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     @objc func handleMapTap() {
         
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        locationDelegate = Key.shared.FMVCtrler
+        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {

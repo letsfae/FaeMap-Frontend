@@ -591,6 +591,8 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var boolShowSavedNoti = false
     
+    var isRed = false
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
@@ -615,8 +617,9 @@ class LocPinAnnotationView: MKAnnotationView {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
-    func assignImage(_ image: UIImage) {
+    func assignImage(_ image: UIImage, red: Bool = false) {
         imgIcon.image = image
+        isRed = red
     }
     
     fileprivate func loadButtons() {

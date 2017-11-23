@@ -200,15 +200,15 @@
     } else {
         operation.isZoomIn = NO;
     }
-    printf("after  %f\n", self.mapView.region.span.longitudeDelta);
-    printf("before %f\n", self.regionSpanBeforeChange.longitudeDelta);
+    //printf("after  %f\n", self.mapView.region.span.longitudeDelta);
+    //printf("before %f\n", self.regionSpanBeforeChange.longitudeDelta);
     
-    if (operation.isZoomIn) {
-        printf("[isZoomIn] true\n");
-    } else {
-        printf("[isZoomIn] false\n");
-    }
-    printf("\n");
+    //if (operation.isZoomIn) {
+    //    printf("[isZoomIn] true\n");
+    //} else {
+    //    printf("[isZoomIn] false\n");
+    //}
+    //printf("\n");
     
     if (completionHandler) {
         operation.completionBlock = ^{
