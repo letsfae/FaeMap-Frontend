@@ -195,6 +195,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
 //        self.uiviewTabView.isHidden = true
 //        tblContacts.frame = CGRect(x: 0, y: 64, width: screenWidth, height: screenHeight - 65)
         tblContacts.reloadData()
+        //btnIndicator.isHidden = true
     }
     
     @objc func pressbtnRR(button: UIButton) {
@@ -208,6 +209,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
 //        self.schbarContacts.isHidden = true
 //        self.uiviewTabView.isHidden = false
         tblContacts.reloadData()
+        //btnIndicator.isHidden = true
     }
     
     // FaeSearchBarTestDelegate
@@ -310,6 +312,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             cell.userId = arrReceivedRequests[indexPath.row].userId
             cell.requestId = arrReceivedRequests[indexPath.row].requestId
             
+            General.shared.avatarCached(userid: cell.userId, completion: { (avatarImage) in
+                cell.imgAvatar.image = avatarImage
+            })
             General.shared.avatar(userid: cell.userId, completion: { (avatarImage) in
                 cell.imgAvatar.image = avatarImage
             })
@@ -323,6 +328,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             cell.userId = arrRequested[indexPath.row].userId
             cell.requestId = arrRequested[indexPath.row].requestId
             
+            General.shared.avatarCached(userid: cell.userId, completion: { (avatarImage) in
+                cell.imgAvatar.image = avatarImage
+            })
             General.shared.avatar(userid: cell.userId, completion: { (avatarImage) in
                 cell.imgAvatar.image = avatarImage
             })
@@ -335,6 +343,10 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeContactsCell", for: indexPath as IndexPath) as! FaeContactsCell
             if schbarContacts.txtSchField.text != "" {
                 cell.userId = filtered[indexPath.row].userId
+                
+                General.shared.avatarCached(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
+                    cell.imgAvatar.image = avatarImage
+                })
                 General.shared.avatar(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
@@ -343,6 +355,10 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                 cell.getFriendStatus(id: cell.userId)
             } else {
                 cell.userId = arrFriends[indexPath.row].userId
+                
+                General.shared.avatarCached(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
+                    cell.imgAvatar.image = avatarImage
+                })
                 General.shared.avatar(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
                     cell.imgAvatar.image = avatarImage
                 })
@@ -517,7 +533,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.performUpdate({
             self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
         }) {
-            self.tblContacts.reloadData()
+            //self.tblContacts.reloadData()
             self.imgDot.isHidden = self.arrReceivedRequests.count == 0
         }
     }

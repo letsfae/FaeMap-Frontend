@@ -144,7 +144,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var countRequests = 0
     
     let lblPrefix: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 3, width: 12, height: 25))
+        let label = UILabel(frame: CGRect(x: 10, y: 3, width: 20, height: 25))
         label.textAlignment = .left
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         label.textColor = .white
