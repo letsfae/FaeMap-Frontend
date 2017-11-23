@@ -92,7 +92,12 @@ class SetDisplayName: UIViewController {
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
+        if let nav = navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            textField.resignFirstResponder()
+            dismiss(animated: true)
+        }
     }
     
     @objc func actionSaveName(_ sender: UIButton) {

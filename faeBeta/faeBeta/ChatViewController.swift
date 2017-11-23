@@ -309,7 +309,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         contentView?.heartButton.addTarget(self, action: #selector(actionHoldingLikeButton(_:)), for: .touchDown)
         contentView?.heartButton.addTarget(self, action: #selector(actionLeaveLikeButton(_:)), for: .touchDragOutside)
         
-        uiviewSafeZone = UIView(frame: (CGRect(x:0, y: 90, width: screenWidth, height: 30)))
+        uiviewSafeZone = UIView(frame: (CGRect(x:0, y: 90, width: screenWidth, height: 300)))
         uiviewSafeZone.backgroundColor = .white
         contentView?.addSubview(uiviewSafeZone)
         

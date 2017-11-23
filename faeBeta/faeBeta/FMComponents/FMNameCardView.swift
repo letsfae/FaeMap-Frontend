@@ -18,6 +18,7 @@ protocol NameCardDelegate: class {
 
 protocol PassStatusFromViewToButton: class {
     func passFriendStatusFromView(status: FriendStatus)
+    func updateNameCardAfterEditing()
 }
 
 enum FriendStatus: String {
@@ -586,6 +587,13 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         statusMode = status
         setButtonImage()
     }
+    
+    func updateNameCardAfterEditing() {
+        if userId == Key.shared.user_id {
+            userId = Key.shared.user_id
+        }
+    }
+    
     // PassStatusFromViewToButton End
 }
 
