@@ -8,7 +8,7 @@
 
 import UIKit
 import MapKit
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController {
     
@@ -27,11 +27,11 @@ extension FaeMapViewController {
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
         placeClusterManager.cellSize = 100
-//        placeClusterManager.minUniqueLocationsForClustering = 3
+        //placeClusterManager.minUniqueLocationsForClustering = 2
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
         placeClusterManager.marginFactor = 0.0
-//        placeClusterManager.isDebuggingEnabled = true
+        placeClusterManager.isDebuggingEnabled = true
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self

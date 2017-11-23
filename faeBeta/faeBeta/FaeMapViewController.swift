@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import MapKit
-import CCHMapClusterController
+//import CCHMapClusterController
 import RealmSwift
 
 enum MapMode {

@@ -16,6 +16,17 @@
 		50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50111C251F476B4B004EA00E /* FMChooseLocs.swift */; };
 		50181F0B1F688579004798B5 /* EXPCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPCells.swift */; };
 		5018565E1F33E39100ADD0F3 /* FMPlaceOptRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */; };
+		50188F3B1FC36C390038CAFF /* CCHCenterOfMassMapClusterer.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F221FC36C370038CAFF /* CCHCenterOfMassMapClusterer.m */; };
+		50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F251FC36C370038CAFF /* CCHMapClusterController.m */; };
+		50188F3D1FC36C390038CAFF /* CCHMapClusterControllerUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F261FC36C370038CAFF /* CCHMapClusterControllerUtils.m */; };
+		50188F3E1FC36C390038CAFF /* CCHMapClusterControllerDebugPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F291FC36C370038CAFF /* CCHMapClusterControllerDebugPolygon.m */; };
+		50188F3F1FC36C390038CAFF /* CCHMapClusterAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F311FC36C380038CAFF /* CCHMapClusterAnnotation.m */; };
+		50188F401FC36C390038CAFF /* CCHMapTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F351FC36C380038CAFF /* CCHMapTree.m */; };
+		50188F411FC36C390038CAFF /* CCHMapTreeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F361FC36C380038CAFF /* CCHMapTreeUtils.m */; };
+		50188F421FC36C390038CAFF /* CCHMapViewDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F371FC36C380038CAFF /* CCHMapViewDelegateProxy.m */; };
+		50188F431FC36C390038CAFF /* CCHNearCenterMapClusterer.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F381FC36C380038CAFF /* CCHNearCenterMapClusterer.m */; };
+		50188F441FC36C390038CAFF /* CCHFadeInOutMapAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F391FC36C390038CAFF /* CCHFadeInOutMapAnimator.m */; };
+		50188F451FC36C390038CAFF /* CCHMapClusterOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F3A1FC36C390038CAFF /* CCHMapClusterOperation.m */; };
 		501D6B651F43BA6200A1F614 /* FMNameCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D6B641F43BA6200A1F614 /* FMNameCardView.swift */; };
 		50234AF71F27DAC000055748 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF61F27DAC000055748 /* ScreenFactor.swift */; };
 		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
@@ -107,7 +118,7 @@
 		B0714D4F1D5E435200356705 /* FaeMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2B1D5E435200356705 /* FaeMapViewController.swift */; };
 		B0714D551D5E435200356705 /* FMLoadMainItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D2D1D5E435200356705 /* FMLoadMainItems.swift */; };
 		B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */; };
-		B0714D731D5E435200356705 /* FMMapPinCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* FMMapPinCtrl.swift */; };
+		B0714D731D5E435200356705 /* FMMapPinCtrl(deprectated).swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D371D5E435200356705 /* FMMapPinCtrl(deprectated).swift */; };
 		B0714D821D5E465900356705 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714D811D5E465900356705 /* Camera.swift */; };
 		B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DC81D5E475500356705 /* ChatMapViewController.swift */; };
 		B0714DF41D62513300356705 /* EmailTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0714DF11D62513300356705 /* EmailTextField.swift */; };
@@ -327,6 +338,31 @@
 		50111C251F476B4B004EA00E /* FMChooseLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMChooseLocs.swift; sourceTree = "<group>"; };
 		50181F0A1F688579004798B5 /* EXPCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPCells.swift; sourceTree = "<group>"; };
 		5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceOptRoute.swift; sourceTree = "<group>"; };
+		50188F221FC36C370038CAFF /* CCHCenterOfMassMapClusterer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHCenterOfMassMapClusterer.m; path = ClusterManager/CCHCenterOfMassMapClusterer.m; sourceTree = "<group>"; };
+		50188F231FC36C370038CAFF /* CCHMapClusterControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterControllerUtils.h; path = ClusterManager/CCHMapClusterControllerUtils.h; sourceTree = "<group>"; };
+		50188F241FC36C370038CAFF /* CCHMapClusterController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterController.h; path = ClusterManager/CCHMapClusterController.h; sourceTree = "<group>"; };
+		50188F251FC36C370038CAFF /* CCHMapClusterController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapClusterController.m; path = ClusterManager/CCHMapClusterController.m; sourceTree = "<group>"; };
+		50188F261FC36C370038CAFF /* CCHMapClusterControllerUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapClusterControllerUtils.m; path = ClusterManager/CCHMapClusterControllerUtils.m; sourceTree = "<group>"; };
+		50188F271FC36C370038CAFF /* CCHMapViewDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapViewDelegateProxy.h; path = ClusterManager/CCHMapViewDelegateProxy.h; sourceTree = "<group>"; };
+		50188F281FC36C370038CAFF /* CCHMapTreeUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapTreeUtils.h; path = ClusterManager/CCHMapTreeUtils.h; sourceTree = "<group>"; };
+		50188F291FC36C370038CAFF /* CCHMapClusterControllerDebugPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapClusterControllerDebugPolygon.m; path = ClusterManager/CCHMapClusterControllerDebugPolygon.m; sourceTree = "<group>"; };
+		50188F2A1FC36C370038CAFF /* CCHMapTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapTree.h; path = ClusterManager/CCHMapTree.h; sourceTree = "<group>"; };
+		50188F2B1FC36C370038CAFF /* CCHFadeInOutMapAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHFadeInOutMapAnimator.h; path = ClusterManager/CCHFadeInOutMapAnimator.h; sourceTree = "<group>"; };
+		50188F2C1FC36C370038CAFF /* CCHMapAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapAnimator.h; path = ClusterManager/CCHMapAnimator.h; sourceTree = "<group>"; };
+		50188F2D1FC36C370038CAFF /* CCHMapClusterControllerDebugPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterControllerDebugPolygon.h; path = ClusterManager/CCHMapClusterControllerDebugPolygon.h; sourceTree = "<group>"; };
+		50188F2E1FC36C380038CAFF /* CCHMapClusterOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterOperation.h; path = ClusterManager/CCHMapClusterOperation.h; sourceTree = "<group>"; };
+		50188F2F1FC36C380038CAFF /* CCHMapClusterAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterAnnotation.h; path = ClusterManager/CCHMapClusterAnnotation.h; sourceTree = "<group>"; };
+		50188F301FC36C380038CAFF /* CCHNearCenterMapClusterer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHNearCenterMapClusterer.h; path = ClusterManager/CCHNearCenterMapClusterer.h; sourceTree = "<group>"; };
+		50188F311FC36C380038CAFF /* CCHMapClusterAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapClusterAnnotation.m; path = ClusterManager/CCHMapClusterAnnotation.m; sourceTree = "<group>"; };
+		50188F321FC36C380038CAFF /* CCHCenterOfMassMapClusterer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHCenterOfMassMapClusterer.h; path = ClusterManager/CCHCenterOfMassMapClusterer.h; sourceTree = "<group>"; };
+		50188F331FC36C380038CAFF /* CCHMapClusterControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterControllerDelegate.h; path = ClusterManager/CCHMapClusterControllerDelegate.h; sourceTree = "<group>"; };
+		50188F341FC36C380038CAFF /* CCHMapClusterer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterer.h; path = ClusterManager/CCHMapClusterer.h; sourceTree = "<group>"; };
+		50188F351FC36C380038CAFF /* CCHMapTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapTree.m; path = ClusterManager/CCHMapTree.m; sourceTree = "<group>"; };
+		50188F361FC36C380038CAFF /* CCHMapTreeUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapTreeUtils.m; path = ClusterManager/CCHMapTreeUtils.m; sourceTree = "<group>"; };
+		50188F371FC36C380038CAFF /* CCHMapViewDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapViewDelegateProxy.m; path = ClusterManager/CCHMapViewDelegateProxy.m; sourceTree = "<group>"; };
+		50188F381FC36C380038CAFF /* CCHNearCenterMapClusterer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHNearCenterMapClusterer.m; path = ClusterManager/CCHNearCenterMapClusterer.m; sourceTree = "<group>"; };
+		50188F391FC36C390038CAFF /* CCHFadeInOutMapAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHFadeInOutMapAnimator.m; path = ClusterManager/CCHFadeInOutMapAnimator.m; sourceTree = "<group>"; };
+		50188F3A1FC36C390038CAFF /* CCHMapClusterOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHMapClusterOperation.m; path = ClusterManager/CCHMapClusterOperation.m; sourceTree = "<group>"; };
 		501D6B641F43BA6200A1F614 /* FMNameCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMNameCardView.swift; sourceTree = "<group>"; };
 		50234AF61F27DAC000055748 /* ScreenFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
@@ -426,7 +462,7 @@
 		B0714D2B1D5E435200356705 /* FaeMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMapViewController.swift; sourceTree = "<group>"; };
 		B0714D2D1D5E435200356705 /* FMLoadMainItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMLoadMainItems.swift; sourceTree = "<group>"; };
 		B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMUnreadChatCtrl.swift; sourceTree = "<group>"; };
-		B0714D371D5E435200356705 /* FMMapPinCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapPinCtrl.swift; sourceTree = "<group>"; };
+		B0714D371D5E435200356705 /* FMMapPinCtrl(deprectated).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FMMapPinCtrl(deprectated).swift"; sourceTree = "<group>"; };
 		B0714D811D5E465900356705 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		B0714DC81D5E475500356705 /* ChatMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMapViewController.swift; sourceTree = "<group>"; };
 		B0714DF11D62513300356705 /* EmailTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmailTextField.swift; sourceTree = "<group>"; };
@@ -711,6 +747,46 @@
 			path = FMComponents;
 			sourceTree = "<group>";
 		};
+		50188F211FC36C250038CAFF /* ClusterManager */ = {
+			isa = PBXGroup;
+			children = (
+				50188F241FC36C370038CAFF /* CCHMapClusterController.h */,
+				50188F251FC36C370038CAFF /* CCHMapClusterController.m */,
+				50188F2E1FC36C380038CAFF /* CCHMapClusterOperation.h */,
+				50188F3A1FC36C390038CAFF /* CCHMapClusterOperation.m */,
+				50188F2C1FC36C370038CAFF /* CCHMapAnimator.h */,
+				50188F2F1FC36C380038CAFF /* CCHMapClusterAnnotation.h */,
+				50188F311FC36C380038CAFF /* CCHMapClusterAnnotation.m */,
+				50188F2D1FC36C370038CAFF /* CCHMapClusterControllerDebugPolygon.h */,
+				50188F291FC36C370038CAFF /* CCHMapClusterControllerDebugPolygon.m */,
+				50188F331FC36C380038CAFF /* CCHMapClusterControllerDelegate.h */,
+				50188F231FC36C370038CAFF /* CCHMapClusterControllerUtils.h */,
+				50188F261FC36C370038CAFF /* CCHMapClusterControllerUtils.m */,
+				50188F341FC36C380038CAFF /* CCHMapClusterer.h */,
+				50188F2A1FC36C370038CAFF /* CCHMapTree.h */,
+				50188F351FC36C380038CAFF /* CCHMapTree.m */,
+				50188F281FC36C370038CAFF /* CCHMapTreeUtils.h */,
+				50188F361FC36C380038CAFF /* CCHMapTreeUtils.m */,
+				50188F271FC36C370038CAFF /* CCHMapViewDelegateProxy.h */,
+				50188F371FC36C380038CAFF /* CCHMapViewDelegateProxy.m */,
+				50188F471FC3E7280038CAFF /* Deprecated */,
+			);
+			name = ClusterManager;
+			sourceTree = "<group>";
+		};
+		50188F471FC3E7280038CAFF /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				50188F321FC36C380038CAFF /* CCHCenterOfMassMapClusterer.h */,
+				50188F221FC36C370038CAFF /* CCHCenterOfMassMapClusterer.m */,
+				50188F2B1FC36C370038CAFF /* CCHFadeInOutMapAnimator.h */,
+				50188F391FC36C390038CAFF /* CCHFadeInOutMapAnimator.m */,
+				50188F301FC36C380038CAFF /* CCHNearCenterMapClusterer.h */,
+				50188F381FC36C380038CAFF /* CCHNearCenterMapClusterer.m */,
+			);
+			name = Deprecated;
+			sourceTree = "<group>";
+		};
 		504CE4D01F67BF3400070284 /* Explore */ = {
 			isa = PBXGroup;
 			children = (
@@ -847,7 +923,7 @@
 				B0714D361D5E435200356705 /* FMUnreadChatCtrl.swift */,
 				B8B7AF511E728BAF00BE92AB /* FMUserPinCtrl.swift */,
 				B8B7AF531E728C2300BE92AB /* FMPlacePinCtrl.swift */,
-				B0714D371D5E435200356705 /* FMMapPinCtrl.swift */,
+				B0714D371D5E435200356705 /* FMMapPinCtrl(deprectated).swift */,
 				5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */,
 				B80601491E0CA5610051C702 /* FMInvisibleMode.swift */,
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
@@ -1001,6 +1077,7 @@
 				50500F8B1F967244009C51FB /* PinDetail */,
 				B8849E991EEB0F9200D4588D /* MapBoard */,
 				504CE4D01F67BF3400070284 /* Explore */,
+				50188F211FC36C250038CAFF /* ClusterManager */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
 				B37E5D921F830F0E008A6B4B /* Settings */,
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
@@ -1658,7 +1735,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E38391E68675FBBB7D07EF60 /* [CP] Embed Pods Frameworks */ = {
@@ -1669,7 +1746,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/CCHMapClusterController/CCHMapClusterController.framework",
 				"${BUILT_PRODUCTS_DIR}/DACircularProgress/DACircularProgress.framework",
 				"${BUILT_PRODUCTS_DIR}/Gifu/Gifu.framework",
 				"${BUILT_PRODUCTS_DIR}/IDMPhotoBrowser/IDMPhotoBrowser.framework",
@@ -1686,7 +1762,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CCHMapClusterController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DACircularProgress.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gifu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IDMPhotoBrowser.framework",
@@ -1714,11 +1789,13 @@
 			files = (
 				B39453E51F27DD990038EDAD /* FMFilterMenu.swift in Sources */,
 				B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */,
+				50188F421FC36C390038CAFF /* CCHMapViewDelegateProxy.m in Sources */,
 				B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */,
 				B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */,
 				50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */,
 				B37E5DC91F831040008A6B4B /* SetInfoNamecard.swift in Sources */,
 				B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */,
+				50188F451FC36C390038CAFF /* CCHMapClusterOperation.m in Sources */,
 				B393E2EB1F4F7644009FD949 /* CollectionsViewController.swift in Sources */,
 				B33FB2421F267CA600EC6655 /* AddNearbyController.swift in Sources */,
 				50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */,
@@ -1745,6 +1822,7 @@
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
+				50188F441FC36C390038CAFF /* CCHFadeInOutMapAnimator.m in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */,
@@ -1764,7 +1842,9 @@
 				B0F688E51CE4FB8E00D91CF9 /* WelcomeViewController.swift in Sources */,
 				B064EEF01D6E0D1000C078F5 /* StickerScrollView.swift in Sources */,
 				508E2C581F6FA233004F423D /* FMLoadCollection.swift in Sources */,
+				50188F401FC36C390038CAFF /* CCHMapTree.m in Sources */,
 				B8849EB51EEB147A00D4588D /* MBSocialCell.swift in Sources */,
+				50188F3E1FC36C390038CAFF /* CCHMapClusterControllerDebugPolygon.m in Sources */,
 				B84663D91E942E8F0010259B /* DoubleExtension.swift in Sources */,
 				DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */,
 				B38FE86E1F679C4000F3C83E /* SignInPhoneViewController.swift in Sources */,
@@ -1775,6 +1855,8 @@
 				B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				B064EEAD1D6E0CA100C078F5 /* OutgoingMessage.swift in Sources */,
+				50188F3B1FC36C390038CAFF /* CCHCenterOfMassMapClusterer.m in Sources */,
+				50188F3F1FC36C390038CAFF /* CCHMapClusterAnnotation.m in Sources */,
 				C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */,
 				DC9F453B1E079AF400128444 /* TermsOfServiceViewController.swift in Sources */,
 				8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */,
@@ -1845,7 +1927,7 @@
 				5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
 				B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */,
-				B0714D731D5E435200356705 /* FMMapPinCtrl.swift in Sources */,
+				B0714D731D5E435200356705 /* FMMapPinCtrl(deprectated).swift in Sources */,
 				B064EF431D74ED0D00C078F5 /* RegisterTextfieldTableViewCell.swift in Sources */,
 				B8F6336B1DCA64EB00C9A079 /* StringExtension.swift in Sources */,
 				B84F7CCB1ED8E01800090ADA /* MapPinCollections.swift in Sources */,
@@ -1887,7 +1969,9 @@
 				B85FFE9C1EA84CEB0079D1A7 /* SavedPinsViewController.swift in Sources */,
 				505367CE1FA643050076D18D /* MSVTableView.swift in Sources */,
 				B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */,
+				50188F3D1FC36C390038CAFF /* CCHMapClusterControllerUtils.m in Sources */,
 				B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */,
+				50188F411FC36C390038CAFF /* CCHMapTreeUtils.m in Sources */,
 				B37E5DC01F831040008A6B4B /* SetPrivacyViewController.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
 				B8CAA0411DDD948400DEC329 /* FMActions.swift in Sources */,
@@ -1915,6 +1999,7 @@
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
 				B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */,
 				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
+				50188F431FC36C390038CAFF /* CCHNearCenterMapClusterer.m in Sources */,
 				B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */,
 				DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */,
 				506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */,
@@ -1946,6 +2031,7 @@
 				372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */,
 				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
 				B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */,
+				50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DCA1D5E475500356705 /* ChatMapViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
