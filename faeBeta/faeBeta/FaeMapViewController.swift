@@ -260,6 +260,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
 //        view.addSubview(line)
+        
+        joshprint("id:", Key.shared.user_id)
     }
     
     deinit {
