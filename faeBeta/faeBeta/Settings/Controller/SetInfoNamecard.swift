@@ -140,13 +140,21 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
             // Vicky 09/17/17
             let vc = SetDisplayName()
             vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
+            if let nav = navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                present(vc, animated: true)
+            }
             // Vicky 09/17/17 End
             break
         case 1:
             let vc = SetShortIntro()
             vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
+            if let nav = navigationController {
+                nav.pushViewController(vc, animated: true)
+            } else {
+                present(vc, animated: true)
+            }
             break
         case 2:
             SetAvatar.addProfileAvatar(vc: self, type: "setNamecard")

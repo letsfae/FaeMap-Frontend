@@ -144,7 +144,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     var countRequests = 0
     
     let lblPrefix: UILabel = {
-        let label = UILabel(frame: CGRect(x: 10, y: 3, width: 20, height: 25))
+        let label = UILabel(frame: CGRect(x: 10, y: 3, width: 12, height: 25))
         label.textAlignment = .left
         label.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
         label.textColor = .white
@@ -153,12 +153,18 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
     }()
     
     let btnIndicator: UIButton = {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 3, height: 30))
-        button.backgroundColor = UIColor._2499090()
-        button.layer.cornerRadius = 3
-        button.frame.origin.x = screenWidth - 8
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 23, height: 30))
+        //button.backgroundColor = UIColor._2499090()
+        //button.layer.cornerRadius = 3
+        button.frame.origin.x = screenWidth - 23
         button.frame.origin.y = 120 + device_offset_top
         button.adjustsImageWhenHighlighted = false
+        
+        let uiviewBar = UIView(frame: CGRect(x: 15, y: 0, width: 3, height: 30))
+        uiviewBar.backgroundColor = UIColor._2499090()
+        uiviewBar.layer.cornerRadius = 3
+        button.addSubview(uiviewBar)
+        
         return button
     }()
     
@@ -168,7 +174,9 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
         case end
     }
     var indicatorState: IndicatorState = .end
-    var lastYOffset: CGFloat = 0.0
+    var floatLongpressStart: CGFloat = 0.0
+    var floatFingerToBtnTop: CGFloat = 0.0
+    let floatBtnRange = screenHeight - 120 - 30 - 6 - device_offset_top - device_offset_bot
     
     let OK = 0
     let WITHDRAW = 3
@@ -248,6 +256,8 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             self.arrFriends.sort{ $0.displayName < $1.displayName }
             self.countFriends = self.arrFriends.count
             self.tblContacts.reloadData()
+            guard let prefix = self.arrFriends.first?.displayName else { return }
+            self.lblPrefix.text = (prefix as NSString).substring(to: 1)
         }
     }
     
