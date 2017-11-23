@@ -105,7 +105,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func loadSearchTable() {
-        uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 50))
+        uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64 + device_offset_top, width: screenWidth, height: 50))
         schbarFromContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
         schbarFromContacts.txtSchField.placeholder = "Search Contacts"
         schbarFromContacts.delegate = self
@@ -124,7 +124,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         view.addSubview(uiviewSchbar)
 
         tblFromContacts = UITableView()
-        tblFromContacts.frame = CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 65 - 50)
+        tblFromContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 50 - device_offset_top)
         tblFromContacts.dataSource = self
         tblFromContacts.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
