@@ -192,11 +192,6 @@
                         [clusters addObject:annotationForCell];
                     }
                 }
-                
-                // Collect cluster annotations
-//                if (!self.isZoomIn) {
-//                    [clusters addObject:annotationForCell];
-//                }
             }
         }
     });
