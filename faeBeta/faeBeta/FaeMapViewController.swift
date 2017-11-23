@@ -22,6 +22,12 @@ enum MapMode {
     case allPlaces
 }
 
+enum ModeLocation {
+    case on
+    case on_create
+    case off
+}
+
 enum CreateLocation {
     case cancel
     case create
@@ -45,6 +51,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrPlaceData = [PlacePin]()
     var timerLoadMessages: Timer?
     var selfAnView: SelfAnnotationView?
+    
+    // General
+    var btnBackToExp: UIButton!
     
     // Search Bar
     var imgSchbarShadow: UIImageView!
@@ -131,6 +140,22 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
+    var modeLocation: ModeLocation = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            imgExpbarShadow.isHidden = modeLocation == .off
+            imgSchbarShadow.isHidden = modeLocation != .off
+            if modeLocation != .off {
+                Key.shared.onlineStatus = 5
+                lblExpContent.attributedText = nil
+                lblExpContent.text = "View Location"
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+            } else {
+                Key.shared.onlineStatus = 1
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+            }
+        }
+    }
     
     // Chat
     let faeChat = FaeChat()

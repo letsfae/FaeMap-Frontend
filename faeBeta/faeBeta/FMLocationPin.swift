@@ -9,7 +9,37 @@
 import UIKit
 //import CCHMapClusterController
 
-extension FaeMapViewController {
+extension FaeMapViewController: LocDetailDelegate {
+    
+    // MARK: - LocDetailDelegate
+    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool) {
+        modeLocation = .on
+        if !created {
+            createLocationPin(point: CGPoint.zero, position: coordinate)
+            modeLocation = .on_create
+        } else {
+            locAnnoView?.hideButtons()
+            selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
+            locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+        }
+        removePlaceUserPins()
+        animateMainItems(show: true, animated: boolFromMap)
+        btnBackToExp.removeTarget(nil, action: nil, for: .touchUpInside)
+        btnBackToExp.addTarget(self, action: #selector(actionBackToLocDetail), for: .touchUpInside)
+    }
+    
+    @objc func actionBackToLocDetail() {
+        animateMainItems(show: false, animated: boolFromMap)
+        reAddUserPins()
+        reAddPlacePins()
+        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
+        locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
+        if modeLocation == .on_create {
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
+        }
+        modeLocation = .off
+        navigationController?.setViewControllers(arrCtrlers, animated: false)
+    }
     
     func tapLocationPin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
@@ -77,9 +107,15 @@ extension FaeMapViewController {
         view.addSubview(activityIndicator)
     }
     
-    func createLocationPin(point: CGPoint) {
+    func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
         createLocation = .create
-        let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
+        var coordinate: CLLocationCoordinate2D!
+        if position == nil {
+            coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
+        } else {
+            guard let coor = position else { return }
+            coordinate = coor
+        }
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
             locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)

@@ -176,7 +176,7 @@ extension FaeMapViewController {
         imgExpbarShadow.isHidden = true
         
         // Left window on main map to open account system
-        let btnBackToExp = UIButton()
+        btnBackToExp = UIButton()
         btnBackToExp.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         imgExpbarShadow.addSubview(btnBackToExp)
         btnBackToExp.addTarget(self, action: #selector(self.actionBackTo(_:)), for: .touchUpInside)

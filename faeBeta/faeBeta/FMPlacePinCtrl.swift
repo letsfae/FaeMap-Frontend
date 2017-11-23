@@ -160,6 +160,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcLocDetail.featureDelegate = self
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
+                vcLocDetail.boolCreated = true
                 navigationController?.pushViewController(vcLocDetail, animated: true)
             } else {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
