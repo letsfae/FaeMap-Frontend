@@ -253,20 +253,14 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             print("email: \(strEmail) code: \(verificationCodeView.displayValue)")
             // reset_login veify
             switch enterEmailMode {
-            case .signInSupport, .signup:
+            case .signInSupport:
                 faeUser.validateCode{ (statusCode, result) in
                     if statusCode / 100 == 2 {
-                        if self.enterEmailMode == .signInSupport {
-                            let controller = SignInSupportNewPassViewController()
-                            controller.enterMode = self.enterMode
-                            controller.email = self.strEmail
-                            controller.code = self.verificationCodeView.displayValue
-                            self.navigationController?.pushViewController(controller, animated: true)
-                        } else {
-                            let nextRegister = RegisterConfirmViewController()
-                            nextRegister.faeUser = self.faeUser
-                            self.navigationController?.pushViewController(nextRegister, animated: false)
-                        }
+                        let controller = SignInSupportNewPassViewController()
+                        controller.enterMode = self.enterMode
+                        controller.email = self.strEmail
+                        controller.code = self.verificationCodeView.displayValue
+                        self.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         for _ in 0..<6 {
                             _ = self.verificationCodeView.addDigit(-1)
@@ -278,24 +272,31 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     self.indicatorView.stopAnimating()
                 }
                 break
-            case .settings:
+            case .settings, .signup:
                 faeUser.verifyEmail {(status: Int, message: Any?) in
                     if status / 100 == 2 {
-                        Key.shared.userEmailVerified = true
-                        if self.boolUpdateEmail {
-                            let vc = UpdateUsrnameEmailViewController()
-                            vc.enterMode = .email
-                            vc.strEmail = self.strEmail
-                            var arrViewControllers = self.navigationController?.viewControllers
-                            arrViewControllers?.removeLast()
-                            arrViewControllers?.removeLast()
-                            arrViewControllers?.removeLast()
-                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
-                            arrViewControllers?.append(vc)
-                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                        if self.enterEmailMode == .settings {
+                            Key.shared.userEmailVerified = true
+                            if self.boolUpdateEmail {
+                                let vc = UpdateUsrnameEmailViewController()
+                                vc.enterMode = .email
+                                vc.strEmail = self.strEmail
+                                var arrViewControllers = self.navigationController?.viewControllers
+                                arrViewControllers?.removeLast()
+                                arrViewControllers?.removeLast()
+                                arrViewControllers?.removeLast()
+                                vc.delegate = arrViewControllers?.last as! SetAccountViewController
+                                arrViewControllers?.append(vc)
+                                self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                            } else {
+                                self.delegate?.verifyEmailSucceed!()
+                                self.navigationController?.popViewController(animated: true)
+                            }
                         } else {
-                            self.delegate?.verifyEmailSucceed!()
-                            self.navigationController?.popViewController(animated: true)
+                            Key.shared.userEmailVerified = true
+                            let nextRegister = RegisterConfirmViewController()
+                            nextRegister.faeUser = self.faeUser
+                            self.navigationController?.pushViewController(nextRegister, animated: false)
                         }
                     } else {
                         for _ in 0..<6 {
