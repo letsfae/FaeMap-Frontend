@@ -59,10 +59,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
-    var createLocation: CreateLocation = .cancel {
+    var createLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
-            if createLocation == .cancel {
+            if createLocation == .off {
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
@@ -478,7 +478,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func createLocationPin(point: CGPoint) {
-        createLocation = .create
+        createLocation = .on
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {

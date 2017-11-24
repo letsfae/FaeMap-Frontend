@@ -151,7 +151,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func placePinAction(action: PlacePinAction, mode: CollectionTableMode) {
         switch action {
         case .detail:
-            if createLocation == .create {
+            if modeLocCreating == .on {
                 guard let anView = locAnnoView else { return }
                 anView.optionsToNormal()
                 let vcLocDetail = LocDetailViewController()
@@ -202,7 +202,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
             break
         case .share:
-            if createLocation == .create {
+            if modeLocCreating == .on {
                 locAnnoView?.optionsToNormal()
                 locAnnoView?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)

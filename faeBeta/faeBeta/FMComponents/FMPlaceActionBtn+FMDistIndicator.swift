@@ -85,8 +85,8 @@ class FMPinActionDisplay: UIButton {
         isUserInteractionEnabled = false
     }
     
-    func changeStyle(action style: PlacePinAction, _ createLocation: CreateLocation = .cancel) {
-        let strType = createLocation == .create ? "Location" : "Place"
+    func changeStyle(action style: PlacePinAction, _ createLocation: FaeMode = .off) {
+        let strType = createLocation == .on ? "Location" : "Place"
         show()
         switch style {
         case .detail:

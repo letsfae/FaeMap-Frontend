@@ -10,9 +10,13 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
+protocol ExploreDelegate: class {
+    func jumpToExpPlacesCollection(places: [PlacePin], category: String)
+}
+
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, ExploreCategorySearch, EXPCellDelegate {
     
-    weak var delegate: MapSearchDelegate?
+    weak var delegate: ExploreDelegate?
     
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
@@ -275,9 +279,16 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func actionExpMap() {
-        let loc = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
-        delegate?.jumpToPlaces?(searchText: "fromEXP", places: arrPlaceData, selectedLoc: loc)
-        navigationController?.popViewController(animated: false)
+        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: "Random")
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     @objc func actionSave(_ sender: UIButton) {

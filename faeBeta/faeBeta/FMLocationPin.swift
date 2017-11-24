@@ -13,7 +13,6 @@ extension FaeMapViewController: LocDetailDelegate {
     
     // MARK: - LocDetailDelegate
     func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool) {
-        modeLocation = .on
         if !created {
             createLocationPin(point: CGPoint.zero, position: coordinate)
             modeLocation = .on_create
@@ -22,6 +21,7 @@ extension FaeMapViewController: LocDetailDelegate {
             selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
         }
+        modeLocation = .on
         removePlaceUserPins()
         animateMainItems(show: true, animated: boolFromMap)
         btnBackToExp.removeTarget(nil, action: nil, for: .touchUpInside)
@@ -108,7 +108,8 @@ extension FaeMapViewController: LocDetailDelegate {
     }
     
     func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
-        createLocation = .create
+        guard modeLocation == .off else { return }
+        modeLocCreating = .on
         var coordinate: CLLocationCoordinate2D!
         if position == nil {
             coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)

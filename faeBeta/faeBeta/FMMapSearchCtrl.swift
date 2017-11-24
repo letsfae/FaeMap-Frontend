@@ -55,10 +55,7 @@ extension FaeMapViewController: MapSearchDelegate {
             })
             self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }, nil)
-        if searchText == "fromEXP" {
-            mapMode = .explore
-            setTitle(type: "Random")
-        } else if searchText == "fromAllPlaces" {
+        if searchText == "fromAllPlaces" {
             animateMainItems(show: true, animated: false)
             uiviewPlaceBar.places = places
             uiviewPlaceBar.hide()
