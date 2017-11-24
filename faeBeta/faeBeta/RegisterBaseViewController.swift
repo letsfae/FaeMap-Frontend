@@ -61,7 +61,7 @@ extension RegisterBaseViewController {
     func createTopView(_ imageNamed: String) {
         let uiviewTop = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 70))
         uiviewTop.backgroundColor = .white
-        let btnBack = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.setTitleColor(UIColor.blue, for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
@@ -77,7 +77,7 @@ extension RegisterBaseViewController {
     @objc func backButtonPressed() {}
     
     func createBottomView(_ subview: UIView) {
-        uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
+        uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor - device_offset_bot, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
         btnContinue = UIButton(frame: CGRect(x: 0, y: subview.frame.size.height + 18, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnContinue.center.x = screenWidth / 2
         btnContinue.layer.cornerRadius = 25 * screenHeightFactor
@@ -181,7 +181,7 @@ extension RegisterBaseViewController {
     
     @objc func keyboardWillHide(_ notification: Notification) {
         var frameBottom = uiviewBottom.frame
-        frameBottom.origin.y = view.frame.height - frameBottom.size.height
+        frameBottom.origin.y = view.frame.height - frameBottom.size.height - device_offset_bot
         
         var frameTable: CGRect?
         if tableView != nil {
