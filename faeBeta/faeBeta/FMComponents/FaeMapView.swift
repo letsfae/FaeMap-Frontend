@@ -49,16 +49,16 @@ class FaeMapView: MKMapView {
     }
     
     func cancelCreatingLocationPin() {
-        if faeMapCtrler?.createLocation == .create {
+        if faeMapCtrler?.modeLocCreating == .on {
             if faeMapCtrler?.modeLocation == .off {
-                faeMapCtrler?.createLocation = .cancel
+                faeMapCtrler?.modeLocCreating = .off
             }
-        } else if faeMapCtrler?.createLocation == .cancel {
+        } else if faeMapCtrler?.modeLocCreating == .off {
             faeMapCtrler?.locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
             faeMapCtrler?.deselectAllLocations()
         }
-        if slcMapCtrler?.createLocation == .create {
-            slcMapCtrler?.createLocation = .cancel
+        if slcMapCtrler?.createLocation == .on {
+            slcMapCtrler?.createLocation = .off
         }
     }
     
@@ -232,7 +232,7 @@ class FaeMapView: MKMapView {
             if let anView = faeMapCtrler?.selectedPlaceView {
                 anView.chooseAction()
                 faeMapCtrler?.uiviewPinActionDisplay.hide()
-            } else if faeMapCtrler?.createLocation == .create {
+            } else if faeMapCtrler?.modeLocCreating == .on {
                 guard let anView = faeMapCtrler?.locAnnoView else { return }
                 guard anView.arrBtns.count == 4 else { return }
                 anView.chooseAction()
@@ -266,25 +266,25 @@ class FaeMapView: MKMapView {
                     anView.optionsToNormal()
                     faeMapCtrler?.uiviewPinActionDisplay.hide()
                 }
-            } else if faeMapCtrler?.createLocation == .create {
+            } else if faeMapCtrler?.modeLocCreating == .on {
                 guard let anView = faeMapCtrler?.locAnnoView else { return }
                 guard anView.arrBtns.count == 4 else { return }
                 let point = sender.location(in: anView)
                 if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
                     anView.action(anView.btnDetail, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail, .create)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .detail, .on)
                 }
                 else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
                     anView.action(anView.btnCollect, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect, .create)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .collect, .on)
                 }
                 else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
                     anView.action(anView.btnRoute, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route(placeInfo: nil), .create)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .route(placeInfo: nil), .on)
                 }
                 else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
                     anView.action(anView.btnShare, animated: true)
-                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share, .create)
+                    faeMapCtrler?.uiviewPinActionDisplay.changeStyle(action: .share, .on)
                 } else {
                     anView.optionsToNormal()
                     faeMapCtrler?.uiviewPinActionDisplay.hide()

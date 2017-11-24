@@ -46,8 +46,8 @@ extension FaeMapViewController {
     
     @objc func actionClearSearchResults(_ sender: UIButton) {
         btnZoom.tapToSmallMode()
-        if createLocation == .create {
-            createLocation = .cancel
+        if modeLocCreating == .on {
+            modeLocCreating = .off
             return
         }
         PLACE_ENABLE = true

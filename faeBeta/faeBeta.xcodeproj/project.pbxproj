@@ -37,6 +37,7 @@
 		505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */; };
 		505367CE1FA643050076D18D /* MSVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CD1FA643050076D18D /* MSVTableView.swift */; };
 		505367D01FA643D00076D18D /* MSVAddrAutoCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */; };
+		5057AB181FC7776700CE1982 /* FMExplore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057AB171FC7776700CE1982 /* FMExplore.swift */; };
 		506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */; };
 		506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */; };
 		506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */; };
@@ -373,6 +374,7 @@
 		505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist"; sourceTree = "<group>"; };
 		505367CD1FA643050076D18D /* MSVTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVTableView.swift; sourceTree = "<group>"; };
 		505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVAddrAutoCompletion.swift; sourceTree = "<group>"; };
+		5057AB171FC7776700CE1982 /* FMExplore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMExplore.swift; sourceTree = "<group>"; };
 		506C4B7F1F948C440078F5C5 /* LSMProfilePic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSMProfilePic.swift; sourceTree = "<group>"; };
 		506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceInfoBar.swift; sourceTree = "<group>"; };
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
@@ -929,6 +931,7 @@
 				B806014B1E0CA5940051C702 /* FMGuestMode.swift */,
 				508E2C571F6FA233004F423D /* FMLoadCollection.swift */,
 				5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */,
+				5057AB171FC7776700CE1982 /* FMExplore.swift */,
 			);
 			name = MapViewExtensions;
 			sourceTree = "<group>";
@@ -2081,6 +2084,7 @@
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */,
 				B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */,
+				5057AB181FC7776700CE1982 /* FMExplore.swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
