@@ -106,7 +106,12 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     }
     
     @objc func finishButtonPressed() {
-        self.signUpUser()
+        //self.signUpUser()
+        self.jumpToEnableNotification()
+        let vcNext = InitialPageController()
+        self.navigationController?.pushViewController(vcNext, animated: true)
+        self.navigationController?.viewControllers = [vcNext]
+        //loginUser()
     }
     
     func signUpUser() {
