@@ -139,6 +139,9 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         case 0:
             // Vicky 09/17/17
             let vc = SetDisplayName()
+            if let str = strDisplayName {
+                vc.strFieldText = str
+            }
             vc.delegate = self
             if let nav = navigationController {
                 nav.pushViewController(vc, animated: true)
@@ -149,6 +152,9 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
             break
         case 1:
             let vc = SetShortIntro()
+            if let str = strShortIntro {
+                vc.strFieldText = str
+            }
             vc.delegate = self
             if let nav = navigationController {
                 nav.pushViewController(vc, animated: true)

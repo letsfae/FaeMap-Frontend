@@ -40,7 +40,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         lblWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25)
         lblWelcome.textAlignment = .center
         
-        let btnFinish = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        let btnFinish = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnFinish.layer.cornerRadius = 25 * screenHeightFactor
         btnFinish.layer.masksToBounds = true
         btnFinish.center.x = screenWidth / 2
@@ -51,7 +51,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnFinish.backgroundColor = UIColor._2499090()
         btnFinish.addTarget(self, action: #selector(self.finishButtonPressed), for: .touchUpInside)
         
-        let lblTermsOfService = UILabel(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 36))
+        let lblTermsOfService = UILabel(frame: CGRect(x: 0, y: screenHeight - 56 - device_offset_bot, width: screenWidth, height: 36))
         lblTermsOfService.numberOfLines = 2
         lblTermsOfService.textAlignment = .center
         
