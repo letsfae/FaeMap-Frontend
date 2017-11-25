@@ -55,6 +55,8 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var boolIsClick: Bool = false
     var floatScrollViewOriginOffset: CGFloat = 0
     
+    var boolShared: Bool = false
+    
     enum FriendListMode {
         case chat
         case location
@@ -132,11 +134,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         let arrVCs = navigationController?.viewControllers
         if boolFromPlaceDetail {
             let vcPlaceDetail = arrVCs![arrVCs!.count - 2] as! PlaceDetailViewController
-            vcPlaceDetail.boolShared = true
+            vcPlaceDetail.boolShared = boolShared
         }
         if boolFromLocDetail {
             let vcLocDetail = arrVCs![arrVCs!.count - 2] as! LocDetailViewController
-            vcLocDetail.boolShared = true
+            vcLocDetail.boolShared = boolShared
         }
         navigationController?.popViewController(animated: true)
     }
@@ -256,6 +258,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
  */
     
     func shareWithUsers() {
+        boolShared = true
         navigationLeftItemTapped()
         for index in arrIntSelected {
             let vcChat = ChatViewController()
