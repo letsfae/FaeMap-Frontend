@@ -66,7 +66,14 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.addSubview(uiviewNavBar)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "NavigationBackNew"), for: .normal)
 
-        uiviewNavBar.loadBtnConstraints()
+        //uiviewNavBar.loadBtnConstraints()
+        // back button during signup process does not move down (iPhone X)
+        if enterEmailMode == .signup || enterPhoneMode == .signup {
+            uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+            uiviewNavBar.addConstraintsWithFormat("V:|-\(21)-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+        } else {
+            uiviewNavBar.loadBtnConstraints()
+        }
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.bottomLine.isHidden = true
@@ -82,7 +89,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         verificationCodeView = FAEVerificationCodeView(frame: CGRect(x: 85 * screenWidthFactor, y: 148, width: 244 * screenWidthFactor, height: 82))
         view.addSubview(verificationCodeView)
         
-        btnResendCode = UIButton(frame: CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67, width: screenWidth - 174, height: 18))
+        btnResendCode = UIButton(frame: CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67 - device_offset_bot, width: screenWidth - 174, height: 18))
         btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnResendCode.contentHorizontalAlignment = .center
         btnResendCode.sizeToFit()
@@ -90,7 +97,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.addSubview(btnResendCode)
         
         // set up the send button
-        btnContinue = UIButton(frame: CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnContinue = UIButton(frame: CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnContinue.center.x = screenWidth / 2
         btnContinue.setTitleColor(.white, for: .normal)
         btnContinue.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -100,7 +107,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         btnContinue.addTarget(self, action: #selector(actionVerifyCode(_:)), for: .touchUpInside)
         view.addSubview(btnContinue)
         
-        lblPhoneNumber = UILabel(frame: CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 43, width: screenWidth - 174, height: 27))
+        lblPhoneNumber = UILabel(frame: CGRect(x: 87, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 43 - device_offset_bot, width: screenWidth - 174, height: 27))
         lblPhoneNumber.font = UIFont(name: "AvenirNext-Regular", size: 20)
         lblPhoneNumber.textColor = UIColor._155155155()
         lblPhoneNumber.textAlignment = .center
@@ -108,7 +115,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.addSubview(lblPhoneNumber)
         
         // setup the fake keyboard for numbers input
-        numberKeyboard = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor, width: screenWidth, height: 244 * screenHeightFactor))
+        numberKeyboard = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 244 * screenHeightFactor))
         view.addSubview(numberKeyboard)
         numberKeyboard.delegate = self
         numberKeyboard.transform = CGAffineTransform(translationX: 0, y: 0)
@@ -118,7 +125,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     
     fileprivate func getTitle() {
         if enterMode == .email {
-            btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36
+            btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36 - device_offset_bot
             lblPhoneNumber.isHidden = true
             switch enterEmailMode {
             case .signInSupport:
@@ -135,7 +142,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                 break
             }
         } else {
-            btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67
+            btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67 - device_offset_bot
             switch enterPhoneMode {
             case .signInSupport:
                 lblTitle.text = "Enter the Code we just texted\nto your Number to Continue."
@@ -246,20 +253,14 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             print("email: \(strEmail) code: \(verificationCodeView.displayValue)")
             // reset_login veify
             switch enterEmailMode {
-            case .signInSupport, .signup:
+            case .signInSupport:
                 faeUser.validateCode{ (statusCode, result) in
                     if statusCode / 100 == 2 {
-                        if self.enterEmailMode == .signInSupport {
-                            let controller = SignInSupportNewPassViewController()
-                            controller.enterMode = self.enterMode
-                            controller.email = self.strEmail
-                            controller.code = self.verificationCodeView.displayValue
-                            self.navigationController?.pushViewController(controller, animated: true)
-                        } else {
-                            let nextRegister = RegisterConfirmViewController()
-                            nextRegister.faeUser = self.faeUser
-                            self.navigationController?.pushViewController(nextRegister, animated: false)
-                        }
+                        let controller = SignInSupportNewPassViewController()
+                        controller.enterMode = self.enterMode
+                        controller.email = self.strEmail
+                        controller.code = self.verificationCodeView.displayValue
+                        self.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         for _ in 0..<6 {
                             _ = self.verificationCodeView.addDigit(-1)
@@ -271,24 +272,31 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     self.indicatorView.stopAnimating()
                 }
                 break
-            case .settings:
+            case .settings, .signup:
                 faeUser.verifyEmail {(status: Int, message: Any?) in
                     if status / 100 == 2 {
-                        Key.shared.userEmailVerified = true
-                        if self.boolUpdateEmail {
-                            let vc = UpdateUsrnameEmailViewController()
-                            vc.enterMode = .email
-                            vc.strEmail = self.strEmail
-                            var arrViewControllers = self.navigationController?.viewControllers
-                            arrViewControllers?.removeLast()
-                            arrViewControllers?.removeLast()
-                            arrViewControllers?.removeLast()
-                            vc.delegate = arrViewControllers?.last as! SetAccountViewController
-                            arrViewControllers?.append(vc)
-                            self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                        if self.enterEmailMode == .settings {
+                            Key.shared.userEmailVerified = true
+                            if self.boolUpdateEmail {
+                                let vc = UpdateUsrnameEmailViewController()
+                                vc.enterMode = .email
+                                vc.strEmail = self.strEmail
+                                var arrViewControllers = self.navigationController?.viewControllers
+                                arrViewControllers?.removeLast()
+                                arrViewControllers?.removeLast()
+                                arrViewControllers?.removeLast()
+                                vc.delegate = arrViewControllers?.last as! SetAccountViewController
+                                arrViewControllers?.append(vc)
+                                self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
+                            } else {
+                                self.delegate?.verifyEmailSucceed!()
+                                self.navigationController?.popViewController(animated: true)
+                            }
                         } else {
-                            self.delegate?.verifyEmailSucceed!()
-                            self.navigationController?.popViewController(animated: true)
+                            Key.shared.userEmailVerified = true
+                            let nextRegister = RegisterConfirmViewController()
+                            nextRegister.faeUser = self.faeUser
+                            self.navigationController?.pushViewController(nextRegister, animated: false)
                         }
                     } else {
                         for _ in 0..<6 {

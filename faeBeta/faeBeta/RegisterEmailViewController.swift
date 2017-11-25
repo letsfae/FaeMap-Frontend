@@ -185,11 +185,30 @@ class RegisterEmailViewController: RegisterBaseViewController {
         //let boardRegister = RegisterUsernameViewController()
         //boardRegister.faeUser = faeUser!
         //self.navigationController?.pushViewController(boardRegister, animated: false)
-        let vc = VerifyCodeViewController()
-        vc.enterMode = .email
-        vc.enterEmailMode = .signup
-        vc.faeUser = faeUser
-        navigationController?.pushViewController(vc, animated: true)
+        //faeUser.whereKey("email", value: email!)
+        print(self.faeUser.keyValue)
+        faeUser.signUpInBackground { status, message in
+            if status / 100 == 2 {
+                self.faeUser.logInBackground({ (status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        self.faeUser.whereKey("email", value: self.email!)
+                        self.faeUser.updateEmail {(status: Int, message: Any?) in
+                            if status / 100 == 2 {
+                                let vc = VerifyCodeViewController()
+                                vc.enterMode = .email
+                                vc.enterEmailMode = .signup
+                                vc.strEmail = self.email!
+                                vc.faeUser = self.faeUser
+                                self.navigationController?.pushViewController(vc, animated: true)
+                            } else {
+                                print("[Update Email Fail] \(status) \(message!)")
+                            }
+                            self.hideActivityIndicator()
+                        }
+                    }
+                })
+            }
+        }
     }
     
     func registerCell() {

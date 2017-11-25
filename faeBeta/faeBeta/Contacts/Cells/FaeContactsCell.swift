@@ -35,6 +35,7 @@ class FaeContactsCell: UITableViewCell {
         super.prepareForReuse()
         friendStatus = .accepted
         lblStatus.text = ""
+        imgAvatar.image = nil
     }
     
     func getFriendStatus(id: Int) {

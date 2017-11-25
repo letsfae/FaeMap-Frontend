@@ -73,10 +73,10 @@ class RegisterPhoneViewController: RegisterBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        numKeyPad = FAENumberKeyboard(frame: CGRect(x: 0, y: view.frame.size.height - 244 * screenHeightFactor, width: view.frame.size.width, height: 244 * screenHeightFactor))
+        numKeyPad = FAENumberKeyboard(frame: CGRect(x: 0, y: view.frame.size.height - 244 * screenHeightFactor - device_offset_bot, width: view.frame.size.width, height: 244 * screenHeightFactor))
         view.addSubview(numKeyPad)
         numKeyPad.delegate = self
-        uiviewBottom.frame.origin.y = view.frame.height - 244 * screenHeightFactor - uiviewBottom.frame.size.height + 15
+        uiviewBottom.frame.origin.y = view.frame.height - 244 * screenHeightFactor - uiviewBottom.frame.size.height + 15 - device_offset_bot
     }
     
     override func viewDidAppear(_ animated: Bool) {
