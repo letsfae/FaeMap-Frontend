@@ -86,7 +86,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     
     fileprivate func setupBottomPart() {
         // look around label
-        btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 198 * screenHeightFactor, width: 125, height: 22))
+        btnLookAround = UIButton(frame: CGRect(x: 0, y: screenHeight - 198 * screenHeightFactor - device_offset_bot, width: 125, height: 22))
         btnLookAround.center.x = screenWidth / 2
 //        btnLookAround.setImage(#imageLiteral(resourceName: "btnLookAround"), for: .normal)
         btnLookAround.setTitle("Look Around", for: .normal)
@@ -97,7 +97,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         
         // log in button
         var font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 156 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 156 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
         btnLogin.setTitle("Log in", for: .normal)
         btnLogin.setTitleColor(.white, for: .normal)
@@ -111,7 +111,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         view.bringSubview(toFront: btnLogin)
         
         // create account button
-        btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnCreateAccount = UIButton(frame: CGRect(x: 0, y: screenHeight - 86 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnCreateAccount.center.x = screenWidth / 2
         btnCreateAccount.setTitle("Join Faevorite", for: .normal)
         btnCreateAccount.setTitleColor(UIColor._2499090(), for: .normal)

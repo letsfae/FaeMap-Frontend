@@ -186,6 +186,7 @@ extension ContactsViewController {
             uiviewSchbar.isHidden = false
             tblContacts.frame.origin.y = 114 + device_offset_top
             cellStatus = 0
+            btnIndicator.isHidden = false
         } else {
             imgTick.frame.origin.y = 71
             uiviewNavBar.rightBtn.isHidden = true
@@ -193,6 +194,7 @@ extension ContactsViewController {
             uiviewSchbar.isHidden = true
             tblContacts.frame.origin.y = 65 + device_offset_top
             cellStatus = btnFFF.isSelected ? 1 : 2
+            btnIndicator.isHidden = true
         }
         
         
@@ -204,6 +206,8 @@ extension ContactsViewController {
         
 //        switchFriendsAndFollows()
         tblContacts.reloadData()
+        tblContacts.scrollToTop(animated: false)
+        //tblContacts.setContentOffset(CGPoint.zero, animated: false)
     }
     
 //    fileprivate func switchFriendsAndFollows() {
