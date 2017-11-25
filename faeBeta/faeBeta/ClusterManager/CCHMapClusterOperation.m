@@ -146,42 +146,33 @@
                 CCHMapClusterAnnotation *annotationForCell;
                 if (_reuseExistingClusterAnnotations) {
                     // Check if an existing cluster annotation can be reused
-                    
-                    if (isSelected) {
-                        for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
-                            BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
-                            if (coordinateMatches) {
-                                annotationForCell = visibleAnnotation;
-                                //printf("found \n");
-                            }
-                        }
-                    } else {
-                        if (self.isZoomIn) {
-//                            if (self.isUserPin) {
-//                                annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
-//                                if (annotationForCell) {
-//                                    BOOL coordinateMatches = fequal(coordinate.latitude, annotationForCell.coordinate.latitude) && fequal(coordinate.longitude, annotationForCell.coordinate.longitude);
-//                                    //printf(coordinateMatches ? "2: Yes\n" : "2: No\n");
-//                                    annotationForCell = coordinateMatches ? annotationForCell : nil;
-//                                }
-//                            } else {
-                                for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
-                                    BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
-                                    if (coordinateMatches) {
-                                        annotationForCell = visibleAnnotation;
-                                        //printf("found \n");
-                                    }
-                                }
+//                    if (isSelected) {
+//                        for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
+//                            BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
+//                            if (coordinateMatches) {
+//                                annotationForCell = visibleAnnotation;
+//                                //printf("found \n");
 //                            }
-                        } else {
-                            annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
-                            if (annotationForCell) {
-                                BOOL coordinateMatches = fequal(coordinate.latitude, annotationForCell.coordinate.latitude) && fequal(coordinate.longitude, annotationForCell.coordinate.longitude);
-                                //printf(coordinateMatches ? "2: Yes\n" : "2: No\n");
-                                annotationForCell = coordinateMatches ? annotationForCell : nil;
+//                        }
+//                    } else {
+//                        if (self.isZoomIn) {
+                            for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
+                                BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
+                                if (coordinateMatches) {
+                                    annotationForCell = visibleAnnotation;
+                                    break;
+                                    //printf("found \n");
+                                }
                             }
-                        }
-                    }
+//                        } else {
+//                            annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
+//                            if (annotationForCell) {
+//                                BOOL coordinateMatches = fequal(coordinate.latitude, annotationForCell.coordinate.latitude) && fequal(coordinate.longitude, annotationForCell.coordinate.longitude);
+//                                //printf(coordinateMatches ? "2: Yes\n" : "2: No\n");
+//                                annotationForCell = coordinateMatches ? annotationForCell : nil;
+//                            }
+//                        }
+//                    }
                 }
                 
                 if (annotationForCell == nil) {
