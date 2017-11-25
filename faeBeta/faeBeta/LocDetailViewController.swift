@@ -111,11 +111,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             self.clctNearby.reloadData()
         }
         if boolShared {
-            uiviewAfterAdded.lblSaved.text = "You shared a Location."
+            //uiviewAfterAdded.lblSaved.text = "You shared a Location."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
             uiviewAfterAdded.btnUndo.isHidden = true
             uiviewAfterAdded.btnSeeList.isHidden = true
-            uiviewAfterAdded.show()
+            uiviewAfterAdded.show("You shared a Location.")
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.uiviewAfterAdded.hide()
             }

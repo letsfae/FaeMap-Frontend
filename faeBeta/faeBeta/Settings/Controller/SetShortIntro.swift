@@ -22,6 +22,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     var lblEditIntro: UILabel!
     var btnSave: UIButton!
     var boolWillDisappear: Bool = false
+    var strFieldText: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,6 +58,11 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         lblPlaceholder.font = UIFont(name: "AvenirNext-Regular", size: 25)
         lblPlaceholder.textColor = UIColor._155155155()
         lblPlaceholder.textAlignment = .center
+        
+        if strFieldText != "" {
+            textView.text = strFieldText
+            lblPlaceholder.isHidden = true
+        }
         
         lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 96 - 18, width: screenWidth, height: 18))
         view.addSubview(lblEditIntro)

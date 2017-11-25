@@ -176,7 +176,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.id)", pinID: "\(placeData.id)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
             self.hide()
-            self.uiviewAfterAdded.show()
+            self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.id)
             self.uiviewAfterAdded.pinIdInAction = placeData.id
             self.uiviewAfterAdded.selectedCollection.itemsCount += 1
@@ -193,7 +193,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.id)", pinID: "\(placeData.id)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
             self.hide()
-            self.uiviewAfterAdded.show(save: false)
+            self.uiviewAfterAdded.show(save: false, "Removed from List!")
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.id })
             self.uiviewAfterAdded.pinIdInAction = placeData.id
             self.uiviewAfterAdded.selectedCollection.itemsCount -= 1
@@ -241,7 +241,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.id)", pinID: "\(locationId)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
             self.hide()
-            self.uiviewAfterAdded.show()
+            self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.id)
             self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
@@ -254,7 +254,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.id)", pinID: "\(locationId)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
             self.hide()
-            self.uiviewAfterAdded.show(save: false)
+            self.uiviewAfterAdded.show(save: false, "Removed from List!")
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.id })
             self.uiviewAfterAdded.pinIdInAction = locationId
             self.uiviewAfterAdded.selectedCollection.itemsCount -= 1
@@ -412,8 +412,9 @@ class AfterAddedToListView: UIView {
         delegate?.seeList()
     }
     
-    func show(save: Bool = true) {
-        lblSaved.text = save ? "Collected to List!" : "Removed from List!"
+    func show(save: Bool = true, _ content: String) {
+        //lblSaved.text = save ? "Collected to List!" : "Removed from List!"
+        lblSaved.text = content
         mode = !save ? .save : .unsave
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - self.frame.size.height
