@@ -9,31 +9,27 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer {
     
-    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> CLLocationCoordinate2D {
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> IsSelectedCoordinate {
+        for annotation in annotations {
+            guard let pin = annotation as? FaePinAnnotation else { continue }
+            if pin.isSelected {
+                return IsSelectedCoordinate(isSelected: true, coordinate: pin.coordinate)
+            }
+        }
         guard let firstAnn = annotations.first as? FaePinAnnotation else {
-            return CLLocationCoordinate2DMake(0, 0)
+            return IsSelectedCoordinate(isSelected: false, coordinate: CLLocationCoordinate2DMake(0, 0))
         }
-        return firstAnn.coordinate
-    }
-    
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
-        for annotationView in views {
-            guard let anView = annotationView as? PlacePinAnnotationView else { continue }
-            guard let annotation = anView.annotation as? FaePinAnnotation else { continue }
-            guard annotation.selected else { continue }
-            selectedPlaceView = anView
-            anView.optionsReady = true
-            anView.layer.zPosition = 500
-        }
+        return IsSelectedCoordinate(isSelected: false, coordinate: firstAnn.coordinate)
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
+                anView.superview?.sendSubview(toBack: anView)
                 anView.alpha = 0
                 anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
                 let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
@@ -44,6 +40,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                     }, completion: nil)
                 }
             } else if let anView = annotationView as? UserPinAnnotationView {
+                anView.superview?.bringSubview(toFront: anView)
                 anView.alpha = 0
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.4, animations: {
@@ -70,7 +67,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
 
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
         
-        UIView.animate(withDuration: 0.4, animations: {
+        UIView.animate(withDuration: 0.2, animations: {
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
                     if let anView = self.faeMapView.view(for: anno) {
@@ -84,17 +81,51 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         
     }
     
+    func coordinateEqual(_ a: CLLocationCoordinate2D, _ b: CLLocationCoordinate2D) -> Bool {
+        return doubleEqual(a.latitude, b.latitude) && doubleEqual(a.longitude, b.longitude)
+    }
+    
+    func doubleEqual(_ a: Double, _ b: Double) -> Bool {
+        return fabs(a - b) < Double.ulpOfOne
+    }
+    
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
-        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == "place" {
+        
+        switch mapClusterController {
+        case placeClusterManager:
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
-                anView.assignImage(firstAnn.icon)
+                var found = false
+                for annotation in mapClusterAnnotation.annotations {
+                    guard let pin = annotation as? FaePinAnnotation else { continue }
+                    guard let sPlace = selectedPlace else { continue }
+                    if coordinateEqual(pin.coordinate, sPlace.coordinate) {
+                        found = true
+                        anView.assignImage(pin.icon)
+                    }
+                }
+                if !found {
+                    let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+                    anView.assignImage(firstAnn.icon)
+                }
+                anView.superview?.bringSubview(toFront: anView)
             }
-        } else if firstAnn.type == "user" {
+            
+            break
+        case userClusterManager:
+            let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? UserPinAnnotationView {
                 anView.assignImage(firstAnn.avatar)
+                anView.superview?.bringSubview(toFront: anView)
             }
-        } else if firstAnn.type == "location" {
+            break
+        case locationPinClusterManager:
+            break
+        default:
+            break
+        }
+        
+        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+        if firstAnn.type == "location" {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
@@ -103,6 +134,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
+        }
+        if selectedPlaceView != nil {
+            selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
+            selectedPlaceView?.layer.zPosition = 199
         }
     }
     
@@ -133,8 +168,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
                 dequeuedView.annotation = annotation
                 anView = dequeuedView
+                selfAnView = anView
             } else {
                 anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                selfAnView = anView
             }
             if Key.shared.onlineStatus == 5 {
                 anView.invisibleOn()
@@ -206,13 +243,15 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
+            selectedPlace?.isSelected = false
             guard let img = selectedPlace?.icon else { return }
-            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
+            selectedPlaceView?.layer.zPosition = -1
             selectedPlaceView?.optionsReady = false
             selectedPlaceView?.optionsOpened = false
             selectedPlaceView = nil
+            selectedPlace = nil
         }
     }
     
@@ -258,14 +297,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
         if AUTO_REFRESH {
             calculateDistanceOffset()
         }
         
         if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
-        
-        self.prevBearing = mapView.camera.heading
         
         if mapMode == .selecting {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)

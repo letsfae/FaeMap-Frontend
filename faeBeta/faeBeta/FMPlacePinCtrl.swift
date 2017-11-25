@@ -8,13 +8,13 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, CreateColListDelegate, PlaceDetailDelegate {
     
     // PlaceDetailDelegate
-    func getRouteToPin(mode: CollectionTableMode) {
-        placePinAction(action: .route, mode: mode)
+    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?) {
+        placePinAction(action: .route(placeInfo: placeInfo), mode: mode)
     }
     
     // CreateColListDelegate
@@ -74,9 +74,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func seeList() {
         uiviewAfterAdded.hide()
         if let pin = selectedLocation {
-            locationPinClusterManager.removeAnnotations([pin], withCompletionHandler: nil)
+            locationPinClusterManager.removeAnnotations([pin], withCompletionHandler: {
+                self.deselectAllLocations()
+            })
         }
-        deselectAllLocations()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
         vcList.colId = uiviewAfterAdded.selectedCollection.id
@@ -150,7 +151,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func placePinAction(action: PlacePinAction, mode: CollectionTableMode) {
         switch action {
         case .detail:
-            if createLocation == .create {
+            if modeLocCreating == .on {
                 guard let anView = locAnnoView else { return }
                 anView.optionsToNormal()
                 let vcLocDetail = LocDetailViewController()
@@ -160,6 +161,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcLocDetail.featureDelegate = self
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
+                vcLocDetail.boolCreated = true
                 navigationController?.pushViewController(vcLocDetail, animated: true)
             } else {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
@@ -187,16 +189,20 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 uiviewSavedList.pinToSave = locPin
                 break
             }
-        case .route:
+        case .route(let placeInfo):
             if selectedLocation != nil {
                 routingLocation()
             }
-            if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
-                routingPlace(placeInfo)
+            if let place = placeInfo {
+                routingPlace(place)
+            } else {
+                if let place = selectedPlace?.pinInfo as? PlacePin {
+                    routingPlace(place)
+                }
             }
             break
         case .share:
-            if createLocation == .create {
+            if modeLocCreating == .on {
                 locAnnoView?.optionsToNormal()
                 locAnnoView?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
@@ -226,6 +232,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
+        anView.idx = first.class_2_icon_id
         anView.assignImage(first.icon)
         anView.delegate = self
         return anView
@@ -244,7 +251,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         anView.delegate = self
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
-        anView.layer.zPosition = 7
         return anView
     }
     
@@ -274,15 +280,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
+        firstAnn.isSelected = true
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
-        selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        selectedPlaceView?.layer.zPosition = 1001
+        selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
+        selectedPlaceView?.layer.zPosition = 199
         guard mapMode != .explore else {
             scrollTo(firstAnn.id)
             return

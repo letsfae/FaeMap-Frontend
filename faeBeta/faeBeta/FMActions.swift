@@ -46,8 +46,8 @@ extension FaeMapViewController {
     
     @objc func actionClearSearchResults(_ sender: UIButton) {
         btnZoom.tapToSmallMode()
-        if createLocation == .create {
-            createLocation = .cancel
+        if modeLocCreating == .on {
+            modeLocCreating = .off
             return
         }
         PLACE_ENABLE = true
@@ -179,11 +179,10 @@ extension FaeMapViewController {
                     uiviewFilterMenu.selectedIndexPath = nil
                 }
             }
-
             break
         case .allPlaces:
             animateMainItems(show: false, animated: false)
-            navigationController?.setViewControllers(self.arrCtrlers, animated: false)
+            navigationController?.setViewControllers(arrCtrlers, animated: false)
             break
         default:
             break

@@ -8,7 +8,16 @@
 
 import UIKit
 
-extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
+extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
+    
+    // EXPCellDelegate
+    func jumpToPlaceDetail(_ placeInfo: PlacePin) {
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = placeInfo
+        vcPlaceDetail.featureDelegate = self
+        vcPlaceDetail.delegate = self
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
+    }
     
     func loadSmallClctView() {
         let layout = CenterCellCollectionViewFlowLayout()
@@ -41,6 +50,7 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == clctViewMap {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics_map", for: indexPath) as! EXPClctPicMapCell
+            cell.delegate = self
             cell.updateCell(placeData: arrExpPlace[indexPath.row])
             return cell
         } else {
@@ -68,8 +78,6 @@ extension FaeMapViewController: UICollectionViewDelegate, UICollectionViewDataSo
             anView.assignImage(firstAnn.icon)
             selectedPlace = firstAnn
             selectedPlaceView = anView
-            selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-            selectedPlaceView?.layer.zPosition = 1001
         }
     }
     

@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 // An enum type to return different geo -> address
 enum SelectLoctionMode {
@@ -59,21 +59,22 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     var locAnnoView: LocPinAnnotationView?
     var activityIndicator: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
-    var createLocation: CreateLocation = .cancel {
+    var createLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
-            if createLocation == .cancel {
+            if createLocation == .off {
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
                 if selectedLocation != nil {
-                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-                    if locAnnoView != nil {
-                        locAnnoView?.hideButtons()
-                        locAnnoView?.optionsReady = false
-                        locAnnoView?.optionsOpened = false
-                        locAnnoView?.optionsOpeing = false
-                    }
-                    selectedLocation = nil
+                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                        if self.locAnnoView != nil {
+                            self.locAnnoView?.hideButtons()
+                            self.locAnnoView?.optionsReady = false
+                            self.locAnnoView?.optionsOpened = false
+                            self.locAnnoView?.optionsOpeing = false
+                        }
+                        self.selectedLocation = nil
+                    })
                 }
             }
         }
@@ -343,11 +344,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> CLLocationCoordinate2D {
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> IsSelectedCoordinate {
         guard let firstAnn = annotations.first as? FaePinAnnotation else {
-            return CLLocationCoordinate2DMake(0, 0)
+            return IsSelectedCoordinate(isSelected: false, coordinate: CLLocationCoordinate2DMake(0, 0))
         }
-        return firstAnn.coordinate
+        return IsSelectedCoordinate(isSelected: false, coordinate: firstAnn.coordinate)
     }
     
     // MARK: - Place & Location Managements
@@ -369,15 +370,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
-        selectedPlaceView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        selectedPlaceView?.layer.zPosition = 1001
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
@@ -481,12 +478,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func createLocationPin(point: CGPoint) {
-        createLocation = .create
+        createLocation = .on
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
-            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-            selectedLocation = nil
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                self.selectedLocation = nil
+            })
         }
         uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()
@@ -635,7 +633,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
-            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 2)
+            selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 7)
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
             selectedPlaceView?.optionsReady = false

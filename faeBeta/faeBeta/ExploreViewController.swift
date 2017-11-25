@@ -10,9 +10,13 @@ import UIKit
 import SwiftyJSON
 import CoreLocation
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, ExploreCategorySearch {
+protocol ExploreDelegate: class {
+    func jumpToExpPlacesCollection(places: [PlacePin], category: String)
+}
+
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, ExploreCategorySearch, EXPCellDelegate {
     
-    weak var delegate: MapSearchDelegate?
+    weak var delegate: ExploreDelegate?
     
     var uiviewNavBar: FaeNavBar!
     var clctViewTypes: UICollectionView!
@@ -275,9 +279,16 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func actionExpMap() {
-        let loc = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
-        delegate?.jumpToPlaces?(searchText: "fromEXP", places: arrPlaceData, selectedLoc: loc)
-        navigationController?.popViewController(animated: false)
+        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: "Random")
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     @objc func actionSave(_ sender: UIButton) {
@@ -501,7 +512,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
-        search(category: lastCategory, indexPath: selectedTypeIdx)
+        if selectedTypeIdx != nil {
+            search(category: lastCategory, indexPath: selectedTypeIdx)
+        }
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
@@ -547,6 +560,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == clctViewPics {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics", for: indexPath) as! EXPClctPicCell
+            cell.delegate = self
             cell.updateCell(placeData: arrPlaceData[indexPath.row])
             return cell
         } else if collectionView == clctViewTypes {
@@ -562,6 +576,23 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             let cell = UICollectionViewCell()
             return cell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = arrPlaceData[indexPath.row]
+        vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
+        vcPlaceDetail.delegate = Key.shared.FMVCtrler
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
+    }
+    
+    // EXPCellDelegate
+    func jumpToPlaceDetail(_ placeInfo: PlacePin) {
+        let vcPlaceDetail = PlaceDetailViewController()
+        vcPlaceDetail.place = placeInfo
+        vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
+        vcPlaceDetail.delegate = Key.shared.FMVCtrler
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
     var lastCategory = ""
