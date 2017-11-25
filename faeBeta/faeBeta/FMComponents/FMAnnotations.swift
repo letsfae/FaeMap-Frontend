@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 import MapKit
 
 let mapAvatarWidth: CGFloat = 35
@@ -23,7 +23,6 @@ class AddressAnnotationView: MKAnnotationView {
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 48, height: 52)
-        layer.zPosition = 2
         layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
         addSubview(icon)
@@ -35,7 +34,7 @@ class AddressAnnotationView: MKAnnotationView {
     }
 }
 
-class FaePinAnnotation: MKPointAnnotation {
+@objc class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
         guard let rhs = object as? FaePinAnnotation else { return false }
@@ -51,6 +50,7 @@ class FaePinAnnotation: MKPointAnnotation {
     var id: Int = -1
     var mapViewCluster: CCHMapClusterController?
     var animatable = true
+    var isSelected = false
     
     // location pin
     var address_1 = ""
@@ -171,7 +171,6 @@ class SelfAnnotationView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
         clipsToBounds = false
-        layer.zPosition = 100
         loadBasic()
         if let identifier = reuseIdentifier {
             if identifier == "self_selected_mode" {
@@ -315,8 +314,8 @@ class UserPinAnnotationView: MKAnnotationView {
         imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
-        layer.zPosition = 1
         isEnabled = false
+        layer.zPosition = 99
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -332,18 +331,18 @@ protocol PlacePinAnnotationDelegate: class {
     func placePinAction(action: PlacePinAction, mode: CollectionTableMode)
 }
 
-enum PlacePinAction: String {
+enum PlacePinAction {
     case detail
     case collect
-    case route
+    case route(placeInfo: PlacePin?)
     case share
 }
 
-class PlacePinAnnotationView: MKAnnotationView {
+@objc class PlacePinAnnotationView: MKAnnotationView {
     
     weak var delegate: PlacePinAnnotationDelegate?
     
-    var imgIcon: UIImageView!
+    @objc var imgIcon: UIImageView!
     
     var btnDetail: UIButton!
     var btnCollect: UIButton!
@@ -359,13 +358,16 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var boolShowSavedNoti = false
     
+    @objc var idx = -1
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-        layer.zPosition = 1
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
         boolShowSavedNoti = false
+        
+        layer.zPosition = -1
         
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
@@ -402,11 +404,11 @@ class PlacePinAnnotationView: MKAnnotationView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func assignImage(_ image: UIImage) {
+    @objc func assignImage(_ image: UIImage) {
         imgIcon.image = image
     }
     
-    fileprivate func loadButtons() {
+    func loadButtons() {
         btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 46, height: 46))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail_s"), for: .selected)
@@ -430,13 +432,6 @@ class PlacePinAnnotationView: MKAnnotationView {
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share"), for: .normal)
         btnShare.setImage(#imageLiteral(resourceName: "place_new_share_s"), for: .selected)
         btnShare.alpha = 0
-        
-        layer.zPosition = 2
-        imgIcon.layer.zPosition = 2
-        btnDetail.layer.zPosition = 2
-        btnCollect.layer.zPosition = 2
-        btnRoute.layer.zPosition = 2
-        btnShare.layer.zPosition = 2
         
         addSubview(btnDetail)
         addSubview(btnCollect)
@@ -493,15 +488,12 @@ class PlacePinAnnotationView: MKAnnotationView {
             var point = self.frame.origin; point.x += 59; point.y += 56
             self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
             self.imgIcon.frame.origin = CGPoint.zero
-            self.imgIcon.layer.zPosition = 1
-            self.layer.zPosition = 1
             self.removeButtons()
         })
     }
     
     fileprivate func removeButtons() {
         for btn in arrBtns {
-            btn.layer.zPosition = 1
             btn.removeTarget(nil, action: nil, for: .touchUpInside)
             btn.removeFromSuperview()
         }
@@ -570,7 +562,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         } else if btnCollect.isSelected || sender == btnCollect {
             delegate?.placePinAction(action: .collect, mode: .place)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route, mode: .place)
+            delegate?.placePinAction(action: .route(placeInfo: nil), mode: .place)
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share, mode: .place)
         }
@@ -599,10 +591,11 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var boolShowSavedNoti = false
     
+    var isRed = false
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-        layer.zPosition = 1001
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
         
@@ -624,8 +617,9 @@ class LocPinAnnotationView: MKAnnotationView {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
-    func assignImage(_ image: UIImage) {
+    func assignImage(_ image: UIImage, red: Bool = false) {
         imgIcon.image = image
+        isRed = red
     }
     
     fileprivate func loadButtons() {
@@ -708,15 +702,12 @@ class LocPinAnnotationView: MKAnnotationView {
             var point = self.frame.origin; point.x += 59; point.y += 56
             self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
             self.imgIcon.frame.origin = CGPoint.zero
-            self.imgIcon.layer.zPosition = 1
-            self.layer.zPosition = 1
             self.removeButtons()
         })
     }
     
     fileprivate func removeButtons() {
         for btn in arrBtns {
-            btn.layer.zPosition = 1
             btn.removeTarget(nil, action: nil, for: .touchUpInside)
             btn.removeFromSuperview()
         }
@@ -810,7 +801,7 @@ class LocPinAnnotationView: MKAnnotationView {
         } else if btnCollect.isSelected || sender == btnCollect {
             delegate?.placePinAction(action: .collect, mode: .location)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route, mode: .location)
+            delegate?.placePinAction(action: .route(placeInfo: nil), mode: .location)
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share, mode: .location)
         }
@@ -827,7 +818,6 @@ class SocialPinAnnotationView: MKAnnotationView {
         imageView = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
         addSubview(imageView)
         imageView.contentMode = .scaleAspectFit
-        layer.zPosition = 1
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
     }
     

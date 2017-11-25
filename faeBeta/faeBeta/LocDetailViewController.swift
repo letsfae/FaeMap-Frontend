@@ -20,10 +20,16 @@ import SwiftyJSON
         2. when trainsitioning from collections, saved_status will be always true
         So, no need to check saved_status in back end
 */
+
+protocol LocDetailDelegate: class {
+    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool)
+}
+
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
     weak var featureDelegate: PlaceDetailDelegate?
+    weak var locationDelegate: LocDetailDelegate?
     
     var location: PlacePin!
     var allPlaces = [PlacePin]()
@@ -73,6 +79,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     var boolShared: Bool = false
+    var boolCreated: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,7 +173,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         FaeMap.shared.whereKey("max_count", value: "20")
         FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
-                print("Get Related Places Fail \(status) \(message!)")
+                //print("Get Related Places Fail \(status) \(message!)")
                 completion()
                 return
             }
@@ -195,7 +202,12 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     func loadMap() {
-        mapView = MKMapView(frame: CGRect(x: 0, y: 0, w: 414, h: 352 + 48))
+        mapView = MKMapView()
+        if screenHeight == 812 {
+            mapView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 352 + 60 + device_offset_top * 2)
+        } else {
+            mapView.frame = CGRect(x: 0, y: 0, w: 414, h: 352 + 48)
+        }
         mapView.delegate = self
         mapView.isZoomEnabled = false
         mapView.isPitchEnabled = false
@@ -219,6 +231,18 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     @objc func handleMapTap() {
         
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        locationDelegate = Key.shared.FMVCtrler
+        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
@@ -240,20 +264,20 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
                     arrPlaces.append(placePin)
                 }
             } else {
-                print("Get Related Places Fail \(status) \(message!)")
+                //print("Get Related Places Fail \(status) \(message!)")
             }
             completion(arrPlaces)
         }
     }
     
     func loadHeader() {
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor, width: screenWidth, height: 101 * screenHeightFactor))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
     
     func loadFooter() {
-        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
         let line = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
@@ -349,7 +373,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin(mode: .location)
+        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
         navigationController?.popViewController(animated: false)
     }
     

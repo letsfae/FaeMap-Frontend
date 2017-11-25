@@ -8,7 +8,7 @@
 
 import UIKit
 import MapKit
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension FaeMapViewController {
     
@@ -27,16 +27,17 @@ extension FaeMapViewController {
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
         placeClusterManager.cellSize = 100
-//        placeClusterManager.minUniqueLocationsForClustering = 3
+        //placeClusterManager.minUniqueLocationsForClustering = 2
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
         placeClusterManager.marginFactor = 0.0
-//        placeClusterManager.isDebuggingEnabled = true
+        //placeClusterManager.isDebuggingEnabled = true
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self
         userClusterManager.cellSize = 100
         userClusterManager.marginFactor = 0.0
+        userClusterManager.isUserPinController = true
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
         locationPinClusterManager.delegate = self
@@ -176,7 +177,7 @@ extension FaeMapViewController {
         imgExpbarShadow.isHidden = true
         
         // Left window on main map to open account system
-        let btnBackToExp = UIButton()
+        btnBackToExp = UIButton()
         btnBackToExp.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         imgExpbarShadow.addSubview(btnBackToExp)
         btnBackToExp.addTarget(self, action: #selector(self.actionBackTo(_:)), for: .touchUpInside)

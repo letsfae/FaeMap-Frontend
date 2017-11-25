@@ -9,7 +9,7 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import MapKit
-import CCHMapClusterController
+//import CCHMapClusterController
 import RealmSwift
 
 enum MapMode {
@@ -22,9 +22,20 @@ enum MapMode {
     case allPlaces
 }
 
-enum CreateLocation {
-    case cancel
-    case create
+enum FaeMode {
+    case on
+    case on_create
+    case off
+}
+
+enum ModeSelectLocation {
+    case on
+    case off
+}
+
+enum RoutingMode {
+    case fromMap
+    case fromPinDetail
 }
 
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
@@ -39,6 +50,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var setPlacePins = Set<Int>()
     var arrPlaceData = [PlacePin]()
     var timerLoadMessages: Timer?
+    var selfAnView: SelfAnnotationView?
+    
+    // General
+    var btnBackToExp: UIButton!
     
     // Search Bar
     var imgSchbarShadow: UIImageView!
@@ -103,7 +118,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // MapView Offset Control
     var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var prevAltitude: CLLocationDistance = 0
-    var prevBearing: Double = 0
     
     // Collecting Pin Control
     var uiviewSavedList: AddPinToCollectionView!
@@ -118,6 +132,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnDistIndicator: FMDistIndicator!
     var uiviewChooseLocs: FMChooseLocs!
     var routeAddress: RouteAddress!
+    var routingMode: RoutingMode = .fromMap
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
@@ -134,66 +149,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var boolFromMap = true
     
     var boolNotiSent = false
-    var mapMode: MapMode = .normal {
-        didSet {
-            guard fullyLoaded else { return }
-            
-            imgAddressIcon.isHidden = mapMode == .normal
-            btnCancelSelect.isHidden = mapMode == .normal
-            
-            if mapMode == .selecting {
-                btnDistIndicator.lblDistance.text = "Select"
-            } else {
-                lblSearchContent.text = "Search Fae Map"
-                btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance
-            }
-            imgSearchIcon.isHidden = mapMode == .selecting
-            btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
-            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .explore || mapMode == .pinDetail
-            lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
-            
-            placeClusterManager.maxZoomLevelForClustering = mapMode == .explore ? 0 : Double.greatestFiniteMagnitude
-            clctViewMap.isHidden = mapMode != .explore
-            imgExpbarShadow.isHidden = mapMode != .explore && mapMode != .pinDetail && mapMode != .collection
-            imgSchbarShadow.isHidden = mapMode == .explore || mapMode == .pinDetail || mapMode == .collection
-            btnZoom.isHidden = mapMode == .explore
-            btnLocateSelf.isHidden = mapMode == .explore
-            btnOpenChat.isHidden = mapMode == .explore
-            btnFilterIcon.isHidden = mapMode == .explore
-            btnDiscovery.isHidden = mapMode == .explore
-            
-            btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
-            Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
-            if mapMode == .routing || mapMode == .selecting {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
-            } else {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
-            }
-            
-            if mapMode == .allPlaces {
-                btnLeftWindow.isHidden = true
-                imgExpbarShadow.isHidden = false
-                return
-            }
-        }
-    }
-    
-    var createLocation: CreateLocation = .cancel {
-        didSet {
-            guard fullyLoaded else { return }
-            if createLocation == .cancel {
-                uiviewLocationBar.hide()
-                activityIndicator.stopAnimating()
-                if selectedLocation != nil {
-                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-                    deselectAllLocations()
-                }
-                if uiviewAfterAdded.frame.origin.y != screenHeight {
-                    uiviewAfterAdded.hide()
-                }
-            }
-        }
-    }
     
     var boolCanUpdateUsers = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
@@ -254,6 +209,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
 //        view.addSubview(line)
+        
+        joshprint("id:", Key.shared.user_id)
     }
     
     deinit {
@@ -283,6 +240,106 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
         Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
+    }
+    
+    // MARK: - Switches
+    
+    var modeLocation: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            imgExpbarShadow.isHidden = modeLocation == .off
+            imgSchbarShadow.isHidden = modeLocation != .off
+            if modeLocation != .off {
+                Key.shared.onlineStatus = 5
+                lblExpContent.attributedText = nil
+                lblExpContent.text = "View Location"
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+            } else {
+                Key.shared.onlineStatus = 1
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+            }
+        }
+    }
+    
+    var modeLocCreating: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            if modeLocCreating == .off {
+                uiviewLocationBar.hide()
+                activityIndicator.stopAnimating()
+                if selectedLocation != nil {
+                    locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                        self.deselectAllLocations()
+                    })
+                }
+                if uiviewAfterAdded.frame.origin.y != screenHeight {
+                    uiviewAfterAdded.hide()
+                }
+            }
+        }
+    }
+    
+    var modeExplore: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            
+            btnLeftWindow.isHidden = modeExplore == .on
+            placeClusterManager.maxZoomLevelForClustering = modeExplore == .on ? 0 : Double.greatestFiniteMagnitude
+            imgSchbarShadow.isHidden = modeExplore == .on
+            btnZoom.isHidden = modeExplore == .on
+            btnLocateSelf.isHidden = modeExplore == .on
+            btnOpenChat.isHidden = modeExplore == .on
+            btnFilterIcon.isHidden = modeExplore == .on
+            btnDiscovery.isHidden = modeExplore == .on
+            
+            clctViewMap.isHidden = modeExplore == .off
+            imgExpbarShadow.isHidden = modeExplore == .off
+        }
+    }
+    
+    var modeAllPlaces: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            btnLeftWindow.isHidden = modeAllPlaces == .on
+            imgExpbarShadow.isHidden = modeAllPlaces == .off
+        }
+    }
+    
+    var mapMode: MapMode = .normal {
+        didSet {
+            guard fullyLoaded else { return }
+            
+            imgAddressIcon.isHidden = mapMode == .normal
+            btnCancelSelect.isHidden = mapMode == .normal
+            
+            if mapMode == .selecting {
+                btnDistIndicator.lblDistance.text = "Select"
+            } else {
+                lblSearchContent.text = "Search Fae Map"
+                btnDistIndicator.lblDistance.text = btnDistIndicator.strDistance
+            }
+            imgSearchIcon.isHidden = mapMode == .selecting
+            btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
+            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .pinDetail
+            lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
+            
+            imgExpbarShadow.isHidden = mapMode != .pinDetail && mapMode != .collection
+            imgSchbarShadow.isHidden = mapMode == .pinDetail || mapMode == .collection
+            
+            btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
+            Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
+            if mapMode == .routing || mapMode == .selecting {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+            } else {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+            }
+            
+            if mapMode == .allPlaces {
+                btnLeftWindow.isHidden = true
+                imgExpbarShadow.isHidden = false
+                return
+            }
+        }
     }
     
     func getUserStatus() {

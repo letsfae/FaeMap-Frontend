@@ -7,21 +7,47 @@
 //
 
 import UIKit
-import CCHMapClusterController
+//import CCHMapClusterController
 
-extension FaeMapViewController {
+extension FaeMapViewController: LocDetailDelegate {
+    
+    // MARK: - LocDetailDelegate
+    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool) {
+        if !created {
+            createLocationPin(point: CGPoint.zero, position: coordinate)
+            modeLocation = .on_create
+        } else {
+            locAnnoView?.hideButtons()
+            selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
+            locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+        }
+        modeLocation = .on
+        removePlaceUserPins()
+        animateMainItems(show: true, animated: boolFromMap)
+        btnBackToExp.removeTarget(nil, action: nil, for: .touchUpInside)
+        btnBackToExp.addTarget(self, action: #selector(actionBackToLocDetail), for: .touchUpInside)
+    }
+    
+    @objc func actionBackToLocDetail() {
+        animateMainItems(show: false, animated: boolFromMap)
+        reAddUserPins()
+        reAddPlacePins()
+        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
+        locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
+        if modeLocation == .on_create {
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
+        }
+        modeLocation = .off
+        navigationController?.setViewControllers(arrCtrlers, animated: false)
+    }
     
     func tapLocationPin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? LocPinAnnotationView else { return }
-        anView.layer.zPosition = 2
-        anView.imgIcon.layer.zPosition = 2
         anView.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         selectedLocation = firstAnn
         locAnnoView = anView
-        locAnnoView?.tag = Int(selectedPlaceView?.layer.zPosition ?? 2)
-        locAnnoView?.layer.zPosition = 1001
         guard firstAnn.type == "location" else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
         uiviewSavedList.arrListSavedThisPin.removeAll()
@@ -81,13 +107,21 @@ extension FaeMapViewController {
         view.addSubview(activityIndicator)
     }
     
-    func createLocationPin(point: CGPoint) {
-        createLocation = .create
-        let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
+    func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
+        guard modeLocation == .off else { return }
+        modeLocCreating = .on
+        var coordinate: CLLocationCoordinate2D!
+        if position == nil {
+            coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
+        } else {
+            guard let coor = position else { return }
+            coordinate = coor
+        }
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         if selectedLocation != nil {
-            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
-            selectedLocation = nil
+            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                self.selectedLocation = nil
+            })
         }
         uiviewPlaceBar.hide()
         locAnnoView?.hideButtons()

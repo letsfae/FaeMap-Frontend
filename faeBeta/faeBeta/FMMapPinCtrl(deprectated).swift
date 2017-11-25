@@ -8,7 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-import CCHMapClusterController
+//import CCHMapClusterController
 
 extension Array where Element: Equatable {
     func removeDuplicates() -> [Element] {

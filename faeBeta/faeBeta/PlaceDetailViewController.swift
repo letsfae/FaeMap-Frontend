@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 protocol PlaceDetailDelegate: class {
-    func getRouteToPin(mode: CollectionTableMode)
+    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?)
 }
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
@@ -44,6 +44,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var uiviewWhite: UIView!
     var intHaveHour = 0
     var intHaveWebPhone = 0
+    var boolHaveWeb = false
     var intCellCount = 0
     var intSimilar = 0
     var intNearby = 0
@@ -120,6 +121,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         guard place != nil else { return }
         intHaveHour = place.hours.count > 0 ? 1 : 0
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
+        boolHaveWeb = place.url != ""
         intCellCount = intHaveHour + intHaveWebPhone + 2
     }
     
@@ -163,7 +165,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.search { (status, message) in
                 guard status / 100 == 2 && message != nil else {
-                    print("Get Related Places Fail \(status) \(message!)")
+                    //print("Get Related Places Fail \(status) \(message!)")
                     self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                     completion()
                     return
@@ -184,7 +186,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeMap.shared.whereKey("max_count", value: "20")
             FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
                 guard status / 100 == 2 && message != nil else {
-                    print("Get Related Places Fail \(status) \(message!)")
+                    //print("Get Related Places Fail \(status) \(message!)")
                     self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
                     completion()
                     return
@@ -200,9 +202,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadHeader() {
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top))
         
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208, w: 414, h: 101))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101))
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
     }
@@ -219,7 +221,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadMidTable() {
-        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49), style: .plain)
+        tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49 - device_offset_bot), style: .plain)
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
@@ -237,16 +239,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             automaticallyAdjustsScrollViewInsets = false
         }
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
+        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 208, w: 414, h: 1))
+        let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
         uiviewScrollingPhotos.addSubview(bottomLine)
         uiviewScrollingPhotos.loadImages(place: place)
     }
     
     func loadFooter() {
-        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49, width: screenWidth, height: 49))
+        uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
         let line = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
@@ -317,7 +319,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if uiviewScrollingPhotos != nil {
             var frame = uiviewScrollingPhotos.frame
-            if tblPlaceDetail.contentOffset.y < 0 * screenHeightFactor {
+            if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewScrollingPhotos.frame = frame
             } else {
@@ -325,7 +327,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 uiviewScrollingPhotos.frame = frame
             }
         }
-        if tblPlaceDetail.contentOffset.y >= 186 * screenHeightFactor {
+        if tblPlaceDetail.contentOffset.y >= (186 + device_offset_top) * screenHeightFactor {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
             if boolAnimateTo_1 {
@@ -369,8 +371,19 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin(mode: .place)
-        navigationController?.popViewController(animated: false)
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+            ctrler.routingMode = .fromPinDetail
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        featureDelegate = Key.shared.FMVCtrler
+        featureDelegate?.getRouteToPin(mode: .place, placeInfo: place)
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     @objc func shareThisPin() {

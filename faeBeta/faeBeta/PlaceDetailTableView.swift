@@ -150,8 +150,13 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
             tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
         }
         func tapWebOrPhone() {
-            let phoneNum = place.phone.onlyNumbers()
-            let strURL = indexPath.row == 0 ? place.url : "tel://\(phoneNum)"
+            var strURL = ""
+            if boolHaveWeb && indexPath.row == 0 {
+                strURL = place.url
+            } else {
+                let phoneNum = place.phone.onlyNumbers()
+                strURL = "tel://\(phoneNum)"
+            }
             if let url = URL(string: strURL), UIApplication.shared.canOpenURL(url) {
                 if #available(iOS 10, *) {
                     UIApplication.shared.open(url)
