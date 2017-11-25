@@ -47,6 +47,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var strSearchedPlace: String! = ""
+    var strSearchedLocation: String! = ""
     var strPlaceholder: String! = ""
     
     // uiviews with shadow under table views
@@ -87,7 +88,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         joshprint("BoardVC is called")
         schBar.txtSchField.becomeFirstResponder()
         searchedLoc = LocManager.shared.curtLoc
-        getPlaceInfo()
         
         searchCompleter.delegate = self
     }
@@ -167,15 +167,20 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         
         schBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schBar.delegate = self
-        schBar.txtSchField.placeholder = strPlaceholder
+//        schBar.txtSchField.placeholder = "All Places"
         if enterMode == .place {
-            //            schBar.txtSchField.placeholder = "All Places"
-            //            if strSearchedPlace != "All Places" {
-            //                schBar.txtSchField.text = strSearchedPlace
-            //                schBar.btnClose.isHidden = false
-            //            }
+            schBar.txtSchField.placeholder = "All Places"
+            if strSearchedPlace != "All Places" {
+                schBar.txtSchField.text = strSearchedPlace
+                schBar.btnClose.isHidden = false
+            }
         } else if enterMode == .location {
+            schBar.txtSchField.placeholder = strSearchedLocation
             schBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+//            if strSearchedLocation != "Current Location" {
+//                schBar.txtSchField.text = strSearchedLocation
+//                schBar.btnClose.isHidden = false
+//            }
         }
         uiviewSearch.addSubview(schBar)
     }
@@ -264,8 +269,14 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         switch enterMode {
         case .place:
+            if searchBar.txtSchField.text == "" {
+                showOrHideViews(searchText: searchBar.txtSchField.text!)
+            } else {
+                getPlaceInfo(content: searchBar.txtSchField.text!)
+            }
             break
         case .location:
+            showOrHideViews(searchText: searchBar.txtSchField.text!)
             //            if searchBar.txtSchField.text == "Current Location" {
             //                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
             //                searchBar.txtSchField.text = ""
@@ -275,22 +286,23 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         default:
             break
         }
-        showOrHideViews(searchText: searchBar.txtSchField.text!)
     }
     
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         switch enterMode {
         case .place:
-            filteredPlaces.removeAll()
-            for searchedPlace in searchedPlaces {
-                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
-                    filteredPlaces.append(searchedPlace)
-                }
-            }
+            getPlaceInfo(content: searchBar.txtSchField.text!)
+//            filteredPlaces.removeAll()
+//            for searchedPlace in searchedPlaces {
+//                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
+//                    filteredPlaces.append(searchedPlace)
+//                }
+//            }
             break
         case .location:
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
+                return
             }
             if isCitySearch {
                 placeAutocomplete(searchText)
@@ -322,6 +334,34 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         searchBar.txtSchField.becomeFirstResponder()
     }
     // End of FaeSearchBarTestDelegate
+    
+    func getPlaceInfo(content: String = "", source: String = "name") {
+        FaeSearch.shared.whereKey("content", value: content)
+        FaeSearch.shared.whereKey("source", value: source)
+        FaeSearch.shared.whereKey("type", value: "place")
+        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.search { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                self.showOrHideViews(searchText: content)
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                self.showOrHideViews(searchText: content)
+                return
+            }
+            self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            
+            if source == "name" {
+                self.showOrHideViews(searchText: content)
+            } else {
+                self.delegate?.jumpToPlaceSearchResult?(searchText: content, places: self.filteredPlaces)
+                self.navigationController?.popViewController(animated: false)
+            }
+        }
+    }
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
@@ -388,6 +428,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 if isCitySearch {
                     cell.lblLocationName.attributedText = googlePredictions[indexPath.row].faeSearchBarAttributedText()
                 } else {
+                    cell.lblLocationName.attributedText = nil
                     cell.lblLocationName.text = filteredLocations[indexPath.row]
                 }
                 cell.bottomLine.isHidden = false
@@ -476,6 +517,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 }
             } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
+                    Key.shared.selectedPrediction = nil
                     if boolCurtLocSelected {
                         navigationController?.popViewController(animated: false)
                         delegate?.chooseLocationOnMap?()
@@ -546,60 +588,34 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         schBar.txtSchField.resignFirstResponder()
     }
     
-    func getPlaceInfo() {
-        guard enterMode == .place else { return }
-        
-        let placesList = FaeMap()
-        placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")
-        placesList.whereKey("geo_longitude", value: "\(searchedLoc.coordinate.longitude)")
-        placesList.whereKey("radius", value: "50000")
-        placesList.whereKey("type", value: "place")
-        placesList.whereKey("max_count", value: "1000")
-        placesList.getMapInformation { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
-                print("[loadMapSearchPlaceInfo] status/100 != 2")
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfoJsonArray = placeInfoJSON.array else {
-                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
-                return
-            }
-            if placeInfoJsonArray.count <= 0 {
-                print("[loadMapSearchPlaceInfo] array is nil")
-                return
-            }
-            
-            self.searchedPlaces.removeAll()
-            
-            for result in placeInfoJsonArray {
-                let placeData = PlacePin(json: result)
-                self.searchedPlaces.append(placeData)
-            }
-            //print(self.searchedPlaces.count)
-        }
-    }
-    
     @objc func searchByCategories(_ sender: UIButton) {
         // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
         // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
         // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
+        var content = ""
         switch sender.tag {
         case 0:
+            content = "Restaurants"
             break
         case 1:
+            content = "Bars"
             break
         case 2:
+            content = "Shopping"
             break
         case 3:
+            content = "Coffee"
             break
         case 4:
+            content = "Parks"
             break
         case 5:
+            content = "Hotels"
             break
         default:
             break
         }
+        getPlaceInfo(content: content, source: "categories")
     }
     
     // MARK: - GMSAutocompleteFilter

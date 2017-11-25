@@ -49,6 +49,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     fileprivate var remainingTime = 59
     fileprivate var indicatorView: UIActivityIndicatorView!
     fileprivate var numberKeyboard: FAENumberKeyboard!
+    var enterFrom: EnterFromMode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -258,6 +259,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     if statusCode / 100 == 2 {
                         let controller = SignInSupportNewPassViewController()
                         controller.enterMode = self.enterMode
+                        controller.enterFrom = self.enterFrom
                         controller.email = self.strEmail
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)

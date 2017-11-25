@@ -385,10 +385,12 @@ extension LogInViewController {
         if sender.tag == 0 {  // use phone
             let vc = SignInPhoneViewController()
             vc.enterMode = .signInSupport
+            vc.enterFrom = .login
             navigationController?.pushViewController(vc, animated: true)
         } else {  // use email
             let vc = SignInEmailViewController()
             vc.enterMode = .signInSupport
+            vc.enterFrom = .login
             navigationController?.pushViewController(vc, animated: true)
         }
     }

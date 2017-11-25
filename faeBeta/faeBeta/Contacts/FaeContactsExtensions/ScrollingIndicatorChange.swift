@@ -46,6 +46,7 @@ extension ContactsViewController: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         //felixprint(scrollView.contentOffset.y)
+        hideDropdowmMenu()
         schbarContacts.txtSchField.resignFirstResponder()
         if scrollView.contentSize.height - 74 < screenHeight - 114 - device_offset_top {
             return

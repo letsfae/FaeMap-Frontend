@@ -385,7 +385,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             arrLocations.append(col)
         }
         tblCollections.reloadData()
-        print(col)
     }
     
     func saveSettings(name: String, desp: String) {}

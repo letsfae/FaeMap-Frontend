@@ -31,6 +31,11 @@ fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
     }
 }
 
+enum EnterFromMode {
+    case login
+    case settings
+}
+
 class SignInSupportNewPassViewController: RegisterBaseViewController {
     
     var cellPassword: RegisterTextfieldTableViewCell!
@@ -41,6 +46,8 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     var phone: String?
     var code: String?
     var enterMode: EnterVerifyCodeMode!
+    
+    var enterFrom: EnterFromMode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,28 +107,40 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                          "password": password!]
             postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    let user = FaeUser()
-                    user.whereKey("email", value: self.email!)
-                    user.whereKey("password", value: self.password!)
-                    user.whereKey("device_id", value: Key.shared.headerDeviceID)
-                    user.whereKey("is_mobile", value: "true")
-                    user.logInBackground { (status: Int, message: Any?) in
-                        self.shouldShowActivityIndicator(false)
-                        if status / 100 == 2 {
-                            self.navigationController?.popToRootViewController(animated: false)
-                            if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
-                                if vcRoot is InitialPageController {
-                                    if let vc = vcRoot as? InitialPageController {
-                                        vc.goToFaeMap()
+                    if self.enterFrom == .login {
+                        let user = FaeUser()
+                        user.whereKey("email", value: self.email!)
+                        user.whereKey("password", value: self.password!)
+                        user.whereKey("device_id", value: Key.shared.headerDeviceID)
+                        user.whereKey("is_mobile", value: "true")
+                        user.logInBackground { (status: Int, message: Any?) in
+                            self.shouldShowActivityIndicator(false)
+                            if status / 100 == 2 {
+                                self.navigationController?.popToRootViewController(animated: false)
+                                if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
+                                    if vcRoot is InitialPageController {
+                                        if let vc = vcRoot as? InitialPageController {
+                                            vc.goToFaeMap()
+                                        }
                                     }
                                 }
+                            } else {
+                                print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                             }
-                        } else {
-                            print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                         }
-                        //                _ = self.navigationController?.popToRootViewController(animated: true)
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
+                    } else {   // enterFrom == .settings
+                        self.shouldShowActivityIndicator(false)
+                        let vc = SetAccountViewController()
+                        vc.boolResetPswd = true
+                        var arrViewControllers = self.navigationController?.viewControllers
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.append(vc)
+                        self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
                     }
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
                 } else {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
@@ -132,28 +151,40 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                          "password": password!]
             postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    let user = FaeUser()
-                    user.whereKey("phone", value: self.phone!)
-                    user.whereKey("password", value: self.password!)
-                    user.whereKey("device_id", value: Key.shared.headerDeviceID)
-                    user.whereKey("is_mobile", value: "true")
-                    user.logInBackground { (status: Int, message: Any?) in
-                        self.shouldShowActivityIndicator(false)
-                        if status / 100 == 2 {
-                            self.navigationController?.popToRootViewController(animated: false)
-                            if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
-                                if vcRoot is InitialPageController {
-                                    if let vc = vcRoot as? InitialPageController {
-                                        vc.goToFaeMap()
+                    if self.enterFrom == .login {
+                        let user = FaeUser()
+                        user.whereKey("phone", value: self.phone!)
+                        user.whereKey("password", value: self.password!)
+                        user.whereKey("device_id", value: Key.shared.headerDeviceID)
+                        user.whereKey("is_mobile", value: "true")
+                        user.logInBackground { (status: Int, message: Any?) in
+                            self.shouldShowActivityIndicator(false)
+                            if status / 100 == 2 {
+                                self.navigationController?.popToRootViewController(animated: false)
+                                if let vcRoot = UIApplication.shared.keyWindow?.rootViewController {
+                                    if vcRoot is InitialPageController {
+                                        if let vc = vcRoot as? InitialPageController {
+                                            vc.goToFaeMap()
+                                        }
                                     }
                                 }
+                            } else {
+                                print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                             }
-                        } else {
-                            print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                         }
-                        //                _ = self.navigationController?.popToRootViewController(animated: true)
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
+                    } else {   // enterFrom == .settings
+                        self.shouldShowActivityIndicator(false)
+                        let vc = SetAccountViewController()
+                        vc.boolResetPswd = true
+                        var arrViewControllers = self.navigationController?.viewControllers
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.removeLast()
+                        arrViewControllers?.append(vc)
+                        self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
                     }
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
                 } else {
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }

@@ -287,8 +287,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarUsernames.txtSchField.resignFirstResponder()
     }
-    
-    
+
     // FaeAddUsernameDelegate
     func addFriend(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()

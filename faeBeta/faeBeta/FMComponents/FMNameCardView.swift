@@ -21,17 +21,6 @@ protocol PassStatusFromViewToButton: class {
     func updateNameCardAfterEditing()
 }
 
-enum FriendStatus: String {
-    case defaultMode
-    case accepted
-    case blocked
-    case blocked_by
-    case pending
-    case requested
-    case nameCardOther
-    case nameCardSelf
-}
-
 class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     weak var delegate: NameCardDelegate?
@@ -96,6 +85,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     var isAnimating = false
     
     var uiviewBackground: UIButton!
+    var boolPending = false
     
     var cgfloatCenter: CGFloat = {
         return 276 / 736 * screenHeight
@@ -565,13 +555,15 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             btnProfile.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
             break
         case .pending:
+            boolPending = true
             btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
             break
         case .requested:
+            boolPending = false
             btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
             break
         case .blocked:
-            btnProfile.isHidden = true
+            btnProfile.setImage(nil, for: .normal)
             break
         default:
             break
@@ -579,6 +571,23 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     @objc func chooseFriendActions(_ sender: UIButton) {
+        switch sender.currentImage {
+        case #imageLiteral(resourceName: "btnAddFriend")?:
+            statusMode = .defaultMode
+            break
+        case #imageLiteral(resourceName: "gearIcon")?:
+            statusMode = .accepted
+            break
+        case #imageLiteral(resourceName: "questionIcon")?:
+            statusMode = boolPending ? .pending : .requested
+            break
+        case nil:
+            statusMode = .blocked
+            break
+        default:
+            statusMode = .defaultMode
+            break
+        }
         delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
     }
     

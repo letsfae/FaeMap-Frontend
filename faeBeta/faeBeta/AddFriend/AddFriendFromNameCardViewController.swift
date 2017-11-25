@@ -9,6 +9,17 @@
 import UIKit
 import SwiftyJSON
 
+enum FriendStatus: String {
+    case defaultMode
+    case accepted
+    case blocked
+    case blocked_by
+    case pending
+    case requested
+    case nameCardOther
+    case nameCardSelf
+}
+
 protocol AddFriendFromNameCardDelegate: class {
     func changeContactsTable(action: Int, userId: Int, requestId: Int)
 }

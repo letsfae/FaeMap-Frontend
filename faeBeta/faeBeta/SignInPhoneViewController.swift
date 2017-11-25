@@ -37,6 +37,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     var enterMode: EnterPhoneMode!
     weak var delegate: SignInPhoneDelegate?
     let user = FaeUser()
+    var enterFrom: EnterFromMode!
     
     fileprivate var numberKeyboard: FAENumberKeyboard!
     fileprivate var indicatorView: UIActivityIndicatorView!
@@ -157,6 +158,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         vc.delegate = self
         vc.enterMode = .phone
         vc.enterPhoneMode = self.enterMode
+        vc.enterFrom = enterFrom
         vc.strCountry = strCountryName
         vc.strCountryCode = phoneCode
         vc.strPhoneNumber = phoneNumber
