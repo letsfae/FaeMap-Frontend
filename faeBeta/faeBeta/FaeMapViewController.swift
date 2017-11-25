@@ -210,7 +210,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //        line.layer.borderWidth = 1
 //        view.addSubview(line)
         
-        joshprint("id:", Key.shared.user_id)
+//        joshprint("id:", Key.shared.user_id)
     }
     
     deinit {
