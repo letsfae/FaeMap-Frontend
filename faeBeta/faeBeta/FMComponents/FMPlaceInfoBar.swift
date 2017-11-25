@@ -162,10 +162,14 @@ class FMPlaceInfoBar: UIView {
         }, completion: nil)
     }
     
-    func hide() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+    func hide(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                self.alpha = 0
+            }, completion: nil)
+        } else {
             self.alpha = 0
-        }, completion: nil)
+        }
     }
     
     func panToPrev(_ time: Double = 0.3) {

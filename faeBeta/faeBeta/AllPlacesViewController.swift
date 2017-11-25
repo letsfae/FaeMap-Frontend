@@ -14,9 +14,13 @@ enum AllPlacesEnterMode: Int {
     case placeDetail = 2
 }
 
+protocol AllPlacesDelegate: class {
+    func jumpToAllPlaces(places: [PlacePin])
+}
+
 class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, MapBoardPlaceTabDelegate, BoardsSearchDelegate {
     
-    weak var delegate: MapSearchDelegate?
+    weak var delegate: AllPlacesDelegate?
     
     var uiviewNavBar: FaeNavBar!
     var tblAllPlaces: UITableView!
@@ -163,11 +167,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
             arrCtrlers?.removeLast()
         }
         self.delegate = Key.shared.FMVCtrler
-        if placeTableMode == .recommend {
-            delegate?.jumpToPlaces?(searchText: "fromAllPlaces", places: recommendedPlaces, selectedLoc: CLLocation())
-        } else {
-            delegate?.jumpToPlaces?(searchText: "fromAllPlaces", places: searchedPlaces, selectedLoc: CLLocation())
-        }
+        delegate?.jumpToAllPlaces(places: placeTableMode == .recommend ? recommendedPlaces : searchedPlaces)
         Key.shared.initialCtrler?.goToFaeMap(animated: false)
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
