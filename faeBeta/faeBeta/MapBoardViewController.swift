@@ -91,7 +91,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var btnSearchAllPlaces: UIButton!
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
-    var arrAllPlaces = [PlacePin]()
     var imgIcon: UIImageView!
     var lblCurtLoc: UILabel!
     var btnSearchLoc: UIButton!   // fake button to search location
@@ -107,6 +106,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var testArrFood = [PlacePin]()
     var testArrShopping = [PlacePin]()
     var testArrOutdoors = [PlacePin]()
+    var arrAllPlaces = [PlacePin]()
     
     // data for social table
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]

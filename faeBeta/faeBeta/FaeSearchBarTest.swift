@@ -32,7 +32,8 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
     
     fileprivate func setUpUI() {
         imgSearch = UIImageView()
-        imgSearch.image = #imageLiteral(resourceName: "searchBarIcon")
+        imgSearch.image = #imageLiteral(resourceName: "Search")
+        imgSearch.contentMode = .scaleAspectFill
         addSubview(imgSearch)
 //        let padding = (self.frame.size.height - 15) / 2
         addConstraintsWithFormat("V:|-17-[v0(15)]", options: [], views: imgSearch)

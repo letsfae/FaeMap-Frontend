@@ -224,7 +224,6 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
                 if(statusCode / 100 == 2) {
                     print("Successfully get account info \(statusCode) \(result!)")
-                    Key.shared.userPhoneVerified = true
                     self.delegate?.updatePhone()
                 } else {
                     print("Fail to get account info \(statusCode) \(result!)")

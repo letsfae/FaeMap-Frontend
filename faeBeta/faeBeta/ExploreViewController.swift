@@ -179,6 +179,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
+        vc.delegate = uiviewSavedList
         vc.enterMode = .place
         present(vc, animated: true)
     }

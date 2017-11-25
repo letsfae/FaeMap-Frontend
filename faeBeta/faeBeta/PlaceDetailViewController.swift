@@ -13,6 +13,12 @@ protocol PlaceDetailDelegate: class {
     func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?)
 }
 
+enum EnterPlaceLocDetailMode {
+    case collection
+    case boards
+    case map
+}
+
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
@@ -50,6 +56,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var intNearby = 0
     
     var boolShared: Bool = false
+    var enterMode: EnterPlaceLocDetailMode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -239,6 +246,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             automaticallyAdjustsScrollViewInsets = false
         }
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideAddCollectionView))
+        tblPlaceDetail.addGestureRecognizer(tapGesture)
+        tapGesture.cancelsTouchesInView = false
+        
+        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
@@ -397,7 +409,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.show()
     }
     
-    func hideAddCollectionView() {
+    @objc func hideAddCollectionView() {
         uiviewSavedList.hide()
     }
     
@@ -410,7 +422,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
@@ -419,9 +431,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // AddPlacetoCollectionDelegate
+    // AddPintoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
+        vc.delegate = uiviewSavedList
         vc.enterMode = .place
         present(vc, animated: true)
     }
