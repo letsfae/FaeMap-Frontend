@@ -37,6 +37,7 @@ extension FaeMapViewController {
         userClusterManager.delegate = self
         userClusterManager.cellSize = 100
         userClusterManager.marginFactor = 0.0
+        userClusterManager.isUserPinController = true
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
         locationPinClusterManager.delegate = self

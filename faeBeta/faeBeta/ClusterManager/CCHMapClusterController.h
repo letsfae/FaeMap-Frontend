@@ -74,6 +74,8 @@
 
 @property (nonatomic) BOOL previousZoomLevel;
 
+@property (nonatomic) BOOL isUserPinController;
+
 /**
  Initializes the cluster controller.
  @param mapView `MKMapView` to use to display clusters.

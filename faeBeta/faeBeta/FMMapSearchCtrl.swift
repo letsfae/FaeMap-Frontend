@@ -55,21 +55,13 @@ extension FaeMapViewController: MapSearchDelegate {
             })
             self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }, nil)
-        if searchText == "fromAllPlaces" {
-            animateMainItems(show: true, animated: false)
-            uiviewPlaceBar.places = places
-            uiviewPlaceBar.hide()
-            mapMode = .allPlaces
-            lblExpContent.text = Key.shared.mapHeadTitle
-        } else {
-            updateUI(searchText: searchText)
-            swipingState = .multipleSearch
-            uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
-            if let firstPlacePin = places.first {
-                uiviewPlaceBar.loading(current: firstPlacePin)
-            }
-            uiviewPlaceBar.places = places
+        updateUI(searchText: searchText)
+        swipingState = .multipleSearch
+        uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
+        if let firstPlacePin = places.first {
+            uiviewPlaceBar.loading(current: firstPlacePin)
         }
+        uiviewPlaceBar.places = places
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {

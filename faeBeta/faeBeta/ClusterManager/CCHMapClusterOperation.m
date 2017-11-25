@@ -157,13 +157,22 @@
                         }
                     } else {
                         if (self.isZoomIn) {
-                            for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
-                                BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
-                                if (coordinateMatches) {
-                                    annotationForCell = visibleAnnotation;
-                                    //printf("found \n");
+//                            if (self.isUserPin) {
+//                                annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
+//                                if (annotationForCell) {
+//                                    BOOL coordinateMatches = fequal(coordinate.latitude, annotationForCell.coordinate.latitude) && fequal(coordinate.longitude, annotationForCell.coordinate.longitude);
+//                                    //printf(coordinateMatches ? "2: Yes\n" : "2: No\n");
+//                                    annotationForCell = coordinateMatches ? annotationForCell : nil;
+//                                }
+//                            } else {
+                                for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
+                                    BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
+                                    if (coordinateMatches) {
+                                        annotationForCell = visibleAnnotation;
+                                        //printf("found \n");
+                                    }
                                 }
-                            }
+//                            }
                         } else {
                             annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
                             if (annotationForCell) {
@@ -186,7 +195,7 @@
                     [clusters addObject:annotationForCell];
                 } else {
                     // For an existing cluster annotation, this will implicitly update its annotation view
-                    if (!self.isZoomIn) {
+                    if (!self.isZoomIn || self.isUserPin) {
                         [visibleAnnotationsInCell removeObject:annotationForCell];
                     }
                     annotationForCell.annotations = annotationSet;
@@ -200,7 +209,7 @@
                             [_clusterControllerDelegate mapClusterController:_clusterController willReuseMapClusterAnnotation:annotationForCell];
                         }
                     });
-                    if (!self.isZoomIn) {
+                    if (!self.isZoomIn || self.isUserPin) {
                         [clusters addObject:annotationForCell];
                     }
                 }
@@ -216,7 +225,7 @@
     [annotationsToAddAsSet minusSet:annotationsToKeep];
     NSArray *annotationsToAdd = [annotationsToAddAsSet allObjects];
     NSMutableSet *annotationsToRemoveAsSet = [NSMutableSet setWithSet:annotationsBeforeAsSet];
-    if (self.isZoomIn) {
+    if (self.isZoomIn && !self.isUserPin) {
         [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
     } else {
         [annotationsToRemoveAsSet minusSet:clusters];
