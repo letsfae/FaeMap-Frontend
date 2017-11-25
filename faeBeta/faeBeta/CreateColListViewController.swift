@@ -35,6 +35,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var colId: Int = -1
     let faeCollection = FaeCollection()
     var uiviewPrivacy: UIView!
+    var fromPlaceLocDetail = false
     
     var numLinesName = 1 {
         didSet {

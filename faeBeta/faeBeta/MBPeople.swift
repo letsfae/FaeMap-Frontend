@@ -68,7 +68,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             sliderDisFilter.setValue(Float(disVal)!, animated: false)
         } else { // in place page
             let vc = BoardsSearchViewController()
-            vc.strPlaceholder = lblAllCom.text
+            vc.strSearchedLocation = lblAllCom.text
             vc.enterMode = .location
             vc.isCitySearch = true
             vc.delegate = self
@@ -305,7 +305,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
     
     func searchLoc(_ sender: UIButton) {
         let vc = BoardsSearchViewController()
-        vc.strPlaceholder = lblAllCom.text
+        vc.strSearchedLocation = lblAllCom.text
         vc.enterMode = .location
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: true)

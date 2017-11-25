@@ -39,25 +39,13 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
-        loadPlaceSearchHeader()
-        loadSearchLocationView()
+//        loadPlaceSearchHeader()
+//        loadSearchLocationView()
         loadTable()
-        loadFooter()
-        searchedLoc = LocManager.shared.curtLoc
+//        loadFooter()
+//        searchedLoc = LocManager.shared.curtLoc
         // 如果是从place detail进来的话，以下这行是不是可以做个判断以免加载了未用信息？
-        getPlaceInfo()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+//        getPlaceInfo()
     }
 
     fileprivate func loadNavBar() {
@@ -127,7 +115,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadTable() {
-        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 114))
+        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
         view.addSubview(tblAllPlaces)
         tblAllPlaces.delegate = self
         tblAllPlaces.dataSource = self
@@ -147,7 +135,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         if mbIsOn {
             Key.shared.initialCtrler?.goToMapBoard(animated: false)
         }
-        navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc func jumpToMapPlaces(_ sender: UIButton) {
@@ -176,7 +164,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func searchLocation() {
         let vc = BoardsSearchViewController()
-        vc.strPlaceholder = lblChooseLoc.text
+        vc.strSearchedLocation = lblChooseLoc.text
         vc.enterMode = .location
         vc.isCitySearch = true
         vc.delegate = self

@@ -47,6 +47,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var strSearchedPlace: String! = ""
+    var strSearchedLocation: String! = ""
     var strPlaceholder: String! = ""
     
     // uiviews with shadow under table views
@@ -166,15 +167,20 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         
         schBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schBar.delegate = self
-        schBar.txtSchField.placeholder = "All Places"
+//        schBar.txtSchField.placeholder = "All Places"
         if enterMode == .place {
-            //            schBar.txtSchField.placeholder = "All Places"
-            //            if strSearchedPlace != "All Places" {
-            //                schBar.txtSchField.text = strSearchedPlace
-            //                schBar.btnClose.isHidden = false
-            //            }
+            schBar.txtSchField.placeholder = "All Places"
+            if strSearchedPlace != "All Places" {
+                schBar.txtSchField.text = strSearchedPlace
+                schBar.btnClose.isHidden = false
+            }
         } else if enterMode == .location {
+            schBar.txtSchField.placeholder = strSearchedLocation
             schBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+//            if strSearchedLocation != "Current Location" {
+//                schBar.txtSchField.text = strSearchedLocation
+//                schBar.btnClose.isHidden = false
+//            }
         }
         uiviewSearch.addSubview(schBar)
     }
@@ -263,8 +269,14 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         switch enterMode {
         case .place:
+            if searchBar.txtSchField.text == "" {
+                showOrHideViews(searchText: searchBar.txtSchField.text!)
+            } else {
+                getPlaceInfo(content: searchBar.txtSchField.text!)
+            }
             break
         case .location:
+            showOrHideViews(searchText: searchBar.txtSchField.text!)
             //            if searchBar.txtSchField.text == "Current Location" {
             //                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
             //                searchBar.txtSchField.text = ""
@@ -274,7 +286,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         default:
             break
         }
-        showOrHideViews(searchText: searchBar.txtSchField.text!)
     }
     
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
@@ -291,6 +302,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         case .location:
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
+                return
             }
             if isCitySearch {
                 placeAutocomplete(searchText)
@@ -416,6 +428,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 if isCitySearch {
                     cell.lblLocationName.attributedText = googlePredictions[indexPath.row].faeSearchBarAttributedText()
                 } else {
+                    cell.lblLocationName.attributedText = nil
                     cell.lblLocationName.text = filteredLocations[indexPath.row]
                 }
                 cell.bottomLine.isHidden = false
@@ -504,6 +517,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 }
             } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
                 if indexPath.row == 0 {
+                    Key.shared.selectedPrediction = nil
                     if boolCurtLocSelected {
                         navigationController?.popViewController(animated: false)
                         delegate?.chooseLocationOnMap?()
@@ -581,10 +595,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         var content = ""
         switch sender.tag {
         case 0:
-            content = "Restaurant"
+            content = "Restaurants"
             break
         case 1:
-            content = "Bar"
+            content = "Bars"
             break
         case 2:
             content = "Shopping"
@@ -593,10 +607,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             content = "Coffee"
             break
         case 4:
-            content = "Park"
+            content = "Parks"
             break
         case 5:
-            content = "Hotel"
+            content = "Hotels"
             break
         default:
             break

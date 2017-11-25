@@ -25,8 +25,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     weak var delegate: MapSearchDelegate?
     weak var featureDelegate: PlaceDetailDelegate?
     
-    var location: PlacePin!
-    var allPlaces = [PlacePin]()
     var coordinate: CLLocationCoordinate2D!
     
     var uiviewHeader: UIView!
@@ -40,7 +38,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     var btnShare: UIButton!
     
     var tblNearby: UITableView!
-    let arrTitle = ["Similar Places", "Near this Place"]
     var arrNearbyPlaces = [PlacePin]()
     let faeMap = FaeMap()
     let faePinAction = FaePinAction()
@@ -73,6 +70,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     var boolShared: Bool = false
+    var enterMode: EnterPlaceLocDetailMode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -218,7 +216,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func handleMapTap() {
-        
+        hideAddCollectionView()
     }
     
     func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
@@ -367,7 +365,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.show()
     }
     
-    func hideAddCollectionView() {
+    @objc func hideAddCollectionView() {
         uiviewSavedList.hide()
     }
     
@@ -376,7 +374,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
@@ -385,12 +383,14 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
+    // AddPinToCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
+        vc.delegate = uiviewSavedList
         vc.enterMode = .location
         present(vc, animated: true)
     }
-    // AddPlacetoCollectionDelegate End
+    // AddPlintoCollectionDelegate End
     
     // AfterAddedToListDelegate
     func seeList() {

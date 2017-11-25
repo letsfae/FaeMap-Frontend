@@ -157,7 +157,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             (text.displayName.lowercased()).range(of: searchText.lowercased()) != nil
         }
         filteredRegistered = arrRegistered.filter { text in
-            (text.nameCard.userName.lowercased()).range(of: searchText.lowercased()) != nil
+            (text.nameCard.displayName.lowercased()).range(of: searchText.lowercased()) != nil
         }
         tblFromContacts.reloadData()
     }
@@ -166,7 +166,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         if section == 0 {
             return schbarFromContacts.txtSchField.text != "" ? filteredRegistered.count : arrRegistered.count
         } else {
-            return schbarFromContacts.txtSchField.text != "" ? filteredRegistered.count : arrUnregistered.count
+            return schbarFromContacts.txtSchField.text != "" ? filteredUnregistered.count : arrUnregistered.count
         }
     }
     
@@ -315,6 +315,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
                             self.arrRegistered.append(arrInfo)
                             
                             if self.arrRegistered.count == phoneJson.count {
+                                self.arrRegistered.sort{ $0.nameCard.displayName < $1.nameCard.displayName }
                                 self.tblFromContacts.reloadData()
                             }
                         } else {
@@ -329,6 +330,10 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+        schbarFromContacts.txtSchField.resignFirstResponder()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         schbarFromContacts.txtSchField.resignFirstResponder()
     }
 
