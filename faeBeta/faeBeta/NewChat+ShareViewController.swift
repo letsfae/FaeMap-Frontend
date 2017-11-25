@@ -386,7 +386,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func loadSearchBar() {
-        lblTo = UILabel(frame: CGRect(x: 15, y: 78, width: 29, height: 25))
+        lblTo = UILabel(frame: CGRect(x: 15, y: 78 + device_offset_top, width: 29, height: 25))
         lblTo.text = "To:"
         lblTo.textAlignment = .left
         lblTo.font = UIFont(name: "AvenirNext-Medium", size: 18)
@@ -396,7 +396,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         let layout = CPCollectionViewLayout()
         layout.minimumLineSpacing = 0
         
-        cllcSelected = UICollectionView(frame: CGRect(x: 47, y: 65, width: screenWidth - 47, height: 50), collectionViewLayout: layout)
+        cllcSelected = UICollectionView(frame: CGRect(x: 47, y: 65 + device_offset_top, width: screenWidth - 47, height: 50), collectionViewLayout: layout)
         cllcSelected.backgroundColor = .white
         cllcSelected.delegate = self
         cllcSelected.dataSource = self
@@ -404,7 +404,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         cllcSelected.register(TextFieldCollectionViewCell.self, forCellWithReuseIdentifier: "input")
         view.addSubview(cllcSelected)
         
-        uiviewBottomLine = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: 1))
+        uiviewBottomLine = UIView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: 1))
         uiviewBottomLine.layer.borderWidth = screenWidth
         uiviewBottomLine.layer.borderColor = UIColor._200199204cg()
         uiviewBottomLine.layer.zPosition = 1
@@ -412,7 +412,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     func loadChatsList() {
-        tblFriends = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: .plain)
+        tblFriends = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top), style: .plain)
         tblFriends.dataSource = self
         tblFriends.delegate = self
         tblFriends.register(NewChatTableViewCell.self, forCellReuseIdentifier: "friendCell")
@@ -716,9 +716,9 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         if currentHeight < 49 {
             currentHeight = 49
         }
-        cllcSelected.frame = CGRect(x: 47, y: 65, width: screenWidth - 47, height: currentHeight)
-        uiviewBottomLine.frame.origin.y = 65 + currentHeight
-        tblFriends.frame = CGRect(x: 0, y: 65 + currentHeight, width: screenWidth, height: screenHeight - 65 - currentHeight)
+        cllcSelected.frame = CGRect(x: 47, y: 65 + device_offset_top, width: screenWidth - 47, height: currentHeight)
+        uiviewBottomLine.frame.origin.y = 65 + currentHeight + device_offset_top
+        tblFriends.frame = CGRect(x: 0, y: 65 + currentHeight + device_offset_top, width: screenWidth, height: screenHeight - 65 - currentHeight)
     }
     
     func deselectCell() {
