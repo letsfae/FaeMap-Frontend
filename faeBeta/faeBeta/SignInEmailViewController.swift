@@ -15,6 +15,7 @@ class SignInEmailViewController: UIViewController {
     }
     
     var enterMode: EnterEmailMode!
+    var enterFrom: EnterFromMode!
     //MARK: - Interface
     fileprivate var lblTitle: UILabel!
     fileprivate var txtEmail: FAETextField!
@@ -128,6 +129,7 @@ class SignInEmailViewController: UIViewController {
     func setupEnteringVerificationCode() {
         let vc = VerifyCodeViewController()
         vc.enterMode = .email
+        vc.enterFrom = enterFrom
         vc.enterEmailMode = .signInSupport
         vc.enterPhoneMode = .signInSupport
         vc.strEmail = txtEmail.text!

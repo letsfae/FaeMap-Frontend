@@ -22,6 +22,7 @@ class ColListPlaceCell: UITableViewCell {
     var lblColMemo: UILabel!
     var btnSelect: UIButton!
     var indexPath: IndexPath!
+    var selectedPlace: PlacePin!
     
     internal var memoConstraint = [NSLayoutConstraint]() {
         didSet {
@@ -68,6 +69,7 @@ class ColListPlaceCell: UITableViewCell {
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 5
         addSubview(imgPic)
+        imgPic.isUserInteractionEnabled = false
         
         lblColName = FaeLabel(CGRect.zero, .left, .medium, 16, UIColor._898989())
         addSubview(lblColName)
@@ -106,6 +108,7 @@ class ColListPlaceCell: UITableViewCell {
     
     func setValueForPlacePin(placeId: Int) {
         if let placeInfo = faePlaceInfoCache.object(forKey: placeId as AnyObject) as? PlacePin {
+            selectedPlace = placeInfo
             setValueForPlace(placeInfo)
             return
         }
@@ -114,6 +117,7 @@ class ColListPlaceCell: UITableViewCell {
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let placeInfo = PlacePin(json: resultJson)
+            self.selectedPlace = placeInfo
             faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
             self.setValueForPlace(placeInfo, memoFetched: true)
         }
@@ -139,6 +143,8 @@ class ColListLocationCell: UITableViewCell {
     var lblItemAddr_2: UILabel!
     var lblColMemo: UILabel!
     var btnSelect: UIButton!
+    var selectedLocId: Int = -1
+    var coordinate: CLLocationCoordinate2D!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -167,6 +173,7 @@ class ColListLocationCell: UITableViewCell {
         icon.contentMode = .scaleAspectFit
         icon.image = #imageLiteral(resourceName: "icon_destination")
         imgSavedItem.addSubview(icon)
+        imgSavedItem.isUserInteractionEnabled = false
         
         lblItemName = UILabel()
         lblItemName.textColor = UIColor._898989()
@@ -211,6 +218,7 @@ class ColListLocationCell: UITableViewCell {
             let lat = locationFromCache["geolocation"]["latitude"].doubleValue
             let lon = locationFromCache["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
+            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = locationFromCache["file_ids"].intValue
             self.imgSavedItem.loadImage(id: locationFromCache["file_ids"].intValue)
             UIView.animate(withDuration: 0.1, animations: {
@@ -227,6 +235,7 @@ class ColListLocationCell: UITableViewCell {
             let lat = resultJson["geolocation"]["latitude"].doubleValue
             let lon = resultJson["geolocation"]["longitude"].doubleValue
             let location = CLLocation(latitude: lat, longitude: lon)
+            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             self.imgSavedItem.fileID = resultJson["file_ids"].intValue
             self.imgSavedItem.loadImage(id: resultJson["file_ids"].intValue)
             self.lblColMemo.text = resultJson["user_pin_operations"]["memo"].stringValue

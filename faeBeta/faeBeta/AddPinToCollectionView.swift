@@ -13,7 +13,7 @@ protocol AddPinToCollectionDelegate: class {
     func createColList()
 }
 
-class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
+class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource, CreateColListDelegate {
     weak var delegate: AddPinToCollectionDelegate?
     
     var uiviewHeader: UIView!
@@ -318,6 +318,19 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     @objc func actionNew(_ sender: UIButton) {
         delegate?.createColList()
     }
+    
+    // CreateColListDelegate
+    func saveSettings(name: String, desp: String) {}
+    
+    func updateCols(col: PinCollection) {
+        if col.type == "place" {
+            arrCollection.append(col)
+        } else {
+            arrCollection.append(col)
+        }
+        tblAddCollection.reloadData()
+    }
+    // CreateColListDelegate End
 }
 
 protocol AfterAddedToListDelegate: class {

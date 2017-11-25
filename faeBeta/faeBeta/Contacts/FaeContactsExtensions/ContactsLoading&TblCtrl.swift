@@ -520,4 +520,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             self.imgDot.isHidden = self.arrReceivedRequests.count == 0
         }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        hideDropdowmMenu()
+        schbarContacts.txtSchField.resignFirstResponder()
+    }
 }

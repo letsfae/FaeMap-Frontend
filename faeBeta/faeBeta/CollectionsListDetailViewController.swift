@@ -131,6 +131,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblListName.textColor = UIColor._898989()
         lblListName.text = txtName
+        lblListName.textAlignment = .center
         lblListName.lineBreakMode = .byTruncatingTail
         lblListName.text = arrColDetails.name
         uiviewFixedHeader.addSubview(lblListName)
@@ -333,6 +334,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 if enterMode == .location {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListLocationCell", for: indexPath) as! ColListLocationCell
                     cell.setValueForLocationPin(locId: arrSavedPinIds[indexPath.row])
+                    cell.selectedLocId = arrSavedPinIds[indexPath.row]
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
@@ -353,8 +355,31 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && arrSavedPinIds.count != 0 {
-            
+        if indexPath.section != 1 || arrSavedPinIds.count == 0 {
+            return
+        }
+        
+        if enterMode == .place {
+            let cell = tableView.cellForRow(at: indexPath) as! ColListPlaceCell
+            let vc = PlaceDetailViewController()
+            vc.enterMode = .collection
+            vc.place = cell.selectedPlace
+            navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let cell = tableView.cellForRow(at: indexPath) as! ColListLocationCell
+            let vc = LocDetailViewController()
+            vc.enterMode = .collection
+            vc.locationId = cell.selectedLocId
+            vc.coordinate = cell.coordinate
+//            vc.delegate = self
+//            vc.featureDelegate = self
+            vc.strLocName = cell.lblItemName.text ?? "Invalid Name"
+            var addr = "Invalid Address"
+            if cell.lblItemAddr_1.text! != "" && cell.lblItemAddr_2.text! != "" {
+                addr = cell.lblItemAddr_1.text! + ", " + cell.lblItemAddr_2.text!
+            }
+            vc.strLocAddr = addr
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
     

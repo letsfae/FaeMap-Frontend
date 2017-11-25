@@ -144,10 +144,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
         schPlaceBar.txtSchField.placeholder = !boolFromChat ? "Search Fae Map" : "Search Place or Address"
-        /*if strSearchedPlace != "Search Fae Map" {
+        if strSearchedPlace != "Search Fae Map" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false
-        }*/
+        }
         uiviewSearch.addSubview(schPlaceBar)
         
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
@@ -335,10 +335,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         var content = ""
         switch sender.tag {
         case 0:
-            content = "Restaurant"
+            content = "Restaurants"
             break
         case 1:
-            content = "Bar"
+            content = "Bars"
             break
         case 2:
             content = "Shopping"
@@ -347,10 +347,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             content = "Coffee"
             break
         case 4:
-            content = "Park"
+            content = "Parks"
             break
         case 5:
-            content = "Hotel"
+            content = "Hotels"
             break
         default:
             break

@@ -68,15 +68,24 @@ extension MapSearchViewController {
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         if searchBar == schPlaceBar {   // search places
             cellStatus = 0
+            if searchBar.txtSchField.text == "" {
+                showOrHideViews(searchText: searchBar.txtSchField.text!)
+            } else {
+                getPlaceInfo(content: searchBar.txtSchField.text!)
+            }
         } else {   // search locations
             cellStatus = 1
             if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
                 searchBar.txtSchField.placeholder = searchBar.txtSchField.text
                 searchBar.txtSchField.text = ""
                 searchBar.btnClose.isHidden = true
+            } else {
+                if searchBar.txtSchField.text != "" {
+                    searchBar.btnClose.isHidden = false
+                }
             }
+            showOrHideViews(searchText: searchBar.txtSchField.text!)
         }
-        showOrHideViews(searchText: searchBar.txtSchField.text!)
     }
     
     // FaeSearchBarTestDelegate

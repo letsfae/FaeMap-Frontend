@@ -127,11 +127,7 @@ extension ContactsViewController {
     }
     
     @objc func rollUpDropDownMenu(_ sender: UITapGestureRecognizer) {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.uiviewDropDownMenu.frame.origin.y = -36
-        })
-        navBarMenuBtnClicked = false
-        schbarContacts.txtSchField.resignFirstResponder()
+        hideDropdowmMenu()
     }
     
     // function for drop down menu button, to show / hide the drop down menu (UIVisualView)
@@ -144,12 +140,17 @@ extension ContactsViewController {
             btnNavBarSetTitle()
             updateFriendCount()
         } else {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = -36
-            })
-            navBarMenuBtnClicked = false
-            btnNavBarSetTitle()
+            hideDropdowmMenu()
         }
+        schbarContacts.txtSchField.resignFirstResponder()
+    }
+    
+    func hideDropdowmMenu() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.uiviewDropDownMenu.frame.origin.y = -36
+        })
+        navBarMenuBtnClicked = false
+        btnNavBarSetTitle()
     }
     
     @objc func backToMenu(_ sender: UIButton) {

@@ -72,7 +72,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
             } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
+                schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                Key.shared.selectedPrediction = nil
                 schLocationBar.txtSchField.resignFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 
@@ -87,8 +89,12 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             }
         } else { // search places
             let selectedPlace = filteredPlaces[indexPath.row]
-            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
-            navigationController?.popViewController(animated: false)
+//            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
+//            navigationController?.popViewController(animated: false)
+            schPlaceBar.txtSchField.resignFirstResponder()
+            let vc = PlaceDetailViewController()
+            vc.place = selectedPlace
+            navigationController?.pushViewController(vc, animated: false)
         }
     }
 }

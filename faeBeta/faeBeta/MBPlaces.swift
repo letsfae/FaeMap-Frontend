@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
@@ -121,18 +122,83 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageCtrlPlace.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
+        pageCtrlPlace.currentPage = scrollViewPlaceHeader.contentOffset.x == 0 ? 0 : 1
+    }
+    
+    func getPlaceInfo(content: String = "", source: String = "categories") {
+        FaeSearch.shared.whereKey("content", value: content)
+        FaeSearch.shared.whereKey("source", value: source)
+        FaeSearch.shared.whereKey("type", value: "place")
+        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.search { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                return
+            }
+            self.mbPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            
+            self.lblSearchContent.text = content
+            self.uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
+            self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
+            self.jumpToSearchPlaces()
+        }
     }
     
     @objc func searchByCategories(_ sender: UIButton) {
-        print(sender.tag)
+        var content = ""
+        switch sender.tag {
+        case 0:
+            content = "Restaurants"
+            break
+        case 1:
+            content = "Bars"
+            break
+        case 2:
+            content = "Shopping"
+            break
+        case 3:
+            content = "Coffee"
+            break
+        case 4:
+            content = "Parks"
+            break
+        case 5:
+            content = "Hotels"
+            break
+        case 6:
+            content = "Fast Food"
+            break
+        case 7:
+            content = "Beer Bar"
+            break
+        case 8:
+            content = "Cosmetics"
+            break
+        case 9:
+            content = "Fitness"
+            break
+        case 10:
+            content = "Groceries"
+            break
+        case 11:
+            content = "Pharmacy"
+            break
+        default:
+            break
+        }
+        getPlaceInfo(content: content)
     }
     
     @objc func searchAllPlaces(_ sender: UIButton) {
         let searchVC = BoardsSearchViewController()
         searchVC.enterMode = .place
         searchVC.delegate = self
-//        searchVC.strSearchedPlace = lblSearchContent.text
+        searchVC.strSearchedPlace = lblSearchContent.text
         searchVC.strPlaceholder = lblSearchContent.text
         navigationController?.pushViewController(searchVC, animated: true)
     }
@@ -149,7 +215,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
         vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: false)
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
@@ -196,10 +262,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
         lblAllCom.text = searchText
         imgIconBeforeAllCom.image = icon
-        if tableMode == .people {
-            lblCurtLoc.text = searchText
-            imgIcon.image = icon
-        }
 //        getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
 //        tblMapBoard.reloadData()
     }
