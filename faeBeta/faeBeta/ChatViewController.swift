@@ -120,6 +120,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let vcPlaceDetail = PlaceDetailViewController()
     let vcCollection = CollectionsListDetailViewController()
     
+    weak var mapDelegate: LocDetailDelegate?
+    
     var uiviewSafeZone: UIView!
     
     // MARK: lifecycle

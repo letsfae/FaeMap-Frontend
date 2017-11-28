@@ -23,6 +23,7 @@ class SetDisplayName: UIViewController {
     var btnSave: UIButton!
     var txtName: String!
     var boolWillDisappear: Bool = false
+    var strFieldText: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,9 @@ class SetDisplayName: UIViewController {
         view.addSubview(textField)
         textField.textAlignment = .center
         textField.placeholder = "Display Name"
+        if strFieldText != "" {
+            textField.text = strFieldText
+        }
         
         lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 99 - 36, width: 248, height: 36))
         lblEditIntro.center.x = screenWidth / 2
