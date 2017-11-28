@@ -202,14 +202,25 @@ extension ChatViewController {
             }
         }
         if message.type == "[Location]" {
+            var arrControllers = navigationController?.viewControllers
+            if let controller = Key.shared.FMVCtrler {
+                controller.arrCtrlers = arrControllers!
+                controller.boolFromMap = false
+            }
+            while !(arrControllers?.last is InitialPageController) {
+                arrControllers?.removeLast()
+            }
             let strLocDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
             //let vcLocDetail = LocDetailViewController()
-            self.vcLocDetail.coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
+            let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
+            mapDelegate?.jumpToViewLocation(coordinate: coordinate, created: false)
+            navigationController?.setViewControllers(arrControllers!, animated: true)
+            
             // TODO: capital first letter
-            self.vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue
+            /*self.vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue
             self.vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
-            navigationController?.pushViewController(self.vcLocDetail, animated: true)
+            navigationController?.pushViewController(self.vcLocDetail, animated: true)*/
         }
         if message.type == "[Place]" {
             let strPlaceDetail = message.text.replacingOccurrences(of: "\\", with: "")

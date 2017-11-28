@@ -92,11 +92,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
         PlaceDetailCell.boolFold = true
         if boolShared {
-            uiviewAfterAdded.lblSaved.text = "You shared a Place."
+            //uiviewAfterAdded.lblSaved.text = "You shared a Place."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
             uiviewAfterAdded.btnUndo.isHidden = true
             uiviewAfterAdded.btnSeeList.isHidden = true
-            uiviewAfterAdded.show()
+            uiviewAfterAdded.show("You shared a Place.")
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 self.uiviewAfterAdded.hide()
             }
