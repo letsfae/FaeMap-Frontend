@@ -92,6 +92,11 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         loadNavBar()
         loadSearchBar()
         loadChatsList()
+        
+        // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
+        //         whole table view and cell will automatically disable this
+        let uiviewLeftMargin = LeftMarginToEnableNavGestureView()
+        view.addSubview(uiviewLeftMargin)
     }
     
     func loadFriends() {

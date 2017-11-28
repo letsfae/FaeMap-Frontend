@@ -266,6 +266,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         locAnnoView?.hideButtons()
         locAnnoView?.optionsReady = false
         locAnnoView?.optionsOpened = false
+        locAnnoView?.removeFromSuperview()
         locAnnoView = nil
         selectedLocation = nil
     }

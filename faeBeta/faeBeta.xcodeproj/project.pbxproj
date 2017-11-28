@@ -58,6 +58,7 @@
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
+		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
 		50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E50C151F9EF861008645C8 /* LocationPin.swift */; };
@@ -396,6 +397,7 @@
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
+		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
 		50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailClctView.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		50E50C151F9EF861008645C8 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
@@ -1513,6 +1515,7 @@
 				500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */,
 				50E50C151F9EF861008645C8 /* LocationPin.swift */,
 				9F4736CC1FB811440058770C /* SetAvatar.swift */,
+				50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -2004,6 +2007,7 @@
 				B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */,
 				B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */,
 				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
 				50188F431FC36C390038CAFF /* CCHNearCenterMapClusterer.m in Sources */,

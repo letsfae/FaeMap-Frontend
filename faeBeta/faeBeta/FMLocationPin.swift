@@ -17,11 +17,11 @@ extension FaeMapViewController: LocDetailDelegate {
             createLocationPin(point: CGPoint.zero, position: coordinate)
             modeLocation = .on_create
         } else {
-            locAnnoView?.hideButtons()
+            locAnnoView?.hideButtons(animated: false)
             selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+            modeLocation = .on
         }
-        modeLocation = .on
         removePlaceUserPins()
         animateMainItems(show: true, animated: boolFromMap)
         btnBackToExp.removeTarget(nil, action: nil, for: .touchUpInside)
@@ -35,7 +35,7 @@ extension FaeMapViewController: LocDetailDelegate {
         selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
         locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         if modeLocation == .on_create {
-            locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: nil)
+            modeLocCreating = .off
         }
         modeLocation = .off
         navigationController?.setViewControllers(arrCtrlers, animated: false)

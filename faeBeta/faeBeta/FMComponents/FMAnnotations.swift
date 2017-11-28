@@ -691,19 +691,30 @@ class LocPinAnnotationView: MKAnnotationView {
         }
     }
     
-    func hideButtons() {
+    func hideButtons(animated: Bool = true) {
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, animations: {
+        if animated {
+            UIView.animate(withDuration: 0.2, animations: {
+                for btn in self.arrBtns {
+                    btn.alpha = 0
+                    btn.center = self.imgIcon.center
+                }
+            }, completion: { _ in
+                var point = self.frame.origin; point.x += 59; point.y += 56
+                self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
+                self.imgIcon.frame.origin = CGPoint.zero
+                self.removeButtons()
+            })
+        } else {
             for btn in self.arrBtns {
                 btn.alpha = 0
                 btn.center = self.imgIcon.center
             }
-        }, completion: { _ in
             var point = self.frame.origin; point.x += 59; point.y += 56
             self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
             self.imgIcon.frame.origin = CGPoint.zero
             self.removeButtons()
-        })
+        }
     }
     
     fileprivate func removeButtons() {

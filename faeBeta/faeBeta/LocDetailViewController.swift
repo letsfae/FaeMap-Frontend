@@ -93,6 +93,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_locDetail"), object: nil)
         
+        // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
+        //         whole table view and cell will automatically disable this
+        let uiviewLeftMargin = LeftMarginToEnableNavGestureView()
+        view.addSubview(uiviewLeftMargin)
+        
         fullLoaded = true
     }
     

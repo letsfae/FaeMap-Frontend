@@ -267,13 +267,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             if modeLocCreating == .off {
                 uiviewLocationBar.hide()
                 activityIndicator.stopAnimating()
+                if uiviewAfterAdded.frame.origin.y != screenHeight {
+                    uiviewAfterAdded.hide()
+                }
                 if selectedLocation != nil {
                     locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
                         self.deselectAllLocations()
                     })
-                }
-                if uiviewAfterAdded.frame.origin.y != screenHeight {
-                    uiviewAfterAdded.hide()
                 }
             }
         }
