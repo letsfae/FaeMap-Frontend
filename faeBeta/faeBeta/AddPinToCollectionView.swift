@@ -32,7 +32,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             tblAddCollection.reloadData()
         }
     }
-    var fullLoaded = false
+    private var fullLoaded = false
+    private var showed: Bool = false
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor + device_offset_bot))
@@ -70,12 +71,16 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func show() {
+        guard !showed else { return }
+        showed = true
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - self.frame.size.height
         }, completion: nil)
     }
     
     func hide() {
+        guard showed else { return }
+        showed = false
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight
         }, completion: nil)
@@ -353,6 +358,7 @@ class AfterAddedToListView: UIView {
     var mode: UndoMode = .save
     var btnUndo: UIButton!
     var btnSeeList: UIButton!
+    private var showed: Bool = false
     
     override init(frame: CGRect = .zero) {
         let height: CGFloat = screenHeight == 812 ? 49 + device_offset_bot : 60
@@ -429,12 +435,16 @@ class AfterAddedToListView: UIView {
         //lblSaved.text = save ? "Collected to List!" : "Removed from List!"
         lblSaved.text = content
         mode = !save ? .save : .unsave
+        guard !showed else { return }
+        showed = true
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - self.frame.size.height
         }, completion: nil)
     }
     
     func hide() {
+        guard showed else { return }
+        showed = false
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight
         }, completion: nil)

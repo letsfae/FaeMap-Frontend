@@ -149,6 +149,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     // PlacePinAnnotationDelegate
     func placePinAction(action: PlacePinAction, mode: CollectionTableMode) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.hide()
         switch action {
         case .detail:
             if modeLocCreating == .on {

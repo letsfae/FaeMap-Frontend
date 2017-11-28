@@ -71,6 +71,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         setCellCount()
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
+        
+        // Joshua: Add this two lines to enable the edge-gesture on the left side of screen
+        //         whole table view and cell will automatically disable this
+        let uiviewLeftMargin = LeftMarginToEnableNavGestureView()
+        view.addSubview(uiviewLeftMargin)
+        
+        initPlaceRelatedData()
     }
     
     deinit {
@@ -80,16 +87,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        uiviewSubHeader.setValue(place: place)
-        uiviewFixedHeader.setValue(place: place)
-        tblPlaceDetail.reloadData()
-        let lat = String(place.coordinate.latitude)
-        let long = String(place.coordinate.longitude)
-        getRelatedPlaces(lat, long, isSimilar: true) {
-            self.getRelatedPlaces(lat, long, isSimilar: false, {
-                self.tblPlaceDetail.reloadData()
-            })
-        }
         PlaceDetailCell.boolFold = true
         if boolShared {
             //uiviewAfterAdded.lblSaved.text = "You shared a Place."
@@ -122,6 +119,19 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
+    }
+    
+    func initPlaceRelatedData() {
+        uiviewSubHeader.setValue(place: place)
+        uiviewFixedHeader.setValue(place: place)
+        tblPlaceDetail.reloadData()
+        let lat = String(place.coordinate.latitude)
+        let long = String(place.coordinate.longitude)
+        getRelatedPlaces(lat, long, isSimilar: true) {
+            self.getRelatedPlaces(lat, long, isSimilar: false, {
+                self.tblPlaceDetail.reloadData()
+            })
+        }
     }
     
     func setCellCount() {
