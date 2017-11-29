@@ -147,12 +147,13 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // AfterAddedToListDelegate
     func seeList() {
+        // TODO VICKY
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.id
-        vcList.colInfo = uiviewAfterAdded.selectedCollection
-        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
+//        vcList.colId = uiviewAfterAdded.selectedCollection.id
+//        vcList.colInfo = uiviewAfterAdded.selectedCollection
+//        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
     }
     // AfterAddedToListDelegate
@@ -179,7 +180,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // AddPlacetoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
-        vc.delegate = uiviewSavedList
         vc.enterMode = .place
         present(vc, animated: true)
     }

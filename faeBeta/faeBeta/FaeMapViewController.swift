@@ -195,6 +195,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadDistanceComponents()
         loadSmallClctView()
         loadLocationView()
+        storeRealmCollectionFromServer()
         
         timerSetup()
         updateSelfInfo()
@@ -521,5 +522,36 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func storeRealmCollectionFromServer() {
+        let realm = try! Realm()
+//        try! realm.write {
+//            realm.delete(realm.objects(RealmCollection.self))
+//        }
+        if realm.objects(RealmCollection.self).count != 0 {
+            return
+        }
+        
+        FaeCollection.shared.getCollections {(status: Int, message: Any?) in
+            if status / 100 == 2 {
+                let collections = JSON(message!)
+                guard let colArray = collections.array else {
+                    print("[loadCollectionData] fail to parse collections info")
+                    return
+                }
+                
+                for col in colArray {
+                    let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
+                    
+                    try! realm.write {
+                        realm.add(realmCol, update: true)
+                    }
+                }
+                print("Successfully get collections")
+            } else {
+                print("[Get Collections] Fail to Get \(status) \(message!)")
+            }
+        }
     }
 }
