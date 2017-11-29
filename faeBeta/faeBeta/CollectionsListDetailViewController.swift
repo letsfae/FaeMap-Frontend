@@ -8,13 +8,9 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
-protocol CollectionsListDetailDelegate: class {
-    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath)
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int)
-}
-
-class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, CreateColListDelegate, ManageColListDelegate, ColListCellDelegate {
+class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, ManageColListDelegate, ColListCellDelegate {
     
     var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
@@ -32,8 +28,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnMapView: UIButton!
     var btnShare: UIButton!
     var btnMore: UIButton!
-    var savedItems = [SavedPin]()
-    var savedPlaces = [PlacePin]()
+//    var savedPlaces = [PlacePin]()
     
     // variables in extension file
     var uiviewShadowBG: UIView!
@@ -47,20 +42,19 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnCrossCancel: UIButton!
     var btnYes: UIButton!
     
-    var creatorId: Int = -1
-    var txtName: String = ""
-    var txtDesp: String = ""
-    var txtTime: String = ""
+//    var creatorId: Int = -1
+//    var txtName: String = ""
+//    var txtDesp: String = ""
+//    var txtTime: String = ""
     
-    var arrColDetails: PinCollection!
+    let realm = try! Realm()
+    var realmColDetails: RealmCollection!
+    var notificationToken: NotificationToken? = nil
     var colId: Int = -1
-    var colInfo: PinCollection!
+//    var colInfo: PinCollection!
     
-    var arrSavedPinIds = [Int]()
+//    var arrSavedPinIds = [Int]()
     
-    var indexPath: IndexPath!
-    
-    weak var delegate: CollectionsListDetailDelegate?
     weak var featureDelegate: MapFilterMenuDelegate?
     
     var boolFromChat: Bool = false
@@ -69,14 +63,24 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        
+        guard realm.filterCollectedPin(collection_id: colId, type: enterMode.rawValue) != nil else {
+            return
+        }
+        
+        loadColItems()
         loadTable()
         loadHeaderImg()
         loadFooter()
-        loadColItems()
         loadHiddenHeader()
         loadHiddenSectionHeader()
         loadChooseOption()
+        observeOnCollectionChange()
         ColListDetailHeader.boolExpandMore = false
+    }
+    
+    deinit {
+        notificationToken?.invalidate()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -85,14 +89,20 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
-        creatorId = arrColDetails.creatorId
-        colId = arrColDetails.id
-        txtName = arrColDetails.name
-        txtDesp = arrColDetails.desp
-        txtTime = arrColDetails.lastUpdate
-        numItems = arrColDetails.itemsCount
-        btnMapView.isEnabled = false
-        self.getSavedItems(colId: self.colId)
+//        creatorId = arrColDetails.creatorId
+//        colId = arrColDetails.id
+//        txtName = arrColDetails.name
+//        txtDesp = arrColDetails.desp
+//        txtTime = arrColDetails.lastUpdate
+//        numItems = arrColDetails.itemsCount
+//        btnMapView.isEnabled = false
+        
+        if btnMapView != nil {
+            btnMapView.isEnabled = false
+        }
+        realmColDetails = realm.filterCollectedPin(collection_id: colId, type: enterMode.rawValue)
+        print(realmColDetails)
+        getSavedItems(colId: colId)
     }
     
     fileprivate func loadHeaderImg() {
@@ -113,7 +123,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         imgAvatar.clipsToBounds = true
         imgAvatar.layer.borderWidth = 5
         imgAvatar.layer.borderColor = UIColor.white.cgColor
-        General.shared.avatar(userid: creatorId) { (avatarImage) in
+        General.shared.avatar(userid: realmColDetails.user_id) { (avatarImage) in
             self.imgAvatar.image = avatarImage
             self.imgAvatar.isUserInteractionEnabled = true
         }
@@ -130,10 +140,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName = UILabel(frame: CGRect(x: 20, y: 28, width: screenWidth - 40, height: 27))
         lblListName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblListName.textColor = UIColor._898989()
-        lblListName.text = txtName
+        lblListName.text = realmColDetails.name
         lblListName.textAlignment = .center
         lblListName.lineBreakMode = .byTruncatingTail
-        lblListName.text = arrColDetails.name
         uiviewFixedHeader.addSubview(lblListName)
         
         let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -151,7 +160,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         uiviewFixedSectionHeader.addSubview(lblNum)
         lblNum.textColor = UIColor._146146146()
         lblNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
+        lblNum.text = realmColDetails.pins.count > 1 ? "\(realmColDetails.pins.count) items" : "\(realmColDetails.pins.count) item"
         
         let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
         uiviewFixedSectionHeader.addSubview(lblDateAdded)
@@ -221,7 +230,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     @objc func actionBack(_ sender: UIButton) {
-        delegate?.updateColName(enterMode: enterMode, indexPath: indexPath, name: txtName, desp: txtDesp, time: txtTime, numItems: numItems)
         navigationController?.popViewController(animated: true)
     }
     
@@ -236,13 +244,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             while !(arrCtrlers?.last is InitialPageController) {
                 arrCtrlers?.removeLast()
             }
-            featureDelegate?.showSavedPins(type: arrColDetails.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.name)
+//            featureDelegate?.showSavedPins(type: arrColDetails.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.name)
             navigationController?.setViewControllers(arrCtrlers!, animated: false)
             break
         case 1: // share
             // TODO: jichao
             let vcShareCollection = NewChatShareController(friendListMode: .collection)
-            vcShareCollection.collectionDetail = arrColDetails
+//            vcShareCollection.collectionDetail = arrColDetails
             navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         default:
@@ -270,7 +278,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             uiviewSectionHeader.addSubview(lblItemsNum)
             lblItemsNum.textColor = UIColor._146146146()
             lblItemsNum.font = UIFont(name: "AvenirNext-Medium", size: 18)
-            lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
+            lblItemsNum.text = realmColDetails.pins.count > 1 ? "\(realmColDetails.pins.count) items" : "\(realmColDetails.pins.count) item"
             
             let lblDateAdded = UILabel(frame: CGRect(x: screenWidth - 110, y: 6, width: 90, height: 22))
             uiviewSectionHeader.addSubview(lblDateAdded)
@@ -289,7 +297,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            if arrSavedPinIds.count == 0 {
+            if realmColDetails.pins.count == 0 {
                 return 312
             } else {
                 tblColListDetail.rowHeight = UITableViewAutomaticDimension
@@ -306,7 +314,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 0 {
             return 1
         } else {
-            return arrSavedPinIds.count == 0 ? 1 : arrSavedPinIds.count
+            print(realmColDetails.pins.count)
+            return realmColDetails.pins.count == 0 ? 1 : realmColDetails.pins.count
         }
     }
     
@@ -315,17 +324,17 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             var cell: ColListDetailHeader
             if boolReadMore {
                 cell = tblColListDetail.cellForRow(at: IndexPath(row: 0, section: 0)) as! ColListDetailHeader
-                cell.loadDescription(colInfo: arrColDetails)
+                cell.loadDescription(colInfo: realmColDetails)
                 boolReadMore = false
                 return cell
             }
             cell = tableView.dequeueReusableCell(withIdentifier: "ColListDetailHeader", for: indexPath) as! ColListDetailHeader
             cell.delegate = self
-            cell.updateValueForCell(colInfo: arrColDetails)
-            cell.loadDescription(colInfo: arrColDetails)
+            cell.updateValueForCell(colInfo: realmColDetails)
+            cell.loadDescription(colInfo: realmColDetails)
             return cell
         } else {
-            if arrSavedPinIds.count == 0 {
+            if realmColDetails.pins.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ColListEmptyCell", for: indexPath) as! ColListEmptyCell
                 let img = enterMode == .place ? #imageLiteral(resourceName: "collection_noPlaceList") : #imageLiteral(resourceName: "collection_noLocList")
                 cell.setValueForCell(img: img)
@@ -333,12 +342,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             } else {
                 if enterMode == .location {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListLocationCell", for: indexPath) as! ColListLocationCell
-                    cell.setValueForLocationPin(locId: arrSavedPinIds[indexPath.row])
-                    cell.selectedLocId = arrSavedPinIds[indexPath.row]
+                    cell.setValueForLocationPin(locId: realmColDetails.pins[indexPath.row].pin_id)
+                    cell.selectedLocId = realmColDetails.pins[indexPath.row].pin_id
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
-                    cell.setValueForPlacePin(placeId: arrSavedPinIds[indexPath.row])
+                    cell.setValueForPlacePin(placeId: realmColDetails.pins[indexPath.row].pin_id)
                     return cell
                 }
             }
@@ -355,7 +364,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section != 1 || arrSavedPinIds.count == 0 {
+        if indexPath.section != 1 || realmColDetails.pins.count == 0 {
             return
         }
         
@@ -409,35 +418,72 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-    var desiredCount = 0
-    var fetchCount = 0 {
-        didSet {
-            guard desiredCount != 0 && fetchCount != 0 else { return }
-            if fetchCount == desiredCount {
-                tblColListDetail.reloadData()
-            }
-        }
-    }
+//    var desiredCount = 0
+//    var fetchCount = 0 {
+//        didSet {
+//            guard desiredCount != 0 && fetchCount != 0 else { return }
+//            if fetchCount == desiredCount {
+////                tblColListDetail.reloadData()
+//            }
+//        }
+//    }
     
     func getSavedItems(colId: Int) {
-        FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pins"].arrayValue
-            self.arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
-            joshprint(self.arrSavedPinIds)
-            self.btnMapView.isEnabled = true
-            self.desiredCount = self.arrSavedPinIds.count
-            for placeId in self.arrSavedPinIds {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(placeId)) { (status, message) in
+        if realmColDetails.pins.count != 0 {
+            print("realmColDetails.pins.count \(realmColDetails.pins.count)")
+            if btnMapView != nil {
+                btnMapView.isEnabled = true
+            }
+//            desiredCount = realmColDetails.pins.count
+            for collectedPin in realmColDetails.pins {
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
                     let placeInfo = PlacePin(json: resultJson)
-                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
-                    self.savedPlaces.append(placeInfo)
-                    self.fetchCount += 1
+                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
+                }
+            }
+            return
+        }
+        
+        FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pins"].arrayValue.sorted {$0["added_at"] > $1["added_at"]}
+            print(arrLocPinId)
+            
+            let count = arrLocPinId.map({ $0["pin_id"].intValue }).count
+            
+            if self.btnMapView != nil && count != 0 {
+                self.btnMapView.isEnabled = true
+            }
+            
+            let col = self.realm.filterCollectedPin(collection_id: colId, type: self.enterMode.rawValue)
+            for pin in arrLocPinId {
+                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
+                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+        
+                try! self.realm.write {
+                    col?.pins.append(collectedPin)
+//                    self.realm.add(col, update: true)
+                    print("add pin")
+                }
+            }
+            
+            
+            
+            print(self.realmColDetails.pins)
+            
+            for collectedPin in self.realmColDetails.pins {
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let resultJson = JSON(message!)
+                    let placeInfo = PlacePin(json: resultJson)
+                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
+//                    self.fetchCount += 1
                 }
             }
         })
@@ -445,8 +491,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     // ColListDetailHeaderDelegate
     func readMore() {
-        //let cell = tblColListDetail.cellForRow(at: IndexPath(row: 0, section: 0)) as! ColListDetailHeader
-        //cell.loadDescription(colInfo: arrColDetails)
         boolReadMore = true
         UIView.setAnimationsEnabled(false)
         tblColListDetail.reloadSections(IndexSet(integer: 0), with: .none)
@@ -454,25 +498,32 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     // ColListDetailHeaderDelegate End
     
-    // CreateColListDelegate
-    func saveSettings(name: String, desp: String) {
-        lblListName.text = name
-        txtName = name
-        txtDesp = desp
-        
-        let curtDate = Date()
-        let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-        let date = dateformatter.string(from: curtDate).split(separator: " ")[0].split(separator: "-")
-        txtTime = date[1] + "/" + date[0]
-        arrColDetails.name = txtName
-        arrColDetails.desp = txtDesp
-        arrColDetails.lastUpdate = txtTime
-        tblColListDetail.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+    private func observeOnCollectionChange() {
+        guard let tableview = self.tblColListDetail else { return }
+
+        notificationToken = realm.objects(RealmCollection.self).filter("collection_id == %@", colId).observe { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                print("initial colDetail")
+                tableview.reloadData()
+                break
+            case .update(_, let deletions, let insertions, let modifications):
+                print("recent update colDetail")
+                guard self.realm.filterCollectedPin(collection_id: self.colId, type: self.enterMode.rawValue) != nil else {
+                    return
+                }
+                self.lblNum.text = self.realmColDetails.pins.count > 1 ? "\(self.realmColDetails.pins.count) items" : "\(self.realmColDetails.pins.count) item"
+                tableview.beginUpdates()
+                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1)}), with: .none)
+                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}), with: .none)
+                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1)}), with: .none)
+                tableview.endUpdates()
+            case .error:
+                print("error")
+            }
+        }
     }
-    
-    func updateCols(col: PinCollection) {}
-    // CreateColListDelegate End
 }
 
 protocol ColListDetailHeaderDelegate: class {
@@ -530,14 +581,17 @@ class ColListDetailHeader: UITableViewCell {
         addConstraintsWithFormat("V:|-212-[v0]-5-[v1(22)]-10-[v2]-20-[v3(5)]-0-|", options: [], views: lblName, lblTime, lblDesp, line)
     }
     
-    func updateValueForCell(colInfo: PinCollection) {
+    func updateValueForCell(colInfo: RealmCollection) {
         let attribute = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._146146146()]
         let nameAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
         
-        FaeGenderView.shared.loadGenderAge(id: colInfo.creatorId) { (nickName, _, _) in
+        FaeGenderView.shared.loadGenderAge(id: colInfo.user_id) { (nickName, _, _) in
             let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
-            let updateStr = NSMutableAttributedString(string: " ::: Updated \(colInfo.lastUpdate)", attributes: attribute)
+            let updateTime = colInfo.last_updated_at
+            let updateDate = updateTime.split(separator: " ")[0].split(separator: "-")
+            let lastUpdate = updateDate[1] + "/" + updateDate[0]
+            let updateStr = NSMutableAttributedString(string: " ::: Updated \(lastUpdate)", attributes: attribute)
             curtStr.append(nameStr)
             curtStr.append(updateStr)
             
@@ -547,11 +601,11 @@ class ColListDetailHeader: UITableViewCell {
         lblName.text = colInfo.name
     }
     
-    func loadDescription(colInfo: PinCollection) {
+    func loadDescription(colInfo: RealmCollection) {
         let despAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._115115115()]
-        lblDesp.attributedText = NSAttributedString(string: colInfo.desp, attributes: despAttr)
+        lblDesp.attributedText = NSAttributedString(string: colInfo.descrip, attributes: despAttr)
         
-        let (lineCount, newDesp) = getReadMoreDesp(colInfo.desp)
+        let (lineCount, newDesp) = getReadMoreDesp(colInfo.descrip)
         if lineCount <= 3 || ColListDetailHeader.boolExpandMore {
             uiviewReadMore.isHidden = true
             lblDesp.numberOfLines = 0
@@ -724,16 +778,16 @@ extension CollectionsListDetailViewController {
             vc.delegate = self
             vc.enterMode = enterMode
 //            vc.arrColList = savedItems
-            vc.arrSavedIds = arrSavedPinIds
+//            vc.arrSavedIds = arrSavedPinIds
             vc.colId = colId
             present(vc, animated: true)
             break
         case 1: // settings
             animationHideOptions()
             let vc = CreateColListViewController()
-            vc.delegate = self
-            vc.txtListName = txtName
-            vc.txtListDesp = txtDesp
+            vc.txtListName = realmColDetails.name
+            vc.txtListDesp = realmColDetails.descrip
+            vc.enterMode = enterMode
             vc.colId = colId
             present(vc, animated: true)
             break
@@ -749,8 +803,17 @@ extension CollectionsListDetailViewController {
         FaeCollection.shared.deleteOneCollection(String(colId)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 self.animationHideOptions()
+                
+                // remove from realm
+                guard let collection = self.realm.filterCollectedPin(collection_id: self.colId, type: self.enterMode.rawValue) else {
+                    return
+                }
+                
+                try! self.realm.write {
+                    self.realm.delete(collection)
+                }
+                
                 self.navigationController?.popViewController(animated: true)
-                self.delegate?.deleteColList(enterMode: self.enterMode, indexPath: self.indexPath)
             } else {
                 print("[Collections] Fail to Delete \(status) \(message!)")
             }
@@ -800,11 +863,11 @@ extension CollectionsListDetailViewController {
     
     // ManageColListDelegate
     func finishDeleting(ids: [Int]) {
-        self.arrSavedPinIds = ids
-        let section = IndexSet(integer: 1)
-        tblColListDetail.reloadSections(section, with: .none)
-        numItems = ids.count
-        lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
-        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
+//        self.arrSavedPinIds = ids
+//        let section = IndexSet(integer: 1)
+//        tblColListDetail.reloadSections(section, with: .none)
+//        numItems = ids.count
+//        lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
+//        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
     }
 }

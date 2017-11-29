@@ -234,7 +234,8 @@ extension ChatViewController {
                     let resultJson = JSON(message!)
                     let collectionDetail = PinCollection(json: resultJson)
                     //let vcCollection = CollectionsListDetailViewController()
-                    self.vcCollection.arrColDetails = collectionDetail
+                    // TODO VICKY
+//                    self.vcCollection.arrColDetails = collectionDetail
                     self.vcCollection.enterMode = .place
                     self.vcCollection.boolFromChat = true
                     self.vcCollection.colId = jsonCollection["id"].intValue

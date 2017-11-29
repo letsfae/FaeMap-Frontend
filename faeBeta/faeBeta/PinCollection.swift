@@ -43,29 +43,3 @@ struct PinCollection {
         creatorId = json["user_id"].intValue
     }
 }
-
-struct SavedPin {
-    let pinId: Int
-    let pinType: String
-    let pinName: String
-    let pinAddr: String
-    let pinBelongs: String
-    var memo: String
-    
-    init(json: JSON) {
-        pinId = json["pin_id"].intValue
-        pinType = json["type"].stringValue
-        if pinType == "place" {
-            pinName = json["pin_object"]["name"].stringValue
-            let addr1 = json["pin_object"]["location"]["address"].stringValue
-            let addr2 = json["pin_object"]["location"]["city"].stringValue + ", " + json["pin_object"]["location"]["state"].stringValue + ", " + json["pin_object"]["location"]["country"].stringValue
-            pinAddr = addr1 + ", " + addr2
-        } else {
-            pinName = json["pin_object"]["geolocation"]["latitude"].stringValue
-            pinAddr = json["pin_object"]["geolocation"]["longitude"].stringValue
-        }
-        pinBelongs = json["saved_collections"].stringValue
-        // 现在后端get不到memo内容
-        memo = json["memo"].stringValue
-    }
-}
