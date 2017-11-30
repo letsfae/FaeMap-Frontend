@@ -505,12 +505,10 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 guard let tableview = self.tblPlaceLoc else { return }
                 switch changes {
                 case .initial:
-                    print("initial place")
+//                    print("initial place")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("recent update place")
-                    
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
                     tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
@@ -526,11 +524,11 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 guard let tableview = self.tblPlaceLoc else { return }
                 switch changes {
                 case .initial:
-                    print("initial location")
+//                    print("initial location")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("recent update location")
+//                    print("recent update location")
                     
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)

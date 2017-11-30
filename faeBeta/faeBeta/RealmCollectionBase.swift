@@ -64,7 +64,6 @@ class RealmCollection: Object {
         try! realm.write{
             col.pins.append(pin)
             col.count += 1
-            print("add pin")
         }
 //        col.pins.sorted {$0.added_at > $1.added_at}
     }
@@ -75,7 +74,7 @@ class RealmCollection: Object {
             return
         }
         
-        var idx = 0
+        var idx = -1
         var pin: CollectedPin!
         for i in 0..<col.pins.count {
             if col.pins[i].pin_id == pin_id {
@@ -83,12 +82,16 @@ class RealmCollection: Object {
                 pin = col.pins[i]
             }
         }
+        print("remove \(col) \(pin) \(pin_id)")
+        
+        guard pin != nil && idx != -1 else {
+            return
+        }
         
         try! realm.write {
             col.pins.remove(at: idx)
             col.count -= 1
             realm.delete(pin)
-            print("remove pin")
         }
     }
 }

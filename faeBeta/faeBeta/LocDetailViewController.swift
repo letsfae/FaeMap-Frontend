@@ -364,6 +364,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             uiviewSavedList.show()
             uiviewSavedList.fromLocDetail = true
             uiviewSavedList.locId = locationId
+            print("locDetail \(uiviewSavedList.fromLocDetail) \(locationId)")
         }
         if locationId == 0 {
             showCollections()

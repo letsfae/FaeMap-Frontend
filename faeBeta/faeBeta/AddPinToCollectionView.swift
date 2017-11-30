@@ -262,21 +262,23 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
-        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
+        let loc_id = fromLocDetail ? locId : locationId
+        print("unsave \(collection) \(locId)")
+        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
             self.hide()
             self.uiviewAfterAdded.show(save: false)
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
-            self.uiviewAfterAdded.pinIdInAction = locationId
+            self.uiviewAfterAdded.pinIdInAction = loc_id
 //            self.tblAddCollection.reloadData()
             if self.arrListSavedThisPin.count == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: locationId)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: locationId)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: loc_id)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: loc_id)
             }
             self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
             
             // unsave pin from RealmCollection
-            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: locationId)
+            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: loc_id)
         })
     }
     
@@ -287,11 +289,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 guard let tableview = self.tblAddCollection else { return }
                 switch changes {
                 case .initial:
-                    print("initial place")
+//                    print("initial place")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("update place from addPin")
+//                    print("update place from addPin")
                     
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
@@ -308,11 +310,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 guard let tableview = self.tblAddCollection else { return }
                 switch changes {
                 case .initial:
-                    print("initial location")
+//                    print("initial location")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("recent update location")
+//                    print("recent update location")
                     
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
