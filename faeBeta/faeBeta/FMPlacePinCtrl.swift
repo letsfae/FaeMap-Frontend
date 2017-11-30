@@ -68,7 +68,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.id
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
 //        vcList.colInfo = uiviewAfterAdded.selectedCollection
 //        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         vcList.featureDelegate = self
@@ -78,6 +78,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
+        uiviewSavedList.tableMode = .place
         view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
@@ -167,6 +168,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             locAnnoView?.optionsToNormal()
             uiviewSavedList.tableMode = mode
             uiviewSavedList.loadCollectionData()
+            uiviewSavedList.tblAddCollection.reloadData()
             switch mode {
             case .place:
                 guard let placePin = selectedPlace else { return }

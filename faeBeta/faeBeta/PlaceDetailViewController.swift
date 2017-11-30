@@ -444,7 +444,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-//        vcList.colId = uiviewAfterAdded.selectedCollection.id
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
 //        vcList.colInfo = uiviewAfterAdded.selectedCollection
 //        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)

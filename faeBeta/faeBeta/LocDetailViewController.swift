@@ -354,6 +354,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func saveThisPin() {
+        print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
             uiviewSavedList.loadCollectionData()
@@ -361,6 +362,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             let pinData = LocationPin(position: position)
             uiviewSavedList.pinToSave = FaePinAnnotation(type: "location", cluster: nil, data: pinData as AnyObject)
             uiviewSavedList.show()
+            uiviewSavedList.fromLocDetail = true
+            uiviewSavedList.locId = locationId
         }
         if locationId == 0 {
             showCollections()
@@ -422,7 +425,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-//        vcList.colId = uiviewAfterAdded.selectedCollection.id
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
 //        vcList.colInfo = uiviewAfterAdded.selectedCollection
 //        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)

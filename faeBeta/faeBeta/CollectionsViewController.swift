@@ -31,7 +31,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var navBarMenuBtnClicked: Bool = false
     let realm = try! Realm()
     var tokenPlace: NotificationToken? = nil
-    var tokenLocation: NotificationToken? = nil
+    var tokenLoc: NotificationToken? = nil
     var realmColPlaces: Results<RealmCollection>!
     var realmColLocations: Results<RealmCollection>!
     
@@ -47,13 +47,13 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     deinit {
         tokenPlace?.invalidate()
-        tokenLocation?.invalidate()
+        tokenLoc?.invalidate()
     }
     
     fileprivate func loadCollectionData() {
         if realm.objects(RealmCollection.self).count != 0 {
-            realmColPlaces = realm.filterCollectedTypes(type: "place")
-            realmColLocations = realm.filterCollectedTypes(type: "location")
+            realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
+            realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
         }
     }
     
@@ -242,7 +242,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         }
         btnNavBarSetTitle()
         hideDropDownMenu()
-        tblCollections.reloadData()
+//        tblCollections.reloadData()
+        observeOnCollectionChange()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -326,43 +327,47 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     private func observeOnCollectionChange() {
-        tokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
-            guard let tableview = self.tblCollections else { return }
-            switch changes {
-            case .initial:
-                print("initial place")
-                tableview.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("recent update place")
-                
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.endUpdates()
-            case .error:
-                print("error")
+        if tableMode == .place {
+            tokenLoc?.invalidate()
+            tokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblCollections else { return }
+                switch changes {
+                case .initial:
+                    print("initial place")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+                    print("recent update place")
+                    
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
             }
-        }
-        
-        tokenLocation = realmColLocations.observe { (changes: RealmCollectionChange) in
-            guard let tableview = self.tblCollections else { return }
-            switch changes {
-            case .initial:
-                print("initial location")
-                tableview.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("recent update location")
-                
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.endUpdates()
-            case .error:
-                print("error")
+        } else {
+            tokenPlace?.invalidate()
+            tokenLoc = realmColLocations.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblCollections else { return }
+                switch changes {
+                case .initial:
+                    print("initial location")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+                    print("recent update location")
+                    
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
             }
         }
     }

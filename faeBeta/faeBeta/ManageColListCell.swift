@@ -9,13 +9,7 @@
 import UIKit
 import SwiftyJSON
 
-protocol ColListCellDelegate: class {
-    func reloadCell(indexPath: IndexPath)
-}
-
 class ColListPlaceCell: UITableViewCell {
-    
-    weak var delegate: ColListCellDelegate?
     var imgPic: FaeImageView!
     var lblColName: UILabel!
     var lblColAddr: UILabel!
@@ -119,18 +113,15 @@ class ColListPlaceCell: UITableViewCell {
             let placeInfo = PlacePin(json: resultJson)
             self.selectedPlace = placeInfo
             faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
-            self.setValueForPlace(placeInfo, memoFetched: true)
+            self.setValueForPlace(placeInfo)
         }
     }
     
-    func setValueForPlace(_ placeInfo: PlacePin, memoFetched: Bool = false) {
+    func setValueForPlace(_ placeInfo: PlacePin) {
         lblColName.text = placeInfo.name
         lblColAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         lblColMemo.text = placeInfo.memo
         setConstraints(memo: placeInfo.memo)
-        if memoFetched {
-            delegate?.reloadCell(indexPath: self.indexPath)
-        }
         imgPic.backgroundColor = .white
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgPic)
     }
@@ -145,6 +136,29 @@ class ColListLocationCell: UITableViewCell {
     var btnSelect: UIButton!
     var selectedLocId: Int = -1
     var coordinate: CLLocationCoordinate2D!
+    var indexPath: IndexPath!
+    
+    internal var memoConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                self.removeConstraints(oldValue)
+            }
+            if memoConstraint.count != 0 {
+                self.addConstraints(memoConstraint)
+            }
+        }
+    }
+    
+    internal var addrConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                self.removeConstraints(oldValue)
+            }
+            if addrConstraint.count != 0 {
+                self.addConstraints(addrConstraint)
+            }
+        }
+    }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -180,25 +194,27 @@ class ColListLocationCell: UITableViewCell {
         lblItemName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblItemName)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblItemName)
+        addConstraintsWithFormat("V:|-18-[v0(22)]", options: [], views: lblItemName)
         
         lblItemAddr_1 = UILabel()
         lblItemAddr_1.textColor = UIColor._107105105()
         lblItemAddr_1.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblItemAddr_1)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblItemAddr_1)
+        addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblItemAddr_1)
         
         lblItemAddr_2 = UILabel()
         lblItemAddr_2.textColor = UIColor._107105105()
         lblItemAddr_2.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblItemAddr_2)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblItemAddr_2)
+        addrConstraint = returnConstraintsWithFormat("V:|-56-[v0(16)]-18-|", options: [], views: lblItemAddr_2)
         
         lblColMemo =  FaeLabel(CGRect.zero, .left, .demiBoldItalic, 12, UIColor._107105105())
         lblColMemo.numberOfLines = 0
         addSubview(lblColMemo)
         addConstraintsWithFormat("H:|-93-[v0]-50-|", options: [], views: lblColMemo)
-        
-        addConstraintsWithFormat("V:|-18-[v0(22)]-0-[v1(16)]-1-[v2(16)]-5-[v3]-18-|", options: [], views: lblItemName, lblItemAddr_1, lblItemAddr_2, lblColMemo)
+        memoConstraint = returnConstraintsWithFormat("V:|-77-[v0(0)]", options: [], views: lblColMemo)
         
         btnSelect = UIButton()
         btnSelect.setImage(#imageLiteral(resourceName: "mb_btnOvalUnselected"), for: .normal)
@@ -209,18 +225,30 @@ class ColListLocationCell: UITableViewCell {
         addConstraintsWithFormat("V:|-20-[v0(50)]", options: [], views: btnSelect)
     }
     
+    func setConstraints(memo: String) {
+        if memo == "" {
+            addrConstraint = returnConstraintsWithFormat("V:|-56-[v0(16)]-18-|", options: [], views: lblItemAddr_2)
+            memoConstraint = returnConstraintsWithFormat("V:|-77-[v0(0)]", options: [], views: lblColMemo)
+        } else {
+            addrConstraint = returnConstraintsWithFormat("V:|-56-[v0(16)]", options: [], views: lblItemAddr_2)
+            memoConstraint = returnConstraintsWithFormat("V:|-77-[v0]-18-|", options: [], views: lblColMemo)
+        }
+    }
+    
     func setValueForLocationPin(locId: Int) {
         self.imgSavedItem.alpha = 0
         self.lblItemName.alpha = 0
         self.lblItemAddr_1.alpha = 0
         self.lblItemAddr_2.alpha = 0
-        if let locationFromCache = faeLocationCache.object(forKey: locId as AnyObject) as? JSON {
-            let lat = locationFromCache["geolocation"]["latitude"].doubleValue
-            let lon = locationFromCache["geolocation"]["longitude"].doubleValue
-            let location = CLLocation(latitude: lat, longitude: lon)
-            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = locationFromCache["file_ids"].intValue
-            self.imgSavedItem.loadImage(id: locationFromCache["file_ids"].intValue)
+        self.lblColMemo.alpha = 0
+        if let locationInfo = faeLocationCache.object(forKey: locId as AnyObject) as? LocationPin {
+            let location = locationInfo.location
+            coordinate = locationInfo.coordinate
+            imgSavedItem.fileID = locationInfo.fileId
+            imgSavedItem.loadImage(id: locationInfo.fileId)
+            lblColMemo.text = locationInfo.memo
+            setConstraints(memo: locationInfo.memo)
+
             UIView.animate(withDuration: 0.1, animations: {
                 self.imgSavedItem.alpha = 1
             })
@@ -231,15 +259,10 @@ class ColListLocationCell: UITableViewCell {
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
-            faeLocationCache.setObject(resultJson as AnyObject, forKey: locId as AnyObject)
-            let lat = resultJson["geolocation"]["latitude"].doubleValue
-            let lon = resultJson["geolocation"]["longitude"].doubleValue
-            let location = CLLocation(latitude: lat, longitude: lon)
-            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
-            self.imgSavedItem.fileID = resultJson["file_ids"].intValue
-            self.imgSavedItem.loadImage(id: resultJson["file_ids"].intValue)
-            self.lblColMemo.text = resultJson["user_pin_operations"]["memo"].stringValue
-            self.getAddressForLocation(locId, location)
+            let locationInfo = LocationPin(json: resultJson)
+            faeLocationCache.setObject(locationInfo as AnyObject, forKey: locId as AnyObject)
+            
+            self.getAddressForLocation(locId, locationInfo.location)
             UIView.animate(withDuration: 0.1, animations: {
                 self.imgSavedItem.alpha = 1
             })
@@ -255,6 +278,7 @@ class ColListLocationCell: UITableViewCell {
                 self.lblItemName.alpha = 1
                 self.lblItemAddr_1.alpha = 1
                 self.lblItemAddr_2.alpha = 1
+                self.lblColMemo.alpha = 1
             })
             return
         }
@@ -321,6 +345,7 @@ class ColListLocationCell: UITableViewCell {
                     self.lblItemName.alpha = 1
                     self.lblItemAddr_1.alpha = 1
                     self.lblItemAddr_2.alpha = 1
+                    self.lblColMemo.alpha = 1
                 })
             }
         }

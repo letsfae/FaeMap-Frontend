@@ -7,10 +7,10 @@
 //
 
 import UIKit
+import RealmSwift
 
 protocol ManageColListDelegate: class {
     func returnValBack()
-    func finishDeleting(ids: [Int])
 }
 
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
@@ -30,15 +30,24 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     let REMOVE = 2
     
     weak var delegate: ManageColListDelegate?
-    var arrSavedIds = [Int]()
-//    var arrColList = [SavedPin]()
+//    var arrSavedIds = [Int]()
+    let realm = try! Realm()
+    var realmPins = List<CollectedPin>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        loadPinsData()
         loadNavBar()
         loadContent()
         loadTab()
+    }
+    
+    fileprivate func loadPinsData() {
+        guard let col = RealmCollection.filterCollectedPin(collection_id: colId) else {
+            return
+        }
+        realmPins = col.pins
     }
     
     fileprivate func loadNavBar() {
@@ -115,7 +124,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     @objc func actionDone(_ sender: UIButton) {
-        delegate?.returnValBack()//savedItems: arrColList)
+        delegate?.returnValBack()
         dismiss(animated: true)
     }
     
@@ -132,7 +141,9 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     @objc func actionOperateList(_ sender: UIButton) {
         switch sender.tag {
         case SHARE:
-            // TODO jichao
+            // TODO JICHAO
+            // 这个地方只可以发送一个place/location信息给用户，你可能需要用到的place id = realmPins[realmPins.count - 1 - selectedIdx[0].row].pin_id，如果你需要找place/location的具体信息，可以参考ManageColListCell文件中的setValueForPlacePin和setValueForLocationPin方法
+            
             //let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ManageColListCell
             //let vcShareCollection = NewChatShareController(friendListMode: .place)
             //vcShareCollection.placeDetail = "\(cell.lblColName.text);\(cell.lblColAddr.text)"
@@ -140,30 +151,37 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             break
         case MEMO:
             let vc = EditMemoViewController()
+            if enterMode == .place {
+                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ColListPlaceCell
+                vc.txtMemo = cell.lblColMemo?.text ?? ""
+            } else {
+                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ColListLocationCell
+                vc.txtMemo = cell.lblColMemo?.text ?? ""
+            }
             vc.delegate = self
             vc.enterMode = enterMode
             vc.indexPath = selectedIdx[0]
-            vc.pinId = arrSavedIds[selectedIdx[0].row] //arrColList[selectedIdx[0].row].pinId
+            vc.pinId = realmPins[realmPins.count - 1 - selectedIdx[0].row].pin_id //arrColList[selectedIdx[0].row].pinId
             vc.modalPresentationStyle = .overCurrentContext
             present(vc, animated: false)
             break
         case REMOVE:
             // 对后端需求，批量删除？
-            print(arrSavedIds)
+//            print(arrSavedIds)
             desiredCount = selectedIdx.count
             for i in 0..<selectedIdx.count {
                 let idxPath = selectedIdx[i]
-                let id = String(arrSavedIds[idxPath.row])
+                let pin_id = realmPins[realmPins.count - 1 - selectedIdx[i].row].pin_id //(arrSavedIds[idxPath.row])
                 if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListPlaceCell {
                     cell.btnSelect.isSelected = false
                 }
                 if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListLocationCell {
                     cell.btnSelect.isSelected = false
                 }
-                let idx = idxPath.row
-                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: id) {(status: Int, message: Any?) in
+                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
-                        self.arrSavedIds.remove(at: idx)
+                        RealmCollection.unsavePin(collection_id: self.colId, type: self.enterMode.rawValue, pin_id: pin_id)
+                        
                         self.deleteCount += 1
                     } else {
                         print("[Fail to Unsave Item From Collection] \(status) \(message!)")
@@ -202,19 +220,20 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrSavedIds.count
+        return realmPins.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let idx = realmPins.count - indexPath.row - 1
         if enterMode == .place {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColPlaceCell", for: indexPath) as! ColListPlaceCell
-            let savedId = arrSavedIds[indexPath.row]
+            let savedId = realmPins[idx].pin_id
             cell.setValueForPlacePin(placeId: savedId)
             cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColLocationCell", for: indexPath) as! ColListLocationCell
-            let savedId = arrSavedIds[indexPath.row]
+            let savedId = realmPins[idx].pin_id
             cell.setValueForLocationPin(locId: savedId)
             cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
@@ -258,7 +277,6 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             self.selectedIdx.removeAll()
             self.tblManageList.reloadData()
             self.updateTabBarBtnColor(selectedCount: 0)
-            self.delegate?.finishDeleting(ids: self.arrSavedIds)
         }
     }
     
