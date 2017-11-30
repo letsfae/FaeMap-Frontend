@@ -243,15 +243,7 @@ class ColListLocationCell: UITableViewCell {
         self.lblColMemo.alpha = 0
         if let locationInfo = faeLocationCache.object(forKey: locId as AnyObject) as? LocationPin {
             let location = locationInfo.location
-            coordinate = locationInfo.coordinate
-            imgSavedItem.fileID = locationInfo.fileId
-            imgSavedItem.loadImage(id: locationInfo.fileId)
-            lblColMemo.text = locationInfo.memo
-            setConstraints(memo: locationInfo.memo)
-
-            UIView.animate(withDuration: 0.1, animations: {
-                self.imgSavedItem.alpha = 1
-            })
+            setValueForLocation(locationInfo)
             self.getAddressForLocation(locId, location)
             return
         }
@@ -261,12 +253,20 @@ class ColListLocationCell: UITableViewCell {
             let resultJson = JSON(message!)
             let locationInfo = LocationPin(json: resultJson)
             faeLocationCache.setObject(locationInfo as AnyObject, forKey: locId as AnyObject)
-            
+            self.setValueForLocation(locationInfo)
             self.getAddressForLocation(locId, locationInfo.location)
-            UIView.animate(withDuration: 0.1, animations: {
-                self.imgSavedItem.alpha = 1
-            })
         }
+    }
+    
+    func setValueForLocation(_ locationInfo: LocationPin) {
+        coordinate = locationInfo.coordinate
+        imgSavedItem.fileID = locationInfo.fileId
+        imgSavedItem.loadImage(id: locationInfo.fileId)
+        lblColMemo.text = locationInfo.memo
+        setConstraints(memo: locationInfo.memo)
+        UIView.animate(withDuration: 0.1, animations: {
+            self.imgSavedItem.alpha = 1
+        })
     }
     
     func getAddressForLocation(_ locId: Int, _ location: CLLocation) {

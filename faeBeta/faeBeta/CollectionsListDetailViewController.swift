@@ -46,6 +46,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var notificationToken: NotificationToken? = nil
     var objectToken: NotificationToken? = nil
     var colId: Int = -1
+    var loadFromServer = false
     
     weak var featureDelegate: MapFilterMenuDelegate?
     
@@ -408,6 +409,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             guard desiredCount != 0 && fetchedCount != 0 else { return }
             if fetchedCount == desiredCount {
                 tblColListDetail.reloadData()
+                loadFromServer = false
             }
         }
     }
@@ -438,6 +440,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 return
             }
             
+            self.loadFromServer = true
             if self.realmColDetails.pins.count != 0 {
                 try! self.realm.write {
                     self.realmColDetails.pins.removeAll()
@@ -455,7 +458,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         
                 try! self.realm.write {
                     col?.pins.append(collectedPin)
-                    print("add pin")
                 }
             }
             
@@ -487,9 +489,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             switch change {
             case .change:
                 print("colDetails change")
+                if self.loadFromServer {
+                    return
+                }
                 self.lblListName.text = self.realmColDetails.name
-                self.lblItemsNum.text = self.realmColDetails.pins.count > 1 ? "\(self.realmColDetails.pins.count) items" : "\(self.realmColDetails.pins.count) item"
-                self.lblNum.text = self.realmColDetails.pins.count > 1 ? "\(self.realmColDetails.pins.count) items" : "\(self.realmColDetails.pins.count) item"
+                self.lblNum.text = self.realmColDetails.count > 1 ? "\(self.realmColDetails.count) items" : "\(self.realmColDetails.count) item"
                 tableview.reloadData()
             case .error(let error):
                 print(error)

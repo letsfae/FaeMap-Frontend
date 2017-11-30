@@ -333,11 +333,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 guard let tableview = self.tblCollections else { return }
                 switch changes {
                 case .initial:
-                    print("initial place")
+//                    print("initial place")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("recent update place")
+//                    print("recent update place")
                     
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
@@ -354,11 +354,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 guard let tableview = self.tblCollections else { return }
                 switch changes {
                 case .initial:
-                    print("initial location")
+//                    print("initial location")
                     tableview.reloadData()
                     break
                 case .update(_, let deletions, let insertions, let modifications):
-                    print("recent update location")
+//                    print("recent update location")
                     
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
