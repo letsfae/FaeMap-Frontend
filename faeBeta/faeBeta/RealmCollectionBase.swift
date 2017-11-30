@@ -19,7 +19,7 @@ class RealmCollection: Object {
     @objc dynamic var created_at: String = ""
     @objc dynamic var count: Int = 0
     @objc dynamic var last_updated_at: String = ""
-    let pins = List<CollectedPin>()
+    var pins = List<CollectedPin>()
     
     override static func primaryKey() -> String? {
         return "collection_id"
@@ -38,6 +38,15 @@ class RealmCollection: Object {
         self.last_updated_at = last_updated_at
     }
 
+    static func filterCollectedTypes(type: String) -> Results<RealmCollection> {
+        let realm = try! Realm()
+        return realm.objects(RealmCollection.self).filter("type == %@", type).sorted(byKeyPath: "collection_id")
+    }
+    
+    static func filterCollectedPin(collection_id: Int) -> RealmCollection? {
+        let realm  = try! Realm()
+        return realm.object(ofType: RealmCollection.self, forPrimaryKey: collection_id)
+    }
     static func savePin(collection_id: Int, type: String, pin_id: Int) {
         let curtDate = Date()
         let dateformatter = DateFormatter()
@@ -48,12 +57,13 @@ class RealmCollection: Object {
         pin.setPrimaryKeyInfo(pin_id, added_at)
         
         let realm  = try! Realm()
-        guard let col = realm.filterCollectedPin(collection_id: collection_id, type: type) else {
+        guard let col = filterCollectedPin(collection_id: collection_id) else {
             return
         }
 
         try! realm.write{
             col.pins.append(pin)
+            col.count += 1
             print("add pin")
         }
 //        col.pins.sorted {$0.added_at > $1.added_at}
@@ -61,19 +71,23 @@ class RealmCollection: Object {
     
     static func unsavePin(collection_id: Int, type: String, pin_id: Int) {
         let realm  = try! Realm()
-        guard let col = realm.filterCollectedPin(collection_id: collection_id, type: type) else {
+        guard let col = filterCollectedPin(collection_id: collection_id) else {
             return
         }
         
         var idx = 0
+        var pin: CollectedPin!
         for i in 0..<col.pins.count {
             if col.pins[i].pin_id == pin_id {
                 idx = i
+                pin = col.pins[i]
             }
         }
         
         try! realm.write {
             col.pins.remove(at: idx)
+            col.count -= 1
+            realm.delete(pin)
             print("remove pin")
         }
     }
@@ -98,16 +112,6 @@ class CollectedPin: Object {
         self.pin_id = pin_id
         self.added_at = added_at
         self.primary_key = "\(pin_id)_\(added_at)"
-    }
-}
-
-extension Realm {
-    func filterCollectedTypes(type: String) -> Results<RealmCollection> {
-        return self.objects(RealmCollection.self).filter("type == %@", type).sorted(byKeyPath: "collection_id")
-    }
-    
-    func filterCollectedPin(collection_id: Int, type: String) -> RealmCollection? {
-        return self.objects(RealmCollection.self).filter("collection_id == %@ AND type == %@", collection_id, type).first
     }
 }
 

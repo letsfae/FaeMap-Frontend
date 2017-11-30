@@ -35,8 +35,10 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     var fullLoaded = false
-    var notificationTokenPlace: NotificationToken? = nil
-    var notificationTokenLoc: NotificationToken? = nil
+    var tokenPlace: NotificationToken? = nil
+    var tokenLoc: NotificationToken? = nil
+    var fromLocDetail = false
+    var locId = -1
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: 434 * screenHeightFactor + device_offset_bot))
@@ -48,8 +50,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     deinit {
-        notificationTokenPlace?.invalidate()
-        notificationTokenLoc?.invalidate()
+        tokenPlace?.invalidate()
+        tokenLoc?.invalidate()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -57,8 +59,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func loadCollectionData() {
-        realmColPlaces = realm.filterCollectedTypes(type: "place")
-        realmColLocations = realm.filterCollectedTypes(type: "location")
+        realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
+        realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
     }
     
     func show() {
@@ -140,7 +142,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //joshprint(arrCollection[indexPath.row])
         let colInfo = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
-//        uiviewAfterAdded.selectedCollection = colInfo
+        uiviewAfterAdded.selectedCollection = colInfo
         self.timer?.invalidate()
         self.timer = nil
         let isInThisList = arrListSavedThisPin.contains(colInfo.collection_id)
@@ -171,8 +173,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             self.uiviewAfterAdded.show()
             self.arrListSavedThisPin.append(collection.collection_id)
             self.uiviewAfterAdded.pinIdInAction = placeData.id
-            self.uiviewAfterAdded.selectedCollection.itemsCount += 1
-            self.tblAddCollection.reloadData()
+//            self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_explore"), object: nil)
@@ -190,7 +191,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             self.uiviewAfterAdded.show(save: false)
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
             self.uiviewAfterAdded.pinIdInAction = placeData.id
-            self.uiviewAfterAdded.selectedCollection.itemsCount -= 1
             self.tblAddCollection.reloadData()
             if self.arrListSavedThisPin.count == 0 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
@@ -210,6 +210,14 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             saveLocationToWithId(collection, locationId)
             return
         }
+        
+        if fromLocDetail {
+            let locationId = locId
+            saveLocationToWithId(collection, locationId)
+            return
+        }
+        
+        // TODO YUE 这个地方经常报错
         mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
             FaeImage.shared.type = "image"
             FaeImage.shared.image = snapShotImage
@@ -227,6 +235,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                     guard message != nil else { return }
                     let idJSON = JSON(message!)
                     let locationId = idJSON["location_id"].intValue
+                    print("locationId \(locationId)")
+                    
                     self.uiviewAfterAdded.pinIdInAction = locationId
                     self.saveLocationToWithId(collection, locationId)
                 })
@@ -240,7 +250,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             self.hide()
             self.uiviewAfterAdded.show()
             self.arrListSavedThisPin.append(collection.collection_id)
-            self.tblAddCollection.reloadData()
+//            self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
             self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
@@ -258,8 +268,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             self.uiviewAfterAdded.show(save: false)
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
             self.uiviewAfterAdded.pinIdInAction = locationId
-            self.uiviewAfterAdded.selectedCollection.itemsCount -= 1
-            self.tblAddCollection.reloadData()
+//            self.tblAddCollection.reloadData()
             if self.arrListSavedThisPin.count == 0 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: locationId)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: locationId)
@@ -271,45 +280,48 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         })
     }
     
-    func observeOnCollectionChange() {
-        guard let tableview = self.tblAddCollection else { return }
-        notificationTokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                print("initial place")
-                tableview.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("recent update place")
-                //                UIView.setAnimationsEnabled(true)
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .automatic)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.endUpdates()
-            //                UIView.setAnimationsEnabled(true)
-            case .error:
-                print("error")
+    private func observeOnCollectionChange() {
+        if tableMode == .place {
+            tokenLoc?.invalidate()
+            tokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblAddCollection else { return }
+                switch changes {
+                case .initial:
+                    print("initial place")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+                    print("update place from addPin")
+                    
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
             }
-        }
-        
-        notificationTokenLoc = realmColLocations.observe { (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                print("initial location")
-                tableview.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("recent update location")
-                //                UIView.setAnimationsEnabled(false)
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .automatic)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.endUpdates()
-            //                UIView.setAnimationsEnabled(true)
-            case .error:
-                print("error")
+        } else {
+            tokenPlace?.invalidate()
+            tokenLoc = realmColLocations.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblAddCollection else { return }
+                switch changes {
+                case .initial:
+                    print("initial location")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+                    print("recent update location")
+                    
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
             }
         }
     }
@@ -382,7 +394,7 @@ class AfterAddedToListView: UIView {
     weak var delegate: AfterAddedToListDelegate?
     var uiviewAfterAdded: UIView!
     var pinIdInAction: Int = -1
-    var selectedCollection: PinCollection!
+    var selectedCollection: RealmCollection!
     var lblSaved: FaeLabel!
     var mode: UndoMode = .save
     var btnUndo: UIButton!
@@ -437,19 +449,23 @@ class AfterAddedToListView: UIView {
         self.hide()
         switch mode {
         case .save:
-            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.id), pinID: String(pinIdInAction)) { (status, message) in
+            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
                 guard status / 100 == 2 else { return }
                 joshprint("[undoCollecting] successfully saved again")
                 self.selectedCollection = nil
-                self.delegate?.undoCollect(colId: col.id, mode: self.mode)
+                self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
+                
+                RealmCollection.savePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
             }
             break
         case .unsave:
-            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.id), pinID: String(pinIdInAction)) { (status, message) in
+            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
                 guard status / 100 == 2 else { return }
                 joshprint("[undoCollecting] successfully unsave this pin")
                 self.selectedCollection = nil
-                self.delegate?.undoCollect(colId: col.id, mode: self.mode)
+                self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
+                
+                RealmCollection.unsavePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
             }
             break
         }

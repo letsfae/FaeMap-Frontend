@@ -151,7 +151,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewAfterAdded.hide()
         let vcList = CollectionsListDetailViewController()
         vcList.enterMode = uiviewSavedList.tableMode
-//        vcList.colId = uiviewAfterAdded.selectedCollection.id
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
 //        vcList.colInfo = uiviewAfterAdded.selectedCollection
 //        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
         navigationController?.pushViewController(vcList, animated: true)
@@ -187,7 +187,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
-        uiviewSavedList.tableMode = .place
         uiviewSavedList.loadCollectionData()
         view.addSubview(uiviewSavedList)
         

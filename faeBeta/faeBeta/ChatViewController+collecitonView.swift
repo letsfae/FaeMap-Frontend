@@ -225,23 +225,30 @@ extension ChatViewController {
                 }
             }
         }
+        // TODO JICHAO
         if message.type == "[Collection]" {
             let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let dataCollection = strCollectionDetail.data(using: .utf8)
             let jsonCollection = JSON(data: dataCollection!)
-            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    let resultJson = JSON(message!)
-                    let collectionDetail = PinCollection(json: resultJson)
-                    //let vcCollection = CollectionsListDetailViewController()
-                    // TODO VICKY
-//                    self.vcCollection.arrColDetails = collectionDetail
-                    self.vcCollection.enterMode = .place
-                    self.vcCollection.boolFromChat = true
-                    self.vcCollection.colId = jsonCollection["id"].intValue
-                    self.navigationController?.pushViewController(self.vcCollection, animated: true)
-                }
-            })
+            
+            vcCollection.enterMode = .place
+            vcCollection.boolFromChat = true
+            vcCollection.colId = jsonCollection["id"].intValue
+            navigationController?.pushViewController(self.vcCollection, animated: true)
+            
+//            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
+//                if status / 100 == 2 {
+//                    let resultJson = JSON(message!)
+//                    let collectionDetail = PinCollection(json: resultJson)
+//                    //let vcCollection = CollectionsListDetailViewController()
+//                    // TODO VICKY
+////                    self.vcCollection.arrColDetails = collectionDetail
+//                    self.vcCollection.enterMode = .place
+//                    self.vcCollection.boolFromChat = true
+//                    self.vcCollection.colId = jsonCollection["id"].intValue
+//                    self.navigationController?.pushViewController(self.vcCollection, animated: true)
+//                }
+//            })
         }
         
     }

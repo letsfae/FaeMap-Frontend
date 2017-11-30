@@ -64,7 +64,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     var friendListMode: FriendListMode = .chat
     var locationDetail: String = ""
     var locationSnapImage: UIImage?
-    var collectionDetail: PinCollection?
+    var collectionDetail: RealmCollection?
     var placeDetail: PlacePin?
     
     var boolFromLocDetail: Bool = false
@@ -276,7 +276,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 break
             case .collection:
                 type = "[Collection]"
-                text = "{\"id\":\"\(collectionDetail!.id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.itemsCount)\", \"creator\":\"\(collectionDetail!.creatorId)\"}"
+                text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.count)\", \"creator\":\"\(collectionDetail!.user_id)\"}"
                 vcChat.sendMeaages_v2(type: type, text: text)
                 break
             case .place:
@@ -363,7 +363,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             break
         case .collection:
             newMessage.type = "[Collection]"
-            newMessage.text = "{\"id\":\"\(collectionDetail!.id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.pinIds.count)\", \"creator\":\"\"}"
+            newMessage.text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.pins.count)\", \"creator\":\"\"}"
             break
         case .place:
             newMessage.type = "[Place]"

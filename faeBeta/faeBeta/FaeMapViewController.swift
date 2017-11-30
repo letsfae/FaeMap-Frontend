@@ -178,6 +178,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        storeRealmCollectionFromServer()
         
         Key.shared.FMVCtrler = self
         
@@ -195,7 +196,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadDistanceComponents()
         loadSmallClctView()
         loadLocationView()
-        storeRealmCollectionFromServer()
         
         timerSetup()
         updateSelfInfo()
@@ -525,19 +525,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func storeRealmCollectionFromServer() {
-        let realm = try! Realm()
-//        try! realm.write {
-//            realm.delete(realm.objects(RealmCollection.self))
-//        }
-        if realm.objects(RealmCollection.self).count != 0 {
-            return
-        }
-        
         FaeCollection.shared.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let collections = JSON(message!)
                 guard let colArray = collections.array else {
                     print("[loadCollectionData] fail to parse collections info")
+                    return
+                }
+                
+                let realm = try! Realm()
+                if realm.objects(RealmCollection.self).count == colArray.count {
                     return
                 }
                 

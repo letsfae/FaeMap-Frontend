@@ -11,24 +11,27 @@ import SwiftyJSON
 import CoreLocation
 
 class LocationPin: NSObject {
-    
-    var id: Int = 0
-    var content: String = ""
+    var id: Int = -1
+    var content: String?
+    var location = CLLocation()
     let coordinate: CLLocationCoordinate2D
     let address1: String = ""
     let address2: String = ""
     var icon: UIImage?
-    var fileId: String = ""
+    var fileId: Int = -1
     var arrListSavedThisPin = [Int]()
     var optionsReady = false
+    var memo: String = ""
     
     init(json: JSON) {
         id = json["location_id"].intValue
-        // self.imageURL = json["image_url"].stringValue
-        fileId = json["content"].stringValue
+        fileId = json["file_ids"].intValue
         
-        coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
-        
+        let lat = json["geolocation"]["latitude"].doubleValue
+        let lon = json["geolocation"]["longitude"].doubleValue
+        location = CLLocation(latitude: lat, longitude: lon)
+        coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
+        memo = json["user_pin_operations"]["memo"].stringValue
     }
     
     init(position: CLLocationCoordinate2D) {

@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, ManageColListDelegate, ColListCellDelegate {
+class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, ManageColListDelegate {
     
     var enterMode: CollectionTableMode!
     var uiviewFixedHeader: UIView!
@@ -28,7 +28,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnMapView: UIButton!
     var btnShare: UIButton!
     var btnMore: UIButton!
-//    var savedPlaces = [PlacePin]()
     
     // variables in extension file
     var uiviewShadowBG: UIView!
@@ -42,18 +41,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var btnCrossCancel: UIButton!
     var btnYes: UIButton!
     
-//    var creatorId: Int = -1
-//    var txtName: String = ""
-//    var txtDesp: String = ""
-//    var txtTime: String = ""
-    
     let realm = try! Realm()
     var realmColDetails: RealmCollection!
     var notificationToken: NotificationToken? = nil
+    var objectToken: NotificationToken? = nil
     var colId: Int = -1
-//    var colInfo: PinCollection!
-    
-//    var arrSavedPinIds = [Int]()
     
     weak var featureDelegate: MapFilterMenuDelegate?
     
@@ -64,7 +56,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        guard realm.filterCollectedPin(collection_id: colId, type: enterMode.rawValue) != nil else {
+        guard RealmCollection.filterCollectedPin(collection_id: colId) != nil else {
             return
         }
         
@@ -77,10 +69,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         loadChooseOption()
         observeOnCollectionChange()
         ColListDetailHeader.boolExpandMore = false
+        
+//        print(realm.objects(CollectedPin.self))
     }
     
     deinit {
-        notificationToken?.invalidate()
+        objectToken?.invalidate()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -89,19 +83,10 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadColItems() {
-//        creatorId = arrColDetails.creatorId
-//        colId = arrColDetails.id
-//        txtName = arrColDetails.name
-//        txtDesp = arrColDetails.desp
-//        txtTime = arrColDetails.lastUpdate
-//        numItems = arrColDetails.itemsCount
-//        btnMapView.isEnabled = false
-        
         if btnMapView != nil {
             btnMapView.isEnabled = false
         }
-        realmColDetails = realm.filterCollectedPin(collection_id: colId, type: enterMode.rawValue)
-        print(realmColDetails)
+        realmColDetails = RealmCollection.filterCollectedPin(collection_id: colId)
         getSavedItems(colId: colId)
     }
     
@@ -244,13 +229,19 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             while !(arrCtrlers?.last is InitialPageController) {
                 arrCtrlers?.removeLast()
             }
-//            featureDelegate?.showSavedPins(type: arrColDetails.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: arrColDetails.name)
+            var arrSavedPinIds = [Int]()
+            for pin in realmColDetails.pins {
+                arrSavedPinIds.append(pin.pin_id)
+            }
+            featureDelegate = Key.shared.FMVCtrler
+            featureDelegate?.showSavedPins(type: enterMode.rawValue, savedPinIds: arrSavedPinIds, isCollections: true, colName: realmColDetails.name)
             navigationController?.setViewControllers(arrCtrlers!, animated: false)
             break
         case 1: // share
-            // TODO: jichao
+            // TODO JICHAO
             let vcShareCollection = NewChatShareController(friendListMode: .collection)
 //            vcShareCollection.collectionDetail = arrColDetails
+            vcShareCollection.collectionDetail = realmColDetails
             navigationController?.pushViewController(vcShareCollection, animated: true)
             break
         default:
@@ -314,7 +305,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if section == 0 {
             return 1
         } else {
-            print(realmColDetails.pins.count)
             return realmColDetails.pins.count == 0 ? 1 : realmColDetails.pins.count
         }
     }
@@ -340,26 +330,20 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 cell.setValueForCell(img: img)
                 return cell
             } else {
+                let idx = realmColDetails.pins.count - indexPath.row - 1
                 if enterMode == .location {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListLocationCell", for: indexPath) as! ColListLocationCell
-                    cell.setValueForLocationPin(locId: realmColDetails.pins[indexPath.row].pin_id)
-                    cell.selectedLocId = realmColDetails.pins[indexPath.row].pin_id
+                    cell.indexPath = indexPath
+                    cell.setValueForLocationPin(locId: realmColDetails.pins[idx].pin_id)
+                    cell.selectedLocId = realmColDetails.pins[idx].pin_id
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ColListPlaceCell", for: indexPath) as! ColListPlaceCell
-                    cell.setValueForPlacePin(placeId: realmColDetails.pins[indexPath.row].pin_id)
+                    cell.indexPath = indexPath
+                    cell.setValueForPlacePin(placeId: realmColDetails.pins[idx].pin_id)
                     return cell
                 }
             }
-        }
-    }
-    
-    // ColListCellDelegate
-    func reloadCell(indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            self.tblColListDetail.beginUpdates()
-            self.tblColListDetail.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
-            self.tblColListDetail.endUpdates()
         }
     }
     
@@ -418,63 +402,62 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
-//    var desiredCount = 0
-//    var fetchCount = 0 {
-//        didSet {
-//            guard desiredCount != 0 && fetchCount != 0 else { return }
-//            if fetchCount == desiredCount {
-////                tblColListDetail.reloadData()
-//            }
-//        }
-//    }
+    var desiredCount = 0
+    var fetchedCount = 0 {
+        didSet {
+            guard desiredCount != 0 && fetchedCount != 0 else { return }
+            if fetchedCount == desiredCount {
+                tblColListDetail.reloadData()
+            }
+        }
+    }
     
     func getSavedItems(colId: Int) {
-        if realmColDetails.pins.count != 0 {
-            print("realmColDetails.pins.count \(realmColDetails.pins.count)")
-            if btnMapView != nil {
-                btnMapView.isEnabled = true
-            }
-//            desiredCount = realmColDetails.pins.count
-            for collectedPin in realmColDetails.pins {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
-                    guard status / 100 == 2 else { return }
-                    guard message != nil else { return }
-                    let resultJson = JSON(message!)
-                    let placeInfo = PlacePin(json: resultJson)
-                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
-                }
-            }
-            return
-        }
-        
         FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pins"].arrayValue.sorted {$0["added_at"] > $1["added_at"]}
-            print(arrLocPinId)
+            let arrLocPinId = resultJson["pins"].arrayValue//.reversed()
+//            print(arrLocPinId)
             
-            let count = arrLocPinId.map({ $0["pin_id"].intValue }).count
-            
-            if self.btnMapView != nil && count != 0 {
-                self.btnMapView.isEnabled = true
+            self.desiredCount = arrLocPinId.map({ $0["pin_id"].intValue }).count
+            if self.desiredCount == self.realmColDetails.pins.count {
+                if self.btnMapView != nil {
+                    self.btnMapView.isEnabled = true
+                }
+                for collectedPin in self.realmColDetails.pins {
+                    FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
+                        guard status / 100 == 2 else { return }
+                        guard message != nil else { return }
+                        let resultJson = JSON(message!)
+                        let placeInfo = PlacePin(json: resultJson)
+                        faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
+                        self.fetchedCount += 1
+                    }
+                }
+                return
             }
             
-            let col = self.realm.filterCollectedPin(collection_id: colId, type: self.enterMode.rawValue)
+            if self.realmColDetails.pins.count != 0 {
+                try! self.realm.write {
+                    self.realmColDetails.pins.removeAll()
+                }
+            }
+            
+            if self.btnMapView != nil {
+                self.btnMapView.isEnabled = self.desiredCount != 0
+            }
+            
+            let col = RealmCollection.filterCollectedPin(collection_id: colId)
             for pin in arrLocPinId {
                 let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
                 collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
         
                 try! self.realm.write {
                     col?.pins.append(collectedPin)
-//                    self.realm.add(col, update: true)
                     print("add pin")
                 }
             }
-            
-            
-            
-            print(self.realmColDetails.pins)
             
             for collectedPin in self.realmColDetails.pins {
                 FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
@@ -483,7 +466,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                     let resultJson = JSON(message!)
                     let placeInfo = PlacePin(json: resultJson)
                     faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
-//                    self.fetchCount += 1
+                    self.fetchedCount += 1
                 }
             }
         })
@@ -499,28 +482,19 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     // ColListDetailHeaderDelegate End
     
     private func observeOnCollectionChange() {
-        guard let tableview = self.tblColListDetail else { return }
-
-        notificationToken = realm.objects(RealmCollection.self).filter("collection_id == %@", colId).observe { (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                print("initial colDetail")
-                tableview.reloadData()
-                break
-            case .update(_, let deletions, let insertions, let modifications):
-                print("recent update colDetail")
-                guard self.realm.filterCollectedPin(collection_id: self.colId, type: self.enterMode.rawValue) != nil else {
-                    return
-                }
+        objectToken = realmColDetails.observe { change in
+            guard let tableview = self.tblColListDetail else { return }
+            switch change {
+            case .change:
+                print("colDetails change")
+                self.lblListName.text = self.realmColDetails.name
+                self.lblItemsNum.text = self.realmColDetails.pins.count > 1 ? "\(self.realmColDetails.pins.count) items" : "\(self.realmColDetails.pins.count) item"
                 self.lblNum.text = self.realmColDetails.pins.count > 1 ? "\(self.realmColDetails.pins.count) items" : "\(self.realmColDetails.pins.count) item"
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 1)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 1)}), with: .none)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 1)}), with: .none)
-                tableview.endUpdates()
-            case .error:
-                print("error")
+                tableview.reloadData()
+            case .error(let error):
+                print(error)
+            case .deleted:
+                print("The object was deleted")
             }
         }
     }
@@ -777,8 +751,6 @@ extension CollectionsListDetailViewController {
             let vc = ManageColListViewController()
             vc.delegate = self
             vc.enterMode = enterMode
-//            vc.arrColList = savedItems
-//            vc.arrSavedIds = arrSavedPinIds
             vc.colId = colId
             present(vc, animated: true)
             break
@@ -805,11 +777,20 @@ extension CollectionsListDetailViewController {
                 self.animationHideOptions()
                 
                 // remove from realm
-                guard let collection = self.realm.filterCollectedPin(collection_id: self.colId, type: self.enterMode.rawValue) else {
+                guard let collection = self.realm.object(ofType: RealmCollection.self, forPrimaryKey: self.colId) else {
                     return
                 }
                 
                 try! self.realm.write {
+                    if collection.pins.count != 0 {
+                        for pin in collection.pins {
+                            guard let deletedPin = self.realm.object(ofType: CollectedPin.self, forPrimaryKey: "\(pin.pin_id)_\(pin.added_at)") else {
+                                continue
+                            }
+                            self.realm.delete(deletedPin)
+                        }
+                    }
+                    
                     self.realm.delete(collection)
                 }
                 
@@ -859,15 +840,5 @@ extension CollectionsListDetailViewController {
     func returnValBack() {
         let section = IndexSet(integer: 1)
         tblColListDetail.reloadSections(section, with: .none)
-    }
-    
-    // ManageColListDelegate
-    func finishDeleting(ids: [Int]) {
-//        self.arrSavedPinIds = ids
-//        let section = IndexSet(integer: 1)
-//        tblColListDetail.reloadSections(section, with: .none)
-//        numItems = ids.count
-//        lblItemsNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
-//        lblNum.text = numItems > 1 ? "\(numItems) items" : "\(numItems) item"
     }
 }

@@ -85,16 +85,32 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         FaeCollection.shared.whereKey("content", value: txtMemo)
         FaeCollection.shared.createMemo(enterMode.rawValue, pinID: String(pinId)) {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                if let placeInfo = faePlaceInfoCache.object(forKey: self.pinId as AnyObject) as? PlacePin {
-                    placeInfo.memo = self.txtMemo
-                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: self.pinId as AnyObject)
-                } else {
-                    FaeMap.shared.getPin(type: "place", pinId: String(self.pinId)) { (status, message) in
-                        guard status / 100 == 2 else { return }
-                        guard message != nil else { return }
-                        let resultJson = JSON(message!)
-                        let placeInfo = PlacePin(json: resultJson)
+                if self.enterMode == .place {
+                    if let placeInfo = faePlaceInfoCache.object(forKey: self.pinId as AnyObject) as? PlacePin {
+                        placeInfo.memo = self.txtMemo
                         faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: self.pinId as AnyObject)
+                    } else {
+                        FaeMap.shared.getPin(type: "place", pinId: String(self.pinId)) { (status, message) in
+                            guard status / 100 == 2 else { return }
+                            guard message != nil else { return }
+                            let resultJson = JSON(message!)
+                            let placeInfo = PlacePin(json: resultJson)
+                            faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: self.pinId as AnyObject)
+                        }
+                    }
+                }
+                else {
+                    if let locationInfo = faeLocationCache.object(forKey: self.pinId as AnyObject) as? LocationPin {
+                        locationInfo.memo = self.txtMemo
+                        faeLocationCache.setObject(locationInfo as AnyObject, forKey: self.pinId as AnyObject)
+                    } else {
+                        FaeMap.shared.getPin(type: "location", pinId: String(self.pinId)) { (status, message) in
+                            guard status / 100 == 2 else { return }
+                            guard message != nil else { return }
+                            let resultJson = JSON(message!)
+                            let locationInfo = LocationPin(json: resultJson)
+                            faeLocationCache.setObject(locationInfo as AnyObject, forKey: self.pinId as AnyObject)
+                        }
                     }
                 }
                 self.delegate?.saveMemo(memo: self.txtMemo)
