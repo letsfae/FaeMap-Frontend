@@ -479,12 +479,11 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             selectedIndexPath = indexPath
         }
         let colInfo = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
-        var arrSavedPinIds = [Int]()
-        for pin in colInfo.pins {
-            arrSavedPinIds.append(pin.pin_id)
-        }
-        self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
         
+        getSavedItems(colInfo: colInfo)
+        
+//        self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+
 //        FaeCollection.shared.getOneCollection(String(colInfo.collection_id)) { (status, message) in
 //            guard status / 100 == 2 else { return }
 //            guard message != nil else { return }
@@ -496,6 +495,42 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
+    }
+    
+    func getSavedItems(colInfo: RealmCollection) {
+        var arrSavedPinIds = [Int]()
+        if colInfo.count == colInfo.pins.count {
+            for pin in colInfo.pins {
+                arrSavedPinIds.append(pin.pin_id)
+            }
+            delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+            return
+        }
+        
+        if colInfo.pins.count != 0 {
+            try! realm.write {
+                colInfo.pins.removeAll()
+            }
+        }
+
+        FaeCollection.shared.getOneCollection(String(colInfo.collection_id), completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pins"].arrayValue
+
+            for pin in arrLocPinId {
+                arrSavedPinIds.append(pin["pin_id"].intValue)
+                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
+                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+                
+                try! self.realm.write {
+                    colInfo.pins.append(collectedPin)
+                }
+            }
+            
+            self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+        })
     }
     
     private func observeOnCollectionChange() {

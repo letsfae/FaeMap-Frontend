@@ -357,7 +357,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
-            uiviewSavedList.loadCollectionData()
+//            uiviewSavedList.loadCollectionData()
             guard let position = coordinate else { return }
             let pinData = LocationPin(position: position)
             uiviewSavedList.pinToSave = FaePinAnnotation(type: "location", cluster: nil, data: pinData as AnyObject)

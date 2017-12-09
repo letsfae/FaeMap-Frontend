@@ -534,21 +534,54 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 }
                 
                 let realm = try! Realm()
-                if realm.objects(RealmCollection.self).count == colArray.count {
+                let realmCol = realm.objects(RealmCollection.self)
+                if realmCol.count == colArray.count {
                     return
                 }
                 
-                for col in colArray {
-                    let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
-                    
+                if realmCol.count != 0 {
                     try! realm.write {
-                        realm.add(realmCol, update: true)
+                        realm.delete(realmCol)
                     }
                 }
-                print("Successfully get collections")
+                
+                for col in colArray {
+                    self.storeRealmColItemsFromServer(colId: col["collection_id"].intValue)
+//                    let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
+//
+//                    try! realm.write {
+//                        realm.add(realmCol, update: true)
+//                    }
+                }
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
             }
         }
+    }
+    
+    func storeRealmColItemsFromServer(colId: Int) {
+        FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let col = JSON(message!)
+
+            let realm = try! Realm()
+            let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
+
+            try! realm.write {
+                realm.add(realmCol, update: true)
+            }
+
+            for pin in col["pins"].arrayValue {
+                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
+                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+
+                try! realm.write {
+                    realmCol.pins.append(collectedPin)
+                }
+            }
+            
+//            print("Successfully get collections")
+        })
     }
 }

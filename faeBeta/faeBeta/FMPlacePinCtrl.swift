@@ -77,6 +77,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
+//        uiviewSavedList.loadCollectionData()
         uiviewSavedList.delegate = self
         uiviewSavedList.tableMode = .place
         view.addSubview(uiviewSavedList)
@@ -167,7 +168,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             uiviewSavedList.show()
             locAnnoView?.optionsToNormal()
             uiviewSavedList.tableMode = mode
-            uiviewSavedList.loadCollectionData()
             uiviewSavedList.tblAddCollection.reloadData()
             switch mode {
             case .place:

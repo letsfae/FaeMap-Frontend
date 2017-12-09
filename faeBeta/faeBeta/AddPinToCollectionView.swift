@@ -134,6 +134,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblAddCollection.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let collection = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
+        print("arrListSavedThisPin \(arrListSavedThisPin)")
         let isSavedInThisList = arrListSavedThisPin.contains(collection.collection_id)
         cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell

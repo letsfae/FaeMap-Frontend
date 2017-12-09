@@ -415,37 +415,40 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func getSavedItems(colId: Int) {
+        desiredCount = realmColDetails.count
+        if desiredCount == realmColDetails.pins.count {
+//            print("self.realmColDetails \(self.realmColDetails)")
+            
+            if btnMapView != nil {
+                btnMapView.isEnabled = true
+            }
+            for collectedPin in self.realmColDetails.pins {
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
+                    guard status / 100 == 2 else { return }
+                    guard message != nil else { return }
+                    let resultJson = JSON(message!)
+                    let placeInfo = PlacePin(json: resultJson)
+                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
+                    self.fetchedCount += 1
+                }
+            }
+            return
+        }
+        
+        if self.realmColDetails.pins.count != 0 {
+            try! self.realm.write {
+                self.realmColDetails.pins.removeAll()
+            }
+        }
+
         FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let arrLocPinId = resultJson["pins"].arrayValue//.reversed()
 //            print(arrLocPinId)
-            
-            self.desiredCount = arrLocPinId.map({ $0["pin_id"].intValue }).count
-            if self.desiredCount == self.realmColDetails.pins.count {
-                if self.btnMapView != nil {
-                    self.btnMapView.isEnabled = true
-                }
-                for collectedPin in self.realmColDetails.pins {
-                    FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
-                        guard status / 100 == 2 else { return }
-                        guard message != nil else { return }
-                        let resultJson = JSON(message!)
-                        let placeInfo = PlacePin(json: resultJson)
-                        faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
-                        self.fetchedCount += 1
-                    }
-                }
-                return
-            }
-            
+
             self.loadFromServer = true
-            if self.realmColDetails.pins.count != 0 {
-                try! self.realm.write {
-                    self.realmColDetails.pins.removeAll()
-                }
-            }
             
             if self.btnMapView != nil {
                 self.btnMapView.isEnabled = self.desiredCount != 0
@@ -461,13 +464,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 }
             }
             
-            for collectedPin in self.realmColDetails.pins {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
+            for collectedPin in arrLocPinId {
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: collectedPin["pin_id"].stringValue) { (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
                     let placeInfo = PlacePin(json: resultJson)
-                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
+                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin["pin_id"].intValue as AnyObject)
                     self.fetchedCount += 1
                 }
             }
