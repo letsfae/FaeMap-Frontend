@@ -95,7 +95,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func createDateOfBirthView() {
-        let uiviewDoB = UIView(frame: CGRect(x: 0, y: 99 * screenHeightFactor, width: screenWidth, height: 120 * screenHeightFactor))
+        let uiviewDoB = UIView(frame: CGRect(x: 0, y: 99 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 120 * screenHeightFactor))
         let lblTitle = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
@@ -118,7 +118,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func createGenderView() {
-        let genderView = UIView(frame: CGRect(x: 0, y: 245 * screenHeightFactor, width: screenWidth, height: 150 * screenHeightFactor))
+        let genderView = UIView(frame: CGRect(x: 0, y: 245 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 150 * screenHeightFactor))
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
         titleLabel.textColor = UIColor._898989()
