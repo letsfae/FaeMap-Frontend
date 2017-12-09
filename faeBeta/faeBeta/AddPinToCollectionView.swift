@@ -34,7 +34,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             tblAddCollection.reloadData()
         }
     }
-    private var fullLoaded = false
+    var fullLoaded = false
+    var tokenPlace: NotificationToken? = nil
+    var tokenLoc: NotificationToken? = nil
+    var fromLocDetail = false
+    var locId = -1
     private var showed: Bool = false
     
     override init(frame: CGRect = .zero) {
@@ -173,9 +177,9 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             guard code / 100 == 2 else { return }
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
-            self.arrListSavedThisPin.append(collection.id)
+            self.arrListSavedThisPin.append(collection.collection_id)
             self.uiviewAfterAdded.pinIdInAction = placeData.id
-//            self.tblAddCollection.reloadData()
+            //            self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_explore"), object: nil)
@@ -191,7 +195,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             guard code / 100 == 2 else { return }
             self.hide()
             self.uiviewAfterAdded.show(save: false, "Removed from List!")
-            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.id })
+            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
             self.uiviewAfterAdded.pinIdInAction = placeData.id
             self.tblAddCollection.reloadData()
             if self.arrListSavedThisPin.count == 0 {
@@ -251,8 +255,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             guard code / 100 == 2 else { return }
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
-            self.arrListSavedThisPin.append(collection.id)
-            self.tblAddCollection.reloadData()
+            self.arrListSavedThisPin.append(collection.collection_id)
+//            self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
             self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
@@ -270,10 +274,9 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             guard code / 100 == 2 else { return }
             self.hide()
             self.uiviewAfterAdded.show(save: false, "Removed from List!")
-            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.id })
-            self.uiviewAfterAdded.pinIdInAction = locationId
-            self.uiviewAfterAdded.selectedCollection.itemsCount -= 1
-            self.tblAddCollection.reloadData()
+            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
+            self.uiviewAfterAdded.pinIdInAction = loc_id
+//            self.tblAddCollection.reloadData()
             if self.arrListSavedThisPin.count == 0 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: loc_id)
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: loc_id)
