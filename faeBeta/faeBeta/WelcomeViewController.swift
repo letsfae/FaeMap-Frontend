@@ -60,7 +60,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     fileprivate func setupImageContainerPageViewController() {
-        pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56, width: 90, height: 10))
+        pageControl = WelcomePageControl(frame: CGRect(x: 0, y: 56 + device_offset_top, width: 90, height: 10))
         pageControl.center.x = screenWidth / 2
         pageControl.numberOfPages = 5 //  hide trade was 5
         view.insertSubview(pageControl, at: 0)

@@ -43,7 +43,8 @@ class RegisterNameViewController: RegisterBaseViewController {
         super.viewDidLoad()
         createTableView(210 * screenHeightFactor + 59)
         createTopView("ProgressBar1")
-        createBottomView(createAlreadyGotAnAccountView())
+        //createBottomView(createAlreadyGotAnAccountView())
+        createBottomView(UIView())
         registerCell()
         
         tableView.delegate = self
