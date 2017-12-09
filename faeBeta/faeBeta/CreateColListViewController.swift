@@ -8,11 +8,7 @@
 
 import UIKit
 import SwiftyJSON
-
-protocol CreateColListDelegate: class {
-    func saveSettings(name: String, desp: String)
-    func updateCols(col: PinCollection)
-}
+import RealmSwift
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
     
@@ -31,11 +27,11 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     var keyboardHeight: CGFloat = 0
     var txtListName: String = ""
     var txtListDesp: String = ""
-    weak var delegate: CreateColListDelegate?
     var colId: Int = -1
     let faeCollection = FaeCollection()
     var uiviewPrivacy: UIView!
     var fromPlaceLocDetail = false
+    let realm = try! Realm()
     
     var numLinesName = 1 {
         didSet {
@@ -186,6 +182,11 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     @objc func actionCreateList(_ sender: UIButton) {
         txtListName = self.textviewListName.textColor == UIColor._155155155() ? "" : self.textviewListName.text
         txtListDesp = self.textviewDesp.textColor == UIColor._155155155() ? "" : self.textviewDesp.text
+        let curtDate = Date()
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        let time = dateformatter.string(from: curtDate)
+        
         if sender.tag == 0 {  // create
             faeCollection.whereKey("type", value: enterMode.rawValue)
             faeCollection.whereKey("name", value: txtListName)
@@ -195,20 +196,19 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.createCollection {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    let colId = JSON(message!)["collection_id"].stringValue
-                    let curtDate = Date()
-                    let dateformatter = DateFormatter()
-                    dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-                    let time = dateformatter.string(from: curtDate)
+                    let colId = JSON(message!)["collection_id"].intValue
                     
-                    let json: JSON = ["collection_id": colId, "name": self.txtListName, "user_id": Key.shared.user_id, "description": self.txtListDesp, "type": self.enterMode.rawValue, "is_private": true, "created_at": time, "count": "0", "last_updated_at": time]
-                    let newCol = PinCollection(json: json)
-                    
-                    self.delegate?.updateCols(col: newCol)
                     self.textviewListName.resignFirstResponder()
                     self.textviewDesp.resignFirstResponder()
                     self.dismiss(animated: true)
                     print("[Create Collection] Create Successfully \(status) \(message!)")
+                    
+                    // store to realm
+                    let realmCol = RealmCollection(collection_id: colId, name: self.txtListName, user_id: Key.shared.user_id, desp: self.txtListDesp, type: self.enterMode.rawValue, is_private: false, created_at: time, count: 0, last_updated_at: time)
+                    
+                    try! self.realm.write {
+                        self.realm.add(realmCol, update: false)
+                    }
                 } else {
                     print("[Create Collection] Fail to Create \(status) \(message!)")
                 }
@@ -221,7 +221,14 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    self.delegate?.saveSettings(name: self.txtListName, desp: self.txtListDesp)
+                    // store to realm
+                    let realmCol = RealmCollection.filterCollectedPin(collection_id: self.colId)
+                    
+                    try! self.realm.write {
+                        realmCol?.name = self.txtListName
+                        realmCol?.descrip = self.txtListDesp
+                        realmCol?.last_updated_at = time
+                    }
                     self.textviewListName.resignFirstResponder()
                     self.textviewDesp.resignFirstResponder()
                     self.dismiss(animated: true)

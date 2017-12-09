@@ -119,7 +119,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     fileprivate func loadTable() {
-        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot))
+        tblAllPlaces = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top - device_offset_bot))
         view.addSubview(tblAllPlaces)
         tblAllPlaces.delegate = self
         tblAllPlaces.dataSource = self

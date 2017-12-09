@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 //import CCHMapClusterController
 
-extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDelegate {
+extension FaeMapViewController: MapFilterMenuDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
@@ -142,14 +142,6 @@ extension FaeMapViewController: MapFilterMenuDelegate, CollectionsListDetailDele
         }
         userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
-    
-    // CollectionsListDetailDelegate
-    func deleteColList(enterMode: CollectionTableMode, indexPath: IndexPath) {}
-    
-    func updateColName(enterMode: CollectionTableMode, indexPath: IndexPath, name: String, desp: String, time: String, numItems: Int) {
-        
-    }
-    // CollectionsListDetailDelegate End
     
     func actionHideFilterMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {

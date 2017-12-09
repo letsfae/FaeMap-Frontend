@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 @objc protocol MapFilterMenuDelegate: class {
     @objc optional func autoReresh(isOn: Bool)
@@ -42,7 +43,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
-    var tblCollections: UITableView!
     var btnPlaces: UIButton!
     var btnLocations: UIButton!
     var lblPlaces: UILabel!
@@ -50,9 +50,13 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var countPlaces: Int = 0
     var countLocations: Int = 0
     var navBarMenuBtnClicked: Bool = false
-    var arrPlaces = [PinCollection]()
-    var arrLocations = [PinCollection]()
-    
+//    var arrPlaces = [PinCollection]()
+//    var arrLocations = [PinCollection]()
+    var realmColPlaces: Results<RealmCollection>!
+    var realmColLocations: Results<RealmCollection>!
+    let realm = try! Realm()
+    var tokenPlace: NotificationToken? = nil
+    var tokenLoc: NotificationToken? = nil
     let faeCollection = FaeCollection()
     var tableMode: CollectionTableMode = .place
     var arrListThatSavedThisPin = [Int]() {
@@ -68,6 +72,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         super.init(frame: frame)
         setUpUI()
         loadCollectionData()
+        observeOnCollectionChange()
         fullLoaded = true
     }
     
@@ -75,33 +80,14 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        tokenPlace?.invalidate()
+        tokenLoc?.invalidate()
+    }
+    
     func loadCollectionData() {
-        faeCollection.getCollections {(status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let collections = JSON(message!)
-                guard let colArray = collections.array else {
-                    print("[loadCollectionData] fail to parse collections info")
-                    return
-                }
-                
-                self.arrPlaces.removeAll()
-                self.arrLocations.removeAll()
-                for col in colArray {
-                    let data = PinCollection(json: col)
-                    if data.type == "place" {
-                        self.arrPlaces.append(data)
-                    }
-                    if data.type == "location" {
-                        self.arrLocations.append(data)
-                    }
-                }
-                self.countPlaces = self.arrPlaces.count
-                self.countLocations = self.arrLocations.count
-                self.tblPlaceLoc.reloadData()
-            } else {
-                print("[Get Collections] Fail to Get \(status) \(message!)")
-            }
-        }
+        realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
+        realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
     }
     
     fileprivate func setUpUI() {
@@ -350,7 +336,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     fileprivate func updateCount() {
-        countPlaces = arrPlaces.count
+        countPlaces = realmColPlaces != nil ? realmColPlaces.count : 0
         let attributedStr1 = NSMutableAttributedString()
         let strPlaces = NSAttributedString(string: "Places ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
         let countP = NSAttributedString(string: "(\(countPlaces))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
@@ -358,7 +344,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         attributedStr1.append(countP)
         lblPlaces.attributedText = attributedStr1
         
-        countLocations = arrLocations.count
+        countLocations = realmColLocations != nil ? realmColLocations.count : 0
         let attributedStr2 = NSMutableAttributedString()
         let strLocations = NSAttributedString(string: "Locations ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
         let countL = NSAttributedString(string: "(\(countLocations))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
@@ -424,7 +410,8 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
         hideDropDownMenu()
         setView2CurtTitle()
-        tblPlaceLoc.reloadData()
+//        tblPlaceLoc.reloadData()
+        observeOnCollectionChange()
     }
     
     @objc func changePage(_ sender: Any?) {
@@ -469,17 +456,18 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         return 100
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableMode == .place ? arrPlaces.count : arrLocations.count
+        return tableMode == .place ? realmColPlaces.count : realmColLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
-        let collection = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.id)
+        let collection = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
+        let isSavedInThisList = arrListThatSavedThisPin.contains(collection.collection_id)
         cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
         return cell
     }
     
+    // TODO YUE
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let idxPath = selectedIndexPath {
             if let cell = tableView.cellForRow(at: idxPath) as? CollectionsListCell {
@@ -490,18 +478,102 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             cell.imgIsIn.isHidden = false
             selectedIndexPath = indexPath
         }
-        let colInfo = tableMode == .place ? arrPlaces[indexPath.row] : arrLocations[indexPath.row]
-        FaeCollection.shared.getOneCollection(String(colInfo.id)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pins"].arrayValue
-            let arrSavedPinIds = arrLocPinId.map({ $0["pin_id"].intValue })
-            self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
-        }
+        let colInfo = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
+        
+        getSavedItems(colInfo: colInfo)
+        
+//        self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+
+//        FaeCollection.shared.getOneCollection(String(colInfo.collection_id)) { (status, message) in
+//            guard status / 100 == 2 else { return }
+//            guard message != nil else { return }
+//            let resultJson = JSON(message!)
+//            let arrLocPinId = resultJson["pins"].arrayValue
+//        }
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
+    }
+    
+    func getSavedItems(colInfo: RealmCollection) {
+        var arrSavedPinIds = [Int]()
+        if colInfo.count == colInfo.pins.count {
+            for pin in colInfo.pins {
+                arrSavedPinIds.append(pin.pin_id)
+            }
+            delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+            return
+        }
+        
+        if colInfo.pins.count != 0 {
+            try! realm.write {
+                colInfo.pins.removeAll()
+            }
+        }
+
+        FaeCollection.shared.getOneCollection(String(colInfo.collection_id), completion: { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            let arrLocPinId = resultJson["pins"].arrayValue
+
+            for pin in arrLocPinId {
+                arrSavedPinIds.append(pin["pin_id"].intValue)
+                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
+                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+                
+                try! self.realm.write {
+                    colInfo.pins.append(collectedPin)
+                }
+            }
+            
+            self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+        })
+    }
+    
+    private func observeOnCollectionChange() {
+        if tableMode == .place {
+            tokenLoc?.invalidate()
+            tokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblPlaceLoc else { return }
+                switch changes {
+                case .initial:
+//                    print("initial place")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
+            }
+        } else {
+            tokenPlace?.invalidate()
+            tokenLoc = realmColLocations.observe { (changes: RealmCollectionChange) in
+                guard let tableview = self.tblPlaceLoc else { return }
+                switch changes {
+                case .initial:
+//                    print("initial location")
+                    tableview.reloadData()
+                    break
+                case .update(_, let deletions, let insertions, let modifications):
+//                    print("recent update location")
+                    
+                    tableview.beginUpdates()
+                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                    tableview.endUpdates()
+                case .error:
+                    print("error")
+                }
+            }
+        }
     }
 }
