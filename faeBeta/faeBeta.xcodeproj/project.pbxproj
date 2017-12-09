@@ -190,6 +190,7 @@
 		B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */; };
 		B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23D1F267C0500EC6655 /* WenJia.swift */; };
 		B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* YingChen.swift */; };
+		B35DD60F1FCD44D10099AC3E /* RealmCollectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */; };
 		B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
 		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
 		B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D341F46519500DE3107 /* MBTalkTalk.swift */; };
@@ -550,6 +551,7 @@
 		B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingIndicatorChange.swift; sourceTree = "<group>"; };
 		B33FB23D1F267C0500EC6655 /* WenJia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WenJia.swift; sourceTree = "<group>"; };
 		B33FB23E1F267C0500EC6655 /* YingChen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YingChen.swift; sourceTree = "<group>"; };
+		B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCollectionBase.swift; sourceTree = "<group>"; };
 		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
 		B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsSearchViewController.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */,
 				B30B87851F7F0F3400B52027 /* ManageColListCell.swift */,
 				B30B878B1F80211F00B52027 /* EditMemoViewController.swift */,
+				B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */,
 				B3170EA11F4560DF0072F9CD /* Temporarily unused */,
 			);
 			name = Collections;
@@ -1877,6 +1880,7 @@
 				B85FE6D41DB8791600BB8F6A /* SelectLocationViewController.swift in Sources */,
 				B8849F571EF355E500D4588D /* MBComtsStoriesViewController.swift in Sources */,
 				B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */,
+				B35DD60F1FCD44D10099AC3E /* RealmCollectionBase.swift in Sources */,
 				B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */,
 				B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,

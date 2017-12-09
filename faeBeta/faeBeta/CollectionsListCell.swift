@@ -60,13 +60,13 @@ class CollectionsListCell: UITableViewCell {
         imgIsIn.isHidden = true
     }
     
-    func setValueForCell(cols: PinCollection, isIn: Bool = false) {
+    func setValueForCell(cols: RealmCollection, isIn: Bool = false) {
         imgPic.image = cols.type == "place" ? #imageLiteral(resourceName: "defaultPlaceIcon") : #imageLiteral(resourceName: "collection_locIcon")
-        General.shared.avatar(userid: cols.creatorId, completion: { avatarImage in
+        General.shared.avatar(userid: cols.user_id, completion: { avatarImage in
             self.imgAvatar.image = avatarImage
         })
         lblListName.text = cols.name
-        lblListNum.text = cols.itemsCount <= 1 ? "\(cols.itemsCount) item" : "\(cols.itemsCount) items"
+        lblListNum.text = cols.count <= 1 ? "\(cols.count) item" : "\(cols.count) items"
         imgIsIn.isHidden = !isIn
     }
 }
