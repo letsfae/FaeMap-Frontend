@@ -316,6 +316,16 @@ class UserPinAnnotationView: MKAnnotationView {
         imageView.contentMode = .scaleAspectFit
         isEnabled = false
         layer.zPosition = 99
+        
+        //layer.borderColor = UIColor.black.cgColor
+        //layer.borderWidth = 1
+        self.layer.addObserver(self, forKeyPath: "zPosition", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if object is CALayer {
+            self.layer.zPosition = 99
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -338,11 +348,11 @@ enum PlacePinAction {
     case share
 }
 
-@objc class PlacePinAnnotationView: MKAnnotationView {
+class PlacePinAnnotationView: MKAnnotationView {
     
     weak var delegate: PlacePinAnnotationDelegate?
     
-    @objc var imgIcon: UIImageView!
+    var imgIcon: UIImageView!
     
     var btnDetail: UIButton!
     var btnCollect: UIButton!
@@ -358,23 +368,28 @@ enum PlacePinAction {
     
     var boolShowSavedNoti = false
     
-    @objc var idx = -1
+    var idx = -1
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        frame = CGRect(x: 0, y: 0, width: 56, height: 56)
+        frame = CGRect(x: 0, y: 0, width: 56 - 16, height: 56 - 10)
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
         boolShowSavedNoti = false
         
-        layer.zPosition = -1
+        layer.zPosition = 7.0
         
-        imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
+        imgIcon = UIImageView(frame: CGRect(x: 28 - 8, y: 56 - 10, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
         
+        //layer.borderColor = UIColor.black.cgColor
+        //layer.borderWidth = 1
+        
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_place"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+        
+        self.layer.addObserver(self, forKeyPath: "zPosition", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
     }
     
     deinit {
@@ -402,6 +417,12 @@ enum PlacePinAction {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if object is CALayer {
+            self.layer.zPosition = 7.0 + CGFloat(idx) / 10000.0
+        }
     }
     
     @objc func assignImage(_ image: UIImage) {
@@ -455,8 +476,8 @@ enum PlacePinAction {
         optionsReady = true
         optionsOpeing = true
         loadButtons()
-        var point = frame.origin; point.x -= 59; point.y -= 56
-        frame = CGRect(x: point.x, y: point.y, width: 174, height: 112)
+        var point = frame.origin; point.x -= 59 + 8; point.y -= 56 + 5
+        frame = CGRect(x: point.x, y: point.y, width: 174, height: 112 - 5)
         imgIcon.center.x = 87; imgIcon.frame.origin.y = 56
         var delay: Double = 0
         for btn in arrBtns {
@@ -485,9 +506,9 @@ enum PlacePinAction {
                 btn.center = self.imgIcon.center
             }
         }, completion: { _ in
-            var point = self.frame.origin; point.x += 59; point.y += 56
-            self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
-            self.imgIcon.frame.origin = CGPoint.zero
+            var point = self.frame.origin; point.x += 59 + 8; point.y += 56 + 5
+            self.frame = CGRect(x: point.x, y: point.y, width: 56-16, height: 56-10)
+            self.imgIcon.frame.origin = CGPoint(x: -8, y: -5)
             self.removeButtons()
         })
     }
