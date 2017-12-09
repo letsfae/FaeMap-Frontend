@@ -187,7 +187,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
-        uiviewSavedList.loadCollectionData()
+//        uiviewSavedList.loadCollectionData()
         view.addSubview(uiviewSavedList)
         
         uiviewAfterAdded = AfterAddedToListView()
@@ -293,7 +293,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc func actionSave(_ sender: UIButton) {
         uiviewSavedList.show()
-        uiviewSavedList.loadCollectionData()
+//        uiviewSavedList.loadCollectionData()
     }
     
     @objc func showSavedNoti() {

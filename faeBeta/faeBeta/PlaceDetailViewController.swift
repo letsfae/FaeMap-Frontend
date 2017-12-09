@@ -369,7 +369,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     @objc func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .place
-            uiviewSavedList.loadCollectionData()
+//            uiviewSavedList.loadCollectionData()
             uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
             uiviewSavedList.show()
         }
