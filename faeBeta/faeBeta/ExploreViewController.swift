@@ -53,6 +53,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var selectedTypeIdx: IndexPath!
     
+    var strLocation: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -67,6 +69,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
                     self.reloadBottomText(String(new[0]), String(new[1]))
+                    self.strLocation = "\(String(new[0])), \(String(new[1]))"
                 }
             }
         }
@@ -490,10 +493,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func handleTap(_ tap: UITapGestureRecognizer) {
-        let vc = SelectLocationViewController()
+        /*let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
-        navigationController?.pushViewController(vc, animated: false)
+        vc.boolFromExplore = true
+        navigationController?.pushViewController(vc, animated: false)*/
+        let vc = BoardsSearchViewController()
+        vc.enterMode = .location
+        vc.delegate = self
+        vc.strSearchedLocation = strLocation
+        vc.strPlaceholder = strLocation
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     // BoardsSearchDelegate
@@ -519,6 +529,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
+        strLocation = "\(city), \(state)"
         let fullAttrStr = NSMutableAttributedString()
         let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
         let first_attch = InlineTextAttachment()

@@ -50,8 +50,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // Boolean values
     var fullyLoaded = false // if all ui components are fully loaded
     var boolFromBoard = false // if called from BoardSearchViewController
+    var boolSearchEnabled = false
+    var boolFromExplore = false
+    var boolFromChat = false
     
     var placesFromSearch = [FaePinAnnotation]()
+    
+    var strShownLoc: String = ""
     
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
@@ -106,6 +111,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     func loadMapView() {
         faeMapView = FaeMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.showsUserLocation = true
+        faeMapView.isZoomEnabled = !boolFromExplore
         faeMapView.delegate = self
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = true
@@ -129,7 +135,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         camera.centerCoordinate = Key.shared.selectedLoc
         // if mode == .part { camera.altitude = 35000 }
         // faeMapView.setCamera(camera, animated: false)
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, 800, 800)
+        let viewDistance: CLLocationDistance = boolFromExplore ? 15000 : 800
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, viewDistance, viewDistance)
         faeMapView.setRegion(coordinateRegion, animated: false)
     }
     
@@ -151,17 +158,17 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnLeftWindow.adjustsImageWhenDisabled = false
         
         let imgSearchIcon = UIImageView()
-        imgSearchIcon.image = #imageLiteral(resourceName: "Search")
+        imgSearchIcon.image = boolSearchEnabled ? #imageLiteral(resourceName: "Search") : #imageLiteral(resourceName: "Location")
         imgSchbarShadow.addSubview(imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
         imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
         
         lblSearchContent = UILabel()
-        lblSearchContent.text = "Search Place or Address"
+        lblSearchContent.text = boolFromChat ? "Search Place or Address" : strShownLoc
         lblSearchContent.textAlignment = .left
         lblSearchContent.lineBreakMode = .byTruncatingTail
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.textColor = UIColor._182182182()
+        lblSearchContent.textColor = boolFromChat ? UIColor._182182182() : UIColor._898989()
         imgSchbarShadow.addSubview(lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblSearchContent)
@@ -171,6 +178,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnSearch)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnSearch)
         btnSearch.addTarget(self, action: #selector(self.actionSearch(_:)), for: .touchUpInside)
+        btnSearch.isEnabled = boolSearchEnabled
     }
     
     func loadButtons() {
@@ -178,8 +186,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnLocat.removeTarget(nil, action: nil, for: .touchUpInside)
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
         view.addSubview(btnLocat)
-        view.addConstraintsWithFormat("H:|-21-[v0(60)]", options: [], views: btnLocat)
-        view.addConstraintsWithFormat("V:[v0(60)]-\(13+device_offset_bot)-|", options: [], views: btnLocat)
+        if !boolFromExplore {
+            view.addConstraintsWithFormat("H:|-21-[v0(60)]", options: [], views: btnLocat)
+            view.addConstraintsWithFormat("V:[v0(60)]-\(13+device_offset_bot)-|", options: [], views: btnLocat)
+        } else {
+            view.addConstraintsWithFormat("H:[v0(60)]-21-|", options: [], views: btnLocat)
+            view.addConstraintsWithFormat("V:[v0(60)]-\(20+65+device_offset_bot)-|", options: [], views: btnLocat)
+        }
         
         btnSelect = FMDistIndicator()
         btnSelect.frame.origin.y = screenHeight - 74 - device_offset_bot
@@ -187,16 +200,31 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
+        btnSelect.isHidden = boolFromExplore
+        
+        let uiviewBg = UIView(frame: CGRect(x: 0, y: screenHeight - 65 - device_offset_bot, width: screenWidth, height: 65 + device_offset_bot))
+        uiviewBg.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.85)
+        view.addSubview(uiviewBg)
+        uiviewBg.isHidden = !boolFromExplore
+        
+        let btnSetLoc = UIButton(frame: CGRect(x: 0, y: 18, width: 150, height: 30))
+        btnSetLoc.center.x = screenWidth / 2
+        btnSetLoc.setTitle("Set Location", for: .normal)
+        btnSetLoc.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
+        btnSetLoc.setTitleColor(UIColor._2499090(), for: .normal)
+        uiviewBg.addSubview(btnSetLoc)
+        btnSetLoc.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
         
         btnZoom = FMZoomButton()
         btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
         btnZoom.mapView = faeMapView
         view.addSubview(btnZoom)
+        btnZoom.isHidden = boolFromExplore
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         btnSelect.addGestureRecognizer(tapGesture)
         
-        faeMapView.cgfloatCompassOffset = 134
+        faeMapView.cgfloatCompassOffset = 85 + 60 + device_offset_bot - device_offset_bot_main //134
         faeMapView.layoutSubviews()
         
         btnClearSearchRes = UIButton()
@@ -394,7 +422,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func refreshPlacePins(radius: Int) {
-        if boolFromBoard { return }
+        if boolFromBoard || boolFromExplore { return }
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
             let nowTime = DispatchTime.now()

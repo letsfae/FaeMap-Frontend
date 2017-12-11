@@ -136,7 +136,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     // shows "no results"
     func loadNoResultsView() {
-        uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 - 48, width: screenWidth - 16, height: 100))
+        uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         view.addSubview(uiviewNoResults)
         lblNoResults = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
@@ -156,7 +156,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         view.addSubview(uiviewSearch)
         uiviewSearch.backgroundColor = .white
         view.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: uiviewSearch)
-        view.addConstraintsWithFormat("V:|-23-[v0(48)]", options: [], views: uiviewSearch)
+        view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(48)]", options: [], views: uiviewSearch)
         uiviewSearch.layer.cornerRadius = 2
         addShadow(uiviewSearch)
         
@@ -182,12 +182,15 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
 //                schBar.btnClose.isHidden = false
 //            }
         }
+        if boolFromRouting {
+            schBar.txtSchField.placeholder = BoardsSearchViewController.boolToDestination ? "Choose Destination..." : "Choose Starting Point..."
+        }
         uiviewSearch.addSubview(schBar)
     }
     
     // load six buttons
     func loadPlaceBtns() {
-        uiviewPics = UIView(frame: CGRect(x: 8, y: 124 - 48, width: screenWidth - 16, height: 214))
+        uiviewPics = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: 214))
         uiviewPics.backgroundColor = .white
         view.addSubview(uiviewPics)
         uiviewPics.layer.cornerRadius = 2
@@ -233,11 +236,11 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     func loadTable() {
         // background view with shadow of table tblPlacesRes
-        uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 - 48, width: screenWidth - 16, height: screenHeight - 139)) // 124 + 15
+        uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
         addShadow(uiviewSchResBg)
         
-        tblPlacesRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 139))
+        tblPlacesRes = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top))
         tblPlacesRes.dataSource = self
         tblPlacesRes.delegate = self
         uiviewSchResBg.addSubview(tblPlacesRes)
@@ -249,7 +252,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         tblPlacesRes.register(LocationListCell.self, forCellReuseIdentifier: "MyFixedCell")
         
         // background view with shadow of table tblLocationRes
-        uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124 - 48, width: screenWidth - 16, height: screenHeight - 240)) // 124 + 20 + 2 * 48
+        uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: screenHeight - 240 - device_offset_top)) // 124 + 20 + 2 * 48
         uiviewSchLocResBg.backgroundColor = .clear
         view.addSubview(uiviewSchLocResBg)
         addShadow(uiviewSchLocResBg)
@@ -372,7 +375,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             if searchText != "" && filteredPlaces.count != 0 {
                 uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
-                uiviewSchResBg.frame.origin.y = 124 - 48
+                uiviewSchResBg.frame.origin.y = 124 - 48 + device_offset_top
                 uiviewSchResBg.frame.size.height = min(screenHeight - 139, CGFloat(68 * filteredPlaces.count))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
@@ -406,13 +409,13 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             let count = isCitySearch ? googlePredictions.count : filteredLocations.count
             
             if searchText == "" || count == 0 {
-                uiviewSchResBg.frame.origin.y = 124 - 48
+                uiviewSchResBg.frame.origin.y = 124 - 48 + device_offset_top
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
                 uiviewSchLocResBg.frame.size.height = min(screenHeight - 240, CGFloat(48 * count)) - device_offset_top - device_offset_bot
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
-                uiviewSchResBg.frame.origin.y = 124 - 48 + uiviewSchLocResBg.frame.height + 5
+                uiviewSchResBg.frame.origin.y = 124 - 48 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
             }
             tblPlacesRes.isScrollEnabled = false
             tblLocationRes.reloadData()
@@ -544,18 +547,25 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                         if let vcMB = lastVC.arrViewCtrl.last as? MapBoardViewController {
                             vc.delegate = vcMB
                             vc.boolFromBoard = true
+                            vc.strShownLoc = strSearchedLocation
                             arrViewControllers!.append(vc)
                         } else if let vcFM = lastVC.arrViewCtrl.first as? FaeMapViewController {
                             // will never be excuted
                             // because FaeMapVC will reuse self to do location selecting
                             vc.delegate = vcFM
                             vc.boolFromBoard = true
+                            vc.strShownLoc = strSearchedLocation
                             arrViewControllers!.append(vc)
                         }
                     } else if let lastVC = arrViewControllers?.last as? AllPlacesViewController {
                         vc.delegate = lastVC
                         vc.boolFromBoard = true
                         arrViewControllers!.append(vc)
+                    } else if let vcExplore = arrViewControllers?.last as? ExploreViewController {
+                        vc.delegate = vcExplore
+                        vc.boolFromExplore = true
+                        vc.strShownLoc = strSearchedLocation
+                        arrViewControllers?.append(vc)
                     }
                     navigationController?.setViewControllers(arrViewControllers!, animated: true)
                 }
