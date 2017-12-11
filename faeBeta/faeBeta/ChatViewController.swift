@@ -789,6 +789,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         closeToolbarContentView()
         boolGoToFullContent = true
         let vc = SelectLocationViewController()
+        vc.boolFromChat = true
+        vc.boolSearchEnabled = true
         vc.delegate = self
         Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
         navigationController?.pushViewController(vc, animated: true)
