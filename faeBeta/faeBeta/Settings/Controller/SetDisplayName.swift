@@ -31,19 +31,19 @@ class SetDisplayName: UIViewController {
         addObersers()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
         
-        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
         
-        lblTitle = UILabel(frame: CGRect(x: 0, y: 99, width: screenWidth, height: 27))
+        lblTitle = UILabel(frame: CGRect(x: 0, y: 99 + device_offset_top, width: screenWidth, height: 27))
         view.addSubview(lblTitle)
         lblTitle.text = "Display Name"
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         
-        textField = FAETextField(frame: CGRect(x: 0, y: 174, width: screenWidth - 70, height: 34))
+        textField = FAETextField(frame: CGRect(x: 0, y: 174 + device_offset_top, width: screenWidth - 70, height: 34))
         textField.center.x = screenWidth / 2
         view.addSubview(textField)
         textField.textAlignment = .center
@@ -52,7 +52,7 @@ class SetDisplayName: UIViewController {
             textField.text = strFieldText
         }
         
-        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 99 - 36, width: 248, height: 36))
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 99 - 36 - device_offset_bot, width: 248, height: 36))
         lblEditIntro.center.x = screenWidth / 2
         view.addSubview(lblEditIntro)
         lblEditIntro.text = "Unlike your Username, a Display Name is\njust for show. You can change it anytime!"
@@ -62,7 +62,7 @@ class SetDisplayName: UIViewController {
         lblEditIntro.lineBreakMode = .byWordWrapping
         lblEditIntro.numberOfLines = 0
         
-        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 - device_offset_bot, width: 300, height: 50))
         btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
         btnSave.setImage(#imageLiteral(resourceName: "settings_save"), for: .normal)
@@ -126,8 +126,8 @@ class SetDisplayName: UIViewController {
             return
         }
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.lblEditIntro.frame.origin.y = screenHeight - 99 - 36
-            self.btnSave.frame.origin.y = screenHeight - 30 - 50
+            self.lblEditIntro.frame.origin.y = screenHeight - 99 - 36 - device_offset_bot
+            self.btnSave.frame.origin.y = screenHeight - 30 - 50 - device_offset_bot
         })
     }
 }

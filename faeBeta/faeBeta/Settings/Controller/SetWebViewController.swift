@@ -24,7 +24,7 @@ class SetWebViewController: UIViewController, UIWebViewDelegate {
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
         
-        webView = UIWebView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        webView = UIWebView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65))
         webView.backgroundColor = .white
         webView.delegate = self
         view.addSubview(webView)
