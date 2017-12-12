@@ -467,7 +467,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         return cell
     }
     
-    // TODO YUE
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let idxPath = selectedIndexPath {
             if let cell = tableView.cellForRow(at: idxPath) as? CollectionsListCell {

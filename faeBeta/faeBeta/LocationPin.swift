@@ -11,6 +11,7 @@ import SwiftyJSON
 import CoreLocation
 
 class LocationPin: NSObject {
+    
     var id: Int = -1
     var content: String?
     var location = CLLocation()
