@@ -366,7 +366,14 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var imgSaved: UIImageView!
     
-    var boolShowSavedNoti = false
+    var boolShowSavedNoti = false {
+        didSet {
+            guard optionsOpened else { return }
+            guard imgSaved != nil else { return }
+            guard boolShowSavedNoti else { return }
+            self.showSavedNoti()
+        }
+    }
     
     var idx = -1
     
@@ -608,9 +615,16 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var imgSaved: UIImageView!
     
-    var locationId: Int = 0
+    var locationId: Int = -1
     
-    var boolShowSavedNoti = false
+    var boolShowSavedNoti = false {
+        didSet {
+            guard optionsOpened else { return }
+            guard imgSaved != nil else { return }
+            guard boolShowSavedNoti else { return }
+            self.savedNotiAnimation()
+        }
+    }
     
     var isRed = false
     
@@ -619,9 +633,6 @@ class LocPinAnnotationView: MKAnnotationView {
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
         isEnabled = false
-        
-        boolShowSavedNoti = false
-        
         imgIcon = UIImageView(frame: CGRect(x: 28, y: 56, width: 0, height: 0))
         imgIcon.contentMode = .scaleAspectFit
         addSubview(imgIcon)
@@ -631,6 +642,12 @@ class LocPinAnnotationView: MKAnnotationView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.locationId = -1
+        self.boolShowSavedNoti = false
     }
     
     deinit {

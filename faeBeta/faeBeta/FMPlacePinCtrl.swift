@@ -286,13 +286,15 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
-        uiviewSavedList.arrListSavedThisPin.removeAll()
-        getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
-            let placeData = placePin
-            placeData.arrListSavedThisPin = ids
-            firstAnn.pinInfo = placeData as AnyObject
-            self.uiviewSavedList.arrListSavedThisPin = ids
-            anView.boolShowSavedNoti = true
+        if anView.optionsOpened {
+            uiviewSavedList.arrListSavedThisPin.removeAll()
+            getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+                let placeData = placePin
+                placeData.arrListSavedThisPin = ids
+                firstAnn.pinInfo = placeData as AnyObject
+                self.uiviewSavedList.arrListSavedThisPin = ids
+                anView.boolShowSavedNoti = true
+            }
         }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()

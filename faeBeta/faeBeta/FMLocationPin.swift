@@ -50,13 +50,18 @@ extension FaeMapViewController: LocDetailDelegate {
         locAnnoView = anView
         guard firstAnn.type == "location" else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
-        uiviewSavedList.arrListSavedThisPin.removeAll()
-        getPinSavedInfo(id: locationData.id, type: "location") { (ids) in
-            let pinData = locationData
-            pinData.arrListSavedThisPin = ids
-            firstAnn.pinInfo = pinData as AnyObject
-            self.uiviewSavedList.arrListSavedThisPin = ids
-            anView.boolShowSavedNoti = true
+        let pinData = locationData
+        if pinData.id == -1 {
+            pinData.id = anView.locationId
+        }
+        if anView.optionsOpened {
+            uiviewSavedList.arrListSavedThisPin.removeAll()
+            getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
+                pinData.arrListSavedThisPin = ids
+                firstAnn.pinInfo = pinData as AnyObject
+                self.uiviewSavedList.arrListSavedThisPin = ids
+                anView.boolShowSavedNoti = true
+            }
         }
         let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
         updateLocationInfo(location: cllocation)
@@ -110,6 +115,7 @@ extension FaeMapViewController: LocDetailDelegate {
     func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
         guard modeLocation == .off else { return }
         modeLocCreating = .on
+        
         var coordinate: CLLocationCoordinate2D!
         if position == nil {
             coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
@@ -118,23 +124,32 @@ extension FaeMapViewController: LocDetailDelegate {
             coordinate = coor
         }
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        func createLoc() {
+            self.uiviewPlaceBar.hide()
+            self.locAnnoView?.hideButtons()
+            self.locAnnoView?.optionsReady = false
+            self.locAnnoView?.optionsOpened = false
+            self.locAnnoView?.optionsOpeing = false
+            self.locAnnoView?.removeFromSuperview()
+            self.locAnnoView = nil
+            self.deselectAllAnnotations()
+            let pinData = LocationPin(position: coordinate)
+            pinData.optionsReady = true
+            self.selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
+            self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
+            self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
+            self.updateLocationInfo(location: cllocation)
+        }
+        
         if selectedLocation != nil {
             locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
                 self.selectedLocation = nil
+                createLoc()
             })
+        } else {
+            createLoc()
         }
-        uiviewPlaceBar.hide()
-        locAnnoView?.hideButtons()
-        locAnnoView?.optionsReady = false
-        locAnnoView?.optionsOpened = false
-        locAnnoView?.optionsOpeing = false
-        deselectAllAnnotations()
-        let pinData = LocationPin(position: coordinate)
-        pinData.optionsReady = true
-        selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
-        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
-        locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
-        updateLocationInfo(location: cllocation)
     }
     
     func updateLocationInfo(location: CLLocation) {

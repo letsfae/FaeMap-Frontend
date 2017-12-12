@@ -87,7 +87,6 @@ class FaeMapView: MKMapView {
                 } else if anView.optionsReady && !anView.optionsOpened {   // second tap place pin
                     anView.showButtons()
                     anView.optionsOpened = true
-                    // TODO YUE 这句话如果不加，在第二次点击place pin时uiviewSavedList.arrListSavedThisPin中数据为空，不再显示该placePin是否存储在某个Collection中（即相应Collection后面没有红色√）。是否有更好处理方法？
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
                 } else if anView.optionsReady && anView.optionsOpened {
                     anView.hideButtons()
@@ -109,6 +108,7 @@ class FaeMapView: MKMapView {
                     } else if anView.optionsReady && !anView.optionsOpened {
                         anView.showButtons()
                         anView.optionsOpened = true
+                        faeMapCtrler?.tapLocationPin(didSelect: anView)
                     } else if anView.optionsReady && anView.optionsOpened {
                         anView.hideButtons()
                         anView.optionsOpened = false
@@ -211,6 +211,7 @@ class FaeMapView: MKMapView {
                 }
             } else {
                 if !(v is UIButton) {
+                    
                     faeMapCtrler?.createLocationPin(point: tapPoint)
                     slcMapCtrler?.createLocationPin(point: tapPoint)
                 }
