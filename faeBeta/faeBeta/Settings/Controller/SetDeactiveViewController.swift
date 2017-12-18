@@ -32,7 +32,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
         view.backgroundColor = .white
-        scrollview = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        scrollview = UIScrollView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65))
         view.addSubview(scrollview)
         scrollview.isPagingEnabled = false
         scrollview.contentSize.height = 600
@@ -46,7 +46,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
     
     func loadContent() {
         //btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
-        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)

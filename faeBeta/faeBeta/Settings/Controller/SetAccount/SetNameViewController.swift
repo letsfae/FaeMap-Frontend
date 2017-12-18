@@ -72,7 +72,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     }
     
     fileprivate func loadNavBar() {
-        let btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)

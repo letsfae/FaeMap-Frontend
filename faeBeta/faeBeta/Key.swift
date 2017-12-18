@@ -71,6 +71,7 @@ class Key: NSObject { //  singleton class
         }
     }
     var is_Login: Int = 0
+    var fully_login: Bool = false
     var userEmail = ""
     var userPassword = ""
     var navOpenMode: NavOpenMode = .mapFirst
