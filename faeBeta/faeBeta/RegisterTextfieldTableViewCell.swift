@@ -67,6 +67,10 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         self.setNeedsDisplay()
     }
     
+    func clearTextFiled() {
+        textfield.text = ""
+    }
+    
     func updateTextColorAccordingToPassword(_ text:String) {
         if !textfield.isSecureTextEntry {
             return;

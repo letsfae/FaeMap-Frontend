@@ -42,6 +42,9 @@ class RegisterInfoViewController: RegisterBaseViewController {
     var btnFemale: UIButton!
     var faeUser: FaeUser!
     var imgExclamationMark: UIImageView!
+    var boolMeetMinAge: Bool = true
+    var uiviewAtBottom: UIView!
+    var lblCont: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +52,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
         createTopView("ProgressBar4")
         createDateOfBirthView()
         createGenderView()
-        createBottomView(UIView(frame: CGRect.zero))
+        uiviewAtBottom = setupBottomView()
+        createBottomView(uiviewAtBottom)
         validation()
     }
     
@@ -59,6 +63,19 @@ class RegisterInfoViewController: RegisterBaseViewController {
         view.addSubview(numKeyPad)
         numKeyPad.delegate = self
         uiviewBottom.frame.origin.y = view.frame.height - 244 * screenHeightFactor - uiviewBottom.frame.size.height + 15 - device_offset_bot
+    }
+    
+    func setupBottomView() -> UIView {
+        let uiviewBtm = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont.numberOfLines = 2
+        lblCont.textAlignment = .center
+        lblCont.textColor = UIColor._2499090()
+        lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblCont.text = "Sorry! You don’t meet the minimum age\nrequirement for Fae Map."
+        uiviewBtm.addSubview(lblCont)
+        lblCont.isHidden = true
+        return uiviewBtm
     }
     
     // MARK: - Functions
@@ -76,7 +93,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         //let boardRegister = RegisterConfirmViewController()
         //boardRegister.faeUser = faeUser
         //navigationController?.pushViewController(boardRegister, animated: true)
-        let secureMenu = UIAlertController(title: nil, message: "How do you want to secure your account?", preferredStyle: .actionSheet)
+        /*let secureMenu = UIAlertController(title: nil, message: "How do you want to secure your account?", preferredStyle: .actionSheet)
         let useEmail = UIAlertAction(title: "Use Email", style: .default) { (alert: UIAlertAction) in
             let secureByEmail = RegisterEmailViewController()
             secureByEmail.faeUser = self.faeUser
@@ -91,7 +108,10 @@ class RegisterInfoViewController: RegisterBaseViewController {
         secureMenu.addAction(useEmail)
         secureMenu.addAction(usePhone)
         secureMenu.addAction(cancel)
-        present(secureMenu, animated: true, completion: nil)
+        present(secureMenu, animated: true, completion: nil)*/
+        let nextRegister = RegisterEmailViewController()
+        nextRegister.faeUser = faeUser
+        navigationController?.pushViewController(nextRegister, animated: true)
     }
     
     func createDateOfBirthView() {
@@ -161,6 +181,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func validation() {
+        boolMeetMinAge = true
         var boolIsValid = false
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
@@ -174,9 +195,15 @@ class RegisterInfoViewController: RegisterBaseViewController {
         
         if boolIsValid {
             let calendar = Calendar.init(identifier: Calendar.Identifier.gregorian)
-            let currentYearInt = ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: date!))!
             
-            boolIsValid = boolIsValid && currentYearInt > ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))! - 99 && currentYearInt < ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))!
+            let intAge = calendar.dateComponents([.year], from: date!, to: Date()).year!
+            boolIsValid = boolIsValid && intAge <= 99 && intAge >= 13
+            boolMeetMinAge = intAge >= 13
+            
+            /*let currentYearInt = ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: date!))!
+            
+            boolIsValid = boolIsValid && currentYearInt > ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))! - 99 && currentYearInt < ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))!*/
+            
             imgExclamationMark.isHidden = boolIsValid
         }
         
@@ -186,6 +213,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         
         boolIsValid = boolIsValid && gender != nil
         enableContinueButton(boolIsValid)
+        lblCont.isHidden = boolMeetMinAge
     }
     
     func setValueInUser() {

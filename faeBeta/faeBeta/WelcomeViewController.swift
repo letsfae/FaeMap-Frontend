@@ -75,7 +75,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         addChildViewController(uipageImgContainer)
         view.addSubview(uipageImgContainer.view)
         uipageImgContainer.didMove(toParentViewController: self)
-        uipageImgContainer.view.frame = CGRect(x: 0, y: 90 * screenHeightFactor, width: screenWidth, height: screenHeight - 336 * screenHeightFactor)
+        uipageImgContainer.view.frame = CGRect(x: 0, y: 100 * screenHeightFactor + device_offset_top, width: screenWidth, height: screenHeight - 336 * screenHeightFactor)
         uipageImgContainer.view.layoutIfNeeded()
         for view in uipageImgContainer.view.subviews {
             if let scrollView = view as? UIScrollView {

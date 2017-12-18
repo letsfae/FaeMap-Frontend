@@ -51,13 +51,15 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     fileprivate var numberKeyboard: FAENumberKeyboard!
     var enterFrom: EnterFromMode!
     
+    var uiviewAlert: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
         createActivityIndicator()
-        loadOtherMethod()
+        //loadOtherMethod()
         
         self.startTimer()
     }
@@ -67,21 +69,26 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.addSubview(uiviewNavBar)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "NavigationBackNew"), for: .normal)
 
-        //uiviewNavBar.loadBtnConstraints()
-        // back button during signup process does not move down (iPhone X)
+        uiviewNavBar.loadBtnConstraints()
         if enterEmailMode == .signup || enterPhoneMode == .signup {
-            uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
-            uiviewNavBar.addConstraintsWithFormat("V:|-\(21)-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+            //uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+            //uiviewNavBar.addConstraintsWithFormat("V:|-\(21+device_offset_top)-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
+            uiviewNavBar.rightBtn.setImage(UIImage(), for: .normal)
+            uiviewNavBar.rightBtn.setTitle("Later  ", for: .normal)
+            uiviewNavBar.rightBtn.setTitleColor(UIColor._182182182(), for: .normal)
+            setupLater()
         } else {
-            uiviewNavBar.loadBtnConstraints()
+            //uiviewNavBar.loadBtnConstraints()
+            uiviewNavBar.rightBtn.isHidden = true
         }
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(actionLater(_:)), for: .touchUpInside)
+        //uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.bottomLine.isHidden = true
     }
     
     fileprivate func loadContent() {
-        lblTitle = FaeLabel(CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60), .center, .medium, 20, UIColor._898989())
+        lblTitle = FaeLabel(CGRect(x: 30, y: 75, width: screenWidth - 60, height: 60), .center, .medium, 18, UIColor._898989())
         lblTitle.numberOfLines = 2
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
@@ -202,6 +209,58 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
+    func setupLater() {
+        uiviewAlert = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        uiviewAlert.backgroundColor  = UIColor._107105105_a50()
+        uiviewAlert.layer.zPosition = 1
+        
+        let uiviewLater = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewLater.center.x = screenWidth / 2
+        uiviewLater.backgroundColor = .white
+        uiviewLater.layer.cornerRadius = 21 * screenWidthFactor
+        uiviewAlert.addSubview(uiviewLater)
+        
+        let lblLaterLine1 = UILabel(frame: CGRect(x: 0, y: 30, w: 185, h: 50))
+        lblLaterLine1.center.x = uiviewLater.frame.width / 2
+        lblLaterLine1.textAlignment = .center
+        lblLaterLine1.lineBreakMode = .byWordWrapping
+        lblLaterLine1.numberOfLines = 2
+        lblLaterLine1.text = "You can verify your\nEmail later in Settings"
+        lblLaterLine1.textColor = UIColor._898989()
+        lblLaterLine1.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewLater.addSubview(lblLaterLine1)
+        
+        let lblLaterLine2 = UILabel(frame: CGRect(x: 0, y: 93, w: 206, h: 36))
+        lblLaterLine2.center.x = uiviewLater.frame.width / 2
+        lblLaterLine2.textAlignment = .center
+        lblLaterLine2.lineBreakMode = .byWordWrapping
+        lblLaterLine2.numberOfLines = 2
+        lblLaterLine2.text = "You need a verified Email to use it\nfor Log In and Password Reset."
+        lblLaterLine2.textColor = UIColor._138138138()
+        lblLaterLine2.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
+        uiviewLater.addSubview(lblLaterLine2)
+        
+        let btnContinue = UIButton(frame: CGRect(x: 0, y: 149, w: 208, h: 39))
+        btnContinue.center.x = uiviewLater.frame.width / 2
+        btnContinue.setTitle("Continue", for: .normal)
+        btnContinue.setTitleColor(UIColor.white, for: .normal)
+        btnContinue.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnContinue.backgroundColor = UIColor._2499090()
+        btnContinue.addTarget(self, action: #selector(laterContinue), for: .touchUpInside)
+        btnContinue.layer.borderWidth = 2
+        btnContinue.layer.borderColor = UIColor._2499090().cgColor
+        btnContinue.layer.cornerRadius = 19 * screenWidthFactor
+        uiviewLater.addSubview(btnContinue)
+        
+        let btnDismiss = UIButton(frame: CGRect(x: 15, y: 15, w: 17, h: 17))
+        btnDismiss.setImage(UIImage.init(named: "btn_close"), for: .normal)
+        btnDismiss.addTarget(self, action: #selector(laterDismiss), for: .touchUpInside)
+        uiviewLater.addSubview(btnDismiss)
+        
+        view.addSubview(uiviewAlert)
+        uiviewAlert.isHidden = true
+    }
+    
     func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
@@ -219,6 +278,20 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         } else {
             navigationController?.popViewController(animated: true)
         }
+    }
+    
+    @objc func actionLater(_ sender: UIButton) {
+        uiviewAlert.isHidden = false
+    }
+    
+    @objc func laterContinue() {
+        let nextRegister = RegisterConfirmViewController()
+        nextRegister.faeUser = self.faeUser
+        self.navigationController?.pushViewController(nextRegister, animated: false)
+    }
+    
+    @objc func laterDismiss() {
+        uiviewAlert.isHidden = true
     }
     
     @objc func changeSecureMethod() {

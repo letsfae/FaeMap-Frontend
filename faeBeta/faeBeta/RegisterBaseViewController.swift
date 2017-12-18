@@ -104,6 +104,7 @@ extension RegisterBaseViewController {
         } else {
             btnContinue.backgroundColor = UIColor._255160160()
         }
+        
     }
     
     func createTableView(_ height: CGFloat) {
