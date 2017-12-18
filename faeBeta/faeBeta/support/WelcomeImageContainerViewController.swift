@@ -42,23 +42,23 @@ class WelcomeImageContainerViewController: UIViewController {
         case 0:
             title = "Faevorite Map"
 //            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
-            description = "Connecting People to Favorite \nPlaces and Communities."
+            description = "Connecting People to Favorite\nPlaces and Communities."
             break
         case 1:
             title = "More of your City"
-            description = "Discover Great Places based on \nsurrounding Points of Interests."
+            description = "Discover Great Places based\non yout Points of Interest."
             break
         case 2:
             title = "Interact with New People"
-            description = "Talk with Interesting People \nfrom Local Communities."
+            description = "Talk with Interesting People\nfrom Local Communities."
             break
         case 3:
             title = "Explore the World"
-            description = "Browse and Collect New Places \nfor your next Big Vacation."
+            description = "Browse and Collect New Places\nfor your next Big Vacation."
             break
         case 4:
             title = "Always Secure"
-            description = "Our Security System Protects \nyour Privacy at All Times."
+            description = "Our Security System protects\nyour True Location at all times."
             break
         default:
             break

@@ -24,7 +24,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func setup() {
-        let btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
+        let btnBack = UIButton(frame: CGRect(x: 0, y: 25 + device_offset_top, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonTapped(_:)), for: .touchUpInside)
         self.view.addSubview(btnBack)
@@ -43,7 +43,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
     
     private func generateScrollView() {
     
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65))
         scrollView.backgroundColor = .white
         self.view.addSubview(scrollView)
         scrollView.contentSize = CGSize(width: screenWidth, height: 2000)

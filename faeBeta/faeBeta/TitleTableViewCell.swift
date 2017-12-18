@@ -26,7 +26,7 @@ class TitleTableViewCell: UITableViewCell {
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         titleLabel.textColor = UIColor._898989()
-        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        titleLabel.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(titleLabel)
     }
     

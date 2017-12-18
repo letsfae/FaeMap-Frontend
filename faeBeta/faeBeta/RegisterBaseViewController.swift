@@ -59,7 +59,7 @@ class RegisterBaseViewController: UIViewController {
 extension RegisterBaseViewController {
     
     func createTopView(_ imageNamed: String) {
-        let uiviewTop = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 70))
+        let uiviewTop = UIView(frame: CGRect(x: 0, y: device_offset_top, width: view.frame.size.width, height: 70))
         uiviewTop.backgroundColor = .white
         let btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
@@ -77,7 +77,7 @@ extension RegisterBaseViewController {
     @objc func backButtonPressed() {}
     
     func createBottomView(_ subview: UIView) {
-        uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor - device_offset_bot, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
+        uiviewBottom = UIView(frame: CGRect(x: 0, y: screenHeight - 18 - subview.frame.size.height - 30 - 50 * screenHeightFactor - device_offset_top - device_offset_bot, width: view.frame.size.width, height: subview.frame.size.height + 50 * screenHeightFactor + 30 + 18))
         btnContinue = UIButton(frame: CGRect(x: 0, y: subview.frame.size.height + 18, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnContinue.center.x = screenWidth / 2
         btnContinue.layer.cornerRadius = 25 * screenHeightFactor
@@ -104,10 +104,11 @@ extension RegisterBaseViewController {
         } else {
             btnContinue.backgroundColor = UIColor._255160160()
         }
+        
     }
     
     func createTableView(_ height: CGFloat) {
-        tableView = UITableView(frame: CGRect(x: 0, y: 72, width: view.frame.size.width, height: height))
+        tableView = UITableView(frame: CGRect(x: 0, y: 72 + device_offset_top, width: view.frame.size.width, height: height))
         view.addSubview(tableView)
         
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -168,7 +169,7 @@ extension RegisterBaseViewController {
         var frameTable: CGRect?
         if tableView != nil {
             frameTable = tableView.frame
-            frameTable!.origin.y = min(screenHeight - keyboardFrame.size.height - frameBottom.size.height - frameTable!.size.height, 70)
+            frameTable!.origin.y = min(screenHeight - keyboardFrame.size.height - frameBottom.size.height - frameTable!.size.height, 70 + device_offset_top)
         }
         
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
@@ -186,7 +187,7 @@ extension RegisterBaseViewController {
         var frameTable: CGRect?
         if tableView != nil {
             frameTable = tableView.frame
-            frameTable!.origin.y = 70
+            frameTable!.origin.y = 70 + device_offset_top
             tableView.isScrollEnabled = false
         }
         

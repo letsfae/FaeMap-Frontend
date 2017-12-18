@@ -30,19 +30,19 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         addObersers()
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:))))
         
-        btnBack = UIButton(frame: CGRect(x: 15, y: 36, width: 18, height: 18))
+        btnBack = UIButton(frame: CGRect(x: 15, y: 36 + device_offset_top, width: 18, height: 18))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
         
-        lblTitle = UILabel(frame: CGRect(x: 0, y: 99, width: screenWidth, height: 27))
+        lblTitle = UILabel(frame: CGRect(x: 0, y: 99 + device_offset_top, width: screenWidth, height: 27))
         view.addSubview(lblTitle)
         lblTitle.text = "Short Intro"
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textColor = UIColor._898989()
         lblTitle.textAlignment = .center
         
-        textView = UITextView(frame: CGRect(x: 0, y: 174, width: 244, height: 105))
+        textView = UITextView(frame: CGRect(x: 0, y: 174 + device_offset_top, width: 244, height: 105))
         textView.center.x = screenWidth / 2
         view.addSubview(textView)
         textView.textAlignment = .left
@@ -64,14 +64,16 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
             lblPlaceholder.isHidden = true
         }
         
-        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 96 - 18, width: screenWidth, height: 18))
+        let remainingCount = 30 - strFieldText.count
+        
+        lblEditIntro = UILabel(frame: CGRect(x: 0, y: screenHeight - 96 - 18 - device_offset_bot, width: screenWidth, height: 18))
         view.addSubview(lblEditIntro)
-        lblEditIntro.text = "30 Characters"
+        lblEditIntro.text = "\(remainingCount) Characters"
         lblEditIntro.font = UIFont(name: "AvenirNext-Medium", size: 13)
         lblEditIntro.textColor = UIColor._138138138()
         lblEditIntro.textAlignment = .center
         
-        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
+        btnSave = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 - device_offset_bot, width: 300, height: 50))
         btnSave.center.x = screenWidth / 2
         view.addSubview(btnSave)
         btnSave.titleLabel?.textColor = .white
@@ -113,6 +115,8 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         lblEditIntro.text = "\(30-(count)) Characters"
         if count == 30 {
             lblEditIntro.textColor = UIColor._2499090()
+        } else {
+            lblEditIntro.textColor = UIColor._138138138()
         }
         lblPlaceholder.isHidden = count != 0
     }
@@ -154,8 +158,8 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
             return
         }
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.lblEditIntro.frame.origin.y = screenHeight - 96 - 18
-            self.btnSave.frame.origin.y = screenHeight - 30 - 50
+            self.lblEditIntro.frame.origin.y = screenHeight - 96 - 18 - device_offset_bot
+            self.btnSave.frame.origin.y = screenHeight - 30 - 50 - device_offset_bot
         })
     }
 }
