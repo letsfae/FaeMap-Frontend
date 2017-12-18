@@ -45,6 +45,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var lblCont: UILabel!
     var lblSecure: UILabel!
     var btnOtherMethod: UIButton!
+    var btnClear: UIButton!
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -59,9 +60,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
         
         uiviewAtBottom = setupBottomView()
         createBottomView(uiviewAtBottom)
-        setUsingPhone()
+        //setUsingPhone()
         
-        btnContinue.setTitle("Vevify", for: UIControlState())
+        btnContinue.setTitle("Continue", for: UIControlState())
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,16 +77,24 @@ class RegisterEmailViewController: RegisterBaseViewController {
         lblCont.textAlignment = .center
         lblCont.textColor = UIColor._138138138()
         lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblCont.text = "After Verification, you can use your Email\nfor Log In, Sign In Support, and more."
+        uiviewBtm.addSubview(lblCont)
         //lblCont.text = "You need to Verify your Email in Account \nSettings to use it for Log In and more."
         
         //uiviewEmailAlready.addSubview(lblCont)
         
         lblSecure = UILabel()
+        lblSecure = UILabel(frame: CGRect(x: 0, y: 18, width: 243, height: 36))
+        lblSecure.center.x = screenWidth / 2
+        lblSecure.textAlignment = .center
+        lblSecure.text = "After Verification, you can use your Email\nfor Log In, Sign In Support, and more."
+        lblSecure.textColor = UIColor._138138138()
+        lblSecure.font = UIFont(name: "AvenirNext-Medium", size: 13)
         //lblAlreadyRegister = UILabel(frame: CGRect(x: view.frame.size.width/2.0 - 118, y: 18, width: 190, height: 25))
         //lblAlreadyRegister.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!,
             //NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         //)
-        uiviewBtm.addSubview(lblSecure)
+        //uiviewBtm.addSubview(lblSecure)
         
         //btnLogin = UIButton(frame: CGRect(x: view.frame.size.width/2.0 + 73, y: 18, width: 45, height: 25))
         //let astrTitle = "Phone."
@@ -101,24 +110,28 @@ class RegisterEmailViewController: RegisterBaseViewController {
         return uiviewBtm
     }
     
-    func setUsingPhone() {
-        lblSecure.frame = CGRect(x: screenWidth / 2 - 77, y: 18, width: 109, height: 25)
+    func setBtmContent() {
+        lblSecure.text = "After Verification, you can use your Email\nfor Log In, Sign In Support, and more."
+        lblSecure.textColor = UIColor._138138138()
+        /*lblSecure.frame = CGRect(x: screenWidth / 2 - 77, y: 18, width: 109, height: 25)
         lblSecure.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()])
         
         btnOtherMethod.frame = CGRect(x: screenWidth / 2 + 32, y: 18, width: 47, height: 25)
         let attributedTitle = NSAttributedString(string: "Phone.", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
         btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
-        btnOtherMethod.addTarget(self, action: #selector(usingPhoneTapped), for: .touchUpInside)
+        btnOtherMethod.addTarget(self, action: #selector(usingPhoneTapped), for: .touchUpInside)*/
     }
     
     func setEmailExists() {
-        lblSecure.frame = CGRect(x: screenWidth / 2 - 118, y: 18, width: 190, height: 25)
+        lblCont.text = "Oops… This Email is already being\nused to Secure an Account."
+        lblCont.textColor = UIColor._2499090()
+        /*lblSecure.frame = CGRect(x: screenWidth / 2 - 118, y: 18, width: 190, height: 25)
         lblSecure.attributedText = NSAttributedString(string: "This Email is already registered! ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
         
         btnOtherMethod.frame = CGRect(x: screenWidth / 2 + 73, y: 18, width: 45, height: 25)
         let attributedTitle = NSAttributedString(string: "Log In!", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
         btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
-        btnOtherMethod.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        btnOtherMethod.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)*/
     }
     
     @objc func usingPhoneTapped() {
@@ -133,6 +146,13 @@ class RegisterEmailViewController: RegisterBaseViewController {
     @objc func loginButtonTapped() {
         let vcLogin = LogInViewController()
         navigationController?.pushViewController(vcLogin, animated: true)
+    }
+    
+    @objc func clearEmail() {
+        cellTxtEmail.clearTextFiled()
+        email = ""
+        btnClear.isHidden = true
+        imgError.isHidden = true
     }
     
     override func backButtonPressed() {
@@ -226,7 +246,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
 
 extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -236,20 +256,29 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
             //cell.setTitleLabelText("Use your Email to Log In \nand Verifications")
             cell.setTitleLabelText("Use your Email to Secure\nyour Account.")
             return cell
-        case 1:
+        /*case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "SubTitleTableViewCellIdentifier") as! SubTitleTableViewCell
             //cell.setSubTitleLabelText("Enter your Email Address")
-            return cell
-        case 2:
+            return cell*/
+        case 1:
             if cellTxtEmail == nil {
                 cellTxtEmail = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 cellTxtEmail.setPlaceholderLabelText("Email Address", indexPath: indexPath)
                 cellTxtEmail.delegate = self
                 cellTxtEmail.textfield.keyboardType = .emailAddress
-                imgError = UIImageView(frame: CGRect(x: screenWidth - 30, y: 37 * screenHeightFactor - 9, width: 6, height: 17))
+                imgError = UIImageView(frame: CGRect(x: screenWidth - 45, y: 0, width: 6, height: 20))
+                imgError.center.y = cellTxtEmail.textfield.center.y
                 imgError.image = UIImage(named:"exclamation_red_new")
                 imgError.isHidden = true
                 cellTxtEmail.contentView.addSubview(imgError)
+                
+                btnClear = UIButton(frame: CGRect(x: screenWidth - 40, y: 0, width: 36.45, height: 36.45))
+                btnClear.center.y = cellTxtEmail.textfield.center.y
+                btnClear.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+                btnClear.isHidden = true
+                btnClear.addTarget(self, action: #selector(clearEmail), for: .touchUpInside)
+                cellTxtEmail.addSubview(btnClear)
+                
                 cellTxtEmail.makeFirstResponder()
             }
             return cellTxtEmail
@@ -263,9 +292,9 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
         switch indexPath.row {
         case 0:
             return 59
+        /*case 1:
+            return 60 * screenHeightFactor*/
         case 1:
-            return 60 * screenHeightFactor
-        case 2:
             return 75 * screenHeightFactor
         default:
             return 0
@@ -289,9 +318,14 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
     
     func textFieldDidChange(_ text: String, indexPath: IndexPath) {
         switch indexPath.row {
-        case 2:
+        case 1:
             email = text
-            setUsingPhone()
+            setBtmContent()
+            if text.count != 0 {
+                btnClear.isHidden = false
+            } else {
+                btnClear.isHidden = true
+            }
             break
         default: break
         }
