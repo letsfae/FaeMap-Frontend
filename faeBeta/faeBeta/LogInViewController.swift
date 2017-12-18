@@ -99,12 +99,12 @@ class LogInViewController: UIViewController {
     fileprivate func setupInterface() {
         // icon
         imgIcon = UIImageView()
-        imgIcon.frame = CGRect(x: screenWidth / 2 - 30, y: 70 * screenHeightFactor, width: 60 * screenHeightFactor, height: 60 * screenHeightFactor)
+        imgIcon.frame = CGRect(x: screenWidth / 2 - 30, y: 70 * screenHeightFactor + device_offset_top, width: 60, height: 60)
         imgIcon.image = #imageLiteral(resourceName: "Faevorite_icon")
         view.addSubview(imgIcon)
         
         // username textField
-        txtUsername = FAETextField(frame: CGRect(x: 15, y: 174 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        txtUsername = FAETextField(frame: CGRect(x: 15, y: 174 * screenHeightFactor + device_offset_top, width: screenWidth - 30, height: 34))
         txtUsername.placeholder = "Username/Email"
         txtUsername.adjustsFontSizeToFitWidth = true
         txtUsername.keyboardType = .emailAddress
@@ -124,7 +124,7 @@ class LogInViewController: UIViewController {
         view.addSubview(lblLoginResult)
         
         // password textField
-        txtPassword = FAETextField(frame: CGRect(x: 15, y: 243 * screenHeightFactor, width: screenWidth - 30, height: 34))
+        txtPassword = FAETextField(frame: CGRect(x: 15, y: 243 * screenHeightFactor + device_offset_top, width: screenWidth - 30, height: 34))
         txtPassword.placeholder = "Password"
         txtPassword.isSecureTextEntry = true
         txtPassword.tag = 2
@@ -132,7 +132,7 @@ class LogInViewController: UIViewController {
         view.addSubview(txtPassword)
         
         // support button
-        btnSupport = UIButton(frame: CGRect(x: (screenWidth - 150) / 2, y: screenHeight - 50 * screenHeightFactor - 71, width: 150, height: 22))
+        btnSupport = UIButton(frame: CGRect(x: (screenWidth - 150) / 2, y: screenHeight - 50 * screenHeightFactor - 71 - device_offset_bot, width: 150, height: 22))
         btnSupport.center.x = screenWidth / 2
         var font = UIFont(name: "AvenirNext-Bold", size: 13)
         btnSupport.setTitle("Sign In Support", for: .normal)
@@ -145,7 +145,7 @@ class LogInViewController: UIViewController {
         
         // log in button
         font = UIFont(name: "AvenirNext-DemiBold", size: 20)
-        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnLogin.center.x = screenWidth / 2
         btnLogin.setTitle("Log in", for: .normal)
         btnLogin.setTitleColor(.white, for: .normal)
@@ -260,8 +260,8 @@ class LogInViewController: UIViewController {
             return
         }
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.btnLogin.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
-            self.btnSupport.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71
+            self.btnLogin.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot
+            self.btnSupport.frame.origin.y = screenHeight - 50 * screenHeightFactor - 71 - device_offset_bot
             self.lblLoginResult.alpha = 1
         })
     }

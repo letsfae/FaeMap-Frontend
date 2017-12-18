@@ -29,12 +29,12 @@ class SetContactDetailViewController: UIViewController {
         addObersers()
         view.backgroundColor = .white
         
-        btnBack = UIButton(frame: CGRect(x: 0, y: 21, width: 48, height: 48))
+        btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
         
-        lblTitle = UILabel(frame: CGRect(x: 0, y: 72, width: screenWidth, height: 60))
+        lblTitle = UILabel(frame: CGRect(x: 0, y: 72 + device_offset_top, width: screenWidth, height: 60))
         setTitleText()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblTitle.textColor = UIColor._898989()
@@ -42,13 +42,13 @@ class SetContactDetailViewController: UIViewController {
         lblTitle.numberOfLines = 0
         view.addSubview(lblTitle)
         
-        textField = FAETextField(frame: CGRect(x: 0, y: 157, width: screenWidth - 50, height: 32))
+        textField = FAETextField(frame: CGRect(x: 0, y: 157 + device_offset_top, width: screenWidth - 50, height: 32))
         textField.center.x = screenWidth / 2
         textField.textAlignment = .left
         setPlaceholder()
         view.addSubview(textField)
         
-        btnSend = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50, width: 300, height: 50))
+        btnSend = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 - device_offset_bot, width: 300, height: 50))
         btnSend.center.x = screenWidth / 2
         view.addSubview(btnSend)
         btnSend.titleLabel?.textColor = .white
@@ -138,7 +138,7 @@ class SetContactDetailViewController: UIViewController {
             return
         }
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.btnSend.frame.origin.y = screenHeight - 30 - 50
+            self.btnSend.frame.origin.y = screenHeight - 30 - 50 - device_offset_bot
         })
     }
 }

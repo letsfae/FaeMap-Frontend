@@ -21,7 +21,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     // MARK: Functions
     func createView() {
-        let btnBack = UIButton(frame: CGRect(x: 10, y: 25, width: 40, height: 40))
+        let btnBack = UIButton(frame: CGRect(x: 10, y: 25 + device_offset_top, width: 40, height: 40))
         btnBack.setImage(UIImage(named: "NavigationBackNew"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
         
@@ -31,16 +31,16 @@ class RegisterConfirmViewController: RegisterBaseViewController {
 //        lblTitle.textAlignment = .center
 //        lblTitle.text = "All Finished!"
         
-        let imgFaePic = UIImageView(frame: CGRect(x: 32, y: 160, w: 350, h: 300))
+        let imgFaePic = UIImageView(frame: CGRect(x: 32, y: 160 + device_offset_top, w: 350, h: 300))
         imgFaePic.image = #imageLiteral(resourceName: "WelcomeFae")
         
-        let lblWelcome = UILabel(frame: CGRect(x: 0, y: 480 * screenHeightFactor, width: screenWidth, height: 34))
+        let lblWelcome = UILabel(frame: CGRect(x: 0, y: 480 * screenHeightFactor + device_offset_top, width: screenWidth, height: 34))
         lblWelcome.text = "Welcome to Faevorite!"
         lblWelcome.textColor = UIColor._898989()
         lblWelcome.font = UIFont(name: "AvenirNext-Medium", size: 25)
         lblWelcome.textAlignment = .center
         
-        let btnFinish = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        let btnFinish = UIButton(frame: CGRect(x: 0, y: screenHeight - 20 - 36 - (25 + 50) * screenHeightFactor - device_offset_top - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnFinish.layer.cornerRadius = 25 * screenHeightFactor
         btnFinish.layer.masksToBounds = true
         btnFinish.center.x = screenWidth / 2
@@ -51,11 +51,11 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         btnFinish.backgroundColor = UIColor._2499090()
         btnFinish.addTarget(self, action: #selector(self.finishButtonPressed), for: .touchUpInside)
         
-        let lblTermsOfService = UILabel(frame: CGRect(x: 0, y: screenHeight - 56 - device_offset_bot, width: screenWidth, height: 36))
+        let lblTermsOfService = UILabel(frame: CGRect(x: 0, y: screenHeight - 56 - device_offset_top - device_offset_bot, width: screenWidth, height: 36))
         lblTermsOfService.numberOfLines = 2
         lblTermsOfService.textAlignment = .center
         
-        let strTermofService = "To use Fae Maps, you agree to its Terms of Service\nand Privacy Policy."
+        let strTermofService = "To use Fae Maps, you agree to our\nTerms of Service and Privacy Policy."
         let attrTermofService = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
         let attrAgreeString = NSMutableAttributedString(string: strTermofService, attributes: attrTermofService)
         attrAgreeString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._138138138(), range: NSRange(location: 0, length: strTermofService.count))
