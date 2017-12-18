@@ -247,7 +247,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard let img = selectedPlace?.icon else { return }
             selectedPlaceView?.assignImage(img)
             selectedPlaceView?.hideButtons()
-            selectedPlaceView?.layer.zPosition = -1
+            selectedPlaceView?.superview?.sendSubview(toBack: selectedPlaceView!)
+            selectedPlaceView?.zPos = 7
             selectedPlaceView?.optionsReady = false
             selectedPlaceView?.optionsOpened = false
             selectedPlaceView = nil

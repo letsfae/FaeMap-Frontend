@@ -377,6 +377,12 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     var idx = -1
     
+    var zPos: CGFloat = 7.0 {
+        didSet {
+            self.layer.zPosition = zPos
+        }
+    }
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56 - 16, height: 56 - 10)
@@ -428,7 +434,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if object is CALayer {
-            self.layer.zPosition = 7.0 + CGFloat(idx) / 10000.0
+            self.layer.zPosition = zPos + CGFloat(idx) / 10000.0
         }
     }
     
