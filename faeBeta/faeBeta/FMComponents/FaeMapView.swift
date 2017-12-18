@@ -211,7 +211,6 @@ class FaeMapView: MKMapView {
                 }
             } else {
                 if !(v is UIButton) {
-                    
                     faeMapCtrler?.createLocationPin(point: tapPoint)
                     slcMapCtrler?.createLocationPin(point: tapPoint)
                 }

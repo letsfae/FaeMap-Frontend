@@ -279,7 +279,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         selectedPlace = firstAnn
         selectedPlaceView = anView
         selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
-        selectedPlaceView?.layer.zPosition = 199
+        selectedPlaceView?.zPos = 199
         guard mapMode != .explore else {
             scrollTo(firstAnn.id)
             return
