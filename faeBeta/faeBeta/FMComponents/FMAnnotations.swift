@@ -171,6 +171,7 @@ class SelfAnnotationView: MKAnnotationView {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: mapAvatarWidth, height: mapAvatarWidth)
         clipsToBounds = false
+        layer.zPosition = 149
         loadBasic()
         if let identifier = reuseIdentifier {
             if identifier == "self_selected_mode" {
@@ -183,6 +184,8 @@ class SelfAnnotationView: MKAnnotationView {
         NotificationCenter.default.addObserver(self, selector: #selector(getSelfAccountInfo), name: NSNotification.Name(rawValue: "reloadUser&MapInfo"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeAvatar), name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(invisibleOn), name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+        
+        self.layer.addObserver(self, forKeyPath: "zPosition", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
     }
     
     deinit {
@@ -194,6 +197,12 @@ class SelfAnnotationView: MKAnnotationView {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if object is CALayer {
+            self.layer.zPosition = 149
+        }
     }
     
     func loadBasic() {
