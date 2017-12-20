@@ -56,12 +56,12 @@ class Key: NSObject { //  singleton class
     
     let GoogleMapKey = "AIzaSyC7Wxy8L4VFaTdzC7vbD43ozVO_yUw4DTk"
     
-    // Settings -> My Information
+    // MARK: - Settings -> My Information
     var hideNameCardOptions: Bool = false
     var disableGender: Bool = false
     var disableAge: Bool = false
     
-    // API Authorizations
+    // MARK: - API Authorizations
     var userToken = ""
     var userTokenEncode = ""
     var session_id: Int = -1
@@ -72,6 +72,8 @@ class Key: NSObject { //  singleton class
     }
     var is_Login: Int = 0
     var fully_login: Bool = false
+    
+    // MARK: - User Personal Info
     var userEmail = ""
     var userPassword = ""
     var navOpenMode: NavOpenMode = .mapFirst
@@ -101,12 +103,16 @@ class Key: NSObject { //  singleton class
     let defaultFemale = UIImage(named: "defaultWomen")
     let faeAvatar = UIImage(named: "faeAvatar")
     
+    // MARK: - Location Seaerch
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
     
+    // MARK: - Temporary Variables
     var initialCtrler: InitialPageController?
     var FMVCtrler: FaeMapViewController?
     var mapHeadTitle: String = ""
+    var selectedTypeIdx: IndexPath! // Explore
+    var lastCategory: String = "" // Explore
     
     func getUserInfo() {
         getGenderAge()
@@ -130,7 +136,7 @@ class Key: NSObject { //  singleton class
         }
     }
     
-    // API Fetching Headers
+    // MARK: - API Fetching Headers
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
     var headerContentType = "application/x-www-form-urlencoded"

@@ -53,8 +53,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var coordinate: CLLocationCoordinate2D!
     
-    var selectedTypeIdx: IndexPath!
-    
     var strLocation: String = ""
     
     override func viewDidLoad() {
@@ -65,7 +63,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         DispatchQueue.main.async {
             self.loadContent()
             self.coordinate = LocManager.shared.curtLoc.coordinate
-            self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
+            if Key.shared.selectedTypeIdx == nil {
+                self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
+            } else {
+                self.search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+            }
             self.fullyLoaded = true
             General.shared.getAddress(location: LocManager.shared.curtLoc, original: false, full: false, detach: true) { (address) in
                 if let addr = address as? String {
@@ -524,8 +526,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
-        if selectedTypeIdx != nil {
-            search(category: lastCategory, indexPath: selectedTypeIdx)
+        if Key.shared.selectedTypeIdx != nil {
+            search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
         }
     }
     
@@ -581,8 +583,13 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.updateTitle(type: testTypes[indexPath.row])
             cell.delegate = self
             cell.indexPath = indexPath
-            if selectedTypeIdx != nil {
-                cell.setButtonColor(selected: indexPath == selectedTypeIdx)
+            if Key.shared.selectedTypeIdx != nil {
+                cell.setButtonColor(selected: indexPath == Key.shared.selectedTypeIdx)
+            } else {
+                if indexPath.row == 0 {
+                    cell.setButtonColor(selected: true)
+                    Key.shared.selectedTypeIdx = indexPath
+                }
             }
             return cell
         } else {
@@ -599,6 +606,19 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
+//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if collectionView == clctViewTypes {
+////            let lastRowIndex = clctViewTypes.numberOfItems(inSection: 0) - 1
+//            if indexPath.item == 0 {
+//                if Key.shared.lastExplored == "" {
+//                    let firstIndex = IndexPath(item: 0, section: 0)
+//                    guard let firstItem = clctViewTypes.cellForItem(at: firstIndex) as? EXPClctTypeCell else { return }
+//                    firstItem.setButtonColor(selected: true)
+//                }
+//            }
+//        }
+//    }
+    
     // EXPCellDelegate
     func jumpToPlaceDetail(_ placeInfo: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
@@ -608,23 +628,21 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    var lastCategory = ""
-    
     // MARK: - ExploreCategorySearch
     func search(category: String, indexPath: IndexPath) {
         
-        if selectedTypeIdx != nil {
-            if let cell = clctViewTypes.cellForItem(at: selectedTypeIdx) as? EXPClctTypeCell {
+        if Key.shared.selectedTypeIdx != nil {
+            if let cell = clctViewTypes.cellForItem(at: Key.shared.selectedTypeIdx) as? EXPClctTypeCell {
                 cell.setButtonColor(selected: false)
             }
         }
         if let cell = clctViewTypes.cellForItem(at: indexPath) as? EXPClctTypeCell {
             cell.setButtonColor(selected: true)
         }
-        selectedTypeIdx = indexPath
-        lastCategory = category
+        Key.shared.selectedTypeIdx = indexPath
+        Key.shared.lastCategory = category
         
-        if lastCategory == "Random" {
+        if Key.shared.lastCategory == "Random" {
             loadPlaces(center: coordinate)
             return
         }
