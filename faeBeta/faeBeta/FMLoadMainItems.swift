@@ -103,7 +103,7 @@ extension FaeMapViewController {
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSearchContent.textColor = UIColor._182182182()
         imgSchbarShadow.addSubview(lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
+        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-108-|", options: [], views: lblSearchContent)
         imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
@@ -115,12 +115,21 @@ extension FaeMapViewController {
         
         // Click to clear search results
         btnClearSearchRes = UIButton()
-        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClearSearchRes.setImage(#imageLiteral(resourceName: "main_clear_search_bar"), for: .normal)
         btnClearSearchRes.isHidden = true
         btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
         imgSchbarShadow.addSubview(btnClearSearchRes)
-        imgSchbarShadow.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
+        imgSchbarShadow.addConstraintsWithFormat("H:[v0(48)]-41-|", options: [], views: btnClearSearchRes)
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
+        
+        // Show drop up menu
+        btnDropUpMenu = UIButton()
+        btnDropUpMenu.setImage(#imageLiteral(resourceName: "main_drop_up_menu_gray"), for: .normal)
+        btnDropUpMenu.setImage(#imageLiteral(resourceName: "main_drop_up_menu_red"), for: .selected)
+        btnDropUpMenu.addTarget(self, action: #selector(self.actionShowMapActionsMenu(_:)), for: .touchUpInside)
+        imgSchbarShadow.addSubview(btnDropUpMenu)
+        imgSchbarShadow.addConstraintsWithFormat("H:[v0(46)]-7-|", options: [], views: btnDropUpMenu)
+        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnDropUpMenu)
         
         // Click to take an action for place pin
         uiviewPinActionDisplay = FMPinActionDisplay()

@@ -40,7 +40,7 @@ let device_offset_bot: CGFloat = {
 }()
 let device_offset_bot_main: CGFloat = {
     if UIScreen.main.bounds.height == 812 {
-        return 20
+        return 22
     } else {
         return 0
     }

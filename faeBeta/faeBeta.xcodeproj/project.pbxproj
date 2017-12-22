@@ -57,6 +57,7 @@
 		509543631FC8D272002EAD2E /* FMAllPlacesFromBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
+		50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
 		50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */; };
@@ -397,6 +398,7 @@
 		509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMAllPlacesFromBoard.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
+		50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDropUpMenu.swift; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
 		50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailClctView.swift; sourceTree = "<group>"; };
@@ -745,6 +747,7 @@
 				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
 				B894651A1F16D86F00561CFA /* FMAnnotations.swift */,
 				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
+				50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
 				50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */,
@@ -1886,6 +1889,7 @@
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
+				50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */,
 				B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */,
