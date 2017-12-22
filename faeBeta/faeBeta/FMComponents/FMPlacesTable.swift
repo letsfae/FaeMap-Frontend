@@ -20,11 +20,14 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var lblNumResults: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 68, width: screenWidth, height: screenHeight - 164 * screenHeightFactor))
+        super.init(frame: CGRect(x: 0, y: 68 + device_offset_top, width: screenWidth, height: screenHeight - 164 * screenHeightFactor - device_offset_bot_main))
         loadContent()
         alpha = 0
         layer.zPosition = 605
         clipsToBounds = true
+        
+        layer.borderColor = UIColor.black.cgColor
+        layer.borderWidth = 1
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -48,7 +51,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         self.frame.size.height = 102
         self.alpha = 1
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.size.height = screenHeight - 164 * screenHeightFactor
+            let iphone_x_offset: CGFloat = screenHeight == 812 ? 24 : 0
+            self.frame.size.height = screenHeight - 164 * screenHeightFactor - device_offset_bot_main - iphone_x_offset
             completion()
         }, completion: nil)
     }
@@ -64,18 +68,25 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack.contentMode = .scaleAspectFit
         addSubview(imgBack)
         
-        tblResults = UITableView(frame: CGRect(x: 8, y: 8, width: 397 * screenWidthFactor, height: screenHeight - 229 * screenHeightFactor))
+        tblResults = UITableView(frame: CGRect(x: 8, y: 8, width: 397 * screenWidthFactor, height: screenHeight - 230 * screenHeightFactor - device_offset_bot_main))
+        tblResults.center.x = screenWidth / 2
         tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
         tblResults.delegate = self
         tblResults.dataSource = self
         tblResults.tableFooterView = UIView()
+//        tblResults.isHidden = true
         addSubview(tblResults)
         
-        let footView = UIView()
+        let iphone_x_offset: CGFloat = screenHeight == 812 ? 115 * screenHeightFactor : 49 * screenHeightFactor
+        let footView = UIView(frame: CGRect(x: 0, y: screenHeight - 164 * screenHeightFactor - device_offset_bot_main - iphone_x_offset, width: screenWidth, height: 49*screenHeightFactor))
+        footView.clipsToBounds = true
+        footView.layer.borderColor = UIColor.black.cgColor
+        footView.layer.borderWidth = 1
         addSubview(footView)
-        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
-        addConstraintsWithFormat("V:[v0(\(49*screenHeightFactor))]-8-|", options: [], views: footView)
-        let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
+//        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
+//        addConstraintsWithFormat("V:[v0(\(49*screenHeightFactor))]-8-|", options: [], views: footView)
+        let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: 397 * screenWidthFactor, height: 1))
+        grayLine.center.x = screenWidth / 2
         grayLine.backgroundColor = UIColor._200199204()
         footView.addSubview(grayLine)
         

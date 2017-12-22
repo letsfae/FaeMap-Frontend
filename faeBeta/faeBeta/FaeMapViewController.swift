@@ -64,6 +64,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var lblSearchContent: UILabel!
     var btnMainMapSearch: UIButton!
     var btnClearSearchRes: UIButton!
+    var btnDropUpMenu: UIButton!
     var uiviewPinActionDisplay: FMPinActionDisplay! // indicate which action is being pressing to release
     
     // Explore Button
@@ -88,6 +89,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Filter Hexagon and Menu
     var btnFilterIcon: FMFilterIcon! // Filter Button
     var uiviewFilterMenu: FMFilterMenu! // Filter Menu
+    var uiviewDropUpMenu: FMDropUpMenu! // 
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
@@ -190,6 +192,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapView()
         loadButton()
         view.bringSubview(toFront: uiviewFilterMenu)
+        view.bringSubview(toFront: uiviewDropUpMenu)
         loadExploreBar()
         loadPlaceDetail()
         loadPlaceListView()

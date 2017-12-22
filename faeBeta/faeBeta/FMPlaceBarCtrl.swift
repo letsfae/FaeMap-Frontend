@@ -34,7 +34,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
         btnTapToShowResultTbl.frame.size = CGSize(width: 58, height: 30)
         btnTapToShowResultTbl.center.x = screenWidth / 2
-        btnTapToShowResultTbl.center.y = 181
+        btnTapToShowResultTbl.center.y = 181 + device_offset_top
         view.addSubview(btnTapToShowResultTbl)
         btnTapToShowResultTbl.alpha = 0
         btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)

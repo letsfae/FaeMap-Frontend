@@ -60,7 +60,7 @@ extension FaeMapViewController {
         btnTapToShowResultTbl.alpha = 0
         btnLocateSelf.isHidden = false
         btnZoom.isHidden = false
-        btnTapToShowResultTbl.center.y = 181
+        btnTapToShowResultTbl.center.y = 181 + device_offset_top
         mapGesture(isOn: true)
         deselectAllAnnotations()
         placeClusterManager.removeAnnotations(placesFromSearch) {
@@ -102,7 +102,7 @@ extension FaeMapViewController {
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.show {
-                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68
+                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68 + device_offset_top
             }
             btnZoom.isHidden = true
             btnLocateSelf.isHidden = true
@@ -112,7 +112,7 @@ extension FaeMapViewController {
             tblPlaceResult.hide()
             btnZoom.isHidden = false
             btnLocateSelf.isHidden = false
-            btnTapToShowResultTbl.center.y = 181
+            btnTapToShowResultTbl.center.y = 181 + device_offset_top
             btnTapToShowResultTbl.transform = CGAffineTransform.identity
         }
     }
@@ -195,5 +195,15 @@ extension FaeMapViewController {
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll()
         clctViewMap.reloadData()
+    }
+    
+    @objc func actionShowMapActionsMenu(_ sender: UIButton) {
+        if sender.isSelected {
+            sender.isSelected = false
+            uiviewDropUpMenu.hide()
+        } else {
+            sender.isSelected = true
+            uiviewDropUpMenu.show()
+        }
     }
 }

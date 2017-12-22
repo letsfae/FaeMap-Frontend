@@ -11,6 +11,7 @@ import SwiftyJSON
 //import CCHMapClusterController
 
 extension FaeMapViewController: MapFilterMenuDelegate {
+    
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
@@ -30,6 +31,11 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         btnFilterIcon.addGestureRecognizer(panGesture_icon)
         let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
+        
+        // new menu design
+        uiviewDropUpMenu = FMDropUpMenu()
+        uiviewDropUpMenu.layer.zPosition = 601
+        view.addSubview(uiviewDropUpMenu)
     }
     
     @objc func actionFilterIcon(_ sender: UIButton) {
