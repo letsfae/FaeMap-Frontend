@@ -44,8 +44,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - 170 - device_offset_bot_main
         }) { _ in
-            self.animating = false
-            self.showed = true
+            
         }
     }
     
@@ -53,8 +52,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight
         }) { _ in
-            self.animating = false
-            self.showed = false
+            
         }
     }
     
