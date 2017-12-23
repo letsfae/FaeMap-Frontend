@@ -204,6 +204,9 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
     }
     
     func closeOrOpen(_ todayHour: String) -> String {
+        if todayHour == "N/A" {
+            return "N/A"
+        }
         var startHour: String = String(todayHour.split(separator: "–")[0])
         var endHour: String = String(todayHour.split(separator: "–")[1])
         if startHour == "Noon" {
