@@ -143,7 +143,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         btnDelete.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         
         //btnAlert = UIButton(frame: CGRect(x: 40/414*screenWidth, y: 102/736*screenHeight, width: 208/414*screenWidth, height: 39))
-         btnAlert = UIButton(frame: CGRect(x: 0, y: 102, w: 208, h: 39))
+        btnAlert = UIButton(frame: CGRect(x: 0, y: 102, w: 208, h: 39))
         btnAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(btnAlert)
         btnAlert.titleLabel?.textColor = .white

@@ -62,11 +62,12 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         observeOnMessageChange()
         
         // TODO
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username , Key.shared.nickname ?? "", true, "", Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username , Key.shared.nickname ?? "", IS_FRIEND, "", Key.shared.gender])
         try! realm.write {
             realm.add(realmUser, update: true)
         }
     }
+    
     deinit {
         notificationToken?.invalidate()
     }
@@ -209,7 +210,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         let indexPath = indexToDelete
         let recentToDeleted = resultRealmRecents[indexPath.row]
         let chat_id = recentToDeleted.chat_id
-        let allMessages = realm.filterAllMessages("\(Key.shared.user_id)", 0, chat_id)
+        let allMessages = realm.filterAllMessages(0, chat_id)
         try! realm.write {
             realm.delete(recentToDeleted)
             realm.delete(allMessages)

@@ -358,7 +358,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         let realm = try! Realm()
         let newMessage = RealmMessage_v2()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, newIndex)
-        let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
+        let selfUser = realm.filterUser(id: login_user_id)!
         newMessage.sender = selfUser
         newMessage.members.append(selfUser)
         newMessage.members.append(shareToUser)

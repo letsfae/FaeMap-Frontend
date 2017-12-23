@@ -150,7 +150,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         let realm = try! Realm()
         for user_id in arrUserIDs {
-            if let user = realm.filterUser("\(Key.shared.user_id)", id: "\(user_id)") {
+            if let user = realm.filterUser(id: "\(user_id)") {
                 arrRealmUsers.append(user)
             }
         }
