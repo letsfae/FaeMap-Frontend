@@ -187,16 +187,57 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         let components = calendar.dateComponents([.weekday], from: date)
         
         if let weekday = components.weekday {
+            
             if weekday == 7 {
-                lblContent.text = arrDay_LG[0] + " / " + arrHour[0]
+                //lblContent.text = arrDay_LG[0] + " / " + arrHour[0]
+                lblContent.text = closeOrOpen(arrHour[0]) + " / " + arrHour[0]
             } else if weekday == 8 {
-                lblContent.text = arrDay_LG[1] + " / " + arrHour[1]
+                //lblContent.text = arrDay_LG[1] + " / " + arrHour[1]
+                lblContent.text = closeOrOpen(arrHour[1]) + " / " + arrHour[1]
             } else {
-                lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
+                //lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
+                lblContent.text = closeOrOpen(arrHour[weekday]) + " / " + arrHour[weekday]
             }
         }
 
         tblOpeningHours.reloadData()
+    }
+    
+    func closeOrOpen(_ todayHour: String) -> String {
+        if todayHour == "N/A" {
+            return "N/A"
+        }
+        var startHour: String = String(todayHour.split(separator: "–")[0])
+        var endHour: String = String(todayHour.split(separator: "–")[1])
+        if startHour == "Noon" {
+            startHour = "12:00 PM"
+        }
+        if endHour == "Noon" {
+            endHour = "12:00 PM"
+        } else if endHour == "Midnight" {
+            endHour = "00:00 AM"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+        let dateStart = dateFormatter.date(from: startHour)
+        let dateEnd = dateFormatter.date(from: endHour)
+        dateFormatter.dateFormat = "HH:mm"
+        
+        let date24Start = dateFormatter.string(from: dateStart!)
+        let date24End = dateFormatter.string(from: dateEnd!)
+        
+        let hourStart = Int(date24Start.split(separator: ":")[0])!
+        var hourEnd = Int(date24End.split(separator: ":")[0])!
+        if endHour.contains("AM") {
+            hourEnd = hourEnd + 24
+        }
+        
+        let hourCurrent = Calendar.current.component(.hour, from: Date())
+        
+        if hourCurrent >= hourStart && hourCurrent < hourEnd {
+            return "Open"
+        }
+        return "Close"
     }
     
     override func loadHiddenContent() {
