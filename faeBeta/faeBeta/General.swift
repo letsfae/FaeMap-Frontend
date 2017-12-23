@@ -17,7 +17,7 @@ class General: NSObject {
     
     func avatarCached(userid: Int, completion:@escaping (UIImage) -> Void) {
         let realm = try! Realm()
-        if let user = realm.filterUser("\(Key.shared.user_id)", id: "\(userid)") {
+        if let user = realm.filterUser(id: "\(userid)") {
             if let avatar = user.avatar?.userSmallAvatar {
                 completion(UIImage(data: avatar as Data)!)
             }

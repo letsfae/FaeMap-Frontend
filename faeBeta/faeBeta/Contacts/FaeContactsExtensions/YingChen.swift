@@ -96,7 +96,7 @@ extension ContactsViewController {
     fileprivate func updateFriendCount() {
         let attributedStr = NSMutableAttributedString()
         let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
-        let count = NSAttributedString(string: "(\(countFriends))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
+        let count = NSAttributedString(string: "(\(arrRealmFriends.count))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr.append(strFriends)
         attributedStr.append(count)
         

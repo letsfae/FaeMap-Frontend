@@ -101,11 +101,11 @@ extension ContactsViewController {
         view.addSubview(uiviewNotification)
         
         // For the close button.
-        btnClose = UIButton()
+        btnClose = UIButton(frame: CGRect(x: 0, y: 0, w: 47, h: 45))
         btnClose.setImage(#imageLiteral(resourceName: "btn_close"), for: .normal)
         uiviewNotification.addSubview(btnClose)
-        view.addConstraintsWithFormat("H:|-0-[v0(47)]|", options: [], views: btnClose)
-        view.addConstraintsWithFormat("V:|-0-[v0(45)]", options: [], views: btnClose)
+        //view.addConstraintsWithFormat("H:|-0-[v0(47)]|", options: [], views: btnClose)
+        //view.addConstraintsWithFormat("V:|-0-[v0(45)]", options: [], views: btnClose)
         
         // adding trigger for btnClose (calls closeNoti()).
         btnClose.addTarget(
@@ -131,7 +131,8 @@ extension ContactsViewController {
         uiviewNotification.addSubview(lblBlockSetting)
         
         // the "yes" button
-        btnYes = UIButton()
+        btnYes = UIButton(frame: CGRect(x: 0, y: 149, w: 208, h: 39))
+        btnYes.center.x = uiviewNotification.frame.width / 2
         uiviewNotification.addSubview(btnYes)
         btnYes.layer.cornerRadius = 19 * screenWidthFactor
         btnYes.setTitleColor(.white, for: .normal)
@@ -143,10 +144,7 @@ extension ContactsViewController {
         uiviewNotification.addConstraintsWithFormat("V:[v0(\(39 * screenHeightFactor))]-\(20 * screenHeightFactor)-|", options: [], views: btnYes)
         
         // adding trigger for btnYes (calls yesButtonFunction).
-        btnYes.addTarget(
-            self,
-            action: #selector(yesButtonFunction(button:)),
-            for: .touchUpInside)
+        btnYes.addTarget(self, action: #selector(yesButtonFunction(button:)), for: .touchUpInside)
     }
     
     // this function configures the "choose an action" UI.

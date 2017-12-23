@@ -18,12 +18,12 @@ class FaeChat {
     var intLastSentIndex: Int = -1
     
     func updateFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", "", true, "", Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", "", MYSELF, "", Key.shared.gender])
         let realm = try! Realm()
         try! realm.write {
             realm.add(realmUser, update: true)
         }
-        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", true, "", ""])
+        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", ""])
         let realmFaeAvatar = UserAvatar()
         realmFaeAvatar.user_id = "1"
         realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
@@ -43,7 +43,7 @@ class FaeChat {
                     let display_name = json[i - 1]["friend_user_nick_name"].stringValue
                     let user_age = json[i - 1]["friend_user_age"].stringValue
                     let user_gender = json[i - 1]["friend_user_gender"].stringValue
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, true, user_age, user_gender])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, IS_FRIEND, user_age, user_gender])
                     try! realm.write {
                         realm.add(realmUser, update: true)
                     }
@@ -204,13 +204,13 @@ class FaeChat {
         let callGroup = DispatchGroup()
         for user in messageJSON["members"].arrayValue {
             callGroup.enter()
-            if let _ = realm.filterUser(login_user_id, id: user.string!) {
+            if let _ = realm.filterUser(id: user.string!) {
                 callGroup.leave()
             } else {
                 getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
                     if status / 100 == 2 && result != nil {
                         let profileJSON = JSON(result!)
-                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, false, "", ""])
+                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, NO_RELATION, "", ""])
                         try! realm.write {
                             realm.add(newUser, update: true)
                         }
@@ -227,7 +227,7 @@ class FaeChat {
             let chat_id = "\(chatID)"
             // messageRealm.chat_id = chat_id
             
-            let messagesInThisChat = realm.filterAllMessages(login_user_id, is_group, chat_id) // realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
+            let messagesInThisChat = realm.filterAllMessages(is_group, chat_id) // realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
             var newIndex = 0
             var unread_count = 1
             if messagesInThisChat.count > 0 {
@@ -239,7 +239,7 @@ class FaeChat {
             // let primaryKey = "\(login_user_id)_\(chat_id)_\(newIndex)"
             // messageRealm.loginUserID_chatID_index = primaryKey
             for user in messageJSON["members"].arrayValue {
-                if let userRealm = realm.filterUser(login_user_id, id: user.string!) { // objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
+                if let userRealm = realm.filterUser(id: user.string!) { // objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
                     if user.string! == login_user_id {
                         messageRealm.members.insert(userRealm, at: 0)
                     } else {
