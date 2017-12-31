@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 protocol FriendOperationFromContactsDelegate: class {
     func passFriendStatusBack(indexPath: IndexPath)
@@ -50,6 +51,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     var statusMode: FriendStatus = .defaultMode
     var action: String = ""
     
+    // MARK: life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._107105105_a50()
@@ -61,6 +63,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
+    // MARK: setup UI
     fileprivate func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
@@ -177,6 +180,9 @@ class FriendOperationFromContactsViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                    
+                    // TODO: API modification needed
+                    
                 } else if status == 400 {
                     // 400-22  Bad request, this user has already sent you a friend request
                     // 400-20  Bad request, you have already sent a request
@@ -207,6 +213,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                    
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: String(self.requestId)) {
+                        user.relation = IS_FRIEND
+                        user.created_at = ""
+                        user.request_id = ""
+                    }
+                    
                 } else {
                     self.lblMsgSent.text = "Accept Request \nFail!"
                     print("[Accept Request Fail] - \(status) \(message!)")
@@ -230,7 +244,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         }
     }
     
-    // actions
+    // MARK: actions
     @objc func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
@@ -336,9 +350,8 @@ class FriendOperationFromContactsViewController: UIViewController {
             }
         }
     }
-    // actions end
     
-    // animations
+    // MARK: animations
     func animationActionView() {
         uiviewChooseAction.isHidden = true
         uiviewChooseAction.alpha = 0
@@ -376,7 +389,6 @@ class FriendOperationFromContactsViewController: UIViewController {
             self.dismiss(animated: false)
         })
     }
-    // animations end
 }
 
 

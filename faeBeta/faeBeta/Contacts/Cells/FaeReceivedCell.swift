@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol SomeDelegateReceivedRequests: class {
+protocol ContactsReceivedRequestsDelegate: class {
     func refuseRequest(requestId: Int, indexPath: IndexPath)
     func acceptRequest(requestId: Int, indexPath: IndexPath)
 }
 
 class FaeReceivedCell: UITableViewCell {
     
-    weak var delegate: SomeDelegateReceivedRequests?
+    weak var delegate: ContactsReceivedRequestsDelegate?
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
