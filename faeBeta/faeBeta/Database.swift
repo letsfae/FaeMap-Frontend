@@ -59,7 +59,7 @@ class RealmUser: Object {
         if current.age != self.age { return false }
         if current.gender != self.gender { return false }
         if self.created_at != "" {
-            if current.created_at != self.created_at { return false}
+            if current.created_at != self.created_at { return false }
         }
         // TODO short intro
         return true

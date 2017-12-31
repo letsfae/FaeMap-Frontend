@@ -320,6 +320,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
 //            self.tblContacts.reloadData()
             guard let prefix = self.arrFriends.first?.displayName else { return }
             self.lblPrefix.text = (prefix as NSString).substring(to: 1)
+            //self.setupScrollBar()
         }
 
     }
@@ -373,7 +374,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 }
                 try! realm.commitWrite()
             }
-            self.countSent = self.arrRequested.count
+            self.countSent = self.arrRealmRequested.count
             //self.tblContacts.reloadData()
         }
     }
@@ -428,7 +429,7 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
                 }
                 try! realm.commitWrite()
             }
-            self.countReceived = self.arrReceivedRequests.count
+            self.countReceived = self.arrRealmReceivedRequests.count
             //self.tblContacts.reloadData()
         }
     }
@@ -438,7 +439,8 @@ class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, So
             switch changes {
             case .initial:
                 felixprint("initial")
-                self.tblContacts.reloadData()
+                //self.tblContacts.reloadData()
+                self.setupScrollBar()
                 break
             case .update(_, let deletions, let insertions, let modifications):
                 felixprint("contact update")

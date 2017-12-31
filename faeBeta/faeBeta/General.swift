@@ -19,7 +19,12 @@ class General: NSObject {
         let realm = try! Realm()
         if let user = realm.filterUser(id: "\(userid)") {
             if let avatar = user.avatar?.userSmallAvatar {
-                completion(UIImage(data: avatar as Data)!)
+                if let img = UIImage(data: avatar as Data) {
+                    completion(img)
+                } else {
+                    let gender = Key.shared.gender == "male" ? "defaultMen" : "defaultWomen"
+                    completion(UIImage(named: gender)!)
+                }
             }
         }
     }
