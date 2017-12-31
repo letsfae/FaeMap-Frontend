@@ -78,7 +78,7 @@ struct Relations {
     }
 }
 
-class ContactsViewController: UIViewController, SomeDelegateReceivedRequests, SomeDelegateRequested {
+class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate, ContactsRequestedDelegate {
     
     // YingChen.swift variable declaration for UI objects
     var uiviewNavBar: FaeNavBar!

@@ -10,9 +10,9 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-
 extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate, AddFriendFromNameCardDelegate {
     
+    // MARK: Setup UI
     func loadSearchBar() {
         uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         view.addSubview(uiviewSchbar)
@@ -83,14 +83,14 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewNameCard.delegate = self
     }
     
-    // NameCardDelegate
+    // MARK: NameCardDelegate
     func openFaeUsrInfo() {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
         uiviewNameCard.hideSelf()
         navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
-    // NameCardDelegate
+    
     func chatUser(id: Int) {
         uiviewNameCard.hideSelf()
         let vcChat = ChatViewController()
@@ -121,13 +121,13 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             }
         }*/
     }
-    // NameCardDelegate
+
     func reportUser(id: Int) {
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
         present(reportPinVC, animated: true, completion: nil)
     }
-    // NameCardDelegate
+
     func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
@@ -152,7 +152,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         navigationController?.pushViewController(vcChat, animated: true)
     }
     
-    // AddFriendFromNameCardDelegate
+    // MARK: AddFriendFromNameCardDelegate
     func changeContactsTable(action: Int, userId: Int, requestId: Int) {
         print("changeContactsTable")
         switch action {
@@ -184,7 +184,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         self.reloadAfterDelete()
     }
     
-    // button press functionalities
+    // MARK: Bottom button functionalities
     @objc func pressbtnFFF(button: UIButton) {
         if btnRR.isSelected {
             getReceivedRequests()
@@ -218,21 +218,24 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         //btnIndicator.isHidden = true
     }
     
-    // FaeSearchBarTestDelegate
+    // MARK: FaeSearchBarTestDelegate
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         filter(searchText: searchText)
     }
+    
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         schbarContacts.txtSchField.becomeFirstResponder()
     }
+    
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
         schbarContacts.txtSchField.resignFirstResponder()
     }
+    
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         schbarContacts.txtSchField.resignFirstResponder()
     }
-    // End of FaeSearchBarTestDelegate
     
+    // MAKR: search on friend list
     func filter(searchText: String, scope: String = "All") {
         //filtered = arrFriends.filter({(($0.displayName).lowercased()).range(of: searchText.lowercased()) != nil})
         filteredRealm = arrRealmFriends.filter({ ($0.display_name).lowercased().range(of: searchText.lowercased()) != nil })
@@ -248,24 +251,57 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.reloadData()
     }
     
+    // MARK: ContactsReceivedRequestsDelegate
+    func refuseRequest(requestId: Int, indexPath: IndexPath) {
+        btnYes.tag = IGNORE
+        indexPathGlobal = indexPath
+        idGlobal = requestId
+        self.chooseAnAction()
+    }
+    
+    func acceptRequest(requestId: Int, indexPath: IndexPath) {
+        indexPathGlobal = indexPath
+        idGlobal = requestId
+        indicatorView.startAnimating()
+        animateWithdrawal(listType: ACCEPT)
+    }
+    
+    // MARK: ContactsRequestedDelegate
+    func withdrawRequest(requestId: Int, indexPath: IndexPath) {
+        btnYes.tag = WITHDRAW
+        indexPathGlobal = indexPath
+        idGlobal = requestId
+        print("button has been executed cancel request")
+        self.showNoti(type: WITHDRAW)
+    }
+    
+    func resendRequest(userId: Int, indexPath: IndexPath) {
+        print("button has been executed resend request")
+        btnYes.tag = RESEND
+        indexPathGlobal = indexPath
+        idGlobal = userId
+        self.showNoti(type: RESEND)
+    }
+    
+    // MARK: TableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStatus == 1 {
             //return arrReceivedRequests.count
             return arrRealmReceivedRequests.count
             /*
-            if curtTitle == "Friends" {
-                if schbarContacts.txtSchField.text != "" {
-                    return filtered.count
-                } else {
-                    return arrFriends.count
-                }
-            } else {
-                if schbarContacts.txtSchField.text != "" {
-                    return filteredFollows.count
-                } else {
-                    return curtTitle == "Followers" ? arrFollowers.count : arrFollowees.count
-                }
-            }
+             if curtTitle == "Friends" {
+             if schbarContacts.txtSchField.text != "" {
+             return filtered.count
+             } else {
+             return arrFriends.count
+             }
+             } else {
+             if schbarContacts.txtSchField.text != "" {
+             return filteredFollows.count
+             } else {
+             return curtTitle == "Followers" ? arrFollowers.count : arrFollowees.count
+             }
+             }
              */
         }
         else if cellStatus == 2 {
@@ -282,40 +318,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             }
         }
     }
-    
-    // SomeDelegateReceivedRequests
-    func refuseRequest(requestId: Int, indexPath: IndexPath) {
-        btnYes.tag = IGNORE
-        indexPathGlobal = indexPath
-        idGlobal = requestId
-        self.chooseAnAction()
-    }
-    
-    func acceptRequest(requestId: Int, indexPath: IndexPath) {
-        indexPathGlobal = indexPath
-        idGlobal = requestId
-        indicatorView.startAnimating()
-        animateWithdrawal(listType: ACCEPT)
-    }
-    // SomeDelegateReceivedRequests End
-    
-    // SomeDelegateRequested
-    func withdrawRequest(requestId: Int, indexPath: IndexPath) {
-        btnYes.tag = WITHDRAW
-        indexPathGlobal = indexPath
-        idGlobal = requestId
-        print("button has been executed cancel request")
-        self.showNoti(type: WITHDRAW)
-    }
-    
-    func resendRequest(userId: Int, indexPath: IndexPath) {
-        print("button has been executed resend request")
-        btnYes.tag = RESEND
-        indexPathGlobal = indexPath
-        idGlobal = userId
-        self.showNoti(type: RESEND)
-    }
-    // SomeDelegateRequested End
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if cellStatus == 1 {
@@ -479,6 +481,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         }
     }
     
+    // MARK: TableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // received
         indexPathGlobal = indexPath
@@ -502,13 +505,11 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewNameCard.show {}
     }
     
-    /* Comment from Joshua:
-     assign the table cell height
-     */
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
     }
     
+    // MARK: Contact actions
     func animateWithdrawal(listType: Int) {
         switch listType {
         case WITHDRAW:
@@ -537,6 +538,17 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "The user has been \nblocked successfully!"
+                    let realm = try! Realm()
+                    try! realm.write {
+                        if self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation & IS_FRIEND == IS_FRIEND {
+                            self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation &= BLOCKED
+                        } else {
+                            self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
+                            self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
+                            self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
+                        }
+                        
+                    }
                     //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
@@ -595,6 +607,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Request Resent \nSuccessfully!"
+                    // TODO: API modification needed
                 } else {
                     self.lblNotificationText.text = "Request Resent \nFail!"
                     print("[Contacts resend friend request fail]")
