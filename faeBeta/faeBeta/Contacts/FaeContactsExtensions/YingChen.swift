@@ -73,6 +73,11 @@ extension ContactsViewController {
         lblTop.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnTop.addSubview(lblTop)
         
+        imgDot = UIImageView(frame: CGRect(x: 30, y: 74, width: 8, height: 8))
+        imgDot.image = #imageLiteral(resourceName: "verification_dot")
+        uiviewDropDownMenu.addSubview(imgDot)
+        imgDot.isHidden = true
+        
         lblBottom = UILabel(frame: CGRect(x: 104, y: 15, width: 150, height: 25))
         lblBottom.textColor = UIColor._898989()
         lblBottom.font = UIFont(name: "AvenirNext-Medium", size: 18)
@@ -86,11 +91,6 @@ extension ContactsViewController {
         imgTick = UIImageView(frame: CGRect(x: screenWidth - 70, y: 20, width: 16, height: 16))
         imgTick.image = #imageLiteral(resourceName: "mb_tick")
         uiviewDropDownMenu.addSubview(imgTick)
-        
-        imgDot = UIImageView(frame: CGRect(x: 30, y: 74, width: 8, height: 8))
-        imgDot.image = #imageLiteral(resourceName: "verification_dot")
-        uiviewDropDownMenu.addSubview(imgDot)
-        imgDot.isHidden = true
     }
     
     fileprivate func updateFriendCount() {
@@ -104,11 +104,14 @@ extension ContactsViewController {
         
         let attributedStr2 = NSMutableAttributedString()
         if cellStatus == 1 {
-            countRequests = countReceived
+            //countRequests = countReceived
+            countRequests = arrRealmReceivedRequests.count
         } else if cellStatus == 2 {
-            countRequests = countSent
+            //countRequests = countSent
+            countRequests = arrRealmRequested.count
         } else {
-            countRequests = countReceived + countSent
+            //countRequests = countReceived + countSent
+            countRequests = arrRealmReceivedRequests.count + arrRealmRequested.count
         }
         let strRequests = NSAttributedString(string: "Requests ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
         let strTotal = NSAttributedString(string: "(\(countRequests))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
@@ -116,6 +119,8 @@ extension ContactsViewController {
         attributedStr2.append(strTotal)
         
         lblBottom.attributedText = attributedStr2
+        
+        imgDot.isHidden = countRequests == 0
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
@@ -185,7 +190,7 @@ extension ContactsViewController {
             uiviewNavBar.rightBtn.isHidden = false
             uiviewBottomNav.isHidden = true
             uiviewSchbar.isHidden = false
-            tblContacts.frame.origin.y = 114 + device_offset_top
+            tblContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
             cellStatus = 0
             btnIndicator.isHidden = false
         } else {
@@ -193,7 +198,7 @@ extension ContactsViewController {
             uiviewNavBar.rightBtn.isHidden = true
             uiviewBottomNav.isHidden = false
             uiviewSchbar.isHidden = true
-            tblContacts.frame.origin.y = 65 + device_offset_top
+            tblContacts.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 49 - device_offset_top - device_offset_bot) 
             cellStatus = btnFFF.isSelected ? 1 : 2
             btnIndicator.isHidden = true
         }

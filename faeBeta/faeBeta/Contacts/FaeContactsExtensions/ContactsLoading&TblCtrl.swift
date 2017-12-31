@@ -338,7 +338,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
             General.shared.avatar(userid: Int(arrRealmReceivedRequests[indexPath.row].id)!, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
+                //cell.imgAvatar.image = avatarImage
             })
             cell.lblUserName.text = arrRealmReceivedRequests[indexPath.row].display_name
             cell.lblUserSaying.text = arrRealmReceivedRequests[indexPath.row].user_name
@@ -612,8 +612,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.performUpdate({
             self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
         }) {
-            //self.tblContacts.reloadData()
-            self.imgDot.isHidden = self.arrReceivedRequests.count == 0
+            self.tblContacts.reloadData()
+            //self.imgDot.isHidden = self.arrReceivedRequests.count == 0
+            self.setupScrollBar()
         }
     }
 }

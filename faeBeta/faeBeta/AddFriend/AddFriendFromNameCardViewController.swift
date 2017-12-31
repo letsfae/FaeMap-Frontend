@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 enum FriendStatus: String {
     case defaultMode
@@ -60,6 +61,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     
     var statusMode: FriendStatus = .defaultMode
     
+    // MARK: life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._107105105_a50()
@@ -75,6 +77,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         animationShowSelf()
     }
     
+    // MARK: setup
     fileprivate func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
@@ -233,7 +236,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         }
     }
     
-    // actions
+    // MARK: actions
     @objc func sentActRequest(_ sender: UIButton!) {
         if !(sender.tag == REPORT_ACT || sender.tag == EDIT_NAME_CARD || sender.tag == INFO_SETTING) {
             print(sender.tag)
@@ -315,6 +318,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     self.statusMode = .accepted
                     self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId, requestId: self.requestId)
+                    
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: String(self.requestId)) {
+                        user.relation = IS_FRIEND
+                        user.created_at = ""
+                        user.request_id = ""
+                    }
+                    
                     print("[FMUserInfo Accept Request Successfully]")
                 } else {
                     self.lblMsgSent.text = "Accept Request \nFail!"
@@ -378,7 +389,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         animationHideSelf()
     }
     
-    @objc func actionOK(_ sender: UIButton) {
+    @objc func actionOK(_ sender: UIButton) { // TODO: jichao
         if sender.tag == OK {
             delegate?.passFriendStatusFromView(status: statusMode)
             animationHideSelf()
@@ -474,9 +485,8 @@ class AddFriendFromNameCardViewController: UIViewController {
             }
         }
     }
-    // actions end
     
-    // animations
+    // MARK: animations
     func animationActionView() {
         uiviewMsgSent.isHidden = false
         uiviewChooseAction.alpha = 0
@@ -507,6 +517,5 @@ class AddFriendFromNameCardViewController: UIViewController {
             self.dismiss(animated: false)
         })
     }
-    // animations end
 }
 

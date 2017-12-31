@@ -17,7 +17,7 @@ extension FaeMapViewController: NameCardDelegate {
         view.addSubview(uiviewNameCard)
     }
     
-    // NameCardDelegate
+    // MARK: NameCardDelegate
     func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
@@ -28,14 +28,12 @@ extension FaeMapViewController: NameCardDelegate {
         present(addFriendVC, animated: false)
     }
     
-    // NameCardDelegate
     func reportUser(id: Int) {
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
         present(reportPinVC, animated: true, completion: nil)
     }
     
-    // NameCardDelegate
     func openFaeUsrInfo() {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
@@ -45,7 +43,6 @@ extension FaeMapViewController: NameCardDelegate {
         navigationController?.pushViewController(fmUsrInfo, animated: true)
     }
     
-    // NameCardDelegate
     func chatUser(id: Int) {
         let vcChat = ChatViewController()
         vcChat.arrUserIDs.append("\(Key.shared.user_id)")
@@ -94,6 +91,7 @@ extension FaeMapViewController: NameCardDelegate {
         }*/
     }
     
+    // MARK: go to chatting
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
         let chatVC = ChatViewController()
         chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
