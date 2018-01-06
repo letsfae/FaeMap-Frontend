@@ -321,9 +321,11 @@ class AddFriendFromNameCardViewController: UIViewController {
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
-                        user.relation = IS_FRIEND
-                        user.created_at = ""
-                        user.request_id = ""
+                        try! realm.write {
+                            user.relation = IS_FRIEND
+                            user.created_at = ""
+                            user.request_id = ""
+                        }                        
                     }
                     
                     print("[FMUserInfo Accept Request Successfully]")
@@ -345,9 +347,11 @@ class AddFriendFromNameCardViewController: UIViewController {
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
-                        user.relation = NO_RELATION
-                        user.created_at = ""
-                        user.request_id = ""
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                            user.created_at = ""
+                            user.request_id = ""
+                        }
                     }
                 } else {
                     self.lblMsgSent.text = "Ignore Request \nFail!"
@@ -410,7 +414,9 @@ class AddFriendFromNameCardViewController: UIViewController {
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
-                        user.relation = NO_RELATION
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                        }
                     }
                 } else {
                     self.lblMsgSent.text = "Remove Friend \nFail!"
@@ -431,12 +437,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
-                        if user.relation & IS_FRIEND == IS_FRIEND {
-                            user.relation &= BLOCKED
-                        } else {
-                            user.relation = NO_RELATION
-                            user.created_at = ""
-                            user.request_id = ""
+                        try! realm.write {
+                            if user.relation & IS_FRIEND == IS_FRIEND {
+                                user.relation &= BLOCKED
+                            } else {
+                                user.relation = NO_RELATION
+                                user.created_at = ""
+                                user.request_id = ""
+                            }
                         }
                     }
                 } else {
@@ -460,7 +468,9 @@ class AddFriendFromNameCardViewController: UIViewController {
                         self.statusMode = .defaultMode
                         self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId, requestId: self.requestId)
                         
-                        user.relation = NO_RELATION
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                        }
                     } else if status == 404 {
                         self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
                         self.statusMode = .defaultMode
