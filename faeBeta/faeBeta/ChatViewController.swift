@@ -204,13 +204,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
         DispatchQueue.main.async {
-        self.toolbarContentView.setup(initializeType)
+        self.toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
         }
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -398,6 +399,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showStikcer() {
         view.endEditing(true)
+        //toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
@@ -408,6 +410,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showLibrary() {
         view.endEditing(true)
+        toolbarContentView.setup(FAEChatToolBarContentType.photo.rawValue)
         let status = PHPhotoLibrary.authorizationStatus()
         if status != .authorized {
             print("not authorized!")
@@ -436,6 +439,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showRecord() {
         view.endEditing(true)
+        toolbarContentView.setup(FAEChatToolBarContentType.audio.rawValue)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
@@ -446,6 +450,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showMiniMap() {
         view.endEditing(true)
+        toolbarContentView.setup(FAEChatToolBarContentType.minimap.rawValue)
         resetToolbarButtonIcon()
         btnLocation.setImage(UIImage(named: "locationChosen"), for: UIControlState())
         let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
