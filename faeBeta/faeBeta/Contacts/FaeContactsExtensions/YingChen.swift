@@ -192,7 +192,7 @@ extension ContactsViewController {
             uiviewSchbar.isHidden = false
             tblContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
             cellStatus = 0
-            btnIndicator.isHidden = false
+            faeScrollBar?.isHidden = false
         } else {
             imgTick.frame.origin.y = 71
             uiviewNavBar.rightBtn.isHidden = true
@@ -200,7 +200,7 @@ extension ContactsViewController {
             uiviewSchbar.isHidden = true
             tblContacts.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 49 - device_offset_top - device_offset_bot) 
             cellStatus = btnFFF.isSelected ? 1 : 2
-            btnIndicator.isHidden = true
+            faeScrollBar?.isHidden = true
         }
         
         
