@@ -102,7 +102,10 @@ class StickerAlbum {
                         button.addTarget(self, action: #selector(deleteEmoji), for: .touchUpInside)
 
                     } else if arr2StrStickerName[page].count > index {
-                        imageView.image = UIImage(named: arr2StrStickerName[page][index])
+                        //imageView.image = UIImage(named: arr2StrStickerName[page][index])
+                        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1 * Double(page), execute: {
+                            imageView.image = UIImage(named: self.arr2StrStickerName[page][index])
+                        })
                         button.addTarget(self, action: #selector(calculateIndex), for: .touchUpInside)
                     }
                 }

@@ -51,8 +51,16 @@ class StickerScrollView : UIScrollView {
         
         self.contentSize = CGSize(width: self.frame.size.width * max(1, CGFloat(totalPages)), height: self.frame.size.height)
 
-        for stickerAlbum in arrStickerAlbums {
-            stickerAlbum.attachStickerButton(self)
+        /*for stickerAlbum in arrStickerAlbums {
+            DispatchQueue.main.async {
+                stickerAlbum.attachStickerButton(self)
+            }
+        }*/
+        for (index, StickerAlbum) in arrStickerAlbums.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1 * Double(index), execute: {
+                StickerAlbum.attachStickerButton(self)
+            })
+            
         }
     }
     

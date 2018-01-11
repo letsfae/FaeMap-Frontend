@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 protocol NameCardDelegate: class {
     func openFaeUsrInfo()
@@ -270,6 +271,9 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             btnOptions.isHidden = true
             return
         }
+        General.shared.avatarCached(userid: withUserId) { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        }
         General.shared.avatar(userid: withUserId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
             self.imgAvatar.isUserInteractionEnabled = true
@@ -526,22 +530,39 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     
     func getFriendStatus(id: Int) {
         statusMode = .defaultMode
-        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                let relation = Relations(json: json)
-                if relation.is_friend {
-                    self.statusMode = .accepted
-                } else if relation.requested {
-                    self.statusMode = .pending
-                } else if relation.requested_by {
-                    self.statusMode = .requested
-                } else if relation.blocked || relation.blocked_by {   // blocked & blocked_by
-                    self.statusMode = .blocked
+        
+        let realm = try! Realm()
+        if let user = realm.filterUser(id: String(id)) {
+            if user.relation & IS_FRIEND == IS_FRIEND {
+                statusMode = .accepted
+            } else if user.relation & FRIEND_REQUESTED == FRIEND_REQUESTED {
+                statusMode = .pending
+                requestId = Int(user.request_id)!
+            } else if user.relation & FRIEND_REQUESTED_BY == FRIEND_REQUESTED_BY {
+                statusMode = .requested
+                requestId = Int(user.request_id)!
+            } else if user.relation & BLOCKED == BLOCKED || user.relation & BLOCKED_BY == BLOCKED_BY {
+                statusMode = .blocked
+            }
+            setButtonImage()
+        } else {
+            FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let json = JSON(message!)
+                    let relation = Relations(json: json)
+                    if relation.is_friend {
+                        self.statusMode = .accepted
+                    } else if relation.requested {
+                        self.statusMode = .pending
+                    } else if relation.requested_by {
+                        self.statusMode = .requested
+                    } else if relation.blocked || relation.blocked_by {   // blocked & blocked_by
+                        self.statusMode = .blocked
+                    }
+                    self.setButtonImage()
+                } else {
+                    print("[get friend status fail] - \(status) \(message!)")
                 }
-                self.setButtonImage()
-            } else {
-                print("[get friend status fail] - \(status) \(message!)")
             }
         }
     }
