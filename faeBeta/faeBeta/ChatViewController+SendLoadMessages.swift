@@ -17,7 +17,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         //newMessage.login_user_id = login_user_id
         let realm = try! Realm()
         //let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
-        let messages = realm.filterAllMessages(login_user_id, intIsGroup, strChatId!)
+        let messages = realm.filterAllMessages(intIsGroup, strChatId!)
         var newIndex = 0
         if messages.count > 0 {
             newIndex = (messages.last?.index)! + 1
@@ -29,7 +29,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         newMessage.setPrimaryKeyInfo(login_user_id, intIsGroup, strChatId!, newIndex)
         for user_id in arrUserIDs {
             //let user = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(user_id)'").first!
-            let user = realm.filterUser(login_user_id, id: user_id)!
+            let user = realm.filterUser(id: user_id)!
             newMessage.members.append(user)
             if user.loginUserID_id == "\(login_user_id)_\(login_user_id)" {
                 newMessage.sender = user
@@ -208,7 +208,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     func loadMessagesFromRealm() {
         let realm = try! Realm()
         //resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
-        resultRealmMessages = realm.filterAllMessages(String(Key.shared.user_id), intIsGroup, strChatId)
+        resultRealmMessages = realm.filterAllMessages(intIsGroup, strChatId)
         let count = resultRealmMessages.count
         for i in (count - intNumberOfMessagesOneTime)..<count {
             if i < 0 {

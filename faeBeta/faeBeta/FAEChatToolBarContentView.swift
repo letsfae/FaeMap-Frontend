@@ -76,7 +76,7 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
     var boolKeyboardShow = false // false: keyboard is hide
     
     // Whether the media content view is show
-    var mediaContentShow : Bool{
+    var mediaContentShow : Bool {
         get{
             return boolImageQuickPickerShow || boolStickerViewShow || boolRecordShow || boolMiniLocationShow
         }
@@ -412,7 +412,9 @@ class FAEChatToolBarContentView: UIView, UICollectionViewDelegate,UICollectionVi
         boolStickerViewShow = false
         boolImageQuickPickerShow = false
         cllcPhotoQuick = nil
-        viewPhotoPicker.cleanup()
+        if viewPhotoPicker != nil {
+            viewPhotoPicker.cleanup()
+        }
         viewAudioRecorder = nil
         boolRecordShow = false
         boolAudioInitialized = false

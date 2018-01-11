@@ -288,7 +288,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         schbarUsernames.txtSchField.resignFirstResponder()
     }
 
-    // FaeAddUsernameDelegate
+    // MARK: FaeAddUsernameDelegate
     func addFriend(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
@@ -338,11 +338,9 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
     }
-    // FaeAddUsernameDelegate End
     
-    // FriendOperationFromContactsDelegate
+    // MARK: FriendOperationFromContactsDelegate
     func passFriendStatusBack(indexPath: IndexPath) {
         tblUsernames.reloadRows(at: [indexPath], with: .none)
     }
-    // FriendOperationFromContactsDelegate End
 }

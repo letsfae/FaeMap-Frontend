@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol SomeDelegateRequested: class {
+protocol ContactsRequestedDelegate: class {
     func withdrawRequest(requestId: Int, indexPath: IndexPath)
     func resendRequest(userId: Int, indexPath: IndexPath)
 }
 
 class FaeRequestedCell: UITableViewCell {
     
-    weak var delegate: SomeDelegateRequested?
+    weak var delegate: ContactsRequestedDelegate?
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
