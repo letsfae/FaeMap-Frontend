@@ -198,7 +198,7 @@ extension String {
             }
             
             if findEmoji {
-                finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -i)])
+                finalString = String(previous[..<previous.index(previous.endIndex, offsetBy: -i)])
             } else {
                 finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -1)])
             }

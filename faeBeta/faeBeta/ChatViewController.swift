@@ -203,9 +203,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             boolInitialLoadComplete = true
         }
         //let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {
         self.toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
-        }
+        })
         
     }
     
