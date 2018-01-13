@@ -36,38 +36,30 @@ extension ChatViewController {
         //let object = arrDictMessages[indexPath.row]
         let index = resultRealmMessages.count - (arrJSQMessages.count - indexPath.row)
         let messageType = resultRealmMessages[index].type
-        switch (messageType) {
+        switch messageType {
             case "text":
                 cell.contentType = Text
-                break
             case "[Picture]":
                 cell.contentType = Picture
-                break
             case "[Sticker]":
                 cell.contentType = Sticker
-                break
             case "[Location]":
                 cell.contentType = Location
-                break
             case "[Place]":
                 cell.contentType = Place
-                break
             case "[Collection]":
                 cell.contentType = Collection
-                break
             case "[Audio]":
                 cell.contentType = Audio
                 let JSQMessage = arrJSQMessages[indexPath.row]
                 if let message = JSQMessage.media as? JSQAudioMediaItemCustom {
                     message.delegate = self
                 }
-                break
             case "[Video]":
                 cell.contentType = Video
             // if it's a unknow message type, display a unknow message type
             default:
                 cell.contentType = Text
-                break
         }
         return cell
     }

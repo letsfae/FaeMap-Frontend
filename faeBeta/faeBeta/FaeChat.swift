@@ -79,7 +79,6 @@ class FaeChat {
                                     self?.sendNewMessageToServer(messages[insert])
                                 }
                             }
-                            break
                         case .error:
                             // print("error")
                             break
@@ -258,9 +257,7 @@ class FaeChat {
             switch messageRealm.type {
             case "[Place]":
                 self.downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
-                break
-            default:
-                break
+            default: break
             }
             if let media = messageJSON["media"].string {
                 if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue: 0)) {

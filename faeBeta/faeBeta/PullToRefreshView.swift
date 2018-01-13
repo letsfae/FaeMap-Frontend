@@ -52,11 +52,9 @@ class PullToRefreshView: UIView {
             switch self.state {
             case .pulling: // starting point
                 arrowRotationBack() // dummy now
-                break
             case .triggered:
                 arrowRotation() // dummy now
                 self.gifUnicorn.frame.origin.x = -130
-                break
             case .refreshing:
                 UIView.animate(withDuration: 3.2, delay: 0, options: [.repeat, .curveLinear], animations: {
                     self.imgBackground_01.frame.origin.x = -screenWidth
@@ -66,13 +64,11 @@ class PullToRefreshView: UIView {
                     self.gifUnicorn.center.x = screenWidth / 2
                 }, completion: nil)
                 startAnimating()
-                break
             case .stop:
                 UIView.animate(withDuration: 1.5, animations: {
                     self.gifUnicorn.frame.origin.x = screenWidth
                 }, completion: nil)
                 stopAnimating()
-                break
             case .finish:
                 var duration = PullToRefreshConst.animationDuration
                 var time = DispatchTime.now() + Double(Int64(duration * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
@@ -84,7 +80,6 @@ class PullToRefreshView: UIView {
                 DispatchQueue.main.asyncAfter(deadline: time) {
                     self.removeFromSuperview()
                 }
-                break
             }
         }
     }

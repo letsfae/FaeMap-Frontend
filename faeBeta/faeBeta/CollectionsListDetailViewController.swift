@@ -237,16 +237,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             featureDelegate = Key.shared.FMVCtrler
             featureDelegate?.showSavedPins(type: enterMode.rawValue, savedPinIds: arrSavedPinIds, isCollections: true, colName: realmColDetails.name)
             navigationController?.setViewControllers(arrCtrlers!, animated: false)
-            break
         case 1: // share
             // TODO JICHAO
             let vcShareCollection = NewChatShareController(friendListMode: .collection)
 //            vcShareCollection.collectionDetail = arrColDetails
             vcShareCollection.collectionDetail = realmColDetails
             navigationController?.pushViewController(vcShareCollection, animated: true)
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -760,7 +757,6 @@ extension CollectionsListDetailViewController {
             vc.enterMode = enterMode
             vc.colId = colId
             present(vc, animated: true)
-            break
         case 1: // settings
             animationHideOptions()
             let vc = CreateColListViewController()
@@ -769,12 +765,9 @@ extension CollectionsListDetailViewController {
             vc.enterMode = enterMode
             vc.colId = colId
             present(vc, animated: true)
-            break
         case 2: // delete
             animationActionView()
-            break
-        default:
-            break
+        default: break
         }
     }
     

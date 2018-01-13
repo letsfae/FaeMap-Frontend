@@ -69,7 +69,6 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         switch indexPath.row {
         case 0:
             cell.lblContent.text = Key.shared.userFirstname + " " + Key.shared.userLastname
-            break
         case 1:
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -79,10 +78,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             let dateString = dateFormatter.string(from: date!)
             
             cell.lblContent.text = dateString
-            break
         case 2:
             cell.lblContent.text = Key.shared.gender
-            break
         case 3:
             cell.lblContent.text = Key.shared.userEmail
             if !Key.shared.userEmailVerified {
@@ -93,10 +90,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 
                 cell.lblContent.attributedText = txt
             }
-            break
         case 4:
             cell.lblContent.text = Key.shared.username
-            break
         case 5:
             if !Key.shared.userPhoneVerified { //Key.shared.userPhoneNumber == "" {
                 let txt = NSMutableAttributedString()
@@ -110,10 +105,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 let phoneNumber = "+" + arrPhone![0] + " " + arrPhone![1]
                 cell.lblContent.text = phoneNumber
             }
-            break
         default:
             cell.lblContent.text = ""
-            break
         }
         return cell
     }
@@ -128,42 +121,36 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
             vc.fName = Key.shared.userFirstname
             vc.lName = Key.shared.userLastname
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 1:
             let vc = SetNameViewController()
             vc.delegate = self
             vc.enterMode = .birth
             vc.dateOfBirth = cell.lblContent.text
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 2:
             let vc = SetNameViewController()
             vc.delegate = self
             vc.enterMode = .gender
             vc.gender = cell.lblContent.text
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 3:
             let vc = UpdateUsrnameEmailViewController()
             vc.delegate = self
             vc.strEmail = Key.shared.userEmail
             vc.enterMode = .email
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 4:
             let vc = UpdateUsrnameEmailViewController()
             //            vc.delegate = self
             vc.strUsername = cell.lblContent.text
             vc.enterMode = .usrname
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 5:
             if !Key.shared.userPhoneVerified {
                 let vc = SignInPhoneViewController()
 //                vc.delegate = self
                 vc.enterMode = .settings
                 navigationController?.pushViewController(vc, animated: true)
-                break
             } else {
                 let vc = UpdateUsrnameEmailViewController()
                 vc.delegate = self
@@ -172,21 +159,16 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 vc.enterMode = .phone
                 navigationController?.pushViewController(vc, animated: true)
             }
-            break
         case 6:
             let vc = SetNameViewController()
             vc.enterMode = .password
             vc.pswdEnterMode = .password
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 7:
             navigationController?.pushViewController(SetDeactiveViewController(), animated: true)
-            break
         case 8:
             navigationController?.pushViewController(SetCloseViewController(), animated: true)
-            break
-        default:
-            break
+        default: break
         }
     }
     

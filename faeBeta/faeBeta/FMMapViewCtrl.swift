@@ -109,15 +109,12 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 }
                 anView.superview?.bringSubview(toFront: anView)
             }
-            
-            break
         case userClusterManager:
             let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? UserPinAnnotationView {
                 anView.assignImage(firstAnn.avatar)
                 anView.superview?.bringSubview(toFront: anView)
             }
-            break
         case locationPinClusterManager:
             break
         default:

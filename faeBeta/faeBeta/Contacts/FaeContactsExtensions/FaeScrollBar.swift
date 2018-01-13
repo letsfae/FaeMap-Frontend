@@ -20,24 +20,25 @@ enum IndicatorSize: Int {
 
 class FaeScrollBar: UIView {
     
-    var btnIndicator: UIButton!
-    var uiviewBar: UIView!
-    var lblPrefix: UILabel!
-    var delegate: FaeScrollBarDelegate?
-    let floatBtnHeight: CGFloat = 30.0
-    var floatFingerToBtnTop: CGFloat = 0.0
-    var floatBtnRange: CGFloat {
+    private var btnIndicator: UIButton!
+    private var uiviewBar: UIView!
+    private var lblPrefix: UILabel!
+    weak var delegate: FaeScrollBarDelegate?
+    private let floatBtnHeight: CGFloat = 30.0
+    private var floatFingerToBtnTop: CGFloat = 0.0
+    private var floatBtnRange: CGFloat {
         get {
             return frame.height - floatBtnHeight
         }
     }
-    var floatScrollRange: CGFloat = 0.0
-    var floatBtnYPositon: CGFloat {
+    private var floatScrollRange: CGFloat = 0.0
+    private var floatBtnYPositon: CGFloat {
         get {
             return btnIndicator.frame.origin.y
         }
     }
     
+    // MARK: init and setup
     init(frame: CGRect, scrollRange: CGFloat) {
         super.init(frame: frame)
         floatScrollRange = scrollRange
@@ -51,7 +52,7 @@ class FaeScrollBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup() {
+    private func setup() {
         btnIndicator = UIButton(frame: CGRect(x: 0, y: 0, width: 23, height: floatBtnHeight))
         btnIndicator.adjustsImageWhenHighlighted = false
         addSubview(btnIndicator)
@@ -75,19 +76,18 @@ class FaeScrollBar: UIView {
         lblPrefix.isHidden = true
     }
     
-    @objc func longPressGestureRecognizer(_ recognizer: UIGestureRecognizer) {
+    // MARK: long press gesture for indicator
+    @objc private func longPressGestureRecognizer(_ recognizer: UIGestureRecognizer) {
         //felixprint("btn long press")
         let curPosition = recognizer.location(in: self).y
         switch recognizer.state {
         case .began:
             animatedIndicator(type: .wide)
             floatFingerToBtnTop = curPosition - floatBtnYPositon
-            break
         case .changed:
             if curPosition < floatFingerToBtnTop || curPosition > self.frame.height - 30 + floatFingerToBtnTop {
-                break
             }
-            setBtnYPosition(curPosition - floatFingerToBtnTop, animated: 0.0)
+            setIndicatorPosition(curPosition - floatFingerToBtnTop, animated: 0.0)
             var percentage = floatBtnYPositon / floatBtnRange
             if percentage > 0.995 {
                 percentage = 1.0
@@ -96,28 +96,25 @@ class FaeScrollBar: UIView {
                 percentage = 0.0
             }
             delegate?.setScrollViewContentOffset(CGPoint(x: 0, y: floatScrollRange * percentage), animated: false)
-            break
         case .ended:
             animatedIndicator(type: .thin)
-            break
         default:
             animatedIndicator(type: .thin)
         }
     }
     
-    @objc func panGestureIndicator(_ pan: UIPanGestureRecognizer) {
+    // MARK: pan gesture for indicator
+    @objc private func panGestureIndicator(_ pan: UIPanGestureRecognizer) {
         //felixprint("btn pan")
         let curPosition = pan.location(in: self).y
         switch pan.state {
         case .began:
             animatedIndicator(type: .wide)
             floatFingerToBtnTop = curPosition - floatBtnYPositon
-            break
         case .changed:
             if curPosition < floatFingerToBtnTop || curPosition > self.frame.height - 30 + floatFingerToBtnTop {
-                break
             }
-            setBtnYPosition(curPosition - floatFingerToBtnTop, animated: 0.0)
+            setIndicatorPosition(curPosition - floatFingerToBtnTop, animated: 0.0)
             var percentage = floatBtnYPositon / floatBtnRange
             if percentage > 0.995 {
                 percentage = 1.0
@@ -128,13 +125,13 @@ class FaeScrollBar: UIView {
             delegate?.setScrollViewContentOffset(CGPoint(x: 0, y: floatScrollRange * percentage), animated: false)
         case .ended:
             animatedIndicator(type: .thin)
-            break
         default:
             animatedIndicator(type: .thin)
         }
     }
     
-    @objc func handleScrollZoneLongPress(_ recognizer: UILongPressGestureRecognizer) {
+    // MARK: long press gesture for scroll zone
+    @objc private func handleScrollZoneLongPress(_ recognizer: UILongPressGestureRecognizer) {
         let curPositon = recognizer.location(in: self).y
         //felixprint(curPositon)
         switch recognizer.state {
@@ -149,14 +146,13 @@ class FaeScrollBar: UIView {
             } else {
                 let percentage = (curPositon - 15.0) / floatBtnRange
                 delegate?.setScrollViewContentOffset(CGPoint(x: 0, y: floatScrollRange * percentage), animated: false)
-                setBtnYPosition(curPositon - 15.0, animated: 0.2)
+                setIndicatorPosition(curPositon - 15.0, animated: 0.2)
             }
             animatedIndicator(type: .wide)
         case .changed:
             if curPositon < floatFingerToBtnTop || curPositon > self.frame.height - 30 + floatFingerToBtnTop {
-                break
             }
-            setBtnYPosition(curPositon - floatFingerToBtnTop, animated: 0.0)
+            setIndicatorPosition(curPositon - floatFingerToBtnTop, animated: 0.0)
             var percentage = floatBtnYPositon / floatBtnRange
             if percentage > 0.995 {
                 percentage = 1.0
@@ -165,15 +161,14 @@ class FaeScrollBar: UIView {
                 percentage = 0.0
             }
             delegate?.setScrollViewContentOffset(CGPoint(x: 0, y: floatScrollRange * percentage), animated: false)
-            break
         case .ended:
             animatedIndicator(type: .thin)
-            break
         default:
             animatedIndicator(type: .thin)
         }
     }
     
+    // MARK: set the size of indicator
     func animatedIndicator(type: IndicatorSize) {
         switch type {
         case .thin:
@@ -184,7 +179,6 @@ class FaeScrollBar: UIView {
             }, completion: { _ in
                 self.uiviewBar.layer.cornerRadius = 3
             })
-            break
         case .normal:
             uiviewBar.layer.cornerRadius = 5
             UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
@@ -193,7 +187,6 @@ class FaeScrollBar: UIView {
                 self.lblPrefix.frame.origin.x = 3 + 15 - 50 + 6
                 self.lblPrefix.isHidden = false
             })
-            break
         case .wide:
             uiviewBar.layer.cornerRadius = 5
             UIView.animate(withDuration: 0.2, delay: 0, options: [.curveEaseOut], animations: {
@@ -202,29 +195,31 @@ class FaeScrollBar: UIView {
                 self.lblPrefix.frame.origin.x = 3 + 15 - 90 + 6
                 self.lblPrefix.isHidden = false
             })
-            break
         }
     }
     
+    // MARK: set the position of the indicator
     func scrollToTop(animated duration: TimeInterval) {
-        setBtnYPosition(0.0, animated: duration)
+        setIndicatorPosition(0.0, animated: duration)
     }
     
     func scrollToBottom(animated duration: TimeInterval) {
-        setBtnYPosition(frame.height - floatBtnHeight, animated: duration)
+        setIndicatorPosition(frame.height - floatBtnHeight, animated: duration)
     }
     
-    func setBtnYPosition(_ pos: CGFloat, animated duration: TimeInterval) {
+    func setIndicatorPosition(_ pos: CGFloat, animated duration: TimeInterval) {
         UIView.animate(withDuration: duration, delay: 0, options: [.curveEaseOut], animations: {
             self.btnIndicator.frame.origin.y = pos
         })
     }
     
+    // MARK: set the prefix of the indicator
     func setPrefixLable(_ prefix: String) {
         lblPrefix.text = prefix
     }
 }
 
+// MARK: extension to know whether the ScrollView is at the top or bottom
 extension UIScrollView {
     var isAtTop: Bool {
         return contentOffset.y <= verticalOffsetForTop

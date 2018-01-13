@@ -113,7 +113,6 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 messageVC.messageComposeDelegate = self
                 messageVC.body = "Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"
                 present(messageVC, animated: true, completion: nil)
-                break
             case 2:
                 if !MFMailComposeViewController.canSendMail() {
                     felixprint("mail service not available")
@@ -124,7 +123,6 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 composeVC.setSubject("Awesome Place Discovery App to Check Out!")
                 composeVC.setMessageBody("Just a quick note to tell you about a cool app I’ve been using. Fae Map is a free place discovery and sharing app that I thought you might like. Check it out here: <a>faemaps.com</a>.\n\nDownload it <a href='https://www.faemaps.com/'>here</a> and let’s discover and go to amazing places together.", isHTML: true)
                 present(composeVC, animated: true, completion: nil)
-                break
             case 3:
                 /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook) {
                     felixprint("facebook not available")
@@ -145,14 +143,11 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 let twitterVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
                 twitterVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
                 present(twitterVC!, animated: true, completion: nil)*/
-                break
             case 5:
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 present(activityVC, animated: true, completion: nil)
-                break
-            default:
-                break
+            default: break
             }
         }
     }

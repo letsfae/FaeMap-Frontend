@@ -36,37 +36,26 @@ class IncomingMessage {
         switch realmMessage.type {
         case "text":
             message = textJSQMessage(realmMessage)
-            break
         case "[Picture]":
             message = pictureJSQMessage(realmMessage)
-            break
         case "[Video]":
             message = videoJSQMessage(realmMessage)
-            break
         case "[Audio]":
             message = audioJSQMessage(realmMessage)
-            break
         case "[Heart]":
             message = stickerJSQMessage(realmMessage)
-            break
         case "[Sticker]":
             message = stickerJSQMessage(realmMessage)
-            break
         case "[Gif]":
             message = pictureJSQMessage(realmMessage)
-            break
         case "[Location]":
             message = locationJSQMessage(realmMessage)
-            break
         case "[Place]":
             message = placeJSQMessage(realmMessage)
-            break
         case "[Collection]":
             message = collectionJSQMessage(realmMessage)
-            break
         default:
             message = textJSQMessage(realmMessage)
-            break
         }
         return message
     }

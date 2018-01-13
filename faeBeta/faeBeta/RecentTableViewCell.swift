@@ -180,19 +180,14 @@ class RecentTableViewCell: UITableViewCell {
         switch latest.type {
         case "text":
             latestContent = latest.text
-            break
         case "[Location]":
             latestContent += "Location."
-            break
         case "[Place]":
             latestContent += "Place."
-            break
         case "[Collection]":
             latestContent += "Collection."
-            break
         default:
             latestContent = latest.type
-            break
         }
         lblLastMessage.text = latestContent
         let height = latestContent.boundingRect(with: CGSize(width: screenWidth - 89 - 56, height: CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 15)!], context: nil).size.height
@@ -314,7 +309,6 @@ class RecentTableViewCell: UITableViewCell {
             floatStartingRightLayoutConstraintConstant = distanceToRight.constant
             self.uiviewMain.backgroundColor = .white
             self.btnDelete.isHidden = false
-            break
         case .changed:
             let currentPoint = recognizer.translation(in: uiviewMain)
             let deltaX = currentPoint.x - pointPanStart.x
@@ -361,7 +355,6 @@ class RecentTableViewCell: UITableViewCell {
                 }
             }
             distanceToLeft.constant = -distanceToRight.constant //8
-            break
         case .ended:
                 // if (self.startingRightLayoutConstraintConstant == 0) { //1
                 //Cell was opening
@@ -373,7 +366,6 @@ class RecentTableViewCell: UITableViewCell {
                     //Re-close
                     resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
                 }
-            break
         case .cancelled:
             if floatStartingRightLayoutConstraintConstant == 0 {
                 //Cell was closed - reset everything to 0
@@ -382,9 +374,7 @@ class RecentTableViewCell: UITableViewCell {
                 //Cell was open - reset to the open state
                 setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

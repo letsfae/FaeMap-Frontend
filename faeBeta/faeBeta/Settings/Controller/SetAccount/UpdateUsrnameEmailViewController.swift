@@ -73,15 +73,11 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         switch enterMode {
         case .email:
             loadEmail()
-            break
         case .usrname:
             loadUserName()
-            break
         case .phone:
             loadPhone()
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -240,17 +236,13 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             let vc = SetNameViewController()
             vc.enterMode = .newEmail
             navigationController?.pushViewController(vc, animated: true)
-            break
         case .usrname:
             animationShowView()
-            break
         case .phone:
             let vc = SignInPhoneViewController()
             vc.enterMode = .settingsUpdate
             navigationController?.pushViewController(vc, animated: true)
-            break
-        default:
-            break
+        default: break
         }
     }
     

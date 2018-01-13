@@ -277,7 +277,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             } else {
                 getPlaceInfo(content: searchBar.txtSchField.text!)
             }
-            break
         case .location:
             showOrHideViews(searchText: searchBar.txtSchField.text!)
             //            if searchBar.txtSchField.text == "Current Location" {
@@ -285,9 +284,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             //                searchBar.txtSchField.text = ""
             //                searchBar.btnClose.isHidden = true
             //            }
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -301,7 +298,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
 //                    filteredPlaces.append(searchedPlace)
 //                }
 //            }
-            break
         case .location:
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
@@ -313,9 +309,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 searchCompleter.queryFragment = searchText
                 showOrHideViews(searchText: searchText)
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -606,24 +600,17 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         switch sender.tag {
         case 0:
             content = "Restaurants"
-            break
         case 1:
             content = "Bars"
-            break
         case 2:
             content = "Shopping"
-            break
         case 3:
             content = "Coffee"
-            break
         case 4:
             content = "Parks"
-            break
         case 5:
             content = "Hotels"
-            break
-        default:
-            break
+        default: break
         }
         getPlaceInfo(content: content, source: "categories")
     }

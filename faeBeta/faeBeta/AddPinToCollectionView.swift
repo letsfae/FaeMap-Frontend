@@ -158,7 +158,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             } else {
                 savePlaceTo(collection: colInfo)
             }
-            break
         case .location:
             if isInThisList {
                 let locationId = self.uiviewAfterAdded.pinIdInAction
@@ -166,7 +165,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             } else {
                 saveLocationTo(collection: colInfo)
             }
-            break
         }
     }
     
@@ -295,7 +293,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 case .initial:
 //                    print("initial place")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
 //                    print("update place from addPin")
                     
@@ -316,7 +313,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 case .initial:
 //                    print("initial location")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
 //                    print("recent update location")
                     
@@ -464,7 +460,6 @@ class AfterAddedToListView: UIView {
                 
                 RealmCollection.savePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
             }
-            break
         case .unsave:
             FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
                 guard status / 100 == 2 else { return }
@@ -474,7 +469,6 @@ class AfterAddedToListView: UIView {
                 
                 RealmCollection.unsavePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
             }
-            break
         }
     }
     

@@ -164,7 +164,6 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             vc.pinId = realmPins[realmPins.count - 1 - selectedIdx[0].row].pin_id //arrColList[selectedIdx[0].row].pinId
             vc.modalPresentationStyle = .overCurrentContext
             present(vc, animated: false)
-            break
         case REMOVE:
             // 对后端需求，批量删除？
 //            print(arrSavedIds)
@@ -188,9 +187,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
                     }
                 }
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

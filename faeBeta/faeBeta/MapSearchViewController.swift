@@ -336,24 +336,17 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         switch sender.tag {
         case 0:
             content = "Restaurants"
-            break
         case 1:
             content = "Bars"
-            break
         case 2:
             content = "Shopping"
-            break
         case 3:
             content = "Coffee"
-            break
         case 4:
             content = "Parks"
-            break
         case 5:
             content = "Hotels"
-            break
-        default:
-            break
+        default: break
         }
         getPlaceInfo(content: content, source: "categories")
     }

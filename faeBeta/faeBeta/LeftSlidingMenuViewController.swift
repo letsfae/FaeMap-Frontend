@@ -300,38 +300,29 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 case .mapBoard:
                     self.tableSelections = .none
                     self.delegate?.switchMapMode()
-                    break
                 case .goInvisible:
                     if Key.shared.onlineStatus == 5 {
                         self.tableSelections = .none
                         self.delegate?.userInvisible(isOn: true)
                     }
-                    break
                 case .contacts:
                     self.tableSelections = .none
                     self.delegate?.jumpToContacts()
-                    break
                 case .moodAvatar:
                     self.tableSelections = .none
                     self.delegate?.jumpToMoodAvatar()
-                    break
                 case .collections:
                     self.tableSelections = .none
                     self.delegate?.jumpToCollections()
-                    break
                 case .myActivities:
                     self.tableSelections = .none
-                    break
                 case .settings:
                     self.tableSelections = .none
                     self.delegate?.jumpToSettings()
-                    break
                 case .myFaeMainPage:
                     self.tableSelections = .none
                     self.delegate?.jumpToFaeUserMainPage()
-                    break
-                default:
-                    break
+                default: break
                 }
             })
         }

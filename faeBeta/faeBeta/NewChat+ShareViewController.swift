@@ -281,12 +281,10 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
                 media = RealmChat.compressImageToData(locationSnapImage!)
                 vcChat.sendMeaages_v2(type: type, text: text, media: media)
-                break
             case .collection:
                 type = "[Collection]"
                 text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.count)\", \"creator\":\"\(collectionDetail!.user_id)\"}"
                 vcChat.sendMeaages_v2(type: type, text: text)
-                break
             case .place:
                 type = "[Place]"
                 text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
@@ -295,9 +293,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                     media = data
                     vcChat.sendMeaages_v2(type: type, text: text, media: media)
                 }
-                break
-            default:
-                break
+            default: break
             }
             //vcChat.sendMeaages_v2(type: type, text: text, media: media)
             /*let realm = try! Realm()
@@ -368,17 +364,13 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             newMessage.type = "[Location]"
             let arrLocationInfo = locationDetail.split(separator: ",")
             newMessage.text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
-            break
         case .collection:
             newMessage.type = "[Collection]"
             newMessage.text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.pins.count)\", \"creator\":\"\"}"
-            break
         case .place:
             newMessage.type = "[Place]"
             newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
-            break
-        default:
-            break
+        default: break
         }
         let recentRealm = RealmRecent_v2()
         recentRealm.created_at = newMessage.created_at

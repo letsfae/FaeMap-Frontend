@@ -59,21 +59,17 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         case .notDetermined:
 //            print("didChangeAuthorizationStatus .notDetermined")
             locManager.requestWhenInUseAuthorization()
-            break
         case .denied:
 //            print("didChangeAuthorizationStatus .denied")
             self.jumpToLocationEnable()
-            break
         case .restricted:
 //            print("didChangeAuthorizationStatus .restricted")
             break
         case .authorizedAlways:
             UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
 //            print("didChangeAuthorizationStatus .authorizedAlways")
-            break
         case .authorizedWhenInUse:
             UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
-            break
         }
     }
     

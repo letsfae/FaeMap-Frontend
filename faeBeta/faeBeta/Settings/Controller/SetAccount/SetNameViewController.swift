@@ -96,15 +96,12 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         case .name:
             lblTitle.text = "\nYour Full Name"
             loadName()
-            break
         case .birth:
             lblTitle.text = "\nYour Birthday"
             loadBirth()
-            break
         case .gender:
             lblTitle.text = "\nYour Gender"
             loadGenderImg()
-            break
         case .password:
             if pswdEnterMode == .password {
                 lblTitle.text = "Enter your Current Password \nto set a New Password"
@@ -115,9 +112,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         case .newEmail:
             lblTitle.text = "\nYour New Email"
             loadChangeEmailPage()
-            break
-        default:
-            break
+        default: break
         }
         
         if enterMode == .name || enterMode == .password || enterMode == .newEmail {
@@ -260,7 +255,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                 }
                 self.indicatorView.stopAnimating()
             })
-            break
         case .birth:
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM/dd/yyyy"
@@ -279,7 +273,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                 }
                 self.indicatorView.stopAnimating()
             })
-            break
         case .gender:
             keyValue["gender"] = gender!
             postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
@@ -293,7 +286,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                 }
                 self.indicatorView.stopAnimating()
             })
-            break
         case .password:
             faeUser.whereKey("password", value: textPswd.text!)
             faeUser.verifyPassword({(status: Int, message: Any?) in
@@ -341,9 +333,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                    print("[Check Email Existence Fail] \(status) \(message!)")
                 }
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

@@ -416,7 +416,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             case .initial:
                 felixprint("initial")
                 tableview.reloadData()
-                break
             case .update(_, let deletions, let insertions, let modifications):
                 felixprint("recent update")
                 UIView.setAnimationsEnabled(false)
@@ -499,7 +498,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             } else {
                 closeCurrentOpenCell()
             }
-            break
         case .changed:
             print("long press changed")
             if let indexPath = tblRecents.indexPathForRow(at: point) {
@@ -509,7 +507,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
             boolFingerMoved = true
-            break
         case .ended:
             print("long press ended")
             if let indexPath = tblRecents.indexPathForRow(at: point) {
@@ -523,9 +520,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                 indexShowDelete = -1
             }
             boolFingerMoved = false
-            break
-        default:
-            break
+        default: break
         }
     }
     

@@ -139,15 +139,12 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             case .signInSupport:
                 lblTitle.text = "Enter the Code we just sent\nto your Email to Continue."
                 btnContinue.setTitle("Continue", for: .normal)
-                break
             case .settings:
                 lblTitle.text = "Enter the Code we just sent\nto your Email to Verify."
                 btnContinue.setTitle("Verify", for: .normal)
-                break
             case .signup:
                 lblTitle.text = "Verify your Email with the\nCode we sent you."
                 btnContinue.setTitle("Finish!", for: .normal)
-                break
             }
         } else {
             btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 67 - device_offset_bot
@@ -155,15 +152,12 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             case .signInSupport:
                 lblTitle.text = "Enter the Code we just texted\nto your Number to Continue."
                 btnContinue.setTitle("Continue", for: .normal)
-                break
             case .signup:
                 lblTitle.text = "Verify your Phone with the \nCode we texted you."
                 btnContinue.setTitle("Finish!", for: .normal)
-                break
             default:
                 lblTitle.text = "Verify your Number with the \nCode we texted you."
                 btnContinue.setTitle("Verify", for: .normal)
-                break
             }
         }
     }
@@ -304,7 +298,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             vcPhone.faeUser = faeUser
             arrControllers?.append(vcPhone)
             navigationController?.setViewControllers(arrControllers!, animated: true)
-            break
         case .phone:
             var arrControllers = navigationController?.viewControllers
             arrControllers?.removeLast()
@@ -313,9 +306,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             vcEmail.faeUser = faeUser
             arrControllers?.append(vcEmail)
             navigationController?.setViewControllers(arrControllers!, animated: true)
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -346,7 +337,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     }
                     self.indicatorView.stopAnimating()
                 }
-                break
             case .settings, .signup:
                 faeUser.verifyEmail {(status: Int, message: Any?) in
                     if status / 100 == 2 {
@@ -383,7 +373,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     }
                     self.indicatorView.stopAnimating()
                 }
-                break
             }
         } else {
             faeUser.whereKey("phone", value: "(" + strCountryCode + ")" + strPhoneNumber)
@@ -413,7 +402,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     }
                     self.indicatorView.stopAnimating()
                 }
-                break
             case .settings, .settingsUpdate, .contacts:
                 faeUser.verifyPhoneNumber {(status, message) in
                     if status / 100 == 2 {
@@ -429,7 +417,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             vc.delegate = arrViewControllers?.last as! SetAccountViewController
                             arrViewControllers?.append(vc)
                             self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
-                            break
                         case .settingsUpdate:
                             let vc = UpdateUsrnameEmailViewController()
                             vc.enterMode = .phone
@@ -442,13 +429,10 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             vc.delegate = arrViewControllers?.last as! SetAccountViewController
                             arrViewControllers?.append(vc)
                             self.navigationController?.setViewControllers(arrViewControllers!, animated: true)
-                            break
                         case .contacts:
                             self.delegate?.verifyPhoneSucceed!()
                             self.dismiss(animated: false)
-                            break
-                        default:
-                            break
+                        default: break
                         }
                     } else {
                         for _ in 0..<6 {
@@ -464,7 +448,6 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                     }
                     self.indicatorView.stopAnimating()
                 }
-                break
             }
         }
     }

@@ -31,13 +31,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         switch mode {
         case .save:
             uiviewSavedList.arrListSavedThisPin.append(colId)
-            break
         case .unsave:
             if uiviewSavedList.arrListSavedThisPin.contains(colId) {
                 let arrListIds = uiviewSavedList.arrListSavedThisPin
                 uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
             }
-            break
         }
         switch uiviewSavedList.tableMode {
         case .location:
@@ -165,7 +163,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcPlaceDetail.delegate = self
                 navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
-            break
         case .collect:
             uiviewSavedList.show()
             locAnnoView?.optionsToNormal()
@@ -175,11 +172,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             case .place:
                 guard let placePin = selectedPlace else { return }
                 uiviewSavedList.pinToSave = placePin
-                break
             case .location:
                 guard let locPin = selectedLocation else { return }
                 uiviewSavedList.pinToSave = locPin
-                break
             }
         case .route(let placeInfo):
             if selectedLocation != nil {
@@ -192,7 +187,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                     routingPlace(place)
                 }
             }
-            break
         case .share:
             if modeLocCreating == .on {
                 locAnnoView?.optionsToNormal()
@@ -211,7 +205,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcSharePlace.placeDetail = placeData
                 navigationController?.pushViewController(vcSharePlace, animated: true)
             }
-            break
         }
     }
 

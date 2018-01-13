@@ -409,7 +409,6 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                 felixprint("initial")
                 //self.tblContacts.reloadData()
                 self.setupScrollBar()
-                break
             case .update(_, let deletions, let insertions, let modifications):
                 felixprint("contact update")
                 for index in insertions {

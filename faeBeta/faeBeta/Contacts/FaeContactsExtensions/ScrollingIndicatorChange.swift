@@ -43,7 +43,7 @@ extension ContactsViewController: UIScrollViewDelegate, FaeScrollBarDelegate {
         if percentage <= 0 {
             faeScrollBar?.scrollToTop(animated: 0.0)
         } else if percentage < 1 {
-            faeScrollBar?.setBtnYPosition(floatBtnRange * percentage, animated: 0.0)
+            faeScrollBar?.setIndicatorPosition(floatBtnRange * percentage, animated: 0.0)
         } else {
             faeScrollBar?.scrollToBottom(animated: 0.0)
         }

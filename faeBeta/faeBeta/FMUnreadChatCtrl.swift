@@ -36,10 +36,8 @@ extension FaeMapViewController {
             switch changes {
             case .initial:
                 self.setupUnreadNum(resultRealmRecents)
-                break
             case .update:
                 self.setupUnreadNum(resultRealmRecents)
-                break
             case .error:
                 break
             }

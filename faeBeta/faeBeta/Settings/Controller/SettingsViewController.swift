@@ -170,35 +170,25 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         switch indexPath.row {
         case 0:
             navigationController?.pushViewController(SetGeneralViewController(), animated: true)
-            break
         case 1:
             navigationController?.pushViewController(SetMapsViewController(), animated: true)
-            break
         case 2:
             navigationController?.pushViewController(SetPrivacyViewController(), animated: true)
-            break
         case 3:
             let vc = SetInfoViewController()
             vc.enterMode = .settings
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 4:
             navigationController?.pushViewController(SetAccountViewController(), animated: true)
-            break
         case 5:
             navigationController?.pushViewController(SetAboutViewController(), animated: true)
-            break
         case 6:
             navigationController?.pushViewController(SetContactViewController(), animated: true)
-            break
         case 7:
             navigationController?.pushViewController(SetSpreadViewController(), animated: true)
-            break
         case 8:
             uiviewBackground.isHidden = false
-            break
-        default:
-            break
+        default: break
         }
     }
     

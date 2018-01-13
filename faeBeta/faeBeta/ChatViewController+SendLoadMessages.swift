@@ -233,7 +233,6 @@ extension ChatViewController: OutgoingMessageProtocol {
             switch changes {
             case .initial:
                 felixprint("initial")
-                break
             case .update(_, _, let insertions, _):
                 print("chat update")
                 if insertions.count > 0 {
@@ -249,7 +248,6 @@ extension ChatViewController: OutgoingMessageProtocol {
                         try! realm.commitWrite()
                     }                    
                 }
-                break
             case .error:
                 print("error")
             }

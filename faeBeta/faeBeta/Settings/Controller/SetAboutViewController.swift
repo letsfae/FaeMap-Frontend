@@ -60,25 +60,19 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
         switch indexPath.row {
         case 0:
             navigationController?.pushViewController(SetFaeInc(), animated: true)
-            break
         case 1:
             navigationController?.pushViewController(SetFaeMap(), animated: true)
-            break
         case 2:
             navigationController?.pushViewController(SetWebViewController(), animated: true)
-            break
         case 3:
             let vc = TermsOfServiceViewController()
             vc.boolPush = true
             navigationController?.pushViewController(vc, animated: true)
-            break
         case 4:
             let vc = PrivacyPolicyViewController()
             vc.boolPush = true
             navigationController?.pushViewController(vc, animated: true)
-            break
-        default:
-            break
+        default: break
         }
         
     }

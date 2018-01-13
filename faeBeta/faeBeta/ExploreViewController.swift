@@ -170,13 +170,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         switch mode {
         case .save:
             uiviewSavedList.arrListSavedThisPin.append(colId)
-            break
         case .unsave:
             if uiviewSavedList.arrListSavedThisPin.contains(colId) {
                 let arrListIds = uiviewSavedList.arrListSavedThisPin
                 uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
             }
-            break
         }
         if uiviewSavedList.arrListSavedThisPin.count <= 0 {
             hideSavedNoti()
