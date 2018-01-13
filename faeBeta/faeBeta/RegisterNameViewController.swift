@@ -193,7 +193,6 @@ extension RegisterNameViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             cellTxtLastName.makeFirstResponder()
-            break
         case 3:
             if btnContinue.isEnabled {
                 cellTxtLastName.endAsResponder()

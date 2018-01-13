@@ -160,7 +160,6 @@ extension RegisterPasswordViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             cellPassword.endAsResponder()
-            break
         default: break
         }
     }
@@ -170,7 +169,6 @@ extension RegisterPasswordViewController: RegisterTextfieldProtocol {
         case 2:
             password = text
             cellPassword.updateTextColorAccordingToPassword(text)
-            break
         default: break
         }
         validation()

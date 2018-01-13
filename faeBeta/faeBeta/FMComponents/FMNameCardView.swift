@@ -571,23 +571,17 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         switch statusMode {
         case .defaultMode:
             btnProfile.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-            break
         case .accepted:
             btnProfile.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
-            break
         case .pending:
             boolPending = true
             btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
-            break
         case .requested:
             boolPending = false
             btnProfile.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
-            break
         case .blocked:
             btnProfile.setImage(nil, for: .normal)
-            break
-        default:
-            break
+        default: break
         }
     }
     
@@ -595,19 +589,14 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         switch sender.currentImage {
         case #imageLiteral(resourceName: "btnAddFriend")?:
             statusMode = .defaultMode
-            break
         case #imageLiteral(resourceName: "gearIcon")?:
             statusMode = .accepted
-            break
         case #imageLiteral(resourceName: "questionIcon")?:
             statusMode = boolPending ? .pending : .requested
-            break
         case nil:
             statusMode = .blocked
-            break
         default:
             statusMode = .defaultMode
-            break
         }
         delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
     }

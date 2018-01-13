@@ -186,19 +186,16 @@ class AddFriendFromNameCardViewController: UIViewController {
             btnActFirst.tag = ADD_FRIEND_ACT
             btnActSecond.setTitle("Follow", for: .normal)
             btnActSecond.tag = FOLLOW_ACT
-            break
         case .pending:
             btnActFirst.setTitle("Withdraw", for: .normal)
             btnActFirst.tag = WITHDRAW_ACT
             btnActSecond.setTitle("Resend", for: .normal)
             btnActSecond.tag = RESEND_ACT
-            break
         case .requested:
             btnActFirst.setTitle("Accept", for: .normal)
             btnActFirst.tag = ACCEPT_ACT
             btnActSecond.setTitle("Ignore", for: .normal)
             btnActSecond.tag = IGNORE_ACT
-            break
         case .accepted:
             btnActFirst.setTitle("Remove Friend", for: .normal)
             btnActFirst.tag = REMOVE_FRIEND_ACT
@@ -206,7 +203,6 @@ class AddFriendFromNameCardViewController: UIViewController {
             btnActSecond.tag = BLOCK_ACT
             btnActThird.setTitle("Report", for: .normal)
             btnActThird.tag = REPORT_ACT
-            break
         case .nameCardOther:
             btnActFirst.setTitle("Block", for: .normal)
             btnActFirst.tag = BLOCK_ACT
@@ -217,8 +213,7 @@ class AddFriendFromNameCardViewController: UIViewController {
             btnActFirst.tag = EDIT_NAME_CARD
             btnActSecond.setTitle("Info Settings", for: .normal)
             btnActSecond.tag = INFO_SETTING
-        default:
-            break
+        default: break
         }
         
         if statusMode == .accepted {
@@ -290,7 +285,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
             }
-            break
         case FOLLOW_ACT:
             indicatorView.startAnimating()
             faeContact.followPerson(followeeId: String(self.userId)) {(status: Int, message: Any?) in
@@ -303,14 +297,11 @@ class AddFriendFromNameCardViewController: UIViewController {
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
             }
-            break
         case WITHDRAW_ACT:
             // withdraw friend request
             lblMsgSent.text = "Are you sure you want \nto withdraw this request?"
-            break
         case RESEND_ACT:
             lblMsgSent.text = "Are you sure you want \nto resend this request?"
-            break
         case ACCEPT_ACT:
             indicatorView.startAnimating()
             faeContact.acceptFriendRequest(requestId: String(requestId)) { (status: Int, message: Any?) in
@@ -336,7 +327,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
             }
-            break
         case IGNORE_ACT:
             indicatorView.startAnimating()
             faeContact.ignoreFriendRequest(requestId: String(userId)) {(status: Int, message: Any?) in
@@ -360,33 +350,26 @@ class AddFriendFromNameCardViewController: UIViewController {
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
             }
-            break
         case REMOVE_FRIEND_ACT:
             lblMsgSent.text = "Are you sure you want \nto remove this person?"
-            break
         case BLOCK_ACT:
             lblMsgSent.text = "Are you sure you want \nto block this person?"
-            break
         case REPORT_ACT:
             let reportPinVC = ReportViewController()
             reportPinVC.reportType = 0
             reportPinVC.modalPresentationStyle = .overCurrentContext
             self.present(reportPinVC, animated: true, completion: nil)
-            break
         case EDIT_NAME_CARD:
             let vc = SetInfoNamecard()
             vc.enterMode = .nameCard
             vc.modalPresentationStyle = .overCurrentContext
             self.present(vc, animated: true, completion: nil)
-            break
         case INFO_SETTING:
             let vc = SetInfoViewController()
             vc.enterMode = .nameCard
             vc.modalPresentationStyle = .overCurrentContext
             self.present(vc, animated: true, completion: nil)
-            break
-        default:
-            break
+        default: break
         }
     }
     

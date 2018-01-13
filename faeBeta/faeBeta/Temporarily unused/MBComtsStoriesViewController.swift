@@ -78,10 +78,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         switch enterMode {
         case .comment:
             strNavBarTitle = "Comments"
-            break
         case .media:
             strNavBarTitle = "Stories"
-            break
         }
         
         let uiviewNavBar = FaeNavBar(frame: .zero)
@@ -106,10 +104,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         switch enterMode {
         case .comment:
             tblCommentStory.estimatedRowHeight = 200
-            break
         case .media:
             tblCommentStory.estimatedRowHeight = 400
-            break
         }
     }
     

@@ -166,13 +166,10 @@ class Key: NSObject { //  singleton class
         switch type {
         case .normal:
             header["Content-Type"] = "application/x-www-form-urlencoded"
-            break
         case .data:
             header["Content-Type"] = "application/form-data"
-            break
         case .json:
             header["Content-Type"] = "application/json"
-            break
         }
         return header
     }

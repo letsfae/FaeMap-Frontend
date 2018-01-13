@@ -225,18 +225,14 @@ extension ContactsViewController {
         case IGNORE: // first button - IGNORE
             indicatorView.startAnimating()
             animateWithdrawal(listType: IGNORE)
-            break
         case BLOCK: // second button - BLOCK
             self.showNoti(type: BLOCK)
-            break
         case REPORT: // third button - REPORT
             let reportPinVC = ReportViewController()
             reportPinVC.reportType = 0
             reportPinVC.modalPresentationStyle = .overCurrentContext
             self.present(reportPinVC, animated: true, completion: nil)
-            break
-        default:
-            break
+        default: break
         }
     }
 }

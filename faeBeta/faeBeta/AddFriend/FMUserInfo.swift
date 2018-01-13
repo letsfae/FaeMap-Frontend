@@ -431,19 +431,15 @@ class FMUserInfo: UIViewController {
         switch statusMode {
         case .defaultMode:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-            break
         case .accepted:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "gearIcon"), for: .normal)
-            break
         case .blocked:
             //            btnBelowFirst.removeFromSuperview()
             btnBelowFirst.isHidden = true
             btnBelowSecond.isHidden = true
             lblContent.text = "Content Unavailable"
-            break
         case .pending:
             btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
-            break
         }
     }
     
@@ -454,17 +450,14 @@ class FMUserInfo: UIViewController {
             btnActFirst.tag = ADD_FRIEND_ACT
             btnActSecond.setTitle("Follow", for: .normal)
             btnActSecond.tag = FOLLOW_ACT
-            break
         case .pending:
             btnActFirst.setTitle("Withdraw", for: .normal)
             btnActFirst.tag = WITHDRAW_ACT
             btnActSecond.setTitle("Resend", for: .normal)
             btnActSecond.tag = RESEND_ACT
-            break
         case .accepted:
             break
-        default:
-            break
+        default: break
         }
     }
     
@@ -505,7 +498,6 @@ class FMUserInfo: UIViewController {
                     }
                 }
             }
-            break
         case .pending:
             if type == WITHDRAW_ACT {    // "Withdraw" button pressed
                 btnFriendOK.tag = WITHDRAW_ACT
@@ -552,9 +544,7 @@ class FMUserInfo: UIViewController {
                     }
                 }
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

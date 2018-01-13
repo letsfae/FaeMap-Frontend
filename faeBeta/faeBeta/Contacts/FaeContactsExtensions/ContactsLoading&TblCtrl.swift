@@ -159,27 +159,21 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         case ACCEPT:
             //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
             arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
-            break
         case IGNORE:
             //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
             arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
-            break
         case WITHDRAW:
             //self.arrRequested.remove(at: self.indexPathGlobal.row)
             arrRealmRequested.remove(at: indexPathGlobal.row)
-            break
         case REMOVE:
             //self.arrFriends.remove(at: self.indexPathGlobal.row)
             arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
-            break
         case BLOCK:
             //self.arrFriends.remove(at: self.indexPathGlobal.row)
             arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
-            break
-        default:
-            break
+        default: break
         }
         self.reloadAfterDelete()
     }

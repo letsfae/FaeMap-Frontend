@@ -92,19 +92,15 @@ class FMPinActionDisplay: UIButton {
         case .detail:
             backgroundColor = UIColor._2559180()
             setTitle("View \(strType) Details", for: .normal)
-            break
         case .collect:
             backgroundColor = UIColor._202144214()
             setTitle("Collect this \(strType)", for: .normal)
-            break
         case .route:
             backgroundColor = UIColor._144162242()
             setTitle("Draw Route to this \(strType)", for: .normal)
-            break
         case .share:
             backgroundColor = UIColor._35197143()
             setTitle("Share this \(strType)", for: .normal)
-            break
         }
     }
     

@@ -187,7 +187,6 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             cellUsername.endAsResponder()
-            break
         default: break
         }
     }
@@ -198,7 +197,6 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
             username = text
             lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
             lblError.textColor = UIColor._138138138()
-            break
         default: break
         }
         validation()

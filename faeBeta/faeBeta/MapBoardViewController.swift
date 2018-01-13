@@ -449,21 +449,16 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         case 0:
             curtTitle = titleArray[0]
             imgTick.frame.origin.y = 20
-            break
         case 1:
             curtTitle = titleArray[1]
             imgTick.frame.origin.y = 70
-            break
         case 2:
             curtTitle = titleArray[2]
             imgTick.frame.origin.y = 120
-            break
         case 3:
             curtTitle = titleArray[3]
             imgTick.frame.origin.y = 168
-            break
-        default:
-            return
+        default: return
         }
         btnNavBarSetTitle()
         getCurtTableMode()

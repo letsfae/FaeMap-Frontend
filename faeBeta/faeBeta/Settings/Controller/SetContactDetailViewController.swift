@@ -84,16 +84,12 @@ class SetContactDetailViewController: UIViewController {
         switch detailType {
         case .supportHelp:
             lblTitle.text = "We’re here to help! Please let us\nknow what you need support on."
-            break
         case .problem:
             lblTitle.text = "Experiencing a Problem? Please\nlet us know & we’ll look into it."
-            break
         case .question:
             lblTitle.text = "See somewhere that needs\nimprovement? Please let us know!"
-            break
         case .feedback:
             lblTitle.text = "Got a Question for us? We’ll try\nour best to answer it!"
-            break
         }
     }
     
@@ -101,16 +97,12 @@ class SetContactDetailViewController: UIViewController {
         switch detailType {
         case .supportHelp:
             textField.placeholder = "How can we help you?"
-            break
         case .problem:
             textField.placeholder = "Describe the problem…"
-            break
         case .question:
             textField.placeholder = "Your Feedback…"
-            break
         case .feedback:
             textField.placeholder = "What’s your Question?"
-            break
         }
     }
     

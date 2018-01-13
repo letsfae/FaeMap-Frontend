@@ -103,7 +103,6 @@ extension MapBoardViewController {
                 if mbPlaceData.class_1.contains("Outdoors") && testArrOutdoors.count < 15 {
                     testArrOutdoors.append(mbPlaceData)
                 }
-                break
             case "people":
                 
                 let mbPeopleData = MBPeopleStruct(json: result)
@@ -120,9 +119,7 @@ extension MapBoardViewController {
                 }
                 
                 self.mbPeople.append(mbPeopleData)
-                break
-            default:
-                break
+            default: break
             }
         }
     }

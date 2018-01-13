@@ -231,14 +231,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
             curtTitle = "Places"
             tableMode = .place
             imgTick.frame.origin.y = 20
-            break
         case 1:
             curtTitle = "Locations"
             tableMode = .location
             imgTick.frame.origin.y = 70
-            break
-        default:
-            return
+        default: return
         }
         btnNavBarSetTitle()
         hideDropDownMenu()
@@ -335,7 +332,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 case .initial:
 //                    print("initial place")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
 //                    print("recent update place")
                     
@@ -356,7 +352,6 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 case .initial:
 //                    print("initial location")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
 //                    print("recent update location")
                     

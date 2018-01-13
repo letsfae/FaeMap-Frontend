@@ -468,15 +468,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             case "Location":
                 let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
                 sendMeaages_v2(type: "[Location]", text: locDetail, media: uiviewLocationExtend.getImageData())
-                break
             case "Place":
                 if let place = uiviewLocationExtend.placeData {
                     let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\"}"
                     sendMeaages_v2(type: "[Place]", text: placeDetail, media: uiviewLocationExtend.getImageData())
                 }
-                break
-            default:
-                break
+            default: break
             }
             //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
@@ -774,9 +771,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
             sendMeaages_v2(type: "[Video]", text: "[\"\(seconds)\"]", media: data)
-            break
-        default:
-            break
+        default: break
         }
         
         picker.dismiss(animated: true, completion: nil)

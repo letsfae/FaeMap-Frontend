@@ -275,7 +275,6 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined, .restricted, .denied:
                 dictPermissions["Location"] = false
-                break
             case .authorizedAlways, .authorizedWhenInUse:
                 dictPermissions["Location"] = true
             }
@@ -284,7 +283,6 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
         case .authorized:
             dictPermissions["Camera"] = true
-            break
         case .denied, .notDetermined, .restricted:
             dictPermissions["Camera"] = false
         }
@@ -292,7 +290,6 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         switch AVAudioSession.sharedInstance().recordPermission() {
         case AVAudioSessionRecordPermission.granted:
             dictPermissions["Microphone"] = true
-            break
         default:
             dictPermissions["Microphone"] = false
         }
@@ -300,7 +297,6 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .authorized:
             dictPermissions["Contacts"] = true
-            break
         default:
             dictPermissions["Contacts"] = false
         }

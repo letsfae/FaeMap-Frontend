@@ -64,19 +64,15 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
             vcChat.arrUserIDs.append("1")
             vcChat.strChatId = "1"
             navigationController?.pushViewController(vcChat, animated: true)
-            break
         case 1, 2, 3, 4:
             let vcDetail = SetContactDetailViewController()
             vcDetail.detailType = SetContactDetailType(rawValue: indexPath.row)!
             navigationController?.pushViewController(vcDetail, animated: true)
-            break
         case 5:
             let vcJoin = SetWebViewController()
             vcJoin.strURL = "https://www.faemaps.com/career/"
             navigationController?.pushViewController(vcJoin, animated: true)
-            break
-        default:
-            break
+        default: break
         }
     }
 }

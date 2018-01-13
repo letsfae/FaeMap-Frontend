@@ -63,7 +63,6 @@ class GeneralTitleCell: UITableViewCell {
         switch sender.tag {
         case 101:
             Key.shared.hideNameCardOptions = sender.isOn
-            break
         case 102:
             delegate?.startUpdating()
             let updateGenderAge = FaeUser()
@@ -78,7 +77,6 @@ class GeneralTitleCell: UITableViewCell {
                 }
                 self.delegate?.stopUpdating()
             }
-            break
         case 103:
             delegate?.startUpdating()
             let updateGenderAge = FaeUser()
@@ -93,9 +91,7 @@ class GeneralTitleCell: UITableViewCell {
                 }
                 self.delegate?.stopUpdating()
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

@@ -116,13 +116,11 @@ class FaeAddUsernameCell: UITableViewCell {
             btnAddorAdded.isHidden = false
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
-            break
         case .accepted:
             lblStatus.text = "Friends"
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
-            break
         case .pending:
             lblStatus.text = ""
             btnAddorAdded.isHidden = true
@@ -130,7 +128,6 @@ class FaeAddUsernameCell: UITableViewCell {
             btnRefuseRequest.isHidden = false
             btnAcceptRequest.setImage(#imageLiteral(resourceName: "resendRequest"), for: .normal)
             btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
-            break
         case .requested:
             lblStatus.text = ""
             btnAddorAdded.isHidden = true
@@ -138,20 +135,17 @@ class FaeAddUsernameCell: UITableViewCell {
             btnRefuseRequest.isHidden = false
             btnAcceptRequest.setImage(#imageLiteral(resourceName: "acceptRequest"), for: .normal)
             btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
-            break
         case .blocked:
             lblStatus.text = "Blocked"
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
-            break
         case .blocked_by:
             lblStatus.text = ""
             btnAddorAdded.isHidden = true
             btnAcceptRequest.isHidden = true
             btnRefuseRequest.isHidden = true
-        default:
-            break
+        default: break
         }
     }
     

@@ -274,7 +274,6 @@ extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             cellPassword.endAsResponder()
-            break
         default: break
         }
     }
@@ -284,7 +283,6 @@ extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
         case 2:
             password = text
             cellPassword.updateTextColorAccordingToPassword(text)
-            break
         default: break
         }
         validation()

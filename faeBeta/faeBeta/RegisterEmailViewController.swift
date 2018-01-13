@@ -311,7 +311,6 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
         switch indexPath.row {
         case 2:
             cellTxtEmail.endAsResponder()
-            break
         default: break
         }
     }
@@ -326,7 +325,6 @@ extension RegisterEmailViewController: RegisterTextfieldProtocol {
             } else {
                 btnClear.isHidden = true
             }
-            break
         default: break
         }
         validation()

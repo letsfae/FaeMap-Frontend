@@ -399,12 +399,10 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             curtTitle = "Places"
             tableMode = .place
             imgTick.frame.origin.y = 20
-            break
         case 1:
             curtTitle = "Locations"
             tableMode = .location
             imgTick.frame.origin.y = 70
-            break
         default:
             return
         }
@@ -541,7 +539,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 case .initial:
 //                    print("initial place")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
                     tableview.beginUpdates()
                     tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
@@ -560,7 +557,6 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 case .initial:
 //                    print("initial location")
                     tableview.reloadData()
-                    break
                 case .update(_, let deletions, let insertions, let modifications):
 //                    print("recent update location")
                     

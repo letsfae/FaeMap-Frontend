@@ -149,7 +149,6 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
                 present(vc, animated: true)
             }
             // Vicky 09/17/17 End
-            break
         case 1:
             let vc = SetShortIntro()
             if let str = strShortIntro {
@@ -161,12 +160,9 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
             } else {
                 present(vc, animated: true)
             }
-            break
         case 2:
             SetAvatar.addProfileAvatar(vc: self, type: "setNamecard")
-            break
-        default:
-            break
+        default: break
         }
     }
     

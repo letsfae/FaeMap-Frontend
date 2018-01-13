@@ -113,9 +113,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 present(vc, animated: true)
             }
-            break
-        default:
-            break
+        default: break
         }
     }
     

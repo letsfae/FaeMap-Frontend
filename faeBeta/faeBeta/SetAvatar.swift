@@ -21,19 +21,15 @@ class SetAvatar {
             let currentVC = vc as! LeftSlidingMenuViewController
             activityIndicator = currentVC.activityIndicator
             imgAvatar = currentVC.imgAvatar
-            break
         case "firstTimeLogin":
             let currentVC = vc as! FirstTimeLoginViewController
             activityIndicator = currentVC.activityIndicator
             imgAvatar = currentVC.imageViewAvatar
-            break
         case "setNamecard":
             let currentVC = vc as! SetInfoNamecard
             activityIndicator = currentVC.activityIndicator
             imgAvatar = currentVC.uiviewNameCard.imgAvatar
-            break
-        default:
-            break
+        default: break
         }
         vc.view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
@@ -76,19 +72,15 @@ class SetAvatar {
             let currentVC = vc as! LeftSlidingMenuViewController
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
-            break
         case "firstTimeLogin":
             let currentVC = vc as! FirstTimeLoginViewController
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
-            break
         case "setNamecard":
             let currentVC = vc as! SetInfoNamecard
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
-            break
-        default:
-            break
+        default: break
         }
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()

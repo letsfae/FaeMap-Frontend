@@ -143,7 +143,6 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         switch MBComtsStoriesCell.strPinType {
         case "comment":
             addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-10-[v2(32)]-17-[v3(27)]-10-|", options: [], views: imgAvatar, lblContent, btnLoc, uiviewCellFooter)
-            break
         case "media":
             scrollViewMedia = UIScrollView()
             scrollViewMedia.delegate = self
@@ -162,9 +161,7 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.actionReplyToThisPin(_:)))
             scrollViewMedia.addGestureRecognizer(tapGesture)
-            break
-        default:
-            break
+        default: break
         }
         
         imgHotPin = UIImageView()

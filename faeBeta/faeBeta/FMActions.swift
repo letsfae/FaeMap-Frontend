@@ -154,7 +154,6 @@ extension FaeMapViewController {
             let vcExp = ExploreViewController()
             vcExp.delegate = self
             navigationController?.pushViewController(vcExp, animated: false)
-            break
         case .pinDetail:
             if let ann = selectedPlace {
                 guard let placePin = ann.pinInfo as? PlacePin else { return }
@@ -166,7 +165,6 @@ extension FaeMapViewController {
             }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
-            break
         case .collection:
             animateMainItems(show: false, animated: boolFromMap)
             if boolFromMap == false {
@@ -179,11 +177,9 @@ extension FaeMapViewController {
                     uiviewFilterMenu.selectedIndexPath = nil
                 }
             }
-            break
         case .allPlaces:
             animateMainItems(show: false, animated: false)
             navigationController?.setViewControllers(arrCtrlers, animated: false)
-            break
         default:
             break
         }
