@@ -11,9 +11,14 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol LocationPickerMiniDelegate: class {
+    func showFullLocationView()
+    func sendLocationMessageFromMini()
+}
+
 class LocationPickerMini: UIView, MKMapViewDelegate {
     
-    weak var locationDelegate: LocationSendDelegate!
+    weak var delegate: LocationPickerMiniDelegate?
     
     // MARK: properties
     var mapView: MKMapView!
@@ -84,16 +89,27 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
         btnSearch.setImage(UIImage(named: "locationSearch"), for: .normal)
         btnSearch.layer.zPosition = 101
         addSubview(btnSearch)
+        btnSearch.addTarget(self, action: #selector(showFullLocationView), for: .touchUpInside)
+        
         btnSend = UIButton(frame: CGRect(x: screenWidth - 71, y: 204, width: 51, height: 51))
         btnSend.setImage(UIImage(named: "locationSend"), for: .normal)
         btnSend.layer.zPosition = 101
         addSubview(btnSend)
+        btnSend.addTarget(self, action: #selector(sendLocationMessageFromMini), for: .touchUpInside)
     }
     
     func actionSelfPosition(_ sender: UIButton) {
         let camera = mapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         mapView.setCamera(camera, animated: true)
+    }
+    
+    @objc func showFullLocationView() {
+        delegate?.showFullLocationView()
+    }
+    
+    @objc func sendLocationMessageFromMini() {
+        delegate?.sendLocationMessageFromMini()
     }
     
 }

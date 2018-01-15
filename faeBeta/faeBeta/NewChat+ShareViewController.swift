@@ -504,7 +504,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
         return UIEdgeInsetsMake(13, 1, 11, 1)
     }
     
-    // UITableViewDelegate
+    // MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let uiviewHeader:UIView = UIView(frame: CGRect(x: 0, y: 113, width: screenWidth, height: 25))
         

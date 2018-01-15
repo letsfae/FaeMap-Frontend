@@ -56,12 +56,16 @@ class StickerScrollView : UIScrollView {
                 stickerAlbum.attachStickerButton(self)
             }
         }*/
-        for (index, StickerAlbum) in arrStickerAlbums.enumerated() {
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.1 * Double(index), execute: {
-                StickerAlbum.attachStickerButton(self)
-            })
-            
-        }
+        arrStickerAlbums[2].attachStickerButton(self)
+        for (index, stickerAlbum) in arrStickerAlbums.enumerated() {
+            if index == 2 {
+                continue
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5 * Double(index - 2), execute: {
+                    stickerAlbum.attachStickerButton(self)
+                })
+            }
+         }
     }
     
     func clearButton() {

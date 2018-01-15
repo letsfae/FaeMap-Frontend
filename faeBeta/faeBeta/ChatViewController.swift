@@ -18,7 +18,7 @@ public let kAVATARSTATE = "avatarState"
 public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FAEChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate, JSQAudioMediaItemDelegateCustom {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FaeChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate, JSQAudioMediaItemDelegateCustom, LocationPickerMiniDelegate {
     var playingAudio: JSQAudioMediaItemCustom?
     
     func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
@@ -36,7 +36,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // MARK: properties
     var uiviewNavBar: FaeNavBar!
     var uiviewLocationExtend = LocationExtendView()
-    var toolbarContentView: FAEChatToolBarContentView!
+    var toolbarContentView: FaeChatToolBarContentView!
     var uiviewNameCard: FMNameCardView!
     // custom toolBar the bottom toolbar button
     var btnSet = [UIButton]()
@@ -202,16 +202,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             scrollToBottom(false)
             boolInitialLoadComplete = true
         }
-        //let initializeType = (FAEChatToolBarContentType.sticker.rawValue | FAEChatToolBarContentType.photo.rawValue | FAEChatToolBarContentType.audio.rawValue | FAEChatToolBarContentType.minimap.rawValue)
+        //let initializeType = (FaeChatToolBarContentType.sticker.rawValue | FaeChatToolBarContentType.photo.rawValue | FaeChatToolBarContentType.audio.rawValue | FaeChatToolBarContentType.minimap.rawValue)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {
-        self.toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
+        //self.toolbarContentView.setup(FaeChatToolBarContentType.sticker.rawValue)
         })
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
+        //toolbarContentView.setup(FaeChatToolBarContentType.sticker.rawValue)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -320,13 +320,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     func setupToolbarContentView() {
-        toolbarContentView = FAEChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatToolBarContentHeight))
+        toolbarContentView = FaeChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatToolBarContentHeight))
         toolbarContentView.delegate = self
         toolbarContentView.inputToolbar = inputToolbar
         toolbarContentView.cleanUpSelectedPhotos()
         view.addSubview(toolbarContentView)
-        toolbarContentView.viewMiniLoc.btnSearch.addTarget(self, action: #selector(showFullLocationView), for: .touchUpInside)
-        toolbarContentView.viewMiniLoc.btnSend.addTarget(self, action: #selector(sendLocationMessageFromMini), for: .touchUpInside)
+        
     }
     
     func setupNameCard() {
@@ -399,10 +398,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showStikcer() {
         view.endEditing(true)
-        //toolbarContentView.setup(FAEChatToolBarContentType.sticker.rawValue)
+        toolbarContentView.setup(FaeChatToolBarContentView.STICKER)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
+        let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showStikcer()
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
@@ -410,7 +409,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showLibrary() {
         view.endEditing(true)
-        toolbarContentView.setup(FAEChatToolBarContentType.photo.rawValue)
+        toolbarContentView.setup(FaeChatToolBarContentView.PHOTO)
         let status = PHPhotoLibrary.authorizationStatus()
         if status != .authorized {
             print("not authorized!")
@@ -419,7 +418,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         resetToolbarButtonIcon()
         btnImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
+        let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showLibrary()
         uiviewLocationExtend.isHidden = true
         moveUpInputBarContentView(animated)
@@ -439,10 +438,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showRecord() {
         view.endEditing(true)
-        toolbarContentView.setup(FAEChatToolBarContentType.audio.rawValue)
+        toolbarContentView.setup(FaeChatToolBarContentView.AUDIO)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
+        let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showRecord()
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
@@ -450,10 +449,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     @objc func showMiniMap() {
         view.endEditing(true)
-        toolbarContentView.setup(FAEChatToolBarContentType.minimap.rawValue)
+        toolbarContentView.setup(FaeChatToolBarContentView.MINIMAP)
+        toolbarContentView.viewMiniLoc.delegate = self
         resetToolbarButtonIcon()
         btnLocation.setImage(UIImage(named: "locationChosen"), for: UIControlState())
-        let animated = !toolbarContentView.mediaContentShow && !toolbarContentView.boolKeyboardShow
+        let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showMiniLocation()
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
@@ -549,7 +549,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
             return
         }
-        if toolbarContentView.mediaContentShow { // show toolbar, no keyboard
+        if toolbarContentView.boolMediaShow { // show toolbar, no keyboard
             uiviewKeyboard.frame.origin.y = screenHeight
             return
         }
@@ -656,7 +656,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             var dragDistanceY = scrollViewCurrentOffset - floatScrollViewOriginOffset
             //print("current offset: \(scrollViewCurrentOffset)")
             if dragDistanceY < 0
-                && (toolbarContentView.mediaContentShow || toolbarContentView.boolKeyboardShow)
+                && (toolbarContentView.boolMediaShow || toolbarContentView.boolKeyboardShow)
                 && !boolClosingToolbarContentView && scrollView.isScrollEnabled == true {
                 if toolbarContentView.boolKeyboardShow {
                     if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight {
@@ -784,7 +784,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // MARK: mini-map picker
-    @objc func showFullLocationView(_ sender: UIButton) {
+    func showFullLocationView() {
         // TODO
         closeToolbarContentView()
         boolGoToFullContent = true
@@ -844,7 +844,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
-    @objc func sendLocationMessageFromMini(_ sender: UIButton) {
+    func sendLocationMessageFromMini() {
         if let mapview = toolbarContentView.viewMiniLoc.mapView {
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)

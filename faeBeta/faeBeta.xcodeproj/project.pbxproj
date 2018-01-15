@@ -311,7 +311,7 @@
 		DC0B09341F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0B09331F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift */; };
 		DC12C36E1F479AFC00796C86 /* NewChat+ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */; };
 		DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */; };
-		DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */; };
+		DC3354161DBFE72100F7317F /* FaeChatToolBarContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */; };
 		DC39820A1DD2BC88000CB51F /* UIScreenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3982091DD2BC88000CB51F /* UIScreenService.swift */; };
 		DC3BAAA61DEFC3CD00EF9307 /* FAEAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */; };
 		DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4334121DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m */; };
@@ -675,7 +675,7 @@
 		DC0B09331F3D206F00E7BE49 /* QuickPhotoPickerCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuickPhotoPickerCollectionViewCell.swift; sourceTree = "<group>"; };
 		DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NewChat+ShareViewController.swift"; sourceTree = "<group>"; };
 		DC12C36F1F47A3C600796C86 /* NewChatTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewChatTableViewCell.swift; sourceTree = "<group>"; };
-		DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEChatToolBarContentView.swift; sourceTree = "<group>"; };
+		DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeChatToolBarContentView.swift; sourceTree = "<group>"; };
 		DC3982091DD2BC88000CB51F /* UIScreenService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIScreenService.swift; sourceTree = "<group>"; };
 		DC3BAAA51DEFC3CD00EF9307 /* FAEAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FAEAlertController.swift; sourceTree = "<group>"; };
 		DC4334111DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSQVideoMediaItemCustom.h; sourceTree = "<group>"; };
@@ -1001,7 +1001,7 @@
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatViewController+collecitonView.swift */,
 				DCF1EBD31DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift */,
-				DC3354151DBFE72100F7317F /* FAEChatToolBarContentView.swift */,
+				DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */,
 				DC3982091DD2BC88000CB51F /* UIScreenService.swift */,
 				DC12C36D1F479AFC00796C86 /* NewChat+ShareViewController.swift */,
 				DCC59D151F8C38D400B2A27F /* NSVC_backup.swift */,
@@ -2071,7 +2071,7 @@
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,
 				5087686A1F47AC6A009922BA /* UserPin.swift in Sources */,
-				DC3354161DBFE72100F7317F /* FAEChatToolBarContentView.swift in Sources */,
+				DC3354161DBFE72100F7317F /* FaeChatToolBarContentView.swift in Sources */,
 				B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */,
 				B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */,
 				B8849EA51EEB143800D4588D /* MBPeople.swift in Sources */,
