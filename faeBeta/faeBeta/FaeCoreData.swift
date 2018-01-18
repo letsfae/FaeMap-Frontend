@@ -1,5 +1,5 @@
 //
-//  LocalStorageManager.swift
+//  FaeCoreData.swift
 //  faeBeta
 //
 //  Created by blesssecret on 5/18/16.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-class LocalStorageManager: NSObject {
+class FaeCoreData: NSObject {
     
-    static let shared = LocalStorageManager()
+    static let shared = FaeCoreData()
     
     fileprivate let defaults = UserDefaults.standard
     func saveString(_ key: String, value: String) {
@@ -20,6 +20,9 @@ class LocalStorageManager: NSObject {
         defaults.set(value, forKey: key)
     }
     func saveNumber(_ key: String, value: NSNumber) {
+        defaults.set(value, forKey: key)
+    }
+    func save(_ key: String, value: Any) {
         defaults.set(value, forKey: key)
     }
     
@@ -110,7 +113,6 @@ class LocalStorageManager: NSObject {
     }
     
     func getAccountStorage() {
-        
         saveString("userEmail", value: Key.shared.userEmail)
         saveString("username", value: Key.shared.username)
         saveString("userFirstname", value: Key.shared.userFirstname)
@@ -141,6 +143,21 @@ class LocalStorageManager: NSObject {
                 Key.shared.userGender = readByKey("userGender") as! Int
                 if readByKey("userMiniAvatar") != nil {
                     Key.shared.userMiniAvatar = readByKey("userMiniAvatar") as! Int
+                }
+                if let autoRefresh = readByKey("autoRefresh") as? Bool {
+                    Key.shared.autoRefresh = autoRefresh
+                } else {
+                    Key.shared.autoRefresh = true
+                }
+                if let autoCycle = readByKey("autoCycle") as? Bool {
+                    Key.shared.autoCycle = autoCycle
+                } else {
+                    Key.shared.autoCycle = true
+                }
+                if let hideAvatars = readByKey("hideAvatars") as? Bool {
+                    Key.shared.hideAvatars = hideAvatars
+                } else {
+                    Key.shared.hideAvatars = false
                 }
             }
         }

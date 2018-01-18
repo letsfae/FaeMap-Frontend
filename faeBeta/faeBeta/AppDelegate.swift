@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
         
-        _ = LocalStorageManager.shared.readLogInfo()
+        _ = FaeCoreData.shared.readLogInfo()
         
         let vcRoot = Key.shared.is_Login == 0 ? WelcomeViewController() : InitialPageController()
         Key.shared.navOpenMode = Key.shared.is_Login == 0 ? .welcomeFirst : .mapFirst

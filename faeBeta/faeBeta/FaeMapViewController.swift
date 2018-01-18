@@ -88,7 +88,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Filter Hexagon and Menu
     var btnFilterIcon: FMFilterIcon! // Filter Button
-    var uiviewFilterMenu: FMFilterMenu! // Filter Menu
     var uiviewDropUpMenu: FMDropUpMenu! // 
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
@@ -183,6 +182,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         storeRealmCollectionFromServer()
         
         Key.shared.FMVCtrler = self
+        AUTO_REFRESH = Key.shared.autoRefresh
+        AUTO_CIRCLE_PINS = Key.shared.autoCycle
+        HIDE_AVATARS = Key.shared.hideAvatars
         
         isUserLoggedIn()
         getUserStatus()
@@ -191,7 +193,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadMapView()
         loadButton()
-        view.bringSubview(toFront: uiviewFilterMenu)
         view.bringSubview(toFront: uiviewDropUpMenu)
         loadExploreBar()
         loadPlaceDetail()
@@ -208,7 +209,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
-        
 //        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35, width: screenWidth, height: 1))
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
@@ -347,7 +347,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func getUserStatus() {
-        guard let user_status = LocalStorageManager.shared.readByKey("userStatus") as? Int else { return }
+        guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
     
@@ -390,7 +390,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func isUserLoggedIn() {
-        _ = LocalStorageManager.shared.readLogInfo()
+        _ = FaeCoreData.shared.readLogInfo()
         if Key.shared.is_Login == 0 {
             jumpToWelcomeView(animated: false)
         }
@@ -436,7 +436,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
         Key.shared.userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
-        LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        FaeCoreData.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {

@@ -74,6 +74,13 @@ class SetMapsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralSubTitleCell", for: indexPath as IndexPath) as! GeneralSubTitleCell
         cell.lblName.text = arrMaps[indexPath.row]
+        if indexPath.row == 1 {
+            cell.switchIcon.isOn = Key.shared.autoRefresh
+        } else if indexPath.row == 2 {
+            cell.switchIcon.isOn = Key.shared.autoCycle
+        } else {
+            cell.switchIcon.isOn = Key.shared.hideAvatars
+        }
         cell.switchIcon.isHidden = false
         cell.btnSelect.isHidden = true
         cell.lblDes.isHidden = false

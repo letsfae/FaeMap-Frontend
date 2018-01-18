@@ -1,5 +1,5 @@
 //
-//  FMMapFilter.swift
+//  FMDropUpMenuCtrl.swift
 //  MapFilterIcon
 //
 //  Created by Yue on 1/24/17.
@@ -21,21 +21,13 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         view.addSubview(btnFilterIcon)
         view.bringSubview(toFront: btnFilterIcon)
         
-        uiviewFilterMenu = FMFilterMenu(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatFilterHeight))
-        uiviewFilterMenu.delegate = self
-        uiviewFilterMenu.btnFilterIcon = btnFilterIcon
-        uiviewFilterMenu.layer.zPosition = 601
-        view.addSubview(uiviewFilterMenu)
-        view.bringSubview(toFront: uiviewFilterMenu)
-        let panGesture_icon = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        btnFilterIcon.addGestureRecognizer(panGesture_icon)
-        let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
-        
         // new menu design
         uiviewDropUpMenu = FMDropUpMenu()
         uiviewDropUpMenu.layer.zPosition = 601
+        uiviewDropUpMenu.delegate = self
         view.addSubview(uiviewDropUpMenu)
+        let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
+        uiviewDropUpMenu.addGestureRecognizer(panGesture_menu)
     }
     
     @objc func actionFilterIcon(_ sender: UIButton) {
@@ -55,13 +47,16 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     // MapFilterMenuDelegate
     func autoReresh(isOn: Bool) {
         AUTO_REFRESH = isOn
+        Key.shared.autoRefresh = isOn
+        FaeCoreData.shared.save("autoRefresh", value: isOn)
     }
     
     // MapFilterMenuDelegate
     func autoCyclePins(isOn: Bool) {
         AUTO_CIRCLE_PINS = isOn
         placeClusterManager.canUpdate = isOn
-        
+        Key.shared.autoCycle = isOn
+        FaeCoreData.shared.save("autoCycle", value: isOn)
     }
     
     /*
@@ -91,6 +86,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     // MapFilterMenuDelegate
     func hideAvatars(isOn: Bool) {
         HIDE_AVATARS = isOn
+        Key.shared.hideAvatars = isOn
+        FaeCoreData.shared.save("hideAvatars", value: isOn)
         if isOn {
             timerUserPin?.invalidate()
             timerUserPin = nil
@@ -149,13 +146,6 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
-    func actionHideFilterMenu(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.uiviewFilterMenu.frame.origin.y = screenHeight
-            self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
-        })
-    }
-    
     @objc func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
@@ -163,15 +153,12 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                 self.mapGesture(isOn: true)
             }
             let location = pan.location(in: view)
-            if uiviewFilterMenu.frame.origin.y == screenHeight {
-                sizeFrom = screenHeight
-                sizeTo = screenHeight - floatFilterHeight
-                end = location.y
+            if uiviewDropUpMenu.frame.origin.y == screenHeight {
+                uiviewDropUpMenu.panCtrlParaSetting(showed: false)
             } else {
-                sizeFrom = screenHeight - floatFilterHeight
-                sizeTo = screenHeight
-                end = location.y
+                uiviewDropUpMenu.panCtrlParaSetting(showed: true)
             }
+            end = location.y
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
             let velocity = pan.velocity(in: view)
             let location = pan.location(in: view)
@@ -181,26 +168,26 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             }
             if percent > 0.1 {
                 // reload collection data
-                if uiviewFilterMenu.frame.origin.y <= screenHeight {
-                    uiviewFilterMenu.loadCollectionData()
+                if uiviewDropUpMenu.frame.origin.y < screenHeight {
+                    uiviewDropUpMenu.loadCollectionData()
                 }
+                btnDropUpMenu.isSelected = false
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.uiviewFilterMenu.frame.origin.y = self.sizeTo
-                    self.btnFilterIcon.center.y = self.sizeTo - 25 - device_offset_bot
-                }, completion: nil)
+                    self.uiviewDropUpMenu.frame.origin.y = self.uiviewDropUpMenu.sizeTo
+                }, completion: { _ in
+                    self.uiviewDropUpMenu.smallMode()
+                })
             } else {
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.uiviewFilterMenu.frame.origin.y = self.sizeFrom
-                    self.btnFilterIcon.center.y = self.sizeFrom - 25 - device_offset_bot
+                    self.uiviewDropUpMenu.frame.origin.y = self.uiviewDropUpMenu.sizeFrom
                 })
             }
         } else {
-            guard uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight else { return }
+            guard uiviewDropUpMenu.frame.origin.y >= screenHeight - uiviewDropUpMenu.frame.size.height - device_offset_bot_main else { return }
             let location = pan.location(in: view)
-            percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
+            percent = abs(Double(CGFloat(end - location.y) / uiviewDropUpMenu.frame.size.height))
             let translation = pan.translation(in: view)
-            btnFilterIcon.center.y = btnFilterIcon.center.y + translation.y
-            uiviewFilterMenu.center.y = uiviewFilterMenu.center.y + translation.y
+            uiviewDropUpMenu.center.y = uiviewDropUpMenu.center.y + translation.y
             pan.setTranslation(CGPoint.zero, in: view)
         }
     }

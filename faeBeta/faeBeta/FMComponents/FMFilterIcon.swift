@@ -65,7 +65,7 @@ class FMFilterIcon: UIButton {
     
     @objc func startAnimation() {
         animateInsideCircles()
-        animateMapFilterArrow()
+//        animateMapFilterArrow()
     }
     
     func animateInsideCircles() {
@@ -169,7 +169,7 @@ class FMFilterIcon: UIButton {
             self.polygonInside.transform = CGAffineTransform(rotationAngle: -(CGFloat.pi * 0.999))
         }, completion: nil)
     }
-    
+    /*
     func animateMapFilterArrow() {
         
         if mapFilterArrow != nil {
@@ -195,4 +195,5 @@ class FMFilterIcon: UIButton {
             }
         })
     }
+ */
 }

@@ -63,12 +63,12 @@ class FaeUser: NSObject {
         } else {
             Key.shared.userGender = 1
         }
-        LocalStorageManager.shared.saveString("userEmail", value: Key.shared.userEmail)
-        LocalStorageManager.shared.saveString("userPassword", value: Key.shared.userPassword)
-        LocalStorageManager.shared.saveString("userFirstname", value: Key.shared.userFirstname)
-        LocalStorageManager.shared.saveString("userLastname", value: Key.shared.userLastname)
-        LocalStorageManager.shared.saveString("userBirthday", value: Key.shared.userBirthday)
-        LocalStorageManager.shared.saveInt("userGender", value: Key.shared.userGender)
+        FaeCoreData.shared.saveString("userEmail", value: Key.shared.userEmail)
+        FaeCoreData.shared.saveString("userPassword", value: Key.shared.userPassword)
+        FaeCoreData.shared.saveString("userFirstname", value: Key.shared.userFirstname)
+        FaeCoreData.shared.saveString("userLastname", value: Key.shared.userLastname)
+        FaeCoreData.shared.saveString("userBirthday", value: Key.shared.userBirthday)
+        FaeCoreData.shared.saveInt("userGender", value: Key.shared.userGender)
     }
     
     /* faeuser log in function
@@ -98,7 +98,7 @@ class FaeUser: NSObject {
                     }
                     Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                     Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
-                    LocalStorageManager.shared.getAccountStorage()
+                    FaeCoreData.shared.getAccountStorage()
                 }
             } else {
                 
@@ -128,7 +128,7 @@ class FaeUser: NSObject {
         Key.shared.userEmail = keyValue["email"] ?? ""
         Key.shared.userPassword = keyValue["password"]!
         
-        LocalStorageManager.shared.logInStorage()
+        FaeCoreData.shared.logInStorage()
     }
     
     /* faeuser log out function
@@ -155,7 +155,7 @@ class FaeUser: NSObject {
         Key.shared.user_id = -1
         Key.shared.is_Login = 0
         Key.shared.onlineStatus = 1
-        LocalStorageManager.shared.saveInt("is_Login", value: 0)
+        FaeCoreData.shared.saveInt("is_Login", value: 0)
     }
     
     /* faeuser check email exist function
@@ -225,7 +225,7 @@ class FaeUser: NSObject {
             if let password = self.keyValue["password"] {
                 Key.shared.userPassword = password
                 print("[changePassword]", Key.shared.userPassword)
-                _ = LocalStorageManager.shared.savePassword()
+                _ = FaeCoreData.shared.savePassword()
             }
             self.clearKeyValue()
             completion(status, message)
@@ -261,8 +261,8 @@ class FaeUser: NSObject {
                 Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
                 Key.shared.userPhoneVerified = userInfoJSON["phone_verified"].boolValue
                 Key.shared.userMiniAvatar = userInfoJSON["mini_avatar"].intValue + 1
-                LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
-                LocalStorageManager.shared.getAccountStorage()
+                FaeCoreData.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+                FaeCoreData.shared.getAccountStorage()
             }
             completion(status, message)
         }
@@ -291,7 +291,7 @@ class FaeUser: NSObject {
                     Key.shared.userGender = 1
                 }
                 Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
-                LocalStorageManager.shared.getAccountStorage()
+                FaeCoreData.shared.getAccountStorage()
             }
             completion(status, message)
             self.clearKeyValue()
@@ -318,7 +318,7 @@ class FaeUser: NSObject {
                 // changed successfully
                 if let newPassword = self.keyValue["new_password"] {
                     Key.shared.userPassword = newPassword
-                    _ = LocalStorageManager.shared.savePassword()
+                    _ = FaeCoreData.shared.savePassword()
                 }
             }
             completion(status, message)
@@ -346,7 +346,7 @@ class FaeUser: NSObject {
                 
                 if let newEmail = self.keyValue["email"] {
                     Key.shared.userEmail = newEmail 
-                    LocalStorageManager.shared.saveEmail()
+                    FaeCoreData.shared.saveEmail()
                     print("new email")
                     print(Key.shared.userEmail)
                 }
@@ -374,7 +374,7 @@ class FaeUser: NSObject {
             if status / 100 == 2 {
                 if let newPhoneNumber = self.keyValue["phone"] {
                     Key.shared.userPhoneNumber = newPhoneNumber
-                    _ = LocalStorageManager.shared.savePhoneNumber()
+                    _ = FaeCoreData.shared.savePhoneNumber()
                     print("new phone number")
                     //                    print(userPhoneNumber)
                 }
