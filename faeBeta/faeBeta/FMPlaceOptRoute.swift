@@ -164,7 +164,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
             self.deselectAllLocations()
         }
         deselectAllAnnotations()
-        HIDE_AVATARS = false
+        HIDE_AVATARS = Key.shared.hideAvatars
         PLACE_ENABLE = true
     }
     

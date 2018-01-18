@@ -36,7 +36,7 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
-        uiviewFilterMenu.hide()
+        uiviewDropUpMenu.hide()
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
@@ -173,10 +173,10 @@ extension FaeMapViewController {
                 boolFromMap = true
                 navigationController?.setViewControllers(arrCtrlers, animated: false)
             }
-            if let idxPath = uiviewFilterMenu.selectedIndexPath {
-                if let cell = uiviewFilterMenu.tblPlaceLoc.cellForRow(at: idxPath) as? CollectionsListCell {
+            if let idxPath = uiviewDropUpMenu.selectedIndexPath {
+                if let cell = uiviewDropUpMenu.tblPlaceLoc.cellForRow(at: idxPath) as? CollectionsListCell {
                     cell.imgIsIn.isHidden = true
-                    uiviewFilterMenu.selectedIndexPath = nil
+                    uiviewDropUpMenu.selectedIndexPath = nil
                 }
             }
             break

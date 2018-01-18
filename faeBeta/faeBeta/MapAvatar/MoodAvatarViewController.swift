@@ -25,8 +25,8 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.white
-        if LocalStorageManager.shared.readByKey("userMiniAvatar") != nil {
-            Key.shared.userMiniAvatar = LocalStorageManager.shared.readByKey("userMiniAvatar") as! Int
+        if FaeCoreData.shared.readByKey("userMiniAvatar") != nil {
+            Key.shared.userMiniAvatar = FaeCoreData.shared.readByKey("userMiniAvatar") as! Int
         } else {
             Key.shared.userMiniAvatar = 1
         }
@@ -138,7 +138,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     @objc func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
-        LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        FaeCoreData.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {

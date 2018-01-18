@@ -136,6 +136,11 @@ class Key: NSObject { //  singleton class
         }
     }
     
+    // MARK: - User Settings
+    var autoRefresh: Bool = true
+    var autoCycle: Bool = true
+    var hideAvatars: Bool = false
+    
     // MARK: - API Fetching Headers
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
@@ -158,7 +163,7 @@ class Key: NSObject { //  singleton class
             else if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
                 header["Authorization"] = Key.shared.userTokenEncode
             }
-            else if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+            else if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
                 Key.shared.userTokenEncode = encode
                 header["Authorization"] = Key.shared.userTokenEncode
             }
@@ -184,7 +189,7 @@ class Key: NSObject { //  singleton class
         if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
             return ["Authorization": Key.shared.userTokenEncode]
         }
-        if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+        if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
             Key.shared.userTokenEncode = encode
             return ["Authorization": Key.shared.userTokenEncode]
         }

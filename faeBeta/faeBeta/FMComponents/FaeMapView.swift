@@ -136,8 +136,6 @@ class FaeMapView: MKMapView {
             }
         }
         block = false
-        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
         faeMapCtrler?.uiviewDropUpMenu.hide()
         faeMapCtrler?.btnDropUpMenu.isSelected = false
@@ -183,8 +181,6 @@ class FaeMapView: MKMapView {
             
         }
         block = false
-        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
         guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
         faeMapCtrler?.uiviewDropUpMenu.hide()
         faeMapCtrler?.btnDropUpMenu.isSelected = false
