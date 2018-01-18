@@ -139,13 +139,13 @@ class FaeChatToolBarContentView: UIView {
             btnMoreImage = UIButton(frame: CGRect(x: 10, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
             btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
-            uiviewPhotoPicker.addSubview(btnQuickSendImage)
+            uiviewPhotoPicker.addSubview(btnMoreImage)
 
             btnQuickSendImage = UIButton(frame: CGRect(x: frame.width - 52, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
-            uiviewPhotoPicker.addSubview(btnMoreImage)
+            uiviewPhotoPicker.addSubview(btnQuickSendImage)
             
             photoPicker = PhotoPicker.shared
             updateSendButtonStatus()
