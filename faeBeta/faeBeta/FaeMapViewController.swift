@@ -205,6 +205,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         updateSelfInfo()
         
         checkDisplayNameExisitency()
+        loadUserSettingsFromCloud()
         
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
@@ -386,6 +387,18 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                     sendWelcomeMessage()
                 }
             }
+        }
+    }
+    
+    func loadUserSettingsFromCloud() {
+        FaeUser.shared.getUserSettings { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard let results = message else { return }
+            let resultsJSON = JSON(results)
+            Key.shared.emailSubscribed = resultsJSON["email_subscription"].boolValue
+            Key.shared.measurementUnits = resultsJSON["measurement_units"].stringValue
+            Key.shared.showNameCardOption = resultsJSON["show_name_card_options"].boolValue
+            Key.shared.shadowLocationEffect = resultsJSON["shadow_location_system_effect"].stringValue == "" ? "normal" : resultsJSON["shadow_location_system_effect"].stringValue
         }
     }
     

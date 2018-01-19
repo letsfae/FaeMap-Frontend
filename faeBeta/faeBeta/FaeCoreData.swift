@@ -159,6 +159,26 @@ class FaeCoreData: NSObject {
                 } else {
                     Key.shared.hideAvatars = false
                 }
+                if let emailSubscribed = readByKey("emailSubscribed") as? Bool {
+                    Key.shared.emailSubscribed = emailSubscribed
+                } else {
+                    Key.shared.emailSubscribed = true
+                }
+                if let showNameCardOption = readByKey("showNameCardOption") as? Bool {
+                    Key.shared.showNameCardOption = showNameCardOption
+                } else {
+                    Key.shared.showNameCardOption = true
+                }
+                if let measurementUnits = readByKey("measurementUnits") as? String {
+                    Key.shared.measurementUnits = measurementUnits
+                } else {
+                    Key.shared.measurementUnits = "imperial"
+                }
+                if let shadowLocationEffect = readByKey("shadowLocationEffect") as? String {
+                    Key.shared.shadowLocationEffect = shadowLocationEffect
+                } else {
+                    Key.shared.shadowLocationEffect = "normal"
+                }
             }
         }
         return false
