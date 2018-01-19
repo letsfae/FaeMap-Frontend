@@ -10,6 +10,7 @@
 
 import UIKit
 import Contacts
+import Photos
 
 class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var uiviewNavBar: FaeNavBar!
@@ -157,13 +158,16 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             if let name = arrNames["\(sec)\(row)"] {
                 cell.updateName(name: name)
             }
+            if row == 1 {
+                cell.btnSelect.isSelected = Key.shared.measurementUnits == "imperial"
+            } else {
+                cell.btnSelect.isSelected = Key.shared.measurementUnits == "metric"
+            }
             cell.lblDes.isHidden = true
             cell.removeContraintsForDes()
             cell.switchIcon.isHidden = true
             cell.btnSelect.isHidden = false
             cell.imgView.isHidden = true
-            let isMetric = NSLocale.current.usesMetricSystem
-            cell.btnSelect.isSelected = isMetric ? row == 2 : row == 1
             return cell
         } else if sec == 1 {
             // sec==1 is Permission part
@@ -186,6 +190,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                 cell.removeContraintsForDes()
             }
             cell.switchIcon.isHidden = false
+            cell.switchIcon.tag = 10 + row
             cell.switchIcon.isOn = dictPermissions[arrNames["\(sec)\(row)"]!]!
             cell.btnSelect.isHidden = true
             cell.imgView.isHidden = true
@@ -195,6 +200,7 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.lblDes.isHidden = false
             cell.setContraintsForDes()
             cell.switchIcon.isHidden = false
+            cell.switchIcon.tag = 31
             cell.imgView.isHidden = true
             cell.topGrayLine.isHidden = false
             if sec == 2 {
@@ -203,8 +209,8 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             } else {
                 cell.lblName.text = "Email Subscription"
                 cell.lblDes.text = "Enable to receive recommendations, local favorites, newsletters, and updates by email."
-                cell.switchIcon.isOn = true
-                cell.switchIcon.addTarget(self, action: #selector(switchEmailSubscription(_:)), for: .valueChanged)
+                cell.switchIcon.isOn = Key.shared.emailSubscribed
+                cell.uiviewBackground = self.uiviewBackground
             }
             return cell
         }
@@ -213,47 +219,85 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
         let row = indexPath.row
-        /**
+        
         if section == 0 {
             // section == 0 exchange Imperial & Metric
-            let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralSubTitleCell
             if row == 1 {
+                let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
                 if cell.btnSelect.isSelected == false {
                     cell.btnSelect.isSelected = true
                     let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
+                    Key.shared.measurementUnits = "imperial"
+                    FaeUser.shared.whereKey("measurement_units", value: "imperial")
+                    FaeUser.shared.setUserSettings { (status, message) in
+                        guard status / 100 == 2 else { return }
+                    }
                 }
             } else if row == 2 {
+                let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
                 if cell.btnSelect.isSelected == false {
                     cell.btnSelect.isSelected = true
                     let cell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
+                    Key.shared.measurementUnits = "metric"
+                    FaeUser.shared.whereKey("measurement_units", value: "metric")
+                    FaeUser.shared.setUserSettings { (status, message) in
+                        guard status / 100 == 2 else { return }
+                    }
                 }
             }
         } else
-         */
         if section == 1 {
-            if row != 1 {
+            switch row {
+            case 1:
+                break
+            case 2:
+                let status = AVCaptureDevice.authorizationStatus(for: .video)
+                if status != .authorized {
+                    AVCaptureDevice.requestAccess(for: .video, completionHandler: { (isOn) in
+                        DispatchQueue.main.async {
+                            let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
+                            cell.switchIcon.isOn = AVCaptureDevice.authorizationStatus(for: .video) == .authorized
+                        }
+                    })
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
+                break
+            case 3:
+                let status = AVCaptureDevice.authorizationStatus(for: .audio)
+                if status != .authorized {
+                    AVCaptureDevice.requestAccess(for: .audio, completionHandler: { (isOn) in
+                        DispatchQueue.main.async {
+                            let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
+                            cell.switchIcon.isOn = AVCaptureDevice.authorizationStatus(for: .audio) == .authorized
+                        }
+                    })
+                } else {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
+                break
+            case 4:
+                break
+            case 5:
+                break
+            default:
+                break
+            }
+            if row > 0 && row != 2 && row != 3 {
                 UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
             }
         } else if section == 3 {
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralTitleCell
-            if cell.switchIcon.isOn == true {
-                cell.switchIcon.isOn = false
-                uiviewBackground.isHidden = false
-            } else {
-                cell.switchIcon.isOn = true
-                uiviewBackground.isHidden = true
-            }
+            uiviewBackground.isHidden = !cell.switchIcon.isOn
         }
     }
     
     @objc func switchEmailSubscription(_ sender: UISwitch) {
         if sender.isOn == true {
-            sender.isOn = false
             uiviewBackground.isHidden = false
         } else {
-            sender.isOn = true
             uiviewBackground.isHidden = true
         }
     }

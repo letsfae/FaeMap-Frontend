@@ -181,7 +181,19 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         if section == 1 && (row == 1 || row == 2 || row == 3) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "GeneralSubTitleCell", for: indexPath as IndexPath) as! GeneralSubTitleCell
             cell.btnSelect.isHidden = false
-            cell.btnSelect.isSelected = row == 1
+            switch row {
+            case 1:
+                cell.btnSelect.isSelected = Key.shared.shadowLocationEffect == "min"
+                break
+            case 2:
+                cell.btnSelect.isSelected = Key.shared.shadowLocationEffect == "normal"
+                break
+            case 3:
+                cell.btnSelect.isSelected = Key.shared.shadowLocationEffect == "max"
+                break
+            default:
+                break
+            }
             cell.imgView.isHidden = true
             cell.lblDes.isHidden = true
             cell.removeContraintsForDes()
@@ -194,6 +206,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         if section == 0 {
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = false
+            cell.switchIcon.isOn = Key.shared.onlineStatus == 5
             cell.switchIcon.addTarget(self, action: #selector(getintoHiddenModel(_:)), for: .valueChanged)
             cell.topGrayLine.isHidden = true
         }
@@ -217,7 +230,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
-        //let row = indexPath.row
+        let row = indexPath.row
         if section == 0 { // TODO
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralTitleCell
             if cell.switchIcon.isOn == false {
@@ -226,6 +239,43 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 uiviewBackground.isHidden = false
                 uiviewAlert.isHidden = true
                 uiviewHidden.isHidden = false
+            }
+        }
+        else if section == 1 {
+            var effect = "normal"
+            switch row {
+            case 1:
+                effect = "min"
+                let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
+                cell.btnSelect.isSelected = true
+                let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 1)) as! GeneralSubTitleCell
+                cell2.btnSelect.isSelected = false
+                let cell3 = tableView.cellForRow(at: IndexPath(row: 3, section: 1)) as! GeneralSubTitleCell
+                cell3.btnSelect.isSelected = false
+                break
+            case 2:
+                let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
+                cell.btnSelect.isSelected = true
+                let cell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as! GeneralSubTitleCell
+                cell2.btnSelect.isSelected = false
+                let cell3 = tableView.cellForRow(at: IndexPath(row: 3, section: 1)) as! GeneralSubTitleCell
+                cell3.btnSelect.isSelected = false
+            case 3:
+                effect = "max"
+                let cell = tableView.cellForRow(at: indexPath) as! GeneralSubTitleCell
+                cell.btnSelect.isSelected = true
+                let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 1)) as! GeneralSubTitleCell
+                cell2.btnSelect.isSelected = false
+                let cell3 = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as! GeneralSubTitleCell
+                cell3.btnSelect.isSelected = false
+                break
+            default:
+                break
+            }
+            Key.shared.shadowLocationEffect = effect
+            FaeUser.shared.whereKey("shadow_location_system_effect", value: effect)
+            FaeUser.shared.setUserSettings { (status, message) in
+                guard status / 100 == 2 else { return }
             }
         }
         else if section == 3 { // TODO

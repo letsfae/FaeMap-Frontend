@@ -457,4 +457,16 @@ class FaeUser: NSObject {
         }
     }
     
+    func setUserSettings(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("users/settings", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
+    func getUserSettings(completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("users/settings", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            completion(status, message)
+        }
+    }
+    
 }

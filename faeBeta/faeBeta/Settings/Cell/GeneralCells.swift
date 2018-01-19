@@ -25,6 +25,8 @@ class GeneralTitleCell: UITableViewCell {
     var imgView: UIImageView!
     var topGrayLine: UIView!
     
+    var uiviewBackground: UIView?
+    
     internal var lblDesContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
@@ -59,8 +61,17 @@ class GeneralTitleCell: UITableViewCell {
     }
     
     @objc func actionSwitchFunc(_ sender: UISwitch) {
-        print(sender.tag)
         switch sender.tag {
+        case 31:
+            if Key.shared.userEmailVerified == false {
+                self.uiviewBackground?.isHidden = !sender.isOn
+            }
+            Key.shared.emailSubscribed = sender.isOn
+            FaeUser.shared.whereKey("email_subscription", value: "\(sender.isOn)")
+            FaeUser.shared.setUserSettings { (status, message) in
+                guard status / 100 == 2 else { return }
+            }
+            break
         case 101:
             Key.shared.hideNameCardOptions = sender.isOn
             break
@@ -176,6 +187,16 @@ class GeneralSubTitleCell: UITableViewCell {
         loadContent()
     }
     
+    @objc func actionSwitchFunc(_ sender: UISwitch) {
+        switch sender.tag {
+        case 11, 12, 13, 14, 15:
+            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+            break
+        default:
+            break
+        }
+    }
+    
     func updateName(name: String) {
         var arrNames = name.split(separator: " ")
         var array = [String]()
@@ -209,6 +230,7 @@ class GeneralSubTitleCell: UITableViewCell {
         btnSelect.setImage(#imageLiteral(resourceName: "Settings_choose"), for: .selected)
         btnSelect.setImage(#imageLiteral(resourceName: "Settings_notChoose"), for: .normal)
         btnSelect.adjustsImageWhenHighlighted = false
+        btnSelect.isUserInteractionEnabled = false
         addSubview(btnSelect)
         addConstraintsWithFormat("H:[v0(22)]-27-|", options: [], views: btnSelect)
         addConstraintsWithFormat("V:|-0-[v0(22)]", options: [], views: btnSelect)
@@ -220,6 +242,7 @@ class GeneralSubTitleCell: UITableViewCell {
         addSubview(switchIcon)
         addConstraintsWithFormat("H:[v0(39)]-19-|", options: [], views: switchIcon)
         addConstraintsWithFormat("V:|-(-3)-[v0(23)]", options: [], views: switchIcon)
+        switchIcon.addTarget(self, action: #selector(self.actionSwitchFunc(_:)), for: .touchUpInside)
         
         imgView = UIImageView()
         addSubview(imgView)

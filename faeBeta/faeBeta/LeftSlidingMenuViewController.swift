@@ -351,7 +351,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     @objc func invisibleSwitch(_ sender: UISwitch) {
         let switchToInvisible = FaeUser()
         if sender.isOn {
-            print("sender.on")
             switchToInvisible.whereKey("status", value: "5")
             switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
@@ -359,7 +358,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.tableSelections = .goInvisible
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
-                    print("Successfully switch to invisible")
                     self.actionCloseMenu(self.btnBackground)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
                 } else {
@@ -367,7 +365,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                 }
             })
         } else {
-            print("sender.off")
             switchToInvisible.whereKey("status", value: "1")
             switchToInvisible.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
@@ -375,7 +372,6 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
                     self.delegate?.userInvisible(isOn: false)
                     let storageForUserStatus = UserDefaults.standard
                     storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
-                    print("Successfully switch to online")
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
                 } else {
                     print("Fail to switch to online")

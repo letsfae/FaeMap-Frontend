@@ -35,9 +35,9 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
+    var joshDebug: Bool = true
     var vickyDebug: Bool = false
-    var felixDebug: Bool = true
+    var felixDebug: Bool = false
     
     // change this to .production to switch to production mode
     private let server = ServerType.development
@@ -140,6 +140,11 @@ class Key: NSObject { //  singleton class
     var autoRefresh: Bool = true
     var autoCycle: Bool = true
     var hideAvatars: Bool = false
+    
+    var emailSubscribed: Bool = true
+    var showNameCardOption: Bool = true
+    var measurementUnits: String = "imperial" // metric
+    var shadowLocationEffect: String = "normal" // min, max
     
     // MARK: - API Fetching Headers
     var version = "x.faeapp.v1"

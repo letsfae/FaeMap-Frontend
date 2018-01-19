@@ -79,7 +79,6 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         super.init(frame: frame)
         self.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 170)
         loadContent()
-        
         loadCollectionData()
         observeOnCollectionChange()
         fullLoaded = true
@@ -96,13 +95,14 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     fileprivate func loadContent() {
         loadBackground()
-        loadButtons()
         loadOptions()
         loadCollection()
         let btnBack = UIButton(frame: CGRect(x: 5, y: 20, width: 9.37 + 26, height: 16.06 + 24))
         btnBack.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
         imgBackground_lg.addSubview(btnBack)
         btnBack.addTarget(self, action: #selector(self.smallMode), for: .touchUpInside)
+        //let horiPan = UIPanGestureRecognizer(target: self, action: #selector(self.horizontalPan(_:)))
+        //self.addGestureRecognizer(horiPan)
     }
     
     func loadCollectionData() {
@@ -441,17 +441,17 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     fileprivate func loadBackground() {
-        imgBackground_lg = UIImageView(frame: CGRect(x: 5, y: 1, width: screenWidth - 10, height: 420))
+        imgBackground_lg = UIImageView(frame: CGRect(x: 5 + screenWidth, y: 1, width: screenWidth - 10, height: 420))
         imgBackground_lg.contentMode = .scaleAspectFit
         imgBackground_lg.image = #imageLiteral(resourceName: "main_drop_up_backg_lg")
         addSubview(imgBackground_lg)
-        imgBackground_lg.isHidden = true
         imgBackground_lg.isUserInteractionEnabled = true
         
         imgBackground_sm = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 170))
         imgBackground_sm.contentMode = .scaleAspectFit
         imgBackground_sm.image = #imageLiteral(resourceName: "main_drop_up_backg_sm")
         addSubview(imgBackground_sm)
+        imgBackground_sm.isUserInteractionEnabled = true
         
         let lblMapActions = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
         lblMapActions.text = "Map Actions"
@@ -460,26 +460,24 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         lblMapActions.textColor = UIColor._898989()
         imgBackground_sm.addSubview(lblMapActions)
         
+        btnCollection = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
+        btnCollection.frame.origin.x = screenWidth / 2 - 90
+        btnCollection.setImage(#imageLiteral(resourceName: "drop_up_collection"), for: .normal)
+        imgBackground_sm.addSubview(btnCollection)
+        btnCollection.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
+        
+        btnOptions = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
+        btnOptions.frame.origin.x = screenWidth / 2 + 29
+        btnOptions.setImage(#imageLiteral(resourceName: "drop_up_options"), for: .normal)
+        imgBackground_sm.addSubview(btnOptions)
+        btnOptions.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
+        
         lblMenuTitle = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
         lblMenuTitle.text = "Map Options"
         lblMenuTitle.textAlignment = .center
         lblMenuTitle.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
         lblMenuTitle.textColor = UIColor._898989()
         imgBackground_lg.addSubview(lblMenuTitle)
-    }
-    
-    fileprivate func loadButtons() {
-        btnCollection = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
-        btnCollection.frame.origin.x = screenWidth / 2 - 90
-        btnCollection.setImage(#imageLiteral(resourceName: "drop_up_collection"), for: .normal)
-        addSubview(btnCollection)
-        btnCollection.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
-        
-        btnOptions = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
-        btnOptions.frame.origin.x = screenWidth / 2 + 29
-        btnOptions.setImage(#imageLiteral(resourceName: "drop_up_options"), for: .normal)
-        addSubview(btnOptions)
-        btnOptions.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
     }
     
     fileprivate func loadOptions() {
@@ -562,12 +560,28 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         } else {
             mode = .on
         }
-        imgBackground_lg.isHidden = false
-        imgBackground_sm.isHidden = true
-        btnCollection.isHidden = true
-        btnOptions.isHidden = true
         self.frame.origin.y -= 250
         self.frame.size.height = 420
+        imgBackground_sm.frame.origin.y += 250
+        showLargeBackground()
+    }
+    
+    func showLargeBackground() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.imgBackground_lg.frame.origin.x = 5
+            self.imgBackground_sm.frame.origin.x = -screenWidth
+        }) { _ in
+            
+        }
+    }
+    
+    func hideLargeBackground() {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            self.imgBackground_lg.frame.origin.x = 5 + screenWidth
+            self.imgBackground_sm.frame.origin.x = 0
+        }) { _ in
+            self.imgBackground_lg.frame.origin.y = 1
+        }
     }
     
     func show() {
@@ -589,11 +603,51 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     @objc public func smallMode() {
         self.frame.origin.y += 250
         self.frame.size.height = 170
-        imgBackground_lg.isHidden = true
-        imgBackground_sm.isHidden = false
-        btnCollection.isHidden = false
-        btnOptions.isHidden = false
+        imgBackground_sm.frame.origin.y = 0
+        imgBackground_lg.frame.origin.y = -249
+        hideLargeBackground()
         hideDropDownMenu(animated: false)
     }
     
+    var end: CGFloat = 0
+    
+    /*
+    @objc func horizontalPan(_ pan: UIPanGestureRecognizer) {
+        var resumeTime: Double = 0.5
+        if pan.state == .began {
+            end = pan.location(in: self).x
+        } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
+            let velocity = pan.velocity(in: self)
+            let location = pan.location(in: self)
+            let distanceMoved = end - location.x
+            let percent = distanceMoved / screenWidth
+            print("[horizontalPan]", percent)
+            resumeTime = abs(Double(CGFloat(distanceMoved) / velocity.x))
+            if resumeTime > 0.5 {
+                resumeTime = 0.5
+            } else if resumeTime < 0.3 {
+                resumeTime = 0.3
+            }
+            let absPercent: CGFloat = 0.1
+            if percent < -absPercent {
+                UIView.animate(withDuration: resumeTime, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                    
+                }, completion: { _ in
+                    
+                })
+            } else if percent > absPercent {
+//                panToNext(resumeTime)
+            } else {
+                UIView.animate(withDuration: resumeTime, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                    
+                }, completion: nil)
+            }
+        } else if pan.state == .changed {
+            let translation = pan.translation(in: self)
+            imgBackground_sm.center.x = imgBackground_sm.center.x + translation.x
+            imgBackground_lg.center.x = imgBackground_lg.center.x + translation.x
+            pan.setTranslation(CGPoint.zero, in: self)
+        }
+    }
+    */
 }

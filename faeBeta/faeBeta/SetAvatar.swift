@@ -61,10 +61,19 @@ class SetAvatar {
         }
     }
     
-    static func showAlert(title: String, message: String, vc: UIViewController) {
+    static func showAlert(title: String, message: String, vc: UIViewController, more: Bool = false, second_option: String = "") {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
+        if more {
+            let secondOpt = UIAlertAction(title: second_option, style: UIAlertActionStyle.default) {
+                (alert: UIAlertAction) in
+                if second_option == "Settings" {
+                    UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+                }
+            }
+            alertController.addAction(secondOpt)
+        }
         vc.present(alertController, animated: true, completion: nil)
     }
     
@@ -126,15 +135,23 @@ class SetAvatar {
                 PHPhotoLibrary.requestAuthorization({ (status) in
                     photoStatus = status
                     if photoStatus != .authorized {
-                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access", vc: vc)
+                        self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access", vc: vc, more: true, second_option: "Settings")
                         return
                     }
                     menu.removeFromParentViewController()
                     vc.present(imagePicker, animated: true, completion: nil)
                 })
             } else {
-                menu.removeFromParentViewController()
-                vc.present(imagePicker, animated: true, completion: nil)
+                switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
+                case .authorized:
+                    menu.removeFromParentViewController()
+                    vc.present(imagePicker, animated: true, completion: nil)
+                    break
+                case .denied, .notDetermined, .restricted:
+                    self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access", vc: vc, more: true, second_option: "Settings")
+                    return
+                }
+                
             }
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
