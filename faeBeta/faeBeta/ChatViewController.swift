@@ -546,7 +546,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
-        if uiviewKeyboard == nil || uiviewKeyboard.frame.origin.y >= screenHeight { // keyboard is not visiable
+        if uiviewKeyboard == nil { // keyboard is not visiable
+            return
+        }
+        if uiviewKeyboard.frame.origin.y >= screenHeight && inputToolbar.frame.origin.y >= screenHeight - device_offset_bot - floatInputBarHeight {
             return
         }
         if toolbarContentView.boolMediaShow { // show toolbar, no keyboard
