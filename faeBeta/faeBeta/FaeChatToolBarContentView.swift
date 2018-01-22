@@ -75,7 +75,7 @@ class FaeChatToolBarContentView: UIView {
     fileprivate var boolImageQuickPickerShow = false
     
     //sticker
-    fileprivate var viewStickerPicker: StickerPickView!
+    fileprivate var viewStickerPicker: StickerKeyboardView!
     fileprivate var boolStickerViewShow = false
     
     //location
@@ -110,8 +110,9 @@ class FaeChatToolBarContentView: UIView {
     func setup(_ type : Int) {
         // sticker view
         func initializeStickerView() {
-            viewStickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: frame.width, height: self.frame.height))
-            viewStickerPicker.sendStickerDelegate = self
+            //viewStickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: frame.width, height: self.frame.height))
+            //viewStickerPicker.sendStickerDelegate = self
+            viewStickerPicker = StickerKeyboardView(frame: CGRect(x: 0, y: 0, width: frame.width, height: self.frame.height))
             addSubview(viewStickerPicker)
             viewStickerPicker.isHidden = true
             boolStickerInitialized = true
@@ -323,17 +324,25 @@ extension FaeChatToolBarContentView {
     
     /// close all content
     func closeAll() {
-        viewStickerPicker.isHidden = true
+        if viewStickerPicker != nil {
+            viewStickerPicker.isHidden = true
+        }
         boolStickerViewShow = false
         
-        uiviewPhotoPicker.isHidden = true
+        if uiviewPhotoPicker != nil {
+            uiviewPhotoPicker.isHidden = true
+        }
         boolImageQuickPickerShow = false
         
-        viewAudioRecorder.isHidden = true
-        viewAudioRecorder.switchToRecordMode()
+        if viewAudioRecorder != nil {
+            viewAudioRecorder.isHidden = true
+            viewAudioRecorder.switchToRecordMode()
+        }
         boolRecordShow = false
-        
-        viewMiniLoc.isHidden = true
+
+        if viewMiniLoc != nil {
+            viewMiniLoc.isHidden = true
+        }
         boolMiniLocationShow = false
     }
     
@@ -341,11 +350,11 @@ extension FaeChatToolBarContentView {
         viewStickerPicker = nil
         boolStickerViewShow = false
         
-        uiviewPhotoPicker = nil
-        boolImageQuickPickerShow = false
         if photoPicker != nil {
             photoPicker.cleanup()
         }
+        uiviewPhotoPicker = nil
+        boolImageQuickPickerShow = false
         
         viewAudioRecorder = nil
         boolRecordShow = false
@@ -639,7 +648,7 @@ extension FaeChatToolBarContentView: AudioRecorderViewDelegate {
 extension FaeChatToolBarContentView: SendStickerDelegate {
     func sendStickerWithImageName(_ name : String) {
         self.delegate.sendStickerWithImageName(name)
-        self.viewStickerPicker.updateStickerHistory(name)
+        //self.viewStickerPicker.updateStickerHistory(name)
     }
     
     func appendEmojiWithImageName(_ name: String) {
