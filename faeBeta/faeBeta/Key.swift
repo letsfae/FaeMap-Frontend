@@ -70,7 +70,11 @@ class Key: NSObject { //  singleton class
             self.getUserInfo()
         }
     }
-    var is_Login: Int = 0
+    
+    func isFirstUse() -> Bool {
+        return Key.shared.userTokenEncode == ""
+    }
+    var is_Login: Bool = false
     var fully_login: Bool = false
     
     // MARK: - User Personal Info
@@ -165,7 +169,7 @@ class Key: NSObject { //  singleton class
             if Key.shared.userTokenEncode != "" {
                 header["Authorization"] = Key.shared.userTokenEncode
             }
-            else if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+            else if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
                 header["Authorization"] = Key.shared.userTokenEncode
             }
             else if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
@@ -191,7 +195,7 @@ class Key: NSObject { //  singleton class
         if Key.shared.userTokenEncode != "" {
             return ["Authorization": Key.shared.userTokenEncode]
         }
-        if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+        if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
             return ["Authorization": Key.shared.userTokenEncode]
         }
         if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {

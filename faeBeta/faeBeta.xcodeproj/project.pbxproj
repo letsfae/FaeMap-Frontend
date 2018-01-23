@@ -58,6 +58,7 @@
 		509543631FC8D272002EAD2E /* FMAllPlacesFromBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
+		50A9DCE820169DEB00A721CC /* LaunchLoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */; };
 		50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
@@ -401,6 +402,7 @@
 		509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMAllPlacesFromBoard.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
+		50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchLoadingController.swift; sourceTree = "<group>"; };
 		50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDropUpMenu.swift; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
@@ -1083,6 +1085,7 @@
 			children = (
 				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
+				50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */,
 				B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
@@ -1919,6 +1922,7 @@
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				50A9DCE820169DEB00A721CC /* LaunchLoadingController.swift in Sources */,
 				B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */,
 				506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,

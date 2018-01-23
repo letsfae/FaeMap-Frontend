@@ -28,6 +28,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
+    var old_origin_y: CGFloat = 0 // Pan gesture var
     
     var uiviewOptionsContainer: UIView!
     var uiviewCollectionsContainer: UIView!
@@ -37,6 +38,8 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
     var selectedIndexPath: IndexPath?
+    
+    var tblOptions: UITableView!
     
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
@@ -75,6 +78,8 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     var fullLoaded = false
     
+    var swipeGes: UISwipeGestureRecognizer!
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
         self.frame = CGRect(x: 0, y: screenHeight, width: screenWidth, height: 170)
@@ -93,6 +98,8 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         tokenLoc?.invalidate()
     }
     
+    // MARK: - Loading Parts
+    
     fileprivate func loadContent() {
         loadBackground()
         loadOptions()
@@ -103,6 +110,64 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnBack.addTarget(self, action: #selector(self.smallMode), for: .touchUpInside)
         //let horiPan = UIPanGestureRecognizer(target: self, action: #selector(self.horizontalPan(_:)))
         //self.addGestureRecognizer(horiPan)
+        swipeGes = UISwipeGestureRecognizer(target: self, action: #selector(self.smallMode))
+        swipeGes.direction = .right
+        self.addGestureRecognizer(swipeGes)
+        swipeGes.isEnabled = false
+    }
+    
+    fileprivate func loadBackground() {
+        imgBackground_lg = UIImageView(frame: CGRect(x: 5 + screenWidth, y: 1, width: screenWidth - 10, height: 420))
+        imgBackground_lg.contentMode = .scaleAspectFit
+        imgBackground_lg.image = #imageLiteral(resourceName: "main_drop_up_backg_lg")
+        addSubview(imgBackground_lg)
+        imgBackground_lg.isUserInteractionEnabled = true
+        
+        imgBackground_sm = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 170))
+        imgBackground_sm.contentMode = .scaleAspectFit
+        imgBackground_sm.image = #imageLiteral(resourceName: "main_drop_up_backg_sm")
+        addSubview(imgBackground_sm)
+        imgBackground_sm.isUserInteractionEnabled = true
+        
+        let lblMapActions = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
+        lblMapActions.text = "Map Actions"
+        lblMapActions.textAlignment = .center
+        lblMapActions.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
+        lblMapActions.textColor = UIColor._898989()
+        imgBackground_sm.addSubview(lblMapActions)
+        
+        btnCollection = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
+        btnCollection.frame.origin.x = screenWidth / 2 - 90
+        btnCollection.setImage(#imageLiteral(resourceName: "drop_up_collection"), for: .normal)
+        imgBackground_sm.addSubview(btnCollection)
+        btnCollection.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
+        
+        btnOptions = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
+        btnOptions.frame.origin.x = screenWidth / 2 + 29
+        btnOptions.setImage(#imageLiteral(resourceName: "drop_up_options"), for: .normal)
+        imgBackground_sm.addSubview(btnOptions)
+        btnOptions.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
+        
+        lblMenuTitle = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
+        lblMenuTitle.text = "Map Options"
+        lblMenuTitle.textAlignment = .center
+        lblMenuTitle.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
+        lblMenuTitle.textColor = UIColor._898989()
+        imgBackground_lg.addSubview(lblMenuTitle)
+    }
+    
+    fileprivate func loadOptions() {
+        
+        uiviewOptionsContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 10, height: 420))
+        imgBackground_lg.addSubview(uiviewOptionsContainer)
+        
+        tblOptions = UITableView(frame: CGRect(x: 5, y: 65.5, width: screenWidth - 20, height: 410 - 66.5))
+        tblOptions.delegate = self
+        tblOptions.dataSource = self
+        tblOptions.separatorStyle = .none
+        tblOptions.register(DropUpMenuOptionsCell.self, forCellReuseIdentifier: "dropUpOptionsCell")
+        uiviewOptionsContainer.addSubview(tblOptions)
+        tblOptions.layer.cornerRadius = 12
     }
     
     func loadCollectionData() {
@@ -307,14 +372,40 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     // MARK: - TableView
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == tblOptions {
+            return 92
+        }
         return 100
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == tblOptions {
+            return 3
+        }
         return tableMode == .place ? realmColPlaces.count : realmColLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tblPlaceLoc.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
+        if tableView == tblOptions {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "dropUpOptionsCell", for: indexPath) as! DropUpMenuOptionsCell
+            switch indexPath.row {
+            case 0:
+                cell.lblTitle.text = "Auto Refresh Map"
+                cell.lblDesc.text = "Allow Fae Map to automatically refresh for\nnew pins when moving to a different location."
+                cell.switchButton.isOn = Key.shared.autoRefresh
+            case 1:
+                cell.lblTitle.text = "Auto Cycle Pins"
+                cell.lblDesc.text = "Allow Fae Map to automatically cycle pins in\nthe same location when zooming in and out."
+                cell.switchButton.isOn = Key.shared.autoCycle
+            case 2:
+                cell.lblTitle.text = "Hide Map Avatars"
+                cell.lblDesc.text = "Hide all Map Avatars on the map. Self Avatar\nis still publicly visible unless you Go Invisible."
+                cell.switchButton.isOn = Key.shared.hideAvatars
+            default:
+                break
+            }
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionsListCell", for: indexPath) as! CollectionsListCell
         let collection = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
         let isSavedInThisList = arrListThatSavedThisPin.contains(collection.collection_id)
         cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
@@ -322,6 +413,22 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == tblOptions {
+            let cell = tableView.cellForRow(at: indexPath) as! DropUpMenuOptionsCell
+            cell.switchButton.setOn(!cell.switchButton.isOn, animated: true)
+            vibrate(type: 4)
+            switch indexPath.row {
+            case 0:
+                switchAutoRefresh(cell.switchButton)
+            case 1:
+                switchAutoCyclePins(cell.switchButton)
+            case 2:
+                switchHideAvatars(cell.switchButton)
+            default:
+                break
+            }
+            return
+        }
         if let idxPath = selectedIndexPath {
             if let cell = tableView.cellForRow(at: idxPath) as? CollectionsListCell {
                 cell.imgIsIn.isHidden = true
@@ -440,118 +547,19 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     
-    fileprivate func loadBackground() {
-        imgBackground_lg = UIImageView(frame: CGRect(x: 5 + screenWidth, y: 1, width: screenWidth - 10, height: 420))
-        imgBackground_lg.contentMode = .scaleAspectFit
-        imgBackground_lg.image = #imageLiteral(resourceName: "main_drop_up_backg_lg")
-        addSubview(imgBackground_lg)
-        imgBackground_lg.isUserInteractionEnabled = true
-        
-        imgBackground_sm = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 170))
-        imgBackground_sm.contentMode = .scaleAspectFit
-        imgBackground_sm.image = #imageLiteral(resourceName: "main_drop_up_backg_sm")
-        addSubview(imgBackground_sm)
-        imgBackground_sm.isUserInteractionEnabled = true
-        
-        let lblMapActions = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
-        lblMapActions.text = "Map Actions"
-        lblMapActions.textAlignment = .center
-        lblMapActions.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
-        lblMapActions.textColor = UIColor._898989()
-        imgBackground_sm.addSubview(lblMapActions)
-        
-        btnCollection = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
-        btnCollection.frame.origin.x = screenWidth / 2 - 90
-        btnCollection.setImage(#imageLiteral(resourceName: "drop_up_collection"), for: .normal)
-        imgBackground_sm.addSubview(btnCollection)
-        btnCollection.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
-        
-        btnOptions = UIButton(frame: CGRect(x: 0, y: 66, width: 61, height: 94))
-        btnOptions.frame.origin.x = screenWidth / 2 + 29
-        btnOptions.setImage(#imageLiteral(resourceName: "drop_up_options"), for: .normal)
-        imgBackground_sm.addSubview(btnOptions)
-        btnOptions.addTarget(self, action: #selector(self.actionMapActions(_:)), for: .touchUpInside)
-        
-        lblMenuTitle = UILabel(frame: CGRect(x: (screenWidth-250)/2, y: 28, width: 250, height: 27 * screenHeightFactor))
-        lblMenuTitle.text = "Map Options"
-        lblMenuTitle.textAlignment = .center
-        lblMenuTitle.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenHeightFactor)
-        lblMenuTitle.textColor = UIColor._898989()
-        imgBackground_lg.addSubview(lblMenuTitle)
-    }
-    
-    fileprivate func loadOptions() {
-        uiviewOptionsContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 10, height: 420))
-        imgBackground_lg.addSubview(uiviewOptionsContainer)
-        
-        let lblRefresh = FaeLabel(CGRect(x: 25, y: 86, width: 150, height: 22), .left, .medium, 18, UIColor._107105105())
-        lblRefresh.text = "Auto Refresh Map"
-        uiviewOptionsContainer.addSubview(lblRefresh)
-        
-        let lblCycle = FaeLabel(CGRect(x: 25, y: 178, width: 150, height: 22), .left, .medium, 18, UIColor._107105105())
-        lblCycle.text = "Auto Cycle Pins"
-        uiviewOptionsContainer.addSubview(lblCycle)
-        
-        let lblHideAvatar = FaeLabel(CGRect(x: 25, y: 270, width: 150, height: 22), .left, .medium, 18, UIColor._107105105())
-        lblHideAvatar.text = "Hide Map Avatars"
-        uiviewOptionsContainer.addSubview(lblHideAvatar)
-        
-        let lblRefreshDesc = FaeLabel(CGRect(x: 25, y: 113, width: screenWidth - 60, height: 41), .left, .mediumItalic, 15, UIColor._168168168())
-        lblRefreshDesc.numberOfLines = 0
-        lblRefreshDesc.text = "Allow Fae Map to automatically refresh for\nnew pins when moving to a different location."
-        uiviewOptionsContainer.addSubview(lblRefreshDesc)
-        
-        let lblCycleDesc = FaeLabel(CGRect(x: 25, y: 205, width: screenWidth - 60, height: 41), .left, .mediumItalic, 15, UIColor._168168168())
-        lblCycleDesc.numberOfLines = 0
-        lblCycleDesc.text = "Allow Fae Map to automatically cycle pins in\nthe same location when zooming in and out."
-        uiviewOptionsContainer.addSubview(lblCycleDesc)
-        
-        let lblHideAvatarDesc = FaeLabel(CGRect(x: 25, y: 297, width: screenWidth - 60, height: 41), .left, .mediumItalic, 15, UIColor._168168168())
-        lblHideAvatarDesc.numberOfLines = 0
-        lblHideAvatarDesc.text = "Hide all Map Avatars on the map. Self Avatar\nis still publicly visible unless you Go Invisible."
-        uiviewOptionsContainer.addSubview(lblHideAvatarDesc)
-        
-        switchRefresh = UISwitch()
-        switchRefresh.onTintColor = UIColor._2499090()
-        switchRefresh.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
-        switchRefresh.addTarget(self, action: #selector(self.switchAutoRefresh(_:)), for: .valueChanged)
-        switchRefresh.isOn = Key.shared.autoRefresh
-        uiviewOptionsContainer.addSubview(switchRefresh)
-        uiviewOptionsContainer.addConstraintsWithFormat("H:[v0(39)]-25-|", options: [], views: switchRefresh)
-        uiviewOptionsContainer.addConstraintsWithFormat("V:|-83-[v0(23)]", options: [], views: switchRefresh)
-        
-        switchCyclePins = UISwitch()
-        switchCyclePins.onTintColor = UIColor._2499090()
-        switchCyclePins.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
-        switchCyclePins.addTarget(self, action: #selector(self.switchAutoCyclePins(_:)), for: .valueChanged)
-        switchCyclePins.isOn = Key.shared.autoCycle
-        uiviewOptionsContainer.addSubview(switchCyclePins)
-        uiviewOptionsContainer.addConstraintsWithFormat("H:[v0(39)]-25-|", options: [], views: switchCyclePins)
-        uiviewOptionsContainer.addConstraintsWithFormat("V:|-175-[v0(23)]", options: [], views: switchCyclePins)
-        
-        switchHideAvatars = UISwitch()
-        switchHideAvatars.onTintColor = UIColor._2499090()
-        switchHideAvatars.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
-        switchHideAvatars.addTarget(self, action: #selector(self.switchShowAvatars(_:)), for: .valueChanged)
-        switchHideAvatars.isOn = Key.shared.hideAvatars
-        uiviewOptionsContainer.addSubview(switchHideAvatars)
-        uiviewOptionsContainer.addConstraintsWithFormat("H:[v0(39)]-25-|", options: [], views: switchHideAvatars)
-        uiviewOptionsContainer.addConstraintsWithFormat("V:|-267-[v0(23)]", options: [], views: switchHideAvatars)
-    }
-    
     @objc func switchAutoRefresh(_ sender: UISwitch) {
         //lblRefresh.textColor = switchRefresh.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.autoReresh?(isOn: switchRefresh.isOn)
+        delegate?.autoReresh?(isOn: sender.isOn)
     }
     
     @objc func switchAutoCyclePins(_ sender: UISwitch) {
         //lblCyclePins.textColor = switchCyclePins.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.autoCyclePins?(isOn: switchCyclePins.isOn)
+        delegate?.autoCyclePins?(isOn: sender.isOn)
     }
     
-    @objc func switchShowAvatars(_ sender: UISwitch) {
+    @objc func switchHideAvatars(_ sender: UISwitch) {
         //lblHideAvatars.textColor = switchHideAvatars.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.hideAvatars?(isOn: switchHideAvatars.isOn)
+        delegate?.hideAvatars?(isOn: sender.isOn)
     }
     
     @objc func actionMapActions(_ sender: UIButton) {
@@ -561,6 +569,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             mode = .on
         }
         self.frame.origin.y -= 250
+        old_origin_y = self.frame.origin.y
         self.frame.size.height = 420
         imgBackground_sm.frame.origin.y += 250
         showLargeBackground()
@@ -571,7 +580,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             self.imgBackground_lg.frame.origin.x = 5
             self.imgBackground_sm.frame.origin.x = -screenWidth
         }) { _ in
-            
+            self.swipeGes.isEnabled = true
         }
     }
     
@@ -585,14 +594,19 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func show() {
+        Key.shared.FMVCtrler?.mapGesture(isOn: false)
+        Key.shared.FMVCtrler?.animateMainScreenButtons(hide: true, animated: true)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight - 170 - device_offset_bot_main
         }) { _ in
-            
+            self.old_origin_y = self.frame.origin.y
         }
     }
     
     func hide() {
+        Key.shared.FMVCtrler?.btnDropUpMenu.isSelected = false
+        Key.shared.FMVCtrler?.mapGesture(isOn: true)
+        Key.shared.FMVCtrler?.animateMainScreenButtons(hide: false, animated: true)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = screenHeight
         }) { _ in
@@ -602,11 +616,13 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     @objc public func smallMode() {
         self.frame.origin.y += 250
+        old_origin_y = self.frame.origin.y
         self.frame.size.height = 170
         imgBackground_sm.frame.origin.y = 0
         imgBackground_lg.frame.origin.y = -249
         hideLargeBackground()
         hideDropDownMenu(animated: false)
+        swipeGes.isEnabled = false
     }
     
     var end: CGFloat = 0
@@ -650,4 +666,41 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     */
+}
+
+class DropUpMenuOptionsCell: UITableViewCell {
+    
+    var lblTitle: FaeLabel!
+    var lblDesc: FaeLabel!
+    var switchButton: UISwitch!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
+        loadContent()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadContent() {
+        lblTitle = FaeLabel(CGRect(x: 20, y: 21, width: 150, height: 22), .left, .medium, 18, UIColor._107105105())
+        lblTitle.text = "Auto Refresh Map"
+        addSubview(lblTitle)
+        
+        lblDesc = FaeLabel(CGRect(x: 20, y: 48, width: screenWidth - 60, height: 41), .left, .mediumItalic, 15, UIColor._168168168())
+        lblDesc.numberOfLines = 0
+        lblDesc.text = "Allow Fae Map to automatically refresh for\nnew pins when moving to a different location."
+        addSubview(lblDesc)
+        
+        switchButton = UISwitch()
+        switchButton.onTintColor = UIColor._2499090()
+        switchButton.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
+//        switchButton.addTarget(self, action: #selector(self.switchAutoRefresh(_:)), for: .valueChanged)
+        switchButton.isOn = Key.shared.autoRefresh
+        addSubview(switchButton)
+        addConstraintsWithFormat("H:[v0(39)]-20-|", options: [], views: switchButton)
+        addConstraintsWithFormat("V:|-18-[v0(23)]", options: [], views: switchButton)
+    }
 }
