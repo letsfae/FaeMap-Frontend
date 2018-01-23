@@ -643,6 +643,12 @@ class LocPinAnnotationView: MKAnnotationView {
     
     var isRed = false
     
+    var zPos: CGFloat = 299 {
+        didSet {
+            self.layer.zPosition = zPos
+        }
+    }
+    
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
         frame = CGRect(x: 0, y: 0, width: 56, height: 56)
@@ -653,6 +659,15 @@ class LocPinAnnotationView: MKAnnotationView {
         addSubview(imgIcon)
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti(_:)), name: NSNotification.Name(rawValue: "showSavedNoti_loc"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
+        
+        self.layer.zPosition = 299
+        self.layer.addObserver(self, forKeyPath: "zPosition", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if object is CALayer {
+            self.layer.zPosition = 299
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
