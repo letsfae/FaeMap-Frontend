@@ -61,6 +61,7 @@ extension FaeMapViewController {
         btnLocateSelf.isHidden = false
         btnZoom.isHidden = false
         btnTapToShowResultTbl.center.y = 181 + device_offset_top
+        btnTapToShowResultTbl.tag = 1
         btnTapToShowResultTbl.sendActions(for: .touchUpInside)
         mapGesture(isOn: true)
         deselectAllAnnotations()
