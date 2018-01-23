@@ -56,12 +56,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let vcRoot = !Key.shared.is_Login ? WelcomeViewController() : InitialPageController()
             Key.shared.navOpenMode = !Key.shared.is_Login ? .welcomeFirst : .mapFirst
             self.navMain.setViewControllers([vcRoot], animated: false)
-            if !Key.shared.is_Login && !Key.shared.isFirstUse() {
-                showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: vcRoot)
-                FaeCoreData.shared.save("userTokenEncode", value: "")
-            }
             LocManager.shared.updateCurtLoc() // update user current location
             self.configureNotifications()
+            if !Key.shared.is_Login && !Key.shared.isFirstUse() {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                    showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: vcRoot)
+                    FaeCoreData.shared.save("userTokenEncode", value: "")
+                })
+            }
         }
         
         if Key.shared.isFirstUse() {
