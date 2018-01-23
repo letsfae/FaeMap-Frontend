@@ -265,6 +265,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         boolCanOpenPin = true
         
         locAnnoView?.hideButtons()
+        locAnnoView?.zPos = 8.0
         locAnnoView?.optionsReady = false
         locAnnoView?.optionsOpened = false
         locAnnoView?.removeFromSuperview()
