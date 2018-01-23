@@ -9,7 +9,6 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import MapKit
-//import CCHMapClusterController
 import RealmSwift
 
 enum MapMode {
@@ -108,6 +107,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var boolSelecting = false
     var firstSelectPlace = true
     
+    // Place Pin Control
+    var placePinOPQueue: OperationQueue!
+    
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
     var tblPlaceResult: FMPlacesTable!
@@ -171,7 +173,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             guard desiredCount > 0 else { return }
             self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
-            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+            // self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }
     }
     var desiredCount = 0
@@ -403,8 +405,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func isUserLoggedIn() {
-        _ = FaeCoreData.shared.readLogInfo()
-        if Key.shared.is_Login == 0 {
+        FaeCoreData.shared.readLogInfo()
+        if Key.shared.is_Login == false {
             jumpToWelcomeView(animated: false)
         }
     }
@@ -449,7 +451,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
         Key.shared.userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
-        FaeCoreData.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {

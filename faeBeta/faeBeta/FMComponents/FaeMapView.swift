@@ -126,7 +126,7 @@ class FaeMapView: MKMapView {
             } else {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.mapGesture(isOn: true)
-                if faeMapCtrler?.mapMode != .pinDetail {
+                if faeMapCtrler?.mapMode != .pinDetail && faeMapCtrler?.swipingState != .multipleSearch {
                     faeMapCtrler?.uiviewPlaceBar.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()

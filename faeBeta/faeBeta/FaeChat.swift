@@ -135,13 +135,14 @@ class FaeChat {
     
     func getMessageFromServer() {
         getFromURL("chats_v2/unread", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+            /*
             if status == 401 {
                 if let root = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
-                    if Key.shared.is_Login != 0 {
+                    if Key.shared.is_Login {
                         let welcomeVC = WelcomeViewController()
                         root.viewControllers = [welcomeVC]
                         Key.shared.navOpenMode = .welcomeFirst
-                        Key.shared.is_Login = 0
+                        Key.shared.is_Login = false
                         let alertController = UIAlertController(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", preferredStyle: UIAlertControllerStyle.alert)
                         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
                         alertController.addAction(okAction)
@@ -149,6 +150,7 @@ class FaeChat {
                     }
                 }
             }
+            */
             if let unreadList = result as? NSArray {
                 for item in unreadList {
                     let dictItem: NSDictionary = item as! NSDictionary

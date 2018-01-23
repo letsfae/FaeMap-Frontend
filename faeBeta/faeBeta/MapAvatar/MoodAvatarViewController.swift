@@ -138,7 +138,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
     @objc func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
-        FaeCoreData.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {

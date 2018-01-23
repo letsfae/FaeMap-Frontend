@@ -25,9 +25,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         alpha = 0
         layer.zPosition = 605
         clipsToBounds = true
-        
-        layer.borderColor = UIColor.black.cgColor
-        layer.borderWidth = 1
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -68,23 +65,96 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack.contentMode = .scaleAspectFit
         addSubview(imgBack)
         
-        tblResults = UITableView(frame: CGRect(x: 8, y: 8, width: 397 * screenWidthFactor, height: screenHeight - 230 * screenHeightFactor - device_offset_bot_main))
+        var table_offset_top: CGFloat = 0
+        switch screenHeight {
+        case 812:
+            table_offset_top = 3
+            break
+        case 736:
+            break
+        case 667:
+            break
+        case 568:
+            break
+        default:
+            break
+        }
+        
+        var table_offset_left: CGFloat = 0
+        switch screenHeight {
+        case 812:
+            table_offset_left = 0.5
+            break
+        case 736:
+            break
+        case 667:
+            break
+        case 568:
+            break
+        default:
+            break
+        }
+        
+        var table_length_offset: CGFloat = 0
+        switch screenHeight {
+        case 812:
+            table_length_offset = 77
+            break
+        case 736:
+            break
+        case 667:
+            break
+        case 568:
+            break
+        default:
+            break
+        }
+        
+        tblResults = UITableView(frame: CGRect(x: 8 + table_offset_left, y: 10 + table_offset_top, width: 397 * screenWidthFactor - table_offset_left, height: screenHeight - 230 * screenHeightFactor - table_length_offset))
         tblResults.center.x = screenWidth / 2
         tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
         tblResults.delegate = self
         tblResults.dataSource = self
         tblResults.tableFooterView = UIView()
-//        tblResults.isHidden = true
+        var table_insets = UIEdgeInsets(top: -2, left: -0.5, bottom: 0, right: 0)
+        switch screenHeight {
+        case 812:
+            table_insets = UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0)
+            break
+        case 736:
+            table_insets = UIEdgeInsets(top: -2, left: -0.5, bottom: 0, right: 0)
+            break
+        case 667:
+            break
+        case 568:
+            break
+        default:
+            break
+        }
+        tblResults.contentInset = table_insets
         addSubview(tblResults)
         
-        let iphone_x_offset: CGFloat = screenHeight == 812 ? 115 * screenHeightFactor : 49 * screenHeightFactor
-        let footView = UIView(frame: CGRect(x: 0, y: screenHeight - 164 * screenHeightFactor - device_offset_bot_main - iphone_x_offset, width: screenWidth, height: 49*screenHeightFactor))
+        var table_offset_bot: CGFloat = 0
+        switch screenHeight {
+        case 812:
+            table_offset_bot = 273
+            break
+        case 736:
+            table_offset_bot = 220
+            break
+        case 667:
+            break
+        case 568:
+            break
+        default:
+            break
+        }
+        let footView = UIView(frame: CGRect(x: 8, y: screenHeight - table_offset_bot, width: screenWidth - 16, height: 49*screenHeightFactor))
         footView.clipsToBounds = true
         footView.layer.borderColor = UIColor.black.cgColor
         footView.layer.borderWidth = 1
         addSubview(footView)
-//        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
-//        addConstraintsWithFormat("V:[v0(\(49*screenHeightFactor))]-8-|", options: [], views: footView)
+
         let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: 397 * screenWidthFactor, height: 1))
         grayLine.center.x = screenWidth / 2
         grayLine.backgroundColor = UIColor._200199204()
@@ -179,7 +249,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblItemAddr.textAlignment = .left
         lblItemAddr.textColor = UIColor._107107107()
         lblItemAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblItemAddr)
+        addConstraintsWithFormat("H:|-90-[v0]-25-|", options: [], views: lblItemAddr)
         addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblItemAddr)
         
         lblHours = UILabel()
@@ -197,7 +267,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblPrice.textColor = UIColor._107107107()
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
-        addConstraintsWithFormat("V:|-69-[v0(12)]", options: [], views: lblPrice)
+        addConstraintsWithFormat("V:|-66-[v0(12)]", options: [], views: lblPrice)
         lblPrice.text = ""
     }
 }

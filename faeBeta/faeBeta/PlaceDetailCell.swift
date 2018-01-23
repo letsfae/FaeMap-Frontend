@@ -217,7 +217,9 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         } else if endHour == "Midnight" {
             endHour = "00:00 AM"
         }
+        
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "h:mm a"
         let dateStart = dateFormatter.date(from: startHour)
         let dateEnd = dateFormatter.date(from: endHour)

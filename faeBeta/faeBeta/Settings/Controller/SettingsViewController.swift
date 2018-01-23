@@ -158,7 +158,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         navigationController?.pushViewController(welcomeVC, animated: animated)
         navigationController?.viewControllers = [welcomeVC]
         Key.shared.navOpenMode = .welcomeFirst
-        Key.shared.is_Login = 0
+        Key.shared.is_Login = false
         //}
     }
     
