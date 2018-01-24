@@ -359,7 +359,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             return
         }
         boolCanUpdatePlaces = false
-        btnFilterIcon.startIconSpin()
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -370,7 +369,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         getPlaceInfo.whereKey("type", value: "place")
         getPlaceInfo.whereKey("max_count", value: "500")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
-            
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 self.boolCanUpdatePlaces = true

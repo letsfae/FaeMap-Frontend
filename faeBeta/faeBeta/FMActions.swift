@@ -165,7 +165,7 @@ extension FaeMapViewController {
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placePin
                 vcPlaceDetail.delegate = self
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                navigationController?.pushViewController(vcPlaceDetail, animated: false)
             }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()

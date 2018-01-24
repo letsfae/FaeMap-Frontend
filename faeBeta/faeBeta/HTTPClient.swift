@@ -30,7 +30,7 @@ func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int
     
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .data)
-    let name = method == .avatar ? "avatar" : "cover"
+    let name = method == .avatar ? "avatar" : "name_card_cover"
     
     Alamofire.upload(multipartFormData: {
         MultipartFormData in
@@ -167,7 +167,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
     var avatarInRealm: Data?
     
     let realm = try! Realm()
-    if let avatarRealm = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
+    if let avatarRealm = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
         if let etag = type == 2 ? avatarRealm.smallAvatarEtag : avatarRealm.largeAvatarEtag {
             urlRequest.setValue(etag, forHTTPHeaderField: "If-None-Match")
             //joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
@@ -199,7 +199,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
                     return
                 }
                 //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
-                if let realmUser = realm.objects(UserAvatar.self).filter("user_id == %@", "\(userID)").first {
+                if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
                     try! realm.write {
                         if type == 0 {
                             realmUser.largeAvatarEtag = etag
@@ -211,7 +211,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
                         completion(statusCode, etag, response.data)
                     }
                 } else {
-                    let realmUser = UserAvatar()
+                    let realmUser = UserImage()
                     realmUser.user_id = "\(userID)"
                     if type == 0 {
                         realmUser.largeAvatarEtag = etag
@@ -229,6 +229,79 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
                 completion(statusCode, "", nil)
             }
         }
+}
+
+func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
+    
+    guard let url = URL(string: "\(Key.shared.baseURL)/files/users/\(userID)/name_card_cover") else { return }
+    var urlRequest = URLRequest(url: url)
+    urlRequest.httpMethod = "GET"
+    urlRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+    urlRequest.setValue(Key.shared.headerUserAgent, forHTTPHeaderField: "User-Agent")
+    urlRequest.setValue(Key.shared.headerClientVersion, forHTTPHeaderField: "Fae-Client-Version")
+    urlRequest.setValue(Key.shared.headerAccept, forHTTPHeaderField: "Accept")
+    for (key, value) in authentication {
+        urlRequest.setValue(value, forHTTPHeaderField: key)
+    }
+    
+    var coverPhotoInRealm: Data?
+    
+    let realm = try! Realm()
+    if let coverPhotoRealm = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
+        if let etag = coverPhotoRealm.coverPhotoEtag {
+            urlRequest.setValue(etag, forHTTPHeaderField: "If-None-Match")
+            //joshprint("[getAvatar - \(userID)] If-None-Match ", etag)
+        }
+        coverPhotoInRealm = coverPhotoRealm.userCoverPhoto as Data?
+    }
+    
+    Alamofire.request(urlRequest)
+        .responseJSON { response in
+            guard response.response != nil else {
+                completion(-500, "", nil)
+                return
+            }
+            guard let statusCode = response.response?.statusCode else {
+                completion(-500, "", nil)
+                return
+            }
+            if let JSON = response.response?.allHeaderFields {
+                guard var etag = JSON["Etag"] as? String else {
+                    completion(statusCode, "", nil)
+                    return
+                }
+                //joshprint("[getAvatar - \(userID)] before", etag)
+                etag = etag.removeSpecialChars()
+                //joshprint("[getAvatar - \(userID)] after ", etag)
+                if statusCode / 100 == 3 {
+                    completion(304, etag, coverPhotoInRealm)
+                    //joshprint("[getAvatar - \(userID)] 304")
+                    return
+                }
+                if statusCode == 404 {
+                    completion(404, "", nil)
+                }
+                //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
+                if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
+                    try! realm.write {
+                        realmUser.coverPhotoEtag = etag
+                        realmUser.userCoverPhoto = response.data as NSData?
+                        completion(statusCode, etag, response.data)
+                    }
+                } else {
+                    let realmUser = UserImage()
+                    realmUser.user_id = "\(userID)"
+                    realmUser.coverPhotoEtag = etag
+                    realmUser.userCoverPhoto = response.data as NSData?
+                    try! realm.write {
+                        realm.add(realmUser)
+                        completion(statusCode, etag, response.data)
+                    }
+                }
+            } else {
+                completion(statusCode, "", nil)
+            }
+    }
 }
 
 func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {

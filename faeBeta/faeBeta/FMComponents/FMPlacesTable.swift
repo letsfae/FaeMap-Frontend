@@ -151,8 +151,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         let footView = UIView(frame: CGRect(x: 8, y: screenHeight - table_offset_bot, width: screenWidth - 16, height: 49*screenHeightFactor))
         footView.clipsToBounds = true
-        footView.layer.borderColor = UIColor.black.cgColor
-        footView.layer.borderWidth = 1
         addSubview(footView)
 
         let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: 397 * screenWidthFactor, height: 1))

@@ -135,7 +135,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
         uploadProfileAvatar()
-//        SetAvatar.uploadProfileAvatar(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
+//        SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
     }
     
     func uploadProfileAvatar() {
@@ -202,7 +202,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     @objc func addProfileAvatar(_ sender: UIButton) {
-        SetAvatar.addProfileAvatar(vc: self, type: "firstTimeLogin")
+        SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
@@ -262,7 +262,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.imageViewAvatar.image = image
         //uploadProfileAvatar()
-        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "firstTimeLogin")
+        SetAvatar.uploadUserImage(image: image, vc: self, type: "firstTimeLogin")
         picker.dismiss(animated: true, completion: nil)
     }
     

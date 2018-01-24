@@ -8,6 +8,7 @@
 import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
+    
     func loadCannotFindPeople() {
         uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
         uiviewBubbleHint.backgroundColor = .white
@@ -62,7 +63,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             uiviewLineBelowLoc.frame.size.width = screenWidth - 28
             uiviewPeopleLocDetail.isHidden = false
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                self.uiviewPeopleLocDetail.frame.origin.y = 113
+                self.uiviewPeopleLocDetail.frame.origin.y = 113 + device_offset_top
             }, completion: nil)
             self.tblMapBoard.delaysContentTouches = false
             sliderDisFilter.setValue(Float(disVal)!, animated: false)

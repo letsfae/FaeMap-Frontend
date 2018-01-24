@@ -48,7 +48,11 @@ class FMDistIndicator: UIImageView {
     }
     
     func updateDistance(distance: CLLocationDistance) {
-        strDistance = distance.format(f: ".1") + " mi"
+        var unit = " km"
+        if Key.shared.measurementUnits == "imperial" {
+            unit = " mi"
+        }
+        strDistance = distance.format(f: ".1") + unit
         lblDistance.text = strDistance
         show()
     }

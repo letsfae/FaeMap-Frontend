@@ -17,7 +17,7 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
         print("send image for avatar")
         if let image = images.first {
             //uploadProfileAvatar(image: image)
-            SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "leftSliding")
+            SetAvatar.uploadUserImage(image: image, vc: self, type: "leftSliding")
         }   
     }
     
@@ -31,7 +31,7 @@ extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavi
         }
         picker.dismiss(animated: true, completion: nil)
         //uploadProfileAvatar(image: image)
-        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "leftSliding")
+        SetAvatar.uploadUserImage(image: image, vc: self, type: "leftSliding")
     }
     /*
     func uploadProfileAvatar(image: UIImage) {

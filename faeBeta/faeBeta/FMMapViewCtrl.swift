@@ -30,6 +30,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.superview?.sendSubview(toBack: anView)
+                if mapMode == .pinDetail { // immediatelly show up
+                    anView.imgIcon.frame = CGRect(x: 0-8, y: 0-5, width: 56, height: 56)
+                    anView.alpha = 1
+                    return
+                }
                 anView.alpha = 0
                 anView.imgIcon.frame = CGRect(x: 28-8, y: 56-10, width: 0, height: 0)
                 let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
@@ -66,6 +71,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
 
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
+        
+        if mapMode == .pinDetail { // immediatelly remove
+            for annotation in annotations {
+                if let anno = annotation as? MKAnnotation {
+                    if let anView = self.faeMapView.view(for: anno) {
+                        anView.alpha = 0
+                    }
+                }
+            }
+            if completionHandler != nil { completionHandler() }
+            return
+        }
         
         UIView.animate(withDuration: 0.2, animations: {
             for annotation in annotations {
