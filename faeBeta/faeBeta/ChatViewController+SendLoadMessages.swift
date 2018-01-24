@@ -53,7 +53,12 @@ extension ChatViewController: OutgoingMessageProtocol {
             realm.add(recentRealm, update: true)
         }
         //JSQSystemSoundPlayer.jsq_playMessageSentSound()
-        finishSendingMessage()
+        if type == "text" {
+            finishSendingMessage()
+        } else {
+            finishSendingMessage(animated: true, cleanTextView: false)
+        }
+        
     }
     // MARK: - send message
     /*func sendMessage(text: String? = nil, picture: UIImage? = nil, sticker: UIImage? = nil, isHeartSticker: Bool? = false, location: CLLocation? = nil, place: PlacePin? = nil, audio: Data? = nil, video: Data? = nil, videoDuration: Int = 0, snapImage: Data? = nil, date: Date) {

@@ -182,7 +182,7 @@ extension String {
         var finalString = ""
         
         if previous.count > 0 && previous.last != "]" {
-            finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -1)])
+            finalString = String(previous[..<previous.index(previous.endIndex, offsetBy: -1)])
         } else if previous.count > 0 && previous.last == "]" {
             var i = 1
             var findEmoji = false
@@ -200,7 +200,7 @@ extension String {
             if findEmoji {
                 finalString = String(previous[..<previous.index(previous.endIndex, offsetBy: -i)])
             } else {
-                finalString = String(previous[...previous.index(previous.endIndex, offsetBy: -1)])
+                finalString = String(previous[..<previous.index(previous.endIndex, offsetBy: -1)])
             }
         }
         return finalString
