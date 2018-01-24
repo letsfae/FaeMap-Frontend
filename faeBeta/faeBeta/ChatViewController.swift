@@ -122,8 +122,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     weak var mapDelegate: LocDetailDelegate?
     
-    var uiviewSafeZone: UIView!
-    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -312,9 +310,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         contentView?.heartButton.addTarget(self, action: #selector(actionHoldingLikeButton(_:)), for: .touchDown)
         contentView?.heartButton.addTarget(self, action: #selector(actionLeaveLikeButton(_:)), for: .touchDragOutside)
         
-        uiviewSafeZone = UIView(frame: (CGRect(x:0, y: 90, width: screenWidth, height: 300)))
-        uiviewSafeZone.backgroundColor = .white
-        contentView?.addSubview(uiviewSafeZone)
+        
         
         automaticallyAdjustsScrollViewInsets = false
     }
@@ -348,7 +344,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
-        //inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
+        inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeInputMode), name: NSNotification.Name.UITextInputCurrentInputModeDidChange, object: nil)
     }
     

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -66,6 +66,13 @@
                     </constraints>
                     <state key="normal" image="pinDetailLikeHeartHollow"/>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e2r-1B-gse" userLabel="Safe Zone">
+                    <rect key="frame" x="0.0" y="90" width="320" height="300"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="300" id="CpX-d2-NMl"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -74,6 +81,7 @@
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="11" id="8Pf-pI-zRB"/>
                 <constraint firstItem="B66-Yp-anV" firstAttribute="top" secondItem="1" secondAttribute="top" constant="-1" id="CHB-sD-Ogn"/>
                 <constraint firstAttribute="bottom" secondItem="Myo-1S-Vg1" secondAttribute="bottom" constant="6" id="EaS-Oq-Qp5"/>
+                <constraint firstItem="e2r-1B-gse" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Fa9-kV-OdU"/>
                 <constraint firstAttribute="bottom" secondItem="lPx-Ht-Wy3" secondAttribute="bottom" constant="42" id="HKY-aj-0Qt"/>
                 <constraint firstAttribute="trailing" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="6" id="KQg-1o-Yf8"/>
                 <constraint firstItem="LEq-G7-jGt" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="LAU-fo-GJJ"/>
@@ -83,7 +91,9 @@
                 <constraint firstAttribute="trailing" secondItem="ZwA-Ow-CJg" secondAttribute="trailing" constant="20" id="aWw-Kx-ox2"/>
                 <constraint firstAttribute="trailing" secondItem="lPx-Ht-Wy3" secondAttribute="trailing" constant="10" id="bqK-8e-rqA"/>
                 <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
+                <constraint firstItem="e2r-1B-gse" firstAttribute="trailing" secondItem="1" secondAttribute="trailing" id="eoc-BZ-sZZ"/>
                 <constraint firstAttribute="bottom" secondItem="ZwA-Ow-CJg" secondAttribute="bottom" constant="51" id="fiN-NN-Zvv"/>
+                <constraint firstItem="e2r-1B-gse" firstAttribute="top" secondItem="1" secondAttribute="bottom" id="hnh-qh-Syj"/>
                 <constraint firstItem="B66-Yp-anV" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="nZX-7l-WWe"/>
                 <constraint firstAttribute="bottom" secondItem="LEq-G7-jGt" secondAttribute="bottom" constant="6" id="oG2-YD-ZZI"/>
                 <constraint firstAttribute="trailing" secondItem="B66-Yp-anV" secondAttribute="trailing" id="pbe-J0-g3G"/>
