@@ -393,18 +393,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc func showStikcer() {
-        view.endEditing(true)
         toolbarContentView.setup(FaeChatToolBarContentView.STICKER)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showStikcer()
+        view.endEditing(true)
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
     }
     
     @objc func showLibrary() {
-        view.endEditing(true)
         toolbarContentView.setup(FaeChatToolBarContentView.PHOTO)
         let status = PHPhotoLibrary.authorizationStatus()
         if status != .authorized {
@@ -417,6 +416,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showLibrary()
         uiviewLocationExtend.isHidden = true
+        view.endEditing(true)
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
     }
@@ -433,24 +433,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc func showRecord() {
-        view.endEditing(true)
         toolbarContentView.setup(FaeChatToolBarContentView.AUDIO)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
         let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showRecord()
+        view.endEditing(true)
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
     }
     
     @objc func showMiniMap() {
-        view.endEditing(true)
         toolbarContentView.setup(FaeChatToolBarContentView.MINIMAP)
         toolbarContentView.viewMiniLoc.delegate = self
         resetToolbarButtonIcon()
         btnLocation.setImage(UIImage(named: "locationChosen"), for: UIControlState())
         let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow
         toolbarContentView.showMiniLocation()
+        view.endEditing(true)
         moveUpInputBarContentView(animated)
         scrollToBottom(false)
     }
@@ -616,8 +616,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if !notToolBar {
             toolbarContentView.frame.origin.y = screenHeight - distance
         }
-        view.setNeedsUpdateConstraints()
-        view.layoutIfNeeded()
+        //view.setNeedsUpdateConstraints()
+        //view.layoutIfNeeded()
         if !isScrolling {
             let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + floatInputBarHeight + extendHeight, 0.0)
             self.collectionView.contentInset = insets
