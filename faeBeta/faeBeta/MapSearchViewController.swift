@@ -31,7 +31,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var filteredPlaces = [PlacePin]()
 //    var searchedLocations = [String]()   有location数据后使用
     var filteredLocations = [String]()
-    var searchedLoc: CLLocation!
     var faeMapView: MKMapView!
     
     var btnBack: UIButton!
@@ -77,7 +76,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         loadNoResultsView()
         
         schPlaceBar.txtSchField.becomeFirstResponder()
-        searchedLoc = LocManager.shared.curtLoc
         searchCompleter.delegate = self
     }
     
@@ -303,6 +301,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
 //                print("[loadMapSearchPlaceInfo] status/100 != 2")
@@ -322,7 +323,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             if source == "name" {
                 self.showOrHideViews(searchText: content)
             } else {
-                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces, selectedLoc: self.searchedLoc)
+                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces, selectedLoc: LocManager.shared.searchedLoc)
                 self.navigationController?.popViewController(animated: false)
             }
         }

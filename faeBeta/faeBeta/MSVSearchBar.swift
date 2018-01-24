@@ -110,7 +110,7 @@ extension MapSearchViewController {
             if searchBar.txtSchField.text == "" {
                 lookUpForCoordinate()
             } else {
-                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: searchedLoc)
+                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: LocManager.shared.searchedLoc)
                 navigationController?.popViewController(animated: false)
             }
         } else {
