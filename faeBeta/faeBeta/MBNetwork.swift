@@ -115,7 +115,7 @@ extension MapBoardViewController {
                     continue
                 }
                 
-                if (mbPeopleData.dis > Double(disVal)!) || (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") || (Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) {
+                if (mbPeopleData.dis > Double(disVal)!) || (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") || ((Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) && !(ageLBVal == 18 && ageUBVal == 55))  {
                     continue
                 }
                 
