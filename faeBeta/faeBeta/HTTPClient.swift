@@ -53,7 +53,7 @@ func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int
     })
 }
 
-func searchToURL(_ method: PostMethod, parameter: [String: String], completion: @escaping (Int, Any?) -> Void) {
+func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) {
     
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .json)

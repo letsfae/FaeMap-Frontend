@@ -35,7 +35,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var filteredPlaces = [PlacePin]()
     //    var searchedLocations = [String]()   有location数据后使用
     var filteredLocations = [String]()
-    var searchedLoc: CLLocation!
     
     var btnBack: UIButton!
     var uiviewSearch: UIView!
@@ -87,7 +86,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         loadNoResultsView()
         joshprint("BoardVC is called")
         schBar.txtSchField.becomeFirstResponder()
-        searchedLoc = LocManager.shared.curtLoc
         
         searchCompleter.delegate = self
     }
@@ -345,6 +343,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 self.showOrHideViews(searchText: content)

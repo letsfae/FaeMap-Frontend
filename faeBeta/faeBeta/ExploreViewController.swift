@@ -658,6 +658,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
 //        FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {

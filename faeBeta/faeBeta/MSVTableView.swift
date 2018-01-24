@@ -71,6 +71,18 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
+                
+                // TODO VICKY
+                General.shared.lookUpForCoordinate({ (place) in
+                    LocManager.shared.searchedLoc = CLLocation(latitude: place.coordinate.latitude,
+                                                               longitude: place.coordinate.longitude)
+                    if self.schPlaceBar == nil || self.schPlaceBar.txtSchField.text == "Search Fae Map"
+                        || self.schPlaceBar.txtSchField.text == "Search Place or Address" {
+                        return
+                    }
+                    self.getPlaceInfo(content: self.schPlaceBar.txtSchField.text!, source: "name")
+                })
+                
             } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
@@ -79,10 +91,10 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.btnClose.isHidden = true
                 
                 if indexPath.row == 0 {
-                    searchedLoc = LocManager.shared.curtLoc
+                    LocManager.shared.searchedLoc = LocManager.shared.curtLoc
                 } else {
                     let mapCenter_point = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-                    searchedLoc = CLLocation(latitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).latitude,
+                    LocManager.shared.searchedLoc = CLLocation(latitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).latitude,
                                              longitude: faeMapView.convert(mapCenter_point, toCoordinateFrom: nil).longitude)
                 }
                 getPlaceInfo()
