@@ -222,9 +222,9 @@ extension ChatViewController {
                 if status / 100 == 2 {
                     guard let placeInfo = message else { return }
                     let jsonPlace = JSON(placeInfo)
-                    //let vcPlaceDetail = PlaceDetailViewController()
-                    self.vcPlaceDetail.place = PlacePin(json: jsonPlace)
-                    self.navigationController?.pushViewController(self.vcPlaceDetail, animated: true)
+                    let vcPlaceDetail = PlaceDetailViewController()
+                    vcPlaceDetail.place = PlacePin(json: jsonPlace)
+                    self.navigationController?.pushViewController(vcPlaceDetail, animated: true)
                 }
             }
         }
@@ -233,11 +233,11 @@ extension ChatViewController {
             let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
             let dataCollection = strCollectionDetail.data(using: .utf8)
             let jsonCollection = JSON(data: dataCollection!)
-            
+            let vcCollection = CollectionsListDetailViewController()
             vcCollection.enterMode = .place
             vcCollection.boolFromChat = true
             vcCollection.colId = jsonCollection["id"].intValue
-            navigationController?.pushViewController(self.vcCollection, animated: true)
+            navigationController?.pushViewController(vcCollection, animated: true)
             
 //            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
 //                if status / 100 == 2 {
@@ -274,10 +274,37 @@ extension ChatViewController {
 
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         print(indexPath.row)
+        view.endEditing(true)
+        resetToolbarButtonIcon()
         let messageJSQ = arrJSQMessages[indexPath.row]
         uiviewNameCard.userId = Int(messageJSQ.senderId)!
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.imgBackShadow.frame = CGRect.zero
         uiviewNameCard.show { }
     }
+}
+
+extension ChatViewController: NameCardDelegate {
+    func openFaeUsrInfo() {
+    }
+    
+    func chatUser(id: Int) {
+    }
+    
+    func reportUser(id: Int) {
+        let reportPinVC = ReportViewController()
+        reportPinVC.reportType = 0
+        present(reportPinVC, animated: true, completion: nil)
+    }
+    
+    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
+        let addFriendVC = AddFriendFromNameCardViewController()
+        addFriendVC.delegate = uiviewNameCard
+        addFriendVC.userId = userId
+        addFriendVC.requestId = requestId
+        addFriendVC.statusMode = status
+        addFriendVC.modalPresentationStyle = .overCurrentContext
+        present(addFriendVC, animated: false)
+    }    
+    
 }

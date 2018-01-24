@@ -116,9 +116,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var showAvatar: Bool = true //false not show avatar, true show avatar
     var firstLoad: Bool? // whether it is the first time to load this room.
     
-    let vcLocDetail = LocDetailViewController()
-    let vcPlaceDetail = PlaceDetailViewController()
-    let vcCollection = CollectionsListDetailViewController()
+//    let vcLocDetail = LocDetailViewController()
+//    let vcPlaceDetail = PlaceDetailViewController()
+//    let vcCollection = CollectionsListDetailViewController()
     
     weak var mapDelegate: LocDetailDelegate?
     
@@ -326,6 +326,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func setupNameCard() {
         uiviewNameCard = FMNameCardView()
+        uiviewNameCard.delegate = self
         view.addSubview(uiviewNameCard)
     }
     
@@ -592,9 +593,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
             let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
             let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
-            var distance: CGFloat = 0.0
+            var distance: CGFloat = device_offset_bot
             if (endFrame?.origin.y)! < screenHeight {
-                distance = endFrame?.size.height ?? 0.0
+                distance = endFrame?.size.height ?? device_offset_bot
             }
             UIView.animate(withDuration: duration, delay: TimeInterval(0), options: animationCurve, animations: {
                 self.setContraintsWhenInputBarMove(inputBarToBottom: distance, keyboard: true)
@@ -1026,7 +1027,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // change every button to its origin state
-    fileprivate func resetToolbarButtonIcon() {
+    func resetToolbarButtonIcon() {
         btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
         btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
         btnSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
