@@ -113,6 +113,7 @@ class FaeChatToolBarContentView: UIView {
             //viewStickerPicker = StickerPickView(frame: CGRect(x: 0, y: 0, width: frame.width, height: self.frame.height))
             //viewStickerPicker.sendStickerDelegate = self
             viewStickerPicker = StickerKeyboardView(frame: CGRect(x: 0, y: 0, width: frame.width, height: self.frame.height))
+            viewStickerPicker.delegate = self
             addSubview(viewStickerPicker)
             viewStickerPicker.isHidden = true
             boolStickerInitialized = true
