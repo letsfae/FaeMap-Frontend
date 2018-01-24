@@ -262,6 +262,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
+        uiviewScrollingPhotos.viewCtrler = self
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
@@ -383,7 +384,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     @objc func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .place
-//            uiviewSavedList.loadCollectionData()
+            //uiviewSavedList.loadCollectionData()
             uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
             uiviewSavedList.show()
         }

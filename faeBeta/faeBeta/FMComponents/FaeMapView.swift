@@ -94,6 +94,7 @@ class FaeMapView: MKMapView {
                 }
             } else if let anView = v as? UserPinAnnotationView {
                 cancelCreatingLocationPin()
+                faeMapCtrler?.deselectAllAnnotations()
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             } else if let anView = v as? LocPinAnnotationView {
@@ -136,7 +137,7 @@ class FaeMapView: MKMapView {
             }
         }
         block = false
-        guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
+        guard faeMapCtrler?.uiviewDropUpMenu != nil && faeMapCtrler?.mapMode == .normal else { return }
         faeMapCtrler?.uiviewDropUpMenu.hide()
         faeMapCtrler?.btnDropUpMenu.isSelected = false
     }

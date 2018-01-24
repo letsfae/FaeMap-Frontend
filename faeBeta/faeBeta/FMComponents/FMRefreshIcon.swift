@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FMFilterIcon: UIButton {
+class FMRefreshIcon: UIButton {
     
     var polygonInside: UIImageView!
     var polygonOutside: UIImageView!
@@ -123,14 +123,15 @@ class FMFilterIcon: UIButton {
         
         polygonOutside.layer.removeAllAnimations()
         
-        isEnabled = true
         boolHideInsides = false
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-            self.polygonInside.alpha = 0
-            self.polygonOutside.transform = CGAffineTransform.identity
-            if self.center.y == screenHeight - 25 - device_offset_bot {
-                self.polygonOutside.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+            if self.polygonInside != nil {
+                self.polygonInside.alpha = 0
+                self.polygonOutside.transform = CGAffineTransform.identity
+                if self.center.y == screenHeight - 25 - device_offset_bot {
+                    self.polygonOutside.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+                }
             }
         }) { _ in
             if self.polygonInside != nil {
@@ -145,7 +146,6 @@ class FMFilterIcon: UIButton {
         guard self.center.y == screenHeight - 25 - device_offset_bot else { return }
         guard isSpinning == false else { return }
         self.boolHideInsides = true
-        self.isEnabled = false
         self.isSpinning = true
         
         if self.polygonInside != nil {

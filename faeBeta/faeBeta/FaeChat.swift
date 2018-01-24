@@ -24,7 +24,7 @@ class FaeChat {
             realm.add(realmUser, update: true)
         }
         let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", ""])
-        let realmFaeAvatar = UserAvatar()
+        let realmFaeAvatar = UserImage()
         realmFaeAvatar.user_id = "1"
         realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
         try! realm.write {

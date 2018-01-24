@@ -12,51 +12,80 @@ import RealmSwift
 
 class SetAvatar {
     
-    static func uploadProfileAvatar(image: UIImage, vc: UIViewController, type: String) {
+    static func uploadUserImage(image: UIImage, vc: UIViewController, type: String, isProfilePic: Bool = true) {
         //let currentVC: UIViewController
         var activityIndicator = UIActivityIndicatorView()
-        var imgAvatar = UIImageView()
+        var imgView = UIImageView()
         switch type {
         case "leftSliding":
             let currentVC = vc as! LeftSlidingMenuViewController
             activityIndicator = currentVC.activityIndicator
-            imgAvatar = currentVC.imgAvatar
+            imgView = currentVC.imgAvatar
             break
         case "firstTimeLogin":
             let currentVC = vc as! FirstTimeLoginViewController
             activityIndicator = currentVC.activityIndicator
-            imgAvatar = currentVC.imageViewAvatar
+            imgView = currentVC.imageViewAvatar
             break
         case "setNamecard":
             let currentVC = vc as! SetInfoNamecard
             activityIndicator = currentVC.activityIndicator
-            imgAvatar = currentVC.uiviewNameCard.imgAvatar
+            if isProfilePic {
+                imgView = currentVC.uiviewNameCard.imgAvatar
+            } else {
+                imgView = currentVC.uiviewNameCard.imgCover
+            }
             break
         default:
             break
         }
         vc.view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
-        let avatar = FaeImage()
-        avatar.image = image
-        avatar.faeUploadProfilePic { (code: Int, message: Any?) in
-            activityIndicator.stopAnimating()
-            vc.view.isUserInteractionEnabled = true
-            if code / 100 == 2 {
-                imgAvatar.image = image
-                print("[uploadProfileAvatar] succeed")
-                let realm = try! Realm()
-                let realmUser = UserAvatar()
-                realmUser.user_id = "\(Key.shared.user_id)"
-                realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
-                try! realm.write {
-                    realm.add(realmUser, update: true)
+        if isProfilePic {
+            let avatar = FaeImage()
+            avatar.image = image
+            avatar.faeUploadProfilePic { (code: Int, message: Any?) in
+                activityIndicator.stopAnimating()
+                vc.view.isUserInteractionEnabled = true
+                if code / 100 == 2 {
+                    imgView.image = image
+                    print("[uploadProfileAvatar] succeed")
+                    let realm = try! Realm()
+                    let realmUser = UserImage()
+                    realmUser.user_id = "\(Key.shared.user_id)"
+                    realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
+                    try! realm.write {
+                        realm.add(realmUser, update: true)
+                    }
+                }
+                else {
+                    print("[uploadProfileAvatar] fail")
+                    self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again", vc: vc)
+                    return
                 }
             }
-            else {
-                print("[uploadProfileAvatar] fail")
-                self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again", vc: vc)
-                return
+        } else {
+            let coverPhoto = FaeImage()
+            coverPhoto.image = image
+            coverPhoto.faeUploadCoverPhoto { (code: Int, message: Any?) in
+                activityIndicator.stopAnimating()
+                vc.view.isUserInteractionEnabled = true
+                if code / 100 == 2 {
+                    imgView.image = image
+                    print("[uploadProfileAvatar] succeed")
+                    let realm = try! Realm()
+                    let realmUser = UserImage()
+                    realmUser.user_id = "\(Key.shared.user_id)"
+                    realmUser.userCoverPhoto = RealmChat.compressImageToData(image)! as NSData
+                    try! realm.write {
+                        realm.add(realmUser, update: true)
+                    }
+                }
+                else {
+                    print("[faeUploadCoverPhoto] fail")
+                    self.showAlert(title: "Upload Cover Photo Failed", message: "please try again", vc: vc)
+                    return
+                }
             }
         }
     }
@@ -77,7 +106,7 @@ class SetAvatar {
         vc.present(alertController, animated: true, completion: nil)
     }
     
-    static func addProfileAvatar(vc: UIViewController, type: String) {
+    static func addUserImage(vc: UIViewController, type: String) {
         var imageDelegate: SendMutipleImagesDelegate!
         var imagePickerDelegate: (UIImagePickerControllerDelegate & UINavigationControllerDelegate)!
         switch type {

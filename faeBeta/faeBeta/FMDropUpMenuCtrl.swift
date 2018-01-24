@@ -15,7 +15,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
-        btnFilterIcon = FMFilterIcon()
+        btnFilterIcon = FMRefreshIcon()
         btnFilterIcon.addTarget(self, action: #selector(self.actionFilterIcon(_:)), for: .touchUpInside)
         btnFilterIcon.layer.zPosition = 601
         view.addSubview(btnFilterIcon)
@@ -33,6 +33,12 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     
     @objc func actionFilterIcon(_ sender: UIButton) {
         PLACE_ENABLE = true
+        if btnFilterIcon.isSpinning {
+            btnFilterIcon.stopIconSpin()
+            boolCanUpdatePlaces = true
+            boolCanUpdateUsers = true
+            return
+        }
         guard boolCanUpdatePlaces && boolCanUpdateUsers else { return }
         btnFilterIcon.startIconSpin()
         removePlaceUserPins({

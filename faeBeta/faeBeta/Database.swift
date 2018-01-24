@@ -47,8 +47,8 @@ class RealmUser: Object {
     var message: RealmMessage_v2? {
         return realm?.objects(RealmMessage_v2.self).filter("login_user_id = %@ AND members.@count = 2 AND %@ IN members", self.login_user_id, self).last
     }
-    var avatar: UserAvatar? {
-        return realm?.objects(UserAvatar.self).filter("user_id == %@", self.id).first
+    var avatar: UserImage? {
+        return realm?.objects(UserImage.self).filter("user_id == %@", self.id).first
     }
     
     public override func isEqual(_ object: Any?) -> Bool {
@@ -91,12 +91,14 @@ class SelfInformation: Object {
     @objc dynamic var avatar: NSData? = nil
 }
 
-class UserAvatar: Object {
+class UserImage: Object {
     @objc dynamic var user_id: String = ""
     @objc dynamic var userSmallAvatar: NSData? = nil
     @objc dynamic var smallAvatarEtag: String? = nil
     @objc dynamic var userLargeAvatar: NSData? = nil
     @objc dynamic var largeAvatarEtag: String? = nil
+    @objc dynamic var userCoverPhoto: NSData? = nil
+    @objc dynamic var coverPhotoEtag: String? = nil
     override static func primaryKey() -> String? {
         return "user_id"
     }

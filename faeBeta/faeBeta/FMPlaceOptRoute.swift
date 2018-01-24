@@ -238,7 +238,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 totalDistance += route.distance
             }
             totalDistance /= 1000
-            totalDistance *= 0.621371
+            if Key.shared.measurementUnits == "imperial" {
+                totalDistance *= 0.621371
+            }
             if totalDistance > 3000 {
                 self.showAlert(title: "Sorry! This route is too long to draw.", message: "please try again")
                 return

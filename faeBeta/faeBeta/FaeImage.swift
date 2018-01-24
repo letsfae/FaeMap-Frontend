@@ -74,7 +74,7 @@ class FaeImage: NSObject {
         }
     }
 
-    func faeUploadCoverImageInBackground(_ completion: @escaping (Int, Any?) -> Void) {
+    func faeUploadCoverPhoto(_ completion: @escaping (Int, Any?) -> Void) {
         if image == nil {
             completion(-400, "you need to save image first" as AnyObject?)
         } else {

@@ -46,7 +46,7 @@
 		506D67B81F5272C600CE8BBB /* CollectionsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */; };
 		507BE10C1F5A4ABD0077A959 /* FaeFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507BE10B1F5A4ABD0077A959 /* FaeFont.swift */; };
 		507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D19FE1F57746300F98663 /* UITableViewExtension.swift */; };
-		5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMFilterIcon.swift */; };
+		5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
 		50816DBC1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */; };
 		5087686A1F47AC6A009922BA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508768691F47AC6A009922BA /* UserPin.swift */; };
@@ -390,7 +390,7 @@
 		506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
 		507BE10B1F5A4ABD0077A959 /* FaeFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeFont.swift; sourceTree = "<group>"; };
 		507D19FE1F57746300F98663 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
-		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
+		5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMRefreshIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMZoomButton+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		508768691F47AC6A009922BA /* UserPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
@@ -752,7 +752,7 @@
 			children = (
 				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
 				B894651A1F16D86F00561CFA /* FMAnnotations.swift */,
-				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
+				5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */,
 				50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
@@ -1934,7 +1934,7 @@
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
-				5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */,
+				5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */,
 				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,

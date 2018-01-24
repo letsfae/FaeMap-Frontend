@@ -21,7 +21,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     weak var delegate: MapFilterMenuDelegate?
     
-    var btnFilterIcon = FMFilterIcon()
+    var btnFilterIcon = FMRefreshIcon()
     var uiviewMapOpt: UIView!
     var uiviewPlaceLoc: UIView!
     var btnDiscovery: UIButton!
