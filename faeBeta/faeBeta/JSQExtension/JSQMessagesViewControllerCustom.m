@@ -185,7 +185,7 @@ JSQMessagesKeyboardControllerDelegate>
     self.collectionView.delegate = self; // Notice: It works here, but it's definately not the best practice
 
     self.inputToolbar.delegate = self;
-    self.inputToolbar.maximumHeight = 128;
+    self.inputToolbar.maximumHeight = 158;
     self.inputToolbar.contentView.textView.placeHolder = [NSBundle jsq_localizedStringForKey:@"new_message"];
 
     self.inputToolbar.contentView.textView.accessibilityLabel = [NSBundle jsq_localizedStringForKey:@"new_message"];
