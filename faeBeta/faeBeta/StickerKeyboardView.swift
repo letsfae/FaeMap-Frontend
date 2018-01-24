@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StickerKeyboardView.swift
 //  faeBeta
 //
 //  Created by Jichao on 2018/1/21.
@@ -34,6 +34,8 @@ class StickerKeyboardView: UIView {
             pageControl.currentPage = intPageInSection
         }
     }
+    
+    weak var delegate: SendStickerDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,6 +81,7 @@ class StickerKeyboardView: UIView {
         cllcSticker.setContentOffset(CGPoint(x: screenWidth * CGFloat(arrPageNumIndex[1]), y: 0), animated: false)
         cllcSticker.setNeedsLayout()
         cllcSticker.layoutIfNeeded()
+        intCurrentSection = 2
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -148,6 +151,16 @@ extension StickerKeyboardView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == cllcSticker {
             print(arrStickerCollection[indexPath.section].list[indexPath.item])
+            let name = arrStickerCollection[indexPath.section].list[indexPath.item]
+            if arrStickerCollection[indexPath.section].isEmoji {
+                if name == "erase" {
+                    delegate?.deleteEmoji()
+                } else {
+                    delegate?.appendEmojiWithImageName(name)
+                }
+            } else {
+                delegate?.sendStickerWithImageName(name)
+            }
         } else {
             let targetPage = indexPath.row == 0 ? 0 : arrPageNumIndex[indexPath.row - 1]
             intPageInSection = 0
