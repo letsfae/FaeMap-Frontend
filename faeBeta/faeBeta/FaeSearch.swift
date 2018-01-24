@@ -13,13 +13,13 @@ class FaeSearch {
     
     static let shared = FaeSearch()
     
-    var keyValue = [String: String]()
-    func whereKey(_ key: String, value: String) {
+    var keyValue = [String: Any]()
+    func whereKey(_ key: String, value: Any) {
         keyValue[key] = value
     }
     
     func clearKeyValue() {
-        keyValue = [String: String]()
+        keyValue = [String: Any]()
     }
     
     func search(_ completion: @escaping (Int, Any?) -> Void) {

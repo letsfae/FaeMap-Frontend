@@ -180,6 +180,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeSearch.shared.whereKey("size", value: "20")
             FaeSearch.shared.whereKey("radius", value: "20000")
             FaeSearch.shared.whereKey("offset", value: "0")
+            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+            FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                          "longitude": long])
             FaeSearch.shared.search { (status, message) in
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")
