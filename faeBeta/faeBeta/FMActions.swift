@@ -36,7 +36,7 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
-        uiviewFilterMenu.hide()
+        uiviewDropUpMenu.hide()
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
@@ -60,7 +60,9 @@ extension FaeMapViewController {
         btnTapToShowResultTbl.alpha = 0
         btnLocateSelf.isHidden = false
         btnZoom.isHidden = false
-        btnTapToShowResultTbl.center.y = 181
+        btnTapToShowResultTbl.center.y = 181 + device_offset_top
+        btnTapToShowResultTbl.tag = 1
+        btnTapToShowResultTbl.sendActions(for: .touchUpInside)
         mapGesture(isOn: true)
         deselectAllAnnotations()
         placeClusterManager.removeAnnotations(placesFromSearch) {
@@ -102,7 +104,8 @@ extension FaeMapViewController {
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.show {
-                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68
+                let iphone_x_offset: CGFloat = 70
+                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68 + device_offset_top - iphone_x_offset
             }
             btnZoom.isHidden = true
             btnLocateSelf.isHidden = true
@@ -112,7 +115,7 @@ extension FaeMapViewController {
             tblPlaceResult.hide()
             btnZoom.isHidden = false
             btnLocateSelf.isHidden = false
-            btnTapToShowResultTbl.center.y = 181
+            btnTapToShowResultTbl.center.y = 181 + device_offset_top
             btnTapToShowResultTbl.transform = CGAffineTransform.identity
         }
     }
@@ -161,7 +164,7 @@ extension FaeMapViewController {
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placePin
                 vcPlaceDetail.delegate = self
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                navigationController?.pushViewController(vcPlaceDetail, animated: false)
             }
             animateMainItems(show: false, animated: false)
             uiviewPlaceBar.hide()
@@ -171,10 +174,10 @@ extension FaeMapViewController {
                 boolFromMap = true
                 navigationController?.setViewControllers(arrCtrlers, animated: false)
             }
-            if let idxPath = uiviewFilterMenu.selectedIndexPath {
-                if let cell = uiviewFilterMenu.tblPlaceLoc.cellForRow(at: idxPath) as? CollectionsListCell {
+            if let idxPath = uiviewDropUpMenu.selectedIndexPath {
+                if let cell = uiviewDropUpMenu.tblPlaceLoc.cellForRow(at: idxPath) as? CollectionsListCell {
                     cell.imgIsIn.isHidden = true
-                    uiviewFilterMenu.selectedIndexPath = nil
+                    uiviewDropUpMenu.selectedIndexPath = nil
                 }
             }
         case .allPlaces:

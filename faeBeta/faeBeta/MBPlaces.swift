@@ -12,7 +12,7 @@ import SwiftyJSON
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
     func loadPlaceSearchHeader() {
-        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20, width: screenWidth - 50, height: 43))
+        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
         btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
         btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
         btnSearchAllPlaces.contentHorizontalAlignment = .left
@@ -132,6 +132,9 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 return
@@ -247,10 +250,16 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
+        LocManager.shared.searchedLoc = location
         lblAllCom.text = searchText
         imgIconBeforeAllCom.image = icon
+        if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
+            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        } else {
+            getPlaceInfo(content: lblSearchContent.text!, source: "name")
+        }
 //        getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-//        tblMapBoard.reloadData()
+        tblMapBoard.reloadData()
     }
 }
 

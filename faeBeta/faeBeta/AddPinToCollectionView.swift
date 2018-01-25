@@ -25,7 +25,12 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     var realmColPlaces: Results<RealmCollection>!
     var realmColLocations: Results<RealmCollection>!
     let realm = try! Realm()
-    var tableMode: CollectionTableMode = .place
+    var tableMode: CollectionTableMode = .place {
+        didSet {
+            guard fullLoaded else { return }
+            tblAddCollection.reloadData()
+        }
+    }
     var pinToSave: FaePinAnnotation!
     var timer: Timer?
     var arrListSavedThisPin = [Int]() {
@@ -214,7 +219,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             return
         }
         
-        if fromLocDetail {
+        if fromLocDetail && uiviewAfterAdded.pinIdInAction > 0 {
             let locationId = locId
             saveLocationToWithId(collection, locationId)
             return

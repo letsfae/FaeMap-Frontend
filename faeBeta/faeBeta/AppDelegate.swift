@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 import CoreLocation
 import RealmSwift
-
 import GooglePlaces
 
 @UIApplicationMain
@@ -29,6 +28,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         GMSPlacesClient.provideAPIKey("AIzaSyBqxJcAYqy28IZL_wleL7kJr2yEiynXdMQ")
         
+        configureReachability()
+        configureRealm()
+        setupNavigationController()
+        
+        return true
+    }
+    
+    fileprivate func sync(_ completion: @escaping (Bool) -> Void) {
+        FaePush.shared.getSync { (status, _) in
+            completion(status / 100 == 2)
+        }
+    }
+    
+    fileprivate func setupNavigationController() {
+        
+        FaeCoreData.shared.readLogInfo()
+        
+        let vc = LaunchLoadingController()
+        self.navMain.viewControllers = [vc]
+        self.navMain.navigationBar.isHidden = true
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = self.navMain
+        self.window?.makeKeyAndVisible()
+        
+        func configureNavCtrler() {
+            let vcRoot = !Key.shared.is_Login ? WelcomeViewController() : InitialPageController()
+            Key.shared.navOpenMode = !Key.shared.is_Login ? .welcomeFirst : .mapFirst
+            self.navMain.setViewControllers([vcRoot], animated: false)
+            LocManager.shared.updateCurtLoc() // update user current location
+            self.configureNotifications()
+            if !Key.shared.is_Login && !Key.shared.isFirstUse() {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                    showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: vcRoot)
+                    FaeCoreData.shared.save("userTokenEncode", value: "")
+                })
+            }
+        }
+        
+        if Key.shared.isFirstUse() {
+            configureNavCtrler()
+        } else {
+            sync { (success) in
+                Key.shared.is_Login = success
+                DispatchQueue.main.async {
+                    configureNavCtrler()
+                    self.configureNotifications()
+                }
+            }
+        }
+    }
+    
+    fileprivate func configureNotifications() {
+        let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
+        let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(settings)
+    }
+    
+    fileprivate func configureReachability() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
         
         reachability = Reachability.init()
@@ -36,11 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try reachability.startNotifier()
         } catch {
         }
-        
-        let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
-        let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
-        UIApplication.shared.registerUserNotificationSettings(settings)
-        
+    }
+    
+    fileprivate func configureRealm() {
         // Config Realm Database
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 9,
@@ -50,30 +105,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //                        newObject!["pinType"] = "\(oldObject?["pinType"])"
                 //                    }
                 //                }
-            }
+        }
         )
         // Delete all realm swift database data
         /*do {
-            try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
-        } catch {}*/
-        
-        Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
-        
-        _ = LocalStorageManager.shared.readLogInfo()
-        
-        let vcRoot = Key.shared.is_Login == 0 ? WelcomeViewController() : InitialPageController()
-        Key.shared.navOpenMode = Key.shared.is_Login == 0 ? .welcomeFirst : .mapFirst
-        navMain.viewControllers = [vcRoot]
-        navMain.navigationBar.isHidden = true
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = navMain
-        window?.makeKeyAndVisible()
-        
-        // update user current location
-        LocManager.shared.updateCurtLoc()
-        
-        return true
+         try FileManager.default.removeItem(at: Realm.Configuration.defaultConfiguration.fileURL!)
+         } catch {}*/
     }
     
     // MARK: - Network Check

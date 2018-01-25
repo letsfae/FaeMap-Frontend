@@ -21,7 +21,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     weak var delegate: MapFilterMenuDelegate?
     
-    var btnFilterIcon = FMFilterIcon()
+    var btnFilterIcon = FMRefreshIcon()
     var uiviewMapOpt: UIView!
     var uiviewPlaceLoc: UIView!
     var btnDiscovery: UIButton!
@@ -449,7 +449,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         })
     }
     
-    // MARK - TableView
+    // MARK: - TableView
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }

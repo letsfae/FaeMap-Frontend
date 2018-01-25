@@ -38,7 +38,7 @@ class FaeGenderView: UIView {
     }
     
     fileprivate func loadContent() {
-        imgCardGender = UIImageView(frame: CGRect(x: 9, y: 3, width: 10, height: 12))
+        imgCardGender = UIImageView(frame: CGRect(x: 9, y: 3, w: 10, h: 12))
         imgCardGender.contentMode = .scaleAspectFit
         addSubview(imgCardGender)
         

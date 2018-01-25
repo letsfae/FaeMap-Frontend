@@ -55,6 +55,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var strLocation: String = ""
     
+    var lblNoResults: FaeLabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -98,6 +100,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadButtons()
         loadBottomLocation()
         loadPlaceListView()
+        loadNoResultLabel()
     }
     
     func buttonEnable(on: Bool) {
@@ -136,13 +139,23 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         clctViewPics.reloadData()
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
-                guard status / 100 == 2 else { return }
-                guard let mapPlaceJsonArray = placesJSON.array else { return }
-                guard mapPlaceJsonArray.count > 0 else { return }
+                guard status / 100 == 2 else {
+                    self.lblNoResults.alpha = 1
+                    return
+                }
+                guard let mapPlaceJsonArray = placesJSON.array else {
+                    self.lblNoResults.alpha = 1
+                    return
+                }
+                guard mapPlaceJsonArray.count > 0 else {
+                    self.lblNoResults.alpha = 1
+                    return
+                }
                 let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
                 self.arrPlaceData = getRandomIndex(arrRaw)
                 self.clctViewPics.reloadData()
                 self.buttonEnable(on: true)
+                self.lblNoResults.alpha = 0
                 UIView.animate(withDuration: 0.3, animations: {
                     self.clctViewPics.alpha = 1
                     self.uiviewAvatarWaveSub.alpha = 0
@@ -200,6 +213,15 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addSubview(uiviewAfterAdded)
         
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
+    }
+    
+    func loadNoResultLabel() {
+        lblNoResults = FaeLabel(CGRect(x: 0, y: 492 * screenHeightFactor, width: 270, height: 88) , .center, .medium, 16, UIColor._146146146())
+        lblNoResults.center.x = screenWidth / 2
+        lblNoResults.numberOfLines = 3
+        lblNoResults.text = "Sorry… we can’t suggest any place\ncards currently, please try a different\nlocation or check back later!"
+        view.addSubview(lblNoResults)
+        lblNoResults.alpha = 0
     }
     
     func loadAvatarWave() {
@@ -674,21 +696,27 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
 //        FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMapSearchPlaceInfo] status/100 != 2")
+                self.lblNoResults.alpha = 1
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
                 print("[loadMapSearchPlaceInfo] fail to parse map search place info")
+                self.lblNoResults.alpha = 1
                 return
             }
             let arrRaw = placeInfoJsonArray.map { PlacePin(json: $0) }
             self.arrPlaceData = getRandomIndex(arrRaw)
             self.clctViewPics.reloadData()
             self.buttonEnable(on: true)
+            self.lblNoResults.alpha = 0
             UIView.animate(withDuration: 0.3, animations: {
                 self.clctViewPics.alpha = 1
                 self.uiviewAvatarWaveSub.alpha = 0

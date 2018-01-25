@@ -35,9 +35,9 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
+    var joshDebug: Bool = true
     var vickyDebug: Bool = false
-    var felixDebug: Bool = true
+    var felixDebug: Bool = false
     
     // change this to .production to switch to production mode
     private let server = ServerType.development
@@ -70,7 +70,11 @@ class Key: NSObject { //  singleton class
             self.getUserInfo()
         }
     }
-    var is_Login: Int = 0
+    
+    func isFirstUse() -> Bool {
+        return Key.shared.userTokenEncode == ""
+    }
+    var is_Login: Bool = false
     var fully_login: Bool = false
     
     // MARK: - User Personal Info
@@ -136,6 +140,16 @@ class Key: NSObject { //  singleton class
         }
     }
     
+    // MARK: - User Settings
+    var autoRefresh: Bool = true
+    var autoCycle: Bool = true
+    var hideAvatars: Bool = false
+    
+    var emailSubscribed: Bool = true
+    var showNameCardOption: Bool = true
+    var measurementUnits: String = "imperial" // metric
+    var shadowLocationEffect: String = "normal" // min, max
+    
     // MARK: - API Fetching Headers
     var version = "x.faeapp.v1"
     var headerAccept = "application/x.faeapp.v1+json"
@@ -155,10 +169,10 @@ class Key: NSObject { //  singleton class
             if Key.shared.userTokenEncode != "" {
                 header["Authorization"] = Key.shared.userTokenEncode
             }
-            else if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+            else if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
                 header["Authorization"] = Key.shared.userTokenEncode
             }
-            else if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+            else if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
                 Key.shared.userTokenEncode = encode
                 header["Authorization"] = Key.shared.userTokenEncode
             }
@@ -178,10 +192,10 @@ class Key: NSObject { //  singleton class
         if Key.shared.userTokenEncode != "" {
             return ["Authorization": Key.shared.userTokenEncode]
         }
-        if Key.shared.is_Login == 1 && Key.shared.userTokenEncode != "" {
+        if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
             return ["Authorization": Key.shared.userTokenEncode]
         }
-        if let encode = LocalStorageManager.shared.readByKey("userTokenEncode") as? String {
+        if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
             Key.shared.userTokenEncode = encode
             return ["Authorization": Key.shared.userTokenEncode]
         }

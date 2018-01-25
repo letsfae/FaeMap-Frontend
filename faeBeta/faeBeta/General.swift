@@ -57,6 +57,47 @@ class General: NSObject {
         }
     }
     
+    func coverPhotoCached(userid: Int, completion:@escaping (UIImage) -> Void) {
+        let realm = try! Realm()
+        if let user = realm.filterUser(id: "\(userid)") {
+            if let coverPhoto = user.avatar?.userCoverPhoto {
+                if let img = UIImage(data: coverPhoto as Data) {
+                    completion(img)
+                } else {
+                    let gender = Key.shared.gender == "male" ? "defaultMen" : "defaultWomen"
+                    completion(UIImage(named: gender)!)
+                }
+            }
+        }
+    }
+    
+    func coverPhoto(userid: Int, completion:@escaping (UIImage) -> Void) {
+        
+        if userid <= 1 {
+            guard let defaultCover = Key.shared.defaultCover else { return }
+            completion(defaultCover)
+            return
+        }
+        
+        getCoverPhoto(userID: userid, type: 2) { (status, etag, imageRawData) in
+            if status == 404 {
+                guard let defaultCover = Key.shared.defaultCover else { return }
+                completion(defaultCover)
+            }
+            guard imageRawData != nil else {
+                print("[getCoverPhoto] fail, imageRawData is nil")
+                return
+            }
+            guard status / 100 == 2 || status / 100 == 3 else { return }
+            DispatchQueue.main.async(execute: {
+                guard imageRawData != nil else { return }
+                guard let imageToCache = UIImage(data: imageRawData!) else { return }
+                faeImageCache.setObject(imageToCache, forKey: "\(userid)_coverPhoto" as AnyObject)
+                completion(imageToCache)
+            })
+        }
+    }
+    
     func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (AnyObject) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
