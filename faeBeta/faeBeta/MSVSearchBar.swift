@@ -16,11 +16,12 @@ extension MapSearchViewController {
         if cellStatus == 0 {
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
-            if searchText != "" && filteredPlaces.count != 0 {
+            if searchText != "" && (filteredPlaces.count != 0 || filteredCategory.count != 0) {
                 uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * filteredPlaces.count))
+                let catCnt = filteredCategory.count >= 2 ? 2 : filteredCategory.count
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (filteredPlaces.count + catCnt)))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
                 uiviewPics.isHidden = false
@@ -33,7 +34,7 @@ extension MapSearchViewController {
             }
             
             // for uiviewNoResults
-            if searchText != "" && filteredPlaces.count == 0 {
+            if searchText != "" && filteredPlaces.count == 0 && filteredCategory.count == 0 {
                 uiviewNoResults.isHidden = false
             } else {
                 uiviewNoResults.isHidden = true
@@ -64,16 +65,31 @@ extension MapSearchViewController {
         }
     }
     
+    func filterPlaceCat(searchText: String, scope: String = "All") {
+        // TODO VICKY 为什么造成crash?
+        var filtered = categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
+        
+        if filtered.count == 1 {
+            filteredCategory = [filtered.popFirst()!]
+        } else if filtered.count >= 2 {
+            filteredCategory = [filtered.popFirst()!, filtered.popFirst()!]
+        }
+    }
+    
     // FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         if searchBar == schPlaceBar {   // search places
+            schLocationBar.btnClose.isHidden = true
             cellStatus = 0
             if searchBar.txtSchField.text == "" {
                 showOrHideViews(searchText: searchBar.txtSchField.text!)
             } else {
+                schPlaceBar.btnClose.isHidden = false
+                filterPlaceCat(searchText: searchBar.txtSchField.text!)  // crash when entering from map
                 getPlaceInfo(content: searchBar.txtSchField.text!)
             }
         } else {   // search locations
+            schPlaceBar.btnClose.isHidden = true
             cellStatus = 1
             if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
                 searchBar.txtSchField.placeholder = searchBar.txtSchField.text
@@ -99,6 +115,7 @@ extension MapSearchViewController {
             placeAutocomplete(searchText)
         } else {
             cellStatus = 0
+            filterPlaceCat(searchText: searchText)
             getPlaceInfo(content: searchText.lowercased())
         }
     }

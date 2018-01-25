@@ -37,25 +37,48 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 return cell
             }
+        } else {  // cellStatus == 0
+            if indexPath.section == 0 {  // search category
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCategories", for: indexPath as IndexPath) as! CategoryListCell
+                if filteredCategory.isEmpty {
+                    return cell
+                }
+
+                cell.setValueForCategory(filteredCategory[indexPath.row])
+                cell.bottomLine.isHidden = false
+                if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 && filteredPlaces.count == 0 {
+                    cell.bottomLine.isHidden = true
+                }
+                
+                return cell
+            } else {   // search places
+                // search places - cellStatus == 0
+                let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
+                let place = filteredPlaces[indexPath.row]
+                
+                cell.setValueForPlace(place)
+                cell.bottomLine.isHidden = false
+                
+                if indexPath.row == tblPlacesRes.numberOfRows(inSection: 1) - 1 {
+                    cell.bottomLine.isHidden = true
+                }
+                return cell
+            }
         }
-        
-        // search places - cellStatus == 0
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
-        let place = filteredPlaces[indexPath.row]
-        
-        cell.setValueForPlace(place)
-        cell.bottomLine.isHidden = false
-        
-        if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 {
-            cell.bottomLine.isHidden = true
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if cellStatus == 0 && tableView == tblPlacesRes {
+            return 2
         }
-        return cell
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // cellStatus == 0 -> search places
-        //        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
-        return cellStatus == 0 ? filteredPlaces.count : (tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count)
+        if cellStatus == 0 {
+            return section == 1 ? filteredPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
+        } else {
+            return tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -99,14 +122,20 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 getPlaceInfo()
             }
-        } else { // search places
-            let selectedPlace = filteredPlaces[indexPath.row]
-//            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
-//            navigationController?.popViewController(animated: false)
-            schPlaceBar.txtSchField.resignFirstResponder()
-            let vc = PlaceDetailViewController()
-            vc.place = selectedPlace
-            navigationController?.pushViewController(vc, animated: false)
+        } else {
+            if indexPath.section == 1 { // search places
+                let selectedPlace = filteredPlaces[indexPath.row]
+    //            delegate?.jumpToOnePlace?(searchText: selectedPlace.name, place: selectedPlace)
+    //            navigationController?.popViewController(animated: false)
+                schPlaceBar.txtSchField.resignFirstResponder()
+                let vc = PlaceDetailViewController()
+                vc.place = selectedPlace
+                navigationController?.pushViewController(vc, animated: false)
+            } else {  // search categories
+                let cell = tableView.cellForRow(at: indexPath) as! CategoryListCell
+                let selectedCat = filteredCategory[indexPath.row].key
+                getPlaceInfo(content: selectedCat, source: "categories")
+            }
         }
     }
 }

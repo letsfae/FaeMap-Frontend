@@ -40,8 +40,15 @@ extension FaeMapViewController: MapSearchDelegate {
         }, nil)
     }
     
+    // TODO YUE
+    /*
+     按搜索返回地图不显示category了就直接显示具体地点等其他results
+     跟如果用户搜了乱码比如 ‘esjufah’ 一样，按搜索前显示无结果因为没有符合包括用户输入内容的任何东西，这时用户点search还是可以返回地图但是什么都没有
+     
+     以上是老板原话。我把你的return注释掉了，但存在问题，你试试搜索b，下面不会出来place数据，点击search，出现的页面，根据该页面修改一下？
+    */
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
-        guard places.count > 0 else { return }
+//        guard places.count > 0 else { return }
         PLACE_ENABLE = false
         placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         removePlaceUserPins({
