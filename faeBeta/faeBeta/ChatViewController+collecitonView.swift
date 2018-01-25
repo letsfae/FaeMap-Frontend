@@ -173,6 +173,7 @@ extension ChatViewController {
         if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
             closeToolbarContentView()
         }
+        floatContentOffsetY = collectionView.contentOffset.y
         let message = arrRealmMessages[indexPath.row]
         if ["[Picture]", "[Gif]"].contains(message.type) {
             let photo = IDMPhoto.photos(withImages: [UIImage(data: message.media! as Data)!])

@@ -84,7 +84,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var animatingHeartTimer: Timer! // a timer to show heart animation continously
     var boolJustSentHeart = false // check if user just sent a heart sticker and avoid sending heart continuously
     
-    var boolGoToFullContent = false // go to full album, full map, taking photo from chatting
+    var boolGoToFullContent = true // go to full album, full map, taking photo from chatting
     var boolClosingToolbarContentView = false
     var floatScrollViewOriginOffset: CGFloat = 0.0 // origin offset when starting dragging
     var floatDistanceInputBarToBottom: CGFloat {
@@ -122,6 +122,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     weak var mapDelegate: LocDetailDelegate?
     
+    var floatContentOffsetY: CGFloat = 0.0
+    
     // MARK: lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,6 +131,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
+        
         senderId = "\(Key.shared.user_id)"
         //senderDisplayName = realmWithUser!.display_name
         
@@ -194,16 +197,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if boolGoToFullContent {
             scrollToBottom(false)
             boolGoToFullContent = false
+        } else {
+            if collectionView.contentOffset.y != floatContentOffsetY {
+                collectionView.setContentOffset(CGPoint(x: 0, y: floatContentOffsetY), animated: false)
+                collectionView.setNeedsLayout()
+                collectionView.layoutIfNeeded()
+            }
         }
         
-        if !boolInitialLoadComplete {
+        /*if !boolInitialLoadComplete {
             scrollToBottom(false)
             boolInitialLoadComplete = true
-        }
+        }*/
         //let initializeType = (FaeChatToolBarContentType.sticker.rawValue | FaeChatToolBarContentType.photo.rawValue | FaeChatToolBarContentType.audio.rawValue | FaeChatToolBarContentType.minimap.rawValue)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {
         //self.toolbarContentView.setup(FaeChatToolBarContentType.sticker.rawValue)
         })
+        
+        
         
     }
     
@@ -1010,6 +1021,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if currentHeight > currentVisibleHeight {
             collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
         }
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
         
         /*let item = collectionView(collectionView!, numberOfItemsInSection: 0) - 1
         if item >= 0 {
