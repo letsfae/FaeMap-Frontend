@@ -136,16 +136,19 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     }
     
     @objc func navigationLeftItemTapped() {
-        let arrVCs = navigationController?.viewControllers
-        if boolFromPlaceDetail {
-            let vcPlaceDetail = arrVCs![arrVCs!.count - 2] as! PlaceDetailViewController
-            vcPlaceDetail.boolShared = boolShared
+        if let arrVCs = navigationController?.viewControllers {
+            if boolFromPlaceDetail {
+                let vcPlaceDetail = arrVCs[arrVCs.count - 2] as! PlaceDetailViewController
+                vcPlaceDetail.boolShared = boolShared
+            }
+            if boolFromLocDetail {
+                let vcLocDetail = arrVCs[arrVCs.count - 2] as! LocDetailViewController
+                vcLocDetail.boolShared = boolShared
+            }
+            navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
         }
-        if boolFromLocDetail {
-            let vcLocDetail = arrVCs![arrVCs!.count - 2] as! LocDetailViewController
-            vcLocDetail.boolShared = boolShared
-        }
-        navigationController?.popViewController(animated: true)
     }
     
     @objc func navigationRightItemTapped() {
