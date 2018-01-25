@@ -63,7 +63,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
-        uiviewNavBar.addConstraintsWithFormat("H:[v0(92)]-(-22)-|", options: [], views: uiviewNavBar.rightBtn)
+        //uiviewNavBar.addConstraintsWithFormat("H:[v0(92)]-(-22)-|", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(createNewList), for: .touchUpInside)
         

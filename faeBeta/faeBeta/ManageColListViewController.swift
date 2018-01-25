@@ -51,7 +51,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     fileprivate func loadNavBar() {
-        uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        uiviewNavBar = UIView(frame: CGRect(x: 0, y: device_offset_top, width: screenWidth, height: 65))
         view.addSubview(uiviewNavBar)
         
         let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -74,7 +74,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     fileprivate func loadContent() {
-        tblManageList = UITableView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65 - 56), style: .plain)
+        tblManageList = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 56 - device_offset_top - device_offset_bot), style: .plain)
         view.addSubview(tblManageList)
         tblManageList.backgroundColor = .white
         tblManageList.dataSource = self
@@ -86,7 +86,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     fileprivate func loadTab() {
-        uiviewTabBar = UIView(frame: CGRect(x: 0, y: screenHeight - 56, width: screenWidth, height: 56))
+        uiviewTabBar = UIView(frame: CGRect(x: 0, y: screenHeight - 56 - device_offset_bot, width: screenWidth, height: 56 + device_offset_bot))
         uiviewTabBar.backgroundColor = UIColor._241241241()
         view.addSubview(uiviewTabBar)
         
@@ -148,6 +148,18 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             //let vcShareCollection = NewChatShareController(friendListMode: .place)
             //vcShareCollection.placeDetail = "\(cell.lblColName.text);\(cell.lblColAddr.text)"
             //navigationController?.pushViewController(vcShareCollection, animated: true)
+            if enterMode == .place {
+                let vcSharePlace = NewChatShareController(friendListMode: .place)
+                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ColListPlaceCell
+                vcSharePlace.placeDetail = cell.selectedPlace
+                present(vcSharePlace, animated: true)
+            } else {
+                let cell = tblManageList.cellForRow(at: selectedIdx[0]) as! ColListLocationCell
+                let vcShareLoc = NewChatShareController(friendListMode: .location)
+                vcShareLoc.locationDetail = "\(cell.coordinate.latitude),\(cell.coordinate.longitude),\(cell.lblItemName.text!),\(cell.lblItemAddr_1.text!),\(cell.lblItemAddr_2.text!)"
+                vcShareLoc.locationSnapImage = cell.imgSavedItem.image
+                present(vcShareLoc, animated: true)
+            }
             break
         case MEMO:
             let vc = EditMemoViewController()
