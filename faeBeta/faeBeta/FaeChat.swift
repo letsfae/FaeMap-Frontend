@@ -18,7 +18,7 @@ class FaeChat {
     var intLastSentIndex: Int = -1
     
     func updateFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), "", "", MYSELF, "", Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, Key.shared.gender])
         let realm = try! Realm()
         try! realm.write {
             realm.add(realmUser, update: true)

@@ -107,6 +107,7 @@ class FaeCoreData: NSObject {
     func getAccountStorage() {
         save("userEmail", value: Key.shared.userEmail)
         save("username", value: Key.shared.username)
+        save("userNickname", value: Key.shared.nickname)
         save("userFirstname", value: Key.shared.userFirstname)
         save("userLastname", value: Key.shared.userLastname)
         save("userBirthday", value: Key.shared.userBirthday)
@@ -129,6 +130,7 @@ class FaeCoreData: NSObject {
                 Key.shared.user_id = readByKey("user_id") as! Int
 //                Key.shared.is_Login = readByKey("is_Login") as! Bool
                 Key.shared.userEmail = readByKey("userEmail") as! String
+                Key.shared.nickname = readByKey("userNickname") as! String
                 Key.shared.userPassword = readByKey("userPassword") as! String
                 Key.shared.userFirstname = readByKey("userFirstname") as! String
                 Key.shared.userLastname = readByKey("userLastname") as! String

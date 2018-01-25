@@ -96,7 +96,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     
     func loadName() {
         lblNickname = UILabel(frame: CGRect(x: (screenWidth - 280) / 2, y: 154, width: 280, height: 38))
-        lblNickname.text = Key.shared.nickname ?? "someone"
+        lblNickname.text = Key.shared.nickname
         lblNickname.textAlignment = .center
         lblNickname.font = UIFont(name: "AvenirNext-Medium", size: 23)
         lblNickname.textColor = UIColor._898989()

@@ -98,7 +98,12 @@ class FaeUser: NSObject {
                     }
                     Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                     Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
-                    FaeCoreData.shared.getAccountStorage()
+                    FaeUser().getSelfNamecard { (status: Int, message: Any?) in
+                        guard status / 100 == 2 else { return }
+                        let nickNameInfo = JSON(message!)
+                        Key.shared.nickname = nickNameInfo["nick_name"].stringValue
+                        FaeCoreData.shared.getAccountStorage()
+                    }
                 }
             } else {
                 
