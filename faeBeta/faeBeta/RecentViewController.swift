@@ -62,10 +62,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         observeOnMessageChange()
         
         // TODO
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username , Key.shared.nickname ?? "", IS_FRIEND, "", Key.shared.gender])
+        /*let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username , Key.shared.nickname ?? "", IS_FRIEND, "", Key.shared.gender])
         try! realm.write {
             realm.add(realmUser, update: true)
-        }
+        }*/
     }
     
     deinit {

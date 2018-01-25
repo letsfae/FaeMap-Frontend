@@ -83,7 +83,7 @@ class Key: NSObject { //  singleton class
     var navOpenMode: NavOpenMode = .mapFirst
     
     var username: String = ""
-    var nickname: String?
+    var nickname: String = ""
     var introduction: String = ""
     var age: String = ""
     

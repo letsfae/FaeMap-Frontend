@@ -105,7 +105,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         lblMyScreennameField = UILabel()
         lblMyScreennameField.textAlignment = .center
-        lblMyScreennameField.text = Key.shared.nickname ?? "Someone"
+        lblMyScreennameField.text = Key.shared.nickname
         lblMyScreennameField.textColor = UIColor._155155155()
         lblMyScreennameField.font = UIFont(name: "AvenirNext-Medium", size: 16)
         

@@ -94,7 +94,7 @@ extension FaeMapViewController {
         }
         let leftMenuVC = LeftSlidingMenuViewController()
         leftMenuVC.delegate = self
-        leftMenuVC.displayName = Key.shared.nickname ?? "Someone"
+        leftMenuVC.displayName = Key.shared.nickname
         leftMenuVC.modalPresentationStyle = .overCurrentContext
         present(leftMenuVC, animated: false, completion: nil)
     }
