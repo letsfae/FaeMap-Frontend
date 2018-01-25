@@ -53,7 +53,7 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegateSeeAll?.jumpToPlaceDetail(place: arrNearbyPlaces[indexPath.row])
+        jumpToPlaceDetail(place: arrNearbyPlaces[indexPath.row])
     }
     
     @objc func btnSeeAllTapped(_ sender: UIButton) {

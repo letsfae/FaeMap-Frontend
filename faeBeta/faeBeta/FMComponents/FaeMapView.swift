@@ -94,6 +94,7 @@ class FaeMapView: MKMapView {
                 }
             } else if let anView = v as? UserPinAnnotationView {
                 cancelCreatingLocationPin()
+                faeMapCtrler?.deselectAllAnnotations()
                 faeMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             } else if let anView = v as? LocPinAnnotationView {
@@ -126,7 +127,7 @@ class FaeMapView: MKMapView {
             } else {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.mapGesture(isOn: true)
-                if faeMapCtrler?.mapMode != .pinDetail {
+                if faeMapCtrler?.mapMode != .pinDetail && faeMapCtrler?.swipingState != .multipleSearch {
                     faeMapCtrler?.uiviewPlaceBar.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
@@ -136,8 +137,9 @@ class FaeMapView: MKMapView {
             }
         }
         block = false
-        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+        guard faeMapCtrler?.uiviewDropUpMenu != nil && faeMapCtrler?.mapMode == .normal else { return }
+        faeMapCtrler?.uiviewDropUpMenu.hide()
+        faeMapCtrler?.btnDropUpMenu.isSelected = false
     }
     
     @objc func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
@@ -180,8 +182,9 @@ class FaeMapView: MKMapView {
             
         }
         block = false
-        guard faeMapCtrler?.uiviewFilterMenu != nil else { return }
-        faeMapCtrler?.uiviewFilterMenu.btnHideMFMenu.sendActions(for: .touchUpInside)
+        guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
+        faeMapCtrler?.uiviewDropUpMenu.hide()
+        faeMapCtrler?.btnDropUpMenu.isSelected = false
     }
 
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
@@ -215,6 +218,9 @@ class FaeMapView: MKMapView {
                     slcMapCtrler?.createLocationPin(point: tapPoint)
                 }
             }
+            guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
+            faeMapCtrler?.uiviewDropUpMenu.hide()
+            faeMapCtrler?.btnDropUpMenu.isSelected = false
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {

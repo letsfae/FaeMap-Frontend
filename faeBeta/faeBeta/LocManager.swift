@@ -14,6 +14,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
 
     var locManager: CLLocationManager!
     var curtLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
+    var searchedLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
     var curtLat: CLLocationDegrees {
         return curtLoc.coordinate.latitude
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IDMPhotoBrowser
 
 class InfiniteScrollingView: UIView {
     var placePhotos = [UIImage]()
@@ -17,16 +18,26 @@ class InfiniteScrollingView: UIView {
     var boolLeft: Bool!
     var boolRight: Bool!
     
+    var panGesture: UIPanGestureRecognizer!
+    
+    var viewCtrler: UIViewController?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadContent()
         
         if placePhotos.count > 1 {
-            let panGesture = UIPanGestureRecognizer()
+            panGesture = UIPanGestureRecognizer()
             panGesture.maximumNumberOfTouches = 1
             panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
             addGestureRecognizer(panGesture)
         }
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToShowImage))
+        if panGesture != nil {
+            tapGesture.require(toFail: tapGesture)
+        }
+        addGestureRecognizer(tapGesture)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -69,6 +80,21 @@ class InfiniteScrollingView: UIView {
         }
         boolLeft = placePhotos.count > 1
         boolRight = placePhotos.count > 1
+    }
+    
+    @objc func tapToShowImage() {
+        var photos = [IDMPhoto]()
+        //for photo in placePhotos {
+        //    if let idmPhoto = IDMPhoto(image: photo) {
+        //        photos.append(idmPhoto)
+        //    }
+        //}
+        guard let idmPhoto = IDMPhoto(image: imgPic_1.image) else { return }
+        photos.append(idmPhoto)
+        guard let browser = IDMPhotoBrowser(photos: photos) else { return }
+        browser.displayToolbar = false
+        browser.displayDoneButton = false
+        viewCtrler?.present(browser, animated: true, completion: nil)
     }
     
     func panToPrev(_ time: Double = 0.3) {

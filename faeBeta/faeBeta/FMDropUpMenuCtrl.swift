@@ -1,5 +1,5 @@
 //
-//  FMMapFilter.swift
+//  FMDropUpMenuCtrl.swift
 //  MapFilterIcon
 //
 //  Created by Yue on 1/24/17.
@@ -11,29 +11,34 @@ import SwiftyJSON
 //import CCHMapClusterController
 
 extension FaeMapViewController: MapFilterMenuDelegate {
+    
     func loadMapFilter() {
         guard FILTER_ENABLE else { return }
         
-        btnFilterIcon = FMFilterIcon()
+        btnFilterIcon = FMRefreshIcon()
         btnFilterIcon.addTarget(self, action: #selector(self.actionFilterIcon(_:)), for: .touchUpInside)
         btnFilterIcon.layer.zPosition = 601
         view.addSubview(btnFilterIcon)
         view.bringSubview(toFront: btnFilterIcon)
         
-        uiviewFilterMenu = FMFilterMenu(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatFilterHeight))
-        uiviewFilterMenu.delegate = self
-        uiviewFilterMenu.btnFilterIcon = btnFilterIcon
-        uiviewFilterMenu.layer.zPosition = 601
-        view.addSubview(uiviewFilterMenu)
-        view.bringSubview(toFront: uiviewFilterMenu)
-        let panGesture_icon = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        btnFilterIcon.addGestureRecognizer(panGesture_icon)
+        // new menu design
+        uiviewDropUpMenu = FMDropUpMenu()
+        uiviewDropUpMenu.layer.zPosition = 601
+        uiviewDropUpMenu.delegate = self
+        view.addSubview(uiviewDropUpMenu)
         let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
-        uiviewFilterMenu.addGestureRecognizer(panGesture_menu)
+        panGesture_menu.require(toFail: uiviewDropUpMenu.swipeGes)
+        uiviewDropUpMenu.addGestureRecognizer(panGesture_menu)
     }
     
     @objc func actionFilterIcon(_ sender: UIButton) {
         PLACE_ENABLE = true
+        if btnFilterIcon.isSpinning {
+            btnFilterIcon.stopIconSpin()
+            boolCanUpdatePlaces = true
+            boolCanUpdateUsers = true
+            return
+        }
         guard boolCanUpdatePlaces && boolCanUpdateUsers else { return }
         btnFilterIcon.startIconSpin()
         removePlaceUserPins({
@@ -46,16 +51,29 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         }
     }
     
+    @objc func actionShowMapActionsMenu(_ sender: UIButton) {
+        if sender.isSelected {
+            sender.isSelected = false
+            uiviewDropUpMenu.hide()
+        } else {
+            sender.isSelected = true
+            uiviewDropUpMenu.show()
+        }
+    }
+    
     // MapFilterMenuDelegate
     func autoReresh(isOn: Bool) {
         AUTO_REFRESH = isOn
+        Key.shared.autoRefresh = isOn
+        FaeCoreData.shared.save("autoRefresh", value: isOn)
     }
     
     // MapFilterMenuDelegate
     func autoCyclePins(isOn: Bool) {
         AUTO_CIRCLE_PINS = isOn
         placeClusterManager.canUpdate = isOn
-        
+        Key.shared.autoCycle = isOn
+        FaeCoreData.shared.save("autoCycle", value: isOn)
     }
     
     /*
@@ -85,6 +103,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     // MapFilterMenuDelegate
     func hideAvatars(isOn: Bool) {
         HIDE_AVATARS = isOn
+        Key.shared.hideAvatars = isOn
+        FaeCoreData.shared.save("hideAvatars", value: isOn)
         if isOn {
             timerUserPin?.invalidate()
             timerUserPin = nil
@@ -143,11 +163,44 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     
-    func actionHideFilterMenu(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.uiviewFilterMenu.frame.origin.y = screenHeight
-            self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
-        })
+    func animateMainScreenButtons(hide: Bool, animated: Bool) {
+        if hide {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnZoom.frame.origin.y = screenHeight + 10
+                    self.btnLocateSelf.frame.origin.y = screenHeight + 10
+                    self.btnOpenChat.frame.origin.y = screenHeight + 10
+                    self.btnDiscovery.frame.origin.y = screenHeight + 10
+                    self.btnFilterIcon.frame.origin.y = screenHeight + 10
+                }, completion: nil)
+            } else {
+                self.btnZoom.frame.origin.y = screenHeight + 10
+                self.btnLocateSelf.frame.origin.y = screenHeight + 10
+                self.btnOpenChat.frame.origin.y = screenHeight + 10
+                self.btnDiscovery.frame.origin.y = screenHeight + 10
+                self.btnFilterIcon.frame.origin.y = screenHeight + 10
+            }
+            faeMapView.cgfloatCompassOffset = 134
+            faeMapView.layoutSubviews()
+        } else {
+            if animated {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                    self.btnZoom.frame.origin.y = screenHeight - 154 - device_offset_bot_main
+                    self.btnLocateSelf.frame.origin.y = screenHeight - 154 - device_offset_bot_main
+                    self.btnOpenChat.frame.origin.y = screenHeight - 90 - device_offset_bot_main
+                    self.btnDiscovery.frame.origin.y = screenHeight - 90 - device_offset_bot_main
+                    self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
+                }, completion: nil)
+            } else {
+                self.btnZoom.frame.origin.y = screenHeight - 154 - device_offset_bot_main
+                self.btnLocateSelf.frame.origin.y = screenHeight - 154 - device_offset_bot_main
+                self.btnOpenChat.frame.origin.y = screenHeight - 90 - device_offset_bot_main
+                self.btnDiscovery.frame.origin.y = screenHeight - 90 - device_offset_bot_main
+                self.btnFilterIcon.center.y = screenHeight - 25 - device_offset_bot
+            }
+            faeMapView.cgfloatCompassOffset = 215
+            faeMapView.layoutSubviews()
+        }
     }
     
     @objc func panGesMenuDragging(_ pan: UIPanGestureRecognizer) {
@@ -157,15 +210,12 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                 self.mapGesture(isOn: true)
             }
             let location = pan.location(in: view)
-            if uiviewFilterMenu.frame.origin.y == screenHeight {
-                sizeFrom = screenHeight
-                sizeTo = screenHeight - floatFilterHeight
-                end = location.y
+            if uiviewDropUpMenu.frame.origin.y == screenHeight {
+                uiviewDropUpMenu.panCtrlParaSetting(showed: false)
             } else {
-                sizeFrom = screenHeight - floatFilterHeight
-                sizeTo = screenHeight
-                end = location.y
+                uiviewDropUpMenu.panCtrlParaSetting(showed: true)
             }
+            end = location.y
         } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
             let velocity = pan.velocity(in: view)
             let location = pan.location(in: view)
@@ -173,29 +223,37 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             if resumeTime > 0.3 {
                 resumeTime = 0.3
             }
-            if percent > 0.1 {
+            if percent < -0.1 {
                 // reload collection data
-                if uiviewFilterMenu.frame.origin.y <= screenHeight {
-                    uiviewFilterMenu.loadCollectionData()
+                if uiviewDropUpMenu.frame.origin.y < screenHeight {
+                    uiviewDropUpMenu.loadCollectionData()
                 }
+                btnDropUpMenu.isSelected = false
+                mapGesture(isOn: true)
+                animateMainScreenButtons(hide: false, animated: true)
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.uiviewFilterMenu.frame.origin.y = self.sizeTo
-                    self.btnFilterIcon.center.y = self.sizeTo - 25 - device_offset_bot
-                }, completion: nil)
+                    self.uiviewDropUpMenu.frame.origin.y = self.uiviewDropUpMenu.sizeTo
+                }, completion: { _ in
+                    self.uiviewDropUpMenu.smallMode()
+                })
             } else {
                 UIView.animate(withDuration: resumeTime, animations: {
-                    self.uiviewFilterMenu.frame.origin.y = self.sizeFrom
-                    self.btnFilterIcon.center.y = self.sizeFrom - 25 - device_offset_bot
+                    self.uiviewDropUpMenu.frame.origin.y = self.uiviewDropUpMenu.sizeFrom
                 })
             }
         } else {
-            guard uiviewFilterMenu.frame.origin.y >= screenHeight - floatFilterHeight else { return }
             let location = pan.location(in: view)
-            percent = abs(Double(CGFloat(end - location.y) / floatFilterHeight))
             let translation = pan.translation(in: view)
-            btnFilterIcon.center.y = btnFilterIcon.center.y + translation.y
-            uiviewFilterMenu.center.y = uiviewFilterMenu.center.y + translation.y
-            pan.setTranslation(CGPoint.zero, in: view)
+            if uiviewDropUpMenu.frame.origin.y == uiviewDropUpMenu.old_origin_y {
+                if translation.y < 0 { return }
+                percent = Double(CGFloat(end - location.y) / uiviewDropUpMenu.frame.size.height)
+                uiviewDropUpMenu.frame.origin.y += translation.y
+                pan.setTranslation(CGPoint.zero, in: view)
+            } else if uiviewDropUpMenu.frame.origin.y > uiviewDropUpMenu.old_origin_y {
+                percent = Double(CGFloat(end - location.y) / uiviewDropUpMenu.frame.size.height)
+                uiviewDropUpMenu.frame.origin.y += translation.y
+                pan.setTranslation(CGPoint.zero, in: view)
+            }
         }
     }
 }

@@ -30,6 +30,7 @@
 		501D6B651F43BA6200A1F614 /* FMNameCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501D6B641F43BA6200A1F614 /* FMNameCardView.swift */; };
 		50234AF71F27DAC000055748 /* ScreenFactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF61F27DAC000055748 /* ScreenFactor.swift */; };
 		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
+		50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */; };
 		5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */; };
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
@@ -45,7 +46,7 @@
 		506D67B81F5272C600CE8BBB /* CollectionsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */; };
 		507BE10C1F5A4ABD0077A959 /* FaeFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507BE10B1F5A4ABD0077A959 /* FaeFont.swift */; };
 		507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D19FE1F57746300F98663 /* UITableViewExtension.swift */; };
-		5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMFilterIcon.swift */; };
+		5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */; };
 		5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005D1F2521B3009E3720 /* GCDControl.swift */; };
 		50816DBC1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */; };
 		5087686A1F47AC6A009922BA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508768691F47AC6A009922BA /* UserPin.swift */; };
@@ -57,6 +58,8 @@
 		509543631FC8D272002EAD2E /* FMAllPlacesFromBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
+		50A9DCE820169DEB00A721CC /* LaunchLoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */; };
+		50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
 		50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */; };
@@ -158,7 +161,7 @@
 		B0BF358C1D8DC96300B0540B /* RecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */; };
 		B0BF358F1D8DC96300B0540B /* RecentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BF358B1D8DC96300B0540B /* RecentViewController.swift */; };
 		B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A51CED344200EC356A /* HTTPClient.swift */; };
-		B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */; };
+		B0CFC9AA1CED345500EC356A /* FaeCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9A91CED345500EC356A /* FaeCoreData.swift */; };
 		B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CFC9BD1CED42A800EC356A /* Verification.swift */; };
 		B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */; };
 		B0D8CF1B1D3D525C0030939E /* MoodAvatarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D8CD3D1D3D525C0030939E /* MoodAvatarViewController.swift */; };
@@ -290,7 +293,7 @@
 		B88905721E36094B00E68D58 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88905711E36094B00E68D58 /* Reachability.swift */; };
 		B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A3E2B1DC8654A00351A2A /* ReportViewController.swift */; };
 		B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = B894651A1F16D86F00561CFA /* FMAnnotations.swift */; };
-		B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMMapFilterCtrl.swift */; };
+		B89AB3F31E3D775F00C5116D /* FMDropUpMenuCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B89AB3F21E3D775F00C5116D /* FMDropUpMenuCtrl.swift */; };
 		B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */; };
 		B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AC45871DBAA78C0089112B /* RK4Spring.swift */; };
 		B8B2C15C1E65EDFF00F253EA /* MapPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B2C15B1E65EDFF00F253EA /* MapPin.swift */; };
@@ -375,6 +378,7 @@
 		501D6B641F43BA6200A1F614 /* FMNameCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMNameCardView.swift; sourceTree = "<group>"; };
 		50234AF61F27DAC000055748 /* ScreenFactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenFactor.swift; sourceTree = "<group>"; };
 		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
+		50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationPin.swift; sourceTree = "<group>"; };
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
@@ -390,7 +394,7 @@
 		506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
 		507BE10B1F5A4ABD0077A959 /* FaeFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeFont.swift; sourceTree = "<group>"; };
 		507D19FE1F57746300F98663 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
-		5080005B1F249FD2009E3720 /* FMFilterIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMFilterIcon.swift; sourceTree = "<group>"; };
+		5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMRefreshIcon.swift; sourceTree = "<group>"; };
 		5080005D1F2521B3009E3720 /* GCDControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCDControl.swift; sourceTree = "<group>"; };
 		50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMZoomButton+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		508768691F47AC6A009922BA /* UserPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
@@ -402,6 +406,8 @@
 		509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMAllPlacesFromBoard.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
+		50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchLoadingController.swift; sourceTree = "<group>"; };
+		50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDropUpMenu.swift; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
 		50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailClctView.swift; sourceTree = "<group>"; };
@@ -523,7 +529,7 @@
 		B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentTableViewCell.swift; sourceTree = "<group>"; };
 		B0BF358B1D8DC96300B0540B /* RecentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentViewController.swift; sourceTree = "<group>"; };
 		B0CFC9A51CED344200EC356A /* HTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
-		B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
+		B0CFC9A91CED345500EC356A /* FaeCoreData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeCoreData.swift; sourceTree = "<group>"; };
 		B0CFC9B61CED3A3400EC356A /* faeBeta-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "faeBeta-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0CFC9BD1CED42A800EC356A /* Verification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Verification.swift; sourceTree = "<group>"; };
 		B0D8CD3B1D3D525C0030939E /* MoodAvatarTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoodAvatarTableViewCell.swift; sourceTree = "<group>"; };
@@ -657,7 +663,7 @@
 		B88905711E36094B00E68D58 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		B88A3E2B1DC8654A00351A2A /* ReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		B894651A1F16D86F00561CFA /* FMAnnotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMAnnotations.swift; sourceTree = "<group>"; };
-		B89AB3F21E3D775F00C5116D /* FMMapFilterCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMMapFilterCtrl.swift; sourceTree = "<group>"; };
+		B89AB3F21E3D775F00C5116D /* FMDropUpMenuCtrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FMDropUpMenuCtrl.swift; sourceTree = "<group>"; };
 		B8A3BF591DD0682F00288C3B /* ScrollViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewExtension.swift; sourceTree = "<group>"; };
 		B8AC45871DBAA78C0089112B /* RK4Spring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RK4Spring.swift; sourceTree = "<group>"; };
 		B8B2C15B1E65EDFF00F253EA /* MapPin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPin.swift; sourceTree = "<group>"; };
@@ -754,7 +760,8 @@
 			children = (
 				50414F5A1F43D54100FF1B76 /* FaeMapView.swift */,
 				B894651A1F16D86F00561CFA /* FMAnnotations.swift */,
-				5080005B1F249FD2009E3720 /* FMFilterIcon.swift */,
+				5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */,
+				50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
 				50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */,
@@ -935,7 +942,7 @@
 				B8CAA0401DDD948400DEC329 /* FMActions.swift */,
 				B8CAA03A1DDD913F00DEC329 /* FMMapViewCtrl.swift */,
 				B8CAA03E1DDD941300DEC329 /* FMDelegateCtrl.swift */,
-				B89AB3F21E3D775F00C5116D /* FMMapFilterCtrl.swift */,
+				B89AB3F21E3D775F00C5116D /* FMDropUpMenuCtrl.swift */,
 				B83F8AEC1E0353DB00F31CEF /* FMNameCardCtrl.swift */,
 				B31437A91F310B1E007AE884 /* FMMapSearchCtrl.swift */,
 				506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */,
@@ -1090,6 +1097,7 @@
 			children = (
 				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
+				50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */,
 				B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */,
 				B0A2ACC91CE3A9C8002E0C9D /* SignIn */,
 				B0D36BE71D1C0CB1002FC047 /* MyFae */,
@@ -1190,7 +1198,7 @@
 				B82767531DF5DD2E00CFB912 /* Database.swift */,
 				B05E2DBE1DD24FEE00D6745A /* Key.swift */,
 				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
-				B0CFC9A91CED345500EC356A /* LocalStorageManager.swift */,
+				B0CFC9A91CED345500EC356A /* FaeCoreData.swift */,
 				B0CFC9BD1CED42A800EC356A /* Verification.swift */,
 				50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */,
 				B05E2DBA1DCE357700D6745A /* FaePush.swift */,
@@ -1501,6 +1509,7 @@
 				B8AC45871DBAA78C0089112B /* RK4Spring.swift */,
 				B808B4A01F1EC074008CB624 /* PrintFunctions.swift */,
 				5080005D1F2521B3009E3720 /* GCDControl.swift */,
+				50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
@@ -1901,6 +1910,7 @@
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
+				50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */,
 				B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */,
 				DCBE690B1DB60F1400BFF46C /* AudioRecorderView.swift in Sources */,
 				B80D98F01EFCA6B500AB27C4 /* UIScrollViewExtension.swift in Sources */,
@@ -1924,6 +1934,7 @@
 				B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */,
 				B85FFE961EA84CEB0079D1A7 /* CreatedPinsViewController.swift in Sources */,
 				B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */,
+				50A9DCE820169DEB00A721CC /* LaunchLoadingController.swift in Sources */,
 				B81377061EB7C181002BD238 /* FaeNavBar.swift in Sources */,
 				506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */,
 				B064EEED1D6E0D1000C078F5 /* StickerPickView.swift in Sources */,
@@ -1936,7 +1947,7 @@
 				DCF1EBD41DA31E8C0066B3ED /* ChatViewController+SendLoadMessages.swift in Sources */,
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
-				5080005C1F249FD2009E3720 /* FMFilterIcon.swift in Sources */,
+				5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */,
 				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
@@ -1981,7 +1992,7 @@
 				B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */,
 				B33F8A001F3EB4E20033610D /* MBPlaceTabView.swift in Sources */,
 				B0714D701D5E435200356705 /* FMUnreadChatCtrl.swift in Sources */,
-				B0CFC9AA1CED345500EC356A /* LocalStorageManager.swift in Sources */,
+				B0CFC9AA1CED345500EC356A /* FaeCoreData.swift in Sources */,
 				B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */,
 				9F186F851F6A320F00D24E07 /* FaeChat.swift in Sources */,
 				B8849EB81EEB147A00D4588D /* MBChatsViewController.swift in Sources */,
@@ -2000,7 +2011,7 @@
 				505367CE1FA643050076D18D /* MSVTableView.swift in Sources */,
 				B8C46DC01E64152500FD7E27 /* PinDetailUser.swift in Sources */,
 				50188F3D1FC36C390038CAFF /* CCHMapClusterControllerUtils.m in Sources */,
-				B89AB3F31E3D775F00C5116D /* FMMapFilterCtrl.swift in Sources */,
+				B89AB3F31E3D775F00C5116D /* FMDropUpMenuCtrl.swift in Sources */,
 				50188F411FC36C390038CAFF /* CCHMapTreeUtils.m in Sources */,
 				B37E5DC01F831040008A6B4B /* SetPrivacyViewController.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
@@ -2057,6 +2068,7 @@
 				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				9FC92AC7201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift in Sources */,
+				50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */,
 				B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,

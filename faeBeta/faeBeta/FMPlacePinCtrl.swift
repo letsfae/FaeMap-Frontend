@@ -352,7 +352,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             return
         }
         boolCanUpdatePlaces = false
-        btnFilterIcon.startIconSpin()
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)

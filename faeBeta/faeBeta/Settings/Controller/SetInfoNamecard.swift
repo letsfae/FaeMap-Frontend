@@ -55,6 +55,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     //    var vc = SetDisplayName()
     
     var activityIndicator: UIActivityIndicatorView!
+    var isProfilePhoto: Bool = true
     
     override func viewDidLoad() {
         // super.viewDidLoad() missing here
@@ -161,7 +162,11 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
                 present(vc, animated: true)
             }
         case 2:
-            SetAvatar.addProfileAvatar(vc: self, type: "setNamecard")
+            isProfilePhoto = true
+            SetAvatar.addUserImage(vc: self, type: "setNamecard")
+        case 3:
+            isProfilePhoto = false
+            SetAvatar.addUserImage(vc: self, type: "setNamecard")
         default: break
         }
     }
@@ -179,7 +184,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         print("send image for avatar")
         if let image = images.first {
             //uploadProfileAvatar(image: image)
-            SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "setNamecard")
+            SetAvatar.uploadUserImage(image: image, vc: self, type: "setNamecard", isProfilePic: self.isProfilePhoto)
         }
     }
     
@@ -193,6 +198,6 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         }
         picker.dismiss(animated: true, completion: nil)
         //uploadProfileAvatar(image: image)
-        SetAvatar.uploadProfileAvatar(image: image, vc: self, type: "setNamecard")
+        SetAvatar.uploadUserImage(image: image, vc: self, type: "setNamecard", isProfilePic: self.isProfilePhoto)
     }
 }

@@ -48,7 +48,11 @@ class FMDistIndicator: UIImageView {
     }
     
     func updateDistance(distance: CLLocationDistance) {
-        strDistance = distance.format(f: ".1") + " mi"
+        var unit = " km"
+        if Key.shared.measurementUnits == "imperial" {
+            unit = " mi"
+        }
+        strDistance = distance.format(f: ".1") + unit
         lblDistance.text = strDistance
         show()
     }
@@ -61,7 +65,7 @@ class FMDistIndicator: UIImageView {
     
     func show() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight - 74 - device_offset_bot
+            self.frame.origin.y = screenHeight - 74 - device_offset_bot_main
         })
     }
 }

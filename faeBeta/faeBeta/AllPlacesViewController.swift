@@ -6,6 +6,8 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
+// This ViewController is currently unused
+
 import UIKit
 import SwiftyJSON
 

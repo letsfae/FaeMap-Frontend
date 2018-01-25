@@ -1,5 +1,5 @@
 //
-//  LocalStorageManager.swift
+//  FaeCoreData.swift
 //  faeBeta
 //
 //  Created by blesssecret on 5/18/16.
@@ -8,18 +8,13 @@
 
 import UIKit
 
-class LocalStorageManager: NSObject {
+class FaeCoreData: NSObject {
     
-    static let shared = LocalStorageManager()
+    static let shared = FaeCoreData()
     
     fileprivate let defaults = UserDefaults.standard
-    func saveString(_ key: String, value: String) {
-        defaults.set(value, forKey: key)
-    }
-    func saveInt(_ key: String, value: Int) {
-        defaults.set(value, forKey: key)
-    }
-    func saveNumber(_ key: String, value: NSNumber) {
+    
+    func save(_ key: String, value: Any) {
         defaults.set(value, forKey: key)
     }
     
@@ -32,7 +27,7 @@ class LocalStorageManager: NSObject {
     }
     func saveUsername() -> Bool {
         if Key.shared.username != "" {
-            saveString("username", value: Key.shared.username)
+            save("username", value: Key.shared.username)
             return true
         }
         return false
@@ -49,7 +44,7 @@ class LocalStorageManager: NSObject {
         return true
     }
     func saveEmail() {
-        saveString("userEmail", value: Key.shared.userEmail)
+        save("userEmail", value: Key.shared.userEmail)
     }
     func readEmail() -> Bool {
         if Key.shared.userEmail == "" {
@@ -64,7 +59,7 @@ class LocalStorageManager: NSObject {
     }
     func savePhoneNumber() -> Bool {
         if Key.shared.userPhoneNumber != nil {
-            saveString("userPhoneNumber", value: Key.shared.userPhoneNumber!)
+            save("userPhoneNumber", value: Key.shared.userPhoneNumber!)
             return true
         }
         return false
@@ -83,7 +78,7 @@ class LocalStorageManager: NSObject {
     
     func savePassword() -> Bool {
         if Key.shared.userPassword != "" {
-            saveString("userPassword", value: Key.shared.userPassword)
+            save("userPassword", value: Key.shared.userPassword)
             return true
         }
         return false
@@ -100,39 +95,39 @@ class LocalStorageManager: NSObject {
         return true
     }
     func logInStorage() {
-        saveString("userToken", value: Key.shared.userToken)
-        saveString("userTokenEncode", value: Key.shared.userTokenEncode)
-        saveInt("session_id", value: Key.shared.session_id)
-        saveInt("user_id", value: Key.shared.user_id)
-        saveInt("is_Login", value: Key.shared.is_Login)
-        saveString("userEmail", value: Key.shared.userEmail)
-        saveString("userPassword", value: Key.shared.userPassword)
+        save("userToken", value: Key.shared.userToken)
+        save("userTokenEncode", value: Key.shared.userTokenEncode)
+        save("session_id", value: Key.shared.session_id)
+        save("user_id", value: Key.shared.user_id)
+        save("is_Login", value: Key.shared.is_Login)
+        save("userEmail", value: Key.shared.userEmail)
+        save("userPassword", value: Key.shared.userPassword)
     }
     
     func getAccountStorage() {
-        
-        saveString("userEmail", value: Key.shared.userEmail)
-        saveString("username", value: Key.shared.username)
-        saveString("userFirstname", value: Key.shared.userFirstname)
-        saveString("userLastname", value: Key.shared.userLastname)
-        saveString("userBirthday", value: Key.shared.userBirthday)
-        saveInt("userGender", value: Key.shared.userGender)
+        save("userEmail", value: Key.shared.userEmail)
+        save("username", value: Key.shared.username)
+        save("userFirstname", value: Key.shared.userFirstname)
+        save("userLastname", value: Key.shared.userLastname)
+        save("userBirthday", value: Key.shared.userBirthday)
+        save("userGender", value: Key.shared.userGender)
     }
     
-    func readLogInfo() -> Bool {
+    func readLogInfo() {
         _ = readUsername()
-        if Key.shared.is_Login == 1 {
-            return true
+        Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
+        if Key.shared.is_Login {
+            return
         }
         if let login = readByKey("is_Login") as? Int {
             if login == 0 {
-                return false
+                return
             } else {
                 Key.shared.userToken = readByKey("userToken") as! String
                 Key.shared.userTokenEncode = readByKey("userTokenEncode") as! String
                 Key.shared.session_id = readByKey("session_id") as! Int
                 Key.shared.user_id = readByKey("user_id") as! Int
-                Key.shared.is_Login = readByKey("is_Login") as! Int
+//                Key.shared.is_Login = readByKey("is_Login") as! Bool
                 Key.shared.userEmail = readByKey("userEmail") as! String
                 Key.shared.userPassword = readByKey("userPassword") as! String
                 Key.shared.userFirstname = readByKey("userFirstname") as! String
@@ -142,9 +137,43 @@ class LocalStorageManager: NSObject {
                 if readByKey("userMiniAvatar") != nil {
                     Key.shared.userMiniAvatar = readByKey("userMiniAvatar") as! Int
                 }
+                if let autoRefresh = readByKey("autoRefresh") as? Bool {
+                    Key.shared.autoRefresh = autoRefresh
+                } else {
+                    Key.shared.autoRefresh = true
+                }
+                if let autoCycle = readByKey("autoCycle") as? Bool {
+                    Key.shared.autoCycle = autoCycle
+                } else {
+                    Key.shared.autoCycle = true
+                }
+                if let hideAvatars = readByKey("hideAvatars") as? Bool {
+                    Key.shared.hideAvatars = hideAvatars
+                } else {
+                    Key.shared.hideAvatars = false
+                }
+                if let emailSubscribed = readByKey("emailSubscribed") as? Bool {
+                    Key.shared.emailSubscribed = emailSubscribed
+                } else {
+                    Key.shared.emailSubscribed = true
+                }
+                if let showNameCardOption = readByKey("showNameCardOption") as? Bool {
+                    Key.shared.showNameCardOption = showNameCardOption
+                } else {
+                    Key.shared.showNameCardOption = true
+                }
+                if let measurementUnits = readByKey("measurementUnits") as? String {
+                    Key.shared.measurementUnits = measurementUnits
+                } else {
+                    Key.shared.measurementUnits = "imperial"
+                }
+                if let shadowLocationEffect = readByKey("shadowLocationEffect") as? String {
+                    Key.shared.shadowLocationEffect = shadowLocationEffect
+                } else {
+                    Key.shared.shadowLocationEffect = "normal"
+                }
             }
         }
-        return false
     }
     func isFirstPushLaunch() -> Bool {
         let firstLaunchFlag = "FirstPushLaunchFlag"

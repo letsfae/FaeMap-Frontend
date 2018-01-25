@@ -190,17 +190,35 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
             
             if weekday == 7 {
                 //lblContent.text = arrDay_LG[0] + " / " + arrHour[0]
-                lblContent.text = closeOrOpen(arrHour[0]) + " / " + arrHour[0]
+                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[0]), hour: " / " + arrHour[0])
             } else if weekday == 8 {
                 //lblContent.text = arrDay_LG[1] + " / " + arrHour[1]
-                lblContent.text = closeOrOpen(arrHour[1]) + " / " + arrHour[1]
+                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[1]), hour: " / " + arrHour[1])
             } else {
                 //lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
-                lblContent.text = closeOrOpen(arrHour[weekday]) + " / " + arrHour[weekday]
+                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[weekday]), hour: " / " + arrHour[weekday])
             }
         }
 
         tblOpeningHours.reloadData()
+    }
+    
+    func attributedHourText(openStatus: String, hour: String) -> NSMutableAttributedString {
+        var attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!]
+        switch openStatus {
+        case "Closed":
+            attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._2559180(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!]
+        case "Open":
+            attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor(r: 120, g: 200, b: 32, alpha: 100), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!]
+        default:
+            attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor(r: 120, g: 200, b: 32, alpha: 100), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!]
+        }
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_0_attr = NSMutableAttributedString(string: openStatus, attributes: attrs_0)
+        let title_1_attr = NSMutableAttributedString(string: hour, attributes: attrs_1)
+        title_0_attr.append(title_1_attr)
+        
+        return title_0_attr
     }
     
     func closeOrOpen(_ todayHour: String) -> String {
@@ -217,7 +235,9 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         } else if endHour == "Midnight" {
             endHour = "00:00 AM"
         }
+        
         let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         dateFormatter.dateFormat = "h:mm a"
         let dateStart = dateFormatter.date(from: startHour)
         let dateEnd = dateFormatter.date(from: endHour)
@@ -237,7 +257,7 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         if hourCurrent >= hourStart && hourCurrent < hourEnd {
             return "Open"
         }
-        return "Close"
+        return "Closed"
     }
     
     override func loadHiddenContent() {

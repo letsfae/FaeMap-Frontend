@@ -180,6 +180,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeSearch.shared.whereKey("size", value: "20")
             FaeSearch.shared.whereKey("radius", value: "20000")
             FaeSearch.shared.whereKey("offset", value: "0")
+            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+            FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                          "longitude": long])
             FaeSearch.shared.search { (status, message) in
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")
@@ -262,6 +265,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
+        uiviewScrollingPhotos.viewCtrler = self
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
@@ -383,7 +387,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     @objc func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .place
-//            uiviewSavedList.loadCollectionData()
+            //uiviewSavedList.loadCollectionData()
             uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
             uiviewSavedList.show()
         }

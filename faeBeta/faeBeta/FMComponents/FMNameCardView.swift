@@ -278,6 +278,13 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgAvatar.image = avatarImage
             self.imgAvatar.isUserInteractionEnabled = true
         }
+        General.shared.coverPhotoCached(userid: withUserId) { (coverPhoto) in
+            self.imgCover.image = coverPhoto
+        }
+        General.shared.coverPhoto(userid: withUserId) { (coverPhoto) in
+            self.imgCover.image = coverPhoto
+            self.imgCover.isUserInteractionEnabled = true
+        }
         uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, _) in
             self.lblNickName.text = nickName
             self.lblUserName.text = "@" + userName
@@ -317,7 +324,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         if screenHeight == 812 {
             iPhone_X_offset = 129 / 736 * 812
         }
-        UIView.animate(withDuration: 0.8, delay: 0.3, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .curveLinear, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)
             self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: self.boolSmallSize ? 301 : 350) // height 301
             self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
@@ -422,7 +429,6 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         imgBackShadow = UIImageView(frame: initialFrame)
         imgBackShadow.layer.anchorPoint = nameCardAnchor
         imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new")
-//        imgBackShadow.image = #imageLiteral(resourceName: "namecardsub_shadow_new_sm")
         imgBackShadow.contentMode = .scaleAspectFit
         imgBackShadow.clipsToBounds = true
         addSubview(imgBackShadow)
@@ -430,7 +436,15 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         imgCover = UIImageView(frame: initialFrame)
         imgCover.image = UIImage(named: "Cover")
         imgCover.layer.anchorPoint = nameCardAnchor
+        imgCover.clipsToBounds = true
+        imgCover.contentMode = .scaleAspectFill
         addSubview(imgCover)
+        let rectShape = CAShapeLayer()
+        rectShape.bounds = CGRect(x: 25.5, y: 37.5, w: 269, h: 125)
+        rectShape.position = CGPoint(x: 134*screenWidthFactor, y: 63.6*screenHeightFactor)
+        rectShape.path = UIBezierPath(roundedRect: CGRect(x: 26, y: 37, w: 268, h: 125), byRoundingCorners: [.topRight, .topLeft], cornerRadii: CGSize(width: 18.9*screenHeightFactor, height: 18.9*screenHeightFactor)).cgPath
+        //Here I'm masking the textView's layer with rectShape layer
+        imgCover.layer.mask = rectShape
         
         imgAvatarShadow = UIImageView(frame: initialFrame)
         imgAvatarShadow.image = #imageLiteral(resourceName: "avatar_rim_shadow")

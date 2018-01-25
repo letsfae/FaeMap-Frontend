@@ -48,6 +48,7 @@ extension FaeMapViewController: LocDetailDelegate {
         anView.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         selectedLocation = firstAnn
         locAnnoView = anView
+        locAnnoView?.zPos = 299
         guard firstAnn.type == "location" else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
         let pinData = locationData

@@ -9,7 +9,6 @@ import UIKit
 import CoreLocation
 import SwiftyJSON
 import MapKit
-//import CCHMapClusterController
 import RealmSwift
 
 enum MapMode {
@@ -64,6 +63,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var lblSearchContent: UILabel!
     var btnMainMapSearch: UIButton!
     var btnClearSearchRes: UIButton!
+    var btnDropUpMenu: UIButton!
     var uiviewPinActionDisplay: FMPinActionDisplay! // indicate which action is being pressing to release
     
     // Explore Button
@@ -86,8 +86,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnDiscovery: UIButton!
     
     // Filter Hexagon and Menu
-    var btnFilterIcon: FMFilterIcon! // Filter Button
-    var uiviewFilterMenu: FMFilterMenu! // Filter Menu
+    var btnFilterIcon: FMRefreshIcon! // Filter Button
+    var uiviewDropUpMenu: FMDropUpMenu! // 
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
@@ -106,6 +106,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     var boolSelecting = false
     var firstSelectPlace = true
+    
+    // Place Pin Control
+    var placePinOPQueue: OperationQueue!
     
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
@@ -170,7 +173,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             guard desiredCount > 0 else { return }
             self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
-            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+            // self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }
     }
     var desiredCount = 0
@@ -181,6 +184,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         storeRealmCollectionFromServer()
         
         Key.shared.FMVCtrler = self
+        AUTO_REFRESH = Key.shared.autoRefresh
+        AUTO_CIRCLE_PINS = Key.shared.autoCycle
+        HIDE_AVATARS = Key.shared.hideAvatars
         
         isUserLoggedIn()
         getUserStatus()
@@ -189,7 +195,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadMapFilter()
         loadMapView()
         loadButton()
-        view.bringSubview(toFront: uiviewFilterMenu)
+        view.bringSubview(toFront: uiviewDropUpMenu)
         loadExploreBar()
         loadPlaceDetail()
         loadPlaceListView()
@@ -201,11 +207,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         updateSelfInfo()
         
         checkDisplayNameExisitency()
+        loadUserSettingsFromCloud()
         
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
-        
 //        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35, width: screenWidth, height: 1))
 //        line.layer.borderColor = UIColor.black.cgColor
 //        line.layer.borderWidth = 1
@@ -344,7 +350,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func getUserStatus() {
-        guard let user_status = LocalStorageManager.shared.readByKey("userStatus") as? Int else { return }
+        guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
     
@@ -386,9 +392,21 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    func loadUserSettingsFromCloud() {
+        FaeUser.shared.getUserSettings { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard let results = message else { return }
+            let resultsJSON = JSON(results)
+            Key.shared.emailSubscribed = resultsJSON["email_subscription"].boolValue
+            Key.shared.measurementUnits = resultsJSON["measurement_units"].stringValue
+            Key.shared.showNameCardOption = resultsJSON["show_name_card_options"].boolValue
+            Key.shared.shadowLocationEffect = resultsJSON["shadow_location_system_effect"].stringValue == "" ? "normal" : resultsJSON["shadow_location_system_effect"].stringValue
+        }
+    }
+    
     func isUserLoggedIn() {
-        _ = LocalStorageManager.shared.readLogInfo()
-        if Key.shared.is_Login == 0 {
+        FaeCoreData.shared.readLogInfo()
+        if Key.shared.is_Login == false {
             jumpToWelcomeView(animated: false)
         }
     }
@@ -433,7 +451,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
         Key.shared.userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
-        LocalStorageManager.shared.saveInt("userMiniAvatar", value: Key.shared.userMiniAvatar)
+        FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {
