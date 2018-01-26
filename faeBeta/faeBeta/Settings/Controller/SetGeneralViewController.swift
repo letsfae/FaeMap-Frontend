@@ -209,7 +209,11 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
             } else {
                 cell.lblName.text = "Email Subscription"
                 cell.lblDes.text = "Enable to receive recommendations, local favorites, newsletters, and updates by email."
-                cell.switchIcon.isOn = Key.shared.emailSubscribed
+                if !Key.shared.userEmailVerified {
+                    cell.switchIcon.isOn = false
+                } else {
+                    cell.switchIcon.isOn = Key.shared.emailSubscribed
+                }
                 cell.uiviewBackground = self.uiviewBackground
             }
             return cell
@@ -295,8 +299,11 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc func switchEmailSubscription(_ sender: UISwitch) {
+        // TODO
         if sender.isOn == true {
-            uiviewBackground.isHidden = false
+            if !Key.shared.userEmailVerified {
+                uiviewBackground.isHidden = false
+            }
         } else {
             uiviewBackground.isHidden = true
         }
@@ -304,6 +311,8 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
     
     @objc func showMainView(_ sender: UIImageView) {
         uiviewBackground.isHidden = true
+        let subscriptionCell = tblGeneral.cellForRow(at: IndexPath(row: 0, section: 3)) as! GeneralTitleCell
+        subscriptionCell.switchIcon.isOn = false
     }
     
     func showEmailAlert(_ sender: UIButton) {

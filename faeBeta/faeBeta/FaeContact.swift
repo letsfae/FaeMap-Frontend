@@ -109,6 +109,14 @@ class FaeContact {
         }
     }
     
+    func getBlockList(_ completion: @escaping (Int,Any?) -> Void) {
+        getFromURL("blocks", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?)
+            in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
     func followPerson(followeeId: String, _ completion: @escaping (Int, Any?) -> Void) {
         self.whereKey("followee_id", value: followeeId)
         postToURL("follows", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?)
