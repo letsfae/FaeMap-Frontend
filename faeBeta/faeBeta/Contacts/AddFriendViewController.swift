@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import Contacts
-import ContactsUI
+//import Contacts
+//import ContactsUI
 
 class AddFriendViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -16,7 +16,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     let recommendedFriendsArray: [Friends] = []
     let optionsImagesArray = [#imageLiteral(resourceName: "searchUsernamesIcon"), #imageLiteral(resourceName: "fromContactsIcon"), #imageLiteral(resourceName: "scanNearbyIcon"), #imageLiteral(resourceName: "shareUsernameIcon")]
     var tblOptions: UITableView!
-    var contactStore = CNContactStore()
+    //var contactStore = CNContactStore()
     var uiviewNavBar: FaeNavBar!
     var imgCity: UIImageView!
     var arrFriends = [Friends]()
@@ -103,7 +103,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
                 let vc = AddNearbyController()
                 self.navigationController?.pushViewController(vc, animated: true)
             } else {
-                let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username) https://www.xxx.com"], applicationActivities: nil)
+                let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username)"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 self.present(activityVC, animated: true, completion: nil)
             }
@@ -158,7 +158,8 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func getContacts() {
-        let entityType = CNEntityType.contacts
+        navigationController?.pushViewController(AddFromContactsController(), animated: true)
+        /*let entityType = CNEntityType.contacts
         let authStatus = CNContactStore.authorizationStatus(for: entityType)
 
         let vc = AddFromContactsController()
@@ -169,7 +170,8 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         } else if authStatus == .authorized {
             vc.boolAllowAccess = true
             self.navigationController?.pushViewController(vc, animated: true)
-        }
+        }*/
+        
     }
     
     func showAlert(title: String, message: String) {

@@ -372,13 +372,17 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     func updateRedDot() {
-        FaeContact().getFriendRequests() {(status: Int, message: Any?) in
+        /*FaeContact().getFriendRequests() {(status: Int, message: Any?) in
             let json = JSON(message!)
             if json.count > 0 {
                 let cell = self.tblLeftSlide.cellForRow(at: IndexPath(row: 2, section: 0)) as! LeftSlideWindowCell
                 cell.uiviewRedDot.isHidden = false
             }
-        }
+        }*/
+        let realm = try! Realm()
+        let requests = realm.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", FRIEND_REQUESTED_BY).count
+        let contactCell = tblLeftSlide.cellForRow(at: IndexPath(row: 2, section: 0)) as! LeftSlideWindowCell
+        contactCell.uiviewRedDot.isHidden = requests == 0
         if !Key.shared.userEmailVerified && !Key.shared.userPhoneVerified {
             let cell = tblLeftSlide.cellForRow(at: IndexPath(row: 5, section: 0)) as! LeftSlideWindowCell
             cell.uiviewRedDot.isHidden = false

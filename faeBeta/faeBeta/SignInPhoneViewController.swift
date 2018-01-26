@@ -77,31 +77,31 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     
     fileprivate func setupInterface() {
         // set up the title label
-        lblTitle = FaeLabel(CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60), .center, .medium, 20, UIColor._898989())
+        lblTitle = FaeLabel(CGRect(x: 30, y: 72 + device_offset_top, width: screenWidth - 60, height: 60), .center, .medium, 20, UIColor._898989())
         lblTitle.numberOfLines = 2
         lblTitle.center.x = screenWidth / 2
         lblTitle.adjustsFontSizeToFitWidth = true
-        self.view.addSubview(lblTitle)
+        view.addSubview(lblTitle)
         
         // set up the button of select area code
-        btnCountryCode = UIButton(frame: CGRect(x: 15, y: 170, width: screenWidth - 30, height: 30))
+        btnCountryCode = UIButton(frame: CGRect(x: 15, y: 170 + device_offset_top, width: screenWidth - 30, height: 30))
         btnCountryCode.addTarget(self, action: #selector(actionSelectCountry(_:)), for: .touchUpInside)
         setCountryName()
         view.addSubview(btnCountryCode)
         
         // set up the phone label
-        lblPhone = FaeLabel(CGRect(x: 15, y: 250, width: screenWidth - 30, height: 34), .center, .regular, 25, UIColor._155155155())
+        lblPhone = FaeLabel(CGRect(x: 15, y: 250 + device_offset_top, width: screenWidth - 30, height: 34), .center, .regular, 25, UIColor._155155155())
         lblPhone.text = "Phone Number"
         lblPhone.adjustsFontSizeToFitWidth = true
-        self.view.addSubview(lblPhone)
+        view.addSubview(lblPhone)
         
         // set up the "We could’t find an account linked \nwith this Phone Number!" label
-        lblCannotFind = FaeLabel(CGRect(x: 20, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 55, width: screenWidth - 40, height: 36), .center, .medium, 13, UIColor._2499090())
+        lblCannotFind = FaeLabel(CGRect(x: 20, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 55 - device_offset_bot, width: screenWidth - 40, height: 36), .center, .medium, 13, UIColor._2499090())
         lblCannotFind.numberOfLines = 0
         view.addSubview(lblCannotFind)
         
         // set up the send button
-        btnSendCode = UIButton(frame: CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnSendCode = UIButton(frame: CGRect(x: 57, y: screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnSendCode.center.x = screenWidth / 2
         btnSendCode.setTitleColor(.white, for: .normal)
         btnSendCode.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -112,7 +112,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         view.insertSubview(btnSendCode, at: 0)
         
         // setup the fake keyboard for numbers input
-        numberKeyboard = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor, width: screenWidth, height: 244 * screenHeightFactor))
+        numberKeyboard = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 244 * screenHeightFactor))
         view.addSubview(numberKeyboard)
         numberKeyboard.delegate = self
         numberKeyboard.numMode = "phoneNum"
