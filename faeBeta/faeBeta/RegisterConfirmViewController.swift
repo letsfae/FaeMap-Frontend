@@ -72,11 +72,11 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         lblTermsOfService.attributedText = attrAgreeString
         
         let btnTerm = UIButton(frame: CGRect(x: 0, y: 0, width: 140, height: 25))
-        btnTerm.center = CGPoint(x: screenWidth / 2 + 60, y: lblTermsOfService.frame.origin.y + 13)
+        btnTerm.frame.origin = CGPoint(x: screenWidth / 2 - 140, y: lblTermsOfService.frame.origin.y + 15)
         btnTerm.addTarget(self, action: #selector(self.termOfServiceButtonTapped(_:)), for: .touchUpInside)
         
         let btnPrivacyPolicy = UIButton(frame: CGRect(x: 0, y: 0, width: 110, height: 25))
-        btnPrivacyPolicy.center = CGPoint(x: screenWidth / 2 + 13, y: lblTermsOfService.frame.origin.y + 37)
+        btnPrivacyPolicy.frame.origin = CGPoint(x: screenWidth / 2 + 23, y: lblTermsOfService.frame.origin.y + 15)
         btnPrivacyPolicy.addTarget(self, action: #selector(self.privacyPolicyButtonTapped(_:)), for: .touchUpInside)
         
         view.addSubview(btnBack)
