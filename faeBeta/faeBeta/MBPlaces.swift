@@ -156,7 +156,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         var content = ""
         switch sender.tag {
         case 0:
-            content = "Restaurants"
+            content = "Restaurant"
             break
         case 1:
             content = "Bars"
@@ -195,6 +195,13 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
             break
         }
         getPlaceInfo(content: content)
+        
+        if catDict[content] == nil {
+            catDict[content] = 0
+        } else {
+            catDict[content] = catDict[content]! + 1;
+        }
+        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
     @objc func searchAllPlaces(_ sender: UIButton) {

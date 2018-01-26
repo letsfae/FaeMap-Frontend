@@ -42,7 +42,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var btnPlaces = [UIButton]()
     var lblPlaces = [UILabel]()
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
+    var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var strSearchedPlace: String! = ""
     var cellStatus = 0
     
@@ -331,13 +331,13 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     @objc func searchByCategories(_ sender: UIButton) {
-        // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
+        // tag = 0 - Restaurant - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
         // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
         // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
         var content = ""
         switch sender.tag {
         case 0:
-            content = "Restaurants"
+            content = "Restaurant"
             break
         case 1:
             content = "Bars"
@@ -358,8 +358,13 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             break
         }
         getPlaceInfo(content: content, source: "categories")
-        CatDict[content] = CatDict[content]! + 1;
-        FavCategoryCache.setObject(CatDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+
+        if catDict[content] == nil {
+            catDict[content] = 0
+        } else {
+            catDict[content] = catDict[content]! + 1;
+        }
+        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
 //        print(FavCategoryCache.object(forKey: Key.shared.user_id as AnyObject))
     }
 }

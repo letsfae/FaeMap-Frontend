@@ -78,6 +78,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         view.addSubview(uiviewLeftMargin)
         
         initPlaceRelatedData()
+        
+        let content = place.class_2
+        if catDict[content] == nil {
+            catDict[content] = 0
+        } else {
+            catDict[content] = catDict[content]! + 1;
+        }
+        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
     deinit {
