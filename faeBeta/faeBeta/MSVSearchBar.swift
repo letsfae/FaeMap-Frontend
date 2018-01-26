@@ -69,7 +69,10 @@ extension MapSearchViewController {
         // TODO VICKY 为什么造成crash?
         var filtered = categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
-        if filtered.count == 1 {
+        if filtered.count == 0 {
+            filteredCategory = []
+        } else
+            if filtered.count == 1 {
             filteredCategory = [filtered.popFirst()!]
         } else if filtered.count >= 2 {
             filteredCategory = [filtered.popFirst()!, filtered.popFirst()!]
@@ -125,6 +128,7 @@ extension MapSearchViewController {
         if searchBar == schPlaceBar {
             searchBar.txtSchField.resignFirstResponder()
             if searchBar.txtSchField.text == "" {
+                // TODO Vicky - 为空一直都是按搜索返回地图，不搜出任何东西，就是原本的地图主页效果，但是地图当前的view会根据第二行的地点
                 lookUpForCoordinate()
             } else {
                 delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: LocManager.shared.searchedLoc)

@@ -14,8 +14,8 @@ let faePlaceInfoCache = NSCache<AnyObject, AnyObject>()
 let placeInfoBarImageCache = NSCache<AnyObject, AnyObject>()
 let faeLocationCache = NSCache<AnyObject, AnyObject>()
 let faeLocationInfoCache = NSCache<AnyObject, AnyObject>()
-let FavCategoryCache = NSCache<AnyObject, AnyObject>()
-var CatDict: [String : Int] = ["Restaurants" : 0, "Bars" : 0, "Shopping" : 0, "Coffee" : 0, "Parks" : 0, "Hotels" : 0]
+let favCategoryCache = NSCache<AnyObject, AnyObject>()
+var catDict = [String : Int]()
 
 enum NavOpenMode {
     case mapFirst

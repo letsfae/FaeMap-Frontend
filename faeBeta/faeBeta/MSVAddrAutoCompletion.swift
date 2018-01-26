@@ -13,6 +13,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     // GMSLookUpPlaceForCoordinate
     func lookUpForCoordinate() {
+        print("lookUpForCoordinate")
         General.shared.lookUpForCoordinate { (place) in
             let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
             self.delegate?.jumpToLocation?(region: region)
