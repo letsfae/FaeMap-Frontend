@@ -44,7 +44,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var btnPlaces = [UIButton]()
     var lblPlaces = [UILabel]()
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames: [String] = ["Restaurants", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
+    var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var strSearchedPlace: String! = ""
     var strSearchedLocation: String! = ""
     var strPlaceholder: String! = ""
@@ -594,7 +594,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     @objc func searchByCategories(_ sender: UIButton) {
-        // tag = 0 - Restaurants - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
+        // tag = 0 - Restaurant - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
         // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
         // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
         var content = ""
@@ -614,6 +614,13 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         default: break
         }
         getPlaceInfo(content: content, source: "categories")
+        
+        if catDict[content] == nil {
+            catDict[content] = 0
+        } else {
+            catDict[content] = catDict[content]! + 1;
+        }
+        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
     // MARK: - GMSAutocompleteFilter
