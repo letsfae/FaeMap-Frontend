@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -277,14 +278,18 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             FaeUser.shared.setUserSettings { (status, message) in
                 guard status / 100 == 2 else { return }
             }
-        }
-        else if section == 3 { // TODO
-            uiviewBackground.isHidden = false
-            uiviewHidden.isHidden = true
-            uiviewAlert.isHidden = false
-            tag = 0
+        } else if section == 2 {
+            FaeContact().getBlockList({ (status, message) in
+                felixprint(status)
+            })
+        } else if section == 3 { // TODO
             //need to clear chat history later
-            clearCharHistory()
+            clearChatHistory() { success in
+                self.uiviewBackground.isHidden = false
+                self.uiviewHidden.isHidden = true
+                self.uiviewAlert.isHidden = false
+                self.tag = 0
+            }
         }
     }
     
@@ -316,8 +321,15 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
-    func clearCharHistory() {
-        
+    func clearChatHistory(completion: @escaping ((Bool) -> Void)) {
+        let realm = try! Realm()
+        let allMessages = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        let allRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        try! realm.write {
+            realm.delete(allMessages)
+            realm.delete(allRecents)
+        }
+        completion(true)
     }
     
     @objc func getintoNextClear(_ sender: UIButton) {
