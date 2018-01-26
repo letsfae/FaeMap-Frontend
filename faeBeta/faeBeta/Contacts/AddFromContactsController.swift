@@ -52,9 +52,34 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         loadNavBar()
         definesPresentationContext = true
         view.backgroundColor = .white
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .restricted, .notDetermined:
+            contactStore.requestAccess(for: .contacts, completionHandler: { (success, _) in
+                if success {
+                    self.boolAllowAccess = true
+                    DispatchQueue.main.async {
+                        self.setup()
+                    }
+                } else {
+                    self.boolAllowAccess = false
+                    DispatchQueue.main.async {
+                        self.setup()
+                    }
+                }
+            })
+        case .authorized:
+            boolAllowAccess = true
+            setup()
+        case .denied:
+            boolAllowAccess = false
+            setup()
+        }
+    }
+    
+    func setup() {
         loadSearchTable()
         loadNotAllowedView()
-        self.showView()
+        showView()
         linkPhoneNumber()
     }
     
@@ -109,6 +134,7 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         schbarFromContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
         schbarFromContacts.txtSchField.placeholder = "Search Contacts"
         schbarFromContacts.delegate = self
+        uiviewSchbar.layer.zPosition = 1
         uiviewSchbar.addSubview(schbarFromContacts)
 
         let topLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 1))
@@ -119,12 +145,13 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         let bottomLine = UIView(frame: CGRect(x: 0, y: 49, width: screenWidth, height: 1))
         bottomLine.layer.borderWidth = 1
         bottomLine.layer.borderColor = UIColor._200199204cg()
+        bottomLine.layer.zPosition = 1
         uiviewSchbar.addSubview(bottomLine)
         
         view.addSubview(uiviewSchbar)
 
         tblFromContacts = UITableView()
-        tblFromContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 50 - device_offset_top)
+        tblFromContacts.frame = CGRect(x: 0, y: 113 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 50 - device_offset_top)
         tblFromContacts.dataSource = self
         tblFromContacts.delegate = self
         let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
@@ -185,11 +212,12 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
             return cell
         }
         else {
+            let unregistered = schbarFromContacts.txtSchField.text != "" ? filteredUnregistered[indexPath.row] : arrUnregistered[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeInviteCell", for: indexPath) as! FaeInviteCell
             cell.indexPath = indexPath
             cell.delegate = self
-            cell.lblName.text = arrUnregistered[indexPath.row].displayName
-            cell.lblTel.text = arrUnregistered[indexPath.row].userName
+            cell.lblName.text = unregistered.displayName
+            cell.lblTel.text = unregistered.userName
             cell.btnInvite.isSelected = selectedIdx.contains(indexPath)
             return cell
         }
@@ -203,6 +231,9 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView.numberOfRows(inSection: section) == 0 {
+            return 0
+        }
         return 25
     }
     
@@ -212,9 +243,9 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
-        if schbarFromContacts.txtSchField.text != "" && filteredRegistered.count == 0 {
+        /*if schbarFromContacts.txtSchField.text != "" && filteredRegistered.count == 0 {
             return headerView
-        }
+        }*/
         headerView.backgroundColor = UIColor._248248248()
         if section != 0 {
             let borderTop = UIView()

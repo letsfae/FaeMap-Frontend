@@ -60,7 +60,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
     }
     
     fileprivate func loadNavBar() {
-        let uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        let uiviewNavBar = UIView(frame: CGRect(x: 0, y: device_offset_top, width: screenWidth, height: 65))
         view.addSubview(uiviewNavBar)
         
         let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
@@ -88,7 +88,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
     }
 
     fileprivate func loadSearchBar() {
-        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 49))
+        let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         view.addSubview(uiviewSchbar)
         
         schbarCountryCode = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
@@ -103,7 +103,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
     }
     
     fileprivate func loadTable() {
-        tblCountryCode = UITableView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114), style: .plain)
+        tblCountryCode = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top), style: .plain)
         view.addSubview(tblCountryCode)
         tblCountryCode.backgroundColor = .white
         tblCountryCode.register(CountryCodeCell.self, forCellReuseIdentifier: "CountryCodeCell")

@@ -120,7 +120,7 @@ extension ContactsViewController {
         
         lblBottom.attributedText = attributedStr2
         
-        imgDot.isHidden = countRequests == 0
+        imgDot.isHidden = arrRealmReceivedRequests.count == 0
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
@@ -169,7 +169,7 @@ extension ContactsViewController {
         vc.arrReceivedRequests = arrReceivedRequests
         vc.arrRequested = arrRequested
         self.navigationController?.pushViewController(vc, animated: true)
-        getContacts()
+        //getContacts()
     }
     
     fileprivate func getContacts() {
