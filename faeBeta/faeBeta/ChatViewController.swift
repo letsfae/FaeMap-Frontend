@@ -27,7 +27,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
         if let current = playingAudio {
             if current != audioMediaItem {
-                current.finishPlaying()
+               current.finishPlaying()
             }
         }
         playingAudio = audioMediaItem
@@ -781,7 +781,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            sendMeaages_v2(type: "[Video]", text: "[\"\(seconds)\"]", media: data)
+            sendMeaages_v2(type: "[Video]", text: "\(seconds)", media: data)
         default: break
         }
         

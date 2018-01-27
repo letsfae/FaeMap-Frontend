@@ -84,7 +84,7 @@ class SignInEmailViewController: UIViewController {
     
     fileprivate func setupInterface() {
         // set up the title label
-        lblTitle = UILabel(frame: CGRect(x: 30, y: 72, width: screenWidth - 60, height: 60))
+        lblTitle = UILabel(frame: CGRect(x: 30, y: 72 + device_offset_top, width: screenWidth - 60, height: 60))
         lblTitle.numberOfLines = 2
         lblTitle.text = "Enter your Email\nto Reset Password"
         lblTitle.textColor = UIColor._898989()
@@ -95,7 +95,7 @@ class SignInEmailViewController: UIViewController {
         self.view.addSubview(lblTitle)
         
         // set up the email/username text field
-        txtEmail = FAETextField(frame: CGRect(x: 15, y: 171, width: screenWidth - 30, height: 30))
+        txtEmail = FAETextField(frame: CGRect(x: 15, y: 171 + device_offset_top, width: screenWidth - 30, height: 30))
         txtEmail.placeholder = "Email Address"
         txtEmail.adjustsFontSizeToFitWidth = true
 //        if enterMode == .signInSupport {
@@ -104,7 +104,7 @@ class SignInEmailViewController: UIViewController {
         self.view.addSubview(txtEmail)
         
         // set up the "We can’t find an account with this Email!" label
-        btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67 , width: screenWidth - 175, height: 18))
+        btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67  - device_offset_bot, width: screenWidth - 175, height: 18))
         btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
         btnInfo.contentHorizontalAlignment = .center
         btnInfo.sizeToFit()
@@ -113,7 +113,7 @@ class SignInEmailViewController: UIViewController {
         self.view.addSubview(btnInfo)
         
         // set up the send button
-        btnSendCode = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
+        btnSendCode = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
         btnSendCode.center.x = screenWidth / 2
         btnSendCode.setTitleColor(.white, for: .normal)
         btnSendCode.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
@@ -193,8 +193,8 @@ class SignInEmailViewController: UIViewController {
             return
         }
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
-            self.btnSendCode.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
-            self.btnInfo.frame.origin.y = screenHeight - 50 * screenHeightFactor - 67
+            self.btnSendCode.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot
+            self.btnInfo.frame.origin.y = screenHeight - 50 * screenHeightFactor - 67 - device_offset_bot
         })
     }
     
