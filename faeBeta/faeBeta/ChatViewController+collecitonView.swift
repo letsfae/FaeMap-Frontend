@@ -176,9 +176,12 @@ extension ChatViewController {
         floatContentOffsetY = collectionView.contentOffset.y
         let message = arrRealmMessages[indexPath.row]
         if ["[Picture]", "[Gif]"].contains(message.type) {
-            let photo = IDMPhoto.photos(withImages: [UIImage(data: message.media! as Data)!])
-            let browser = IDMPhotoBrowser(photos: photo)
-            present(browser!, animated: true, completion: nil)
+            let messageJSQ = arrJSQMessages[indexPath.row]
+            if let mediaItem = messageJSQ.media as? JSQPhotoMediaItemCustom {
+                let photo = IDMPhoto.photos(withImages: [mediaItem.image])
+                let browser = IDMPhotoBrowser(photos: photo)
+                present(browser!, animated: true, completion: nil)
+            }
         }
         if message.type == "[Video]" {
             let messageJSQ = arrJSQMessages[indexPath.row]
