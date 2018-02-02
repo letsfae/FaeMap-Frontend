@@ -66,8 +66,13 @@ class IncomingMessage {
     }
     
     fileprivate func pictureJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
-        let imgPic = UIImage(data: realmMessage.media! as Data)
-        let mediaItem = JSQPhotoMediaItemCustom(image: imgPic)
+        var imgMedia: UIImage!
+        if realmMessage.type == "[Gif]" {
+            imgMedia = UIImage.gif(data: realmMessage.media! as Data)
+        } else {
+            imgMedia = UIImage(data: realmMessage.media! as Data)
+        }
+        let mediaItem = JSQPhotoMediaItemCustom(image: imgMedia)
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         

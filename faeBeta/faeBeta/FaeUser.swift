@@ -88,6 +88,7 @@ class FaeUser: NSObject {
                     let userInfoJSON = JSON(userInfo)
                     Key.shared.userEmail = userInfoJSON["email"].stringValue
                     Key.shared.username = userInfoJSON["user_name"].stringValue
+                    Key.shared.nickname = userInfoJSON["nick_name"].stringValue
                     Key.shared.userFirstname = userInfoJSON["first_name"].stringValue
                     Key.shared.userLastname = userInfoJSON["last_name"].stringValue
                     let gender = userInfoJSON["gender"].stringValue
@@ -98,12 +99,13 @@ class FaeUser: NSObject {
                     }
                     Key.shared.userBirthday = userInfoJSON["birthday"].stringValue
                     Key.shared.userPhoneNumber = userInfoJSON["phone"].stringValue
-                    FaeUser().getSelfNamecard { (status: Int, message: Any?) in
+                    /*FaeUser().getSelfNamecard { (status: Int, message: Any?) in
                         guard status / 100 == 2 else { return }
                         let nickNameInfo = JSON(message!)
                         Key.shared.nickname = nickNameInfo["nick_name"].stringValue
                         FaeCoreData.shared.getAccountStorage()
-                    }
+                    }*/
+                    FaeCoreData.shared.getAccountStorage()
                 }
             } else {
                 
