@@ -594,6 +594,7 @@ class ColListDetailHeader: UITableViewCell {
             newDesp.append(NSAttributedString(string: "Read More", attributes: moreAttr))
             lblDesp.attributedText = newDesp
             lblDesp.numberOfLines = 3
+            uiviewReadMore.isHidden = false
         }
     }
 
