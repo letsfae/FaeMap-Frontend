@@ -100,7 +100,7 @@ class IncomingMessage {
         } catch {
             // fail to get snap image
         }
-        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(duration)!, isReadyToPlay: true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(Double(duration)!), isReadyToPlay: true)
          mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }
