@@ -186,13 +186,34 @@ extension ChatViewController: OutgoingMessageProtocol {
     func fakeCompletion() {}
     // ENDBryan
     
+    func sendMediaMessage(with faePHAssets: [FaePHAsset]) {
+        for faePHAsset in faePHAssets {
+            switch faePHAsset.assetType {
+            case .photo:
+                if faePHAsset.fileFormat() == .gif {
+                    sendMeaages_v2(type: "[Gif]", text: "[Gif]", media: faePHAsset.fullResolutionImageData!)
+                } else {
+                    sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: faePHAsset.fullResolutionImageData!)
+                }
+            case .video:
+                _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
+                    if let data = try? Data(contentsOf: url) {
+                        self.sendMeaages_v2(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", media: data)
+                    }
+                })
+                break
+            default: break
+            }
+        }
+    }
+    
     // send image delegate function
     func sendImages(_ images: [UIImage]) {
         for i in 0 ..< images.count {
             //self.sendMessage(picture: images[i], date: Date())
             sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(images[i]))
         }
-        self.toolbarContentView.cleanUpSelectedPhotos()
+        //self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     func sendStickerWithImageName(_ name: String) {
@@ -424,7 +445,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         //imageData = UIImageJPEGRepresentation(snapImage, factor)
         //sendMessage(video: video, videoDuration: duration, snapImage: imageData, date: Date())
         sendMeaages_v2(type: "[Video]", text: "\(duration)", media: video)
-        self.toolbarContentView.cleanUpSelectedPhotos()
+        //self.toolbarContentView.cleanUpSelectedPhotos()
     }
     
     // MARK: outgoingmessage delegate
