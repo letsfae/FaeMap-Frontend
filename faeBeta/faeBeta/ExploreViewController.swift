@@ -64,6 +64,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadAvatarWave()
         DispatchQueue.main.async {
             self.loadContent()
+            self.reloadBottomText("Loading...", "")
             self.coordinate = LocManager.shared.curtLoc.coordinate
             if Key.shared.selectedTypeIdx == nil {
                 self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
@@ -87,6 +88,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadWaves()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     deinit {

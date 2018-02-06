@@ -132,7 +132,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 vc.place = selectedPlace
                 navigationController?.pushViewController(vc, animated: false)
             } else {  // search categories
-                let cell = tableView.cellForRow(at: indexPath) as! CategoryListCell
+                //let cell = tableView.cellForRow(at: indexPath) as! CategoryListCell
                 let selectedCat = filteredCategory[indexPath.row].key
                 getPlaceInfo(content: selectedCat, source: "categories")
             }

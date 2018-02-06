@@ -133,8 +133,12 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
+        var y_offset = (screenHeight - keyboardFrame.height)
+        y_offset += -self.btnSend.frame.origin.y
+        y_offset +=  -50 * screenHeightFactor - 14
+        
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.btnSend.frame.origin.y += (screenHeight - keyboardFrame.height) - self.btnSend.frame.origin.y - 50 * screenHeightFactor - 14
+            self.btnSend.frame.origin.y += y_offset
         })
     }
     

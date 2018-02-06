@@ -152,8 +152,7 @@ class RegisterPhoneViewController: RegisterBaseViewController {
     }
     
     func setupBtmBtn() {
-        
-        uiviewBottom.frame = CGRect(x: 0, y: screenHeight - 18 - uiviewAtBottom.frame.size.height - 30 - 50 * screenHeightFactor - 244 * screenHeightFactor, width: screenWidth, height: uiviewAtBottom.frame.size.height + 50 * screenHeightFactor + 30 + 18)
+        uiviewBottom.frame = CGRect(x: 0, y: screenHeight - 48 - uiviewAtBottom.frame.size.height - 294 * screenHeightFactor, width: screenWidth, height: uiviewAtBottom.frame.size.height + 50 * screenHeightFactor + 48)
         btnContinue.setTitle("Vevify", for: UIControlState())
     }
     

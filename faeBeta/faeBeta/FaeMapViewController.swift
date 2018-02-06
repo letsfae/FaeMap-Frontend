@@ -511,17 +511,30 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func removePlaceUserPins(_ placeComp: (() -> ())? = nil, _ userComp: (() -> ())? = nil) {
-        removePlacePins {
+        removePlacePins({
             placeComp?()
-        }
+        }, otherThan: self.selectedPlace)
         removeUserPins {
             userComp?()
         }
     }
     
-    func removePlacePins(_ completion: (() -> ())? = nil) {
+    func removePlacePins(_ completion: (() -> ())? = nil, otherThan pin: FaePinAnnotation? = nil) {
         //let placesNeedToRemove = faePlacePins.filter({ $0 != selectedPlace })
+        
+        if pin != nil {
+            for i in 0..<faePlacePins.count {
+                if faePlacePins[i] == pin {
+                    faePlacePins.remove(at: i)
+                    break
+                }
+            }
+        }
+        
+        placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(faePlacePins) {
+            print("[set count]", self.placeClusterManager.annotations.count)
+            self.placeClusterManager.isForcedRefresh = false
             completion?()
         }
     }

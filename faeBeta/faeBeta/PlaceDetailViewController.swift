@@ -271,7 +271,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208))
         uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
         uiviewScrollingPhotos.viewCtrler = self
         tblPlaceDetail.addSubview(uiviewScrollingPhotos)

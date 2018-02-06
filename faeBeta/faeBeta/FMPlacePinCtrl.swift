@@ -289,9 +289,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 anView.boolShowSavedNoti = true
             }
         }
-        uiviewPlaceBar.show()
-        uiviewPlaceBar.resetSubviews()
-        uiviewPlaceBar.tag = 1
+        if modeExplore != .on {
+            uiviewPlaceBar.show()
+            uiviewPlaceBar.resetSubviews()
+            uiviewPlaceBar.tag = 1
+        }
         mapView(faeMapView, regionDidChangeAnimated: false)
         if swipingState == .map {
             uiviewPlaceBar.loadingData(current: cluster)

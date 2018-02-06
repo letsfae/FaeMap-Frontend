@@ -102,6 +102,8 @@
         
         _isUserPinController = NO;
         
+        _isForcedRefresh = NO;
+        
         MKCoordinateRegion region = mapView.region;
         _previousZoomLevel = CCHMapClusterControllerZoomLevelForRegion(region.center.longitude, region.span.longitudeDelta, self.mapView.bounds.size.width);
     }
@@ -195,6 +197,7 @@
     operation.clusterControllerDelegate = self.delegate;
     operation.clusterController = self;
     operation.isUserPin = self.isUserPinController;
+    operation.isForcedRefresh = self.isForcedRefresh;
     BOOL hasZoomed = !fequal(self.mapView.region.span.longitudeDelta, self.regionSpanBeforeChange.longitudeDelta);
     if (hasZoomed && self.mapView.region.span.longitudeDelta < self.regionSpanBeforeChange.longitudeDelta) {
         operation.isZoomIn = YES;

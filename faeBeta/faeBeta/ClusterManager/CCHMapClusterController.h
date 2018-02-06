@@ -76,6 +76,8 @@
 
 @property (nonatomic) BOOL isUserPinController;
 
+@property (nonatomic) BOOL isForcedRefresh;
+
 /**
  Initializes the cluster controller.
  @param mapView `MKMapView` to use to display clusters.

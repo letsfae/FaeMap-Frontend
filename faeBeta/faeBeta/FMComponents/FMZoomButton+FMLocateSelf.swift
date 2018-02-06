@@ -45,8 +45,10 @@ class FMZoomButton: UIButton {
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             smallMode()
-            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+            if Key.shared.autoCycle {
+                Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+                Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+            }
             Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
             Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
         } else if sender.state == .changed {
