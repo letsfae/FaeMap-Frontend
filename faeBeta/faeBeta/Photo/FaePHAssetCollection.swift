@@ -42,8 +42,8 @@ struct FaePHAsset {
     
     var originalFileName: String? {
         get {
-            guard let phAsset = self.phAsset, let resource = PHAssetResource.assetResources(for: phAsset).first else { return nil }
-            return resource.originalFilename
+            guard let phAsset = self.phAsset, let fileName = phAsset.value(forKey: "filename") as? String else { return nil }
+            return fileName
         }
     }
     
@@ -73,22 +73,37 @@ struct FaePHAsset {
         return format
     }
     
-    func cloudImageDownload(progress: @escaping (Double) -> Void, completion: @escaping (UIImage?) -> Void) -> PHImageRequestID? {
+    func cloudImageDownload(progress: @escaping (Double) -> Void, completion: @escaping (Data?) -> Void) -> PHImageRequestID? {
         guard let phAsset = self.phAsset else { return nil }
         let options = PHImageRequestOptions()
-        options.isSynchronous = false
+        options.isSynchronous = true
         options.isNetworkAccessAllowed = true
         options.deliveryMode = .highQualityFormat
         options.version = .current
-        options.resizeMode = .exact
+        options.resizeMode = .none
         options.progressHandler = { (progressHandler, error, stop, info) in
             progress(progressHandler)
         }
-        let requestId = PHCachingImageManager().requestImage(for: phAsset, targetSize: CGSize(width: phAsset.pixelWidth, height: phAsset.pixelHeight), contentMode: .aspectFill, options: options) { (image, info) in
-            if let image = image, let _ = info {
-                completion(image)
-            } else {
-                completion(nil) // error
+        
+        var requestId: PHImageRequestID?
+        if self.fileFormat() == .gif {
+            requestId = PHCachingImageManager().requestImageData(for: phAsset, options: options) { (imageData, dataUTI, orientation, info) in
+                if let data = imageData,let _ = info {
+                    completion(data)
+                }else{
+                    completion(nil)//error
+                }
+            }
+        } else {
+            requestId = PHCachingImageManager().requestImage(for: phAsset, targetSize: CGSize(width: phAsset.pixelWidth, height: phAsset.pixelHeight), contentMode: .aspectFill, options: options) { (image, info) in
+                if let image = image, let _ = info {
+                    var imageData = UIImageJPEGRepresentation(image, 1)
+                    let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+                    imageData = UIImageJPEGRepresentation(image, factor)
+                    completion(imageData)
+                } else {
+                    completion(nil) // error
+                }
             }
         }
         return requestId

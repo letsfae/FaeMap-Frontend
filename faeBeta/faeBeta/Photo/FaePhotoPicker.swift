@@ -29,9 +29,11 @@ class FaePhotoPicker: UIView {
     var selectedAssets = [FaePHAsset]() {
         didSet {
             if boolSingleSelection { return }
-            btnRight?.isEnabled = (selectedAssets.count > 0)
-            let attributedText = NSAttributedString(string: strRightBtnTitle, attributes: [NSAttributedStringKey.foregroundColor: selectedAssets.count > 0 ? UIColor._2499090() : UIColor._255160160(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
-            btnRight?.setAttributedTitle(attributedText, for: UIControlState())
+            DispatchQueue.main.async {
+                self.btnRight?.isEnabled = (self.selectedAssets.count > 0)
+                let attributedText = NSAttributedString(string: self.strRightBtnTitle, attributes: [NSAttributedStringKey.foregroundColor: self.selectedAssets.count > 0 ? UIColor._2499090() : UIColor._255160160(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!])
+                self.btnRight?.setAttributedTitle(attributedText, for: UIControlState())
+            }
         }
     }
     var collections = [FaePHAssetCollection]()

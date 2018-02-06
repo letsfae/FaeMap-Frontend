@@ -190,11 +190,32 @@ extension ChatViewController: OutgoingMessageProtocol {
         for faePHAsset in faePHAssets {
             switch faePHAsset.assetType {
             case .photo:
+                var messageType = ""
                 if faePHAsset.fileFormat() == .gif {
-                    sendMeaages_v2(type: "[Gif]", text: "[Gif]", media: faePHAsset.fullResolutionImageData!)
+                    messageType = "[Gif]"
                 } else {
-                    sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: faePHAsset.fullResolutionImageData!)
+                    messageType = "[Picture]"
                 }
+                //if let data = faePHAsset.fullResolutionImageData {
+                    //sendMeaages_v2(type: messageType, text: messageType, media: data)
+                //} else {
+                    
+                    var asset = faePHAsset
+                    if asset.state != .complete {
+                        asset.state = .ready
+                        _ = asset.cloudImageDownload(progress: { (_) in
+                            if asset.state == .ready {
+                                asset.state = .progress
+                            }
+                        }, completion: { [weak self] (data) in
+                            guard let `self` = self else { return }
+                            asset.state = .complete
+                            DispatchQueue.main.async {
+                                self.sendMeaages_v2(type: messageType, text: messageType, media: data)
+                            }
+                        })
+                    }
+                //}
             case .video:
                 _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
                     if let data = try? Data(contentsOf: url) {
