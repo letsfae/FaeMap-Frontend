@@ -22,10 +22,6 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     var btnCollection: UIButton!
     var btnOptions: UIButton!
     
-    var switchRefresh: UISwitch!
-    var switchCyclePins: UISwitch!
-    var switchHideAvatars: UISwitch!
-    
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var old_origin_y: CGFloat = 0 // Pan gesture var
@@ -415,18 +411,18 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == tblOptions {
             let cell = tableView.cellForRow(at: indexPath) as! DropUpMenuOptionsCell
-            cell.switchButton.setOn(!cell.switchButton.isOn, animated: true)
             vibrate(type: 4)
             switch indexPath.row {
             case 0:
-                switchAutoRefresh(cell.switchButton)
+                delegate?.autoReresh?(isOn: !cell.switchButton.isOn)
             case 1:
-                switchAutoCyclePins(cell.switchButton)
+                delegate?.autoCyclePins?(isOn: !cell.switchButton.isOn)
             case 2:
-                switchHideAvatars(cell.switchButton)
+                delegate?.hideAvatars?(isOn: !cell.switchButton.isOn)
             default:
                 break
             }
+            cell.switchButton.setOn(!cell.switchButton.isOn, animated: true)
             return
         }
         if let idxPath = selectedIndexPath {
@@ -545,21 +541,6 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             sizeFrom = screenHeight
             sizeTo = screenHeight - self.frame.size.height - device_offset_bot_main
         }
-    }
-    
-    @objc func switchAutoRefresh(_ sender: UISwitch) {
-        //lblRefresh.textColor = switchRefresh.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.autoReresh?(isOn: sender.isOn)
-    }
-    
-    @objc func switchAutoCyclePins(_ sender: UISwitch) {
-        //lblCyclePins.textColor = switchCyclePins.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.autoCyclePins?(isOn: sender.isOn)
-    }
-    
-    @objc func switchHideAvatars(_ sender: UISwitch) {
-        //lblHideAvatars.textColor = switchHideAvatars.isOn ? UIColor._115115115() : UIColor._146146146()
-        delegate?.hideAvatars?(isOn: sender.isOn)
     }
     
     @objc func actionMapActions(_ sender: UIButton) {
@@ -697,8 +678,7 @@ class DropUpMenuOptionsCell: UITableViewCell {
         switchButton = UISwitch()
         switchButton.onTintColor = UIColor._2499090()
         switchButton.transform = CGAffineTransform(scaleX: 39 / 51, y: 23 / 31)
-//        switchButton.addTarget(self, action: #selector(self.switchAutoRefresh(_:)), for: .valueChanged)
-        switchButton.isOn = Key.shared.autoRefresh
+        switchButton.isUserInteractionEnabled = false
         addSubview(switchButton)
         addConstraintsWithFormat("H:[v0(39)]-20-|", options: [], views: switchButton)
         addConstraintsWithFormat("V:|-18-[v0(23)]", options: [], views: switchButton)

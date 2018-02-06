@@ -44,6 +44,10 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         removePlaceUserPins({
             self.faePlacePins.removeAll(keepingCapacity: true)
             self.setPlacePins.removeAll(keepingCapacity: true)
+            if self.selectedPlace != nil {
+                self.faePlacePins.append(self.selectedPlace!)
+                self.setPlacePins.insert(self.selectedPlace!.id)
+            }
             self.updatePlacePins()
         }) {
             self.faeUserPins.removeAll(keepingCapacity: true)
@@ -72,6 +76,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     func autoCyclePins(isOn: Bool) {
         AUTO_CIRCLE_PINS = isOn
         placeClusterManager.canUpdate = isOn
+        joshprint("[autoCyclePins]", placeClusterManager.canUpdate)
         Key.shared.autoCycle = isOn
         FaeCoreData.shared.save("autoCycle", value: isOn)
     }

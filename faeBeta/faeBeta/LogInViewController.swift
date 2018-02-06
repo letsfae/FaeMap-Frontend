@@ -248,9 +248,19 @@ class LogInViewController: UIViewController {
         }
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        
+        var y_offset_0 = (screenHeight - frameKeyboard.height)
+        y_offset_0 += -self.btnLogin.frame.origin.y
+        y_offset_0 +=  -50 * screenHeightFactor - 14
+        var y_offset_1 = (screenHeight - frameKeyboard.height)
+        y_offset_1 += -self.btnSupport.frame.origin.y
+        y_offset_1 += -50 * screenHeightFactor - 14 - 22 - 19
+        
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.btnLogin.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnLogin.frame.origin.y - 50 * screenHeightFactor - 14
-            self.btnSupport.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnSupport.frame.origin.y - 50 * screenHeightFactor - 14 - 22 - 19
+//            self.btnLogin.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnLogin.frame.origin.y - 50 * screenHeightFactor - 14
+//            self.btnSupport.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnSupport.frame.origin.y - 50 * screenHeightFactor - 14 - 22 - 19
+            self.btnLogin.frame.origin.y += y_offset_0
+            self.btnSupport.frame.origin.y += y_offset_1
             self.lblLoginResult.alpha = 0
         })
     }

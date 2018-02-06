@@ -414,6 +414,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                 self.boolOptionsOpened = false
             }
             completionHandler()
+            Key.shared.FMVCtrler?.boolCanUpdateUsers = true
         })
         guard self.uiviewBackground != nil else { return }
         UIView.animate(withDuration: 0.5, animations: {

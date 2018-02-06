@@ -182,9 +182,16 @@ class SignInEmailViewController: UIViewController {
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
+        var y_offset_0 = (screenHeight - frameKeyboard.height)
+        y_offset_0 += -self.btnSendCode.frame.origin.y
+        y_offset_0 +=  -50 * screenHeightFactor - 14
+        var y_offset_1 = (screenHeight - frameKeyboard.height)
+        y_offset_1 += -self.btnInfo.frame.origin.y
+        y_offset_1 += -50 * screenHeightFactor - 14 - 18 - 19
+        
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
-            self.btnSendCode.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnSendCode.frame.origin.y - 50 * screenHeightFactor - 14
-            self.btnInfo.frame.origin.y += (screenHeight - frameKeyboard.height) - self.btnInfo.frame.origin.y - 50 * screenHeightFactor - 14 - 18 - 19
+            self.btnSendCode.frame.origin.y += y_offset_0
+            self.btnInfo.frame.origin.y += y_offset_1
         })
     }
     
