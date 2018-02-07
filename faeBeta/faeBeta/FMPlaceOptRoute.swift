@@ -128,6 +128,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     func showRouteCalculatorComponents(distance: CLLocationDistance) {
         
+        if modeExplore == .on {
+            btnZoom.alpha = 1
+            btnLocateSelf.alpha = 1
+            clctViewMap.alpha = 0
+        }
+        
         mapMode = .routing
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
         
@@ -143,7 +149,23 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     // FMRouteCalculateDelegate
     func hideRouteCalculatorComponents() {
-        mapMode = .normal
+        if modeExplore == .on {
+            mapMode = .explore
+            modeExplore = .on
+            clctViewMap.alpha = 1
+            btnZoom.alpha = 0
+            btnLocateSelf.alpha = 0
+        } else {
+            mapMode = .normal
+            HIDE_AVATARS = Key.shared.hideAvatars
+            PLACE_ENABLE = true
+            faeMapView.removeAnnotations(addressAnnotations)
+            locationPinClusterManager.removeAnnotations(tempFaePins) {
+                self.reAddUserPins()
+                self.reAddPlacePins()
+                self.deselectAllLocations()
+            }
+        }
         
         if routingMode == .fromPinDetail {
             routingMode = .fromMap
@@ -157,15 +179,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.hide()
         btnZoom.tapToSmallMode()
         animateMainItems(show: false)
-        faeMapView.removeAnnotations(addressAnnotations)
-        locationPinClusterManager.removeAnnotations(tempFaePins) {
-            self.reAddUserPins()
-            self.reAddPlacePins()
-            self.deselectAllLocations()
-        }
+        
         deselectAllAnnotations()
-        HIDE_AVATARS = Key.shared.hideAvatars
-        PLACE_ENABLE = true
+        
     }
     
     func animateMainItems(show: Bool, animated: Bool = true) {

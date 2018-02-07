@@ -14,7 +14,7 @@ protocol ExploreDelegate: class {
     func jumpToExpPlacesCollection(places: [PlacePin], category: String)
 }
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, ExploreCategorySearch, EXPCellDelegate {
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, EXPCellDelegate {
     
     weak var delegate: ExploreDelegate?
     
@@ -31,9 +31,16 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     var intCurtPage = 0
     
-    // var testTypes: [String] = ["Random", "Airport", "Antique Shop", "Arcade", "Art Gallery", "Arts & Crafts Store", "Athletics & Sports", "BBQ Joint", "Bagel Shop", "Bakery", "Bars", "Baseball Stadium", "Beach", "Beer Store", "Brewery", "Buffet", "Building", "Burger Joint", "Burrito Place", "Business Service", "Canal", "Candy Store", "Coffee Shop", "College Bookstore", "College Classroom", "Concert Hall", "Construction & Landscaping", "Convenience Store", "Cosmetics Shop", "Deli / Bodega", "Dessert Shop", "Diner", "Donut Shop", "Farmers Market", "Food Court", "Food Truck", "Fried Chicken Joint", "Frozen Yogurt Shop", "Furniture / Home Store", "Garden", "Gift Shop", "Gourmet Shop", "Grocery Store", "Health & Beauty Service", "Hot Dog Joint", "Ice Cream Shop", "Juice Bar", "Lake", "Library", "Light Rail Station", "Liquor Store", "Market", "Massage Studio", "Metro Station", "Moving Target", "Museum", "Music Store", "Music Venue", "Noodle House", "Organic Grocery", "Outdoor Sculpture", "Paper / Office Supplies Store", "Performing Arts Venue", "Pet Store", "Pharmacy", "Photography Studio", "Pizza Place", "Playground", "Plaza", "Rental Car Location", "Restaurant", "Salad Place", "Sandwich Place", "Scenic Lookout", "Shopping", "Skate Park", "Smoke Shop", "Snack Place", "Spa", "Sporting Goods Shop", "Steakhouse", "Street Food Gathering", "Supermarket", "Taco Place", "Theme Park", "Trail", "Wine Shop"]
+    var categories: [String] = ["Random", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
+    var categoryState: [String: CategoryState] = ["Random": .initial, "Food": .initial, "Drinks": .initial, "Shopping": .initial, "Outdoors": .initial, "Recreation": .initial]
     
-    var testTypes: [String] = ["Random", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
+    // Six Types Categories
+    var arrRandom = [PlacePin]()
+    var arrFood = [PlacePin]()
+    var arrDrinks = [PlacePin]()
+    var arrShopping = [PlacePin]()
+    var arrOutdoors = [PlacePin]()
+    var arrRecreation = [PlacePin]()
     
     var uiviewAvatarWaveSub: UIView!
     var imgAvatar: FaeAvatarView!
@@ -47,14 +54,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var uiviewAfterAdded: AfterAddedToListView!
     var arrListSavedThisPin = [Int]()
     
-    var arrPlaceData = [PlacePin]()
-    
     var fullyLoaded = false
-    
     var coordinate: CLLocationCoordinate2D!
-    
     var strLocation: String = ""
-    
     var lblNoResults: FaeLabel!
     
     override func viewDidLoad() {
@@ -66,11 +68,12 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.loadContent()
             self.reloadBottomText("Loading...", "")
             self.coordinate = LocManager.shared.curtLoc.coordinate
-            if Key.shared.selectedTypeIdx == nil {
-                self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
-            } else {
-                self.search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
-            }
+            self.searchAllCategories()
+//            if Key.shared.selectedTypeIdx == nil {
+//                self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
+//            } else {
+//                self.search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+//            }
             self.fullyLoaded = true
             General.shared.getAddress(location: LocManager.shared.curtLoc, original: false, full: false, detach: true) { (address) in
                 if let addr = address as? String {
@@ -116,58 +119,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         btnGoRight.isEnabled = on
         lblBottomLocation.isUserInteractionEnabled = on
         clctViewTypes.isUserInteractionEnabled = on
-    }
-    
-    func loadPlaces(center: CLLocationCoordinate2D) {
-        
-        func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
-            var tempRaw = arrRaw
-            var arrResult = [PlacePin]()
-            let count = arrRaw.count < 20 ? arrRaw.count : 20
-            for _ in 0..<count {
-                let random: Int = Int(arc4random_uniform(UInt32(tempRaw.count)))
-                arrResult.append(tempRaw[random])
-                tempRaw.remove(at: random)
-            }
-            return arrResult
-        }
-        buttonEnable(on: false)
-        // use uiview.tag as a Bool like value to indicate whether we should
-        // animate the alpha value between clctView and Wave sub view
-        if uiviewAvatarWaveSub.tag != 0 {
-            UIView.animate(withDuration: 0.5, animations: {
-                self.clctViewPics.alpha = 0
-                self.uiviewAvatarWaveSub.alpha = 1
-            })
-        }
-        uiviewAvatarWaveSub.tag = 1
-        clctViewPics.reloadData()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
-                guard status / 100 == 2 else {
-                    self.lblNoResults.alpha = 1
-                    return
-                }
-                guard let mapPlaceJsonArray = placesJSON.array else {
-                    self.lblNoResults.alpha = 1
-                    return
-                }
-                guard mapPlaceJsonArray.count > 0 else {
-                    self.lblNoResults.alpha = 1
-                    return
-                }
-                let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
-                self.arrPlaceData = getRandomIndex(arrRaw)
-                self.clctViewPics.reloadData()
-                self.buttonEnable(on: true)
-                self.lblNoResults.alpha = 0
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.clctViewPics.alpha = 1
-                    self.uiviewAvatarWaveSub.alpha = 0
-                })
-                self.checkSavedStatus(id: 0)
-            })
-        }
     }
     
     // AfterAddedToListDelegate
@@ -311,7 +262,26 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func actionExpMap() {
-        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: "Random")
+        var arrPlaceData = [PlacePin]()
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrPlaceData = arrRandom
+        case "Food":
+            arrPlaceData = arrFood
+        case "Drinks":
+            arrPlaceData = arrDrinks
+        case "Shopping":
+            arrPlaceData = arrShopping
+        case "Outdoors":
+            arrPlaceData = arrOutdoors
+        case "Recreation":
+            arrPlaceData = arrRecreation
+        default:
+            break
+        }
+        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
         var arrCtrlers = navigationController?.viewControllers
         if let ctrler = Key.shared.FMVCtrler {
             ctrler.arrCtrlers = arrCtrlers!
@@ -343,6 +313,25 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc func actionSwitchPage(_ sender: UIButton) {
+        var arrCount = 0
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrCount = arrRandom.count
+        case "Food":
+            arrCount = arrFood.count
+        case "Drinks":
+            arrCount = arrDrinks.count
+        case "Shopping":
+            arrCount = arrShopping.count
+        case "Outdoors":
+            arrCount = arrOutdoors.count
+        case "Recreation":
+            arrCount = arrRecreation.count
+        default:
+            break
+        }
         var numPage = intCurtPage
         if sender == btnGoLeft {
             numPage -= 1
@@ -350,13 +339,28 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             numPage += 1
         }
         if numPage < 0 {
-            numPage = 19
-        } else if numPage >= 20 {
+            numPage = arrCount - 1
+        } else if numPage >= arrCount {
             numPage = 0
         }
-        clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
-        intCurtPage = numPage
-        checkSavedStatus(id: intCurtPage)
+        if (numPage == 0 && intCurtPage != 1) || (numPage == arrCount - 1 && intCurtPage != arrCount - 2) {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.clctViewPics.alpha = 0
+            }, completion: { _ in
+                self.clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: false)
+                self.intCurtPage = numPage
+                self.checkSavedStatus(idx: self.intCurtPage)
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.clctViewPics.alpha = 1
+                }, completion: { _ in
+                    
+                })
+            })
+        } else {
+            clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
+            intCurtPage = numPage
+            checkSavedStatus(idx: intCurtPage)
+        }
     }
     
     @objc func actionBack(_ sender: UIButton) {
@@ -366,17 +370,33 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth = clctViewPics.frame.size.width
         intCurtPage = Int(clctViewPics.contentOffset.x / pageWidth)
-        checkSavedStatus(id: intCurtPage)
+        
+        checkSavedStatus(idx: intCurtPage)
     }
     
-    func checkSavedStatus(id: Int) {
-        guard id < arrPlaceData.count else {
-            // 判断:
-            return
+    func checkSavedStatus(idx: Int) {
+        var arrPlaceData = [PlacePin]()
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrPlaceData = arrRandom
+        case "Food":
+            arrPlaceData = arrFood
+        case "Drinks":
+            arrPlaceData = arrDrinks
+        case "Shopping":
+            arrPlaceData = arrShopping
+        case "Outdoors":
+            arrPlaceData = arrOutdoors
+        case "Recreation":
+            arrPlaceData = arrRecreation
+        default:
+            break
         }
-        let placePin = arrPlaceData[id]
-        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: placePin as AnyObject)
-        getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+        guard idx < arrPlaceData.count else { return }
+        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: arrPlaceData[idx] as AnyObject)
+        getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids
             if ids.count > 0 {
@@ -411,7 +431,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         if collectionView == clctViewTypes {
             let label = UILabel()
             label.font = FaeFont(fontType: .medium, size: 15)
-            label.text = testTypes[indexPath.row]
+            label.text = categories[indexPath.row]
             let width = label.intrinsicContentSize.width
             return CGSize(width: width + 3.0, height: 36)
         }
@@ -504,7 +524,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc func actionRefresh() {
         guard coordinate != nil else { return }
-        loadPlaces(center: coordinate!)
+        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
     
     func loadBottomLocation() {
@@ -551,9 +571,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
-        if Key.shared.selectedTypeIdx != nil {
-            search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
-        }
+        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
@@ -571,11 +589,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         second_attch.image = UIImage(cgImage: (secondImg.cgImage)!, scale: 3, orientation: .up)
         let secondImg_attach = NSAttributedString(attachment: second_attch)
         let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
-//        let attrs_0 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
         
         let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
-//        let attrs_1 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
         let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
         
         fullAttrStr.append(firstImg_attach)
@@ -588,11 +604,35 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    // MARK: - UICollectionViewDelegate
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == clctViewPics {
-            return arrPlaceData.count
+            let selectedIdxRow = Key.shared.selectedTypeIdx.row
+            switch selectedIdxRow {
+            case 0:
+                lblNoResults.alpha = arrRandom.count == 0 ? 1 : 0
+                return arrRandom.count
+            case 1:
+                lblNoResults.alpha = arrFood.count == 0 ? 1 : 0
+                return arrFood.count
+            case 2:
+                lblNoResults.alpha = arrDrinks.count == 0 ? 1 : 0
+                return arrDrinks.count
+            case 3:
+                lblNoResults.alpha = arrShopping.count == 0 ? 1 : 0
+                return arrShopping.count
+            case 4:
+                lblNoResults.alpha = arrOutdoors.count == 0 ? 1 : 0
+                return arrOutdoors.count
+            case 5:
+                lblNoResults.alpha = arrRecreation.count == 0 ? 1 : 0
+                return arrRecreation.count
+            default:
+                return 0
+            }
         } else if collectionView == clctViewTypes {
-            return testTypes.count
+            return categories.count
         }
         return 10
     }
@@ -601,50 +641,84 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         if collectionView == clctViewPics {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics", for: indexPath) as! EXPClctPicCell
             cell.delegate = self
-            cell.updateCell(placeData: arrPlaceData[indexPath.row])
-            return cell
-        } else if collectionView == clctViewTypes {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_types", for: indexPath) as! EXPClctTypeCell
-            cell.updateTitle(type: testTypes[indexPath.row])
-            cell.delegate = self
-            cell.indexPath = indexPath
-            if Key.shared.selectedTypeIdx != nil {
-                cell.setButtonColor(selected: indexPath == Key.shared.selectedTypeIdx)
-            } else {
-                if indexPath.row == 0 {
-                    cell.setButtonColor(selected: true)
-                    Key.shared.selectedTypeIdx = indexPath
-                }
+            var data: PlacePin!
+            let lastSelectedRow = Key.shared.selectedTypeIdx.row
+            let cat = categories[lastSelectedRow]
+            switch cat {
+            case "Random":
+                data = arrRandom[indexPath.row]
+            case "Food":
+                data = arrFood[indexPath.row]
+            case "Drinks":
+                data = arrDrinks[indexPath.row]
+            case "Shopping":
+                data = arrShopping[indexPath.row]
+            case "Outdoors":
+                data = arrOutdoors[indexPath.row]
+            case "Recreation":
+                data = arrRecreation[indexPath.row]
+            default:
+                break
             }
+            cell.updateCell(placeData: data)
             return cell
         } else {
-            let cell = UICollectionViewCell()
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_types", for: indexPath) as! EXPClctTypeCell
+            
+            let cat = categories[indexPath.row]
+            cell.updateTitle(type: cat)
+            cell.indexPath = indexPath
+            
+            if let catState = categoryState[cat] {
+                cell.state = catState
+            }
+            
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vcPlaceDetail = PlaceDetailViewController()
-        vcPlaceDetail.place = arrPlaceData[indexPath.row]
-        vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
-        vcPlaceDetail.delegate = Key.shared.FMVCtrler
-        navigationController?.pushViewController(vcPlaceDetail, animated: true)
+        if collectionView == clctViewPics {
+            var placePin: PlacePin!
+            let lastSelectedRow = Key.shared.selectedTypeIdx.row
+            let cat = categories[lastSelectedRow]
+            switch cat {
+            case "Random":
+                placePin = arrRandom[indexPath.row]
+            case "Food":
+                placePin = arrFood[indexPath.row]
+            case "Drinks":
+                placePin = arrDrinks[indexPath.row]
+            case "Shopping":
+                placePin = arrShopping[indexPath.row]
+            case "Outdoors":
+                placePin = arrOutdoors[indexPath.row]
+            case "Recreation":
+                placePin = arrRecreation[indexPath.row]
+            default:
+                break
+            }
+            let vcPlaceDetail = PlaceDetailViewController()
+            vcPlaceDetail.place = placePin
+            vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
+            vcPlaceDetail.delegate = Key.shared.FMVCtrler
+            navigationController?.pushViewController(vcPlaceDetail, animated: true)
+        } else {
+            let lastSelected = Key.shared.selectedTypeIdx
+            if let cell = clctViewTypes.cellForItem(at: lastSelected) as? EXPClctTypeCell {
+                cell.state = .read
+            }
+            if let cell = clctViewTypes.cellForItem(at: indexPath) as? EXPClctTypeCell {
+                cell.state = .selected
+            }
+            Key.shared.selectedTypeIdx = indexPath
+            let lastSelectedRow = Key.shared.selectedTypeIdx.row
+            Key.shared.lastCategory = categories[lastSelectedRow]
+            clctViewPics.reloadData()
+        }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        if collectionView == clctViewTypes {
-////            let lastRowIndex = clctViewTypes.numberOfItems(inSection: 0) - 1
-//            if indexPath.item == 0 {
-//                if Key.shared.lastExplored == "" {
-//                    let firstIndex = IndexPath(item: 0, section: 0)
-//                    guard let firstItem = clctViewTypes.cellForItem(at: firstIndex) as? EXPClctTypeCell else { return }
-//                    firstItem.setButtonColor(selected: true)
-//                }
-//            }
-//        }
-//    }
-    
-    // EXPCellDelegate
+    // MARK: - EXPCellDelegate
     func jumpToPlaceDetail(_ placeInfo: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = placeInfo
@@ -654,80 +728,119 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     // MARK: - ExploreCategorySearch
-    func search(category: String, indexPath: IndexPath) {
-        
-        if Key.shared.selectedTypeIdx != nil {
-            if let cell = clctViewTypes.cellForItem(at: Key.shared.selectedTypeIdx) as? EXPClctTypeCell {
-                cell.setButtonColor(selected: false)
-            }
+    
+    func searchAllCategories() {
+        for i in 0..<categories.count {
+            search(category: categories[i], indexPath: IndexPath(row: i, section: 0))
         }
-        if let cell = clctViewTypes.cellForItem(at: indexPath) as? EXPClctTypeCell {
-            cell.setButtonColor(selected: true)
+    }
+    
+    func loadPlaces(center: CLLocationCoordinate2D) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
+                guard status / 100 == 2 else {
+                    //.fail
+                    return
+                }
+                guard let mapPlaceJsonArray = placesJSON.array else {
+                    //.fail
+                    return
+                }
+                guard mapPlaceJsonArray.count > 0 else {
+                    //.fail
+                    return
+                }
+                let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
+                self.arrRandom = self.getRandomIndex(arrRaw)
+                if Key.shared.selectedTypeIdx.row == 0 {
+                    self.categoryState["Random"] = .selected
+                } else {
+                    self.categoryState["Random"] = .unread
+                }
+                self.clctViewPics.reloadData()
+                self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.clctViewPics.alpha = 1
+                    self.uiviewAvatarWaveSub.alpha = 0
+                })
+                self.checkSavedStatus(idx: 0)
+            })
         }
-        Key.shared.selectedTypeIdx = indexPath
-        Key.shared.lastCategory = category
+    }
+    
+    func search(category: String, indexPath: IndexPath, flag: Bool = true) {
         
-        if Key.shared.lastCategory == "Random" {
+        if category == "Random" {
             loadPlaces(center: coordinate)
             return
         }
         
-        func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
-            var tempRaw = arrRaw
-            var arrResult = [PlacePin]()
-            let count = arrRaw.count < 20 ? arrRaw.count : 20
-            for _ in 0..<count {
-                let random: Int = Int(arc4random_uniform(UInt32(tempRaw.count)))
-                arrResult.append(tempRaw[random])
-                tempRaw.remove(at: random)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            FaeSearch.shared.whereKey("content", value: category)
+            FaeSearch.shared.whereKey("source", value: "categories")
+            FaeSearch.shared.whereKey("type", value: "place")
+            FaeSearch.shared.whereKey("size", value: "200")
+            FaeSearch.shared.whereKey("radius", value: "99999999")
+            FaeSearch.shared.whereKey("offset", value: "0")
+            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+            FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                          "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
+            //FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
+            FaeSearch.shared.search { (status: Int, message: Any?) in
+                if status / 100 != 2 || message == nil {
+                    // 给CategoryState增加fail
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfoJsonArray = placeInfoJSON.array else {
+                    // .fail
+                    return
+                }
+                let arrRaw = placeInfoJsonArray.map { PlacePin(json: $0) }
+                switch category {
+                case "Random":
+                    self.arrRandom = self.getRandomIndex(arrRaw)
+                case "Food":
+                    self.arrFood = self.getRandomIndex(arrRaw)
+                case "Drinks":
+                    self.arrDrinks = self.getRandomIndex(arrRaw)
+                case "Shopping":
+                    self.arrShopping = self.getRandomIndex(arrRaw)
+                case "Outdoors":
+                    self.arrOutdoors = self.getRandomIndex(arrRaw)
+                case "Recreation":
+                    self.arrRecreation = self.getRandomIndex(arrRaw)
+                default:
+                    break
+                }
+                if Key.shared.selectedTypeIdx == indexPath {
+                    self.categoryState[category] = .selected
+                } else {
+                    self.categoryState[category] = .unread
+                }
+                self.clctViewPics.reloadData()
+                self.clctViewTypes.reloadItems(at: [indexPath])
+                
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.clctViewPics.alpha = 1
+                    self.uiviewAvatarWaveSub.alpha = 0
+                })
+                self.checkSavedStatus(idx: 0)
             }
-            return arrResult
         }
-        buttonEnable(on: false)
-        // use uiview.tag as a Bool like value to indicate whether we should
-        // animate the alpha value between clctView and Wave sub view
-        if uiviewAvatarWaveSub.tag != 0 {
-            UIView.animate(withDuration: 0.5, animations: {
-                self.clctViewPics.alpha = 0
-                self.uiviewAvatarWaveSub.alpha = 1
-            })
+    }
+    
+    func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
+        var tempRaw = arrRaw
+        var arrResult = [PlacePin]()
+        let count = arrRaw.count < 20 ? arrRaw.count : 20
+        for _ in 0..<count {
+            let random: Int = Int(arc4random_uniform(UInt32(tempRaw.count)))
+            arrResult.append(tempRaw[random])
+            tempRaw.remove(at: random)
         }
-        uiviewAvatarWaveSub.tag = 1
-        clctViewPics.reloadData()
-        
-        FaeSearch.shared.whereKey("content", value: category)
-        FaeSearch.shared.whereKey("source", value: "categories")
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "99999999")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-//        FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
-        FaeSearch.shared.search { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
-                print("[loadMapSearchPlaceInfo] status/100 != 2")
-                self.lblNoResults.alpha = 1
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfoJsonArray = placeInfoJSON.array else {
-                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
-                self.lblNoResults.alpha = 1
-                return
-            }
-            let arrRaw = placeInfoJsonArray.map { PlacePin(json: $0) }
-            self.arrPlaceData = getRandomIndex(arrRaw)
-            self.clctViewPics.reloadData()
-            self.buttonEnable(on: true)
-            self.lblNoResults.alpha = 0
-            UIView.animate(withDuration: 0.3, animations: {
-                self.clctViewPics.alpha = 1
-                self.uiviewAvatarWaveSub.alpha = 0
-            })
-            self.checkSavedStatus(id: 0)
-        }
+        return arrResult
     }
     
     func loadNavBar() {
@@ -745,7 +858,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         title_0_attr.append(title_1_attr)
         
         uiviewNavBar.lblTitle.attributedText = title_0_attr
-
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
     }
 }

@@ -150,9 +150,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Collections Managements
     var arrCtrlers = [UIViewController]()
     var boolFromMap = true
-    
     var boolNotiSent = false
-    
     var boolCanUpdateUsers = true // Prevent updating user on map more than once, or, prevent user pin change its ramdom place if clicking on it
     var boolCanOpenPin = true // A boolean var to control if user can open another pin, basically, user cannot open if one pin is under opening process
     let FILTER_ENABLE = true
@@ -293,12 +291,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnLeftWindow.isHidden = modeExplore == .on
             placeClusterManager.maxZoomLevelForClustering = modeExplore == .on ? 0 : Double.greatestFiniteMagnitude
             imgSchbarShadow.isHidden = modeExplore == .on
-            btnZoom.isHidden = modeExplore == .on
-            btnLocateSelf.isHidden = modeExplore == .on
+            btnZoom.alpha = modeExplore == .on ? 0 : 1
+            btnLocateSelf.alpha = modeExplore == .on ? 0 : 1
             btnOpenChat.isHidden = modeExplore == .on
             btnFilterIcon.isHidden = modeExplore == .on
             btnDiscovery.isHidden = modeExplore == .on
             
+            faeMapView.isRotateEnabled = modeExplore == .off
             clctViewMap.isHidden = modeExplore == .off
             imgExpbarShadow.isHidden = modeExplore == .off
         }
@@ -533,7 +532,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(faePlacePins) {
-            print("[set count]", self.placeClusterManager.annotations.count)
             self.placeClusterManager.isForcedRefresh = false
             completion?()
         }
