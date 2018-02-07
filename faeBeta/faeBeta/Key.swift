@@ -117,8 +117,8 @@ class Key: NSObject { //  singleton class
     var initialCtrler: InitialPageController?
     var FMVCtrler: FaeMapViewController?
     var mapHeadTitle: String = ""
-    var selectedTypeIdx: IndexPath! // Explore
-    var lastCategory: String = "" // Explore
+    var selectedTypeIdx: IndexPath = IndexPath(row: 0, section: 0) // Explore
+    var lastCategory: String = "Random" // Explore
     
     func getUserInfo() {
         getGenderAge()

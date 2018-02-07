@@ -44,6 +44,7 @@
 		506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */; };
 		506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */; };
 		506D67B81F5272C600CE8BBB /* CollectionsListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */; };
+		50721803202A8276000EF2EB /* EXPClctTypeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50721802202A8276000EF2EB /* EXPClctTypeCell.swift */; };
 		507BE10C1F5A4ABD0077A959 /* FaeFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507BE10B1F5A4ABD0077A959 /* FaeFont.swift */; };
 		507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507D19FE1F57746300F98663 /* UITableViewExtension.swift */; };
 		5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */; };
@@ -392,6 +393,7 @@
 		506D1FCE1F2A97D5004119EA /* FMPlaceBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceBarCtrl.swift; sourceTree = "<group>"; };
 		506D1FE11F2B187C004119EA /* PinDetailProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinDetailProtocols.swift; sourceTree = "<group>"; };
 		506D67B71F5272C600CE8BBB /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
+		50721802202A8276000EF2EB /* EXPClctTypeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPClctTypeCell.swift; sourceTree = "<group>"; };
 		507BE10B1F5A4ABD0077A959 /* FaeFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeFont.swift; sourceTree = "<group>"; };
 		507D19FE1F57746300F98663 /* UITableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewExtension.swift; sourceTree = "<group>"; };
 		5080005B1F249FD2009E3720 /* FMRefreshIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMRefreshIcon.swift; sourceTree = "<group>"; };
@@ -817,6 +819,7 @@
 			isa = PBXGroup;
 			children = (
 				504CE4D11F67BF4500070284 /* ExploreViewController.swift */,
+				50721802202A8276000EF2EB /* EXPClctTypeCell.swift */,
 				50181F0A1F688579004798B5 /* EXPCells.swift */,
 			);
 			name = Explore;
@@ -2075,6 +2078,7 @@
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
 				B064EF681D74EE5F00C078F5 /* SignInSupportCodeViewController.swift in Sources */,
 				372F29CA1EAC3AEB008113A4 /* PinSearchViewController.swift in Sources */,
+				50721803202A8276000EF2EB /* EXPClctTypeCell.swift in Sources */,
 				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
 				B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */,
 				50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */,

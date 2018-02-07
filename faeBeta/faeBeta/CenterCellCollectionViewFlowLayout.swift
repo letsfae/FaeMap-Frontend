@@ -55,7 +55,9 @@ class CenterCellCollectionViewFlowLayout: UICollectionViewFlowLayout {
                     return proposedContentOffset
                 }
                 
-                return CGPoint(x: floor(candidateAttributes!.center.x - halfWidth), y: proposedContentOffset.y)
+                let center_x: CGFloat = candidateAttributes == nil ? 0 : candidateAttributes!.center.x
+                
+                return CGPoint(x: floor(center_x - halfWidth), y: proposedContentOffset.y)
             }
         }
         

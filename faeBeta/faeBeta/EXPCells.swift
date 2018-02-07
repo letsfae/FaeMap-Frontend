@@ -359,70 +359,8 @@ class EXPClctImgCell: UICollectionViewCell {
     }
 }
 
-protocol ExploreCategorySearch: class {
-    func search(category: String, indexPath: IndexPath)
-}
+//protocol ExploreCategorySearch: class {
+    //func search(category: String, indexPath: IndexPath)
+//}
 
-class EXPClctTypeCell: UICollectionViewCell {
-    
-    weak var delegate: ExploreCategorySearch?
-    
-    var btnType: UIButton!
-    var category = ""
-    var indexPath: IndexPath!
-    
-    internal var widthContraint = [NSLayoutConstraint]() {
-        didSet {
-            if oldValue.count != 0 {
-                removeConstraints(oldValue)
-            }
-            if widthContraint.count != 0 {
-                addConstraints(widthContraint)
-            }
-        }
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        loadCellItems()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setButtonColor(selected: Bool) {
-        btnType.isSelected = selected
-        if selected {
-            btnType.titleLabel?.font = FaeFont(fontType: .demiBold, size: 15)
-        } else {
-            btnType.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
-        }
-    }
-    
-    func loadCellItems() {
-        btnType = UIButton()
-        btnType.setTitle("", for: .normal)
-        btnType.setTitleColor(UIColor(r: 102, g: 192, b: 251, alpha: 100), for: .normal)
-        btnType.setTitleColor(UIColor(r: 249, g: 90, b: 90, alpha: 100), for: .selected)
-        btnType.setTitleColor(.lightGray, for: .highlighted)
-        btnType.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
-        btnType.titleLabel?.textAlignment = .center
-        btnType.addTarget(self, action: #selector(actionSearch), for: .touchUpInside)
-        addSubview(btnType)
-        widthContraint = returnConstraintsWithFormat("H:|-0-[v0(50)]", options: [], views: btnType)
-        addConstraintsWithFormat("V:[v0(36)]-0-|", options: [], views: btnType)
-    }
-    
-    @objc func actionSearch() {
-        guard indexPath != nil else { return }
-        delegate?.search(category: category, indexPath: indexPath)
-    }
-    
-    func updateTitle(type: String) {
-        category = type
-        btnType.setTitle(type, for: .normal)
-        guard let lblWidth = btnType.titleLabel?.intrinsicContentSize.width else { return }
-        widthContraint = returnConstraintsWithFormat("H:|-0-[v0(\(Int(lblWidth) + 3))]", options: [], views: btnType)
-    }
-}
+

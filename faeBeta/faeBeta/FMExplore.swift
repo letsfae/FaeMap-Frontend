@@ -34,6 +34,7 @@ extension FaeMapViewController: ExploreDelegate {
     }
     
     @objc func actionBackToExplore() {
+        mapMode = .normal
         modeExplore = .off
         PLACE_ENABLE = true
         faeMapView.blockTap = false
