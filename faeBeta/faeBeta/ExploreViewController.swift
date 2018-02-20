@@ -59,21 +59,18 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var strLocation: String = ""
     var lblNoResults: FaeLabel!
     
+    // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
-        loadAvatarWave()
+        loadAvatar()
         DispatchQueue.main.async {
             self.loadContent()
             self.reloadBottomText("Loading...", "")
             self.coordinate = LocManager.shared.curtLoc.coordinate
             self.searchAllCategories()
-//            if Key.shared.selectedTypeIdx == nil {
-//                self.loadPlaces(center: LocManager.shared.curtLoc.coordinate)
-//            } else {
-//                self.search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
-//            }
             self.fullyLoaded = true
             General.shared.getAddress(location: LocManager.shared.curtLoc, original: false, full: false, detach: true) { (address) in
                 if let addr = address as? String {
@@ -85,7 +82,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +98,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
     }
     
+    // MARK: - Loading Content
+    
     func loadContent() {
         loadTopTypesCollection()
         loadPicCollections()
@@ -109,53 +107,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadBottomLocation()
         loadPlaceListView()
         loadNoResultLabel()
-    }
-    
-    func buttonEnable(on: Bool) {
-        btnGoLeft.isEnabled = on
-        btnSave.isEnabled = on
-        btnRefresh.isEnabled = on
-        btnMap.isEnabled = on
-        btnGoRight.isEnabled = on
-        lblBottomLocation.isUserInteractionEnabled = on
-        clctViewTypes.isUserInteractionEnabled = on
-    }
-    
-    // AfterAddedToListDelegate
-    func seeList() {
-        // TODO VICKY
-        uiviewAfterAdded.hide()
-        let vcList = CollectionsListDetailViewController()
-        vcList.enterMode = uiviewSavedList.tableMode
-        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
-//        vcList.colInfo = uiviewAfterAdded.selectedCollection
-//        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
-        navigationController?.pushViewController(vcList, animated: true)
-    }
-    // AfterAddedToListDelegate
-    func undoCollect(colId: Int, mode: UndoMode) {
-        uiviewAfterAdded.hide()
-        uiviewSavedList.show()
-        switch mode {
-        case .save:
-            uiviewSavedList.arrListSavedThisPin.append(colId)
-        case .unsave:
-            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
-                let arrListIds = uiviewSavedList.arrListSavedThisPin
-                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
-            }
-        }
-        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
-            hideSavedNoti()
-        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
-            showSavedNoti()
-        }
-    }
-    // AddPlacetoCollectionDelegate
-    func createColList() {
-        let vc = CreateColListViewController()
-        vc.enterMode = .place
-        present(vc, animated: true)
     }
     
     func loadPlaceListView() {
@@ -172,7 +123,16 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func loadNoResultLabel() {
-        lblNoResults = FaeLabel(CGRect(x: 0, y: 492 * screenHeightFactor, width: 270, height: 88) , .center, .medium, 16, UIColor._146146146())
+        var y_offset: CGFloat = 550
+        switch screenHeight {
+        case 736, 667:
+            y_offset = 515 * screenHeightFactor
+        case 568:
+            y_offset = 420
+        default:
+            break
+        }
+        lblNoResults = FaeLabel(CGRect(x: 0, y: y_offset, width: 270, height: 88) , .center, .medium, 16, UIColor._146146146())
         lblNoResults.center.x = screenWidth / 2
         lblNoResults.numberOfLines = 3
         lblNoResults.text = "Sorry… we can’t suggest any place\ncards currently, please try a different\nlocation or check back later!"
@@ -180,7 +140,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblNoResults.alpha = 0
     }
     
-    func loadAvatarWave() {
+    func loadAvatar() {
         let xAxis: CGFloat = screenWidth / 2
         var yAxis: CGFloat = 324.5 * screenHeightFactor
         yAxis += screenHeight == 812 ? 80 : 0
@@ -235,13 +195,20 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_3)
         uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_4)
         
-        animation(circle: filterCircle_1, delay: 0)
-        animation(circle: filterCircle_2, delay: 0.5)
-        animation(circle: filterCircle_3, delay: 2)
-        animation(circle: filterCircle_4, delay: 2.5)
+        UIView.animate(withDuration: 0.3, animations: {
+            if self.clctViewPics != nil {
+                self.clctViewPics.alpha = 0
+            }
+            self.uiviewAvatarWaveSub.alpha = 1
+        })
+        
+        waveAnimation(circle: filterCircle_1, delay: 0)
+        waveAnimation(circle: filterCircle_2, delay: 0.5)
+        waveAnimation(circle: filterCircle_3, delay: 2)
+        waveAnimation(circle: filterCircle_4, delay: 2.5)
     }
     
-    func animation(circle: UIImageView, delay: Double) {
+    func waveAnimation(circle: UIImageView, delay: Double) {
         let animateTime: Double = 3
         let radius: CGFloat = screenWidth
         let newFrame = CGRect(x: 0, y: 0, width: radius, height: radius)
@@ -256,186 +223,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 circle.alpha = 0.0
                 circle.frame = newFrame
             }), completion: { _ in
-                self.animation(circle: circle, delay: 0.75)
+                self.waveAnimation(circle: circle, delay: 0.75)
             })
         }
-    }
-    
-    @objc func actionExpMap() {
-        var arrPlaceData = [PlacePin]()
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
-        let cat = categories[lastSelectedRow]
-        switch cat {
-        case "Random":
-            arrPlaceData = arrRandom
-        case "Food":
-            arrPlaceData = arrFood
-        case "Drinks":
-            arrPlaceData = arrDrinks
-        case "Shopping":
-            arrPlaceData = arrShopping
-        case "Outdoors":
-            arrPlaceData = arrOutdoors
-        case "Recreation":
-            arrPlaceData = arrRecreation
-        default:
-            break
-        }
-        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
-    }
-    
-    @objc func actionSave(_ sender: UIButton) {
-        uiviewSavedList.show()
-//        uiviewSavedList.loadCollectionData()
-    }
-    
-    @objc func showSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
-            self.imgSaved.alpha = 1
-        }, completion: nil)
-    }
-    
-    @objc func hideSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 50, y: 16, width: 0, height: 0)
-            self.imgSaved.alpha = 0
-        }, completion: nil)
-    }
-    
-    @objc func actionSwitchPage(_ sender: UIButton) {
-        var arrCount = 0
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
-        let cat = categories[lastSelectedRow]
-        switch cat {
-        case "Random":
-            arrCount = arrRandom.count
-        case "Food":
-            arrCount = arrFood.count
-        case "Drinks":
-            arrCount = arrDrinks.count
-        case "Shopping":
-            arrCount = arrShopping.count
-        case "Outdoors":
-            arrCount = arrOutdoors.count
-        case "Recreation":
-            arrCount = arrRecreation.count
-        default:
-            break
-        }
-        var numPage = intCurtPage
-        if sender == btnGoLeft {
-            numPage -= 1
-        } else {
-            numPage += 1
-        }
-        if numPage < 0 {
-            numPage = arrCount - 1
-        } else if numPage >= arrCount {
-            numPage = 0
-        }
-        if (numPage == 0 && intCurtPage != 1) || (numPage == arrCount - 1 && intCurtPage != arrCount - 2) {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.clctViewPics.alpha = 0
-            }, completion: { _ in
-                self.clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: false)
-                self.intCurtPage = numPage
-                self.checkSavedStatus(idx: self.intCurtPage)
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.clctViewPics.alpha = 1
-                }, completion: { _ in
-                    
-                })
-            })
-        } else {
-            clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
-            intCurtPage = numPage
-            checkSavedStatus(idx: intCurtPage)
-        }
-    }
-    
-    @objc func actionBack(_ sender: UIButton) {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageWidth = clctViewPics.frame.size.width
-        intCurtPage = Int(clctViewPics.contentOffset.x / pageWidth)
-        
-        checkSavedStatus(idx: intCurtPage)
-    }
-    
-    func checkSavedStatus(idx: Int) {
-        var arrPlaceData = [PlacePin]()
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
-        let cat = categories[lastSelectedRow]
-        switch cat {
-        case "Random":
-            arrPlaceData = arrRandom
-        case "Food":
-            arrPlaceData = arrFood
-        case "Drinks":
-            arrPlaceData = arrDrinks
-        case "Shopping":
-            arrPlaceData = arrShopping
-        case "Outdoors":
-            arrPlaceData = arrOutdoors
-        case "Recreation":
-            arrPlaceData = arrRecreation
-        default:
-            break
-        }
-        guard idx < arrPlaceData.count else { return }
-        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: arrPlaceData[idx] as AnyObject)
-        getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
-            self.arrListSavedThisPin = ids
-            self.uiviewSavedList.arrListSavedThisPin = ids
-            if ids.count > 0 {
-                self.showSavedNoti()
-            } else {
-                self.hideSavedNoti()
-            }
-        }
-    }
-    
-    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
-        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            var ids = [Int]()
-            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
-                completion(ids)
-                return
-            }
-            guard is_saved != "false" else { return }
-            for colIdRaw in is_saved.split(separator: ",") {
-                let strColId = String(colIdRaw)
-                guard let colId = Int(strColId) else { continue }
-                ids.append(colId)
-            }
-            completion(ids)
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == clctViewTypes {
-            let label = UILabel()
-            label.font = FaeFont(fontType: .medium, size: 15)
-            label.text = categories[indexPath.row]
-            let width = label.intrinsicContentSize.width
-            return CGSize(width: width + 3.0, height: 36)
-        }
-        return CGSize(width: screenWidth, height: screenHeight - 116 - 156 - device_offset_top - device_offset_bot)
     }
     
     func loadTopTypesCollection() {
@@ -522,11 +312,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewBtnSub.addConstraintsWithFormat("V:|-0-[v0(78)]", options: [], views: btnGoRight)
     }
     
-    @objc func actionRefresh() {
-        guard coordinate != nil else { return }
-        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
-    }
-    
     func loadBottomLocation() {
         lblBottomLocation = UILabel()
         lblBottomLocation.numberOfLines = 1
@@ -540,38 +325,150 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
     
-    @objc func handleTap(_ tap: UITapGestureRecognizer) {
-        /*let vc = SelectLocationViewController()
-        vc.delegate = self
-        vc.mode = .part
-        vc.boolFromExplore = true
-        navigationController?.pushViewController(vc, animated: false)*/
-        let vc = BoardsSearchViewController()
-        vc.enterMode = .location
-        vc.delegate = self
-        vc.strSearchedLocation = strLocation
-        vc.strPlaceholder = strLocation
-        navigationController?.pushViewController(vc, animated: true)
+    func loadNavBar() {
+        uiviewNavBar = FaeNavBar()
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.loadBtnConstraints()
+        
+        let title_0 = "Explore "
+        let title_1 = "Around Me"
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
+        let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
+        let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
+        title_0_attr.append(title_1_attr)
+        
+        uiviewNavBar.lblTitle.attributedText = title_0_attr
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
     }
     
-    // BoardsSearchDelegate
-    func sendLocationBack(address: RouteAddress) {
-        var arrNames = address.name.split(separator: ",")
-        var array = [String]()
-        guard arrNames.count >= 1 else { return }
-        for i in 0..<arrNames.count {
-            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
-            array.append(name)
+    // MARK: - Button Actions
+    
+    @objc func actionExpMap() {
+        var arrPlaceData = [PlacePin]()
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrPlaceData = arrRandom
+        case "Food":
+            arrPlaceData = arrFood
+        case "Drinks":
+            arrPlaceData = arrDrinks
+        case "Shopping":
+            arrPlaceData = arrShopping
+        case "Outdoors":
+            arrPlaceData = arrOutdoors
+        case "Recreation":
+            arrPlaceData = arrRecreation
+        default:
+            break
         }
-        if array.count >= 3 {
-            reloadBottomText(array[0], array[1] + ", " + array[2])
-        } else if array.count == 1 {
-            reloadBottomText(array[0], "")
-        } else if array.count == 2 {
-            reloadBottomText(array[0], array[1])
+        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
         }
-        self.coordinate = address.coordinate
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+    }
+    
+    @objc func actionSave(_ sender: UIButton) {
+        uiviewSavedList.show()
+//        uiviewSavedList.loadCollectionData()
+    }
+    
+    @objc func actionSwitchPage(_ sender: UIButton) {
+        var arrCount = 0
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrCount = arrRandom.count
+        case "Food":
+            arrCount = arrFood.count
+        case "Drinks":
+            arrCount = arrDrinks.count
+        case "Shopping":
+            arrCount = arrShopping.count
+        case "Outdoors":
+            arrCount = arrOutdoors.count
+        case "Recreation":
+            arrCount = arrRecreation.count
+        default:
+            break
+        }
+        var numPage = intCurtPage
+        if sender == btnGoLeft {
+            numPage -= 1
+        } else {
+            numPage += 1
+        }
+        if numPage < 0 {
+            numPage = arrCount - 1
+        } else if numPage >= arrCount {
+            numPage = 0
+        }
+        if (numPage == 0 && intCurtPage != 1) || (numPage == arrCount - 1 && intCurtPage != arrCount - 2) {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.clctViewPics.alpha = 0
+            }, completion: { _ in
+                self.clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: false)
+                self.intCurtPage = numPage
+                self.checkSavedStatus(idx: self.intCurtPage)
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.clctViewPics.alpha = 1
+                }, completion: { _ in
+                    
+                })
+            })
+        } else {
+            clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
+            intCurtPage = numPage
+            checkSavedStatus(idx: intCurtPage)
+        }
+    }
+    
+    @objc func actionBack(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func actionRefresh() {
+        guard coordinate != nil else { return }
+        loadWaves()
+        buttonEnable(on: false)
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+    }
+    
+    
+    // MARK: - Other Functions
+    
+    func buttonEnable(on: Bool) {
+        btnGoLeft.isEnabled = on
+        btnSave.isEnabled = on
+        btnRefresh.isEnabled = on
+        btnMap.isEnabled = on
+        btnGoRight.isEnabled = on
+        lblBottomLocation.isUserInteractionEnabled = on
+        clctViewTypes.isUserInteractionEnabled = on
+    }
+    
+    @objc func showSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    @objc func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 50, y: 16, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
     }
     
     func reloadBottomText(_ city: String, _ state: String) {
@@ -604,33 +501,126 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
+    // MARK: - UIScrollViewDelegate
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = clctViewPics.frame.size.width
+        intCurtPage = Int(clctViewPics.contentOffset.x / pageWidth)
+        checkSavedStatus(idx: intCurtPage)
+    }
+    
+    // MARK: - Pin Info
+    
+    func checkSavedStatus(idx: Int) {
+        var arrPlaceData = [PlacePin]()
+        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let cat = categories[lastSelectedRow]
+        switch cat {
+        case "Random":
+            arrPlaceData = arrRandom
+        case "Food":
+            arrPlaceData = arrFood
+        case "Drinks":
+            arrPlaceData = arrDrinks
+        case "Shopping":
+            arrPlaceData = arrShopping
+        case "Outdoors":
+            arrPlaceData = arrOutdoors
+        case "Recreation":
+            arrPlaceData = arrRecreation
+        default:
+            break
+        }
+        guard idx < arrPlaceData.count else { return }
+        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: arrPlaceData[idx] as AnyObject)
+        getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
+            self.arrListSavedThisPin = ids
+            self.uiviewSavedList.arrListSavedThisPin = ids
+            if ids.count > 0 {
+                self.showSavedNoti()
+            } else {
+                self.hideSavedNoti()
+            }
+        }
+    }
+    
+    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
+        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
+            guard status / 100 == 2 else { return }
+            guard message != nil else { return }
+            let resultJson = JSON(message!)
+            var ids = [Int]()
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion(ids)
+                return
+            }
+            guard is_saved != "false" else { return }
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            completion(ids)
+        }
+    }
+    
+    // MARK: - Gesture Recognizers
+    
+    @objc func handleTap(_ tap: UITapGestureRecognizer) {
+        /*let vc = SelectLocationViewController()
+        vc.delegate = self
+        vc.mode = .part
+        vc.boolFromExplore = true
+        navigationController?.pushViewController(vc, animated: false)*/
+        let vc = BoardsSearchViewController()
+        vc.enterMode = .location
+        vc.delegate = self
+        vc.strSearchedLocation = strLocation
+        vc.strPlaceholder = strLocation
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     // MARK: - UICollectionViewDelegate
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView == clctViewTypes {
+            let label = UILabel()
+            label.font = FaeFont(fontType: .medium, size: 15)
+            label.text = categories[indexPath.row]
+            let width = label.intrinsicContentSize.width
+            return CGSize(width: width + 3.0, height: 36)
+        }
+        return CGSize(width: screenWidth, height: screenHeight - 116 - 156 - device_offset_top - device_offset_bot)
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == clctViewPics {
             let selectedIdxRow = Key.shared.selectedTypeIdx.row
+            let isInitial = categoryState[categories[selectedIdxRow]] != .initial
+            var count = 0
             switch selectedIdxRow {
             case 0:
-                lblNoResults.alpha = arrRandom.count == 0 ? 1 : 0
-                return arrRandom.count
+                count = arrRandom.count
             case 1:
-                lblNoResults.alpha = arrFood.count == 0 ? 1 : 0
-                return arrFood.count
+                count = arrFood.count
             case 2:
-                lblNoResults.alpha = arrDrinks.count == 0 ? 1 : 0
-                return arrDrinks.count
+                count = arrDrinks.count
             case 3:
-                lblNoResults.alpha = arrShopping.count == 0 ? 1 : 0
-                return arrShopping.count
+                count = arrShopping.count
             case 4:
-                lblNoResults.alpha = arrOutdoors.count == 0 ? 1 : 0
-                return arrOutdoors.count
+                count = arrOutdoors.count
             case 5:
-                lblNoResults.alpha = arrRecreation.count == 0 ? 1 : 0
-                return arrRecreation.count
+                count = arrRecreation.count
             default:
                 return 0
             }
+            lblNoResults.alpha = count == 0 && isInitial ? 1 : 0
+            if count == 0 {
+                loadWaves()
+            } else {
+                hideWaves()
+            }
+            return count
         } else if collectionView == clctViewTypes {
             return categories.count
         }
@@ -727,27 +717,37 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // MARK: - ExploreCategorySearch
+    // MARK: - Category Search
     
     func searchAllCategories() {
+        buttonEnable(on: false)
         for i in 0..<categories.count {
             search(category: categories[i], indexPath: IndexPath(row: i, section: 0))
         }
     }
     
-    func loadPlaces(center: CLLocationCoordinate2D) {
+    func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
                 guard status / 100 == 2 else {
                     //.fail
+                    if indexPath == Key.shared.selectedTypeIdx {
+                        self.buttonEnable(on: true)
+                    }
                     return
                 }
                 guard let mapPlaceJsonArray = placesJSON.array else {
                     //.fail
+                    if indexPath == Key.shared.selectedTypeIdx {
+                        self.buttonEnable(on: true)
+                    }
                     return
                 }
                 guard mapPlaceJsonArray.count > 0 else {
                     //.fail
+                    if indexPath == Key.shared.selectedTypeIdx {
+                        self.buttonEnable(on: true)
+                    }
                     return
                 }
                 let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
@@ -759,20 +759,26 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 self.clctViewPics.reloadData()
                 self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
-                
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.clctViewPics.alpha = 1
-                    self.uiviewAvatarWaveSub.alpha = 0
-                })
+                if indexPath == Key.shared.selectedTypeIdx {
+                    self.hideWaves()
+                    self.buttonEnable(on: true)
+                }
                 self.checkSavedStatus(idx: 0)
             })
         }
     }
     
+    func hideWaves() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.clctViewPics.alpha = 1
+            self.uiviewAvatarWaveSub.alpha = 0
+        })
+    }
+    
     func search(category: String, indexPath: IndexPath, flag: Bool = true) {
         
         if category == "Random" {
-            loadPlaces(center: coordinate)
+            loadPlaces(center: coordinate, indexPath: indexPath)
             return
         }
         
@@ -790,11 +796,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             FaeSearch.shared.search { (status: Int, message: Any?) in
                 if status / 100 != 2 || message == nil {
                     // 给CategoryState增加fail
+                    if indexPath == Key.shared.selectedTypeIdx {
+                        self.buttonEnable(on: true)
+                    }
                     return
                 }
                 let placeInfoJSON = JSON(message!)
                 guard let placeInfoJsonArray = placeInfoJSON.array else {
                     // .fail
+                    if indexPath == Key.shared.selectedTypeIdx {
+                        self.buttonEnable(on: true)
+                    }
                     return
                 }
                 let arrRaw = placeInfoJsonArray.map { PlacePin(json: $0) }
@@ -821,11 +833,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 self.clctViewPics.reloadData()
                 self.clctViewTypes.reloadItems(at: [indexPath])
-                
-                UIView.animate(withDuration: 0.3, animations: {
-                    self.clctViewPics.alpha = 1
-                    self.uiviewAvatarWaveSub.alpha = 0
-                })
+                if indexPath == Key.shared.selectedTypeIdx {
+                    self.hideWaves()
+                    self.buttonEnable(on: true)
+                }
                 self.checkSavedStatus(idx: 0)
             }
         }
@@ -843,21 +854,61 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         return arrResult
     }
     
-    func loadNavBar() {
-        uiviewNavBar = FaeNavBar()
-        view.addSubview(uiviewNavBar)
-        uiviewNavBar.rightBtn.isHidden = true
-        uiviewNavBar.loadBtnConstraints()
-        
-        let title_0 = "Explore "
-        let title_1 = "Around Me"
-        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
-        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!]
-        let title_0_attr = NSMutableAttributedString(string: title_0, attributes: attrs_0)
-        let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
-        title_0_attr.append(title_1_attr)
-        
-        uiviewNavBar.lblTitle.attributedText = title_0_attr
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
+    // MARK: - AfterAddedToListDelegate
+    func seeList() {
+        // TODO VICKY
+        uiviewAfterAdded.hide()
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewSavedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
+        //        vcList.colInfo = uiviewAfterAdded.selectedCollection
+        //        vcList.arrColDetails = uiviewAfterAdded.selectedCollection
+        navigationController?.pushViewController(vcList, animated: true)
+    }
+    
+    func undoCollect(colId: Int, mode: UndoMode) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.show()
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+        }
+        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+            hideSavedNoti()
+        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+            showSavedNoti()
+        }
+    }
+    
+    // MARK: - AddPlacetoCollectionDelegate
+    func createColList() {
+        let vc = CreateColListViewController()
+        vc.enterMode = .place
+        present(vc, animated: true)
+    }
+    
+    // MARK: - BoardsSearchDelegate
+    func sendLocationBack(address: RouteAddress) {
+        var arrNames = address.name.split(separator: ",")
+        var array = [String]()
+        guard arrNames.count >= 1 else { return }
+        for i in 0..<arrNames.count {
+            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
+            array.append(name)
+        }
+        if array.count >= 3 {
+            reloadBottomText(array[0], array[1] + ", " + array[2])
+        } else if array.count == 1 {
+            reloadBottomText(array[0], "")
+        } else if array.count == 2 {
+            reloadBottomText(array[0], array[1])
+        }
+        self.coordinate = address.coordinate
+        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
 }
