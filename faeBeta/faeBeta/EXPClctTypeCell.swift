@@ -96,4 +96,3 @@ class EXPClctTypeCell: UICollectionViewCell {
         widthContraint = returnConstraintsWithFormat("H:|-0-[v0(\(Int(lblWidth) + 3))]", options: [], views: btnType)
     }
 }
-
