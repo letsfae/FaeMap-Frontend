@@ -66,8 +66,13 @@ class IncomingMessage {
     }
     
     fileprivate func pictureJSQMessage(_ realmMessage: RealmMessage_v2) -> JSQMessage {
-        let imgPic = UIImage(data: realmMessage.media! as Data)
-        let mediaItem = JSQPhotoMediaItemCustom(image: imgPic)
+        var imgMedia: UIImage!
+        if realmMessage.type == "[Gif]" {
+            imgMedia = UIImage.gif(data: realmMessage.media! as Data)
+        } else {
+            imgMedia = UIImage(data: realmMessage.media! as Data)
+        }
+        let mediaItem = JSQPhotoMediaItemCustom(image: imgMedia)
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         
@@ -95,7 +100,7 @@ class IncomingMessage {
         } catch {
             // fail to get snap image
         }
-        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(duration)!, isReadyToPlay: true)
+        let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(fileURLWithPath: fileURL), snapImage: snapImage, duration: Int32(Double(duration)!), isReadyToPlay: true)
          mediaItem?.appliesMediaViewMaskAsOutgoing = returnOutgoingStatusFromUser(senderId)
         return JSQMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, media: mediaItem)
     }

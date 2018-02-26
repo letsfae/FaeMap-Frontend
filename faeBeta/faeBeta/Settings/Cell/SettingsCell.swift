@@ -17,7 +17,7 @@ class SettingsCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         
-        imgIcon = UIImageView(frame: CGRect(x: 22, y: 20, width: 26, height: 26))
+        imgIcon = UIImageView(frame: CGRect(x: 20, y: 20, width: 26, height: 26))
         imgIcon.contentMode = .scaleAspectFill
         addSubview(imgIcon)
         
