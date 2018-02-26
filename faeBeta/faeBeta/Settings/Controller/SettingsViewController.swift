@@ -82,10 +82,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func setupVersionView() {
         uiviewVersion = UIView()
-        view.addSubview(uiviewVersion)
+        tblSettings.addSubview(uiviewVersion)
         uiviewVersion.center.x = screenWidth / 2
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewVersion)
-        view.addConstraintsWithFormat("V:[v0(20)]-10-|", options: [], views: uiviewVersion)
+        tblSettings.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewVersion)
+        tblSettings.addConstraintsWithFormat("V:|-(-40)-[v0(20)]", options: [], views: uiviewVersion)
         imgVersion = UIImageView()
         imgVersion.image = #imageLiteral(resourceName: "settings_version")
         uiviewVersion.addSubview(imgVersion)

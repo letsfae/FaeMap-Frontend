@@ -19,6 +19,7 @@ class FMZoomButton: UIButton {
     var prev_y: CGFloat = 0
     var gesLongPress: UILongPressGestureRecognizer!
     var gesPan: UIPanGestureRecognizer!
+    var prevRotation: CLLocationDirection!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153 - device_offset_bot_main, width: 60, height: 60))
@@ -39,6 +40,7 @@ class FMZoomButton: UIButton {
         if sender.state == .began {
             largeMode()
             prevRegion = mapView.region
+            prevRotation = mapView.camera.heading
             guard prevRegion != nil else { return }
             Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
@@ -100,6 +102,9 @@ class FMZoomButton: UIButton {
         
         region?.span = span
         mapView.setRegion(region!, animated: false)
+        let camera = mapView.camera
+        camera.heading = prevRotation
+        mapView.setCamera(camera, animated: false)
     }
     
     func makeZoom(_ timer: Timer) {

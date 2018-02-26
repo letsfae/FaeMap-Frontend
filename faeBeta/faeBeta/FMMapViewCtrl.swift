@@ -314,6 +314,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
+        Key.shared.lastChosenLoc = mapView.centerCoordinate
+        
         if AUTO_REFRESH {
             calculateDistanceOffset()
         }

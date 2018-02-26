@@ -64,6 +64,7 @@ class InfiniteScrollingView: UIView {
         imgPic_0.clipsToBounds = true
         imgPic_1.clipsToBounds = true
         imgPic_2.clipsToBounds = true
+        imgPic_1.image = #imageLiteral(resourceName: "default_place")
         resetSubviews()
         
         addSubview(imgPic_0)

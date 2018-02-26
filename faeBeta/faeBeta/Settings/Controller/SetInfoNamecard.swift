@@ -67,6 +67,11 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         updateInfo()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        uiviewNameCard.userId = Key.shared.user_id // refresh user namecard
+    }
+    
     func loadContent() {
         faeNavBar = FaeNavBar()
         view.addSubview(faeNavBar)
