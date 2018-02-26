@@ -149,6 +149,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         self.lblUserName.alpha = 1
     }
     
+    // MARK: - Actions
+    
     @objc func openFaeUsrInfo() {
         delegate?.openFaeUsrInfo()
     }
@@ -285,9 +287,9 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             self.imgCover.image = coverPhoto
             self.imgCover.isUserInteractionEnabled = true
         }
-        uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, _) in
+        uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, shortIntro) in
             self.lblNickName.text = nickName
-            self.lblUserName.text = "@" + userName
+            self.lblUserName.text = shortIntro == "" ? "@" + userName : shortIntro
         }
         getFriendStatus(id: withUserId)
     }
@@ -322,7 +324,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         }
         var iPhone_X_offset: CGFloat = 129
         if screenHeight == 812 {
-            iPhone_X_offset = 129 / 736 * 812
+            iPhone_X_offset = 129 / 736 * 812 + 50
         }
         UIView.animate(withDuration: 0.3, animations: {
             self.frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)

@@ -76,10 +76,6 @@ class FMPlaceInfoBar: UIView {
         imgBack_2.frame.origin.x = screenWidth + 2
     }
     
-    func loadPlaceImage(placeView: PlaceView, placeInfo: PlacePin) {
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: placeView.imgType)
-    }
-    
     func load(for placeInfo: PlacePin) {
         state = .singleSearch
         imgBack_1.setValueForPlace(placeInfo: placeInfo)
@@ -254,6 +250,7 @@ class PlaceView: UIImageView {
     var lblPrice: UILabel!
     var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     var arrHour = [String]()
+    var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 102))
@@ -268,7 +265,7 @@ class PlaceView: UIImageView {
         lblName.text = placeInfo.name
         lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         lblPrice.text = placeInfo.price
-        imgType.backgroundColor = .white
+        imgType.backgroundColor = .clear
         if placeInfo.hours.count > 0 {
             arrHour.removeAll()
             for day in arrDay {
@@ -296,7 +293,17 @@ class PlaceView: UIImageView {
         } else {
             lblHours.text = nil
         }
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
+        loadPlaceImage(placeInfo: placeInfo)
+//        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
+    }
+    
+    func loadPlaceImage(placeInfo: PlacePin) {
+        imgType.alpha = 0
+        indicator.startAnimating()
+        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType) {
+            self.imgType.alpha = 1
+            self.indicator.stopAnimating()
+        }
     }
     
     private func loadContent() {
@@ -307,6 +314,7 @@ class PlaceView: UIImageView {
         imgType.layer.cornerRadius = 5
         imgType.clipsToBounds = true
         imgType.backgroundColor = UIColor._2499090()
+        imgType.alpha = 0
         addSubview(imgType)
         addConstraintsWithFormat("H:|-15-[v0(66)]", options: [], views: imgType)
         addConstraintsWithFormat("V:|-18-[v0(66)]", options: [], views: imgType)
@@ -343,6 +351,14 @@ class PlaceView: UIImageView {
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addConstraintsWithFormat("H:[v0(32)]-18-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:|-69-[v0(18)]", options: [], views: lblPrice)
+        
+        indicator = UIActivityIndicatorView()
+        indicator.activityIndicatorViewStyle = .white
+        indicator.center.x = 48
+        indicator.center.y = 51
+        indicator.hidesWhenStopped = true
+        indicator.color = UIColor._2499090()
+        addSubview(indicator)
     }
 }
 

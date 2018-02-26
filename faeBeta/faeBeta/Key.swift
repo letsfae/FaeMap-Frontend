@@ -119,6 +119,7 @@ class Key: NSObject { //  singleton class
     var mapHeadTitle: String = ""
     var selectedTypeIdx: IndexPath = IndexPath(row: 0, section: 0) // Explore
     var lastCategory: String = "Random" // Explore
+    var lastChosenLoc: CLLocationCoordinate2D?
     
     func getUserInfo() {
         getGenderAge()

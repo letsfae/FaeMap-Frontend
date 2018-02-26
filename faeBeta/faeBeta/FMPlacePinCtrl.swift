@@ -360,7 +360,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         let getPlaceInfo = FaeMap()
         getPlaceInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
         getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        getPlaceInfo.whereKey("radius", value: "500000")
+        getPlaceInfo.whereKey("radius", value: "\(radius)")
         getPlaceInfo.whereKey("type", value: "place")
         getPlaceInfo.whereKey("max_count", value: "500")
         getPlaceInfo.getMapInformation { (status: Int, message: Any?) in

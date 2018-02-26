@@ -103,7 +103,7 @@ class General: NSObject {
             (placemarks, error) -> Void in
             
             DispatchQueue.global(qos: .userInitiated).async {
-                guard error == nil else { joshprint("[CLGeocoder] error != nil"); return }
+                guard error == nil else { joshprint("[CLGeocoder] error != nil", error?.localizedDescription ?? ""); return }
                 guard let results = placemarks else { joshprint("[CLGeocoder] results = placemarks"); return }
                 guard results.count > 0 else { joshprint("[CLGeocoder] results.count <= 0"); return }
                 guard let first = results.first else { joshprint("[CLGeocoder] first != results.first"); return }
@@ -114,6 +114,7 @@ class General: NSObject {
                 var name = ""
                 var subThoroughfare = ""
                 var thoroughfare = ""
+                var subLocality = ""
                 var locality = ""
                 var administrativeArea = ""
                 var postalCode = ""
@@ -127,6 +128,9 @@ class General: NSObject {
                 }
                 if let t = first.thoroughfare {
                     thoroughfare = t
+                }
+                if let s_l = first.subLocality {
+                    subLocality = s_l
                 }
                 if let l = first.locality {
                     locality = l
@@ -144,15 +148,22 @@ class General: NSObject {
                 var address = ""
                 
                 if full == false {
-                    address = locality + ", " + administrativeArea + ", " + country
+//                    address = subLocality + ", " + locality + ", " + administrativeArea + ", " + country
+                    address = (subLocality == "" ? "" : subLocality + ", ") + (locality == "" ? "" : locality + ", ") + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
                     if detach {
+                        /*
                         if locality == administrativeArea {
-                            address = locality + "@" + ", " + country
+                            address = subLocality + ", " + locality + "@" + ", " + country
+                            completion(address as AnyObject)
+                            return
                         }
                         if locality == country {
-                            address = locality + "@"
+                            address = subLocality + ", " + locality + "@"
+                            completion(address as AnyObject)
+                            return
                         }
-                        address = locality + "@" + administrativeArea + ", " + country
+                        */
+                        address = (subLocality == "" ? "" : subLocality + ", ") + locality + "@" + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
                         completion(address as AnyObject)
                     } else {
                         completion(address as AnyObject)
@@ -208,25 +219,33 @@ class General: NSObject {
         }
     }
     
-    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
-        if url == "" {
-            imgPic.image = UIImage(named: "place_result_\(place.class_2_icon_id)") ?? UIImage(named: "place_result_48")
+    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
+        
+        func whenComplete() {
+            imgPic.image = #imageLiteral(resourceName: "default_place")
             imgPic.backgroundColor = .white
             imgPic.contentMode = .center
+            completion?()
+        }
+        
+        if url == "" {
+            whenComplete()
         } else {
             imgPic.contentMode = .scaleAspectFill
             if let placeImgFromCache = placeInfoBarImageCache.object(forKey: url as AnyObject) as? UIImage {
                 imgPic.image = placeImgFromCache
                 imgPic.backgroundColor = UIColor._2499090()
+                completion?()
             } else {
                 downloadImage(URL: url) { (rawData) in
-                    guard let data = rawData else { return }
+                    guard let data = rawData else { whenComplete(); return }
                     DispatchQueue.global(qos: .userInitiated).async {
-                        guard let placeImg = UIImage(data: data) else { return }
+                        guard let placeImg = UIImage(data: data) else { whenComplete(); return }
                         DispatchQueue.main.async {
                             imgPic.image = placeImg
                             imgPic.backgroundColor = UIColor._2499090()
                             placeInfoBarImageCache.setObject(placeImg, forKey: url as AnyObject)
+                            completion?()
                         }
                     }
                 }

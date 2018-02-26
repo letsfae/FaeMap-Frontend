@@ -78,7 +78,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         view.addSubview(btnSave)
         btnSave.titleLabel?.textColor = .white
         btnSave.titleLabel?.textAlignment = .center
-        btnSave.setTitle("Send", for: .normal)
+        btnSave.setTitle("Save", for: .normal)
         btnSave.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnSave.backgroundColor = UIColor._2499090()
         btnSave.layer.cornerRadius = 25
@@ -129,7 +129,11 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     
     @objc func actionSaveIntro(_ sender: UIButton) {
         delegate?.protSaveIntro(txtIntro: textView.text)
-        navigationController?.popViewController(animated: true)
+        if let nav = navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     @objc func actionGoBack(_ sender: UIButton) {

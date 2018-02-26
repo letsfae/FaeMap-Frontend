@@ -72,7 +72,13 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             self.coordinate = LocManager.shared.curtLoc.coordinate
             self.searchAllCategories()
             self.fullyLoaded = true
-            General.shared.getAddress(location: LocManager.shared.curtLoc, original: false, full: false, detach: true) { (address) in
+            var location: CLLocation!
+            if let loc = Key.shared.lastChosenLoc {
+                location = CLLocation(latitude: loc.latitude, longitude: loc.longitude)
+            } else {
+                location = LocManager.shared.curtLoc
+            }
+            General.shared.getAddress(location: location, original: false, full: false, detach: true) { (address) in
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
                     self.reloadBottomText(String(new[0]), String(new[1]))
@@ -128,7 +134,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         case 736, 667:
             y_offset = 515 * screenHeightFactor
         case 568:
-            y_offset = 420
+            y_offset = 350
         default:
             break
         }
@@ -194,13 +200,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_2)
         uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_3)
         uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_4)
-        
-        UIView.animate(withDuration: 0.3, animations: {
-            if self.clctViewPics != nil {
-                self.clctViewPics.alpha = 0
-            }
-            self.uiviewAvatarWaveSub.alpha = 1
-        })
         
         waveAnimation(circle: filterCircle_1, delay: 0)
         waveAnimation(circle: filterCircle_2, delay: 0.5)
@@ -321,7 +320,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblBottomLocation)
         view.addConstraintsWithFormat("V:[v0(25)]-\(19+device_offset_bot)-|", options: [], views: lblBottomLocation)
         lblBottomLocation.isHidden = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapToChooseLoc(_:)))
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
     
@@ -439,7 +438,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc func actionRefresh() {
         guard coordinate != nil else { return }
-        loadWaves()
+        showWaves()
         buttonEnable(on: false)
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
@@ -453,7 +452,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         btnRefresh.isEnabled = on
         btnMap.isEnabled = on
         btnGoRight.isEnabled = on
-        lblBottomLocation.isUserInteractionEnabled = on
+        //lblBottomLocation.isUserInteractionEnabled = on
         clctViewTypes.isUserInteractionEnabled = on
     }
     
@@ -566,18 +565,20 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Gesture Recognizers
     
-    @objc func handleTap(_ tap: UITapGestureRecognizer) {
-        /*let vc = SelectLocationViewController()
-        vc.delegate = self
-        vc.mode = .part
-        vc.boolFromExplore = true
-        navigationController?.pushViewController(vc, animated: false)*/
+    @objc func tapToChooseLoc(_ tap: UITapGestureRecognizer) {
+        /*
         let vc = BoardsSearchViewController()
         vc.enterMode = .location
         vc.delegate = self
         vc.strSearchedLocation = strLocation
         vc.strPlaceholder = strLocation
         navigationController?.pushViewController(vc, animated: true)
+ */
+        let vc = SelectLocationViewController()
+        vc.delegate = self
+        vc.mode = .part
+        vc.boolFromExplore = true
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     // MARK: - UICollectionViewDelegate
@@ -616,7 +617,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             lblNoResults.alpha = count == 0 && isInitial ? 1 : 0
             if count == 0 {
-                loadWaves()
+                showWaves()
             } else {
                 hideWaves()
             }
@@ -757,15 +758,24 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 } else {
                     self.categoryState["Random"] = .unread
                 }
-                self.clctViewPics.reloadData()
                 self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
                 if indexPath == Key.shared.selectedTypeIdx {
+                    self.clctViewPics.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }
                 self.checkSavedStatus(idx: 0)
             })
         }
+    }
+    
+    func showWaves() {
+        UIView.animate(withDuration: 0.3, animations: {
+            if self.clctViewPics != nil {
+                self.clctViewPics.alpha = 0
+            }
+            self.uiviewAvatarWaveSub.alpha = 1
+        })
     }
     
     func hideWaves() {
@@ -831,9 +841,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 } else {
                     self.categoryState[category] = .unread
                 }
-                self.clctViewPics.reloadData()
                 self.clctViewTypes.reloadItems(at: [indexPath])
                 if indexPath == Key.shared.selectedTypeIdx {
+                    self.clctViewPics.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }

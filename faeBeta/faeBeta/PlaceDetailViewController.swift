@@ -230,15 +230,22 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func loadHeader() {
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top))
-        
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101))
+        let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top - 27 + txtHeight))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101 - 27 + txtHeight))
+        uiviewSubHeader.lblName.frame.size.height = txtHeight
+        let origin_y = uiviewSubHeader.lblCategory.frame.origin.y - 27 + txtHeight
+        uiviewSubHeader.lblCategory.frame.origin.y = origin_y
         uiviewHeader.addSubview(uiviewSubHeader)
         uiviewSubHeader.setValue(place: place)
     }
     
     func loadFixedHeader() {
-        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101))
+        let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
+        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101-27+txtHeight))
+        uiviewFixedHeader.lblName.frame.size.height = txtHeight
+        let origin_y = uiviewFixedHeader.lblCategory.frame.origin.y - 27 + txtHeight
+        uiviewFixedHeader.lblCategory.frame.origin.y = origin_y
         view.addSubview(uiviewFixedHeader)
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
@@ -514,20 +521,20 @@ class FixedHeader: UIView {
         backgroundColor = .white
         
         lblName = UILabel(frame: CGRect(x: 20, y: 21 * screenHeightFactor, width: screenWidth - 40, height: 27))
+        lblName.numberOfLines = 0
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblName.textColor = UIColor._898989()
+        addSubview(lblName)
         
         lblCategory = UILabel(frame: CGRect(x: 20, y: 53 * screenHeightFactor, width: screenWidth - 90, height: 22))
         lblCategory.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblCategory.textColor = UIColor._146146146()
+        addSubview(lblCategory)
         
         lblPrice = UILabel()
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblPrice.textColor = UIColor._107105105()
         lblPrice.textAlignment = .right
-        
-        addSubview(lblName)
-        addSubview(lblCategory)
         addSubview(lblPrice)
         addConstraintsWithFormat("H:[v0(100)]-15-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:[v0(22)]-\(14 * screenHeightFactor)-|", options: [], views: lblPrice)
@@ -535,11 +542,13 @@ class FixedHeader: UIView {
         let uiviewLine = UIView(frame: CGRect(x: 0, y: 96, w: 414, h: 5))
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewLine)
+        addConstraintsWithFormat("V:[v0(\(5 * screenHeightFactor))]-\(5 * screenHeightFactor)-|", options: [], views: uiviewLine)
     }
     
     func setValue(place: PlacePin) {
         lblName.text = place.name
         lblCategory.text = place.class_1
-        lblPrice.text = "$$$"
+        lblPrice.text = place.price
     }
 }

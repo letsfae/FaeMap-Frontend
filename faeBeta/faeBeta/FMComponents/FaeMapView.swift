@@ -15,6 +15,9 @@ class FaeMapView: MKMapView {
     var slcMapCtrler: SelectLocationViewController?
     var blockTap = false
     var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
+    var singleTap: UITapGestureRecognizer!
+    var doubleTap: UITapGestureRecognizer!
+    var longPress: UILongPressGestureRecognizer!
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -29,13 +32,13 @@ class FaeMapView: MKMapView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let singleTap = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(_:)))
+        singleTap = UITapGestureRecognizer(target: self, action: #selector(handleSingleTap(_:)))
         singleTap.numberOfTapsRequired = 1
         
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        doubleTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
         doubleTap.numberOfTapsRequired = 2
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+        longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         longPress.minimumPressDuration = 0.3
         
         addGestureRecognizer(singleTap)

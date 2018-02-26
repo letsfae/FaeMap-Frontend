@@ -161,7 +161,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadTable() {
-        tblColListDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49 - device_offset_bot))
+        tblColListDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 48 - device_offset_bot))
         view.addSubview(tblColListDetail)
         
         tblColListDetail.delegate = self
