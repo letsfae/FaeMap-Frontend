@@ -19,6 +19,8 @@ public let kFIRSTRUN = "firstRun"
 public var headerDeviceToken: Data!
 
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FaeChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate, JSQAudioMediaItemDelegateCustom, LocationPickerMiniDelegate {
+    
+    
     var playingAudio: JSQAudioMediaItemCustom?
     
     func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
@@ -27,7 +29,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
         if let current = playingAudio {
             if current != audioMediaItem {
-                current.finishPlaying()
+               current.finishPlaying()
             }
         }
         playingAudio = audioMediaItem
@@ -330,7 +332,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         toolbarContentView = FaeChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatToolBarContentHeight))
         toolbarContentView.delegate = self
         toolbarContentView.inputToolbar = inputToolbar
-        toolbarContentView.cleanUpSelectedPhotos()
+        //toolbarContentView.cleanUpSelectedPhotos()
         view.addSubview(toolbarContentView)
         
     }
@@ -723,7 +725,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 }, completion: { (_) -> Void in
                     self.toolbarContentView.closeAll()
                     self.resetToolbarButtonIcon()
-                    self.toolbarContentView.cleanUpSelectedPhotos()
+                    //self.toolbarContentView.cleanUpSelectedPhotos()
                     self.boolClosingToolbarContentView = false
                 })
             }
@@ -734,12 +736,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
 
     // MARK: quick photo picker
-    func showFullAlbum() {
+    func showFullAlbum(with photoPicker: FaePhotoPicker) {
         closeToolbarContentView()
         boolGoToFullContent = true
-        let layout = UICollectionViewFlowLayout()
+        /*let layout = UICollectionViewFlowLayout()
         let vcFullAlbum = FullAlbumCollectionViewController(collectionViewLayout: layout)
         vcFullAlbum.imageDelegate = self
+        navigationController?.pushViewController(vcFullAlbum, animated: true)*/
+        let vcFullAlbum = FullAlbumViewController()
+        vcFullAlbum.prePhotoPicker = photoPicker
+        vcFullAlbum.delegate = self
         navigationController?.pushViewController(vcFullAlbum, animated: true)
     }
     
@@ -781,7 +787,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            sendMeaages_v2(type: "[Video]", text: "[\"\(seconds)\"]", media: data)
+            sendMeaages_v2(type: "[Video]", text: "\(seconds)", media: data)
         default: break
         }
         
@@ -1068,9 +1074,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     // need to refresh the album because user might take a photo outside the app
     @objc func appWillEnterForeground() {
         collectionView.reloadData()
-        toolbarContentView.reloadPhotoAlbum()
+        //toolbarContentView.reloadPhotoAlbum()
     }
-
+    func endEdit() {  }
+    
     func appendEmoji(_ name: String) { }
     
     func deleteLastEmoji() { }

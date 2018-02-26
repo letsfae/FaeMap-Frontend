@@ -80,6 +80,11 @@
 		9F64B3F520019BD40007848B /* FaeScrollBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F64B3F420019BD40007848B /* FaeScrollBar.swift */; };
 		9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */; };
 		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
+		9F99F0E12025746A007CE6FE /* FaePhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */; };
+		9F99F0E3202574EB007CE6FE /* FaePHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E2202574EB007CE6FE /* FaePHAssetCollection.swift */; };
+		9F99F0E52025751D007CE6FE /* FaePhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */; };
+		9F99F0E720257584007CE6FE /* FaePhotoPickerCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */; };
+		9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */; };
 		9FC6AAFE1FA167BA0024B9B8 /* SetWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */; };
 		9FC92AC52015526B00DD3250 /* StickerKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC92AC42015526B00DD3250 /* StickerKeyboardView.swift */; };
 		9FC92AC7201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC92AC6201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift */; };
@@ -438,6 +443,11 @@
 		9F64B3F420019BD40007848B /* FaeScrollBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeScrollBar.swift; sourceTree = "<group>"; };
 		9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneViewController.swift; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
+		9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPicker.swift; sourceTree = "<group>"; };
+		9F99F0E2202574EB007CE6FE /* FaePHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePHAssetCollection.swift; sourceTree = "<group>"; };
+		9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoLibrary.swift; sourceTree = "<group>"; };
+		9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPickerCells.swift; sourceTree = "<group>"; };
+		9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAlbumViewController.swift; sourceTree = "<group>"; };
 		9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWebViewController.swift; sourceTree = "<group>"; };
 		9FC92AC42015526B00DD3250 /* StickerKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerKeyboardView.swift; sourceTree = "<group>"; };
 		9FC92AC6201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerKeyboardViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -891,11 +901,16 @@
 			isa = PBXGroup;
 			children = (
 				B064EEB91D6E0CEA00C078F5 /* FullAlbumCollectionViewController.swift */,
+				9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */,
 				DC88D6591DE8250500C36B35 /* UIImage+Gif.swift */,
 				B064EEBD1D6E0CEA00C078F5 /* PhotoPicker.swift */,
 				B064EEBE1D6E0CEA00C078F5 /* SmartAlbum.swift */,
 				B064EEB41D6E0CEA00C078F5 /* CustomCollectionViewCell */,
 				B064EEBA1D6E0CEA00C078F5 /* CustomTableViewCell */,
+				9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */,
+				9F99F0E2202574EB007CE6FE /* FaePHAssetCollection.swift */,
+				9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */,
+				9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */,
 			);
 			path = Photo;
 			sourceTree = "<group>";
@@ -1860,6 +1875,7 @@
 				DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
+				9F99F0E12025746A007CE6FE /* FaePhotoPicker.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
 				50188F441FC36C390038CAFF /* CCHFadeInOutMapAnimator.m in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
@@ -1926,6 +1942,7 @@
 				B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
 				B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */,
+				9F99F0E3202574EB007CE6FE /* FaePHAssetCollection.swift in Sources */,
 				B8B7AF521E728BAF00BE92AB /* FMUserPinCtrl.swift in Sources */,
 				9FCE363E1FB958F1008CE5A1 /* SetContactDetailViewController.swift in Sources */,
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
@@ -2069,6 +2086,7 @@
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,
+				9F99F0E52025751D007CE6FE /* FaePhotoLibrary.swift in Sources */,
 				DC4EC3631DACA435001D0EA5 /* JSQAudioMediaViewAttributesCustom.m in Sources */,
 				9FC92AC7201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift in Sources */,
 				50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */,
@@ -2115,11 +2133,13 @@
 				B8849EBD1EEB147A00D4588D /* MBPeopleCell.swift in Sources */,
 				B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */,
 				506D1FCF1F2A97D5004119EA /* FMPlaceBarCtrl.swift in Sources */,
+				9F99F0E720257584007CE6FE /* FaePhotoPickerCells.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
 				B37E5DC31F831040008A6B4B /* SetDisplayName.swift in Sources */,
 				50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */,
 				B0A2ACA11CE3A3C7002E0C9D /* faeBeta.xcdatamodeld in Sources */,
+				9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */,
 				B064EEF31D6E0D1000C078F5 /* StickerTabView.swift in Sources */,
 				B83F8AED1E0353DB00F31CEF /* FMNameCardCtrl.swift in Sources */,
 				5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */,

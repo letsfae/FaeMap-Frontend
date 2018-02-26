@@ -33,17 +33,18 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-@objc protocol FaeChatToolBarContentViewDelegate {
+protocol FaeChatToolBarContentViewDelegate: class {
+    func sendMediaMessage(with faePHAssets: [FaePHAsset])
     func showAlertView(withWarning text: String)
     func sendStickerWithImageName(_ name: String)
     func sendImages(_ images: [UIImage])
-    func showFullAlbum()
-    @objc optional func sendAudioData(_ data: Data)
-    @objc optional func endEdit()
-    @objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
-    @objc optional func sendGifData(_ data: Data)
-    @objc optional func appendEmoji(_ name: String)
-    @objc optional func deleteLastEmoji()
+    func showFullAlbum(with photoPicker: FaePhotoPicker)
+    func sendAudioData(_ data: Data)
+    func endEdit()
+    //@objc optional func sendVideoData(_ video: Data, snapImage: UIImage, duration: Int)
+    //@objc optional func sendGifData(_ data: Data)
+    func appendEmoji(_ name: String)
+    func deleteLastEmoji()
 }
 
 /// This view contains all the stuff below a input toolbar, supporting stickers, photo, video, auido
@@ -65,11 +66,11 @@ class FaeChatToolBarContentView: UIView {
     }
     
     // Photos
-    fileprivate var uiviewPhotoPicker: UIView!
-    fileprivate var photoPicker: PhotoPicker!
-    fileprivate var cllcPhotoQuick: UICollectionView!//preview of the photoes
-    fileprivate let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
-    fileprivate let requestOption = PHImageRequestOptions()
+    fileprivate var faePhotoPicker: FaePhotoPicker!
+    //fileprivate var photoPicker: PhotoPicker!
+    //fileprivate var cllcPhotoQuick: UICollectionView!//preview of the photoes
+    //fileprivate let photoQuickCollectionReuseIdentifier = "photoQuickCollectionReuseIdentifier"
+    //fileprivate let requestOption = PHImageRequestOptions()
     fileprivate var btnQuickSendImage: UIButton!
     fileprivate var btnMoreImage: UIButton!
     fileprivate var boolImageQuickPickerShow = false
@@ -121,7 +122,7 @@ class FaeChatToolBarContentView: UIView {
         
         // quick photo picker
         func initializePhotoQuickPicker() {
-            uiviewPhotoPicker = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+            /*uiviewPhotoPicker = UIView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
             uiviewPhotoPicker.backgroundColor = .white
             addSubview(uiviewPhotoPicker)
             uiviewPhotoPicker.isHidden = true
@@ -136,21 +137,28 @@ class FaeChatToolBarContentView: UIView {
             cllcPhotoQuick.backgroundColor = UIColor.white
             cllcPhotoQuick.delegate = self
             cllcPhotoQuick.dataSource = self
-            uiviewPhotoPicker.addSubview(cllcPhotoQuick)
+            uiviewPhotoPicker.addSubview(cllcPhotoQuick)*/
 
+            var configure = FaePhotoPickerConfigure()
+            configure.boolFullPicker = false
+            configure.sizeThumbnail = CGSize(width: 220, height: frame.height)
+            
+            faePhotoPicker = FaePhotoPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height), with: configure)
+            addSubview(faePhotoPicker)
+            
             btnMoreImage = UIButton(frame: CGRect(x: 10, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
             btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
-            uiviewPhotoPicker.addSubview(btnMoreImage)
+            faePhotoPicker.addSubview(btnMoreImage)
 
             btnQuickSendImage = UIButton(frame: CGRect(x: frame.width - 52, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
-            uiviewPhotoPicker.addSubview(btnQuickSendImage)
+            faePhotoPicker.addSubview(btnQuickSendImage)
             
-            photoPicker = PhotoPicker.shared
-            updateSendButtonStatus()
+            //photoPicker = PhotoPicker.shared
+            //updateSendButtonStatus()
             boolPhotoInitialized = true
         }
         
@@ -207,7 +215,7 @@ extension FaeChatToolBarContentView {
             boolStickerViewShow = false
         }
         if boolImageQuickPickerShow {
-            uiviewPhotoPicker.isHidden = true
+            faePhotoPicker.isHidden = true
             boolImageQuickPickerShow = false
         }
         if boolRecordShow {
@@ -228,7 +236,7 @@ extension FaeChatToolBarContentView {
         if !boolStickerViewShow {
             viewStickerPicker.isHidden = false
             if boolImageQuickPickerShow {
-                uiviewPhotoPicker.isHidden = true
+                faePhotoPicker.isHidden = true
                 boolImageQuickPickerShow = false
             } else if boolRecordShow {
                 viewAudioRecorder.isHidden = true
@@ -238,7 +246,7 @@ extension FaeChatToolBarContentView {
                 viewMiniLoc.isHidden = true
             } else if boolKeyboardShow {
                 UIView.setAnimationsEnabled(false)
-                delegate.endEdit?()
+                delegate.endEdit()
                 //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
@@ -252,7 +260,7 @@ extension FaeChatToolBarContentView {
         if !boolMiniLocationShow {
             viewMiniLoc.isHidden = false
             if boolImageQuickPickerShow {
-                uiviewPhotoPicker.isHidden = true
+                faePhotoPicker.isHidden = true
                 boolImageQuickPickerShow = false
             } else if (boolRecordShow) {
                 viewAudioRecorder.isHidden = true
@@ -262,7 +270,7 @@ extension FaeChatToolBarContentView {
                 boolStickerViewShow = false
             } else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
-                delegate.endEdit?()
+                delegate.endEdit()
                 //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
@@ -271,15 +279,15 @@ extension FaeChatToolBarContentView {
     }
     
     func showLibrary() {
-        assert(cllcPhotoQuick != nil, "You must call setup() before call showLibrary!")
+        //assert(cllcPhotoQuick != nil, "You must call setup() before call showLibrary!")
         isHidden = false
         if !boolImageQuickPickerShow {
-            cllcPhotoQuick?.reloadData()
+            /*cllcPhotoQuick?.reloadData()
             let indexPath = IndexPath(row: 0, section: 0)
             if photoPicker.currentAlbum != nil {
                 cllcPhotoQuick?.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
-            }
-            uiviewPhotoPicker.isHidden = false
+            }*/
+            faePhotoPicker.isHidden = false
             if boolStickerViewShow {
                 viewStickerPicker.isHidden = true
                 boolStickerViewShow = false
@@ -291,7 +299,7 @@ extension FaeChatToolBarContentView {
                 viewMiniLoc.isHidden = true
             } else if (boolKeyboardShow){
                 UIView.setAnimationsEnabled(false)
-                delegate.endEdit?()
+                delegate.endEdit()
                 //self.boolKeyboardShow = false
                 UIView.setAnimationsEnabled(true)
             }
@@ -309,14 +317,14 @@ extension FaeChatToolBarContentView {
                 viewStickerPicker.isHidden = true
                 boolStickerViewShow = false
             } else if boolImageQuickPickerShow {
-                uiviewPhotoPicker.isHidden = true
+                faePhotoPicker.isHidden = true
                 boolImageQuickPickerShow = false
             } else if (boolMiniLocationShow) {
                 boolMiniLocationShow = false
                 viewMiniLoc.isHidden = true
             } else if boolKeyboardShow {
                 UIView.setAnimationsEnabled(false)
-                delegate.endEdit?()
+                delegate.endEdit()
                 UIView.setAnimationsEnabled(true)
             }
             boolRecordShow = true
@@ -330,8 +338,8 @@ extension FaeChatToolBarContentView {
         }
         boolStickerViewShow = false
         
-        if uiviewPhotoPicker != nil {
-            uiviewPhotoPicker.isHidden = true
+        if faePhotoPicker != nil {
+            faePhotoPicker.isHidden = true
         }
         boolImageQuickPickerShow = false
         
@@ -351,10 +359,10 @@ extension FaeChatToolBarContentView {
         viewStickerPicker = nil
         boolStickerViewShow = false
         
-        if photoPicker != nil {
+        /*if photoPicker != nil {
             photoPicker.cleanup()
-        }
-        uiviewPhotoPicker = nil
+        }*/
+        faePhotoPicker = nil
         boolImageQuickPickerShow = false
         
         viewAudioRecorder = nil
@@ -370,7 +378,7 @@ extension FaeChatToolBarContentView {
         felixprint("clear tool bar views")
     }
 }
-
+/*
 // MARK: UICollectionViewDataSource
 extension FaeChatToolBarContentView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -569,15 +577,15 @@ extension FaeChatToolBarContentView {
         btnQuickSendImage.isEnabled = photoPicker.videoAsset != nil || photoPicker.assetIndexDict.count != 0
     }
 }
-
+*/
 // MARK: Quick photo picker button action
 extension FaeChatToolBarContentView {
     @objc func showFullAlbum() {
-        self.delegate.showFullAlbum()
+        self.delegate.showFullAlbum(with: faePhotoPicker)
     }
     
     @objc func sendImageFromQuickPicker() {
-        if photoPicker.videoAsset != nil {
+        /*if photoPicker.videoAsset != nil {
             sendVideoFromQuickPicker()
             return
         } else if photoPicker.gifAssetDict.count != 0 {
@@ -590,21 +598,24 @@ extension FaeChatToolBarContentView {
         for i in 0..<photoPicker.indexImageDict.count {
             images.append(photoPicker.indexImageDict[i]!)
         }
-        self.delegate.sendImages(images)
+        self.delegate.sendImages(images)*/
+        delegate.sendMediaMessage(with: faePhotoPicker.selectedAssets)
+        faePhotoPicker.selectedAssets.removeAll()
+        faePhotoPicker.updateSelectedOrder()
     }
     
     fileprivate func sendGifFromQuickPicker() -> Bool {
-        if self.delegate.sendGifData != nil {
+        /*if self.delegate.sendGifData != nil {
             for data in photoPicker.gifAssetDict.values {
                 self.delegate.sendGifData!(data)
             }
             return true
-        }
+        }*/
         return false
     }
     
     fileprivate func sendVideoFromQuickPicker() {
-        UIScreenService.showActivityIndicator()
+        /*UIScreenService.showActivityIndicator()
         
         let image = self.photoPicker.videoImage!
         let duration = photoPicker.assetDurationDict[photoPicker.indexAssetDict[0]!] ?? 0
@@ -634,14 +645,14 @@ extension FaeChatToolBarContentView {
                 }
             }
             UIScreenService.hideActivityIndicator()
-        }
+        }*/
     }
 }
 
 // MARK: AudioRecorderViewDelegate
 extension FaeChatToolBarContentView: AudioRecorderViewDelegate {
     func audioRecorderView(_ audioView: AudioRecorderView, needToSendAudioData data: Data) {
-        self.delegate.sendAudioData?(data)
+        self.delegate.sendAudioData(data)
     }
 }
 
@@ -654,7 +665,7 @@ extension FaeChatToolBarContentView: SendStickerDelegate {
     
     func appendEmojiWithImageName(_ name: String) {
         print("[appendEmojiWithImageName]")
-        self.delegate.appendEmoji!(name)
+        self.delegate.appendEmoji(name)
         if inputToolbar != nil {
             inputToolbar.contentView.textView.insertText("[\(name)]")
         }
@@ -662,7 +673,7 @@ extension FaeChatToolBarContentView: SendStickerDelegate {
     
     func deleteEmoji() {
         print("[deleteEmoji]")
-        self.delegate.deleteLastEmoji!()
+        self.delegate.deleteLastEmoji()
         if inputToolbar != nil {
             let previous = inputToolbar.contentView.textView.text!
             inputToolbar.contentView.textView.text = previous.stringByDeletingLastEmoji()

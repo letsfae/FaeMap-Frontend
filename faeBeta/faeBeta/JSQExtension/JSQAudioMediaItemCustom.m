@@ -201,9 +201,11 @@
 }
 
 - (void)finishPlaying {
-    [self.audioPlayer stop];
-    self.audioPlayer.currentTime = 0.0;
-    [self resetAudioItem];
+    if (self.audioPlayer.isPlaying) {
+        [self.audioPlayer stop];
+        self.audioPlayer.currentTime = 0.0;
+        [self resetAudioItem];
+    }
 }
 
 - (void)resetAudioItem {
@@ -220,8 +222,9 @@
                                                             forDuration:self.audioPlayer.duration];
                     }
                     completion:^(BOOL finished) {
+                        /*[self.audioPlayer stop];
                         id error;
-                        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];
+                        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:&error];*/
                     } ];
 }
 

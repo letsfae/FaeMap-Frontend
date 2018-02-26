@@ -233,6 +233,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
 }
 
 extension RegisterInfoViewController: FAENumberKeyboardDelegate {
@@ -264,6 +266,9 @@ extension RegisterInfoViewController: FAENumberKeyboardDelegate {
 extension RegisterInfoViewController {
     override func keyboardWillShow(_ notification: Notification) {
         textField.resignFirstResponder()
+    }
+    
+    override func keyboardWillHide(_ notification: Notification) {
     }
     
     func hideNumKeyboard() {
