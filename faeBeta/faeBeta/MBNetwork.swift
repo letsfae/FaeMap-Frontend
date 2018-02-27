@@ -105,16 +105,31 @@ extension MapBoardViewController {
                 }
             case "people":
                 
-                let mbPeopleData = MBPeopleStruct(json: result)
+                let mbPeopleData = MBPeopleStruct(json: result, centerLoc: self.chosenLoc)
                 if mbPeopleData.userId == Key.shared.user_id {
                     continue
                 }
                 
-                if selectedGender == "" || mbPeopleData.age == "" {
+                if selectedGender == "" {
+                    continue
+                }
+                if (mbPeopleData.dis > Double(disVal)!) {
+                    continue
+                }
+                if (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") {
                     continue
                 }
                 
-                if (mbPeopleData.dis > Double(disVal)!) || (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") || ((Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) && !(ageLBVal == 18 && ageUBVal == 55))  {
+                if lblAgeVal.text == "All" {
+                    self.mbPeople.append(mbPeopleData)
+                    continue
+                }
+                
+                if mbPeopleData.age == "" {
+                    continue
+                }
+                
+                if ((Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) && !(ageLBVal == 18 && ageUBVal == 55)) {
                     continue
                 }
                 
@@ -170,13 +185,17 @@ extension MapBoardViewController {
     }
     
     func getMBPeopleInfo(_ completion: ((Int) -> ())?) {
-        let mbPeopleList = FaeMap()
-        
-        mbPeopleList.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
-        mbPeopleList.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
-        mbPeopleList.whereKey("radius", value: "9999999")
-        mbPeopleList.whereKey("type", value: "user")
-        mbPeopleList.getMapInformation { (status: Int, message: Any?) in
+        var location: CLLocationCoordinate2D!
+        if let loc = chosenLoc {
+            location = loc
+        } else {
+            location = LocManager.shared.curtLoc.coordinate
+        }
+        FaeMap.shared.whereKey("geo_latitude", value: "\(location.latitude)")
+        FaeMap.shared.whereKey("geo_longitude", value: "\(location.longitude)")
+        FaeMap.shared.whereKey("radius", value: "99999999999")
+        FaeMap.shared.whereKey("type", value: "user")
+        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPeopleInfo] status/100 != 2")
                 return

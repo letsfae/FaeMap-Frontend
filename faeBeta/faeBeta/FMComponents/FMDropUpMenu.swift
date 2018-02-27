@@ -219,7 +219,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         uiviewCollectionsContainer.addSubview(tblPlaceLoc)
         tblPlaceLoc.layer.cornerRadius = 12
         
-        uiviewBubbleHint.isHidden = true
+        uiviewBubbleHint.alpha = 0
         
         loadDropDownMenu()
         

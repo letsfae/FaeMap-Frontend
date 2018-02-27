@@ -28,7 +28,7 @@ struct MBPlacesStruct {
     var icon: UIImage?
     let classOne: String
     
-    init(json: JSON) {
+    init(json: JSON, centerLoc: CLLocationCoordinate2D? = nil) {
         placeId = json["place_id"].intValue
         name = json["name"].stringValue
         address = json["location"]["address"].stringValue + ", " + json["location"]["city"].stringValue + ", " + json["location"]["country"].stringValue + ", " + json["location"]["zip_code"].stringValue + ", " + json["location"]["state"].stringValue
@@ -36,7 +36,14 @@ struct MBPlacesStruct {
         position = CLLocation(latitude: json["geolocation"]["latitude"].doubleValue,
                              longitude: json["geolocation"]["longitude"].doubleValue)
         
-        let curtPos = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+        var location: CLLocationCoordinate2D!
+        if let loc = centerLoc {
+            location = loc
+        } else {
+            location = LocManager.shared.curtLoc.coordinate
+        }
+        
+        let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)
 
         dis = curtPos.distance(from: position) / 1000
         if dis < 0.1 {

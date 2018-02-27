@@ -9,6 +9,56 @@ import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
     
+    // MARK: - BoardsSearchDelegate
+    func sendLocationBack(address: RouteAddress) {
+        var arrNames = address.name.split(separator: ",")
+        var array = [String]()
+        guard arrNames.count >= 1 else { return }
+        for i in 0..<arrNames.count {
+            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
+            array.append(name)
+        }
+        if array.count >= 3 {
+            reloadBottomText(array[0], array[1] + ", " + array[2])
+        } else if array.count == 1 {
+            reloadBottomText(array[0], "")
+        } else if array.count == 2 {
+            reloadBottomText(array[0], array[1])
+        }
+        self.chosenLoc = address.coordinate
+        self.uiviewBubbleHint.alpha = 0
+        updateNearbyPeople()
+        rollUpFilter()
+    }
+    
+    func reloadBottomText(_ city: String, _ state: String) {
+        let fullAttrStr = NSMutableAttributedString()
+//        let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+//        let first_attch = InlineTextAttachment()
+//        first_attch.fontDescender = -2
+//        first_attch.image = UIImage(cgImage: (firstImg.cgImage)!, scale: 3, orientation: .up)
+//        let firstImg_attach = NSAttributedString(attachment: first_attch)
+//
+//        let secondImg = #imageLiteral(resourceName: "exp_bottom_loc_arrow")
+//        let second_attch = InlineTextAttachment()
+//        second_attch.fontDescender = -1
+//        second_attch.image = UIImage(cgImage: (secondImg.cgImage)!, scale: 3, orientation: .up)
+//        let secondImg_attach = NSAttributedString(attachment: second_attch)
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+        
+//        fullAttrStr.append(firstImg_attach)
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+//        fullAttrStr.append(secondImg_attach)
+        DispatchQueue.main.async {
+            self.lblAllCom.attributedText = fullAttrStr
+        }
+    }
+    
     func loadCannotFindPeople() {
         uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
         uiviewBubbleHint.backgroundColor = .white
@@ -18,7 +68,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         imgBubbleHint.image = #imageLiteral(resourceName: "mb_bubbleHint")
         uiviewBubbleHint.addSubview(imgBubbleHint)
         
-        lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 7, width: 206, height: 75))
+        lblBubbleHint = UILabel(frame: CGRect(x: 24, y: 9, width: 206, height: 75))
         lblBubbleHint.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblBubbleHint.textColor = UIColor._898989()
         lblBubbleHint.lineBreakMode = .byWordWrapping
@@ -31,13 +81,13 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         vickyprint("userStatus \(Key.shared.onlineStatus)")
         if curtTitle == "People" && !boolUsrVisibleIsOn {
             tblMapBoard.isHidden = true
-            uiviewBubbleHint.isHidden = false
+            uiviewBubbleHint.alpha = 1
             strBubbleHint = "Oops, you are invisible right now, turn off invisibility to discover! :)"
             lblBubbleHint.text = strBubbleHint
             btnSearchLoc.isUserInteractionEnabled = false
         } else {
             tblMapBoard.isHidden = false
-            uiviewBubbleHint.isHidden = true
+            uiviewBubbleHint.alpha = 0
             btnSearchLoc.isUserInteractionEnabled = true
         }
     }
@@ -67,13 +117,20 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             }, completion: nil)
             self.tblMapBoard.delaysContentTouches = false
             sliderDisFilter.setValue(Float(disVal)!, animated: false)
-        } else { // in place page
+        } else { // in both place & people
+            /* 老板要求改为直接地图上选取
             let vc = BoardsSearchViewController()
             vc.strSearchedLocation = lblAllCom.text
             vc.enterMode = .location
             vc.isCitySearch = true
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
+            */
+            let vc = SelectLocationViewController()
+            vc.delegate = self
+            vc.mode = .part
+            vc.boolFromExplore = true
+            navigationController?.pushViewController(vc, animated: false)
         }
     }
     
@@ -101,19 +158,16 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         if !boolUsrVisibleIsOn || curtTitle != "People" {
             return
         }
-        
+        showWaves()
         getMBPeopleInfo ({ (count: Int) in
             //            print(self.mbPeople)
             if count == 0 {   // self.mbPeople.count == 0
-                self.tblMapBoard.isHidden = true
-                self.uiviewBubbleHint.isHidden = false
                 self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
                 self.lblBubbleHint.text = self.strBubbleHint
             } else {
-                self.tblMapBoard.isHidden = false
-                self.uiviewBubbleHint.isHidden = true
                 self.tblMapBoard.reloadData()
             }
+            self.hideWaves(count: count)
         })
     }
     
@@ -297,6 +351,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         ageUBVal = Int(selectedMaximum)
         if ageLBVal == 18 && ageUBVal == 50 {
             lblAgeVal.text = "All"
+            
         } else if ageUBVal == 50 {
             lblAgeVal.text = "\(ageLBVal)-50+"
         } else {

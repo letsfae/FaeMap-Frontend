@@ -158,6 +158,16 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var talkTableMode: TalkTableMode = .feed
     var talkPostTableMode: TalkPostTableMode = .talk
     
+    var chosenLoc: CLLocationCoordinate2D? // user-chosen location
+    
+    // Loading Waves
+    var uiviewAvatarWaveSub: UIView!
+    var imgAvatar: FaeAvatarView!
+    var filterCircle_1: UIImageView!
+    var filterCircle_2: UIImageView!
+    var filterCircle_3: UIImageView!
+    var filterCircle_4: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -170,7 +180,9 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadChooseLocation()
         loadNavBar()
         loadTalkTabView()
-        uiviewBubbleHint.isHidden = true
+        loadAvatar()
+        
+        uiviewBubbleHint.alpha = 0
         uiviewTalkTab.isHidden = true
 
         getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
@@ -207,6 +219,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         super.viewWillAppear(animated)
         automaticallyAdjustsScrollViewInsets = false
         tblMapBoard.contentInset = .zero
+        loadWaves()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -433,7 +446,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         } else {
             hideDropDownMenu()
         }
-        
         rollUpFilter()
     }
     

@@ -42,6 +42,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     var arrOutdoors = [PlacePin]()
     var arrRecreation = [PlacePin]()
     
+    // Loading Waves
     var uiviewAvatarWaveSub: UIView!
     var imgAvatar: FaeAvatarView!
     var filterCircle_1: UIImageView!
