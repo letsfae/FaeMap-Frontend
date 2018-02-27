@@ -268,7 +268,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         tblPlaceLoc.register(CollectionsListCell.self, forCellReuseIdentifier: "CollectionsListCell")
         uiviewPlaceLoc.addSubview(tblPlaceLoc)
         
-        uiviewBubbleHint.isHidden = true
+        uiviewBubbleHint.alpha = 0
         
         loadDropDownMenu()
         

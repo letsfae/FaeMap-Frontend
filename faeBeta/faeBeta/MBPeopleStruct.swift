@@ -27,7 +27,7 @@ struct MBPeopleStruct {
     var distance: String
     let dis: Double
     
-    init(json: JSON) {
+    init(json: JSON, centerLoc: CLLocationCoordinate2D? = nil) {
         userId = json["user_id"].intValue
         userName = json["user_name"].stringValue
         displayName = json["user_nick_name"].stringValue
@@ -38,7 +38,14 @@ struct MBPeopleStruct {
         position = CLLocation(latitude: json["geolocation"][0]["latitude"].doubleValue,
                               longitude: json["geolocation"][0]["longitude"].doubleValue)
 
-        let curtPos = CLLocation(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+        var location: CLLocationCoordinate2D!
+        if let loc = centerLoc {
+            location = loc
+        } else {
+            location = LocManager.shared.curtLoc.coordinate
+        }
+        
+        let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)
         
         dis = curtPos.distance(from: position) / 1000
         if dis < 0.1 {

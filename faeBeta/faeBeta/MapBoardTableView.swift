@@ -76,7 +76,16 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mbPeopleCell", for: indexPath) as! MBPeopleCell
             
             let people = mbPeople[indexPath.row]
-            cell.setValueForCell(people: people, curtLoc: LocManager.shared.curtLoc)
+            
+            var location: CLLocationCoordinate2D!
+            if let loc = self.chosenLoc {
+                location = loc
+            } else {
+                location = LocManager.shared.curtLoc.coordinate
+            }
+            let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)
+            
+            cell.setValueForCell(people: people, curtLoc: curtPos)
             
             return cell
         } else if tableMode == .places {
