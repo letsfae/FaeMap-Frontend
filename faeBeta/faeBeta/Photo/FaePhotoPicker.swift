@@ -47,6 +47,7 @@ class FaePhotoPicker: UIView {
     var activityIndicator: UIActivityIndicatorView?
     var leftBtnHandler: (() -> Void)? = nil
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
+    var alertHandler: ((String) -> Void)? = nil
     
     // MARK: configuration
     var configuration = FaePhotoPickerConfigure()
@@ -247,6 +248,7 @@ extension FaePhotoPicker: UICollectionViewDataSource, UICollectionViewDataSource
                 requestIds[indexPath] = requestId
             }
         }
+        cell.imgChosenIndicator.isHidden = boolSingleSelection
         return cell
     }
     
@@ -321,7 +323,10 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                 cell.boolIsSelected = false
                 updateSelectedOrder()
             } else {
-                guard !maxCheck() else { return }
+                guard !maxCheck() else {
+                    alertHandler?("You can only select up to \(intMaxSelectedAssets) images at the same time")
+                    return
+                }
                 asset.selectedOrder = selectedAssets.count + 1
                 selectedAssets.append(asset)
                 requestCloudDownload(asset: asset, indexPath: indexPath)

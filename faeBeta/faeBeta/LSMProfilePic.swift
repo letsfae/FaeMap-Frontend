@@ -10,9 +10,12 @@ import UIKit
 import Photos
 import RealmSwift
 
-extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
+extension LeftSlidingMenuViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseAvatarDelegate {
     
     // SendMutipleImagesDelegate
+    func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
+        SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "leftSlidingMenu")
+    }
     func sendImages(_ images: [UIImage]) {
         print("send image for avatar")
         if let image = images.first {

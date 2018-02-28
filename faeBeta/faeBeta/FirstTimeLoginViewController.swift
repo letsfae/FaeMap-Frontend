@@ -15,7 +15,7 @@ protocol ButtonFinishClickedDelegate: class {
     func jumpToEnableNotification()
 }
 
-class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate {
+class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseAvatarDelegate {
 
     weak var delegate: ButtonFinishClickedDelegate?
     var uiViewSetPicture: UIView!
@@ -134,8 +134,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.view.addSubview(activityIndicator)
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
-        uploadProfileAvatar()
-//        SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
+        //uploadProfileAvatar()
+        SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
     }
     
     func uploadProfileAvatar() {
@@ -200,8 +200,10 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             buttonFinish.isEnabled = false
         }
     }
-    
     @objc func addProfileAvatar(_ sender: UIButton) {
+         SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
+    }
+    /*@objc func addProfileAvatar(_ sender: UIButton) {
         SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
         let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
@@ -257,7 +259,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         menu.addAction(showCamera)
         menu.addAction(cancel)
         self.present(menu, animated: true, completion: nil)
-    }
+    }*/
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         self.imageViewAvatar.image = image
@@ -272,7 +274,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         alertController.addAction(okAction)
         self.present(alertController, animated: true, completion: nil)
     }
-    
+    func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
+        SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "firstTimeLogin")
+    }
     func sendImages(_ images: [UIImage]) {
         print("send image for avatar")
         imageViewAvatar.image = images[0]
