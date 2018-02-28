@@ -58,9 +58,13 @@ extension FaePhotoLibrary {
         return options
     }
     
-    func fetchResult(collection: FaePHAssetCollection?) -> PHFetchResult<PHAsset>? {
+    func fetchResult(collection: FaePHAssetCollection?, boolAllowVideo: Bool) -> PHFetchResult<PHAsset>? {
         guard let phAssetCollection = collection?.phAssetCollection else { return nil}
-        return PHAsset.fetchAssets(in: phAssetCollection, options: getOption())
+        let options = getOption()
+        if !boolAllowVideo {
+            options.predicate = NSPredicate(format: "mediaType = %i", PHAssetMediaType.image.rawValue)
+        }
+        return PHAsset.fetchAssets(in: phAssetCollection, options: options)
     }
     
     func fetchCollection(with configure: FaePhotoPickerConfigure) {
