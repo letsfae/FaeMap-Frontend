@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol FullAlbumSelectionDelegate: class {
+    func finishChoosing(with faePHAssets: [FaePHAsset])
+}
+
 class FullAlbumViewController: UIViewController {
     var selectedAssets = [FaePHAsset]()
     var faePhotoPicker: FaePhotoPicker!
@@ -26,6 +30,7 @@ class FullAlbumViewController: UIViewController {
         }
         faePhotoPicker.rightBtnHandler = handleDone
         faePhotoPicker.leftBtnHandler = cancel
+        faePhotoPicker.alertHandler = handleAlert
         view.addSubview(faePhotoPicker)
     }
     
@@ -44,5 +49,11 @@ class FullAlbumViewController: UIViewController {
     func cancel() {
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
+    }
+    
+    func handleAlert(_ message: String) {
+        let alert = UIAlertController(title: message, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }

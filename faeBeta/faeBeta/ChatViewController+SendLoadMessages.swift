@@ -228,6 +228,10 @@ extension ChatViewController: OutgoingMessageProtocol {
         }
     }
     
+    /*func finishChoosing(with faePHAssets: [FaePHAsset]) {
+        sendMediaMessage(with: faePHAssets)
+    }*/
+    
     // send image delegate function
     func sendImages(_ images: [UIImage]) {
         for i in 0 ..< images.count {

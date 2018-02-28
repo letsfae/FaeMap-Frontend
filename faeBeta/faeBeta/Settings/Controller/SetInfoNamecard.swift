@@ -14,7 +14,7 @@ enum SetInfoEnterMode {
     case settings
 }
 
-class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate, UIImagePickerControllerDelegate, SendMutipleImagesDelegate {
+class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate, UIImagePickerControllerDelegate, ChooseAvatarDelegate {
     
     func protSaveName(txtName: String?) {
         strDisplayName = txtName
@@ -163,10 +163,10 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
             }
         case 2:
             isProfilePhoto = true
-            SetAvatar.addUserImage(vc: self, type: "setNamecard")
+            SetAvatar.addUserImage(vc: self, type: "setInfoNamecard")
         case 3:
             isProfilePhoto = false
-            SetAvatar.addUserImage(vc: self, type: "setNamecard")
+            SetAvatar.addUserImage(vc: self, type: "setInfoNamecard")
         default: break
         }
     }
@@ -184,8 +184,12 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         print("send image for avatar")
         if let image = images.first {
             //uploadProfileAvatar(image: image)
-            SetAvatar.uploadUserImage(image: image, vc: self, type: "setNamecard", isProfilePic: self.isProfilePhoto)
+            SetAvatar.uploadUserImage(image: image, vc: self, type: "setInfoNamecard", isProfilePic: self.isProfilePhoto)
         }
+    }
+    
+    func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
+        SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "setInfoNamecard", isProfilePic: self.isProfilePhoto)
     }
     
     // UIImagePickerControllerDelegate
