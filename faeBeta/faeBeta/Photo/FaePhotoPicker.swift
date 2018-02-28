@@ -215,7 +215,7 @@ extension FaePhotoPicker: UICollectionViewDataSource, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.identifier, for: indexPath) as! PhotoCollectionViewCell
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.identifier, for: indexPath) as! PhotoCollectionViewCell
         guard let collection = currentCollection else { return cell }
         guard let asset = collection.getFaePHAsset(at: indexPath.item) else { return cell }
         cell.boolFullPicker = boolFullPicker
@@ -389,6 +389,11 @@ extension FaePhotoPicker: UITableViewDataSource {
                 }
             })
         }
+        if let current = currentCollection, current == collection {
+            cell.setCheckMark(true)
+        } else {
+            cell.setCheckMark(false)
+        }
         return cell
     }
 }
@@ -442,8 +447,9 @@ extension FaePhotoPicker {
         cancelAllCloudRequests()
         cancelAllAssetsRequests()
         currentCollection = collection
-        currentCollection?.fetchResult = photoLibrary.fetchResult(collection: collection)
+        currentCollection?.fetchResult = photoLibrary.fetchResult(collection: collection, boolAllowVideo: boolAllowedVideo)
         collectionView.reloadData()
+        tblAlbums?.reloadData()
     }
     
     func setupNavTitle(at lblTitle: UILabel?, albumTable isOpen: Bool) {
