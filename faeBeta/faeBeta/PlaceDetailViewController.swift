@@ -27,6 +27,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var place: PlacePin!
     var allPlaces = [PlacePin]()
     var uiviewHeader: UIView!
+    var uiview_bottomLine: UIView!
     var uiviewSubHeader: FixedHeader!
     var uiviewFixedHeader: FixedHeader!
     var uiviewScrollingPhotos: InfiniteScrollingView!
@@ -243,6 +244,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     func loadFixedHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
         uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101-27+txtHeight))
+        if screenHeight == 812 { uiviewFixedHeader.frame.origin.y = 30 }
         uiviewFixedHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewFixedHeader.lblCategory.frame.origin.y - 27 + txtHeight
         uiviewFixedHeader.lblCategory.frame.origin.y = origin_y
@@ -250,6 +252,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewFixedHeader.setValue(place: place)
         uiviewFixedHeader.isHidden = true
         uiviewWhite = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 22))
+        if screenHeight == 812 { uiviewWhite.frame.size.height = 30 }
         uiviewWhite.backgroundColor = .white
         view.addSubview(uiviewWhite)
         uiviewWhite.alpha = 0
@@ -284,6 +287,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
         uiviewScrollingPhotos.addSubview(bottomLine)
+        uiviewScrollingPhotos.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
+        uiviewScrollingPhotos.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
         uiviewScrollingPhotos.loadImages(place: place)
     }
     
@@ -362,24 +367,31 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewScrollingPhotos.frame = frame
+                let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
+                uiviewScrollingPhotos.frame.size.height = height
+                uiviewScrollingPhotos.imgPic_1.frame.size.height = height
             } else {
                 frame.origin.y = 0
-                uiviewScrollingPhotos.frame = frame
+                uiviewScrollingPhotos.frame.origin.y = 0
             }
         }
-        if tblPlaceDetail.contentOffset.y >= (186 + device_offset_top) * screenHeightFactor {
+        var offset_y: CGFloat = 186 * screenHeightFactor
+        if screenHeight == 812 { offset_y = 180 }
+        if tblPlaceDetail.contentOffset.y >= offset_y {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
             if boolAnimateTo_1 {
                 boolAnimateTo_1 = false
                 UIView.animate(withDuration: 0.2, animations: {
                     self.uiviewScrollingPhotos.alpha = 0
+                    self.uiviewSubHeader.alpha = 0
                     self.uiviewWhite.alpha = 1
                 })
             }
         } else {
             uiviewFixedHeader.isHidden = true
             self.uiviewWhite.alpha = 0
+            self.uiviewSubHeader.alpha = 1
             UIApplication.shared.statusBarStyle = .lightContent
             if boolAnimateTo_1 == false {
                 boolAnimateTo_1 = true
