@@ -167,7 +167,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
     func checkForUniqueEmail() {
         faeUser.whereKey("email", value: email!)
         showActivityIndicator()
-        faeUser.checkEmailExistence {(status, message) in DispatchQueue.main.async(execute: {
+        jumpToEnterCode()
+        /*faeUser.checkEmailExistence {(status, message) in DispatchQueue.main.async(execute: {
             if status/100 == 2 {
                     let value = (message as! NSDictionary).value(forKey: "existence")
                     if (value != nil) {
@@ -182,7 +183,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     self.hideActivityIndicator()
                 }
             })
-        }
+        }*/
     }
     
     func checkForValidEmail(_ email: String, completion: @escaping () -> Void) {
