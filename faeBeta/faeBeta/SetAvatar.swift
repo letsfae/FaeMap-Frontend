@@ -12,7 +12,7 @@ import RealmSwift
 
 class SetAvatar {
     
-    static func uploadUserImage(image: UIImage, vc: UIViewController, type: String, isProfilePic: Bool = true) {
+    static func uploadUserImage(image: UIImage, vc: UIViewController, type: String, isProfilePic: Bool = true, _ complete: (() -> Void)? = nil) {
         //let currentVC: UIViewController
         var activityIndicator = UIActivityIndicatorView()
         var imgView = UIImageView()
@@ -53,8 +53,8 @@ class SetAvatar {
                 try! realm.write {
                     realm.add(realmUser, update: true)
                 }
-            }
-            else {
+                complete?()
+            } else {
                 print("[uploadProfileAvatar] fail")
                 self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again", vc: vc)
                 return

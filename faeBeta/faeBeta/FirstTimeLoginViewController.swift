@@ -135,7 +135,9 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
         //uploadProfileAvatar()
-        SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin")
+        SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin") {
+            self.modifyDisplayName()
+        }
     }
     
     func uploadProfileAvatar() {
