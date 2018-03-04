@@ -47,6 +47,7 @@ class FaePhotoPicker: UIView {
     var activityIndicator: UIActivityIndicatorView?
     var leftBtnHandler: (() -> Void)? = nil
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
+    var alertHandler: ((String) -> Void)? = nil
     
     // MARK: configuration
     var configuration = FaePhotoPickerConfigure()
@@ -214,7 +215,7 @@ extension FaePhotoPicker: UICollectionViewDataSource, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.identifier, for: indexPath) as! PhotoCollectionViewCell
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCollectionViewCell.identifier, for: indexPath) as! PhotoCollectionViewCell
         guard let collection = currentCollection else { return cell }
         guard let asset = collection.getFaePHAsset(at: indexPath.item) else { return cell }
         cell.boolFullPicker = boolFullPicker
@@ -247,6 +248,7 @@ extension FaePhotoPicker: UICollectionViewDataSource, UICollectionViewDataSource
                 requestIds[indexPath] = requestId
             }
         }
+        cell.imgChosenIndicator.isHidden = boolSingleSelection
         return cell
     }
     
@@ -321,7 +323,10 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                 cell.boolIsSelected = false
                 updateSelectedOrder()
             } else {
-                guard !maxCheck() else { return }
+                guard !maxCheck() else {
+                    alertHandler?("You can only select up to \(intMaxSelectedAssets) images at the same time")
+                    return
+                }
                 asset.selectedOrder = selectedAssets.count + 1
                 selectedAssets.append(asset)
                 requestCloudDownload(asset: asset, indexPath: indexPath)
@@ -384,6 +389,11 @@ extension FaePhotoPicker: UITableViewDataSource {
                 }
             })
         }
+        if let current = currentCollection, current == collection {
+            cell.setCheckMark(true)
+        } else {
+            cell.setCheckMark(false)
+        }
         return cell
     }
 }
@@ -437,8 +447,9 @@ extension FaePhotoPicker {
         cancelAllCloudRequests()
         cancelAllAssetsRequests()
         currentCollection = collection
-        currentCollection?.fetchResult = photoLibrary.fetchResult(collection: collection)
+        currentCollection?.fetchResult = photoLibrary.fetchResult(collection: collection, boolAllowVideo: boolAllowedVideo)
         collectionView.reloadData()
+        tblAlbums?.reloadData()
     }
     
     func setupNavTitle(at lblTitle: UILabel?, albumTable isOpen: Bool) {

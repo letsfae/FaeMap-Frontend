@@ -181,6 +181,7 @@ class AlbumsTableViewCell: UITableViewCell {
         addSubview(imgCheckMark)
         addConstraintsWithFormat("H:[v0(19)]-10-|", options: [], views: imgCheckMark)
         addConstraintsWithFormat("V:|-34-[v0(15)]", options: [], views: imgCheckMark)
+        imgCheckMark.isHidden = true
         
         selectionStyle = .none
         
@@ -196,7 +197,7 @@ class AlbumsTableViewCell: UITableViewCell {
     }
     
     func setCheckMark(_ bool : Bool) {
-        imgCheckMark.isHidden = bool
+        imgCheckMark.isHidden = !bool
     }
     
 }
