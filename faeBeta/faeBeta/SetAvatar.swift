@@ -12,12 +12,12 @@ import RealmSwift
 
 class SetAvatar {
     
-    static func uploadUserImage(image: UIImage, vc: UIViewController, type: String, isProfilePic: Bool = true) {
+    static func uploadUserImage(image: UIImage, vc: UIViewController, type: String, isProfilePic: Bool = true, _ complete: (() -> Void)? = nil) {
         //let currentVC: UIViewController
         var activityIndicator = UIActivityIndicatorView()
         var imgView = UIImageView()
         switch type {
-        case "leftSliding":
+        case "leftSlidingMenu":
             let currentVC = vc as! LeftSlidingMenuViewController
             activityIndicator = currentVC.activityIndicator
             imgView = currentVC.imgAvatar
@@ -25,7 +25,7 @@ class SetAvatar {
             let currentVC = vc as! FirstTimeLoginViewController
             activityIndicator = currentVC.activityIndicator
             imgView = currentVC.imageViewAvatar
-        case "setNamecard":
+        case "setInfoNamecard":
             let currentVC = vc as! SetInfoNamecard
             activityIndicator = currentVC.activityIndicator
             if isProfilePic {
@@ -37,51 +37,27 @@ class SetAvatar {
         }
         vc.view.isUserInteractionEnabled = false
         activityIndicator.startAnimating()
-        if isProfilePic {
-            let avatar = FaeImage()
-            avatar.image = image
-            avatar.faeUploadProfilePic { (code: Int, message: Any?) in
-                activityIndicator.stopAnimating()
-                vc.view.isUserInteractionEnabled = true
-                if code / 100 == 2 {
-                    imgView.image = image
-                    print("[uploadProfileAvatar] succeed")
-                    let realm = try! Realm()
-                    let realmUser = UserImage()
-                    realmUser.user_id = "\(Key.shared.user_id)"
-                    realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
-                    try! realm.write {
-                        realm.add(realmUser, update: true)
-                    }
+        let avatar = FaeImage()
+        avatar.image = image
+        let uploadHandler = isProfilePic ? avatar.faeUploadProfilePic : avatar.faeUploadCoverPhoto
+        uploadHandler { (code: Int, message: Any?) in
+            activityIndicator.stopAnimating()
+            vc.view.isUserInteractionEnabled = true
+            if code / 100 == 2 {
+                imgView.image = image
+                print("[uploadProfileAvatar] succeed")
+                let realm = try! Realm()
+                let realmUser = UserImage()
+                realmUser.user_id = "\(Key.shared.user_id)"
+                realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
+                try! realm.write {
+                    realm.add(realmUser, update: true)
                 }
-                else {
-                    print("[uploadProfileAvatar] fail")
-                    self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again", vc: vc)
-                    return
-                }
-            }
-        } else {
-            let coverPhoto = FaeImage()
-            coverPhoto.image = image
-            coverPhoto.faeUploadCoverPhoto { (code: Int, message: Any?) in
-                activityIndicator.stopAnimating()
-                vc.view.isUserInteractionEnabled = true
-                if code / 100 == 2 {
-                    imgView.image = image
-                    print("[uploadProfileAvatar] succeed")
-                    let realm = try! Realm()
-                    let realmUser = UserImage()
-                    realmUser.user_id = "\(Key.shared.user_id)"
-                    realmUser.userCoverPhoto = RealmChat.compressImageToData(image)! as NSData
-                    try! realm.write {
-                        realm.add(realmUser, update: true)
-                    }
-                }
-                else {
-                    print("[faeUploadCoverPhoto] fail")
-                    self.showAlert(title: "Upload Cover Photo Failed", message: "please try again", vc: vc)
-                    return
-                }
+                complete?()
+            } else {
+                print("[uploadProfileAvatar] fail")
+                self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again", vc: vc)
+                return
             }
         }
     }
@@ -103,10 +79,10 @@ class SetAvatar {
     }
     
     static func addUserImage(vc: UIViewController, type: String) {
-        var imageDelegate: SendMutipleImagesDelegate!
+        var imageDelegate: ChooseAvatarDelegate!
         var imagePickerDelegate: (UIImagePickerControllerDelegate & UINavigationControllerDelegate)!
         switch type {
-        case "leftSliding":
+        case "leftSlidingMenu":
             let currentVC = vc as! LeftSlidingMenuViewController
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
@@ -114,7 +90,7 @@ class SetAvatar {
             let currentVC = vc as! FirstTimeLoginViewController
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
-        case "setNamecard":
+        case "setInfoNamecard":
             let currentVC = vc as! SetInfoNamecard
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
@@ -131,20 +107,30 @@ class SetAvatar {
                         self.showAlert(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access", vc: vc)
                         return
                     }
-                    let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                    let imagePicker = ChooseAvatarViewController()
+                    imagePicker.delegate = imageDelegate
+                    imagePicker.vcComeFromType = ChooseAvatarViewController.ComeFromType(rawValue: type)!
+                    imagePicker.vcComeFrom = vc
+                    vc.present(imagePicker, animated: true, completion: nil)
+                    /*let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                     imagePicker.imageDelegate = imageDelegate
                     imagePicker.vcComeFromType = .lefeSlidingMenu
                     imagePicker.vcComeFrom = vc
                     imagePicker._maximumSelectedPhotoNum = 1
-                    vc.present(imagePicker, animated: true, completion: nil)
+                    vc.present(imagePicker, animated: true, completion: nil)*/
                 })
             } else {
-                let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+                let imagePicker = ChooseAvatarViewController()
+                imagePicker.delegate = imageDelegate
+                imagePicker.vcComeFromType = ChooseAvatarViewController.ComeFromType(rawValue: type)!
+                imagePicker.vcComeFrom = vc
+                vc.present(imagePicker, animated: true, completion: nil)
+                /*let albumPicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
                 albumPicker.imageDelegate = imageDelegate
                 albumPicker.vcComeFromType = .lefeSlidingMenu
                 albumPicker.vcComeFrom = vc
                 albumPicker._maximumSelectedPhotoNum = 1
-                vc.present(albumPicker, animated: true, completion: nil)
+                vc.present(albumPicker, animated: true, completion: nil)*/
             }
         }
         let showCamera = UIAlertAction(title: "Take photos", style: .default) { (alert: UIAlertAction) in
@@ -182,5 +168,75 @@ class SetAvatar {
         menu.addAction(showCamera)
         menu.addAction(cancel)
         vc.present(menu, animated: true, completion: nil)
+    }
+}
+
+protocol ChooseAvatarDelegate: class {
+    func finishChoosingAvatar(with faePHAsset: FaePHAsset)
+}
+
+class ChooseAvatarViewController: UIViewController {
+    var faePhotoPicker: FaePhotoPicker!
+    weak var delegate: ChooseAvatarDelegate?
+    
+    enum ComeFromType: String {
+        case leftSlidingMenu
+        case firstTimeLogin
+        case setInfoNamecard
+    }
+    var vcComeFromType: ComeFromType = .firstTimeLogin
+    var vcComeFrom: UIViewController!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        var configure = FaePhotoPickerConfigure()
+        configure.boolAllowdVideo = false
+        configure.strRightBtnTitle = "Camera"
+        configure.boolSingleSelection = true
+        faePhotoPicker = FaePhotoPicker(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight), with: configure)
+        faePhotoPicker.leftBtnHandler = cancel
+        faePhotoPicker.rightBtnHandler = handleDone
+        view.addSubview(faePhotoPicker)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    func handleDone(_ results: [FaePHAsset], _ camera: Bool) {
+        if camera {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .camera
+            switch vcComeFromType {
+            case .leftSlidingMenu:
+                imagePicker.delegate = vcComeFrom as! LeftSlidingMenuViewController
+            case .firstTimeLogin:
+                imagePicker.delegate = vcComeFrom as! FirstTimeLoginViewController
+            case .setInfoNamecard:
+                imagePicker.delegate = vcComeFrom as! SetInfoNamecard
+            }
+            if PHPhotoLibrary.authorizationStatus() != .authorized {
+                PHPhotoLibrary.requestAuthorization({ (status) in
+                    if status != .authorized {
+                        let alert = UIAlertController(title: "Cannot access photo library", message: "Open System Setting -> Fae Map to turn on the camera access", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        self.dismiss(animated: true, completion: nil)
+                        self.vcComeFrom.present(imagePicker, animated: true, completion: nil)
+                    }
+                })
+            } else {
+                dismiss(animated: true, completion: nil)
+                vcComeFrom.present(imagePicker, animated: true, completion: nil)
+            }
+        } else {
+            delegate?.finishChoosingAvatar(with: results[0])
+            dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    func cancel() {
+        dismiss(animated: true, completion: nil)
     }
 }

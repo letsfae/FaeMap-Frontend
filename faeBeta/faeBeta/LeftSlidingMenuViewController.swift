@@ -332,7 +332,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
 //        tableSelections = .myFaeMainPage
 //        actionCloseMenu(btnBackground)
         //addProfileAvatar()
-        SetAvatar.addUserImage(vc: self, type: "leftSliding")
+        SetAvatar.addUserImage(vc: self, type: "leftSlidingMenu")
     }
     
     @objc func mapBoardSwitch(_ sender: UISwitch) {
