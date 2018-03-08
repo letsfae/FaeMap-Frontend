@@ -30,7 +30,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.superview?.sendSubview(toBack: anView)
-                if mapMode == .pinDetail { // immediatelly show up
+                if mapMode == .pinDetail || modePinDetail == .on { // immediatelly show up
                     anView.imgIcon.frame = CGRect(x: 0-8, y: 0-5, width: 56, height: 56)
                     anView.alpha = 1
                     return
@@ -72,7 +72,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
 
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
         
-        if mapMode == .pinDetail { // immediatelly remove
+        if mapMode == .pinDetail || modePinDetail == .on { // immediatelly remove
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
                     if let anView = self.faeMapView.view(for: anno) {
@@ -171,6 +171,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(Key.shared.userMiniAvatar)") ?? UIImage())  {
                 self.boolCanOpenPin = true
             }
+            uiviewNameCard.boolSmallSize = false
+            uiviewNameCard.btnProfile.isHidden = true
         }
     }
     

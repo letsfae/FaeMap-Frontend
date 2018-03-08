@@ -64,8 +64,8 @@ class General: NSObject {
                 if let img = UIImage(data: coverPhoto as Data) {
                     completion(img)
                 } else {
-                    let gender = Key.shared.gender == "male" ? "defaultMen" : "defaultWomen"
-                    completion(UIImage(named: gender)!)
+                    guard let defaultCover = Key.shared.defaultCover else { return }
+                    completion(defaultCover)
                 }
             }
         }
@@ -224,7 +224,7 @@ class General: NSObject {
         func whenComplete() {
             imgPic.image = #imageLiteral(resourceName: "default_place")
             imgPic.backgroundColor = .white
-            imgPic.contentMode = .center
+            imgPic.contentMode = .scaleAspectFill
             completion?()
         }
         

@@ -37,6 +37,8 @@ extension FaeMapViewController {
         uiviewNameCard.show(avatar: firstAnn.avatar) {
             self.boolCanOpenPin = true
         }
+        guard let userPin = firstAnn.pinInfo as? UserPin else { return }
+        uiviewNameCard.boolSmallSize = !userPin.showOptions
     }
     
     func updateTimerForUserPin() {

@@ -20,7 +20,8 @@ extension FaeMapViewController: MapSearchDelegate {
         let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
         placesFromSearch.append(pin)
         if searchText == "fromPlaceDetail" {
-            mapMode = .pinDetail
+            // mapMode = .pinDetail
+            modePinDetail = .on
             let pin_self = FaePinAnnotation(type: "place", data: place)
             pin_self.coordinate = LocManager.shared.curtLoc.coordinate
             let coordinateRegion = MKCoordinateRegionMakeWithDistance(place.coordinate, 3000, 3000)
@@ -84,7 +85,7 @@ extension FaeMapViewController: MapSearchDelegate {
         var edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
         if mapMode == .explore {
             edgePadding = UIEdgeInsetsMake(120, 40, 300, 40)
-        } else if mapMode == .pinDetail {
+        } else if mapMode == .pinDetail || modePinDetail == .on {
             edgePadding = UIEdgeInsetsMake(220, 80, 120, 80)
         }
         faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)

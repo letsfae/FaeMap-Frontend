@@ -71,9 +71,9 @@ class FMPlaceInfoBar: UIView {
     }
     
     func resetSubviews() {
-        imgBack_0.frame.origin.x = -screenWidth + 2
-        imgBack_1.frame.origin.x = 0 + 2
-        imgBack_2.frame.origin.x = screenWidth + 2
+        imgBack_0.frame.origin.x = -screenWidth + 7
+        imgBack_1.frame.origin.x = 7
+        imgBack_2.frame.origin.x = screenWidth + 7
     }
     
     func load(for placeInfo: PlacePin) {
@@ -153,6 +153,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     func show() {
+        self.isHidden = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
         }, completion: nil)
@@ -162,16 +163,19 @@ class FMPlaceInfoBar: UIView {
         if animated {
             UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
                 self.alpha = 0
-            }, completion: nil)
+            }, completion: { _ in
+                self.isHidden = true
+            })
         } else {
             self.alpha = 0
+            self.isHidden = true
         }
     }
     
     func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.imgBack_0.frame.origin.x = 2
-            self.imgBack_1.frame.origin.x += screenWidth + 2
+            self.imgBack_0.frame.origin.x = 7
+            self.imgBack_1.frame.origin.x += screenWidth + 7
         }, completion: {_ in
             if self.state == .map {
                 self.delegate?.goTo(annotation: self.prevAnnotation, place: nil)
@@ -184,8 +188,8 @@ class FMPlaceInfoBar: UIView {
     
     func panToNext(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.imgBack_1.frame.origin.x = -screenWidth + 2
-            self.imgBack_2.frame.origin.x = 2
+            self.imgBack_1.frame.origin.x = -screenWidth + 7
+            self.imgBack_2.frame.origin.x = 7
         }, completion: { _ in
             if self.state == .map {
                 self.delegate?.goTo(annotation: self.nextAnnotation, place: nil)
@@ -240,7 +244,7 @@ class FMPlaceInfoBar: UIView {
     }
 }
 
-class PlaceView: UIImageView {
+class PlaceView: UIView {
     
     var class_2_icon_id = 0
     var imgType: UIImageView!
@@ -253,8 +257,68 @@ class PlaceView: UIImageView {
     var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 102))
+        super.init(frame: CGRect(x: 7, y: 6, width: screenWidth - 14, height: 90))
         loadContent()
+        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
+    }
+    
+    private func loadContent() {
+        let uiviewBkgd = UIView()
+        uiviewBkgd.layer.cornerRadius = 2
+        uiviewBkgd.backgroundColor = .white
+        addSubview(uiviewBkgd)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
+        
+        imgType = UIImageView()
+        imgType.layer.cornerRadius = 5
+        imgType.clipsToBounds = true
+        imgType.backgroundColor = UIColor._2499090()
+        imgType.alpha = 0
+        addSubview(imgType)
+        addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgType)
+        addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgType)
+        
+        lblName = UILabel()
+        addSubview(lblName)
+        lblName.textAlignment = .left
+        lblName.textColor = UIColor._898989()
+        lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblName)
+        addConstraintsWithFormat("V:|-17-[v0(20)]", options: [], views: lblName)
+        
+        lblAddr = UILabel()
+        addSubview(lblAddr)
+        lblAddr.textAlignment = .left
+        lblAddr.textColor = UIColor._107107107()
+        lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblAddr)
+        addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblAddr)
+        
+        lblHours = UILabel()
+        addSubview(lblHours)
+        lblHours.textAlignment = .left
+        lblHours.textColor = UIColor._107107107()
+        lblHours.font = UIFont(name: "AvenirNext-Medium", size: 12)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblHours)
+        addConstraintsWithFormat("V:|-57-[v0(16)]", options: [], views: lblHours)
+        lblHours.text = ""
+        
+        lblPrice = UILabel()
+        addSubview(lblPrice)
+        lblPrice.textAlignment = .right
+        lblPrice.textColor = UIColor._107107107()
+        lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
+        addConstraintsWithFormat("V:|-63-[v0(18)]", options: [], views: lblPrice)
+        
+        indicator = UIActivityIndicatorView()
+        indicator.activityIndicatorViewStyle = .white
+        indicator.center.x = 48
+        indicator.center.y = 51
+        indicator.hidesWhenStopped = true
+        indicator.color = UIColor._2499090()
+        addSubview(indicator)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -306,60 +370,6 @@ class PlaceView: UIImageView {
         }
     }
     
-    private func loadContent() {
-        contentMode = .scaleAspectFit
-        image = #imageLiteral(resourceName: "placeResult_shadow_new")
-        
-        imgType = UIImageView()
-        imgType.layer.cornerRadius = 5
-        imgType.clipsToBounds = true
-        imgType.backgroundColor = UIColor._2499090()
-        imgType.alpha = 0
-        addSubview(imgType)
-        addConstraintsWithFormat("H:|-15-[v0(66)]", options: [], views: imgType)
-        addConstraintsWithFormat("V:|-18-[v0(66)]", options: [], views: imgType)
-        
-        lblName = UILabel()
-        addSubview(lblName)
-        lblName.textAlignment = .left
-        lblName.textColor = UIColor._898989()
-        lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblName)
-        addConstraintsWithFormat("V:|-23-[v0(20)]", options: [], views: lblName)
-        
-        lblAddr = UILabel()
-        addSubview(lblAddr)
-        lblAddr.textAlignment = .left
-        lblAddr.textColor = UIColor._107107107()
-        lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblAddr)
-        addConstraintsWithFormat("V:|-46-[v0(16)]", options: [], views: lblAddr)
-        
-        lblHours = UILabel()
-        addSubview(lblHours)
-        lblHours.textAlignment = .left
-        lblHours.textColor = UIColor._107107107()
-        lblHours.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-96-[v0]-30-|", options: [], views: lblHours)
-        addConstraintsWithFormat("V:|-63-[v0(16)]", options: [], views: lblHours)
-        lblHours.text = ""
-        
-        lblPrice = UILabel()
-        addSubview(lblPrice)
-        lblPrice.textAlignment = .right
-        lblPrice.textColor = UIColor._107107107()
-        lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        addConstraintsWithFormat("H:[v0(32)]-18-|", options: [], views: lblPrice)
-        addConstraintsWithFormat("V:|-69-[v0(18)]", options: [], views: lblPrice)
-        
-        indicator = UIActivityIndicatorView()
-        indicator.activityIndicatorViewStyle = .white
-        indicator.center.x = 48
-        indicator.center.y = 51
-        indicator.hidesWhenStopped = true
-        indicator.color = UIColor._2499090()
-        addSubview(indicator)
-    }
 }
 
 class FMLocationInfoBar: UIView {

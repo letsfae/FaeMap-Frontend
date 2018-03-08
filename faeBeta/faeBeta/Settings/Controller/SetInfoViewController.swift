@@ -90,7 +90,10 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         else {
             cell.switchIcon.isHidden = false
             cell.switchIcon.tag = indexPath.section + 100
-            if indexPath.section == 2 {
+            if indexPath.section == 1 {
+                cell.switchIcon.setOn(!Key.shared.showNameCardOption, animated: false)
+            }
+            else if indexPath.section == 2 {
                 cell.switchIcon.setOn(Key.shared.disableGender, animated: false)
             } else if indexPath.section == 3 {
                 cell.switchIcon.setOn(Key.shared.disableAge, animated: false)

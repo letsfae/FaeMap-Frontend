@@ -51,18 +51,24 @@ extension FaeMapViewController {
             return
         }
         PLACE_ENABLE = true
+        
         lblSearchContent.text = "Search Fae Map"
         lblSearchContent.textColor = UIColor._182182182()
+        
         btnClearSearchRes.isHidden = true
-        uiviewPlaceBar.alpha = 0
-        uiviewPlaceBar.state = .map
-        tblPlaceResult.alpha = 0
         btnTapToShowResultTbl.alpha = 0
         btnLocateSelf.isHidden = false
         btnZoom.isHidden = false
         btnTapToShowResultTbl.center.y = 181 + device_offset_top
         btnTapToShowResultTbl.tag = 1
         btnTapToShowResultTbl.sendActions(for: .touchUpInside)
+        
+        uiviewPlaceBar.state = .map
+        swipingState = .map
+        uiviewPlaceBar.hide(animated: false)
+        
+        tblPlaceResult.alpha = 0
+        
         mapGesture(isOn: true)
         deselectAllAnnotations()
         placeClusterManager.removeAnnotations(placesFromSearch) {
@@ -70,6 +76,10 @@ extension FaeMapViewController {
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
+    }
+    
+    func cancelSearch() {
+        
     }
     
     func actionPlacePinAction(_ sender: UIButton) {
@@ -112,10 +122,11 @@ extension FaeMapViewController {
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
         } else {
             sender.tag = 0
-            tblPlaceResult.hide()
+            tblPlaceResult.hide {
+                self.btnTapToShowResultTbl.center.y = 181 + device_offset_top
+            }
             btnZoom.isHidden = false
             btnLocateSelf.isHidden = false
-            btnTapToShowResultTbl.center.y = 181 + device_offset_top
             btnTapToShowResultTbl.transform = CGAffineTransform.identity
         }
     }
@@ -158,16 +169,7 @@ extension FaeMapViewController {
             vcExp.delegate = self
             navigationController?.pushViewController(vcExp, animated: false)
         case .pinDetail:
-            if let ann = selectedPlace {
-                guard let placePin = ann.pinInfo as? PlacePin else { return }
-                selectedPlaceView?.hideButtons()
-                let vcPlaceDetail = PlaceDetailViewController()
-                vcPlaceDetail.place = placePin
-                vcPlaceDetail.delegate = self
-                navigationController?.pushViewController(vcPlaceDetail, animated: false)
-            }
-            animateMainItems(show: false, animated: false)
-            uiviewPlaceBar.hide()
+            break
         case .collection:
             animateMainItems(show: false, animated: boolFromMap)
             if boolFromMap == false {
@@ -186,6 +188,7 @@ extension FaeMapViewController {
         default:
             break
         }
+        backFromPinDetail()
         PLACE_ENABLE = true
         mapMode = .normal
         faeMapView.blockTap = false
@@ -194,5 +197,22 @@ extension FaeMapViewController {
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll()
         clctViewMap.reloadData()
+    }
+    
+    func backFromPinDetail() {
+        if modePinDetail == .on {
+            if let ann = selectedPlace {
+                guard let placePin = ann.pinInfo as? PlacePin else { return }
+                selectedPlaceView?.hideButtons()
+                let vcPlaceDetail = PlaceDetailViewController()
+                vcPlaceDetail.place = placePin
+                vcPlaceDetail.delegate = self
+                navigationController?.pushViewController(vcPlaceDetail, animated: false)
+            }
+            animateMainItems(show: false, animated: false)
+            uiviewPlaceBar.hide()
+            modePinDetail = .off
+            checkIfResultTableAppearred()
+        }
     }
 }
