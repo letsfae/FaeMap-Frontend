@@ -73,12 +73,22 @@ class GeneralTitleCell: UITableViewCell {
             }
             break
         case 101:
-            Key.shared.hideNameCardOptions = sender.isOn
+            delegate?.startUpdating()
+            FaeUser.shared.whereKey("show_name_card_options", value: "\(!sender.isOn)")
+            FaeUser.shared.setUserSettings { status, _ in
+                if status / 100 == 2 {
+                    print("[hideOptions] Successfully update namecard")
+                    Key.shared.showNameCardOption = sender.isOn
+                } else {
+                    print("[hideOptions] Fail to update namecard")
+                    sender.setOn(!sender.isOn, animated: true)
+                }
+                self.delegate?.stopUpdating()
+            }
         case 102:
             delegate?.startUpdating()
-            let updateGenderAge = FaeUser()
-            updateGenderAge.whereKey("show_gender", value: "\(!sender.isOn)")
-            updateGenderAge.updateNameCard { status, _ in
+            FaeUser.shared.whereKey("show_gender", value: "\(!sender.isOn)")
+            FaeUser.shared.updateNameCard { status, _ in
                 if status / 100 == 2 {
                     print("[showGenderAge] Successfully update namecard")
                     Key.shared.disableGender = sender.isOn
@@ -90,9 +100,8 @@ class GeneralTitleCell: UITableViewCell {
             }
         case 103:
             delegate?.startUpdating()
-            let updateGenderAge = FaeUser()
-            updateGenderAge.whereKey("show_age", value: "\(!sender.isOn)")
-            updateGenderAge.updateNameCard { status, _ in
+            FaeUser.shared.whereKey("show_age", value: "\(!sender.isOn)")
+            FaeUser.shared.updateNameCard { status, _ in
                 if status / 100 == 2 {
                     print("[showGenderAge] Successfully update namecard")
                     Key.shared.disableAge = sender.isOn

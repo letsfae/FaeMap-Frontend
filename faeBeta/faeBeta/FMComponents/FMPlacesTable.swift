@@ -18,17 +18,77 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var tblResults: UITableView!
     var arrPlaces = [PlacePin]()
     var lblNumResults: UILabel!
+    var grayLine: UIView!
+    var showed = false
+    
+    internal var tblVConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                removeConstraints(oldValue)
+            }
+            if tblVConstraint.count != 0 {
+                addConstraints(tblVConstraint)
+            }
+        }
+    }
+    
+    internal var lineVConstraint = [NSLayoutConstraint]() {
+        didSet {
+            if oldValue.count != 0 {
+                removeConstraints(oldValue)
+            }
+            if lineVConstraint.count != 0 {
+                addConstraints(lineVConstraint)
+            }
+        }
+    }
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 68 + device_offset_top, width: screenWidth, height: screenHeight - 164 * screenHeightFactor - device_offset_bot_main))
+        super.init(frame: CGRect(x: 7, y: 76 + device_offset_top, width: screenWidth - 14, height: 90))
         loadContent()
         alpha = 0
         layer.zPosition = 605
-        clipsToBounds = true
+        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    fileprivate func loadContent() {
+        tblResults = UITableView()
+        tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
+        tblResults.delegate = self
+        tblResults.dataSource = self
+        tblResults.tableFooterView = UIView()
+        tblResults.layer.cornerRadius = 2
+        tblResults.backgroundColor = .white
+        addSubview(tblResults)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tblResults)
+        tblVConstraint = returnConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: tblResults)
+        
+        let footView = UIView()
+        footView.clipsToBounds = true
+        footView.layer.cornerRadius = 2
+        footView.backgroundColor = .white
+        addSubview(footView)
+        sendSubview(toBack: footView)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: footView)
+        addConstraintsWithFormat("V:[v0(54)]-0-|", options: [], views: footView)
+        
+        lblNumResults = UILabel()
+        lblNumResults.textAlignment = .center
+        lblNumResults.textColor = UIColor._107105105()
+        lblNumResults.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        footView.addSubview(lblNumResults)
+        footView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblNumResults)
+        footView.addConstraintsWithFormat("V:|-20-[v0(21)]", options: [], views: lblNumResults)
+        
+        grayLine = UIView()
+        grayLine.backgroundColor = UIColor._200199204()
+        addSubview(grayLine)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: grayLine)
+        lineVConstraint = returnConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: grayLine)
     }
     
     func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
@@ -45,126 +105,32 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func show(_ completion: @escaping () -> Void) {
-        self.frame.size.height = 102
+        self.frame.size.height = 90
         self.alpha = 1
+        Key.shared.FMVCtrler?.uiviewPlaceBar.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            let iphone_x_offset: CGFloat = screenHeight == 812 ? 24 : 0
-            self.frame.size.height = screenHeight - 164 * screenHeightFactor - device_offset_bot_main - iphone_x_offset
+            self.frame.size.height = screenHeight == 812 ? 587 : 556 * screenHeightFactor
+            self.tblVConstraint = self.returnConstraintsWithFormat("V:|-0-[v0]-48-|", options: [], views: self.tblResults)
+            self.lineVConstraint = self.returnConstraintsWithFormat("V:[v0(1)]-48-|", options: [], views: self.grayLine)
+            self.layoutIfNeeded()
             completion()
-        }, completion: nil)
+        }, completion: { _ in
+            self.showed = true
+        })
     }
     
-    func hide() {
-        self.frame.size.height = 102
-        self.alpha = 0
-    }
-    
-    fileprivate func loadContent() {
-        let imgBack = UIImageView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 164 * screenHeightFactor))
-        imgBack.image = #imageLiteral(resourceName: "placeResultTbl_shadow")
-        imgBack.contentMode = .scaleAspectFit
-        addSubview(imgBack)
-        
-        var table_offset_top: CGFloat = 0
-        switch screenHeight {
-        case 812:
-            table_offset_top = 3
-            break
-        case 736:
-            break
-        case 667:
-            break
-        case 568:
-            break
-        default:
-            break
-        }
-        
-        var table_offset_left: CGFloat = 0
-        switch screenHeight {
-        case 812:
-            table_offset_left = 0.5
-            break
-        case 736:
-            break
-        case 667:
-            break
-        case 568:
-            break
-        default:
-            break
-        }
-        
-        var table_length_offset: CGFloat = 0
-        switch screenHeight {
-        case 812:
-            table_length_offset = 77
-            break
-        case 736:
-            break
-        case 667:
-            break
-        case 568:
-            break
-        default:
-            break
-        }
-        
-        tblResults = UITableView(frame: CGRect(x: 8 + table_offset_left, y: 10 + table_offset_top, width: 397 * screenWidthFactor - table_offset_left, height: screenHeight - 230 * screenHeightFactor - table_length_offset))
-        tblResults.center.x = screenWidth / 2
-        tblResults.register(FMPlaceResultBarCell.self, forCellReuseIdentifier: "placeResultBarCell")
-        tblResults.delegate = self
-        tblResults.dataSource = self
-        tblResults.tableFooterView = UIView()
-        var table_insets = UIEdgeInsets(top: -2, left: -0.5, bottom: 0, right: 0)
-        switch screenHeight {
-        case 812:
-            table_insets = UIEdgeInsets(top: -5, left: 0, bottom: 0, right: 0)
-            break
-        case 736:
-            table_insets = UIEdgeInsets(top: -2, left: -0.5, bottom: 0, right: 0)
-            break
-        case 667:
-            break
-        case 568:
-            break
-        default:
-            break
-        }
-        tblResults.contentInset = table_insets
-        addSubview(tblResults)
-        
-        var table_offset_bot: CGFloat = 0
-        switch screenHeight {
-        case 812:
-            table_offset_bot = 273
-            break
-        case 736:
-            table_offset_bot = 220
-            break
-        case 667:
-            break
-        case 568:
-            break
-        default:
-            break
-        }
-        let footView = UIView(frame: CGRect(x: 8, y: screenHeight - table_offset_bot, width: screenWidth - 16, height: 49*screenHeightFactor))
-        footView.clipsToBounds = true
-        addSubview(footView)
-
-        let grayLine = UIView(frame: CGRect(x: 0, y: 0, width: 397 * screenWidthFactor, height: 1))
-        grayLine.center.x = screenWidth / 2
-        grayLine.backgroundColor = UIColor._200199204()
-        footView.addSubview(grayLine)
-        
-        lblNumResults = UILabel()
-        lblNumResults.textAlignment = .center
-        lblNumResults.textColor = UIColor._107105105()
-        lblNumResults.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        footView.addSubview(lblNumResults)
-        footView.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblNumResults)
-        footView.addConstraintsWithFormat("V:[v0(\(21*screenHeightFactor))]-\(13*screenHeightFactor)-|", options: [], views: lblNumResults)
+    func hide(_ completion: @escaping () -> Void) {
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
+            self.frame.size.height = 90
+            self.tblVConstraint = self.returnConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: self.tblResults)
+            self.lineVConstraint = self.returnConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: self.grayLine)
+            self.layoutIfNeeded()
+            completion()
+        }, completion: { _ in
+            Key.shared.FMVCtrler?.uiviewPlaceBar.alpha = 1
+            self.alpha = 0
+            self.showed = false
+        })
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -202,6 +168,8 @@ class FMPlaceResultBarCell: UITableViewCell {
     var lblItemAddr: UILabel!
     var lblHours: UILabel!
     var lblPrice: UILabel!
+    var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
+    var arrHour = [String]()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -223,6 +191,33 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update
 //        lblHours.text = placeInfo.hours
+        if placeInfo.hours.count > 0 {
+            arrHour.removeAll()
+            for day in arrDay {
+                if placeInfo.hours.index(forKey: day) == nil {
+                    arrHour.append("N/A")
+                } else {
+                    arrHour.append(placeInfo.hours[day]!)
+                }
+            }
+            let date = Date()
+            let calendar = Calendar.current
+            let components = calendar.dateComponents([.weekday], from: date)
+            
+            if let weekday = components.weekday {
+                if weekday == 7 {
+                    lblHours.text = arrDay[0] + ": " + arrHour[0]
+                } else if weekday == 8 {
+                    lblHours.text = arrDay[1] + ": " + arrHour[1]
+                } else {
+                    lblHours.text = arrDay[weekday] + ": " + arrHour[weekday]
+                }
+            } else {
+                lblHours.text = nil
+            }
+        } else {
+            lblHours.text = nil
+        }
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     
@@ -231,7 +226,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         imgSavedItem.layer.cornerRadius = 5
         imgSavedItem.clipsToBounds = true
         addSubview(imgSavedItem)
-        addConstraintsWithFormat("H:|-9-[v0(66)]", options: [], views: imgSavedItem)
+        addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgSavedItem)
         addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgSavedItem)
         
         lblItemName = UILabel()
@@ -247,7 +242,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         lblItemAddr.textAlignment = .left
         lblItemAddr.textColor = UIColor._107107107()
         lblItemAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-90-[v0]-25-|", options: [], views: lblItemAddr)
+        addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblItemAddr)
         addConstraintsWithFormat("V:|-40-[v0(16)]", options: [], views: lblItemAddr)
         
         lblHours = UILabel()

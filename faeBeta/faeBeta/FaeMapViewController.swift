@@ -102,6 +102,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
+            btnTapToShowResultTbl.isHidden = swipingState != .multipleSearch
+            tblPlaceResult.isHidden = swipingState != .multipleSearch
+            uiviewPlaceBar.isHidden = false
+            uiviewPlaceBar.alpha = 1
         }
     }
     var boolSelecting = false
@@ -249,6 +253,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Switches
     
+    func checkIfResultTableAppearred() {
+        guard modePinDetail == .off else { return }
+        tblPlaceResult.isHidden = !tblPlaceResult.showed
+        btnTapToShowResultTbl.isHidden = !(tblPlaceResult.showed && swipingState == .multipleSearch)
+    }
+    
     var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
@@ -311,6 +321,18 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    var modePinDetail: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            btnLeftWindow.isHidden = modePinDetail == .on
+            imgSchbarShadow.isHidden = modePinDetail == .on
+            imgExpbarShadow.isHidden = modePinDetail == .off
+            
+            tblPlaceResult.isHidden = modePinDetail == .on
+            btnTapToShowResultTbl.isHidden = modePinDetail == .on
+        }
+    }
+    
     var mapMode: MapMode = .normal {
         didSet {
             guard fullyLoaded else { return }
@@ -326,11 +348,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             }
             imgSearchIcon.isHidden = mapMode == .selecting
             btnDistIndicator.isUserInteractionEnabled = mapMode == .selecting
-            btnLeftWindow.isHidden = mapMode == .selecting || mapMode == .pinDetail
+            btnLeftWindow.isHidden = mapMode == .selecting
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
             
-            imgExpbarShadow.isHidden = mapMode != .pinDetail && mapMode != .collection
-            imgSchbarShadow.isHidden = mapMode == .pinDetail || mapMode == .collection
+            imgExpbarShadow.isHidden = mapMode != .collection
+            imgSchbarShadow.isHidden = mapMode == .collection
             
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
             Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1

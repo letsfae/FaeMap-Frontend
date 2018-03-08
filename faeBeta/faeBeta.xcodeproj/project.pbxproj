@@ -68,6 +68,8 @@
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E50C151F9EF861008645C8 /* LocationPin.swift */; };
 		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
+		50F1D500204CF3F300AC57AC /* BasicMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */; };
+		50F1D502204EC98F00AC57AC /* PlaceViewMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */; };
 		50FCE42C1FA0EAC80071D472 /* FaeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
 		8537A8881E08A2F00009C39B /* LeftSlidingMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* LeftSlidingMenuViewController.swift */; };
@@ -423,6 +425,8 @@
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		50E50C151F9EF861008645C8 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
 		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
+		50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMapController.swift; sourceTree = "<group>"; };
+		50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewMapController.swift; sourceTree = "<group>"; };
 		50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearch.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		690452871F032A9900B58982 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeGenderView.swift; sourceTree = "<group>"; };
@@ -881,6 +885,14 @@
 			name = LocationDetail;
 			sourceTree = "<group>";
 		};
+		50F1D4FE204CF3D300AC57AC /* BasicMapController */ = {
+			isa = PBXGroup;
+			children = (
+				50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */,
+			);
+			name = BasicMapController;
+			sourceTree = "<group>";
+		};
 		8537A8861E08A2B10009C39B /* LeftSlidingMenu */ = {
 			isa = PBXGroup;
 			children = (
@@ -1261,6 +1273,7 @@
 		B0F688F21CEA403D00D91CF9 /* Map */ = {
 			isa = PBXGroup;
 			children = (
+				50F1D4FE204CF3D300AC57AC /* BasicMapController */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				50111C241F476063004EA00E /* FMComponents */,
@@ -1328,6 +1341,7 @@
 				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
+				50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -2063,6 +2077,7 @@
 				B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */,
 				B064EF081D6E34E200C078F5 /* FAEVerificationCodeView.swift in Sources */,
 				B0BF35721D8DC8D700B0540B /* JSQMessagesBubblesSizeCalculatorCustom.m in Sources */,
+				50F1D502204EC98F00AC57AC /* PlaceViewMapController.swift in Sources */,
 				50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */,
 				B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */,
 				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
@@ -2095,6 +2110,7 @@
 				9FC92AC7201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift in Sources */,
 				50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */,
 				B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */,
+				50F1D500204CF3F300AC57AC /* BasicMapController.swift in Sources */,
 				B806014A1E0CA5610051C702 /* FMInvisibleMode.swift in Sources */,
 				B85FFE971EA84CEB0079D1A7 /* MemoViewController.swift in Sources */,
 				B0CFC9BE1CED42A800EC356A /* Verification.swift in Sources */,
