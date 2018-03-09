@@ -143,7 +143,7 @@ extension MapBoardViewController {
         let mbPlacesList = FaeMap()
         mbPlacesList.whereKey("geo_latitude", value: "\(latitude)")
         mbPlacesList.whereKey("geo_longitude", value: "\(longitude)")
-        mbPlacesList.whereKey("radius", value: "9999999")
+        mbPlacesList.whereKey("radius", value: "9999999999")
         mbPlacesList.whereKey("type", value: "place")
         mbPlacesList.whereKey("max_count", value: "1000")
         mbPlacesList.getMapInformation { (status: Int, message: Any?) in
