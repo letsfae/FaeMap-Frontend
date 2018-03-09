@@ -59,6 +59,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     var uiviewNoResults: UIView!
     var lblNoResults: UILabel!
+    var activityView: UIActivityIndicatorView!
     
     // Joshua: Send label text back to start point or destination
     static var boolToDestination = false
@@ -136,16 +137,22 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     func loadNoResultsView() {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
+        uiviewNoResults.layer.cornerRadius = 2
         view.addSubview(uiviewNoResults)
+        
         lblNoResults = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
         uiviewNoResults.addSubview(lblNoResults)
-        lblNoResults.center = CGPoint(x: screenWidth / 2, y: 50)
+        lblNoResults.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
         lblNoResults.numberOfLines = 0
         lblNoResults.text = "No Results Found...\nTry a Different Search!"
         lblNoResults.textAlignment = .center
         lblNoResults.textColor = UIColor._115115115()
         lblNoResults.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        uiviewNoResults.layer.cornerRadius = 2
+        
+        activityView = createActivityIndicator(large: true)
+        activityView.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
+        uiviewNoResults.addSubview(activityView)
+        
         addShadow(uiviewNoResults)
     }
     
@@ -331,6 +338,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // End of FaeSearchBarTestDelegate
     
     func getPlaceInfo(content: String = "", source: String = "name") {
+        guard content != "" else {
+            showOrHideViews(searchText: content)
+            return
+        }
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")

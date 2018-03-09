@@ -635,4 +635,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
 //            print("Successfully get collections")
         })
     }
+    
+    func animateToCoordinate(mapView: MKMapView, coordinate: CLLocationCoordinate2D, animated: Bool = true) {
+        let point = MKMapPointForCoordinate(coordinate)
+        var rect = mapView.visibleMapRect
+        rect.origin.x = point.x - rect.size.width * 0.5
+        rect.origin.y = point.y - rect.size.height * 0.5
+        mapView.setVisibleMapRect(rect, animated: <#T##Bool#>)
+    }
 }

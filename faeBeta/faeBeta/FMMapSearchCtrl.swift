@@ -49,7 +49,7 @@ extension FaeMapViewController: MapSearchDelegate {
      以上是老板原话。我把你的return注释掉了，但存在问题，你试试搜索b，下面不会出来place数据，点击search，出现的页面，根据该页面修改一下？
     */
     func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
-//        guard places.count > 0 else { return }
+
         PLACE_ENABLE = false
         placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         removePlaceUserPins({
@@ -64,12 +64,18 @@ extension FaeMapViewController: MapSearchDelegate {
             self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }, nil)
         updateUI(searchText: searchText)
-        swipingState = .multipleSearch
-        uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
-        if let firstPlacePin = places.first {
-            uiviewPlaceBar.loading(current: firstPlacePin)
+        
+        btnTapToShowResultTbl.isHidden = places.count <= 1
+        if let _ = places.first {
+            swipingState = .multipleSearch
+            uiviewPlaceBar.places = tblPlaceResult.updatePlacesArray(places: places)
+            uiviewPlaceBar.loading(current: places[0])
+            placeClusterManager.maxZoomLevelForClustering = 0
+        } else {
+            swipingState = .map
+            uiviewPlaceBar.alpha = 0
+            placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         }
-        uiviewPlaceBar.places = places
     }
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {

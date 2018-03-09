@@ -9,6 +9,14 @@
 import UIKit
 import MapKit
 
+func createActivityIndicator(large: Bool) -> UIActivityIndicatorView {
+    let view = UIActivityIndicatorView()
+    view.activityIndicatorViewStyle = large ? .whiteLarge : .white
+    view.hidesWhenStopped = true
+    view.color = UIColor._2499090()
+    return view
+}
+
 // MARK: - Map View
 
 func visiblePlaces(mapView: MKMapView) -> [CCHMapClusterAnnotation] {

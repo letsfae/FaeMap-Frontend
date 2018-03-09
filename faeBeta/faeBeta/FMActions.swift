@@ -66,6 +66,7 @@ extension FaeMapViewController {
         uiviewPlaceBar.state = .map
         swipingState = .map
         uiviewPlaceBar.hide(animated: false)
+        placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         
         tblPlaceResult.alpha = 0
         

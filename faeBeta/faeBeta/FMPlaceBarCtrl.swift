@@ -54,6 +54,9 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             boolPreventUserPinOpen = false
         }
         if let placePin = place {
+            
+            animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
+            
             swipingState = .multipleSearch
             var desiredAnno: CCHMapClusterAnnotation!
             for anno in faeMapView.annotations {
