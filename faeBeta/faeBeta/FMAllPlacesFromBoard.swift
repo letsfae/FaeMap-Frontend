@@ -27,8 +27,8 @@ extension FaeMapViewController: AllPlacesDelegate {
         }, nil)
         modeAllPlaces = .on
         animateMainItems(show: true, animated: false)
-        uiviewPlaceBar.places = places
-        uiviewPlaceBar.hide(animated: false)
+        tblPlaceResult.places = places
+        tblPlaceResult.hide(animated: false)
         lblExpContent.text = Key.shared.mapHeadTitle
         
         btnBackToExp.removeTarget(nil, action: nil, for: .touchUpInside)

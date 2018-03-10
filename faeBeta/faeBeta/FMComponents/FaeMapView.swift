@@ -98,7 +98,7 @@ class FaeMapView: MKMapView {
             } else if let anView = v as? UserPinAnnotationView {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.deselectAllAnnotations()
-                faeMapCtrler?.uiviewPlaceBar.hide()
+                faeMapCtrler?.tblPlaceResult.hide()
                 faeMapCtrler?.tapUserPin(didSelect: anView)
             } else if let anView = v as? LocPinAnnotationView {
                 faeMapCtrler?.uiviewNameCard.hide() {
@@ -131,7 +131,7 @@ class FaeMapView: MKMapView {
                 cancelCreatingLocationPin()
                 faeMapCtrler?.mapGesture(isOn: true)
                 if (faeMapCtrler?.mapMode != .pinDetail || faeMapCtrler?.modePinDetail == .off) && faeMapCtrler?.swipingState != .multipleSearch {
-                    faeMapCtrler?.uiviewPlaceBar.hide()
+                    faeMapCtrler?.tblPlaceResult.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
                 faeMapCtrler?.deselectAllAnnotations()
@@ -168,7 +168,7 @@ class FaeMapView: MKMapView {
                     }
                 } else if let anView = v as? UserPinAnnotationView {
                     faeMapCtrler?.deselectAllAnnotations()
-                    faeMapCtrler?.uiviewPlaceBar.hide()
+                    faeMapCtrler?.tblPlaceResult.hide()
                     faeMapCtrler?.tapUserPin(didSelect: anView)
                 }
             }

@@ -782,9 +782,9 @@
 				50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */,
 				B39453E41F27DBBE0038EDAD /* FMFilterMenu.swift */,
 				506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */,
+				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
 				50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */,
 				501D6B641F43BA6200A1F614 /* FMNameCardView.swift */,
-				50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */,
 				50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */,
 				50111C251F476B4B004EA00E /* FMChooseLocs.swift */,
 			);

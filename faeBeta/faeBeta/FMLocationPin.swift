@@ -127,7 +127,7 @@ extension FaeMapViewController: LocDetailDelegate {
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
         func createLoc() {
-            self.uiviewPlaceBar.hide()
+            self.tblPlaceResult.hide()
             self.locAnnoView?.hideButtons()
             self.locAnnoView?.optionsReady = false
             self.locAnnoView?.optionsOpened = false

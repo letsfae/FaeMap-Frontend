@@ -97,15 +97,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Selected Place Control
     var selectedPlaceView: PlacePinAnnotationView?
     var selectedPlace: FaePinAnnotation?
-    var uiviewPlaceBar = FMPlaceInfoBar()
     var swipingState: PlaceInfoBarState = .map {
         didSet {
             guard fullyLoaded else { return }
             btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
             btnTapToShowResultTbl.isHidden = swipingState != .multipleSearch
             tblPlaceResult.isHidden = swipingState != .multipleSearch
-            uiviewPlaceBar.isHidden = false
-            uiviewPlaceBar.alpha = 1
         }
     }
     var boolSelecting = false
@@ -116,7 +113,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Results from Search
     var btnTapToShowResultTbl: UIButton!
-    var tblPlaceResult: FMPlacesTable!
+    var tblPlaceResult = FMPlacesTable()
     var placesFromSearch = [FaePinAnnotation]()
     
     // Name Card
@@ -641,6 +638,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         var rect = mapView.visibleMapRect
         rect.origin.x = point.x - rect.size.width * 0.5
         rect.origin.y = point.y - rect.size.height * 0.5
-        mapView.setVisibleMapRect(rect, animated: <#T##Bool#>)
+        mapView.setVisibleMapRect(rect, animated: animated)
     }
 }

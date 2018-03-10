@@ -38,6 +38,9 @@ class FMPlaceInfoBar: UIView {
     var prevAnnotation: CCHMapClusterAnnotation!
     var nextAnnotation: CCHMapClusterAnnotation!
     
+    var prevPlacePin: PlacePin!
+    var nextPlacePin: PlacePin!
+    
     var boolDisableSwipe = false
     
     var state: PlaceInfoBarState = .map {
@@ -48,7 +51,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: screenWidth, height: 102))
+        super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 102))
         loadContent()
         tag = 0
         alpha = 0
@@ -67,6 +70,9 @@ class FMPlaceInfoBar: UIView {
         addSubview(imgBack_0)
         addSubview(imgBack_1)
         addSubview(imgBack_2)
+        addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_1, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
         resetSubviews()
     }
     
@@ -83,9 +89,6 @@ class FMPlaceInfoBar: UIView {
         boolLeft = false
         boolRight = false
     }
-    
-    var prevPlacePin: PlacePin!
-    var nextPlacePin: PlacePin!
     
     func loading(current: PlacePin) {
         state = .multipleSearch
@@ -257,9 +260,8 @@ class PlaceView: UIView {
     var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 7, y: 6, width: screenWidth - 14, height: 90))
+        super.init(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
         loadContent()
-        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
     }
     
     private func loadContent() {

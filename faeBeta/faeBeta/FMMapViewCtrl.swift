@@ -323,7 +323,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             calculateDistanceOffset()
         }
         
-        if uiviewPlaceBar.tag > 0 && PLACE_ENABLE { uiviewPlaceBar.annotations = visiblePlaces() }
+        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
         
         if mapMode == .selecting {
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
