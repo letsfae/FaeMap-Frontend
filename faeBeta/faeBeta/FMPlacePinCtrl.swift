@@ -290,15 +290,15 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
         }
         if modeExplore != .on {
-            uiviewPlaceBar.show()
-            uiviewPlaceBar.resetSubviews()
-            uiviewPlaceBar.tag = 1
+            tblPlaceResult.show()
+            tblPlaceResult.resetSubviews()
+            tblPlaceResult.tag = 1
         }
         mapView(faeMapView, regionDidChangeAnimated: false)
         if swipingState == .map {
-            uiviewPlaceBar.loadingData(current: cluster)
+            tblPlaceResult.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
-            uiviewPlaceBar.loading(current: placePin)
+            tblPlaceResult.loading(current: placePin)
         }
     }
     

@@ -63,9 +63,9 @@ extension FaeMapViewController {
         btnTapToShowResultTbl.tag = 1
         btnTapToShowResultTbl.sendActions(for: .touchUpInside)
         
-        uiviewPlaceBar.state = .map
+        tblPlaceResult.state = .map
         swipingState = .map
-        uiviewPlaceBar.hide(animated: false)
+        tblPlaceResult.hide(animated: false)
         placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         
         tblPlaceResult.alpha = 0
@@ -114,7 +114,7 @@ extension FaeMapViewController {
         btnZoom.tapToSmallMode()
         if sender.tag == 0 {
             sender.tag = 1
-            tblPlaceResult.show {
+            tblPlaceResult.expand {
                 let iphone_x_offset: CGFloat = 70
                 self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68 + device_offset_top - iphone_x_offset
             }
@@ -123,7 +123,7 @@ extension FaeMapViewController {
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
         } else {
             sender.tag = 0
-            tblPlaceResult.hide {
+            tblPlaceResult.shrink {
                 self.btnTapToShowResultTbl.center.y = 181 + device_offset_top
             }
             btnZoom.isHidden = false
@@ -211,7 +211,7 @@ extension FaeMapViewController {
                 navigationController?.pushViewController(vcPlaceDetail, animated: false)
             }
             animateMainItems(show: false, animated: false)
-            uiviewPlaceBar.hide()
+            tblPlaceResult.hide()
             modePinDetail = .off
             checkIfResultTableAppearred()
         }

@@ -140,7 +140,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         btnDistIndicator.show()
         btnDistIndicator.updateDistance(distance: distance)
         
-        uiviewPlaceBar.hide()
+        tblPlaceResult.hide()
         uiviewChooseLocs.show()
         
         animateMainItems(show: true)

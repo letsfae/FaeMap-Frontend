@@ -21,13 +21,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     }
     
     func loadPlaceDetail() {
-        view.addSubview(uiviewPlaceBar)
-        uiviewPlaceBar.delegate = self
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
-        uiviewPlaceBar.addGestureRecognizer(tapGesture)
+        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
+        //uiviewPlaceBar.addGestureRecognizer(tapGesture)
         
-        tblPlaceResult = FMPlacesTable()
-        tblPlaceResult.delegate = self
+//        tblPlaceResult = FMPlacesTable()
+        tblPlaceResult.tblDelegate = self
+        tblPlaceResult.barDelegate = self
         view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = UIButton()
@@ -54,9 +53,6 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             boolPreventUserPinOpen = false
         }
         if let placePin = place {
-            
-            animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
-            
             swipingState = .multipleSearch
             var desiredAnno: CCHMapClusterAnnotation!
             for anno in faeMapView.annotations {
@@ -70,6 +66,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             }
             if desiredAnno != nil {
                 faeMapView.selectAnnotation(desiredAnno, animated: false)
+                animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
             }
         }
     }
