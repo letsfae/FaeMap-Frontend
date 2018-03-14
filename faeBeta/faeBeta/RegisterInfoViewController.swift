@@ -65,6 +65,12 @@ class RegisterInfoViewController: RegisterBaseViewController {
         uiviewBottom.frame.origin.y = view.frame.height - 244 * screenHeightFactor - uiviewBottom.frame.size.height + 15 - device_offset_bot
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        validation()
+        FaeCoreData.shared.save("signup", value: "info")
+    }
+    
     func setupBottomView() -> UIView {
         let uiviewBtm = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
         lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
@@ -81,12 +87,27 @@ class RegisterInfoViewController: RegisterBaseViewController {
     // MARK: - Functions
     override func backButtonPressed() {
         view.endEditing(true)
+        if gender != nil {
+            FaeCoreData.shared.save("signup_gender", value: gender!)
+        }
+        if dateOfBirth != nil {
+            FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)            
+        }
         navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
-        setValueInUser()
-        jumpToRegisterNext()
+        if Key.shared.is_Login {
+            setValueInUser()
+            faeUser.updateAccountBasicInfo({ (_, _) in
+                self.jumpToRegisterNext()
+            })
+        } else {
+            setValueInUser()
+            jumpToRegisterNext()            
+        }
+        FaeCoreData.shared.save("signup_gender", value: gender!)
+        FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)
     }
     
     func jumpToRegisterNext() {
@@ -125,6 +146,10 @@ class RegisterInfoViewController: RegisterBaseViewController {
         textField = FAETextField(frame: CGRect(x: 15, y: 59 * screenHeightFactor, width: screenWidth - 30, height: 34))
         textField.placeholder = "MM/DD/YYYY"
         textField.isEnabled = false
+        if let savedDateOfBirth = FaeCoreData.shared.readByKey("signup_dateofbirth") {
+            textField.text = savedDateOfBirth as? String
+            dateOfBirth = savedDateOfBirth as? String
+        }
         
         imgExclamationMark = UIImageView(frame: CGRect(x: screenWidth / 2 + 70, y: 64 * screenHeightFactor, width: 7, height: 21))
         imgExclamationMark.image = #imageLiteral(resourceName: "exclamation_red_new")
@@ -162,6 +187,16 @@ class RegisterInfoViewController: RegisterBaseViewController {
         
         view.addSubview(genderView)
         
+        if let savedGender = FaeCoreData.shared.readByKey("signup_gender") {
+            gender = savedGender as? String
+            if (savedGender as? String) == "male" {
+                btnMale.isSelected = true
+                btnFemale.isSelected = false
+            } else {
+                btnMale.isSelected = false
+                btnFemale.isSelected = true
+            }
+        }
     }
     
     @objc func maleButtonTapped() {
@@ -181,6 +216,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     func validation() {
+        if gender == nil || dateOfBirth == nil { return }
         boolMeetMinAge = true
         var boolIsValid = false
         let dateFormatter = DateFormatter()

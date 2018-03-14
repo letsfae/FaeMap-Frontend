@@ -52,20 +52,39 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         registerCell()
         tableView.delegate = self
         tableView.dataSource = self
+        if let savedUsername = FaeCoreData.shared.readByKey("signup_username") {            
+            username = savedUsername as? String
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        validation()
+        FaeCoreData.shared.save("signup", value: "username")
     }
     
     // MARK: - Functions
     override func backButtonPressed() {
         view.endEditing(true)
-        _ = navigationController?.popViewController(animated: false)
+        if username != nil {
+            FaeCoreData.shared.save("signup_username", value: username!)            
+        }
+        navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
-        checkForUniqueUsername()
+        if let savedUsername = FaeCoreData.shared.readByKey("signup_username") {
+            if (savedUsername as? String) != username! && Key.shared.is_Login {
+                faeUser.logOut({ (_, _) in
+                    self.checkForUniqueUsername()
+                })
+            } else {
+                jumpToRegisterNext()
+            }
+        } else {
+            checkForUniqueUsername()
+        }
+        FaeCoreData.shared.save("signup_username", value: username!)
     }
     
     func jumpToRegisterNext() {
@@ -88,6 +107,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     }
     
     func validation() {
+        if username == nil { return }
         var boolIsValid = false
         let userNameRegEx = ".*[^a-zA-Z0-9_-.].*"
         let range = username!.range(of: userNameRegEx, options: .regularExpression)
@@ -156,6 +176,9 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
                 cellUsername.setLeftPlaceHolderDisplay(true)
                 cellUsername.delegate = self
                 cellUsername.textfield.keyboardType = .asciiCapable
+                if username != nil {
+                    cellUsername.textfield.text = username
+                }
                 cellUsername.makeFirstResponder()
             }
             return cellUsername
