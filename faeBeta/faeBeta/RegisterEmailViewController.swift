@@ -46,6 +46,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var lblSecure: UILabel!
     var btnOtherMethod: UIButton!
     var btnClear: UIButton!
+    var boolSavedSignup: Bool! = false
     
     // MARK: - View Lifecycle
     override func viewDidLoad() {
@@ -63,10 +64,15 @@ class RegisterEmailViewController: RegisterBaseViewController {
         //setUsingPhone()
         
         btnContinue.setTitle("Continue", for: UIControlState())
+        if let savedEmail = FaeCoreData.shared.readByKey("signup_email") {            
+            email = savedEmail as? String
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        validation()
+        FaeCoreData.shared.save("signup", value: "email")
     }
     
     // MARK: - Functions
@@ -157,11 +163,48 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
+        if boolSavedSignup {
+            // alert
+            FaeCoreData.shared.removeByKey("signup")
+            FaeCoreData.shared.removeByKey("signup_first_name")
+            FaeCoreData.shared.removeByKey("signup_last_name")
+            FaeCoreData.shared.removeByKey("signup_username")
+            FaeCoreData.shared.removeByKey("signup_password")
+            FaeCoreData.shared.removeByKey("signup_gender")
+            FaeCoreData.shared.removeByKey("signup_dateofbirth")
+            FaeCoreData.shared.removeByKey("signup_email")
+        } else {
+            if email != nil {
+                FaeCoreData.shared.save("signup_email", value: email!)
+            }
+        }
         navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
-        checkForUniqueEmail()
+        if let savedEmail = FaeCoreData.shared.readByKey("signup_email") {
+            if (savedEmail as? String) != email! && Key.shared.is_Login {
+                faeUser.whereKey("email", value: email!)
+                faeUser.updateEmail({ (_, _) in
+                    let vc = VerifyCodeViewController()
+                    vc.enterMode = .email
+                    vc.enterEmailMode = .signup
+                    vc.strEmail = self.email!
+                    vc.faeUser = self.faeUser
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+            } else {
+                let vc = VerifyCodeViewController()
+                vc.enterMode = .email
+                vc.enterEmailMode = .signup
+                vc.strEmail = self.email!
+                vc.faeUser = self.faeUser
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        } else {
+            checkForUniqueEmail()            
+        }
+        FaeCoreData.shared.save("signup_email", value: email!)
     }
 
     func checkForUniqueEmail() {
@@ -279,6 +322,10 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 btnClear.isHidden = true
                 btnClear.addTarget(self, action: #selector(clearEmail), for: .touchUpInside)
                 cellTxtEmail.addSubview(btnClear)
+                
+                if email != nil {
+                    cellTxtEmail.textfield.text = email
+                }
                 
                 cellTxtEmail.makeFirstResponder()
             }

@@ -183,8 +183,47 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         navigationController?.pushViewController(boardLogin, animated: true)
     }
     @objc func jumpToSignUp() {
-        let boardRegister = RegisterNameViewController()
-        navigationController?.pushViewController(boardRegister, animated: true)
+        if let signup = FaeCoreData.shared.readByKey("signup") {
+            if (signup as? String) == "email" {
+                let faeUser = FaeUser()
+                if let savedFirstName = FaeCoreData.shared.readByKey("signup_first_name") {
+                    faeUser.whereKey("first_name", value: (savedFirstName as? String)!)
+                }
+                if let savedLastName = FaeCoreData.shared.readByKey("signup_last_name") {
+                    faeUser.whereKey("last_name", value: (savedLastName as? String)!)
+                }
+                if let savedUsername = FaeCoreData.shared.readByKey("signup_username") {
+                    faeUser.whereKey("username", value: (savedUsername as? String)!)
+                }
+                if let savedPassword = FaeCoreData.shared.readByKey("signup_password") {
+                    faeUser.whereKey("password", value: (savedPassword as? String)!)
+                }
+                if let savedDateOfBirth = FaeCoreData.shared.readByKey("signup_dateofbirth") {
+                    faeUser.whereKey("birthday", value: (savedDateOfBirth as? String)!)
+                }
+                if let savedGender = FaeCoreData.shared.readByKey("signup_gender") {
+                    faeUser.whereKey("gender", value: (savedGender as? String)!)
+                }
+                let nextRegister = RegisterEmailViewController()
+                nextRegister.faeUser = faeUser
+                nextRegister.boolSavedSignup = true
+                navigationController?.pushViewController(nextRegister, animated: true)
+            } else {
+                FaeCoreData.shared.removeByKey("signup")
+                FaeCoreData.shared.removeByKey("signup_first_name")
+                FaeCoreData.shared.removeByKey("signup_last_name")
+                FaeCoreData.shared.removeByKey("signup_username")
+                FaeCoreData.shared.removeByKey("signup_password")
+                FaeCoreData.shared.removeByKey("signup_gender")
+                FaeCoreData.shared.removeByKey("signup_dateofbirth")
+                FaeCoreData.shared.removeByKey("signup_email")
+                let boardRegister = RegisterNameViewController()
+                navigationController?.pushViewController(boardRegister, animated: true)
+            }
+        } else {
+            let boardRegister = RegisterNameViewController()
+            navigationController?.pushViewController(boardRegister, animated: true)
+        }
     }
     
     @objc func actionLookAround(_ sender: UIButton) {
