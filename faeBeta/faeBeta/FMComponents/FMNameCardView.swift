@@ -353,8 +353,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
     }
     
     func hide(completionHandler: @escaping () -> Void) {
-        guard boolCardOpened else { return }
-        guard !isAnimating else { return }
+        guard boolCardOpened else { completionHandler(); return }
+        guard !isAnimating else { completionHandler(); return }
         boolCardOpened = false
         lblNickName.text = ""
         lblUserName.text = ""

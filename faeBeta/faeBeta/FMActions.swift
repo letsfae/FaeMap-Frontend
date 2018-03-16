@@ -40,7 +40,11 @@ extension FaeMapViewController {
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
+        if let text = lblSearchContent.text {
+            searchVC.strSearchedPlace = text
+        } else {
+            searchVC.strSearchedPlace = ""
+        }
         navigationController?.pushViewController(searchVC, animated: false)
     }
     
@@ -74,6 +78,7 @@ extension FaeMapViewController {
         deselectAllAnnotations()
         placeClusterManager.removeAnnotations(placesFromSearch) {
             self.placesFromSearch.removeAll(keepingCapacity: true)
+            self.placeClusterManager.manuallyCallRegionDidChange()
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)

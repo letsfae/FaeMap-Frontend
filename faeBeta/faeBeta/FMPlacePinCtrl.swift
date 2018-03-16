@@ -320,12 +320,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     func updatePlacePins() {
+        return
         let coorDistance = cameraDiagonalDistance()
         refreshPlacePins(radius: coorDistance)
     }
     
     fileprivate func refreshPlacePins(radius: Int) {
-        
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
             let nowTime = DispatchTime.now()
@@ -411,6 +411,19 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 }
             }
             stopIconSpin(delay: getDelay(prevTime: time_0))
+        }
+    }
+    
+    // MARK: - Reload Place Pins
+    func reloadPlacePinsOnMap(places: [PlacePin], completion: @escaping () -> Void) {
+        placeClusterManager.isForcedRefresh = true
+        placeClusterManager.removeAnnotations(placesFromSearch) {
+            self.placesFromSearch = places.map({ FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0 as AnyObject) })
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+                self.placeClusterManager.isForcedRefresh = false
+                completion()
+            })
+            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }
     }
 }

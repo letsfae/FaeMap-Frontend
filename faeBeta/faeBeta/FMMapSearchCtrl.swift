@@ -48,8 +48,9 @@ extension FaeMapViewController: MapSearchDelegate {
      
      以上是老板原话。我把你的return注释掉了，但存在问题，你试试搜索b，下面不会出来place数据，点击search，出现的页面，根据该页面修改一下？
     */
-    func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation) {
+    func jumpToPlaces(searchText: String, places: [PlacePin]) {
         PLACE_ENABLE = false
+        /*
         placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         removePlaceUserPins({
             self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
@@ -65,6 +66,7 @@ extension FaeMapViewController: MapSearchDelegate {
             })
             self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }, nil)
+        */
         updateUI(searchText: searchText)
         
         btnTapToShowResultTbl.isHidden = places.count <= 1
@@ -72,6 +74,15 @@ extension FaeMapViewController: MapSearchDelegate {
             swipingState = .multipleSearch
             tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places)
             tblPlaceResult.loading(current: places[0])
+            placesFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+            removePlaceUserPins({
+                self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+                    if let first = places.first {
+                        self.goTo(annotation: nil, place: first, animated: true)
+                    }
+                })
+                self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+            }, nil)
             placeClusterManager.maxZoomLevelForClustering = 0
         } else {
             swipingState = .map

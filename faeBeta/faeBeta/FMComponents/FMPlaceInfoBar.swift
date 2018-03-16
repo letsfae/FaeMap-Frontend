@@ -11,7 +11,7 @@ import MapKit
 //import CCHMapClusterController
 
 protocol PlaceViewDelegate: class {
-    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?)
+    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool)
 }
 
 enum PlaceInfoBarState: String {
@@ -181,9 +181,9 @@ class FMPlaceInfoBar: UIView {
             self.imgBack_1.frame.origin.x += screenWidth + 7
         }, completion: {_ in
             if self.state == .map {
-                self.delegate?.goTo(annotation: self.prevAnnotation, place: nil)
+                self.delegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
             } else if self.state == .multipleSearch {
-                self.delegate?.goTo(annotation: nil, place: self.prevPlacePin)
+                self.delegate?.goTo(annotation: nil, place: self.prevPlacePin, animated: true)
             }
             self.resetSubviews()
         })
@@ -195,9 +195,9 @@ class FMPlaceInfoBar: UIView {
             self.imgBack_2.frame.origin.x = 7
         }, completion: { _ in
             if self.state == .map {
-                self.delegate?.goTo(annotation: self.nextAnnotation, place: nil)
+                self.delegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
             } else if self.state == .multipleSearch {
-                self.delegate?.goTo(annotation: nil, place: self.nextPlacePin)
+                self.delegate?.goTo(annotation: nil, place: self.nextPlacePin, animated: true)
             }
             self.resetSubviews()
         })

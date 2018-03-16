@@ -30,19 +30,19 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.superview?.sendSubview(toBack: anView)
-                if mapMode == .pinDetail || modePinDetail == .on { // immediatelly show up
-                    anView.imgIcon.frame = CGRect(x: 0-8, y: 0-5, width: 56, height: 56)
+                if mapMode == .pinDetail || modePinDetail == .on || PLACE_INSTANT_SHOWUP { // immediatelly show up
+                    anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
                     anView.alpha = 1
-                    return
-                }
-                anView.alpha = 0
-                anView.imgIcon.frame = CGRect(x: 28-8, y: 56-10, width: 0, height: 0)
-                let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                        anView.imgIcon.frame = CGRect(x: 0-8, y: 0-5, width: 56, height: 56)
-                        anView.alpha = 1
-                    }, completion: nil)
+                } else {
+                    anView.alpha = 0
+                    anView.imgIcon.frame = CGRect(x: 20, y: 46, width: 0, height: 0)
+                    let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                            anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
+                            anView.alpha = 1
+                        }, completion: nil)
+                    }
                 }
             } else if let anView = annotationView as? UserPinAnnotationView {
                 anView.superview?.bringSubview(toFront: anView)

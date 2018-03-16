@@ -63,6 +63,7 @@ class FMZoomButton: UIButton {
     @objc func handlePan(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
             prevRegion = mapView.region
+            prevRotation = mapView.camera.heading
             guard prevRegion != nil else { return }
             Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = false

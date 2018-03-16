@@ -12,7 +12,7 @@ import GooglePlaces
 
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
-    @objc optional func jumpToPlaces(searchText: String, places: [PlacePin], selectedLoc: CLLocation)
+    @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
 //    func backToMainMapFromMapSearch()
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
 }
@@ -43,7 +43,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var lblPlaces = [UILabel]()
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-    var strSearchedPlace: String! = ""
+    var strSearchedPlace = ""
     var cellStatus = 0
     
     // uiviews with shadow under table views
@@ -335,7 +335,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             if source == "name" {
                 self.showOrHideViews(searchText: content)
             } else {
-                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces, selectedLoc: LocManager.shared.searchedLoc)
+                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces)
                 self.navigationController?.popViewController(animated: false)
             }
         }

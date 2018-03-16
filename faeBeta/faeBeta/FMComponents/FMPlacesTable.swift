@@ -10,6 +10,7 @@ import UIKit
 
 protocol FMPlaceTableDelegate: class {
     func selectPlaceFromTable(_ placeData: PlacePin)
+    func reloadPlacesOnMap(places: [PlacePin])
 }
 
 class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
@@ -21,6 +22,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var showed = false
     
     // Table
+    var allPlaces = [[PlacePin]]()
     var uiviewTblBckg: UIView!
     var tblResults: UITableView!
     var lblNumResults: UILabel!
@@ -28,10 +30,16 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var btnPrevPage: UIButton!
     var btnNextPage: UIButton!
     
+    var dictOffset = [Int: CGPoint]()
+    
     // Bar
     var imgBack_0 = PlaceView()
     var imgBack_1 = PlaceView()
     var imgBack_2 = PlaceView()
+    
+    var currentIdx: Int = 0
+    var goingToNextGroup: Bool = false
+    var goingToPrevGroup: Bool = false
     
     var boolLeft = true
     var boolRight = true
@@ -46,12 +54,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var prevPlacePin: PlacePin!
     var nextPlacePin: PlacePin!
     
-    var boolDisableSwipe = false
+    var boolDisableSwipe = false {
+        didSet {
+            self.boolLeft = !boolDisableSwipe
+            self.boolRight = !boolDisableSwipe
+        }
+    }
     
     var state: PlaceInfoBarState = .map {
         didSet {
-//            boolLeft = annotations.count > 1 || places.count > 1
-//            boolRight = annotations.count > 1 || places.count > 1
+            boolLeft = annotations.count > 1 || places.count > 1
+            boolRight = annotations.count > 1 || places.count > 1
         }
     }
     
@@ -77,18 +90,21 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    var fullyLoaded = false
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 90))
         loadContent()
         loadBar()
         alpha = 0
         layer.zPosition = 605
-        //addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
         
         let panGesture = UIPanGestureRecognizer()
         panGesture.maximumNumberOfTouches = 1
         panGesture.addTarget(self, action: #selector(self.handlePanGesture(_:)))
         addGestureRecognizer(panGesture)
+        
+        fullyLoaded = true
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -130,11 +146,14 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         guard places.count > 0 else { return }
         var prev_idx = places.count - 1
         var next_idx = 0
+        
         for i in 0..<places.count {
             if places[i] == current {
                 // joshprint("[loading], find equals")
                 prev_idx = (i - 1) < 0 ? places.count - 1 : i - 1
                 next_idx = (i + 1) >= places.count ? 0 : i + 1
+                currentIdx = i
+                configureIndexForPanGes()
                 // joshprint("[loading], count = \(places.count)")
                 // joshprint("[loading],     i = \(i)")
                 // joshprint("[loading],  prev = \(prev_idx)")
@@ -146,8 +165,35 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         prevPlacePin = places[prev_idx]
         nextPlacePin = places[next_idx]
+        
+        if currentIdx == 0 && boolLeft && tblResults.tag - 1 >= 0 {
+            let places = allPlaces[tblResults.tag - 1]
+            prev_idx = places.count - 1
+            prevPlacePin = places[prev_idx]
+        }
+        
+        if currentIdx == places.count - 1 && boolRight && tblResults.tag + 1 <= allPlaces.count - 1 {
+            let places = allPlaces[tblResults.tag + 1]
+            next_idx = 0
+            nextPlacePin = places[next_idx]
+        }
+        
         imgBack_0.setValueForPlace(placeInfo: prevPlacePin)
         imgBack_2.setValueForPlace(placeInfo: nextPlacePin)
+    }
+    
+    func configureCurrentPlaces(goingNext: Bool) {
+        if goingNext {
+            if tblResults.tag + 1 <= allPlaces.count - 1 {
+                tblResults.tag += 1
+                places = allPlaces[tblResults.tag]
+            }
+        } else if goingToPrevGroup {
+            if tblResults.tag - 1 >= 0 {
+                tblResults.tag -= 1
+                places = allPlaces[tblResults.tag]
+            }
+        }
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
@@ -194,9 +240,12 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.uiviewTblBckg.frame.origin.x += screenWidth + 7
         }, completion: {_ in
             if self.state == .map {
-                self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil)
+                self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
             } else if self.state == .multipleSearch {
-                self.barDelegate?.goTo(annotation: nil, place: self.prevPlacePin)
+                if self.currentIdx == 0 {
+                    self.goingToPrevGroup = true
+                }
+                self.barDelegate?.goTo(annotation: nil, place: self.prevPlacePin, animated: true)
             }
             self.resetSubviews()
         })
@@ -208,9 +257,12 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.imgBack_2.frame.origin.x = 7
         }, completion: { _ in
             if self.state == .map {
-                self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil)
+                self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
             } else if self.state == .multipleSearch {
-                self.barDelegate?.goTo(annotation: nil, place: self.nextPlacePin)
+                if self.currentIdx == self.places.count - 1 {
+                    self.goingToNextGroup = true
+                }
+                self.barDelegate?.goTo(annotation: nil, place: self.nextPlacePin, animated: true)
             }
             self.resetSubviews()
         })
@@ -242,20 +294,55 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             let absPercent: CGFloat = 0.1
             guard boolDisableSwipe == false else { return }
             if percent < -absPercent {
+                guard boolLeft else { return }
                 panToPrev(resumeTime)
             } else if percent > absPercent {
+                guard boolRight else { return }
                 panToNext(resumeTime)
             } else {
                 panBack(resumeTime)
             }
         } else if pan.state == .changed {
-            if boolLeft || boolRight {
-                let translation = pan.translation(in: self)
+            let translation = pan.translation(in: self)
+            if translation.x > 0 {
+                guard boolLeft else { return }
+                imgBack_0.center.x = imgBack_0.center.x + translation.x
+                uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
+                imgBack_2.center.x = imgBack_2.center.x + translation.x
+                pan.setTranslation(CGPoint.zero, in: self)
+            } else {
+                guard boolRight else { return }
                 imgBack_0.center.x = imgBack_0.center.x + translation.x
                 uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
                 imgBack_2.center.x = imgBack_2.center.x + translation.x
                 pan.setTranslation(CGPoint.zero, in: self)
             }
+//            if boolLeft || boolRight {
+//
+//                imgBack_0.center.x = imgBack_0.center.x + translation.x
+//                uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
+//                imgBack_2.center.x = imgBack_2.center.x + translation.x
+//                pan.setTranslation(CGPoint.zero, in: self)
+//                joshprint("[handlePanGes]", translation.x)
+//            }
+        }
+    }
+    
+    func configureIndexForPanGes() {
+        if currentIdx == 0 && tblResults.tag == 0 {
+            boolLeft = false
+        } else {
+            boolLeft = true
+        }
+        
+        if tblResults.tag == allPlaces.count - 1 {
+            if currentIdx == allPlaces[tblResults.tag].count - 1 {
+                boolRight = false
+            } else {
+                boolRight = true
+            }
+        } else {
+            boolRight = true
         }
     }
     
@@ -273,7 +360,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         tblResults.dataSource = self
         tblResults.tableFooterView = UIView()
         tblResults.layer.cornerRadius = 2
-        //tblResults.backgroundColor = .white
+        tblResults.alwaysBounceVertical = false
+        tblResults.bounces = false
         uiviewTblBckg.addSubview(tblResults)
         uiviewTblBckg.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tblResults)
         tblVConstraint = returnConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: tblResults)
@@ -299,6 +387,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         btnPrevPage = UIButton()
         btnPrevPage.setImage(#imageLiteral(resourceName: "navigationBack_light"), for: .normal)
         btnPrevPage.setImage(#imageLiteral(resourceName: "navigationBack"), for: .selected)
+        btnPrevPage.addTarget(self, action: #selector(actionSwitchPage(_:)), for: .touchUpInside)
         footView.addSubview(btnPrevPage)
         footView.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: btnPrevPage)
         footView.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: btnPrevPage)
@@ -306,6 +395,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         btnNextPage = UIButton()
         btnNextPage.setImage(#imageLiteral(resourceName: "navigationBack_right_light"), for: .normal)
         btnNextPage.setImage(#imageLiteral(resourceName: "navigationBack_right"), for: .selected)
+        btnNextPage.addTarget(self, action: #selector(actionSwitchPage(_:)), for: .touchUpInside)
         footView.addSubview(btnNextPage)
         footView.addConstraintsWithFormat("H:[v0(40.5)]-0-|", options: [], views: btnNextPage)
         footView.addConstraintsWithFormat("V:[v0(48)]-0-|", options: [], views: btnNextPage)
@@ -318,16 +408,68 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
-        arrPlaces.removeAll()
-        for i in 0..<50 {
-            if i >= places.count { break }
+        //arrPlaces.removeAll()
+        var groupPlaces = [PlacePin]()
+        for i in 0..<places.count-1 {
             let place = places[i]
             place.name = "\(i+1). " + place.name
-            arrPlaces.append(place)
+            //arrPlaces.append(place)
+            groupPlaces.append(place)
+            if groupPlaces.count % 20 == 0 {
+                self.allPlaces.append(groupPlaces)
+                groupPlaces.removeAll(keepingCapacity: true)
+            }
+        }
+        allPlaces.append(groupPlaces)
+        tblResults.tag = 0
+        btnPrevPage.isSelected = false
+        btnNextPage.isSelected = allPlaces.count > 1
+        tblResults.reloadData()
+        //lblNumResults.text = arrPlaces.count == 1 ? "1 Result" : "\(arrPlaces.count) Results"
+        if allPlaces.count > 0 {
+            return allPlaces[0]
+        }
+        return []
+    }
+    
+    // MARK: - Table Actions
+    
+    @objc func actionSwitchPage(_ sender: UIButton) {
+        let prevTag = tblResults.tag
+        if sender == btnPrevPage {
+            tblResults.tag -= 1
+            if tblResults.tag <= 0 {
+                tblResults.tag = 0
+                btnPrevPage.isSelected = false
+                if tblResults.tag == prevTag {
+                    return
+                }
+            }
+            btnNextPage.isSelected = allPlaces.count > 1
+        } else {
+            tblResults.tag += 1
+            if tblResults.tag >= allPlaces.count - 1 {
+                tblResults.tag = allPlaces.count - 1
+                btnNextPage.isSelected = false
+                if tblResults.tag == prevTag {
+                    return
+                }
+            }
+            btnPrevPage.isSelected = true
+        }
+        self.places = self.allPlaces[tblResults.tag]
+        self.loading(current: self.places[0])
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            if let offset = self.dictOffset[self.tblResults.tag] {
+                self.tblResults.setContentOffset(offset, animated: false)
+            } else {
+                self.tblResults.setContentOffset(.zero, animated: false)
+            }
+            self.tblDelegate?.reloadPlacesOnMap(places: self.allPlaces[self.tblResults.tag])
         }
         tblResults.reloadData()
-        lblNumResults.text = arrPlaces.count == 1 ? "1 Result" : "\(arrPlaces.count) Results"
-        return arrPlaces
+        CATransaction.commit()
     }
     
     // MARK: - Table Animation
@@ -355,6 +497,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     func expand(_ completion: @escaping () -> Void) {
         self.frame.size.height = 90
         self.uiviewTblBckg.frame.size.height = 90
+        self.dictOffset.removeAll()
+        self.tblResults.contentOffset = .zero
+        self.boolDisableSwipe = true
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.frame.size.height = screenHeight == 812 ? 587 : 556 * screenHeightFactor
             self.tblResults.alpha = 1
@@ -380,24 +525,35 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.layoutIfNeeded()
             completion()
         }, completion: { _ in
-//            UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-//                Key.shared.FMVCtrler?.uiviewPlaceBar.alpha = 1
-//                self.alpha = 0
-//            })
             self.showed = false
+            self.boolDisableSwipe = false
         })
+    }
+    
+    // MARK: - ScrollViwe Delegate
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("[scrollViewDidEndDecelerating]")
+        dictOffset[tblResults.tag] = scrollView.contentOffset
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        print("[scrollViewDidEndDragging]")
+        dictOffset[tblResults.tag] = scrollView.contentOffset
     }
     
     // MARK: - Table View Delegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let placeData = arrPlaces[indexPath.row]
+//        let placeData = arrPlaces[indexPath.row]
+        let placeData = allPlaces[tableView.tag][indexPath.row]
         tblDelegate?.selectPlaceFromTable(placeData)
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return arrPlaces.count
+//        return arrPlaces.count
+        guard allPlaces.count > 0 else { return 0 }
+        return allPlaces[tableView.tag].count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -406,8 +562,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "placeResultBarCell", for: indexPath) as! FMPlaceResultBarCell
-        let data = arrPlaces[indexPath.row]
-        cell.setValueForPlace(data)
+        let placeData = allPlaces[tableView.tag][indexPath.row]
+        cell.setValueForPlace(placeData)
         return cell
     }
     
