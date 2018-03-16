@@ -658,7 +658,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - PlaceViewDelegate
     
-    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?) {
+    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool) {
         deselectAllAnnotations()
         if let anno = annotation {
             faeMapView.selectAnnotation(anno, animated: false)

@@ -50,6 +50,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var arrPlaceData = [PlacePin]()
     var timerLoadMessages: Timer?
     var selfAnView: SelfAnnotationView?
+    var PLACE_ANIMATED = true
     
     // General
     var btnBackToExp: UIButton!
@@ -163,6 +164,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var HIDE_AVATARS = false
     var fullyLoaded = false // indicate if all components are fully loaded
     var boolCanUpdatePlaces = true
+    var PLACE_INSTANT_SHOWUP = false
     
     var unreadNotiToken: NotificationToken? = nil
     

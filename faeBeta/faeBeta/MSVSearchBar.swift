@@ -85,11 +85,23 @@ extension MapSearchViewController {
             schLocationBar.btnClose.isHidden = true
             cellStatus = 0
             if searchBar.txtSchField.text == "" {
-                showOrHideViews(searchText: searchBar.txtSchField.text!)
+                if let text = searchBar.txtSchField.text {
+                    showOrHideViews(searchText: text)
+                } else {
+                    showOrHideViews(searchText: "")
+                }
             } else {
                 schPlaceBar.btnClose.isHidden = false
-                filterPlaceCat(searchText: searchBar.txtSchField.text!)  // crash when entering from map
-                getPlaceInfo(content: searchBar.txtSchField.text!)
+                if let text = searchBar.txtSchField.text {
+                    showOrHideViews(searchText: text)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.filterPlaceCat(searchText: text)  // crash when entering from map
+                        self.getPlaceInfo(content: text)
+                    }
+                } else {
+                    filterPlaceCat(searchText: "")
+                    getPlaceInfo(content: "")
+                }
             }
         } else {   // search locations
             schPlaceBar.btnClose.isHidden = true
@@ -131,7 +143,7 @@ extension MapSearchViewController {
                 // TODO Vicky - 为空一直都是按搜索返回地图，不搜出任何东西，就是原本的地图主页效果，但是地图当前的view会根据第二行的地点
                 lookUpForCoordinate()
             } else {
-                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces, selectedLoc: LocManager.shared.searchedLoc)
+                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces)
                 navigationController?.popViewController(animated: false)
             }
         } else {

@@ -20,11 +20,15 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
+    // FMPlaceTableDelegate
+    func reloadPlacesOnMap(places: [PlacePin]) {
+        reloadPlacePinsOnMap(places: places) {}
+    }
+    
     func loadPlaceDetail() {
-        //let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
-        //uiviewPlaceBar.addGestureRecognizer(tapGesture)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
+        tblPlaceResult.addGestureRecognizer(tapGesture)
         
-//        tblPlaceResult = FMPlacesTable()
         tblPlaceResult.tblDelegate = self
         tblPlaceResult.barDelegate = self
         view.addSubview(tblPlaceResult)
@@ -44,30 +48,64 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     }
     
     // PlaceViewDelegate
-    func goTo(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil) {
+    func goTo(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil, animated: Bool = true) {
+        
+        func findAnnotation() {
+            if let placePin = place {
+                swipingState = .multipleSearch
+                var desiredAnno: CCHMapClusterAnnotation!
+                for anno in faeMapView.annotations {
+                    guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                    guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
+                    guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
+                    if placeInfo == placePin {
+                        desiredAnno = cluster
+                        break
+                    }
+                }
+                if desiredAnno != nil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.faeMapView.selectAnnotation(desiredAnno, animated: false)
+                    }
+                    if animated {
+                        animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
+                    }
+                }
+            }
+        }
+        
         deselectAllAnnotations()
         if let anno = annotation {
             swipingState = .map
             boolPreventUserPinOpen = true
             faeMapView.selectAnnotation(anno, animated: false)
             boolPreventUserPinOpen = false
+            if animated {
+                animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
+            }
         }
-        if let placePin = place {
-            swipingState = .multipleSearch
-            var desiredAnno: CCHMapClusterAnnotation!
-            for anno in faeMapView.annotations {
-                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
-                guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
-                guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
-                if placeInfo == placePin {
-                    desiredAnno = cluster
-                    break
-                }
+        
+        // If going to prev or next group
+        if tblPlaceResult.goingToNextGroup {
+            tblPlaceResult.configureCurrentPlaces(goingNext: true)
+            self.PLACE_INSTANT_SHOWUP = true
+            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+                findAnnotation()
+                self.tblPlaceResult.goingToNextGroup = false
+                self.PLACE_INSTANT_SHOWUP = false
             }
-            if desiredAnno != nil {
-                faeMapView.selectAnnotation(desiredAnno, animated: false)
-                animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
+            return
+        } else if tblPlaceResult.goingToPrevGroup {
+            self.PLACE_INSTANT_SHOWUP = true
+            tblPlaceResult.configureCurrentPlaces(goingNext: false)
+            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+                findAnnotation()
+                self.tblPlaceResult.goingToPrevGroup = false
+                self.PLACE_INSTANT_SHOWUP = false
             }
+            return
+        } else {
+            findAnnotation()
         }
     }
 }
