@@ -76,10 +76,12 @@ extension FaeMapViewController: MapSearchDelegate {
             tblPlaceResult.loading(current: places[0])
             placesFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
             removePlaceUserPins({
+                self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
                     if let first = places.first {
                         self.goTo(annotation: nil, place: first, animated: true)
                     }
+                    self.PLACE_INSTANT_SHOWUP = false
                 })
                 self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
             }, nil)

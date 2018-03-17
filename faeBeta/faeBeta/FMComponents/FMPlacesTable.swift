@@ -294,55 +294,61 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             let absPercent: CGFloat = 0.1
             guard boolDisableSwipe == false else { return }
             if percent < -absPercent {
-                guard boolLeft else { return }
+                //guard boolLeft else { return }
+                guard !imgBack_0.isHidden else {
+                    panBack()
+                    return
+                }
                 panToPrev(resumeTime)
             } else if percent > absPercent {
-                guard boolRight else { return }
+                //guard boolRight else { return }
+                guard !imgBack_2.isHidden else {
+                    panBack()
+                    return
+                }
                 panToNext(resumeTime)
             } else {
                 panBack(resumeTime)
             }
         } else if pan.state == .changed {
             let translation = pan.translation(in: self)
+            //let isDeviated = uiviewTblBckg.frame.origin.x != 7
             if translation.x > 0 {
-                guard boolLeft else { return }
+                //guard boolLeft || isDeviated else { return }
                 imgBack_0.center.x = imgBack_0.center.x + translation.x
                 uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
                 imgBack_2.center.x = imgBack_2.center.x + translation.x
                 pan.setTranslation(CGPoint.zero, in: self)
             } else {
-                guard boolRight else { return }
+                //guard boolRight || isDeviated else { return }
                 imgBack_0.center.x = imgBack_0.center.x + translation.x
                 uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
                 imgBack_2.center.x = imgBack_2.center.x + translation.x
                 pan.setTranslation(CGPoint.zero, in: self)
             }
-//            if boolLeft || boolRight {
-//
-//                imgBack_0.center.x = imgBack_0.center.x + translation.x
-//                uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
-//                imgBack_2.center.x = imgBack_2.center.x + translation.x
-//                pan.setTranslation(CGPoint.zero, in: self)
-//                joshprint("[handlePanGes]", translation.x)
-//            }
         }
     }
     
     func configureIndexForPanGes() {
         if currentIdx == 0 && tblResults.tag == 0 {
-            boolLeft = false
+            //boolLeft = false
+            imgBack_0.isHidden = true
         } else {
-            boolLeft = true
+            //boolLeft = true
+            imgBack_0.isHidden = false
         }
         
         if tblResults.tag == allPlaces.count - 1 {
             if currentIdx == allPlaces[tblResults.tag].count - 1 {
-                boolRight = false
+                //boolRight = false
+                imgBack_2.isHidden = true
             } else {
-                boolRight = true
+                //boolRight = true
+                imgBack_2.isHidden = false
             }
         } else {
-            boolRight = true
+            //boolRight = true
+            imgBack_2.isHidden = false
         }
     }
     
@@ -409,6 +415,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
         //arrPlaces.removeAll()
+        allPlaces.removeAll()
         var groupPlaces = [PlacePin]()
         for i in 0..<places.count-1 {
             let place = places[i]
