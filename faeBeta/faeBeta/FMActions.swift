@@ -76,11 +76,13 @@ extension FaeMapViewController {
         
         mapGesture(isOn: true)
         deselectAllAnnotations()
+        placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(placesFromSearch) {
             self.placesFromSearch.removeAll(keepingCapacity: true)
-            self.placeClusterManager.manuallyCallRegionDidChange()
+            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: {
+                self.placeClusterManager.isForcedRefresh = false
+            })
         }
-        placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
     }
     

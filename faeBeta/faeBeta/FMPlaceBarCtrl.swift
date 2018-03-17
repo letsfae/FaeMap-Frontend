@@ -22,7 +22,13 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     
     // FMPlaceTableDelegate
     func reloadPlacesOnMap(places: [PlacePin]) {
-        reloadPlacePinsOnMap(places: places) {}
+        self.PLACE_INSTANT_SHOWUP = true
+        reloadPlacePinsOnMap(places: places) {
+            if let first = places.first {
+                self.goTo(annotation: nil, place: first, animated: true)
+            }
+            self.PLACE_INSTANT_SHOWUP = false
+        }
     }
     
     func loadPlaceDetail() {
@@ -67,6 +73,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
+                    //tblPlaceResult.loading(current: placePin)
                     if animated {
                         animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
                     }
@@ -83,6 +90,10 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             if animated {
                 animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
             }
+        }
+        
+        if let placePin = place {
+            tblPlaceResult.loading(current: placePin)
         }
         
         // If going to prev or next group
