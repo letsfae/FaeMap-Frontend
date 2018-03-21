@@ -316,8 +316,8 @@ class PlaceView: UIView {
         
         indicator = UIActivityIndicatorView()
         indicator.activityIndicatorViewStyle = .white
-        indicator.center.x = 48
-        indicator.center.y = 51
+        indicator.center.x = 45
+        indicator.center.y = 45
         indicator.hidesWhenStopped = true
         indicator.color = UIColor._2499090()
         addSubview(indicator)

@@ -218,7 +218,26 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
         anView.idx = first.class_2_icon_id
-        anView.assignImage(first.icon)
+        if swipingState == .multipleSearch {
+            if let placePin = first.pinInfo as? PlacePin {
+                let tag = tblPlaceResult.tblResults.tag
+                if let lastSelected = tblPlaceResult.groupLastSelected[tag] {
+                    if placePin == lastSelected {
+                        let icon = UIImage(named: "place_map_\(anView.idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                        anView.assignImage(icon)
+                        tapPlacePin(didSelect: anView)
+                    } else {
+                        anView.assignImage(first.icon)
+                    }
+                } else {
+                    anView.assignImage(first.icon)
+                }
+            } else {
+                anView.assignImage(first.icon)
+            }
+        } else {
+            anView.assignImage(first.icon)
+        }
         anView.delegate = self
         return anView
     }
@@ -266,7 +285,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
         let idx = firstAnn.class_2_icon_id
-        firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
+        firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         firstAnn.isSelected = true
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
@@ -320,11 +339,96 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     func updatePlacePins() {
-        return
         let coorDistance = cameraDiagonalDistance()
         refreshPlacePins(radius: coorDistance)
     }
     
+//    fileprivate func refreshPlacePins(radius: Int) {
+//        func getDelay(prevTime: DispatchTime) -> Double {
+//            let standardInterval: Double = 1
+//            let nowTime = DispatchTime.now()
+//            let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
+//            var delay: Double = 0
+//            if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
+//                delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
+//            } else {
+//                delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
+//            }
+//            return delay
+//        }
+//
+//        func stopIconSpin(delay: Double) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+//                self.btnFilterIcon.stopIconSpin()
+//            })
+//        }
+//        let time_0 = DispatchTime.now()
+//        guard PLACE_ENABLE else {
+//            stopIconSpin(delay: getDelay(prevTime: time_0))
+//            return
+//        }
+//        guard boolCanUpdatePlaces else {
+//            stopIconSpin(delay: getDelay(prevTime: time_0))
+//            return
+//        }
+//        boolCanUpdatePlaces = false
+//        renewSelfLocation()
+//        let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+//        let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
+//        FaeMap.shared.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+//        FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+//        FaeMap.shared.whereKey("radius", value: "\(radius)")
+//        FaeMap.shared.whereKey("type", value: "place")
+//        FaeMap.shared.whereKey("max_count", value: "500")
+//        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+//            guard status / 100 == 2 && message != nil else {
+//                stopIconSpin(delay: getDelay(prevTime: time_0))
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            let mapPlaceJSON = JSON(message!)
+//            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
+//                stopIconSpin(delay: getDelay(prevTime: time_0))
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            guard mapPlaceJsonArray.count > 0 else {
+//                stopIconSpin(delay: getDelay(prevTime: time_0))
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            var placePins = [FaePinAnnotation]()
+//            var serialQueue = DispatchQueue(label: "appendPlaces")
+//            if #available(iOS 10.0, *) {
+//                serialQueue = DispatchQueue(label: "appendPlaces", qos: .userInteractive, attributes: [], autoreleaseFrequency: .workItem, target: nil)
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//            serialQueue.async {
+//                for placeJson in mapPlaceJsonArray {
+//                    let placeData = PlacePin(json: placeJson)
+//                    let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
+//                    if self.setPlacePins.contains(placeJson["place_id"].intValue) {
+//                    } else {
+//                        self.setPlacePins.insert(placeJson["place_id"].intValue)
+//                        placePins.append(place)
+//                        self.faePlacePins.append(place)
+//                    }
+//                }
+//                self.boolCanUpdatePlaces = true
+//                guard placePins.count > 0 else {
+//                    return
+//                }
+//                DispatchQueue.main.async {
+//                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: {
+//
+//                    })
+//                }
+//            }
+//            stopIconSpin(delay: getDelay(prevTime: time_0))
+//        }
+//    }
+
     fileprivate func refreshPlacePins(radius: Int) {
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
@@ -357,13 +461,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         renewSelfLocation()
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
-        let getPlaceInfo = FaeMap()
-        getPlaceInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
-        getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        getPlaceInfo.whereKey("radius", value: "\(radius)")
-        getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count", value: "500")
-        getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+        FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+        FaeMap.shared.whereKey("radius", value: "\(radius)")
+        FaeMap.shared.whereKey("type", value: "place")
+        FaeMap.shared.whereKey("max_count", value: "500")
+        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 self.boolCanUpdatePlaces = true
@@ -380,36 +483,21 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 self.boolCanUpdatePlaces = true
                 return
             }
-            var placePins = [FaePinAnnotation]()
-            var serialQueue = DispatchQueue(label: "appendPlaces")
-            if #available(iOS 10.0, *) {
-                serialQueue = DispatchQueue(label: "appendPlaces", qos: .userInteractive, attributes: [], autoreleaseFrequency: .workItem, target: nil)
-            } else {
-                // Fallback on earlier versions
-            }
-            serialQueue.async {
-                var i = 0
-                for placeJson in mapPlaceJsonArray {
-                    let placeData = PlacePin(json: placeJson)
-                    let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
-                    if self.setPlacePins.contains(placeJson["place_id"].intValue) {
-                    } else {
-                        self.setPlacePins.insert(placeJson["place_id"].intValue)
-                        placePins.append(place)
-                        self.faePlacePins.append(place)
-                    }
-                    i += 1
-                }
-                self.boolCanUpdatePlaces = true
-                guard placePins.count > 0 else {
-                    return
-                }
+            self.placeAdderQueue.cancelAllOperations()
+            let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            adder.completionBlock = {
                 DispatchQueue.main.async {
-                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: {
-                        
+                    if adder.isCancelled {
+                        return
+                    }
+                    self.placeClusterManager.addAnnotations(adder.placePins, withCompletionHandler: {
+                        self.setPlacePins = self.setPlacePins.union(Set(adder.ids))
+                        self.faePlacePins += adder.placePins
                     })
                 }
             }
+            self.placeAdderQueue.addOperation(adder)
+            self.boolCanUpdatePlaces = true
             stopIconSpin(delay: getDelay(prevTime: time_0))
         }
     }
@@ -423,7 +511,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 self.placeClusterManager.isForcedRefresh = false
                 completion()
             })
-            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+            //self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }
     }
 }
