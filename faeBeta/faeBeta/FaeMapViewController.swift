@@ -51,6 +51,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var timerLoadMessages: Timer?
     var selfAnView: SelfAnnotationView?
     var PLACE_ANIMATED = true
+    var placeAdderQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "adder queue"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
     
     // General
     var btnBackToExp: UIButton!
@@ -635,11 +641,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         })
     }
     
-    func animateToCoordinate(mapView: MKMapView, coordinate: CLLocationCoordinate2D, animated: Bool = true) {
-        let point = MKMapPointForCoordinate(coordinate)
-        var rect = mapView.visibleMapRect
-        rect.origin.x = point.x - rect.size.width * 0.5
-        rect.origin.y = point.y - rect.size.height * 0.5
-        mapView.setVisibleMapRect(rect, animated: animated)
+    func cancelAllPinLoading() {
+        placeAdderQueue.cancelAllOperations()
     }
+    
 }

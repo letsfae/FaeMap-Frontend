@@ -252,23 +252,28 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         faeMapView.setVisibleMapRect(rect, animated: animated)
     }
     
-    func deselectAllAnnotations() {
+    func deselectAllAnnotations(full: Bool = true) {
         
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
         
         if let idx = selectedPlace?.class_2_icon_id {
-            selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
-            selectedPlace?.isSelected = false
-            guard let img = selectedPlace?.icon else { return }
-            selectedPlaceView?.assignImage(img)
-            selectedPlaceView?.hideButtons()
-            selectedPlaceView?.superview?.sendSubview(toBack: selectedPlaceView!)
-            selectedPlaceView?.zPos = 7
-            selectedPlaceView?.optionsReady = false
-            selectedPlaceView?.optionsOpened = false
-            selectedPlaceView = nil
-            selectedPlace = nil
+            if full {
+                selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
+                selectedPlace?.isSelected = false
+                guard let img = selectedPlace?.icon else { return }
+                selectedPlaceView?.assignImage(img)
+                selectedPlaceView?.hideButtons()
+                selectedPlaceView?.superview?.sendSubview(toBack: selectedPlaceView!)
+                selectedPlaceView?.zPos = 7
+                selectedPlaceView?.optionsReady = false
+                selectedPlaceView?.optionsOpened = false
+                selectedPlaceView = nil
+                selectedPlace = nil
+            } else {
+                selectedPlaceView?.hideButtons()
+                selectedPlaceView?.optionsOpened = false
+            }
         }
     }
     
@@ -321,6 +326,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         
         if AUTO_REFRESH {
             calculateDistanceOffset()
+        }
+        
+        if swipingState == .multipleSearch && tblPlaceResult.altitude == 0 {
+            tblPlaceResult.altitude = mapView.camera.altitude
+            joshprint("[regionDidChangeAnimated] altitude changed")
         }
         
         if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.annotations = visiblePlaces() }

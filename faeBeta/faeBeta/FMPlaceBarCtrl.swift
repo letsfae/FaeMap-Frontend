@@ -23,10 +23,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     // FMPlaceTableDelegate
     func reloadPlacesOnMap(places: [PlacePin]) {
         self.PLACE_INSTANT_SHOWUP = true
+        //self.placeClusterManager.marginFactor = 10000
+        let camera = faeMapView.camera
+        camera.altitude = tblPlaceResult.altitude
+        faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
-            if let first = places.first {
-                self.goTo(annotation: nil, place: first, animated: true)
-            }
+            self.goTo(annotation: nil, place: self.tblPlaceResult.getGroupLastSelected(), animated: true)
             self.PLACE_INSTANT_SHOWUP = false
         }
     }
@@ -69,13 +71,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
                         break
                     }
                 }
+                if animated {
+                    faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
+                }
                 if desiredAnno != nil {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
-                    }
-                    //tblPlaceResult.loading(current: placePin)
-                    if animated {
-                        animateToCoordinate(mapView: faeMapView, coordinate: placePin.coordinate)
                     }
                 }
             }
@@ -88,12 +89,8 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             faeMapView.selectAnnotation(anno, animated: false)
             boolPreventUserPinOpen = false
             if animated {
-                animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
+                faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
             }
-        }
-        
-        if let placePin = place {
-            tblPlaceResult.loading(current: placePin)
         }
         
         // If going to prev or next group
@@ -117,6 +114,9 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             return
         } else {
             findAnnotation()
+        }
+        if let placePin = place { // 必须放在最末尾
+            tblPlaceResult.loading(current: placePin)
         }
     }
 }

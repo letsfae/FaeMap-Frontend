@@ -134,7 +134,7 @@ class FaeMapView: MKMapView {
                     faeMapCtrler?.tblPlaceResult.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
-                faeMapCtrler?.deselectAllAnnotations()
+                faeMapCtrler?.deselectAllAnnotations(full: false)
                 slcMapCtrler?.deselectAllAnnotations()
                 slcMapCtrler?.selectedPlace = nil
             }

@@ -68,7 +68,7 @@ extension FaeMapViewController: MapSearchDelegate {
         }, nil)
         */
         updateUI(searchText: searchText)
-        
+        deselectAllAnnotations()
         btnTapToShowResultTbl.isHidden = places.count <= 1
         if let _ = places.first {
             swipingState = .multipleSearch
@@ -83,7 +83,8 @@ extension FaeMapViewController: MapSearchDelegate {
                     }
                     self.PLACE_INSTANT_SHOWUP = false
                 })
-                self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+                //self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+                self.zoomToFitAllPlaces(places: self.tblPlaceResult.arrPlaces)
             }, nil)
             placeClusterManager.maxZoomLevelForClustering = 0
         } else {
@@ -100,6 +101,25 @@ extension FaeMapViewController: MapSearchDelegate {
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {
             let annotationPoint = MKMapPointForCoordinate(annotation.coordinate)
+            let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
+            zoomRect = MKMapRectUnion(zoomRect, pointRect)
+        }
+        var edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
+        if mapMode == .explore {
+            edgePadding = UIEdgeInsetsMake(120, 40, 300, 40)
+        } else if mapMode == .pinDetail || modePinDetail == .on {
+            edgePadding = UIEdgeInsetsMake(220, 80, 120, 80)
+        }
+        faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
+    }
+    
+    func zoomToFitAllPlaces(places: [PlacePin]) {
+        guard let first = places.first else { return }
+        //        placeClusterManager.maxZoomLevelForClustering = 0
+        let point = MKMapPointForCoordinate(first.coordinate)
+        var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
+        for place in places {
+            let annotationPoint = MKMapPointForCoordinate(place.coordinate)
             let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
             zoomRect = MKMapRectUnion(zoomRect, pointRect)
         }
