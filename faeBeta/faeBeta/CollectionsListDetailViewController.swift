@@ -119,11 +119,11 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     fileprivate func loadHiddenHeader() {
-        uiviewFixedHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65))
+        uiviewFixedHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65 + device_offset_top))
         uiviewFixedHeader.backgroundColor = .white
         view.addSubview(uiviewFixedHeader)
         
-        lblListName = UILabel(frame: CGRect(x: 20, y: 28, width: screenWidth - 40, height: 27))
+        lblListName = UILabel(frame: CGRect(x: 20, y: 28 + device_offset_top, width: screenWidth - 40, height: 27))
         lblListName.font = UIFont(name: "AvenirNext-Medium", size: 20)
         lblListName.textColor = UIColor._898989()
         lblListName.text = realmColDetails.name
@@ -131,14 +131,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         lblListName.lineBreakMode = .byTruncatingTail
         uiviewFixedHeader.addSubview(lblListName)
         
-        let line = UIView(frame: CGRect(x: 0, y: 64, width: screenWidth, height: 1))
+        let line = UIView(frame: CGRect(x: 0, y: 64 + device_offset_top, width: screenWidth, height: 1))
         line.backgroundColor = UIColor._200199204()
         uiviewFixedHeader.addSubview(line)
         uiviewFixedHeader.isHidden = true
     }
     
     fileprivate func loadHiddenSectionHeader() {
-        uiviewFixedSectionHeader = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: 34))
+        uiviewFixedSectionHeader = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 34))
         uiviewFixedSectionHeader.backgroundColor = .white
         view.addSubview(uiviewFixedSectionHeader)
         
@@ -375,6 +375,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(tblColListDetail.contentOffset.y)
         if imgHeader != nil {
             var frame = imgHeader.frame
             if tblColListDetail.contentOffset.y < 0 * screenHeightFactor {
@@ -386,13 +387,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             }
         }
         
-        if tblColListDetail.contentOffset.y >= 244 {
+        if tblColListDetail.contentOffset.y >= 236 - device_offset_top {
             uiviewFixedHeader.isHidden = false
         } else {
             uiviewFixedHeader.isHidden = true
         }
         if uiviewFixedSectionHeader != nil {
-            if tblColListDetail.contentOffset.y >= tblColListDetail.rect(forSection: 0).height - 65 && tblColListDetail.contentOffset.y >= 0 {
+            if tblColListDetail.contentOffset.y >= tblColListDetail.rect(forSection: 0).height - 65 - device_offset_top && tblColListDetail.contentOffset.y >= 0 {
                 uiviewFixedSectionHeader.isHidden = false
             } else {
                 uiviewFixedSectionHeader.isHidden = true

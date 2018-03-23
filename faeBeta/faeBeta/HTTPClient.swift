@@ -26,13 +26,22 @@ enum PostMethod: String {
     case update_account = "users/account"
 }
 
+let configuration = { () -> URLSessionConfiguration in
+    let con = URLSessionConfiguration.default
+    con.timeoutIntervalForRequest = 4 // seconds
+    con.timeoutIntervalForResource = 4
+    return con
+}()
+
+let alamoFireManager = Alamofire.SessionManager(configuration: configuration)
+
 func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int, Any?) -> Void) {
     
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .data)
     let name = method == .avatar ? "avatar" : "name_card_cover"
     
-    Alamofire.upload(multipartFormData: {
+    alamoFireManager.upload(multipartFormData: {
         MultipartFormData in
         MultipartFormData.append(imageData, withName: name, fileName: name + ".jpg", mimeType: "image/jpeg")
     }, usingThreshold: 100, to: fullURL, method: .post, headers: headers, encodingCompletion: { encodingResult in
@@ -58,7 +67,7 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .json)
     
-    Alamofire.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
+    alamoFireManager.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "Internet error")
@@ -83,7 +92,7 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
     let fullURL = Key.shared.baseURL + "/" + className
     let headers = Key.shared.header(auth: authentication != nil, type: .normal)
     
-    Alamofire.request(fullURL, method: .post, parameters: parameter, headers: headers)
+    alamoFireManager.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 print("POST NO RESPONSE")
@@ -114,7 +123,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     let headers = Key.shared.header(auth: authentication != nil, type: .normal)
     
     if parameter == nil {
-        Alamofire.request(fullURL, method: .get, headers: headers)
+        alamoFireManager.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
                 // print(response.response!.statusCode)
                 if response.response != nil {
@@ -124,7 +133,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
                 }
             }
     } else {
-        Alamofire.request(fullURL, method: .get, parameters: parameter!, headers: headers)
+        alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
@@ -141,7 +150,7 @@ func deleteFromURL(_ className: String, parameter: [String: Any], completion: @e
     let fullURL = Key.shared.baseURL + "/" + className
     let headers = Key.shared.header(auth: true, type: .normal)
     
-    Alamofire.request(fullURL, method: .delete, headers: headers)
+    alamoFireManager.request(fullURL, method: .delete, headers: headers)
         .responseJSON { response in
             if response.response != nil {
                 completion(response.response!.statusCode, "nothing here")
@@ -175,7 +184,7 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
         avatarInRealm = type == 2 ? avatarRealm.userSmallAvatar as Data? : avatarRealm.userLargeAvatar as Data?
     }
     
-    Alamofire.request(urlRequest)
+    alamoFireManager.request(urlRequest)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "", nil)
@@ -255,7 +264,7 @@ func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = 
         coverPhotoInRealm = coverPhotoRealm.userCoverPhoto as Data?
     }
     
-    Alamofire.request(urlRequest)
+    alamoFireManager.request(urlRequest)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "", nil)
@@ -316,7 +325,7 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
         headers[key] = value
     }
     
-    Alamofire.request(URL, headers: headers)
+    alamoFireManager.request(URL, headers: headers)
         .responseJSON { response in
             if response.response != nil {
                 guard let statusCode = response.response?.statusCode else {
@@ -341,7 +350,7 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
 
 func downloadImage(URL: String, completion: @escaping (Data?) -> Void) {
     
-    Alamofire.request(URL).responseJSON { response in
+    alamoFireManager.request(URL).responseJSON { response in
         if response.response != nil {
             guard (response.response?.statusCode) != nil else {
                 completion(nil)
@@ -372,7 +381,7 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
     if parameter != nil {
         let imageData = parameter!["file"] as! Data
         let mediaType = parameter!["type"] as! String
-        Alamofire.upload(
+        alamoFireManager.upload(
             multipartFormData: { multipartFormData in
                 multipartFormData.append(imageData, withName: "file", fileName: "momentImage.jpg", mimeType: "image/jpeg")
                 multipartFormData.append((mediaType.data(using: .utf8))!, withName: "type")
@@ -421,7 +430,7 @@ func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?,
     if parameter != nil {
         let imageData = parameter!["cover_image"] as! Data
         let chatRoomId = parameter!["chat_room_id"] as! NSNumber
-        Alamofire.upload(multipartFormData: {
+        alamoFireManager.upload(multipartFormData: {
             MultipartFormData in
             MultipartFormData.append(imageData, withName: "cover_image", fileName: "cover_image.jpg", mimeType: "image/jpeg")
             MultipartFormData.append(NSKeyedArchiver.archivedData(withRootObject: chatRoomId), withName: "chat_room_id")
@@ -450,6 +459,11 @@ func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?,
         
     }
     
+}
+
+func showTimeOutAlert() {
+    guard let current = UIApplication.shared.keyWindow?.visibleViewController else { return }
+    showAlert(title: "Time out!", message: "Please try again!", viewCtrler: current)
 }
 
 // utf-8 encode

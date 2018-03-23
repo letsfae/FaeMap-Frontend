@@ -69,6 +69,7 @@ extension FaeMapViewController: MapSearchDelegate {
         */
         updateUI(searchText: searchText)
         deselectAllAnnotations()
+        cancelAllPinLoading()
         btnTapToShowResultTbl.isHidden = places.count <= 1
         if let _ = places.first {
             swipingState = .multipleSearch
@@ -96,7 +97,6 @@ extension FaeMapViewController: MapSearchDelegate {
     
     func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
         guard let firstAnn = annotations.first else { return }
-//        placeClusterManager.maxZoomLevelForClustering = 0
         let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for annotation in annotations {
@@ -115,7 +115,6 @@ extension FaeMapViewController: MapSearchDelegate {
     
     func zoomToFitAllPlaces(places: [PlacePin]) {
         guard let first = places.first else { return }
-        //        placeClusterManager.maxZoomLevelForClustering = 0
         let point = MKMapPointForCoordinate(first.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
         for place in places {

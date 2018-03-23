@@ -16,7 +16,7 @@ protocol ButtonFinishClickedDelegate: class {
 }
 
 class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseAvatarDelegate {
-
+    
     weak var delegate: ButtonFinishClickedDelegate?
     var uiViewSetPicture: UIView!
     var labelTitle: UILabel!
@@ -44,7 +44,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
-        updateGenderAge.updateNameCard { (status, message) in
+        updateGenderAge.updateNameCard { status, _ in
             if status / 100 == 2 {
                 // print("[showGenderAge] Successfully update namecard")
             } else {
@@ -54,8 +54,13 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func updateDefaultProfilePic() {
+        if Key.shared.gender == "female" {
+            self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
+        } else {
+            self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleMen")
+        }
         let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+        getSelfInfo.getAccountBasicInfo({ (status: Int, message: Any?) in
             if status / 100 != 2 {
                 return
             }
@@ -64,53 +69,56 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                 Key.shared.gender = gender
                 if gender == "female" {
                     self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
-                }
-                else {
+                } else {
                     self.imageViewAvatar.image = #imageLiteral(resourceName: "PeopleMen")
                 }
             }
         })
     }
-
+    
     func firstTimeLogin() {
         dimBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        dimBackground.backgroundColor = UIColor(red: 107/255, green: 105/255, blue: 105/255, alpha: 0.5)
+        dimBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.5)
         dimBackground.alpha = 0
-        self.view.addSubview(dimBackground)
+        view.addSubview(dimBackground)
         
-        uiViewSetPicture = UIView(frame:CGRect(x: 62*screenWidthFactor, y: 116*screenWidthFactor, width: 290*screenWidthFactor, height: 334*screenWidthFactor))
+        var offset = 116 * screenWidthFactor
+        if screenHeight == 812 {
+            offset = 175
+        }
+        uiViewSetPicture = UIView(frame: CGRect(x: 62 * screenWidthFactor, y: offset, width: 290 * screenWidthFactor, height: 334 * screenWidthFactor))
         uiViewSetPicture.backgroundColor = UIColor.white
         uiViewSetPicture.layer.cornerRadius = 16
-        self.dimBackground.addSubview(uiViewSetPicture)
+        dimBackground.addSubview(uiViewSetPicture)
         
-        labelTitle = UILabel(frame: CGRect(x: 48*screenWidthFactor, y: 27*screenWidthFactor, width: 194*screenWidthFactor, height: 44*screenWidthFactor))
+        labelTitle = UILabel(frame: CGRect(x: 48 * screenWidthFactor, y: 27 * screenWidthFactor, width: 194 * screenWidthFactor, height: 44 * screenWidthFactor))
         labelTitle.text = "Set your Profile Picture\n & Display Name"
         labelTitle.numberOfLines = 0
         labelTitle.textAlignment = NSTextAlignment.center
         labelTitle.textColor = UIColor._898989()
-        labelTitle.font = UIFont(name: "AvenirNext-Medium",size: 16*screenWidthFactor)
+        labelTitle.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
         uiViewSetPicture.addSubview(labelTitle)
         
         imageViewAvatar = UIImageView(frame: CGRect(x: 100, y: 88, w: 90, h: 90))
-        self.updateDefaultProfilePic()
-        imageViewAvatar.layer.cornerRadius = 45*screenWidthFactor
+        updateDefaultProfilePic()
+        imageViewAvatar.layer.cornerRadius = 45 * screenWidthFactor
         imageViewAvatar.clipsToBounds = true
         imageViewAvatar.contentMode = .scaleAspectFill
         uiViewSetPicture.addSubview(imageViewAvatar)
         
         buttonAvatar = UIButton(frame: CGRect(x: 100, y: 88, w: 90, h: 90))
         uiViewSetPicture.addSubview(buttonAvatar)
-        buttonAvatar.addTarget(self, action: #selector(self.addProfileAvatar(_:)), for: .touchUpInside)
+        buttonAvatar.addTarget(self, action: #selector(addProfileAvatar(_:)), for: .touchUpInside)
         
         textFieldDisplayName = UITextField(frame: CGRect(x: 0, y: 203, w: 160, h: 34))
         textFieldDisplayName.center.x = uiViewSetPicture.frame.size.width / 2
         //textFieldDisplayName.placeholder = "Display Name"
         textFieldDisplayName.attributedPlaceholder = NSAttributedString(string: "Display Name", attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155()])
-        textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25*screenWidthFactor)
+        textFieldDisplayName.font = UIFont(name: "AvenirNext-Regular", size: 25 * screenWidthFactor)
         textFieldDisplayName.tintColor = UIColor._2499090()
         textFieldDisplayName.textColor = UIColor._2499090()
         textFieldDisplayName.textAlignment = .center
-        textFieldDisplayName.addTarget(self, action: #selector(self.displayNameValueChanged(_:)), for: .editingChanged)
+        textFieldDisplayName.addTarget(self, action: #selector(displayNameValueChanged(_:)), for: .editingChanged)
         textFieldDisplayName.textColor = UIColor._898989()
         textFieldDisplayName.autocorrectionType = .no
         uiViewSetPicture.addSubview(textFieldDisplayName)
@@ -118,11 +126,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         buttonFinish = UIButton(frame: CGRect(x: 40, y: 269, w: 210, h: 40))
         buttonFinish.layer.cornerRadius = 20 * screenWidthFactor
         buttonFinish.setTitle("Save", for: .normal)
-        buttonFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16*screenWidthFactor)
+        buttonFinish.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
         buttonFinish.backgroundColor = UIColor._255160160()
         uiViewSetPicture.addSubview(buttonFinish)
         buttonFinish.isEnabled = false
-        buttonFinish.addTarget(self, action: #selector(self.buttonFinishClicked(_:)), for: .touchUpInside)
+        buttonFinish.addTarget(self, action: #selector(buttonFinishClicked(_:)), for: .touchUpInside)
     }
     
     @objc func buttonFinishClicked(_ sender: UIButton) {
@@ -131,8 +139,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor._2499090()
-        self.view.addSubview(activityIndicator)
-        self.view.bringSubview(toFront: activityIndicator)
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
         activityIndicator.startAnimating()
         //uploadProfileAvatar()
         SetAvatar.uploadUserImage(image: imageViewAvatar.image!, vc: self, type: "firstTimeLogin") {
@@ -143,11 +151,10 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     func uploadProfileAvatar() {
         let avatar = FaeImage()
         avatar.image = imageViewAvatar.image
-        avatar.faeUploadProfilePic { (code: Int, message: Any?) in
+        avatar.faeUploadProfilePic { (code: Int, _: Any?) in
             if code / 100 == 2 {
                 self.modifyDisplayName()
-            }
-            else {
+            } else {
                 print("[uploadProfileAvatar] fail")
                 self.activityIndicator.stopAnimating()
                 self.showAlert(title: "Upload Profile Avatar Failed", message: "please try again")
@@ -160,24 +167,27 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let user = FaeUser()
         if let displayName = textFieldDisplayName.text {
             if displayName == "" {
-                self.activityIndicator.stopAnimating()
-                self.showAlert(title: "Please Enter Display Name", message: "try again")
+                activityIndicator.stopAnimating()
+                showAlert(title: "Please Enter Display Name", message: "try again")
                 return
             }
             user.whereKey("nick_name", value: displayName)
-            user.updateNameCard { (status:Int, objects:Any?) in
+            user.updateNameCard { (status: Int, _: Any?) in
                 if status / 100 == 2 {
                     self.activityIndicator.stopAnimating()
                     self.textFieldDisplayName.resignFirstResponder()
                     self.updateUserRealm()
                     UIView.animate(withDuration: 0.3, animations: {
                         self.dimBackground.alpha = 0
-                    }) {_ in
+                    }) { _ in
                         self.dismiss(animated: false, completion: nil)
                     }
-                } else {
+                } else if status != 422 {
                     self.activityIndicator.stopAnimating()
                     self.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again")
+                } else {
+                    self.activityIndicator.stopAnimating()
+                    self.showAlert(title: "Please follow the rules to create a display name:", message: "1. Up to 50 characters\n2. No limits on uppercase or lowercase letters\n3. No limits on this symbols: !@#$%^&*)(+=._-, and space, but can't be all of them")
                 }
             }
         }
@@ -194,7 +204,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     @objc func displayNameValueChanged(_ sender: UITextField) {
-        if(sender.text != "") {
+        if sender.text != "" {
             buttonFinish.backgroundColor = UIColor._2499090()
             buttonFinish.isEnabled = true
         } else {
@@ -203,7 +213,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     @objc func addProfileAvatar(_ sender: UIButton) {
-         SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
+        SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
     }
     /*@objc func addProfileAvatar(_ sender: UIButton) {
         SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
@@ -255,7 +265,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
             }
         }
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in
-            
+     
         }
         menu.addAction(showLibrary)
         menu.addAction(showCamera)
@@ -263,8 +273,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.present(menu, animated: true, completion: nil)
     }*/
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        self.imageViewAvatar.image = image
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String: AnyObject]?) {
+        imageViewAvatar.image = image
         //uploadProfileAvatar()
         SetAvatar.uploadUserImage(image: image, vc: self, type: "firstTimeLogin")
         picker.dismiss(animated: true, completion: nil)
@@ -274,7 +284,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
         alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
     func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
         SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "firstTimeLogin")

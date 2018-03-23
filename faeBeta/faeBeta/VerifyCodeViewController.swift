@@ -266,6 +266,22 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         view.bringSubview(toFront: indicatorView)
     }
     
+    func actionSendCode() {
+        indicatorView.startAnimating()
+        self.view.endEditing(true)
+        let user = FaeUser()
+        user.whereKey("phone", value: "(" + strCountryCode + ")" + strPhoneNumber)
+        user.updatePhoneNumber {(status, message) in
+            print("[UPDATE PHONE] \(status) \(message!)")
+            if status / 100 == 2 {
+                
+            } else {
+                
+            }
+            self.indicatorView.stopAnimating()
+        }
+    }
+    
     @objc func actionBack(_ sender: UIButton) {
         if enterMode == .phone && enterPhoneMode == .contacts {
             dismiss(animated: false)
@@ -481,7 +497,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             timer.invalidate()
             timer = nil
             self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
-            self.btnResendCode.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside )
+            self.btnResendCode.removeTarget(nil, action: nil, for: .touchUpInside)
+            self.btnResendCode.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
         }
     }
     
@@ -489,7 +506,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         if enterMode == .email {
             postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
         } else {
-            postToURL("reset_login/code", parameter: ["phone": "(" + strCountryCode + ")" + strPhoneNumber], authentication: nil, completion: {(statusCode, result) in })
+            actionSendCode()
         }
         startTimer()
         btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)

@@ -14,12 +14,13 @@ protocol SeeAllPlacesDelegate: class {
 }
 
 class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    weak var delegate: SeeAllPlacesDelegate?
     var lblTitle: UILabel!
     var btnSeeAll: UIButton!
     var colInfo: UICollectionView!
     var places = [PlacePin]()
     var title: String!
-    weak var delegate: SeeAllPlacesDelegate?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -126,9 +127,11 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
 }
 
 class PlacesCollectionCell: UICollectionViewCell {
+    
     var imgPic: UIImageView!
     var lblName: UILabel!
     var lblAddress: UILabel!
+    var indicatorView: UIActivityIndicatorView!
     
     override init(frame : CGRect) {
         super.init(frame: frame)
@@ -143,8 +146,8 @@ class PlacesCollectionCell: UICollectionViewCell {
         imgPic = UIImageView(frame: CGRect(x: 0, y: 4, width: 120, height: 120))
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 5
-        imgPic.layer.borderWidth = 1
-        imgPic.layer.borderColor = UIColor._200199204().cgColor
+        //imgPic.layer.borderWidth = 1
+        //imgPic.layer.borderColor = UIColor._200199204().cgColor
         addSubview(imgPic)
         
         lblName = UILabel(frame: CGRect(x: 0, y: 133, width: 120, height: 18))
@@ -156,13 +159,21 @@ class PlacesCollectionCell: UICollectionViewCell {
         lblAddress.textColor = UIColor._115115115()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblAddress)
+        
+        indicatorView = createActivityIndicator(large: true)
+        indicatorView.center.x = 60
+        indicatorView.center.y = 60
+        addSubview(indicatorView)
     }
     
     func setValueForColCell(place: PlacePin) {
-        imgPic.image = place.icon
+        imgPic.image = nil
         lblName.text = place.name
         lblAddress.text = place.address1 + ", " + place.address2
         imgPic.backgroundColor = .white
-        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic)
+        indicatorView.startAnimating()
+        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic) {
+            self.indicatorView.stopAnimating()
+        }
     }
 }

@@ -219,12 +219,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
-//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35, width: screenWidth, height: 1))
-//        line.layer.borderColor = UIColor.black.cgColor
-//        line.layer.borderWidth = 1
-//        view.addSubview(line)
-        
-//        joshprint("id:", Key.shared.user_id)
     }
     
     deinit {
@@ -402,6 +396,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func checkDisplayNameExisitency() {
+        faeMapView.showsUserLocation = false
         getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
@@ -409,6 +404,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 DispatchQueue.main.async {
                     sendWelcomeMessage()
                 }
+                self.faeMapView.showsUserLocation = true
             } else {
                 DispatchQueue.main.async {
                     self.loadFirstLoginVC()
@@ -465,9 +461,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func loadFirstLoginVC() {
         updateGenderAge()
-        let firstTimeLoginVC = FirstTimeLoginViewController()
-        firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
-        present(firstTimeLoginVC, animated: false, completion: nil)
         let updateMiniAvatar = FaeUser()
         let males: [Int] = [1, 2, 3, 6, 7, 9, 14, 15, 16, 18]
         var females = [Int]()
@@ -477,15 +470,22 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         let random = Int(Double.random(min: 0, max: Double(males.count - 1)))
         Key.shared.userMiniAvatar = Key.shared.gender == "male" ? males[random] : females[random]
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+        self.selfAnView?.changeAvatar()
         FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
         updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
+                self.selfAnView?.changeAvatar()
             } else {
                 print("Fail to update miniavatar")
             }
+            self.faeMapView.showsUserLocation = true
+            let firstTimeLoginVC = FirstTimeLoginViewController()
+            firstTimeLoginVC.modalPresentationStyle = .overCurrentContext
+            self.present(firstTimeLoginVC, animated: false, completion: nil)
         })
     }
     

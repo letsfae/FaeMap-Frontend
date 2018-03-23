@@ -134,7 +134,7 @@ class FaeMapView: MKMapView {
                     faeMapCtrler?.tblPlaceResult.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
-                faeMapCtrler?.deselectAllAnnotations(full: false)
+                faeMapCtrler?.deselectAllAnnotations(full: faeMapCtrler?.swipingState == .map)
                 slcMapCtrler?.deselectAllAnnotations()
                 slcMapCtrler?.selectedPlace = nil
             }
@@ -161,10 +161,10 @@ class FaeMapView: MKMapView {
                 if let anView = v as? PlacePinAnnotationView {
                     if !anView.optionsOpened {
                         faeMapCtrler?.deselectAllAnnotations()
-                        faeMapCtrler?.tapPlacePin(didSelect: anView)
-                        anView.showButtons()
                         anView.optionsReady = true
                         anView.optionsOpened = true
+                        faeMapCtrler?.tapPlacePin(didSelect: anView)
+                        anView.showButtons()
                     }
                 } else if let anView = v as? UserPinAnnotationView {
                     faeMapCtrler?.deselectAllAnnotations()
@@ -203,6 +203,7 @@ class FaeMapView: MKMapView {
                 block = true
                 cancelCreatingLocationPin()
                 if anView.arrBtns.count == 0 {
+                    anView.optionsOpened = true
                     faeMapCtrler?.deselectAllAnnotations()
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
                     anView.showButtons()
