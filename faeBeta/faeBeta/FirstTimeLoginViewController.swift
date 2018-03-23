@@ -277,7 +277,8 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         self.present(alertController, animated: true, completion: nil)
     }
     func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
-        SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "firstTimeLogin")
+        //SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "firstTimeLogin")
+        imageViewAvatar.image = UIImage(data: faePHAsset.fullResolutionImageData!)
     }
     func sendImages(_ images: [UIImage]) {
         print("send image for avatar")
