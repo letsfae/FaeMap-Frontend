@@ -49,10 +49,19 @@ class RegisterNameViewController: RegisterBaseViewController {
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        if let savedFirstName = FaeCoreData.shared.readByKey("signup_first_name") {
+            firstName = savedFirstName as? String
+        }
+        if let savedLastName = FaeCoreData.shared.readByKey("signup_last_name") {            
+            lastName = savedLastName as? String
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        validation()
+        FaeCoreData.shared.save("signup", value: "name")
     }
    
     func registerCell() {
@@ -84,11 +93,20 @@ class RegisterNameViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        _ = navigationController?.popViewController(animated: true)
+        FaeCoreData.shared.removeByKey("signup_first_name")
+        FaeCoreData.shared.removeByKey("signup_last_name")
+        FaeCoreData.shared.removeByKey("signup_username")
+        FaeCoreData.shared.removeByKey("signup_password")
+        FaeCoreData.shared.removeByKey("signup_gender")
+        FaeCoreData.shared.removeByKey("signup_dateofbirth")
+        FaeCoreData.shared.removeByKey("signup_email")
+        navigationController?.popViewController(animated: true)
     }
     
     override func continueButtonPressed() {
         view.endEditing(true)
+        FaeCoreData.shared.save("signup_first_name", value: firstName!)
+        FaeCoreData.shared.save("signup_last_name", value: lastName!)
         createUser()
         jumpToRegisterNext()
     }
@@ -103,7 +121,9 @@ class RegisterNameViewController: RegisterBaseViewController {
     }
     
     func createUser() {
-        faeUser = FaeUser()
+        if faeUser == nil {
+            faeUser = FaeUser()
+        }
         faeUser?.whereKey("first_name", value: firstName!)
         faeUser?.whereKey("last_name", value: lastName!)
     }
@@ -150,6 +170,9 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
                 cellTxtFirstName.setPlaceholderLabelText("First Name", indexPath: indexPath)
                 cellTxtFirstName.textfield.autocapitalizationType = .words
                 cellTxtFirstName.delegate = self
+                if firstName != nil {
+                    cellTxtFirstName.textfield.text = firstName
+                }
                 cellTxtFirstName.makeFirstResponder()
             }
             return cellTxtFirstName
@@ -158,6 +181,9 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
                 cellTxtLastName = tableView.dequeueReusableCell(withIdentifier: "RegisterTextfieldTableViewCellIdentifier") as! RegisterTextfieldTableViewCell
                 cellTxtLastName.setPlaceholderLabelText("Last Name", indexPath: indexPath)
                 cellTxtLastName.textfield.autocapitalizationType = .words
+                if lastName != nil {
+                    cellTxtLastName.textfield.text = lastName
+                }
                 cellTxtLastName.delegate = self
             }
             return cellTxtLastName

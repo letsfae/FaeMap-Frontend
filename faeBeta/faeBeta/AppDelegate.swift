@@ -68,7 +68,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
         }
+<<<<<<< HEAD
 
+=======
+        
+        if Key.shared.is_Login, let _ = FaeCoreData.shared.readByKey("signup") {
+            FaeUser().logOut({(_, _) in })
+            Key.shared.is_Login = false
+        }
+        
+>>>>>>> jichao_1222
         if Key.shared.isFirstUse() {
             configureNavCtrler()
         } else {
