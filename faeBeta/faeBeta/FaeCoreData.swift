@@ -18,6 +18,9 @@ class FaeCoreData: NSObject {
         defaults.set(value, forKey: key)
     }
     
+    func removeByKey(_ key: String) {
+        defaults.removeObject(forKey: key)
+    }
     func readByKey(_ key: String) -> AnyObject? {
         //        return self.defaults.objectForKey(key)?
         if let obj = self.defaults.object(forKey: key) {

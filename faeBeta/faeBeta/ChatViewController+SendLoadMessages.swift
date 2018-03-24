@@ -214,6 +214,8 @@ extension ChatViewController: OutgoingMessageProtocol {
                                 self.sendMeaages_v2(type: messageType, text: messageType, media: data)
                             }
                         })
+                } else if let data = faePHAsset.fullResolutionImageData {
+                        sendMeaages_v2(type: messageType, text: messageType, media: data)
                     }
                 //}
             case .video:

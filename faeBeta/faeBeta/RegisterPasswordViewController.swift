@@ -49,24 +49,45 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         registerCell()
         tableView.delegate = self
         tableView.dataSource = self
+        if let savedPassword = FaeCoreData.shared.readByKey("signup_password") {            
+            password = savedPassword as? String
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        validation()
+        FaeCoreData.shared.save("signup", value: "password")
     }
     
     // MARK: - Functions
     override func backButtonPressed() {
         view.endEditing(true)
+        if password != nil {
+            FaeCoreData.shared.save("signup_password", value: password!)
+        }
         navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
         view.endEditing(true)
-        savePasswordInUser()
-        jumpToRegisterNext()
+        if let savedPassword = FaeCoreData.shared.readByKey("signup_password") {
+            if (savedPassword as? String) != password! && Key.shared.is_Login {
+                faeUser.whereKey("old_password", value: (savedPassword as? String)!)
+                faeUser.whereKey("new_password", value: password!)
+                faeUser.updatePassword({ (_, _) in
+                    self.savePasswordInUser()
+                    self.jumpToRegisterNext()
+                })
+            } else {
+                jumpToRegisterNext()
+            }
+        } else {
+            savePasswordInUser()
+            jumpToRegisterNext()
+        }
+        FaeCoreData.shared.save("signup_password", value: password!)
     }
-    
     func jumpToRegisterNext() {
         let nextRegister = RegisterInfoViewController()
         nextRegister.faeUser = faeUser
@@ -128,6 +149,9 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
                 cellPassword.setRightPlaceHolderDisplay(true)
                 cellPassword.delegate = self
                 cellPassword.setCharacterLimit(50)
+                if password != nil {
+                    cellPassword.textfield.text = password
+                }
                 cellPassword.makeFirstResponder()
             }
             return cellPassword
