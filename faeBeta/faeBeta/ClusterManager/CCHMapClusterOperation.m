@@ -219,10 +219,15 @@
     [annotationsToAddAsSet minusSet:annotationsToKeep];
     NSArray *annotationsToAdd = [annotationsToAddAsSet allObjects];
     NSMutableSet *annotationsToRemoveAsSet = [NSMutableSet setWithSet:annotationsBeforeAsSet];
-    if (self.isZoomIn && !self.isUserPin && !self.isForcedRefresh) {
-        [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
-    } else {
+//    if (self.isZoomIn && !self.isUserPin && !self.isForcedRefresh) {
+//        [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
+//    } else {
+//        [annotationsToRemoveAsSet minusSet:clusters];
+//    }
+    if (!self.isZoomIn || self.isUserPin || self.isForcedRefresh) {
         [annotationsToRemoveAsSet minusSet:clusters];
+    } else {
+        [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
     }
     NSArray *annotationsToRemove = [annotationsToRemoveAsSet allObjects];
 

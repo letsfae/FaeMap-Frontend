@@ -387,7 +387,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        print(tblColListDetail.contentOffset.y)
         if imgHeader != nil {
             var frame = imgHeader.frame
             if tblColListDetail.contentOffset.y < 0 * screenHeightFactor {

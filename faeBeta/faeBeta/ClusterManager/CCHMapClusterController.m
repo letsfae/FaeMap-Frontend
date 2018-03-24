@@ -291,7 +291,10 @@
 
 - (void) manuallyCallRegionDidChange
 {
-    [self mapView:self.mapView regionDidChangeAnimated:YES];
+//    [self mapView:self.mapView regionDidChangeAnimated:YES];
+    [self updateAnnotationsWithCompletionHandler:^{
+        
+    }];
 }
 
 #pragma mark - Map view proxied delegate methods

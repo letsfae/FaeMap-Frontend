@@ -36,6 +36,8 @@ class FMZoomButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var multiplier: Double = 0
+    
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             largeMode()
@@ -51,16 +53,20 @@ class FMZoomButton: UIButton {
                 Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
                 Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
             }
-//            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = true
-//            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = true
+            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
+            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
+            
             Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
             Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
-//            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
-//            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
+            
+            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
+            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
+            multiplier = m
             zoom(multiplier: m * 0.05)
+            print(m)
         }
     }
     
