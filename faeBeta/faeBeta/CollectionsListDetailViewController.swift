@@ -13,31 +13,39 @@ import RealmSwift
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, ManageColListDelegate {
     
     var enterMode: CollectionTableMode!
+    
     var uiviewFixedHeader: UIView!
     var uiviewFixedSectionHeader: UIView!
-    var imgHeader: UIImageView!
     var uiviewAvatarShadow: UIView!
+    var uiviewFooter: UIView!
+    
+    var imgHeader: UIImageView!
     var imgAvatar: UIImageView!
+    
+    var lblNum: UILabel!
     var lblListName: UILabel!
     var lblItemsNum: UILabel!
-    var numItems: Int = 0
-    var lblNum: UILabel!
+    
     var tblColListDetail: UITableView!
-    var uiviewFooter: UIView!
+    
     var btnBack: UIButton!
     var btnMapView: UIButton!
     var btnShare: UIButton!
     var btnMore: UIButton!
     
+    var numItems: Int = 0
+    
     // variables in extension file
     var uiviewShadowBG: UIView!
     var uiviewChooseAction: UIView!
+    var uiviewMsgHint: UIView!
+    
     var lblChoose: UILabel!
+    
     var btnActFirst: UIButton!
     var btnActSecond: UIButton!
     var btnActThird: UIButton!
     var btnCancel: UIButton!
-    var uiviewMsgHint: UIView!
     var btnCrossCancel: UIButton!
     var btnYes: UIButton!
     
@@ -82,6 +90,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         super.viewDidDisappear(animated)
         ColListDetailHeader.boolExpandMore = false
     }
+    
+    // MARK: - Loading Parts
     
     fileprivate func loadColItems() {
         if btnMapView != nil {
@@ -250,6 +260,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     @objc func moreButtonPressed(_ sender: UIButton) {
         animationShowOptions()
     }
+    
+    // MARK: - TableView Delegates
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -475,14 +487,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         })
     }
     
-    // ColListDetailHeaderDelegate
+    // MARK: - ColListDetailHeaderDelegate
     func readMore() {
         boolReadMore = true
         UIView.setAnimationsEnabled(false)
         tblColListDetail.reloadSections(IndexSet(integer: 0), with: .none)
         UIView.setAnimationsEnabled(true)
     }
-    // ColListDetailHeaderDelegate End
     
     private func observeOnCollectionChange() {
         objectToken = realmColDetails.observe { change in
@@ -505,10 +516,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
 }
 
+// MARK: -
 protocol ColListDetailHeaderDelegate: class {
     func readMore()
 }
 
+// MARK: -
 class ColListDetailHeader: UITableViewCell {
     var lblName: UILabel!
     var lblTime: UILabel!
