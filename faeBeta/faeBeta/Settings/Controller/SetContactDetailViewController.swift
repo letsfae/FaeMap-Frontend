@@ -87,9 +87,9 @@ class SetContactDetailViewController: UIViewController {
         case .problem:
             lblTitle.text = "Experiencing a Problem? Please\nlet us know & we’ll look into it."
         case .question:
-            lblTitle.text = "See somewhere that needs\nimprovement? Please let us know!"
-        case .feedback:
             lblTitle.text = "Got a Question for us? We’ll try\nour best to answer it!"
+        case .feedback:
+            lblTitle.text = "See somewhere that needs\nimprovement? Please let us know!"
         }
     }
     
@@ -100,9 +100,9 @@ class SetContactDetailViewController: UIViewController {
         case .problem:
             textField.placeholder = "Describe the problem…"
         case .question:
-            textField.placeholder = "Your Feedback…"
-        case .feedback:
             textField.placeholder = "What’s your Question?"
+        case .feedback:
+            textField.placeholder = "Your Feedback…"
         }
     }
     

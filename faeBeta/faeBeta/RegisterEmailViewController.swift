@@ -253,6 +253,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
         print(self.faeUser.keyValue)
         faeUser.signUpInBackground { status, message in
             if status / 100 == 2 {
+                self.faeUser.keyValue.removeValue(forKey: "email")
                 self.faeUser.logInBackground({ (status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.faeUser.whereKey("email", value: self.email!)
@@ -310,7 +311,7 @@ extension RegisterEmailViewController: UITableViewDelegate, UITableViewDataSourc
                 cellTxtEmail.setPlaceholderLabelText("Email Address", indexPath: indexPath)
                 cellTxtEmail.delegate = self
                 cellTxtEmail.textfield.keyboardType = .emailAddress
-                imgError = UIImageView(frame: CGRect(x: screenWidth - 45, y: 0, width: 6, height: 20))
+                imgError = UIImageView(frame: CGRect(x: 45, y: 0, width: 6, height: 20))
                 imgError.center.y = cellTxtEmail.textfield.center.y
                 imgError.image = UIImage(named:"exclamation_red_new")
                 imgError.isHidden = true
