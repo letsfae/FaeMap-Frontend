@@ -154,7 +154,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         view.addSubview(textBirth)
         
         // setup the fake keyboard for numbers input
-        numKeyPad = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor, width: screenWidth, height: 244 * screenHeightFactor))
+        numKeyPad = FAENumberKeyboard(frame: CGRect(x: 0, y: screenHeight - 244 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 244 * screenHeightFactor))
         view.addSubview(numKeyPad)
         numKeyPad.delegate = self
         numKeyPad.transform = CGAffineTransform(translationX: 0, y: 0)

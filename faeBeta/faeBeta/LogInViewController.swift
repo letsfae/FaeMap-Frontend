@@ -45,6 +45,7 @@ class LogInViewController: UIViewController {
     fileprivate var txtPassword: FAETextField!
     fileprivate var indicatorActivity: UIActivityIndicatorView!
     fileprivate var boolWillDisappear = false
+    var btnClear: UIButton!
     
     var uiviewGrayBg: UIView!
     var uiviewChooseMethod: UIView!
@@ -52,6 +53,8 @@ class LogInViewController: UIViewController {
     var btnPhone: UIButton!
     var btnEmail: UIButton!
     var btnCancel: UIButton!
+    
+    var uiviewInputUsername: UIView!
     
     // Mark: - View did/will ..
     override func viewDidLoad() {
@@ -111,6 +114,14 @@ class LogInViewController: UIViewController {
         txtUsername.tag = 1
         txtUsername.delegate = self
         view.addSubview(txtUsername)
+        
+        btnClear = UIButton(frame: CGRect(x: 0, y: 0, width: 36.45, height: 36.45))
+        btnClear.center.y = txtUsername.center.y
+        btnClear.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClear.addTarget(self, action: #selector(clearUsername), for: .touchUpInside)
+        //view.addSubview(btnClear)
+        txtUsername.rightView = btnClear
+        btnClear.isHidden = true
         
         // result label
         lblLoginResult = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
@@ -178,6 +189,11 @@ class LogInViewController: UIViewController {
         view.bringSubview(toFront: indicatorActivity)
     }
     
+    @objc func clearUsername() {
+        txtUsername.text = ""
+        btnClear.isHidden = true
+    }
+    
     @objc func loginButtonTapped() {
         indicatorActivity.startAnimating()
         view.endEditing(true)
@@ -208,9 +224,11 @@ class LogInViewController: UIViewController {
                 let loginJSONInfo = JSON(message!)
                 if let errorCode = loginJSONInfo["error_code"].string {
                     if errorCode == "404-3" {
-                        self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username/Email!")
+                        self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username!")
                     } else if errorCode == "401-1" {
                         self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
+                    } else if errorCode == "401-2" {
+                        self.setLoginResult("Oops… This Email has not\nbeen linked to an Account.")
                     } else {
                         self.setLoginResult("Internet Error!")
                     }
@@ -299,6 +317,13 @@ class LogInViewController: UIViewController {
             btnLogin.backgroundColor = UIColor._255160160()
             btnLogin.isEnabled = false
         }
+        if textfield == txtUsername {
+            if textfield.text?.count != 0 {
+                btnClear.isHidden = false
+            } else {
+                btnClear.isHidden = true
+            }
+        }
     }
 }
 
@@ -325,6 +350,14 @@ extension LogInViewController: UITextFieldDelegate {
                 return false
             }
             return true
+        }
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField != txtUsername {
+            btnClear.isHidden = true
+        } else if let count = textField.text?.count, count > 0 {
+            btnClear.isHidden = false
         }
     }
 }
@@ -385,6 +418,15 @@ extension LogInViewController {
         uiviewChooseMethod.addSubview(btnCancel)
         view.addConstraintsWithFormat("H:|-80-[v0]-80-|", options: [], views: btnCancel)
         view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
+        
+        /*uiviewInputUsername = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 262))
+        uiviewInputUsername.center.x = screenWidth / 2
+        uiviewInputUsername.backgroundColor = .white
+        uiviewInputUsername.layer.cornerRadius = 20
+        uiviewGrayBg.addSubview(uiviewInputUsername)
+        
+        let lblInputUsername = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 25))
+        lblInputUsername.text = "Please input "*/
     }
     
     @objc func actionCancel(_ sender: Any?) {
