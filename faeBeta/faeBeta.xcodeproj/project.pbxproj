@@ -96,6 +96,7 @@
 		9FC92AC92015540600DD3250 /* StickerKeyboardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC92AC82015540600DD3250 /* StickerKeyboardCell.swift */; };
 		9FC92ACB2015547700DD3250 /* StickerCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC92ACA2015547700DD3250 /* StickerCollection.swift */; };
 		9FCE363E1FB958F1008CE5A1 /* SetContactDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */; };
+		9FD16C1E206BC9720005ED86 /* SetBlockListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD16C1D206BC9720005ED86 /* SetBlockListViewController.swift */; };
 		A45F006406113543BA645277 /* Pods_faeBeta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82F0ED84EB021F03536B98ED /* Pods_faeBeta.framework */; };
 		B00182651D0EFA2B002D05C5 /* FaeImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00182641D0EFA2B002D05C5 /* FaeImage.swift */; };
 		B04BB9E51CEDB796009B9531 /* FaeUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04BB9E41CEDB796009B9531 /* FaeUser.swift */; };
@@ -464,6 +465,7 @@
 		9FC92AC82015540600DD3250 /* StickerKeyboardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerKeyboardCell.swift; sourceTree = "<group>"; };
 		9FC92ACA2015547700DD3250 /* StickerCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCollection.swift; sourceTree = "<group>"; };
 		9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetContactDetailViewController.swift; sourceTree = "<group>"; };
+		9FD16C1D206BC9720005ED86 /* SetBlockListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBlockListViewController.swift; sourceTree = "<group>"; };
 		B00182641D0EFA2B002D05C5 /* FaeImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeImage.swift; sourceTree = "<group>"; };
 		B04BB9E41CEDB796009B9531 /* FaeUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeUser.swift; sourceTree = "<group>"; };
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
@@ -1415,6 +1417,7 @@
 				B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */,
 				B37E5DAD1F83103F008A6B4B /* SetPrivacyViewController.swift */,
 				B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */,
+				9FD16C1D206BC9720005ED86 /* SetBlockListViewController.swift */,
 				B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */,
 				B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */,
 				B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */,
@@ -2153,6 +2156,7 @@
 				B0BF356F1D8DC8D700B0540B /* JSQMessagesBubbleImageFactoryCustom.m in Sources */,
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */,
+				9FD16C1E206BC9720005ED86 /* SetBlockListViewController.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,

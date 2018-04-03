@@ -40,6 +40,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         setupLogoutView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tblSettings.reloadRows(at: [IndexPath(row: 4, section: 0)], with: .none)
+    }
+    
     @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -205,6 +210,13 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "settingsCell", for: indexPath as IndexPath) as! SettingsCell
         cell.imgIcon.image = arrSettingsIcons[indexPath.row]
         cell.lblSetting.text = arrSettingsText[indexPath.row]
+        if indexPath.row == 4 {
+            if !Key.shared.userEmailVerified && !Key.shared.userPhoneVerified {
+                cell.imgExclamation.isHidden = false
+            } else {
+                cell.imgExclamation.isHidden = true
+            }
+        }
         return cell
     }
     

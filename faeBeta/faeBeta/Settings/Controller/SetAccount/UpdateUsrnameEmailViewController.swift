@@ -126,7 +126,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     
     fileprivate func loadUserName() {
         lblTitle.text = "Your Faevorite Username:"
-        btnUpdate.setTitle("Request Reset", for: UIControlState())
+        //btnUpdate.setTitle("Request Reset", for: UIControlState())
+        btnUpdate.setTitle("Change Username", for: UIControlState())
         lblHint.text = "You can use your Username for Log In,\nAdding People, and Starting Chats."
         
         let lblUsrname = FaeLabel(CGRect(x: 0, y: 213 * screenHeightFactor, width: screenWidth, height: 30), .center, .regular, 22, UIColor._155155155())
@@ -142,7 +143,13 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         let lblBelowHint = FaeLabel(CGRect(x: 0, y: screenHeight - 231 * screenHeightFactor, width: screenWidth, height: 36), .center, .regular, 13, UIColor._138138138())
         lblBelowHint.numberOfLines = 0
         view.addSubview(lblBelowHint)
-        lblBelowHint.text = "If you want to change your Username,\nPlease request a Username Reset."
+        //lblBelowHint.text = "If you want to change your Username,\nPlease request a Username Reset."
+        let strHint = "You can change your Username\n2 times per year - 2 left"
+        let attributes = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
+        let strAttributed =  NSMutableAttributedString(string: strHint, attributes: attributes)
+        strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._138138138(), range: NSRange(location: 0, length: strHint.count))
+        strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._2499090(), range: NSRange(location: strHint.count - 6, length: 6))
+        lblBelowHint.attributedText = strAttributed
         
         loadUserNameShadow()
     }
@@ -237,7 +244,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             vc.enterMode = .newEmail
             navigationController?.pushViewController(vc, animated: true)
         case .usrname:
-            animationShowView()
+            //animationShowView()
+            break
         case .phone:
             let vc = SignInPhoneViewController()
             vc.enterMode = .settingsUpdate
