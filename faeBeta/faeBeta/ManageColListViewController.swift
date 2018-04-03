@@ -190,9 +190,9 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
                     cell.btnSelect.isSelected = false
                 }
                 FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) {(status: Int, message: Any?) in
-                    if status / 100 == 2 {
+                    // status == 400: data is in realm but not in server
+                    if status / 100 == 2 || status == 400 {
                         RealmCollection.unsavePin(collection_id: self.colId, type: self.enterMode.rawValue, pin_id: pin_id)
-                        
                         self.deleteCount += 1
                     } else {
                         print("[Fail to Unsave Item From Collection] \(status) \(message!)")
@@ -238,12 +238,14 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColPlaceCell", for: indexPath) as! ColListPlaceCell
             let savedId = realmPins[idx].pin_id
             cell.setValueForPlacePin(placeId: savedId)
+            cell.selectionStyle = .none
             cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ManageColLocationCell", for: indexPath) as! ColListLocationCell
             let savedId = realmPins[idx].pin_id
             cell.setValueForLocationPin(locId: savedId)
+            cell.selectionStyle = .none
             cell.btnSelect.isSelected = selectedIdx.contains(indexPath)
             return cell
         }

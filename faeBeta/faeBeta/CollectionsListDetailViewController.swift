@@ -64,11 +64,9 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
         guard RealmCollection.filterCollectedPin(collection_id: colId) != nil else {
             return
         }
-        
         loadColItems()
         loadTable()
         loadHeaderImg()
@@ -115,6 +113,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         
         imgAvatar = UIImageView(frame: CGRect(x: 0, y: 0, width: 58, height: 58))
         imgAvatar.layer.cornerRadius = 29
+        imgAvatar.backgroundColor = .white
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
         imgAvatar.layer.borderWidth = 5
@@ -384,6 +383,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             vc.strLocAddr = addr
             navigationController?.pushViewController(vc, animated: true)
         }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

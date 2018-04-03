@@ -311,6 +311,8 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
                 gotoListDetail()
             }
         }
+        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     @objc func createNewList() {
