@@ -66,7 +66,6 @@ class FMZoomButton: UIButton {
             let m = Double(point.y - prev_y)
             multiplier = m
             zoom(multiplier: m * 0.05)
-            print(m)
         }
     }
     

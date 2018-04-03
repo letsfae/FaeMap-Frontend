@@ -9,6 +9,7 @@
 import UIKit
 
 extension FaeMapViewController {
+    
     func invisibleMode() {
         let dimBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         dimBackground.backgroundColor = UIColor._107105105_a50()
@@ -17,7 +18,11 @@ extension FaeMapViewController {
         view.addSubview(dimBackground)
         dimBackground.addTarget(self, action: #selector(invisibleModeDimClicked(_:)), for: .touchUpInside)
         
-        let uiviewInvisible = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
+        var offset: CGFloat = 155
+        if screenHeight == 812 {
+            offset = 230
+        }
+        let uiviewInvisible = UIView(frame: CGRect(x: 62, y: offset, w: 290, h: 380))
         uiviewInvisible.backgroundColor = .white
         uiviewInvisible.layer.cornerRadius = 16 * screenWidthFactor
         dimBackground.addSubview(uiviewInvisible)

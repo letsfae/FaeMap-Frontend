@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 
+// MARK: -
+
 func createActivityIndicator(large: Bool) -> UIActivityIndicatorView {
     let view = UIActivityIndicatorView()
     view.activityIndicatorViewStyle = large ? .whiteLarge : .white

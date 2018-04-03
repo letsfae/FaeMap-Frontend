@@ -203,8 +203,8 @@ class FaeMapView: MKMapView {
                 block = true
                 cancelCreatingLocationPin()
                 if anView.arrBtns.count == 0 {
-                    anView.optionsOpened = true
                     faeMapCtrler?.deselectAllAnnotations()
+                    anView.optionsOpened = true
                     faeMapCtrler?.tapPlacePin(didSelect: anView)
                     anView.showButtons()
                 }
@@ -228,7 +228,7 @@ class FaeMapView: MKMapView {
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
-                if !anView.optionsOpened {
+                if anView.optionsOpened {
                     anView.hideButtons()
                 }
                 anView.optionsReady = true

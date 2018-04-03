@@ -179,7 +179,12 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             guard desiredCount > 0 else { return }
-            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: nil)
+            guard desiredCount == completionCount else { return }
+            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+                self.placeClusterManager.isForcedRefresh = false
+            })
+            guard let first = placesFromSearch.first else { return }
+            faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: first.coordinate, animated: true)
             // self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
         }
     }
