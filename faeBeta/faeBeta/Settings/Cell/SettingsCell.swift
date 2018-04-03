@@ -12,6 +12,7 @@ class SettingsCell: UITableViewCell {
     var imgIcon: UIImageView!
     var lblSetting: UILabel!
     var btnNext: UIButton!
+    var imgExclamation: UIImageView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,6 +28,12 @@ class SettingsCell: UITableViewCell {
         lblSetting.textColor = UIColor._898989()
         lblSetting.textAlignment = .left
         lblSetting.center.y = imgIcon.center.y
+        
+        imgExclamation = UIImageView(frame: CGRect(x: screenWidth - 45, y: 0, width: 6, height: 20))
+        addSubview(imgExclamation)
+        imgExclamation.image = #imageLiteral(resourceName: "Settings_exclamation")
+        imgExclamation.center.y = imgIcon.center.y
+        imgExclamation.isHidden = true
         
         btnNext = UIButton(frame: CGRect(x: screenWidth - 29, y: 0, width: 9, height: 17))
         addSubview(btnNext)

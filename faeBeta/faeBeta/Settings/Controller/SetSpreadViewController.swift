@@ -101,7 +101,11 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            
+            switch indexPath.row {
+            case 1:
+                navigationController?.pushViewController(AddFromContactsController(), animated: true)
+            default: break
+            }
         } else {
             switch indexPath.row {
             case 1:

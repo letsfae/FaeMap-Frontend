@@ -19,7 +19,7 @@ class SignInEmailViewController: UIViewController {
     //MARK: - Interface
     fileprivate var lblTitle: UILabel!
     fileprivate var txtEmail: FAETextField!
-    fileprivate var btnInfo: UIButton!
+    fileprivate var lblInfo: UILabel!
     fileprivate var btnSendCode: UIButton!
     
     fileprivate enum pageStateType {
@@ -104,13 +104,16 @@ class SignInEmailViewController: UIViewController {
         self.view.addSubview(txtEmail)
         
         // set up the "We can’t find an account with this Email!" label
-        btnInfo = UIButton(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 67  - device_offset_bot, width: screenWidth - 175, height: 18))
-        btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
-        btnInfo.contentHorizontalAlignment = .center
-        btnInfo.sizeToFit()
-        btnInfo.center.x = screenWidth / 2
-        btnInfo.alpha = 0
-        self.view.addSubview(btnInfo)
+        lblInfo = UILabel(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 90  - device_offset_bot, width: screenWidth - 175, height: 36))
+        //btnInfo.setAttributedTitle(NSAttributedString(string: "We could’t find an account with this Email!", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        lblInfo.attributedText = NSAttributedString(string: "Oops… This Email has not\nbeen linked to an Account.", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!])
+        //lblInfo.contentHorizontalAlignment = .center
+        //lblInfo.sizeToFit()
+        lblInfo.textAlignment = .center
+        lblInfo.numberOfLines = 2
+        lblInfo.center.x = screenWidth / 2
+        lblInfo.alpha = 0
+        self.view.addSubview(lblInfo)
         
         // set up the send button
         btnSendCode = UIButton(frame: CGRect(x: 0, y: screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
@@ -158,7 +161,7 @@ class SignInEmailViewController: UIViewController {
                 self.setupEnteringVerificationCode()
             }
             else {
-                self.btnInfo.alpha = 1
+                self.lblInfo.alpha = 1
             }
             self.indicatorView.stopAnimating()
         }
@@ -186,12 +189,12 @@ class SignInEmailViewController: UIViewController {
         y_offset_0 += -self.btnSendCode.frame.origin.y
         y_offset_0 +=  -50 * screenHeightFactor - 14
         var y_offset_1 = (screenHeight - frameKeyboard.height)
-        y_offset_1 += -self.btnInfo.frame.origin.y
+        y_offset_1 += -self.lblInfo.frame.origin.y
         y_offset_1 += -50 * screenHeightFactor - 14 - 18 - 19
         
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
             self.btnSendCode.frame.origin.y += y_offset_0
-            self.btnInfo.frame.origin.y += y_offset_1
+            self.lblInfo.frame.origin.y += y_offset_1
         })
     }
     
@@ -201,7 +204,7 @@ class SignInEmailViewController: UIViewController {
         }
         UIView.animate(withDuration: 0.3, animations: {() -> Void in
             self.btnSendCode.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor - device_offset_bot
-            self.btnInfo.frame.origin.y = screenHeight - 50 * screenHeightFactor - 67 - device_offset_bot
+            self.lblInfo.frame.origin.y = screenHeight - 50 * screenHeightFactor - 90 - device_offset_bot
         })
     }
     
