@@ -32,7 +32,6 @@ class FriendOperationFromContactsViewController: UIViewController {
     
     var userId: Int = -1
     let faeContact = FaeContact()
-    var requestId: Int = -1
     
     let OK = 0
     let ADD_FRIEND_ACT = 1
@@ -209,13 +208,13 @@ class FriendOperationFromContactsViewController: UIViewController {
             }
         } else if action == "accept" {
             indicatorView.startAnimating()
-            faeContact.acceptFriendRequest(requestId: String(requestId)) { (status: Int, message: Any?) in
+            faeContact.acceptFriendRequest(friendId: String(userId)) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.requestId)) {
+                    if let user = realm.filterUser(id: String(self.userId)) {
                         user.relation = IS_FRIEND
                         user.created_at = ""
                         user.request_id = ""
@@ -248,7 +247,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     @objc func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
-            faeContact.ignoreFriendRequest(requestId: String(requestId)) {(status: Int, message: Any?) in
+            faeContact.ignoreFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
@@ -291,7 +290,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         } else {
             indicatorView.startAnimating()
             if sender.tag == WITHDRAW_ACT {
-                faeContact.withdrawFriendRequest(requestId: String(requestId)) {(status: Int, message: Any?) in
+                faeContact.withdrawFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)

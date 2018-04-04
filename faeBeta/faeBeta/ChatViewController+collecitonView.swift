@@ -301,11 +301,11 @@ extension ChatViewController: NameCardDelegate {
         present(reportPinVC, animated: true, completion: nil)
     }
     
-    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
+    func openAddFriendPage(userId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.userId = userId
-        addFriendVC.requestId = requestId
+        //addFriendVC.requestId = requestId
         addFriendVC.statusMode = status
         addFriendVC.modalPresentationStyle = .overCurrentContext
         present(addFriendVC, animated: false)

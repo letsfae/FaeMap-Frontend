@@ -19,9 +19,9 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
     //var contactStore = CNContactStore()
     var uiviewNavBar: FaeNavBar!
     var imgCity: UIImageView!
-    var arrFriends = [Friends]()
-    var arrReceivedRequests = [Friends]()
-    var arrRequested = [Friends]()
+    var arrRealmFriends = [RealmUser]()
+    var arrRealmReceivedRequests = [RealmUser]()
+    var arrRealmRequested = [RealmUser]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,9 +93,9 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let vc = AddUsernameController()
-                vc.arrFriends = arrFriends
-                vc.arrReceivedRequests = arrReceivedRequests
-                vc.arrRequested = arrRequested
+                vc.arrRealmFriends = arrRealmFriends
+                vc.arrRealmReceivedRequests = arrRealmReceivedRequests
+                vc.arrRealmRequested = arrRealmRequested
                 self.navigationController?.pushViewController(vc, animated: true)
             } else if indexPath.row == 1 {
                 getContacts()

@@ -450,31 +450,31 @@ class AddFromContactsController: UIViewController, UITableViewDelegate, UITableV
         present(vc, animated: false)
     }
     
-    func acceptRequest(indexPath: IndexPath, request_id: Int) {
+    func acceptRequest(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
         vc.action = "accept"
-        vc.requestId = request_id
+        vc.userId = user_id
         vc.indexPath = indexPath
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
     }
     
-    func ignoreRequest(indexPath: IndexPath, request_id: Int) {
+    func ignoreRequest(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
         vc.action = "ignore"
-        vc.requestId = request_id
+        vc.userId = user_id
         vc.indexPath = indexPath
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
     }
     
-    func withdrawRequest(indexPath: IndexPath, request_id: Int) {
+    func withdrawRequest(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
         vc.action = "withdraw"
-        vc.requestId = request_id
+        vc.userId = user_id
         vc.indexPath = indexPath
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
