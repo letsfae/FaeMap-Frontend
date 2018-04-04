@@ -98,28 +98,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         vcChat.arrUserIDs.append("\(id)")
         vcChat.strChatId = "\(id)"
         navigationController?.pushViewController(vcChat, animated: true)
-        
-        // First get chatroom id
-        /*getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
-            var resultJson1 = JSON([])
-            if status / 100 == 2 {
-                resultJson1 = JSON(result!)
-            }
-            // then get with user name
-            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
-                guard status / 100 == 2 else { return }
-                let resultJson2 = JSON(result!)
-                var chat_id: String?
-                if let id = resultJson1["chat_id"].number {
-                    chat_id = id.stringValue
-                }
-                if let nickName = resultJson2["nick_name"].string {
-                    self.startChat(chat_id, userId: id, nickName: nickName)
-                } else {
-                    self.startChat(chat_id, userId: id, nickName: nil)
-                }
-            }
-        }*/
     }
 
     func reportUser(id: Int) {
@@ -128,12 +106,12 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         present(reportPinVC, animated: true, completion: nil)
     }
 
-    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus) {
+    func openAddFriendPage(userId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.contactsDelegate = self
         addFriendVC.userId = userId
-        addFriendVC.requestId = requestId
+        //addFriendVC.requestId = requestId
         addFriendVC.statusMode = status
         addFriendVC.modalPresentationStyle = .overCurrentContext
         present(addFriendVC, animated: false)
@@ -142,35 +120,24 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
         let vcChat = ChatViewController()
         vcChat.arrUserIDs.append("\(Key.shared.user_id)")
-         vcChat.arrUserIDs.append("\(userId)")
-        /*chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
-        chatVC.strChatId = chat_id
-        let nickName = nickName ?? "Chat"
-        chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.display_name = nickName
-        chatVC.realmWithUser!.id = "\(userId)"*/
+        vcChat.arrUserIDs.append("\(userId)")
         navigationController?.pushViewController(vcChat, animated: true)
     }
     
     // MARK: AddFriendFromNameCardDelegate
-    func changeContactsTable(action: Int, userId: Int, requestId: Int) {
+    func changeContactsTable(action: Int, userId: Int) {
         print("changeContactsTable")
         switch action {
         case ACCEPT:
-            //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
             arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
         case IGNORE:
-            //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
             arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
         case WITHDRAW:
-            //self.arrRequested.remove(at: self.indexPathGlobal.row)
             arrRealmRequested.remove(at: indexPathGlobal.row)
         case REMOVE:
-            //self.arrFriends.remove(at: self.indexPathGlobal.row)
             arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
         case BLOCK:
-            //self.arrFriends.remove(at: self.indexPathGlobal.row)
             arrRealmFriends.remove(at: indexPathGlobal.row)
             self.uiviewNameCard.hide { }
         default: break
@@ -185,17 +152,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             btnRR.isSelected = false
             btnFFF.isSelected = true
         }
-//        uiviewNavBar.rightBtn.isHidden = false
-//        uiviewNavBar.bottomLine.isHidden = false
-//        uiviewNavBar.lblTitle.isHidden = true
-//        btnNavBarMenu.isHidden = false
-        
         cellStatus = 1
-//        self.schbarContacts.isHidden = false
-//        self.uiviewTabView.isHidden = true
-//        tblContacts.frame = CGRect(x: 0, y: 64, width: screenWidth, height: screenHeight - 65)
         tblContacts.reloadData()
-        //btnIndicator.isHidden = true
     }
     
     @objc func pressbtnRR(button: UIButton) {
@@ -204,12 +162,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             btnFFF.isSelected = false
             btnRR.isSelected = true
         }
-//        RequestsPressed()
         cellStatus = 2
-//        self.schbarContacts.isHidden = true
-//        self.uiviewTabView.isHidden = false
         tblContacts.reloadData()
-        //btnIndicator.isHidden = true
     }
     
     // MARK: FaeSearchBarTestDelegate
@@ -231,83 +185,50 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     // MAKR: search on friend list
     func filter(searchText: String, scope: String = "All") {
-        //filtered = arrFriends.filter({(($0.displayName).lowercased()).range(of: searchText.lowercased()) != nil})
         filteredRealm = arrRealmFriends.filter({ ($0.display_name).lowercased().range(of: searchText.lowercased()) != nil })
-        /*
-        if curtTitle == "Friends" {
-            filtered = arrFriends.filter({(($0.displayName).lowercased()).range(of: searchText.lowercased()) != nil})
-        } else  if curtTitle == "Followers" {
-            filteredFollows = arrFollowers.filter({(($0.displayName).lowercased()).range(of: searchText.lowercased()) != nil})
-        } else {
-            filteredFollows = arrFollowees.filter({(($0.displayName).lowercased()).range(of: searchText.lowercased()) != nil})
-        }
-         */
         tblContacts.reloadData()
     }
     
     // MARK: ContactsReceivedRequestsDelegate
-    func refuseRequest(requestId: Int, indexPath: IndexPath) {
+    func refuseRequest(userId: Int, indexPath: IndexPath) {
         btnYes.tag = IGNORE
         indexPathGlobal = indexPath
-        idGlobal = requestId
+        idGlobal = userId
         self.chooseAnAction()
     }
     
-    func acceptRequest(requestId: Int, indexPath: IndexPath) {
+    func acceptRequest(userId: Int, indexPath: IndexPath) {
         indexPathGlobal = indexPath
-        idGlobal = requestId
+        idGlobal = userId
         indicatorView.startAnimating()
         animateWithdrawal(listType: ACCEPT)
     }
     
     // MARK: ContactsRequestedDelegate
-    func withdrawRequest(requestId: Int, indexPath: IndexPath) {
+    func withdrawRequest(userId: Int, indexPath: IndexPath) {
         btnYes.tag = WITHDRAW
         indexPathGlobal = indexPath
-        idGlobal = requestId
-        print("button has been executed cancel request")
-        self.showNoti(type: WITHDRAW)
+        idGlobal = userId
+        showNoti(type: WITHDRAW)
     }
     
     func resendRequest(userId: Int, indexPath: IndexPath) {
-        print("button has been executed resend request")
         btnYes.tag = RESEND
         indexPathGlobal = indexPath
         idGlobal = userId
-        self.showNoti(type: RESEND)
+        showNoti(type: RESEND)
     }
     
     // MARK: TableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStatus == 1 {
-            //return arrReceivedRequests.count
             return arrRealmReceivedRequests.count
-            /*
-             if curtTitle == "Friends" {
-             if schbarContacts.txtSchField.text != "" {
-             return filtered.count
-             } else {
-             return arrFriends.count
-             }
-             } else {
-             if schbarContacts.txtSchField.text != "" {
-             return filteredFollows.count
-             } else {
-             return curtTitle == "Followers" ? arrFollowers.count : arrFollowees.count
-             }
-             }
-             */
-        }
-        else if cellStatus == 2 {
-            //return arrRequested.count
+        } else if cellStatus == 2 {
             return arrRealmRequested.count
-        }
-        else {
+        } else {
             if schbarContacts.txtSchField.text != "" {
-                //return filtered.count
                 return filteredRealm.count
             } else {
-                //return arrFriends.count
                 return arrRealmFriends.count
             }
         }
@@ -316,20 +237,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if cellStatus == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeReceivedCell", for: indexPath as IndexPath) as! FaeReceivedCell
-            /*print("get into cell2")
-            cell.userId = arrReceivedRequests[indexPath.row].userId
-            cell.requestId = arrReceivedRequests[indexPath.row].requestId
-            
-            General.shared.avatarCached(userid: cell.userId, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
-            })
-            General.shared.avatar(userid: cell.userId, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
-            })
-            cell.lblUserName.text = arrReceivedRequests[indexPath.row].displayName
-            cell.lblUserSaying.text = arrReceivedRequests[indexPath.row].userName*/
             cell.userId = Int(arrRealmReceivedRequests[indexPath.row].id)!
-            cell.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
+            //cell.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
             if let data = arrRealmReceivedRequests[indexPath.row].avatar?.userSmallAvatar {
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
@@ -343,19 +252,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             return cell
         } else if cellStatus == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeRequestedCell", for: indexPath as IndexPath) as! FaeRequestedCell
-            /*cell.userId = arrRequested[indexPath.row].userId
-            cell.requestId = arrRequested[indexPath.row].requestId
-            
-            General.shared.avatarCached(userid: cell.userId, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
-            })
-            General.shared.avatar(userid: cell.userId, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
-            })
-            cell.lblUserName.text = arrRequested[indexPath.row].displayName
-            cell.lblUserSaying.text = arrRequested[indexPath.row].userName*/
             cell.userId = Int(arrRealmRequested[indexPath.row].id)!
-            cell.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
+            //cell.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
             if let data = arrRealmRequested[indexPath.row].avatar?.userSmallAvatar {
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
@@ -369,30 +267,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeContactsCell", for: indexPath as IndexPath) as! FaeContactsCell
-            /*if schbarContacts.txtSchField.text != "" {
-                cell.userId = filtered[indexPath.row].userId
-                
-                General.shared.avatarCached(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
-                    cell.imgAvatar.image = avatarImage
-                })
-                General.shared.avatar(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
-                    cell.imgAvatar.image = avatarImage
-                })
-                cell.lblUserName.text = filtered[indexPath.row].displayName
-                cell.lblUserSaying.text = filtered[indexPath.row].userName
-                cell.getFriendStatus(id: cell.userId)
-            } else {
-                cell.userId = arrFriends[indexPath.row].userId
-                
-                General.shared.avatarCached(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
-                    cell.imgAvatar.image = avatarImage
-                })
-                General.shared.avatar(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
-                    cell.imgAvatar.image = avatarImage
-                })
-                cell.lblUserName.text = arrFriends[indexPath.row].displayName
-                cell.lblUserSaying.text = arrFriends[indexPath.row].userName
-            }*/
             if schbarContacts.txtSchField.text != "" {
                 if let data = filteredRealm[indexPath.row].avatar?.userSmallAvatar {
                     cell.imgAvatar.image = UIImage(data: data as Data)
@@ -412,65 +286,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                 cell.lblUserName.text = arrRealmFriends[indexPath.row].display_name
                 cell.lblUserSaying.text = arrRealmFriends[indexPath.row].user_name
             }
-            
-            
-            /*
-            if curtTitle == "Friends" {
-                if schbarContacts.txtSchField.text != "" {
-                    General.shared.avatar(userid: filtered[indexPath.row].userId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = filtered[indexPath.row].userId
-//                    cell.imgAvatar.loadAvatar(id: filtered[indexPath.row].userId)
-                    cell.lblUserName.text = filtered[indexPath.row].displayName
-                    cell.lblUserSaying.text = filtered[indexPath.row].userName
-                } else {
-                    General.shared.avatar(userid: arrFriends[indexPath.row].userId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = testArrayFriends[indexPath.row].userId
-//                    cell.imgAvatar.loadAvatar(id: testArrayFriends[indexPath.row].userId)
-                    cell.lblUserName.text = arrFriends[indexPath.row].displayName
-                    cell.lblUserSaying.text = arrFriends[indexPath.row].userName
-                }
-            } else if curtTitle == "Followers" {
-                if schbarContacts.txtSchField.text != "" {
-                    General.shared.avatar(userid: filteredFollows[indexPath.row].followerId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = filteredFollows[indexPath.row].followerId
-//                    cell.imgAvatar.loadAvatar(id: filteredFollows[indexPath.row].followerId)
-                    cell.lblUserName.text = filteredFollows[indexPath.row].displayName
-                    cell.lblUserSaying.text = filteredFollows[indexPath.row].userName
-                } else {
-                    General.shared.avatar(userid: arrFollowers[indexPath.row].followerId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = arrFollowers[indexPath.row].followerId
-//                    cell.imgAvatar.loadAvatar(id: arrFollowers[indexPath.row].followerId)
-                    cell.lblUserName.text = arrFollowers[indexPath.row].displayName
-                    cell.lblUserSaying.text = arrFollowers[indexPath.row].userName
-                }
-            } else {
-                if schbarContacts.txtSchField.text != "" {
-                    General.shared.avatar(userid: filteredFollows[indexPath.row].followeeId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = filteredFollows[indexPath.row].followeeId
-//                    cell.imgAvatar.loadAvatar(id: filteredFollows[indexPath.row].followeeId)
-                    cell.lblUserName.text = filteredFollows[indexPath.row].displayName
-                    cell.lblUserSaying.text = filteredFollows[indexPath.row].userName
-                } else {
-                    General.shared.avatar(userid: arrFollowees[indexPath.row].followeeId, completion: { (avatarImage) in
-                        cell.imgAvatar.image = avatarImage
-                    })
-//                    cell.imgAvatar.userID = arrFollowees[indexPath.row].followeeId
-//                    cell.imgAvatar.loadAvatar(id: arrFollowees[indexPath.row].followeeId)
-                    cell.lblUserName.text = arrFollowees[indexPath.row].displayName
-                    cell.lblUserSaying.text = arrFollowees[indexPath.row].userName
-                }
-            }
-             */
             return cell
         }
     }
@@ -480,19 +295,15 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         // received
         indexPathGlobal = indexPath
         if cellStatus == 1 {
-            //uiviewNameCard.userId = arrReceivedRequests[indexPath.row].userId
             uiviewNameCard.userId = Int(arrRealmReceivedRequests[indexPath.row].id)!
-            uiviewNameCard.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
+            //uiviewNameCard.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
         } else if cellStatus == 2 {   // requested
-            //uiviewNameCard.userId = arrRequested[indexPath.row].userId
             uiviewNameCard.userId = Int(arrRealmRequested[indexPath.row].id)!
-            uiviewNameCard.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
+            //uiviewNameCard.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
         } else {
             if schbarContacts.txtSchField.text != "" {
-                //uiviewNameCard.userId = filtered[indexPath.row].userId                
                 uiviewNameCard.userId = Int(filteredRealm[indexPath.row].id)!
             } else {
-                //uiviewNameCard.userId = arrFriends[indexPath.row].userId
                 uiviewNameCard.userId = Int(arrRealmFriends[indexPath.row].id)!
             }
         }
@@ -507,10 +318,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func animateWithdrawal(listType: Int) {
         switch listType {
         case WITHDRAW:
-            apiCalls.withdrawFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
+            apiCalls.withdrawFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Request Withdraw \nSuccessfully!"
-                    //self.arrRequested.remove(at: self.indexPathGlobal.row)
                     let realm = try! Realm()
                     try! realm.write {
                         self.arrRealmRequested[self.indexPathGlobal.row].relation = NO_RELATION
@@ -543,7 +353,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                         }
                         
                     }
-                    //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                 } else {
@@ -556,7 +365,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             }
             break
         case IGNORE:
-            apiCalls.ignoreFriendRequest(requestId: String(idGlobal)) {(status: Int, message: Any?) in
+            apiCalls.ignoreFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
                 self.showNoti(type: self.IGNORE)
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Ignore Request \nSuccessfully!"
@@ -566,7 +375,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
-                    //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                 } else {
@@ -577,7 +385,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             }
             break
         case ACCEPT:
-            apiCalls.acceptFriendRequest(requestId: String(idGlobal)) { (status: Int, message: Any?) in
+            apiCalls.acceptFriendRequest(friendId: String(idGlobal)) { (status: Int, message: Any?) in
                 self.showNoti(type: self.ACCEPT)
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Accept Request \nSuccessfully!"
@@ -587,7 +395,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
-                    //self.arrReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
                     print("[Contacts Accept Request Successfully]")
@@ -620,7 +427,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
         }) {
             self.tblContacts.reloadData()
-            //self.imgDot.isHidden = self.arrReceivedRequests.count == 0
             self.setupScrollBar()
         }
     }

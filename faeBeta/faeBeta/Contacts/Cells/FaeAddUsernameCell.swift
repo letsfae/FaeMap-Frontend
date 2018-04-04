@@ -12,15 +12,15 @@ import SwiftyJSON
 protocol FaeAddUsernameDelegate: class {
     func addFriend(indexPath: IndexPath, user_id: Int)
     func resendRequest(indexPath: IndexPath, user_id: Int)
-    func acceptRequest(indexPath: IndexPath, request_id: Int)
-    func ignoreRequest(indexPath: IndexPath, request_id: Int)
-    func withdrawRequest(indexPath: IndexPath, request_id: Int)
+    func acceptRequest(indexPath: IndexPath, user_id: Int)
+    func ignoreRequest(indexPath: IndexPath, user_id: Int)
+    func withdrawRequest(indexPath: IndexPath, user_id: Int)
 }
 
 class FaeAddUsernameCell: UITableViewCell {
     
     var userId: Int = -1
-    var requestId: Int = -1
+    //var requestId: Int = -1
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
@@ -89,7 +89,7 @@ class FaeAddUsernameCell: UITableViewCell {
                 let json = JSON(message!)
                 for i in 0..<json.count {
                     if json[i]["requested_user_id"].intValue == self.userId {
-                        self.requestId = json[i]["friend_request_id"].intValue
+                        //self.requestId = json[i]["friend_request_id"].intValue
                     }
                 }
             }
@@ -99,7 +99,7 @@ class FaeAddUsernameCell: UITableViewCell {
                 let json = JSON(message!)
                 for i in 0..<json.count {
                     if json[i]["request_user_id"].intValue == self.userId {
-                        self.requestId = json[i]["friend_request_id"].intValue
+                        //self.requestId = json[i]["friend_request_id"].intValue
                     }
                 }
             }
@@ -224,17 +224,17 @@ class FaeAddUsernameCell: UITableViewCell {
             delegate.resendRequest(indexPath: indexPath, user_id: userId)
             print("resend")
         } else {
-            delegate.acceptRequest(indexPath: indexPath, request_id: requestId)
+            delegate.acceptRequest(indexPath: indexPath, user_id: userId)
             print("accept")
         }
     }
     
     @objc func refuseWithdrawRequest(_ sender: UIButton) {
         if friendStatus == .pending {
-            delegate.withdrawRequest(indexPath: indexPath, request_id: requestId)
+            delegate.withdrawRequest(indexPath: indexPath, user_id: userId)
             print("withdraw")
         } else {
-            delegate.ignoreRequest(indexPath: indexPath, request_id: requestId)
+            delegate.ignoreRequest(indexPath: indexPath, user_id: userId)
             print("refuse")
         }
     }

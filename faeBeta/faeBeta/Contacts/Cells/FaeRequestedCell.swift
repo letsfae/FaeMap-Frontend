@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ContactsRequestedDelegate: class {
-    func withdrawRequest(requestId: Int, indexPath: IndexPath)
+    func withdrawRequest(userId: Int, indexPath: IndexPath)
     func resendRequest(userId: Int, indexPath: IndexPath)
 }
 
@@ -22,7 +22,7 @@ class FaeRequestedCell: UITableViewCell {
     var btnCancelRequest: UIButton!
     var btnResendRequest: UIButton!
     var userId: Int = -1
-    var requestId: Int = -1
+    //var requestId: Int = -1
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
@@ -86,7 +86,7 @@ class FaeRequestedCell: UITableViewCell {
     }
     
     @objc func cancelRequest(_ sender: UIButton) {
-        self.delegate?.withdrawRequest(requestId: requestId, indexPath: indexPath)
+        self.delegate?.withdrawRequest(userId: userId, indexPath: indexPath)
     }
     
     @objc func resendRequest(_ sender: UIButton) {

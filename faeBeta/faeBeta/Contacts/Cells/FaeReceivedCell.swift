@@ -9,8 +9,8 @@
 import UIKit
 
 protocol ContactsReceivedRequestsDelegate: class {
-    func refuseRequest(requestId: Int, indexPath: IndexPath)
-    func acceptRequest(requestId: Int, indexPath: IndexPath)
+    func refuseRequest(userId: Int, indexPath: IndexPath)
+    func acceptRequest(userId: Int, indexPath: IndexPath)
 }
 
 class FaeReceivedCell: UITableViewCell {
@@ -22,7 +22,6 @@ class FaeReceivedCell: UITableViewCell {
     var btnAgreeRequest: UIButton!
     var btnRefuseRequest: UIButton!
     var userId: Int = -1
-    var requestId: Int = -1
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
@@ -83,10 +82,10 @@ class FaeReceivedCell: UITableViewCell {
     }
     
     @objc func refuseRequest(_ sender: UIButton) {
-        self.delegate?.refuseRequest(requestId: requestId, indexPath: indexPath)
+        self.delegate?.refuseRequest(userId: userId, indexPath: indexPath)
     }
     
     @objc func acceptRequest(_ sender: UIButton) {
-        self.delegate?.acceptRequest(requestId: requestId, indexPath: indexPath)
+        self.delegate?.acceptRequest(userId: userId, indexPath: indexPath)
     }
 }

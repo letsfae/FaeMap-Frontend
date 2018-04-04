@@ -22,11 +22,11 @@ enum FriendStatus: String {
 }
 
 protocol AddFriendFromNameCardDelegate: class {
-    func changeContactsTable(action: Int, userId: Int, requestId: Int)
+    func changeContactsTable(action: Int, userId: Int)
 }
 
 class AddFriendFromNameCardViewController: UIViewController {
-    weak var delegate: PassStatusFromViewToButton?
+    weak var delegate: PassStatusFromViewToButtonDelegate?
     weak var contactsDelegate: AddFriendFromNameCardDelegate?
     var uiviewChooseAction: UIView!
     var uiviewMsgSent: UIView!
@@ -43,7 +43,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     
     var userId: Int = -1
     let faeContact = FaeContact()
-    var requestId: Int = -1
+    //var requestId: Int = -1
     
     let OK = 0
     let ADD_FRIEND_ACT = 1
@@ -304,11 +304,11 @@ class AddFriendFromNameCardViewController: UIViewController {
             lblMsgSent.text = "Are you sure you want \nto resend this request?"
         case ACCEPT_ACT:
             indicatorView.startAnimating()
-            faeContact.acceptFriendRequest(requestId: String(requestId)) { (status: Int, message: Any?) in
+            faeContact.acceptFriendRequest(friendId: String(userId)) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     self.statusMode = .accepted
-                    self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId, requestId: self.requestId)
+                    self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
@@ -329,11 +329,11 @@ class AddFriendFromNameCardViewController: UIViewController {
             }
         case IGNORE_ACT:
             indicatorView.startAnimating()
-            faeContact.ignoreFriendRequest(requestId: String(userId)) {(status: Int, message: Any?) in
+            faeContact.ignoreFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.statusMode = .defaultMode
-                    self.contactsDelegate?.changeContactsTable(action: self.IGNORE_ACT, userId: self.userId, requestId: self.requestId)
+                    self.contactsDelegate?.changeContactsTable(action: self.IGNORE_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
@@ -393,7 +393,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Remove Friend \nSuccessfully!"
                     self.statusMode = .defaultMode
-                    self.contactsDelegate?.changeContactsTable(action: self.REMOVE_FRIEND_ACT, userId: self.userId, requestId: self.requestId)
+                    self.contactsDelegate?.changeContactsTable(action: self.REMOVE_FRIEND_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
@@ -416,7 +416,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "The user has been \nblocked successfully!"
                     self.statusMode = .blocked
-                    self.contactsDelegate?.changeContactsTable(action: self.BLOCK_ACT, userId: self.userId, requestId: self.requestId)
+                    self.contactsDelegate?.changeContactsTable(action: self.BLOCK_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
@@ -443,13 +443,13 @@ class AddFriendFromNameCardViewController: UIViewController {
             indicatorView.startAnimating()
             let realm = try! Realm()
             if let user = realm.filterUser(id: String(userId)) {
-                guard let request_id = Int(user.request_id) else { return }
-                requestId = request_id
-                faeContact.withdrawFriendRequest(requestId: String(self.requestId)) {(status: Int, message: Any?) in
+                //guard let request_id = Int(user.request_id) else { return }
+                //requestId = request_id
+                faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         self.statusMode = .defaultMode
-                        self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId, requestId: self.requestId)
+                        self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
                         
                         try! realm.write {
                             user.relation = NO_RELATION
@@ -468,14 +468,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                         let json = JSON(message!)
                         for i in 0..<json.count {
                             if json[i]["requested_user_id"].intValue == self.userId {
-                                self.requestId = json[i]["friend_request_id"].intValue
+                                //self.requestId = json[i]["friend_request_id"].intValue
                             }
                         }
-                        self.faeContact.withdrawFriendRequest(requestId: String(self.requestId)) {(status: Int, message: Any?) in
+                        self.faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                             if status / 100 == 2 {
                                 self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                                 self.statusMode = .defaultMode
-                                self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId, requestId: self.requestId)
+                                self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
                             } else if status == 404 {
                                 self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
                                 self.statusMode = .defaultMode

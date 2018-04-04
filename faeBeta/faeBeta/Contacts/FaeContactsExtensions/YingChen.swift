@@ -165,9 +165,9 @@ extension ContactsViewController {
     // function to move onto addFriendViewController swift scene
     @objc func goToAddFriendView(_ sender: UIButton) {
         let vc = AddFriendViewController()
-        vc.arrFriends = arrFriends
-        vc.arrReceivedRequests = arrReceivedRequests
-        vc.arrRequested = arrRequested
+        vc.arrRealmFriends = arrRealmFriends
+        vc.arrRealmReceivedRequests = arrRealmReceivedRequests
+        vc.arrRealmRequested = arrRealmRequested
         self.navigationController?.pushViewController(vc, animated: true)
         //getContacts()
     }

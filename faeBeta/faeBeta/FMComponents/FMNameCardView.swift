@@ -14,15 +14,15 @@ protocol NameCardDelegate: class {
     func openFaeUsrInfo()
     func chatUser(id: Int)
     func reportUser(id: Int)
-    func openAddFriendPage(userId: Int, requestId: Int, status: FriendStatus)
+    func openAddFriendPage(userId: Int, status: FriendStatus)
 }
 
-protocol PassStatusFromViewToButton: class {
+protocol PassStatusFromViewToButtonDelegate: class {
     func passFriendStatusFromView(status: FriendStatus)
     func updateNameCardAfterEditing()
 }
 
-class FMNameCardView: UIView, PassStatusFromViewToButton {
+class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     
     weak var delegate: NameCardDelegate?
     let faeContact = FaeContact()
@@ -33,7 +33,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             if userId > 0 { updateNameCard(withUserId: userId) }
         }
     }
-    var requestId: Int = -1
+    //var requestId: Int = -1
     
     var boolCardOpened = false
     var boolOptionsOpened = false
@@ -195,7 +195,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             statusMode = .nameCardOther
         }
         
-        delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
+        delegate?.openAddFriendPage(userId: userId, status: statusMode)
         
         /*
         guard !boolOptionsOpened else { return }
@@ -554,10 +554,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
                 statusMode = .accepted
             } else if user.relation & FRIEND_REQUESTED == FRIEND_REQUESTED {
                 statusMode = .pending
-                requestId = Int(user.request_id)!
+                //requestId = Int(user.request_id)!
             } else if user.relation & FRIEND_REQUESTED_BY == FRIEND_REQUESTED_BY {
                 statusMode = .requested
-                requestId = Int(user.request_id)!
+                //requestId = Int(user.request_id)!
             } else if user.relation & BLOCKED == BLOCKED || user.relation & BLOCKED_BY == BLOCKED_BY {
                 statusMode = .blocked
             }
@@ -615,10 +615,10 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
         default:
             statusMode = .defaultMode
         }
-        delegate?.openAddFriendPage(userId: userId, requestId: requestId, status: statusMode)
+        delegate?.openAddFriendPage(userId: userId, status: statusMode)
     }
     
-    // PassStatusFromViewToButton
+    // MARK: PassStatusFromViewToButtonDelegate
     func passFriendStatusFromView(status: FriendStatus) {
         statusMode = status
         setButtonImage()
@@ -629,7 +629,5 @@ class FMNameCardView: UIView, PassStatusFromViewToButton {
             userId = Key.shared.user_id
         }
     }
-    
-    // PassStatusFromViewToButton End
 }
 

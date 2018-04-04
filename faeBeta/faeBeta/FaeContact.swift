@@ -33,8 +33,9 @@ class FaeContact {
         }
     }
     
-    func acceptFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
-        self.whereKey("friend_request_id", value: requestId)
+    func acceptFriendRequest(friendId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        //self.whereKey("friend_request_id", value: requestId)
+        self.whereKey("requested_user_id", value: friendId)
         postToURL("friends/accept", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
@@ -42,8 +43,9 @@ class FaeContact {
         }
     }
     
-    func ignoreFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
-        self.whereKey("friend_request_id", value: requestId)
+    func ignoreFriendRequest(friendId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        //self.whereKey("friend_request_id", value: requestId)
+        self.whereKey("requested_user_id", value: friendId)
         postToURL("friends/ignore", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
@@ -51,8 +53,9 @@ class FaeContact {
         }
     }
     
-    func withdrawFriendRequest(requestId: String, _ completion: @escaping (Int, Any?) -> Void) {
-        self.whereKey("friend_request_id", value: requestId)
+    func withdrawFriendRequest(friendId: String, _ completion: @escaping (Int, Any?) -> Void) {
+        //self.whereKey("friend_request_id", value: requestId)
+        self.whereKey("requested_user_id", value: friendId)
         postToURL("friends/withdraw", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?)
             in
             self.clearKeyValue()
