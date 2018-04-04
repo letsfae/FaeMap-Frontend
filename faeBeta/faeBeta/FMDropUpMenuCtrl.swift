@@ -126,18 +126,20 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     
     // MapFilterMenuDelegate
     func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String) {
+        guard savedPinIds.count > 0 else {
+            // 判断:
+            showAlert(title: "There is no pin in this collection!", message: "")
+            return
+        }
         if isCollections {
             mapMode = .collection
             setCollectionTitle(type: colName)
         }
         animateMainItems(show: true, animated: false)
-        guard savedPinIds.count > 0 else {
-            // 判断:
-            return
-        }
         PLACE_ENABLE = false
         self.desiredCount = savedPinIds.count
         self.completionCount = 0
+        placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
         placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
             self.placesFromSearch.removeAll(keepingCapacity: true)
@@ -150,12 +152,12 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                         let pinData = PlacePin(json: resultJson)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
                         self.placesFromSearch.append(pin)
-                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+//                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                     } else if type == "location" {
                         let pinData = LocationPin(json: resultJson)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
                         self.placesFromSearch.append(pin)
-                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+//                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
                     }
                     
                     self.completionCount += 1

@@ -300,7 +300,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         line.backgroundColor = UIColor._200199204()
         uiviewFooter.addSubview(line)
         
-        btnBack = UIButton(frame: CGRect(x: 0, y: 1, width: 40.5, height: 48))
+        btnBack = UIButton(frame: CGRect(x: -10, y: 1, width: 60.5, height: 48))
         btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         btnBack.addTarget(self, action: #selector(backToMapBoard(_:)), for: .touchUpInside)
         

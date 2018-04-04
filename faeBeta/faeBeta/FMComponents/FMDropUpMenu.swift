@@ -405,13 +405,13 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         let collection = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
         let isSavedInThisList = arrListThatSavedThisPin.contains(collection.collection_id)
         cell.setValueForCell(cols: collection, isIn: isSavedInThisList)
+        cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == tblOptions {
             let cell = tableView.cellForRow(at: indexPath) as! DropUpMenuOptionsCell
-            vibrate(type: 4)
             switch indexPath.row {
             case 0:
                 delegate?.autoReresh?(isOn: !cell.switchButton.isOn)
@@ -436,6 +436,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
         let colInfo = tableMode == .place ? realmColPlaces[indexPath.row] : realmColLocations[indexPath.row]
         
+        vibrate(type: 4)
         getSavedItems(colInfo: colInfo)
         
         //        self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
