@@ -21,7 +21,7 @@ class CollectionsListCell: UITableViewCell {
         let separatorView = UIView(frame: CGRect(x: 98, y: 99, width: screenWidth - 98, height: 1))
         separatorView.backgroundColor = UIColor._225225225()
         addSubview(separatorView)
-        selectionStyle = .none
+//        selectionStyle = .none
         loadCellContent()
     }
     

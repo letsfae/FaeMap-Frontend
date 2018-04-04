@@ -22,16 +22,16 @@ class FaeMap {
         keyValue = [String: String]()
     }
     
-    //Map information
-    func renewCoordinate(_ completion: @escaping (Int,Any?) -> Void) {
-        postToURL("map/user", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message:Any?) in
+    // Map information
+    func renewCoordinate(_ completion: @escaping (Int, Any?) -> Void) {
+        postToURL("map/user", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
     func getMapInformation(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) {(status: Int, message: Any?) in
+        getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
@@ -45,19 +45,17 @@ class FaeMap {
         }
     }
     
-    
     // Get saved pins
     func getSavedPins(completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("pins/saved", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?) in
+        getFromURL("pins/saved", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
-    
     // Get created pins
     func getCreatedPins(completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("pins/users", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?) in
+        getFromURL("pins/users", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
@@ -65,14 +63,13 @@ class FaeMap {
     
     // Get pin statistics
     func getPinStatistics(completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("pins/statistics", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status:Int, message: Any?) in
+        getFromURL("pins/statistics", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
-    
-    func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void){
+    func getPin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void) {
         guard type != nil && pinId != nil else { return }
         getFromURL("\(type!)s/\(pinId!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
@@ -80,17 +77,17 @@ class FaeMap {
         }
     }
     
-    func updateComment(_ commentId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func updateComment(_ commentId: String?, completion: @escaping (Int, Any?) -> Void) {
         guard commentId != nil else { return }
-        postToURL("comments/"+commentId!, parameter: keyValue, authentication: Key.shared.headerAuthentication()) {(status: Int, message: Any?) in
+        postToURL("comments/" + commentId!, parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
     
-    func updatePin(_ pinType: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func updatePin(_ pinType: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void) {
         guard pinId != nil && pinType != nil else { return }
-        postToURL("\(pinType!)s/\(pinId!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) {(status: Int, message: Any?) in
+        postToURL("\(pinType!)s/\(pinId!)", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
@@ -104,12 +101,12 @@ class FaeMap {
         }
     }
     
-    func deletePin(type: String?, pinId: String?, completion:@escaping (Int, Any?) -> Void) {
+    func deletePin(type: String?, pinId: String?, completion: @escaping (Int, Any?) -> Void) {
         guard type != nil && pinId != nil else { return }
-        deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue) { (status:Int, message:Any?) in
+        deleteFromURL("\(type!)s/\(pinId!)", parameter: keyValue) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
     }
-
+    
 }

@@ -47,7 +47,7 @@ class ColListPlaceCell: UITableViewCell {
         addSubview(separatorView)
         addConstraintsWithFormat("H:|-89-[v0]-0-|", options: [], views: separatorView)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: separatorView)
-        selectionStyle = .none
+//        selectionStyle = .none
         loadCellContent()
         if reuseIdentifier != "ManageColPlaceCell" {
             btnSelect.isHidden = true
@@ -167,7 +167,7 @@ class ColListLocationCell: UITableViewCell {
         separatorView.backgroundColor = UIColor._206203203()
         addConstraintsWithFormat("H:|-89-[v0]-0-|", options: [], views: separatorView)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: separatorView)
-        selectionStyle = .none
+//        selectionStyle = .none
         loadCellContent()
         if reuseIdentifier != "ManageColLocationCell" {
             btnSelect.isHidden = true
