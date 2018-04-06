@@ -325,7 +325,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     try! realm.write {
                         self.arrRealmRequested[self.indexPathGlobal.row].relation = NO_RELATION
                         self.arrRealmRequested[self.indexPathGlobal.row].created_at = ""
-                        self.arrRealmRequested[self.indexPathGlobal.row].request_id = ""
                     }
                     self.arrRealmRequested.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
@@ -349,7 +348,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                         } else {
                             self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
                             self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                            self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                         }
                         
                     }
@@ -373,7 +371,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     try! realm.write {
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()
@@ -393,7 +390,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
                     try! realm.write {
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].relation = IS_FRIEND
                         self.arrRealmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                        self.arrRealmReceivedRequests[self.indexPathGlobal.row].request_id = ""
                     }
                     self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
                     self.reloadAfterDelete()

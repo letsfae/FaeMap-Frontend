@@ -303,8 +303,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         try! realm.write {
                             user.relation = IS_FRIEND
                             user.created_at = ""
-                            user.request_id = ""
-                        }                        
+                        }
                     }
                     
                     print("[FMUserInfo Accept Request Successfully]")
@@ -333,7 +332,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                         try! realm.write {
                             user.relation = NO_RELATION
                             user.created_at = ""
-                            user.request_id = ""
                         }
                     }
                 } else if status == 500 {
@@ -429,7 +427,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                             } else {
                                 user.relation = NO_RELATION
                                 user.created_at = ""
-                                user.request_id = ""
                             }
                         }
                     }
@@ -485,10 +482,9 @@ class AddFriendFromNameCardViewController: UIViewController {
                             if status / 100 == 2 {
                                 self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                                 self.statusMode = .defaultMode
-                                self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
-                            } else if status == 404 {
-                                self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
-                                self.statusMode = .defaultMode
+                                self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)                            
+                            } else if status == 500 {
+                                self.lblMsgSent.text = "Internal Server \n Error!"
                             } else {
                                 if let errorCode = JSON(message!)["error_code"].string {
                                     handleErrorCode(.contact, errorCode, { (errorMsg) in
