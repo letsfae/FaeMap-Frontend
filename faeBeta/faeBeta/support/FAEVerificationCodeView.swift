@@ -55,6 +55,7 @@ class FAEVerificationCodeView: UIView {
     }
     
     //MARK: - display methods
+    @discardableResult
     func addDigit(_ digit:Int) -> Int {
         if digit >= 0 && pointer < numberLabels.count {
             let label = numberLabels[pointer]

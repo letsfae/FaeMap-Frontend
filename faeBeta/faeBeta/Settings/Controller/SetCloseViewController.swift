@@ -132,7 +132,7 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         lblInfo.textColor = UIColor._898989()
         
         //lblContent2 = UILabel(frame: CGRect(x: (screenWidth-contentX)/2, y: 332, width: contentX, height: 228))
-        lblContent2 = UILabel(frame: CGRect(x: 0, y: 267, width: 287, height: 207))
+        lblContent2 = UILabel(frame: CGRect(x: 0, y: 267, width: 287, height: 228))
         lblContent2.center.x = screenWidth / 2
         scrollview.addSubview(lblContent2)
         lblContent2.text = "-You will be logged out right away and your\naccount will be fully deactivated for 15 days.\n\n-Your Account will be completely and\npermanently deleted after the 15 days.\n\n-You can Log In anytime during the 15 day\ndeactivation period to reactivate your Account.\n\nNote: You won’t be able to change your Log In\ninfo while your account is deactivated, so please\nkeep your current Log In info handy for 15 days."

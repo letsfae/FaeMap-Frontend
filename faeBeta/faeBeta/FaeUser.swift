@@ -201,7 +201,7 @@ class FaeUser: NSObject {
      Required parameters: email
      Optional parameters: nil
      */
-    func sendCodeToEmail(_ completion: @escaping (Int, Any?) -> Void) {
+    func resetPassword(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("reset_login/code", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             //            print(message)
             self.clearKeyValue()

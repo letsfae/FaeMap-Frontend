@@ -119,7 +119,9 @@ class FaeChat {
                     if (result as? NSDictionary) != nil {
                         print("\(statusCode) \(String(describing: message["index"]))")
                     }
-                } else {
+                } else if statusCode == 500 {
+                    
+                } else { // TODO: error code undecided
                     print("failed")
                 }
             })
@@ -150,47 +152,60 @@ class FaeChat {
                 }
             }
             */
-            if let unreadList = result as? NSArray {
-                for item in unreadList {
-                    let dictItem: NSDictionary = item as! NSDictionary
-                    let chat_id = dictItem["last_message_sender_id"] as! Int
-                    let unread_count = dictItem["unread_count"] as! Int
-                    let chatIdOnServer = dictItem["chat_id"] as! Int
-                    if chat_id == 1 {
-                        deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], completion: { statusCode, _ in
-                            if statusCode / 100 == 2 {
-                                print("delete \(chatIdOnServer) successfully")
-                            }
-                        })
-                    } else {
-                        let callGroup = DispatchGroup()
-                        // while unread_count > 0 {
-                        for _ in 0...unread_count / 50 {
-                            callGroup.enter()
-                            getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) { _, result in
-                                if let response = result as? NSDictionary {
-                                    // unread_count = response["unread_count"] as! Int
-                                    let unreadMessages = response["messages"] as! NSArray
-                                    for unreadMessage in unreadMessages {
-                                        if let message = unreadMessage as? NSDictionary {
-                                            if chat_id == 1 { break }
-                                            self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
+            if status / 2 == 100 {
+                if let unreadList = result as? NSArray {
+                    for item in unreadList {
+                        let dictItem: NSDictionary = item as! NSDictionary
+                        let chat_id = dictItem["last_message_sender_id"] as! Int
+                        let unread_count = dictItem["unread_count"] as! Int
+                        let chatIdOnServer = dictItem["chat_id"] as! Int
+                        if chat_id == 1 {
+                            deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], completion: { statusCode, _ in
+                                if statusCode / 100 == 2 {
+                                    print("delete \(chatIdOnServer) successfully")
+                                }
+                            })
+                        } else {
+                            let callGroup = DispatchGroup()
+                            // while unread_count > 0 {
+                            for _ in 0...unread_count / 50 {
+                                callGroup.enter()
+                                getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+                                    if status / 2 == 100 {
+                                        if let response = result as? NSDictionary {
+                                            // unread_count = response["unread_count"] as! Int
+                                            let unreadMessages = response["messages"] as! NSArray
+                                            for unreadMessage in unreadMessages {
+                                                if let message = unreadMessage as? NSDictionary {
+                                                    if chat_id == 1 { break }
+                                                    self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
+                                                }
+                                            }
+                                            callGroup.leave()
+                                        } else {
+                                            // print("no more new message")
                                         }
+                                    } else if status == 500 {
+                                        
+                                    } else { // TODO: error code undeciced
+                                        
                                     }
-                                    callGroup.leave()
-                                } else {
-                                    // print("no more new message")
+                                    
                                 }
                             }
-                        }
-                        callGroup.notify(queue: .main) {
-                            // print("finish reading")
-                            // postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                            // print("\(statusCode)")
-                            // })
+                            callGroup.notify(queue: .main) {
+                                // print("finish reading")
+                                // postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
+                                // print("\(statusCode)")
+                                // })
+                            }
                         }
                     }
                 }
+            } else if status == 500 {
+                
+            } else { // TODO: error code undecided
+                
             }
         }
     }
@@ -218,6 +233,10 @@ class FaeChat {
                         General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
                         }
                         callGroup.leave()
+                    } else if status == 500 {
+                        
+                    } else { // TODO: error code undecided
+                        
                     }
                 }
             }
