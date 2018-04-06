@@ -261,26 +261,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     self.statusMode = .pending
-                } else if status == 400 {
-                    // 400-22  Bad request, this user has already sent you a friend request
-                    // 400-20  Bad request, you have already sent a request
-                    // 400-6   Bad request, you have already blocked this user
-                    // 400-6   Bad request, you have already been blocked by the user
-                    let errorCode = JSON(message!)["error_code"].string
-                    if  errorCode == "400-20" {
-                        self.lblMsgSent.text = "You've Already \nSent Friend Request!"
-                        self.statusMode = .pending
-                    } else if errorCode == "400-22" {
-                        self.lblMsgSent.text = "The User Has Already \nSent You a Friend Request!"
-                    } else if errorCode == "400-6" {
-                        self.lblMsgSent.text = "Friend Request \nSent Fail!"  // [BLOCK]
-                        self.statusMode = .blocked
-                    } else {
-                        self.lblMsgSent.text = "Friend Request \nError!"
-                    }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Friend Request \nSent Fail!"
-                    print("[FMUserInfo Friend Request Sent Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
@@ -320,9 +308,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                     }
                     
                     print("[FMUserInfo Accept Request Successfully]")
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Accept Request \nFail!"
-                    print("[FMUserInfo Accept Request Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
@@ -343,9 +336,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.request_id = ""
                         }
                     }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Ignore Request \nFail!"
-                    print("[FMUserInfo Ignore Request Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
@@ -401,9 +399,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.relation = NO_RELATION
                         }
                     }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Remove Friend \nFail!"
-                    print("[FMUserInfo Delete Friend Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.btnOK.setTitle("OK", for: .normal)
                 self.btnOK.tag = self.OK
@@ -430,9 +433,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                             }
                         }
                     }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Block User \nFail!"
-                    print("[FMUserInfo Friend Block Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.btnOK.setTitle("OK", for: .normal)
                 self.btnOK.tag = self.OK
@@ -454,12 +462,14 @@ class AddFriendFromNameCardViewController: UIViewController {
                         try! realm.write {
                             user.relation = NO_RELATION
                         }
-                    } else if status == 404 {
-                        self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
-                        self.statusMode = .defaultMode
+                    } else if status == 500 {
+                        self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
-                        self.lblMsgSent.text = "Request Withdraw \nFail!"
-                        print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
+                        if let errorCode = JSON(message!)["error_code"].string {
+                            handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                self.lblMsgSent.text = errorMsg
+                            })
+                        }
                     }
                 }
             } else {
@@ -480,13 +490,21 @@ class AddFriendFromNameCardViewController: UIViewController {
                                 self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
                                 self.statusMode = .defaultMode
                             } else {
-                                self.lblMsgSent.text = "Request Withdraw \nFail!"
-                                print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
+                                if let errorCode = JSON(message!)["error_code"].string {
+                                    handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                        self.lblMsgSent.text = errorMsg
+                                    })
+                                }
                             }
                         }
+                    } else if status == 500 {
+                        self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
-                        self.lblMsgSent.text = "Request Withdraw Error!"
-                        print("[FMUserInfo Request Withdraw Error] - \(status) \(message!)")
+                        if let errorCode = JSON(message!)["error_code"].string {
+                            handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                self.lblMsgSent.text = errorMsg
+                            })
+                        }
                     }
                     self.btnOK.setTitle("OK", for: .normal)
                     self.btnOK.tag = self.OK
@@ -499,21 +517,14 @@ class AddFriendFromNameCardViewController: UIViewController {
             faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Request Resent \nSuccessfully!"
-                } else if status == 400 {
-                    let errorCode = JSON(message!)["error_code"].string
-                    if  errorCode == "400-20" {
-                        self.lblMsgSent.text = "You've Already \nSent Friend Request!"
-                    } else if errorCode == "400-22" {
-                        self.lblMsgSent.text = "The User Has Already \nSent You a Friend Request!"
-                    } else if errorCode == "400-6" {
-                        self.lblMsgSent.text = "Friend Request Sent \nFail!" // [BLOCK]
-                        self.statusMode = .blocked
-                    } else {
-                        self.lblMsgSent.text = "Friend Request \nError!"
-                    }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Request Resent \nFail!"
-                    print("[FMUserInfo Friend Request Resent Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.btnOK.setTitle("OK", for: .normal)
                 self.btnOK.tag = self.OK
