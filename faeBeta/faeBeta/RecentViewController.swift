@@ -227,6 +227,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
                         }
                     })
                 }
+            } else if statusCode == 500 {
+                
+            } else { // TODO: error code undecided
+                
             }
         }        
     }

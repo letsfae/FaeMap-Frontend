@@ -70,7 +70,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     
     override func backButtonPressed() {
         view.endEditing(true)
-        _ = navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     override func continueButtonPressed() {
@@ -124,7 +124,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                                         }
                                     }
                                 }
-                            } else {
+                            } else { // TODO: error code undecided
                                 print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                             }
                         }
@@ -141,7 +141,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                         self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
                     }
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
-                } else {
+                } else { // TODO: error code undecided
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }
@@ -168,7 +168,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                                         }
                                     }
                                 }
-                            } else {
+                            } else { // TODO: error code undecided
                                 print("[Fail to Login]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                             }
                         }
@@ -185,7 +185,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                         self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
                     }
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "resetPasswordSucceed"), object: nil)
-                } else {
+                } else { // TODO: error code undecided
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }
@@ -202,7 +202,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                     arrViewControllers?.removeLast()
                     arrViewControllers?.append(vc)
                     self.navigationController?.setViewControllers(arrViewControllers!, animated: false)
-                } else {
+                } else { // TODO: error code undecided
                     print("[Fail to Reset Password] \(status) \(message!)")
                 }
             }

@@ -267,11 +267,29 @@ class RegisterEmailViewController: RegisterBaseViewController {
                                 self.navigationController?.pushViewController(vc, animated: true)
                             } else {
                                 print("[Update Email Fail] \(status) \(message!)")
+                                let messageJSON = JSON(message!)
+                                if let error_code = messageJSON["error_code"].string {
+                                    handleErrorCode(.auth, error_code, { (prompt) in
+                                        // handle
+                                        self.hideActivityIndicator()
+                                    })
+                                }
                             }
                             self.hideActivityIndicator()
                         }
                     }
                 })
+            } else {
+                let messageJSON = JSON(message!)
+                if let error_code = messageJSON["error_code"].string {
+                    handleErrorCode(.auth, error_code, { (prompt) in
+                        // handle
+                        if error_code == "422-3" {
+                            self.setEmailExists()
+                        }
+                        self.hideActivityIndicator()
+                    })
+                }
             }
         }
     }
