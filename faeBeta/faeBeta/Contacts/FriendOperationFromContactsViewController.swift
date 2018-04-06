@@ -222,7 +222,6 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if let user = realm.filterUser(id: String(self.userId)) {
                         user.relation = IS_FRIEND
                         user.created_at = ""
-                        user.request_id = ""
                     }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
