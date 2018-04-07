@@ -154,6 +154,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Chat
     let faeChat = FaeChat()
+    let faePush = FaePush()
     
     // Collections Managements
     var arrCtrlers = [UIViewController]()
@@ -193,7 +194,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        storeRealmCollectionFromServer()
         
         Key.shared.FMVCtrler = self
         AUTO_REFRESH = Key.shared.autoRefresh
@@ -202,6 +202,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         isUserLoggedIn()
         getUserStatus()
+        
+        initUserDataFromServer()
         
         loadNameCard()
         loadMapFilter()
@@ -454,7 +456,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(updateUserPins), userInfo: nil, repeats: true)
-        timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateMessages), userInfo: nil, repeats: true)
+        timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(syncMessagesFromServer), userInfo: nil, repeats: true)
     }
     
     func invalidateAllTimer() {
@@ -648,6 +650,35 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func cancelAllPinLoading() {
         placeAdderQueue.cancelAllOperations()
+    }
+    
+    func initUserDataFromServer() {
+        storeRealmCollectionFromServer()
+        ContactsViewController.loadFriendsList()
+        ContactsViewController.loadSentFriendRequests()
+    }
+    
+    @objc func syncMessagesFromServer() {
+        //faeChat.getMessageFromServer()
+        faePush.getSync { (status, message) in
+            if status / 2 == 100 {
+                let messageJSON = JSON(message!)
+                if let friend_request_count = messageJSON["friend_request"].int {
+                    if friend_request_count > 0 {
+                        ContactsViewController.loadReceivedFriendRequests()
+                    }
+                }
+                if let chat_unread_count = messageJSON["chat"].int {
+                    if chat_unread_count > 0 {
+                        self.faeChat.getMessageFromServer()
+                    }
+                }
+            } else if status == 500 { // TODO: error code undecided
+                
+            } else {
+                
+            }
+        }
     }
     
 }
