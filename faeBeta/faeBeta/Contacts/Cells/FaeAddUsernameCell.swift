@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 protocol FaeAddUsernameDelegate: class {
     func addFriend(indexPath: IndexPath, user_id: Int)
@@ -61,7 +62,7 @@ class FaeAddUsernameCell: UITableViewCell {
             if status / 100 == 2 {
                 let json = JSON(message!)
                 let relation = Relations(json: json)
-                self.getFromRelations(id: id, relation: relation)
+                self.getFromRelations(id: id, relation: relation)                
             } else {
                 print("[get friend status fail] - \(status) \(message!)")
             }
@@ -69,43 +70,60 @@ class FaeAddUsernameCell: UITableViewCell {
     }
     
     func getFromRelations(id: Int, relation: Relations) {
+        var realationRealm = NO_RELATION
         if id == Key.shared.user_id {
             self.friendStatus = .blocked_by
         }
 //        print(relation)
         if relation.blocked {   // blocked & blocked_by
             self.friendStatus = .blocked
+            if relation.is_friend {
+                realationRealm = BLOCKED | IS_FRIEND
+            } else {
+                realationRealm = BLOCKED
+            }
         } else if relation.blocked_by {
             if relation.is_friend {
                 self.friendStatus = .accepted
+                realationRealm = BLOCKED_BY | IS_FRIEND
             } else {
                 self.friendStatus = .blocked_by
+                realationRealm = BLOCKED_BY
             }
         } else if relation.is_friend {
             self.friendStatus = .accepted
+            realationRealm = IS_FRIEND
         } else if relation.requested {
             self.friendStatus = .pending
-            self.faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
+            realationRealm = FRIEND_REQUESTED
+            /*self.faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
                 let json = JSON(message!)
                 for i in 0..<json.count {
                     if json[i]["requested_user_id"].intValue == self.userId {
                         //self.requestId = json[i]["friend_request_id"].intValue
                     }
                 }
-            }
+            }*/
         } else if relation.requested_by {
             self.friendStatus = .requested
-            self.faeContact.getFriendRequests() {(status: Int, message: Any?) in
+            realationRealm = FRIEND_REQUESTED_BY
+            /*self.faeContact.getFriendRequests() {(status: Int, message: Any?) in
                 let json = JSON(message!)
                 for i in 0..<json.count {
                     if json[i]["request_user_id"].intValue == self.userId {
                         //self.requestId = json[i]["friend_request_id"].intValue
                     }
                 }
-            }
+            }*/
         }
         
         self.setButtonImage()
+        let realm = try! Realm()
+        if let user = realm.filterUser(id: "\(id)") {
+            try! realm.write {
+                user.relation = realationRealm
+            }
+        }
     }
     
     fileprivate func setButtonImage() {

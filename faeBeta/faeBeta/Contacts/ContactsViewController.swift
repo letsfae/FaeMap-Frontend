@@ -307,14 +307,14 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    let request_id = json[i - 1]["friend_request_id"].stringValue
+                    //let request_id = json[i - 1]["friend_request_id"].stringValue
                     let user_id = json[i - 1]["requested_user_id"].stringValue
                     let user_name = json[i - 1]["requested_user_name"].stringValue
                     let display_name = json[i - 1]["requested_user_nick_name"].stringValue
                     let user_age = json[i - 1]["requested_user_age"].stringValue
                     let user_gender = json[i - 1]["requested_user_gender"].stringValue
                     let created_at = RealmChat.formatDate(str: json[i - 1]["created_at"].stringValue)
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED, user_age, user_gender, request_id, created_at])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED, user_age, user_gender, "", created_at])
                     var boolModified: Bool = false
                     let realm = try! Realm()
                     if let current = realm.filterUser(id: user_id) {
@@ -361,14 +361,14 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {
-                    let request_id = json[i - 1]["friend_request_id"].stringValue
+                    //let request_id = json[i - 1]["friend_request_id"].stringValue
                     let user_id = json[i - 1]["request_user_id"].stringValue
                     let user_name = json[i - 1]["request_user_name"].stringValue
                     let display_name = json[i - 1]["request_user_nick_name"].stringValue
                     let user_age = json[i - 1]["request_user_age"].stringValue
                     let user_gender = json[i - 1]["request_user_gender"].stringValue
                     let created_at = RealmChat.formatDate(str: json[i - 1]["created_at"].stringValue)
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED_BY, user_age, user_gender, request_id, created_at])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED_BY, user_age, user_gender, "", created_at])
                     var boolModified: Bool = false
                     let realm = try! Realm()
                     if let current = realm.filterUser(id: user_id) {

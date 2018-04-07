@@ -7,6 +7,7 @@
 //
 
 import RealmSwift
+import SwiftyJSON
 
 enum UserRelation: Int {
     case no_relation = 0
@@ -23,12 +24,12 @@ enum UserRelation: Int {
 let NO_RELATION: Int = 0
 let MYSELF: Int = 0b1
 let IS_FRIEND: Int = 0b10
-let FOLLOWED: Int = 0b100
-let FOLLOWED_BY: Int = 0b1000
-let FRIEND_REQUESTED: Int = 0b10000
-let FRIEND_REQUESTED_BY: Int = 0b100000
-let BLOCKED: Int = 0b1000000
-let BLOCKED_BY: Int = 0b10000000
+let FOLLOWED: Int = 0b100 // I followed others
+let FOLLOWED_BY: Int = 0b1000 // others followed me
+let FRIEND_REQUESTED: Int = 0b10000 // I've sent request to others
+let FRIEND_REQUESTED_BY: Int = 0b100000 // others have sent request to me
+let BLOCKED: Int = 0b1000000 // I blocked others
+let BLOCKED_BY: Int = 0b10000000 // others blocked me
 
 //Bryan
 class RealmUser: Object {
@@ -40,8 +41,8 @@ class RealmUser: Object {
     @objc dynamic var relation: Int = 0
     @objc dynamic var age: String = ""
     @objc dynamic var gender: String = ""
-    @objc dynamic var created_at: String = ""
     @objc dynamic var short_intro: String = ""
+    @objc dynamic var created_at: String = ""
     //let message = LinkingObjects(fromType: RealmMessage_v2.self, property: "members")
     var message: RealmMessage_v2? {
         return realm?.objects(RealmMessage_v2.self).filter("login_user_id = %@ AND members.@count = 2 AND %@ IN members", self.login_user_id, self).last
@@ -76,6 +77,11 @@ class RealmUser: Object {
     override static func primaryKey() -> String? {
         return "loginUserID_id"
     }
+    
+    /*convenience required init(nameCard: JSON) {
+        self.init()
+        loginUserID_id =
+    }*/
 }
 //ENDBryan
 

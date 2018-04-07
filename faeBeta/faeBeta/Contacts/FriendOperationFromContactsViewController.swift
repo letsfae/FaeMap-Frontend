@@ -180,7 +180,17 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     
-                    // TODO: API modification needed
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: String(self.userId)) {
+                        try! realm.write {
+                            user.relation = FRIEND_REQUESTED
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.calendar = Calendar(identifier: .gregorian)
+                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
+                            user.created_at = dateFormatter.string(from: Date())
+                        }
+                    }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -220,8 +230,10 @@ class FriendOperationFromContactsViewController: UIViewController {
                     
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
-                        user.relation = IS_FRIEND
-                        user.created_at = ""
+                        try! realm.write {
+                            user.relation = IS_FRIEND
+                            user.created_at = ""
+                        }
                     }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
@@ -259,6 +271,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: "\(self.userId)") {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                            user.created_at = ""
+                        }
+                    }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -307,6 +326,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: "\(self.userId)") {
+                            try! realm.write {
+                                user.relation = NO_RELATION
+                                user.created_at = ""
+                            }
+                        }
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -325,6 +351,16 @@ class FriendOperationFromContactsViewController: UIViewController {
                 faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Resent \nSuccessfully!"
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: "\(self.userId)") {
+                            try! realm.write {
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.calendar = Calendar(identifier: .gregorian)
+                                dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                                dateFormatter.dateFormat = "yyyyMMddhhmmss"
+                                user.created_at = dateFormatter.string(from: Date())
+                            }
+                        }
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -346,6 +382,17 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "The user has been \nblocked successfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: "\(self.userId)") {
+                            try! realm.write {
+                                if user.relation & IS_FRIEND == IS_FRIEND {
+                                    user.relation = IS_FRIEND | BLOCKED
+                                } else {
+                                    user.relation = BLOCKED
+                                    user.created_at = ""
+                                }
+                            }
+                        }
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
