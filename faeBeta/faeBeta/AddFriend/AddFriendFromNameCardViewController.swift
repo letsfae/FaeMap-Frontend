@@ -261,6 +261,17 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     self.statusMode = .pending
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: String(self.userId)) {
+                        try! realm.write {
+                            user.relation = FRIEND_REQUESTED
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.calendar = Calendar(identifier: .gregorian)
+                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
+                            user.created_at = dateFormatter.string(from: Date())
+                        }
+                    }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -423,7 +434,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                     if let user = realm.filterUser(id: String(self.userId)) {
                         try! realm.write {
                             if user.relation & IS_FRIEND == IS_FRIEND {
-                                user.relation &= BLOCKED
+                                user.relation = IS_FRIEND | BLOCKED
                             } else {
                                 user.relation = NO_RELATION
                                 user.created_at = ""
@@ -446,8 +457,34 @@ class AddFriendFromNameCardViewController: UIViewController {
             }
         } else if sender.tag == WITHDRAW_ACT {
             indicatorView.startAnimating()
-            let realm = try! Realm()
-            if let user = realm.filterUser(id: String(userId)) {
+            faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
+                    self.statusMode = .defaultMode
+                    self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: String(self.userId)) {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                            user.created_at = ""
+                        }
+                    }
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
+                } else {
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
+                }
+                self.btnOK.setTitle("OK", for: .normal)
+                self.btnOK.tag = self.OK
+                self.indicatorView.stopAnimating()
+                self.animationActionView()
+            }
+            
+            /*if let user = realm.filterUser(id: String(userId)) {
                 //guard let request_id = Int(user.request_id) else { return }
                 //requestId = request_id
                 faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
@@ -507,12 +544,22 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.indicatorView.stopAnimating()
                     self.animationActionView()
                 }
-            }
+            }*/
         } else if sender.tag == RESEND_ACT {
             indicatorView.startAnimating()
             faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Request Resent \nSuccessfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: "\(self.userId)") {
+                        try! realm.write {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.calendar = Calendar(identifier: .gregorian)
+                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
+                            user.created_at = dateFormatter.string(from: Date())
+                        }
+                    }
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
