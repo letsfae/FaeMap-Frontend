@@ -80,6 +80,88 @@ struct Relations {
 
 class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate, ContactsRequestedDelegate {
     
+    static func loadFriendsList() {
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, Key.shared.gender])
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(realmUser, update: true)
+        }
+        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", ""])
+        let realmFaeAvatar = UserImage()
+        realmFaeAvatar.user_id = "1"
+        realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
+        try! realm.write {
+            realm.add(realmFae, update: true)
+            realm.add(realmFaeAvatar, update: true)
+        }
+        FaeContact().getFriends() {(status, message) in
+            if status / 100 == 2 {
+                let messageJSON = JSON(message!)
+                for (_, user):(String, JSON) in messageJSON {
+                    let user_id = user["friend_id"].stringValue
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["friend_user_name"].stringValue, user["friend_user_nick_name"].stringValue, IS_FRIEND, user["friend_user_age"].stringValue, user["friend_user_gender"].stringValue])
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.add(realmUser, update: true)
+                    }
+                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                }
+            } else if status == 500 { // TODO: error code undecided
+                
+            } else {
+                
+            }
+        }
+    }
+    
+    static func loadReceivedFriendRequests() {
+        FaeContact().getFriendRequests { (status, message) in
+            if status / 100 == 2 {
+                let messageJSON = JSON(message!)
+                for (_, user):(String, JSON) in messageJSON {
+                    let user_id = user["request_user_id"].stringValue
+                    let created_at = RealmChat.formatDate(str: user["created_at"].stringValue)
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["request_user_name"].stringValue, user["request_user_nick_name"].stringValue, FRIEND_REQUESTED_BY, user["request_user_age"].stringValue, user["request_user_gender"].stringValue, "", created_at])
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.add(realmUser, update: true)
+                    }
+                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                }
+            } else if status == 500 {
+                
+            } else { // TODO: error code undecided
+                
+            }
+        }
+    }
+    
+    static func loadSentFriendRequests() {
+        FaeContact().getFriendRequestsSent { (status, message) in
+            if status / 100 == 2 {
+                let messageJSON = JSON(message!)
+                for (_, user):(String, JSON) in messageJSON {
+                    let user_id = user["requested_user_id"].stringValue
+                    let created_at = RealmChat.formatDate(str: user["created_at"].stringValue)
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["requested_user_name"].stringValue, user["requested_user_nick_name"].stringValue, FRIEND_REQUESTED, user["requested_user_age"].stringValue, user["requested_user_gender"].stringValue, "", created_at])
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.add(realmUser, update: true)
+                    }
+                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                }
+            } else if status == 500 {
+                
+            } else { // TODO: error code undecided
+                
+            }
+        }
+    }
+    
+    static func loadBlockedList() {
+        
+    }
+    
     // YingChen.swift variable declaration for UI objects
     var uiviewNavBar: FaeNavBar!
     var uiviewDropDownMenu: UIView!

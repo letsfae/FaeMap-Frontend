@@ -17,7 +17,7 @@ extension FaeMapViewController {
         lblUnreadCount.isHidden = true
         updateUnreadChatIndicator()
         if Key.shared.user_id != -1 {
-            faeChat.updateFriendsList()
+            //faeChat.updateFriendsList()
         }
         if faeChat.notificationRunLoop == nil {
             // each call will start a run loop, so only initialize one
@@ -25,9 +25,7 @@ extension FaeMapViewController {
         }
     }
     
-    @objc func updateMessages() {
-        faeChat.getMessageFromServer()
-    }
+    
     
     func updateUnreadChatIndicator() {
         let realm = try! Realm()
