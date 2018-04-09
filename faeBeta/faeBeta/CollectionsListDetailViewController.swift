@@ -853,7 +853,8 @@ extension CollectionsListDetailViewController {
     
     // ManageColListDelegate
     func returnValBack() {
-        let section = IndexSet(integer: 1)
-        tblColListDetail.reloadSections(section, with: .none)
+        tblColListDetail.reloadData()
+//        let section = IndexSet(integer: 1)
+//        tblColListDetail.reloadSections(section, with: .none)
     }
 }

@@ -182,13 +182,20 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     
                     // TODO: API modification needed
-                    
-                } else if status == 400 {
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
+                } else {
                     // 400-22  Bad request, this user has already sent you a friend request
                     // 400-20  Bad request, you have already sent a request
                     // 400-6   Bad request, you have already blocked this user
                     // 400-6   Bad request, you have already been blocked by the user
-                    let errorCode = JSON(message!)["error_code"].string
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
+                    
+                    /*
                     if  errorCode == "400-20" {
                         self.lblMsgSent.text = "You've Already \nSent Friend Request!"
                     } else if errorCode == "400-22" {
@@ -198,9 +205,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                     } else {
                         self.lblMsgSent.text = "Friend Request \nError!"
                     }
-                } else {
-                    self.lblMsgSent.text = "Friend Request \nSent Fail!"
-                    print("[Friend Request Sent Fail] - \(status) \(message!)")
+                    */
                 }
                 self.btnOK.tag = self.OK
                 self.btnOK.setTitle("OK", for: .normal)
@@ -220,10 +225,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                         user.created_at = ""
                         user.request_id = ""
                     }
-                    
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Accept Request \nFail!"
-                    print("[Accept Request Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.btnOK.tag = self.OK
                 self.btnOK.setTitle("OK", for: .normal)
@@ -252,9 +261,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                } else if status == 500 {
+                    self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
-                    self.lblMsgSent.text = "Ignore Request \nFail!"
-                    print("[Ignore Request Fail] - \(status) \(message!)")
+                    if let errorCode = JSON(message!)["error_code"].string {
+                        handleErrorCode(.contact, errorCode, { (errorMsg) in
+                            self.lblMsgSent.text = errorMsg
+                        })
+                    }
                 }
                 self.btnOK.tag = self.OK
                 self.btnOK.setTitle("OK", for: .normal)
@@ -295,11 +309,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
-                    } else if status == 404 {
-                        self.lblMsgSent.text = "You haven't Sent \nFriend Request!"
+                    } else if status == 500 {
+                        self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
-                        self.lblMsgSent.text = "Request Withdraw \nFail!"
-                        print("[Request Withdraw Fail] - \(status) \(message!)")
+                        if let errorCode = JSON(message!)["error_code"].string {
+                            handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                self.lblMsgSent.text = errorMsg
+                            })
+                        }
                     }
                     self.btnOK.tag = self.OK
                     self.btnOK.setTitle("OK", for: .normal)
@@ -310,21 +327,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                 faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Resent \nSuccessfully!"
-                    } else if status == 400 {
-                        let errorCode = JSON(message!)["error_code"].string
-                        if  errorCode == "400-20" {
-                            self.lblMsgSent.text = "You've Already \nSent Friend Request!"
-                        } else if errorCode == "400-22" {
-                            self.lblMsgSent.text = "The User Has Already \nSent You a Friend Request!"
-                        } else if errorCode == "400-6" {
-                            self.lblMsgSent.text = "Friend Request Sent \nFail!" // [BLOCK]
-                            self.statusMode = .blocked
-                        } else {
-                            self.lblMsgSent.text = "Friend Request \nError!"
-                        }
+                    } else if status == 500 {
+                        self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
-                        self.lblMsgSent.text = "Request Resent \nFail!"
-                        print("[FMUserInfo Friend Request Resent Fail] - \(status) \(message!)")
+                        if let errorCode = JSON(message!)["error_code"].string {
+                            handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                self.lblMsgSent.text = errorMsg
+                            })
+                        }
                     }
                     self.btnOK.tag = self.OK
                     self.btnOK.setTitle("OK", for: .normal)
@@ -338,9 +348,14 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "The user has been \nblocked successfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
+                    } else if status == 500 {
+                        self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
-                        self.lblMsgSent.text = "Block User \nFail!"
-                        print("[Block Friend Fail] - \(status) \(message!)")
+                        if let errorCode = JSON(message!)["error_code"].string {
+                            handleErrorCode(.contact, errorCode, { (errorMsg) in
+                                self.lblMsgSent.text = errorMsg
+                            })
+                        }
                     }
                     self.btnOK.tag = self.OK
                     self.btnOK.setTitle("OK", for: .normal)
