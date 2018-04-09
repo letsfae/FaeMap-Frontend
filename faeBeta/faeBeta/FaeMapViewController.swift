@@ -155,6 +155,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Chat
     let faeChat = FaeChat()
     let faePush = FaePush()
+    var intFriendsRequested: Int = 0
     
     // Collections Managements
     var arrCtrlers = [UIViewController]()
@@ -665,7 +666,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 let messageJSON = JSON(message!)
                 if let friend_request_count = messageJSON["friend_request"].int {
                     if friend_request_count > 0 {
-                        ContactsViewController.loadReceivedFriendRequests()
+                        //ContactsViewController.loadReceivedFriendRequests()
                     }
                 }
                 if let chat_unread_count = messageJSON["chat"].int {

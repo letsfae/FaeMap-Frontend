@@ -58,7 +58,26 @@ class FaeAddUsernameCell: UITableViewCell {
     }
     
     func getFriendStatus(id: Int) {
-        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
+        if id == Key.shared.user_id {
+            friendStatus = .blocked_by
+        }
+        let realm = try! Realm()
+        if let user = realm.filterUser(id: id) {
+            if user.relation & IS_FRIEND == IS_FRIEND {
+                friendStatus = .accepted
+            } else if user.relation & FRIEND_REQUESTED == FRIEND_REQUESTED {
+                friendStatus = .pending
+            } else if user.relation & FRIEND_REQUESTED_BY == FRIEND_REQUESTED_BY {
+                friendStatus = .requested
+            }
+            if user.relation & BLOCKED == BLOCKED {
+                friendStatus = .blocked
+            } else if user.relation & BLOCKED_BY == BLOCKED_BY {
+                friendStatus = .blocked_by
+            }
+            setButtonImage()
+        }
+        /*FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
                 let relation = Relations(json: json)
@@ -66,7 +85,7 @@ class FaeAddUsernameCell: UITableViewCell {
             } else {
                 print("[get friend status fail] - \(status) \(message!)")
             }
-        }
+        }*/
     }
     
     func getFromRelations(id: Int, relation: Relations) {

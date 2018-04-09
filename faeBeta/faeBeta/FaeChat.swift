@@ -18,12 +18,12 @@ class FaeChat {
     var intLastSentIndex: Int = -1
     
     func updateFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, true, Key.shared.gender, true, "", ""])
         let realm = try! Realm()
         try! realm.write {
             realm.add(realmUser, update: true)
         }
-        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", ""])
+        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", true, "", true])
         let realmFaeAvatar = UserImage()
         realmFaeAvatar.user_id = "1"
         realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
@@ -226,7 +226,7 @@ class FaeChat {
                 getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
                     if status / 100 == 2 && result != nil {
                         let profileJSON = JSON(result!)
-                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, NO_RELATION, "", ""])
+                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, NO_RELATION, profileJSON["age"].stringValue, profileJSON["show_age"].boolValue, profileJSON["gender"].stringValue, profileJSON["show_gender"].boolValue, profileJSON["short_intro"].stringValue, ""])
                         try! realm.write {
                             realm.add(newUser, update: true)
                         }

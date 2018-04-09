@@ -30,7 +30,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     
     var userId: Int = 0 {
         didSet {
-            if userId > 0 { updateNameCard(withUserId: userId) }
+            if userId > 0 { updateNameCard(with: userId) }
         }
     }
     //var requestId: Int = -1
@@ -262,8 +262,8 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         */
     }
     
-    func updateNameCard(withUserId: Int) {
-        if withUserId == 1 {
+    func updateNameCard(with userId: Int) {
+        if userId == 1 {
             imgAvatar.image = UIImage(named: "faeAvatar")
             imgAvatar.isUserInteractionEnabled = false
             imgMoodAvatar.isHidden = true
@@ -273,25 +273,25 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
             btnOptions.isHidden = true
             return
         }
-        General.shared.avatarCached(userid: withUserId) { (avatarImage) in
+        General.shared.avatarCached(userid: userId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
         }
-        General.shared.avatar(userid: withUserId) { (avatarImage) in
+        General.shared.avatar(userid: userId) { (avatarImage) in
             self.imgAvatar.image = avatarImage
             self.imgAvatar.isUserInteractionEnabled = true
         }
-        General.shared.coverPhotoCached(userid: withUserId) { (coverPhoto) in
+        General.shared.coverPhotoCached(userid: userId) { (coverPhoto) in
             self.imgCover.image = coverPhoto
         }
-        General.shared.coverPhoto(userid: withUserId) { (coverPhoto) in
+        General.shared.coverPhoto(userid: userId) { (coverPhoto) in
             self.imgCover.image = coverPhoto
             self.imgCover.isUserInteractionEnabled = true
         }
-        uiviewPrivacy.loadGenderAge(id: withUserId) { (nickName, userName, shortIntro) in
+        uiviewPrivacy.loadGenderAge(id: userId) { (nickName, userName, shortIntro) in
             self.lblNickName.text = nickName
             self.lblUserName.text = shortIntro == "" ? "@" + userName : shortIntro
+            self.getFriendStatus(id: userId)
         }
-        getFriendStatus(id: withUserId)
     }
     
     func show(avatar: UIImage? = nil, completionHandler: @escaping () -> Void) {
@@ -547,23 +547,20 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     
     func getFriendStatus(id: Int) {
         statusMode = .defaultMode
-        
         let realm = try! Realm()
-        if let user = realm.filterUser(id: String(id)) {
+        if let user = realm.filterUser(id: id) {
             if user.relation & IS_FRIEND == IS_FRIEND {
                 statusMode = .accepted
             } else if user.relation & FRIEND_REQUESTED == FRIEND_REQUESTED {
                 statusMode = .pending
-                //requestId = Int(user.request_id)!
             } else if user.relation & FRIEND_REQUESTED_BY == FRIEND_REQUESTED_BY {
                 statusMode = .requested
-                //requestId = Int(user.request_id)!
             } else if user.relation & BLOCKED == BLOCKED || user.relation & BLOCKED_BY == BLOCKED_BY {
                 statusMode = .blocked
             }
             setButtonImage()
         } else {
-            FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
+            /*FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     let json = JSON(message!)
                     let relation = Relations(json: json)
@@ -580,7 +577,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
                 } else {
                     print("[get friend status fail] - \(status) \(message!)")
                 }
-            }
+            }*/
         }
     }
     

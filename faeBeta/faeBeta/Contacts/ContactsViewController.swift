@@ -81,12 +81,12 @@ struct Relations {
 class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate, ContactsRequestedDelegate {
     
     static func loadFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, Key.shared.gender])
+        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, true, Key.shared.gender, true, "", ""])
         let realm = try! Realm()
         try! realm.write {
             realm.add(realmUser, update: true)
         }
-        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", ""])
+        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", true, "", true])
         let realmFaeAvatar = UserImage()
         realmFaeAvatar.user_id = "1"
         realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
@@ -98,13 +98,32 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
-                    let user_id = user["friend_id"].stringValue
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["friend_user_name"].stringValue, user["friend_user_nick_name"].stringValue, IS_FRIEND, user["friend_user_age"].stringValue, user["friend_user_gender"].stringValue])
+                    RealmUser.getUpdated([user["friend_id"].stringValue, user["friend_user_name"].stringValue, user["friend_user_nick_name"].stringValue, user["friend_user_age"].stringValue, user["friend_user_gender"].stringValue, ""], with: IS_FRIEND)
+                    /*let user_id = user["friend_id"].stringValue
+                    let user_name = user["friend_user_name"].stringValue
+                    let display_name = user["friend_user_nick_name"].stringValue
+                    let age = user["friend_user_age"].stringValue
+                    let show_age = age != ""
+                    let gender = user["friend_user_gender"].stringValue
+                    let show_gender = gender != ""
                     let realm = try! Realm()
-                    try! realm.write {
-                        realm.add(realmUser, update: true)
-                    }
-                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                    if let userExist = realm.filterUser(id: user_id) {
+                        try! realm.write {
+                            userExist.user_name = user_name
+                            userExist.display_name = display_name
+                            userExist.relation = IS_FRIEND
+                            userExist.age = age
+                            userExist.show_age = show_age
+                            userExist.gender = gender
+                            userExist.show_gender = show_gender
+                        }
+                    } else {
+                        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user_name, display_name, IS_FRIEND, age, show_age, gender, show_gender])
+                        try! realm.write {
+                            realm.add(realmUser)
+                        }
+                        General.shared.avatar(userid: Int(user_id)!) {_ in }
+                    }*/
                 }
             } else if status == 500 { // TODO: error code undecided
                 
@@ -119,14 +138,15 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
-                    let user_id = user["request_user_id"].stringValue
+                    RealmUser.getUpdated([user["request_user_id"].stringValue, user["request_user_name"].stringValue, user["request_user_nick_name"].stringValue, user["request_user_age"].stringValue, user["request_user_gender"].stringValue, RealmChat.formatDate(str: user["created_at"].stringValue)], with: FRIEND_REQUESTED_BY)
+                    /*let user_id = user["request_user_id"].stringValue
                     let created_at = RealmChat.formatDate(str: user["created_at"].stringValue)
                     let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["request_user_name"].stringValue, user["request_user_nick_name"].stringValue, FRIEND_REQUESTED_BY, user["request_user_age"].stringValue, user["request_user_gender"].stringValue, "", created_at])
                     let realm = try! Realm()
                     try! realm.write {
                         realm.add(realmUser, update: true)
                     }
-                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                    General.shared.avatar(userid: Int(user_id)!) {_ in }*/
                 }
             } else if status == 500 {
                 
@@ -141,14 +161,15 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
-                    let user_id = user["requested_user_id"].stringValue
+                    RealmUser.getUpdated([user["requested_user_id"].stringValue, user["requested_user_name"].stringValue, user["requested_user_nick_name"].stringValue, user["requested_user_age"].stringValue, user["requested_user_gender"].stringValue, RealmChat.formatDate(str: user["created_at"].stringValue)], with: FRIEND_REQUESTED)
+                    /*let user_id = user["requested_user_id"].stringValue
                     let created_at = RealmChat.formatDate(str: user["created_at"].stringValue)
                     let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user["requested_user_name"].stringValue, user["requested_user_nick_name"].stringValue, FRIEND_REQUESTED, user["requested_user_age"].stringValue, user["requested_user_gender"].stringValue, "", created_at])
                     let realm = try! Realm()
                     try! realm.write {
                         realm.add(realmUser, update: true)
                     }
-                    General.shared.avatar(userid: Int(user_id)!) {_ in }
+                    General.shared.avatar(userid: Int(user_id)!) {_ in }*/
                 }
             } else if status == 500 {
                 
@@ -330,7 +351,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                     let display_name = json[i - 1]["friend_user_nick_name"].stringValue
                     let user_age = json[i - 1]["friend_user_age"].stringValue
                     let user_gender = json[i - 1]["friend_user_gender"].stringValue
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, IS_FRIEND, user_age, user_gender])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, IS_FRIEND, user_age, user_age != "", user_gender, user_gender != ""])
                     var boolModified: Bool = false
                     let realm = try! Realm()
                     if let current = realm.filterUser(id: user_id) {
@@ -396,7 +417,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                     let user_age = json[i - 1]["requested_user_age"].stringValue
                     let user_gender = json[i - 1]["requested_user_gender"].stringValue
                     let created_at = RealmChat.formatDate(str: json[i - 1]["created_at"].stringValue)
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED, user_age, user_gender, "", created_at])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED, user_age, user_age != "", user_gender, user_gender != "", "", created_at])
                     var boolModified: Bool = false
                     let realm = try! Realm()
                     if let current = realm.filterUser(id: user_id) {
@@ -450,7 +471,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                     let user_age = json[i - 1]["request_user_age"].stringValue
                     let user_gender = json[i - 1]["request_user_gender"].stringValue
                     let created_at = RealmChat.formatDate(str: json[i - 1]["created_at"].stringValue)
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED_BY, user_age, user_gender, "", created_at])
+                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, FRIEND_REQUESTED_BY, user_age, user_age != "", user_gender, user_gender != "", "", created_at])
                     var boolModified: Bool = false
                     let realm = try! Realm()
                     if let current = realm.filterUser(id: user_id) {
@@ -492,7 +513,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                 //self.tblContacts.reloadData()
                 self.setupScrollBar()
             case .update(_, let deletions, let insertions, let modifications):
-                felixprint("contact update")
+                //felixprint("contact update")
                 for index in insertions {
                     let insertedUser = self.resultsRealmFriends[index]
                     if insertedUser.relation & IS_FRIEND == IS_FRIEND {

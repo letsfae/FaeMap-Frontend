@@ -286,7 +286,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 if json.count != 0 {
                     for i in 0..<json.count {
                         let user_id = json[i]["user_id"].stringValue
-                        let user_name = json[i]["iser_name"].stringValue
+                        let user_name = json[i]["user_name"].stringValue
                         let realm = try! Realm()
                         if realm.filterUser(id: user_id) == nil {
                             let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, "", BLOCKED, "", "", "", ""])

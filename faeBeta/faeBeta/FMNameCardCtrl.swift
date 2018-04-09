@@ -52,7 +52,8 @@ extension FaeMapViewController: NameCardDelegate {
         if let _ = realm.filterUser(id: "\(id)") {
             navigationController?.pushViewController(vcChat, animated: true)
         } else {
-            getFromURL("users/\(id)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+            assert(false, "[Chat - check why this user is not in Realm]")
+            /*getFromURL("users/\(id)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
                 if status / 100 == 2 && result != nil {
                     let profileJSON = JSON(result!)
                     let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", String(Key.shared.user_id), "\(id)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, NO_RELATION, "", ""])
@@ -63,7 +64,7 @@ extension FaeMapViewController: NameCardDelegate {
                     }
                     self.navigationController?.pushViewController(vcChat, animated: true)
                 }
-            }
+            }*/
         }
 //        uiviewNameCard.hide() {
 //            self.mapGesture(isOn: true)

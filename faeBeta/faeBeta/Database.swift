@@ -40,7 +40,9 @@ class RealmUser: Object {
     @objc dynamic var display_name: String = ""
     @objc dynamic var relation: Int = 0
     @objc dynamic var age: String = ""
+    @objc dynamic var show_age: Bool = true
     @objc dynamic var gender: String = ""
+    @objc dynamic var show_gender: Bool = true
     @objc dynamic var short_intro: String = ""
     @objc dynamic var created_at: String = ""
     //let message = LinkingObjects(fromType: RealmMessage_v2.self, property: "members")
@@ -82,6 +84,36 @@ class RealmUser: Object {
         self.init()
         loginUserID_id =
     }*/
+    
+    static func getUpdated(_ user: [String], with relation: Int) {
+        let user_id = user[0]
+        let user_name = user[1]
+        let display_name = user[2]
+        let age = user[3]
+        let show_age = age != ""
+        let gender = user[4]
+        let show_gender = gender != ""
+        let created_at = user[5]
+        let realm = try! Realm()
+        if let userExist = realm.filterUser(id: user_id) {
+            try! realm.write {
+                userExist.user_name = user_name
+                userExist.display_name = display_name
+                userExist.relation = relation
+                userExist.age = age
+                userExist.show_age = show_age
+                userExist.gender = gender
+                userExist.show_gender = show_gender
+                userExist.created_at = created_at
+            }
+        } else {
+            let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", "\(Key.shared.user_id)", user_id, user_name, display_name, relation, age, show_age, gender, show_gender, "", created_at])
+            try! realm.write {
+                realm.add(realmUser)
+            }
+            General.shared.avatar(userid: Int(user_id)!) {_ in }
+        }
+    }
 }
 //ENDBryan
 
