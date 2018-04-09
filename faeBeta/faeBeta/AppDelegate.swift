@@ -108,7 +108,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate func configureRealm() {
         // Config Realm Database
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 10,
+            schemaVersion: 11,
             migrationBlock: { _, oldSchemaVersion in
                 //                migration.enumerateObjects(ofType: NewFaePin.className()) { oldObject, newObject in
                 if oldSchemaVersion < 9 { }

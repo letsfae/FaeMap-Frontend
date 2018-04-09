@@ -198,7 +198,11 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
                         let json = JSON(message!)
                         let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
                         let realm = try! Realm()
-                        let user = RealmUser(value: ["\(Key.shared.user_id)_\(userId))", "\(Key.shared.user_id)", "\(userId)", json["user_name"].stringValue, json["nick_name"].stringValue, NO_RELATION, json["age"].stringValue, json["gender"].stringValue, json["short_intro"].stringValue])
+                        var relation = NO_RELATION
+                        if let userExist = realm.filterUser(id: "\(userId)") {
+                            relation = userExist.relation
+                        }
+                        let user = RealmUser(value: ["\(Key.shared.user_id)_\(userId))", "\(Key.shared.user_id)", "\(userId)", json["user_name"].stringValue, json["nick_name"].stringValue, relation, json["age"].stringValue, json["show_age"].stringValue, json["gender"].stringValue, json["show_gender"].stringValue, json["short_intro"].stringValue])
                         try! realm.write {
                             realm.add(user, update: true)
                         }

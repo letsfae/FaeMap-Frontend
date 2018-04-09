@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 class FaeGenderView: UIView {
     
@@ -59,14 +60,27 @@ class FaeGenderView: UIView {
                     return
                 }
                 let profileInfo = JSON(unwrapMessage)
+                let display_name = profileInfo["nick_name"].stringValue
+                let user_name = profileInfo["user_name"].stringValue
                 let canShowGender = profileInfo["show_gender"].boolValue
                 let gender = profileInfo["gender"].stringValue
                 let canShowAge = profileInfo["show_age"].boolValue
                 let age = profileInfo["age"].stringValue
+                let short_intro = profileInfo["short_intro"].stringValue
+                let realm = try! Realm()
+                var relation = NO_RELATION
+                if let userExist = realm.filterUser(id: id) {
+                    relation = userExist.relation
+                }
+                let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id))", "\(Key.shared.user_id)", "\(id)", user_name, display_name, relation, age, canShowAge, gender, canShowGender, short_intro])
+                try! realm.write {
+                    realm.add(newUser, update: true)
+                }
                 self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
-                completion(profileInfo["nick_name"].stringValue, profileInfo["user_name"].stringValue, profileInfo["short_intro"].stringValue)
+                completion(display_name, user_name, short_intro)
             })
         }
+        
     }
     
     fileprivate func showGenderAge(showGender: Bool, gender: String, showAge: Bool, age: String) {

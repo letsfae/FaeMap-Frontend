@@ -103,6 +103,10 @@ extension Realm {
         return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", "\(Key.shared.user_id)", id).first
     }
     
+    func filterUser(id: Int) -> RealmUser? {
+        return self.filterUser(id: "\(id)")
+    }
+    
     func filterFriends() -> Results<RealmUser> {
         return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation != %@", "\(Key.shared.user_id)", NO_RELATION).sorted(byKeyPath: "display_name")
     }
