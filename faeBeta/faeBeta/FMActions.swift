@@ -77,8 +77,8 @@ extension FaeMapViewController {
         mapGesture(isOn: true)
         deselectAllAnnotations()
         placeClusterManager.isForcedRefresh = true
-        placeClusterManager.removeAnnotations(placesFromSearch) {
-            self.placesFromSearch.removeAll(keepingCapacity: true)
+        placeClusterManager.removeAnnotations(pinsFromSearch) {
+            self.pinsFromSearch.removeAll(keepingCapacity: true)
             self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: {
                 self.placeClusterManager.isForcedRefresh = false
             })
@@ -179,6 +179,11 @@ extension FaeMapViewController {
         case .pinDetail:
             break
         case .collection:
+            placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
+            tblPlaceResult.hide()
+            btnTapToShowResultTbl.alpha = 0
+            btnTapToShowResultTbl.tag = 1
+            btnTapToShowResultTbl.sendActions(for: .touchUpInside)
             animateMainItems(show: false, animated: boolFromMap)
             if boolFromMap == false {
                 boolFromMap = true
@@ -200,9 +205,13 @@ extension FaeMapViewController {
         PLACE_ENABLE = true
         mapMode = .normal
         faeMapView.blockTap = false
-        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: nil)
+        placeClusterManager.isForcedRefresh = true
+        placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
+            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: {
+                self.placeClusterManager.isForcedRefresh = false
+            })
+        })
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
-        placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
         arrExpPlace.removeAll()
         clctViewMap.reloadData()
     }
