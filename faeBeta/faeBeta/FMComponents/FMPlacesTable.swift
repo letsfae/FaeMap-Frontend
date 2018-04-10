@@ -410,7 +410,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         groupLastSelected.removeAll()
         altitude = 0
         var groupPlaces = [PlacePin]()
-        for i in 0..<places.count-1 {
+        for i in 0..<places.count {
             let place = places[i]
             if numbered {
                 place.name = "\(i+1). " + place.name
