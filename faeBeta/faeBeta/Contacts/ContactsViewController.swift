@@ -96,21 +96,21 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
     var contactStore = CNContactStore()
     
     // JustinHe.swift variable declaration for UI objects
-    var arrFriends: [Friends] = []
+    //var arrFriends: [Friends] = []
     var arrRealmFriends: [RealmUser] = []
     var arrDeletedFriendsIDs: [String] = []
     var arrAddedFriendsIDs: [String] = []
-    var arrReceivedRequests: [Friends] = []
+    //var arrReceivedRequests: [Friends] = []
     var arrRealmReceivedRequests: [RealmUser] = []
     var arrDeletedReceived: [String] = []
-    var arrRequested: [Friends] = []
+    //var arrRequested: [Friends] = []
     var arrRealmRequested: [RealmUser] = []
     var arrDeletedRequested: [String] = []
     var arrFollowers: [Follows] = []
     var arrFollowees: [Follows] = []
 
     var tblContacts: UITableView!
-    var filtered: [Friends] = []
+    //var filtered: [Friends] = []
     var filteredRealm: [RealmUser] = []
     var filteredFollows: [Follows] = []
     var schbarContacts: FaeSearchBarTest!
@@ -286,7 +286,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
 //            self.arrFriends.sort{ $0.displayName < $1.displayName }
 //            self.countFriends = self.arrFriends.count
 //            self.tblContacts.reloadData()
-            guard let prefix = self.arrFriends.first?.displayName else { return }
+            guard let prefix = self.arrRealmFriends.first?.display_name else { return }
             self.faeScrollBar?.setPrefixLable((prefix as NSString).substring(to: 1))
             //self.setupScrollBar()
         }
@@ -357,7 +357,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
         }
         arrRealmReceivedRequests.sort { $0.created_at < $1.created_at }
         apiCalls.getFriendRequests() {(status: Int, message: Any?) in
-            self.arrReceivedRequests = []
+            //self.arrReceivedRequests = []
             let json = JSON(message!)
             if json.count != 0 {
                 for i in 1...json.count {

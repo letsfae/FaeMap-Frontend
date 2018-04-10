@@ -250,7 +250,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                     Key.shared.userLastname = self.lName!
                     self.delegate?.updateInfo(target: "name")
                     self.navigationController?.popViewController(animated: true)
-                } else {
+                } else { // TODO: error code undecided
                     print("Fail to update name")
                 }
                 self.indicatorView.stopAnimating()
@@ -268,7 +268,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                     Key.shared.userBirthday = dateString
                     self.delegate?.updateInfo(target: "birth")
                     self.navigationController?.popViewController(animated: true)
-                } else {
+                } else { // TODO: error code undecided
                     print("Fail to update birthday")
                 }
                 self.indicatorView.stopAnimating()
@@ -281,7 +281,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                     Key.shared.gender = self.gender!
                     self.delegate?.updateInfo(target: "gender")
                     self.navigationController?.popViewController(animated: true)
-                } else {
+                } else { // TODO: error code undecided
                     print("Fail to update gender")
                 }
                 self.indicatorView.stopAnimating()
@@ -295,7 +295,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                     vc.oldPassword = self.textPswd.text!
                     Key.shared.userPassword = self.textPswd.text!
                     self.navigationController?.pushViewController(vc, animated: true)
-                } else {
+                } else { // TODO: error code undecided
+                    // 401-1 wrong password
                     self.lblWrongPswd.isHidden = false
                 }
                 self.indicatorView.stopAnimating()
@@ -322,15 +323,15 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
                                 vc.boolUpdateEmail = true
                                 vc.strEmail = self.textNewEmail.text!
                                 self.navigationController?.pushViewController(vc, animated: true)
-                            } else {
+                            } else { // TODO: error code undecided
                                 print("[Update Email Fail] \(status) \(message!)")
                             }
                             self.indicatorView.stopAnimating()
                         }
                     }
-                } else {
+                } else { // TODO: error code undecided
                     self.indicatorView.stopAnimating()
-                   print("[Check Email Existence Fail] \(status) \(message!)")
+                    print("[Check Email Existence Fail] \(status) \(message!)")
                 }
             }
         default: break

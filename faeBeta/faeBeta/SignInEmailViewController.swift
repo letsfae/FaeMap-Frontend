@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class SignInEmailViewController: UIViewController {
     enum EnterEmailMode {
@@ -156,15 +157,26 @@ class SignInEmailViewController: UIViewController {
         //self.view.endEditing(true)
 
         faeUser.whereKey("email", value: txtEmail.text!)
-        faeUser.sendCodeToEmail{ (statusCode, result) in
-            if(statusCode / 100 == 2 ) {
+        faeUser.resetPassword{ (statusCode, result) in
+            if statusCode / 100 == 2 {
                 self.setupEnteringVerificationCode()
-            }
-            else {
-                self.lblInfo.alpha = 1
+            } else if statusCode == 500 {
+                self.setResetResult("Internal Service Error!")
+            } else { // TODO: error code done
+                let messageJSON = JSON(result!)
+                if let error_code = messageJSON["error_code"].string {
+                    handleErrorCode(.auth, error_code, { (prompt) in
+                        self.setResetResult(prompt)
+                    })
+                }
             }
             self.indicatorView.stopAnimating()
         }
+    }
+    
+    func setResetResult(_ prompt: String) {
+        lblInfo.text = prompt
+        lblInfo.alpha = 1
     }
     
     func addObservers() {

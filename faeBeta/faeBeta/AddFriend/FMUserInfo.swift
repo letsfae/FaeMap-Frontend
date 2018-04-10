@@ -51,7 +51,7 @@ class FMUserInfo: UIViewController {
     var lblContent: UILabel!
     var uiviewCardPrivacy: FaeGenderView!
     let faeContact = FaeContact()
-    var requestId: Int = -1
+    //var requestId: Int = -1
     
     let ADD_FRIEND_ACT = 1
     let FOLLOW_ACT = 2
@@ -508,11 +508,11 @@ class FMUserInfo: UIViewController {
                         for i in 0..<json.count {
                             print("json request_id \(json[i]["requested_user_id"].intValue)")
                             if json[i]["requested_user_id"].intValue == self.userId {
-                                self.requestId = json[i]["friend_request_id"].intValue
+                                //self.requestId = json[i]["friend_request_id"].intValue
                                 break
                             }
                         }
-                        self.faeContact.withdrawFriendRequest(requestId: String(self.requestId)) {(status: Int, message: Any?) in
+                        self.faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                             if status / 100 == 2 {
                                 self.lblFriendSent.text = "Request Withdraw Successfully!"
                                 self.statusMode = .defaultMode

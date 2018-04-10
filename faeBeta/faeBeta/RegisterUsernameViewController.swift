@@ -133,6 +133,14 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                             self.lblError.textColor = UIColor._2499090()
                         }
                     }
+                } else {
+                    let messageJSON = JSON(message!)
+                    if let error_code = messageJSON["error_code"].string {
+                        handleErrorCode(.auth, error_code, { (prompt) in
+                            // handle
+                            felixprint("\(error_code)")
+                        })
+                    }
                 }
             })
         }

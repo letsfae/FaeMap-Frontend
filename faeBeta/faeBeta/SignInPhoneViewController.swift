@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol SignInPhoneDelegate: class {
     func backToContacts()
@@ -181,6 +182,12 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         view.bringSubview(toFront: indicatorView)
     }
     
+    func setRequestResult(_ prompt: String) {
+        lblCannotFind.text = prompt
+        lblCannotFind.textColor = UIColor._2499090()
+        lblCannotFind.alpha = 1
+    }
+    
     @objc func actionSendCode() {
         indicatorView.startAnimating()
         self.view.endEditing(true)
@@ -190,36 +197,53 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                 print("[UPDATE PHONE] \(status) \(message!)")
                 if status / 100 == 2 {
                     self.setupEnteringVerificationCode()
-                } else {
-                    self.lblCannotFind.text = "The phone number is invalid"
-                    self.lblCannotFind.textColor = UIColor._2499090()
+                } else if status == 500 {
+                    self.setRequestResult("Internal Service Error!")
+                } else { // TODO: error code done
+                    // no 400 error for now
+                    /*let messageJSON = JSON(message!)
+                    if let error_code = messageJSON["error_code"].string {
+                        if error_code == "" {
+                            self.lblCannotFind.text = "The phone number is invalid"
+                            self.lblCannotFind.textColor = UIColor._2499090()
+                        }
+                    }*/
                 }
                 self.indicatorView.stopAnimating()
             }
         } else {
             user.checkPhoneExistence{(status: Int, message: Any?) in
                 if status / 100 == 2 {
-                    if let numbers = message as? NSArray {
-                        if numbers.count == 0 {
-                            self.indicatorView.stopAnimating()
-                            // this number has no linked account
-                            self.lblCannotFind.alpha = 1
-                        } else {
-                            self.user.whereKey("phone", value: "(" + self.phoneCode + ")" + self.phoneNumber)
-                            self.user.sendCodeToEmail {(status: Int, message: Any?) in
-                                if status / 100 == 2 {
-                                    self.setupEnteringVerificationCode()
-                                } else {
-                                    print("[SendCodeToPhone Fail] \(status) \(message!)")
+                    let phoneJSON = JSON(message!)
+                    if phoneJSON.count == 0 {
+                        self.indicatorView.stopAnimating()
+                        self.setRequestResult("We could’t find an account linked \nwith this Phone Number!")
+                    } else {
+                        self.user.whereKey("phone", value: "(" + self.phoneCode + ")" + self.phoneNumber)
+                        self.user.whereKey("user_name", value: "username23") //TODO jichao: username
+                        self.user.resetPassword {(status: Int, message: Any?) in
+                            if status / 100 == 2 {
+                                self.setupEnteringVerificationCode()
+                            } else if status == 500 {
+                                self.setRequestResult("Internal Service Error!")
+                            } else { // TODO: error code undecided
+                                let messageJSON = JSON(message!)
+                                if let error_code = messageJSON["error_code"].string {
+                                    handleErrorCode(.auth, error_code, { (prompt) in
+                                        self.setRequestResult(prompt)
+                                    }, "resetByPhone")
                                 }
-                                self.indicatorView.stopAnimating()
+                                print("[SendCodeToPhone Fail] \(status) \(message!)")
                             }
+                            self.indicatorView.stopAnimating()
                         }
                     }
-                } else {
+                } else if status == 500 { // TODO: error code done
+                    self.setRequestResult("Internal Service Error!")
                     self.indicatorView.stopAnimating()
                     print("checkPhoneNumExist failed")
-                }
+                    // internal service error
+                } // no 400 error for now
             }
         }
     }
@@ -250,6 +274,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
             btnSendCode.isEnabled = false
             btnSendCode.backgroundColor = UIColor._255160160()
         }
+        lblCannotFind.alpha = 0
     }
     
     func deleteAll() {

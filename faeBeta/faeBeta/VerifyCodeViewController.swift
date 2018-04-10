@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import SwiftyJSON
 
 @objc protocol VerifyCodeDelegate {
     @objc optional func verifyPhoneSucceed()
@@ -275,7 +275,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             print("[UPDATE PHONE] \(status) \(message!)")
             if status / 100 == 2 {
                 
-            } else {
+            } else {// TODO: error code undecided
                 
             }
             self.indicatorView.stopAnimating()
@@ -326,6 +326,15 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
+    func setVerifyResult(_ prompt: String, resetCodeView isReset: Bool = true) {
+        lblTitle.text = prompt
+        if isReset {
+            for _ in 0..<6 { verificationCodeView.addDigit(-1) }
+            btnContinue.isEnabled = false
+            btnContinue.backgroundColor = UIColor._255160160()
+        }
+    }
+    
     @objc func actionVerifyCode(_ sender: UIButton) {
         indicatorView.startAnimating()
         if enterMode == .email {
@@ -343,13 +352,15 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                         controller.email = self.strEmail
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
-                    } else {
-                        for _ in 0..<6 {
-                            _ = self.verificationCodeView.addDigit(-1)
+                    } else if statusCode == 500 {
+                        self.setVerifyResult("Internal Service Error!", resetCodeView: false)
+                    } else { // TODO: error code undecided, 403-4 time out
+                        let resultJSON = JSON(result!)
+                        if let error_code = resultJSON["error_code"].string {
+                            handleErrorCode(.auth, error_code, { (prompt) in
+                                self.setVerifyResult(prompt)
+                            })
                         }
-                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                        self.btnContinue.isEnabled = false
-                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
                     self.indicatorView.stopAnimating()
                 }
@@ -379,13 +390,15 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             nextRegister.faeUser = self.faeUser
                             self.navigationController?.pushViewController(nextRegister, animated: false)
                         }
-                    } else {
-                        for _ in 0..<6 {
-                            _ = self.verificationCodeView.addDigit(-1)
+                    } else if status == 500 {
+                        self.setVerifyResult("Internal Service Error!", resetCodeView: false)
+                    } else { // TODO: error code done
+                        let messageJSON = JSON(message!)
+                        if let error_code = messageJSON["error_code"].string {
+                            handleErrorCode(.auth, error_code, { (prompt) in
+                                self.setVerifyResult(prompt)
+                            })
                         }
-                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                        self.btnContinue.isEnabled = false
-                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
                     self.indicatorView.stopAnimating()
                 }
@@ -408,13 +421,15 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             nextRegister.faeUser = self.faeUser
                             self.navigationController?.pushViewController(nextRegister, animated: false)
                         }
-                    } else {
-                        for _ in 0..<6 {
-                            _ = self.verificationCodeView.addDigit(-1)
+                    } else if status == 500 {
+                        self.setVerifyResult("Internal Service Error!", resetCodeView: false)
+                    } else { // TODO: error code undecided
+                        let messageJSON = JSON(message!)
+                        if let error_code = messageJSON["error_code"].string {
+                            handleErrorCode(.auth, error_code, { (prompt) in
+                                self.setVerifyResult(prompt)
+                            })
                         }
-                        self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                        self.btnContinue.isEnabled = false
-                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
                     self.indicatorView.stopAnimating()
                 }
@@ -450,17 +465,20 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
                             self.dismiss(animated: false)
                         default: break
                         }
-                    } else {
-                        for _ in 0..<6 {
-                            _ = self.verificationCodeView.addDigit(-1)
+                    } else if status == 500 {
+                        self.setVerifyResult("Internal Service Error!", resetCodeView: false)
+                    } else { // TODO: error code undecided, error message
+                        let messageJSON = JSON(message!)
+                        if let error_code = messageJSON["error_code"].string {
+                            handleErrorCode(.auth, error_code, { (prompt) in
+                                self.setVerifyResult(prompt)
+                            })
+                                /*if self.enterPhoneMode == .contacts {
+                                    self.lblTitle.text = "Oops... That's not the right\ncode. Please try again!"
+                                } else {
+                                    self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
+                                }*/
                         }
-                        if self.enterPhoneMode == .contacts {
-                            self.lblTitle.text = "Oops... That's not the right\ncode. Please try again!"
-                        } else {
-                            self.lblTitle.text = "That's an Incorrect Code!\n Please Try Again!"
-                        }
-                        self.btnContinue.isEnabled = false
-                        self.btnContinue.backgroundColor = UIColor._255160160()
                     }
                     self.indicatorView.stopAnimating()
                 }
@@ -503,7 +521,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
     }
     
     @objc func resendVerificationCode() {
-        if enterMode == .email {
+        if enterMode == .email { // TODO: error code undecided
             postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
         } else {
             actionSendCode()
