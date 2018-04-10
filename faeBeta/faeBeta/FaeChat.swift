@@ -134,6 +134,71 @@ class FaeChat {
         
     }
     
+    static func sendContactMessage(to userId: String, with message: String) {
+        postToURL("chats_v2", parameter: ["receiver_id": userId, "message": message, "type": "customize"], authentication: Key.shared.headerAuthentication(), completion: { statusCode, result in
+            if statusCode / 100 == 2 {
+                if (result as? NSDictionary) != nil {
+                    felixprint("\(statusCode) \(String(describing: result))")
+                }
+            } else if statusCode == 500 {
+                
+            } else { // TODO: error code undecided
+                print("failed")
+            }
+        })
+    }
+    
+    func handleFriendRelation(with userId: String, on message: String, time: String) {
+        switch message {
+        case "send friend request":
+            FaeUser().getUserCard(String(userId)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    let json = JSON(message!)
+                    let realm = try! Realm()
+                    let user = RealmUser(value: ["\(Key.shared.user_id)_\(userId)", "\(Key.shared.user_id)", "\(userId)", json["user_name"].stringValue, json["nick_name"].stringValue, FRIEND_REQUESTED_BY, json["age"].stringValue, json["show_age"].boolValue, json["gender"].stringValue, json["show_gender"].boolValue, json["short_intro"].stringValue, RealmChat.formatDate(str: time)])
+                    try! realm.write {
+                        realm.add(user, update: true)
+                    }
+                } else {
+                    print("[get user name card fail] \(status) \(message!)")
+                }
+            }
+        case "resend friend request":
+            let realm = try! Realm()
+            if let user = realm.filterUser(id: userId) {
+                try! realm.write {
+                    user.created_at = RealmChat.formatDate(str: time)
+                }
+            }
+        case "withdraw friend request", "ignore friend request", "remove friend":
+            let realm = try! Realm()
+            if let user = realm.filterUser(id: userId) {
+                try! realm.write {
+                    user.relation = NO_RELATION
+                }
+            }
+        case "accept friend request":
+            let realm = try! Realm()
+            if let user = realm.filterUser(id: userId) {
+                try! realm.write {
+                    user.relation = IS_FRIEND
+                }
+            }
+        case "block":
+            let realm = try! Realm()
+            if let user = realm.filterUser(id: userId) {
+                try! realm.write {
+                    if user.relation & IS_FRIEND == IS_FRIEND {
+                        user.relation |= BLOCKED_BY
+                    } else {
+                        user.relation = BLOCKED_BY
+                    }
+                }
+            }
+        default: break
+        }
+    }
+    
     func getMessageFromServer() {
         getFromURL("chats_v2/unread", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             /*
@@ -178,6 +243,10 @@ class FaeChat {
                                             for unreadMessage in unreadMessages {
                                                 if let message = unreadMessage as? NSDictionary {
                                                     if chat_id == 1 { break }
+                                                    if message["type"] as! String != "text" {
+                                                        self.handleFriendRelation(with: "\(chat_id)", on: message["message"] as! String, time: message["message_timestamp"] as! String)
+                                                        return
+                                                    }
                                                     self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
                                                 }
                                             }

@@ -191,6 +191,9 @@ class FriendOperationFromContactsViewController: UIViewController {
                             user.created_at = dateFormatter.string(from: Date())
                         }
                     }
+                    
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "send friend request")
+                    
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -235,6 +238,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                             user.created_at = ""
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "accept friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -278,6 +282,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                             user.created_at = ""
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "ignore friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -333,6 +338,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                                 user.created_at = ""
                             }
                         }
+                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "withdraw friend request")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -361,6 +367,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                                 user.created_at = dateFormatter.string(from: Date())
                             }
                         }
+                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "resend friend request")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -393,6 +400,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                                 }
                             }
                         }
+                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "block")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {

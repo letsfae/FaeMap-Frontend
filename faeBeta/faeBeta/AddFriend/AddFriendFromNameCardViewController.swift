@@ -272,6 +272,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.created_at = dateFormatter.string(from: Date())
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "send friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -316,8 +317,8 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.created_at = ""
                         }
                     }
-                    
-                    print("[FMUserInfo Accept Request Successfully]")
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "accept friend request")
+                    //print("[FMUserInfo Accept Request Successfully]")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -345,6 +346,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.created_at = ""
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "ignore friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -408,6 +410,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.relation = NO_RELATION
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "remove friend")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -441,6 +444,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             }
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "block")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -469,6 +473,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.created_at = ""
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "withdraw friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -560,6 +565,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             user.created_at = dateFormatter.string(from: Date())
                         }
                     }
+                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "resend friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
