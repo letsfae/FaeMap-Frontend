@@ -40,7 +40,6 @@ class RealmUser: Object {
     @objc dynamic var relation: Int = 0
     @objc dynamic var age: String = ""
     @objc dynamic var gender: String = ""
-    @objc dynamic var request_id: String = ""
     @objc dynamic var created_at: String = ""
     @objc dynamic var short_intro: String = ""
     //let message = LinkingObjects(fromType: RealmMessage_v2.self, property: "members")

@@ -18,29 +18,13 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     
     func protSaveName(txtName: String?) {
         strDisplayName = txtName
-        let user = FaeUser()
-        user.whereKey("nick_name", value: txtName!)
-        user.updateNameCard { (status:Int, objects:Any?) in
-            if status / 100 != 2 {
-                felixprint("update short intro failed")
-            } else {
-                self.uiviewNameCard.lblNickName.text = txtName
-                self.tblNameCard.reloadData()
-            }
-        }
+        uiviewNameCard.lblNickName.text = txtName
+        tblNameCard.reloadData()
     }
     
     func protSaveIntro(txtIntro: String?) {
         strShortIntro = txtIntro
-        let user = FaeUser()
-        user.whereKey("short_intro", value: txtIntro!)
-        user.updateNameCard { (status:Int, objects:Any?) in
-            if status / 100 != 2 {
-                felixprint("update short intro failed")
-            } else {
-                self.tblNameCard.reloadData()
-            }
-        }
+        tblNameCard.reloadData()
     }
     
     var faeNavBar: FaeNavBar!

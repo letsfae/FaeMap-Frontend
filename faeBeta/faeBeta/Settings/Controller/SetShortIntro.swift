@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 protocol ViewControllerIntroDelegate: class {
     func protSaveIntro(txtIntro: String?)
@@ -19,6 +20,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     var lblTitle: UILabel!
     var lblPlaceholder: UILabel!
     var textView: UITextView!
+    var lblRequestResult: UILabel!
     var lblEditIntro: UILabel!
     var btnSave: UIButton!
     var boolWillDisappear: Bool = false
@@ -63,6 +65,14 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
             textView.text = strFieldText
             lblPlaceholder.isHidden = true
         }
+        
+        lblRequestResult = UILabel(frame: CGRect(x: 0, y: 230 + device_offset_top, width: screenWidth, height: 20))
+        lblRequestResult.center.x = screenWidth / 2
+        lblRequestResult.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblRequestResult.textColor = UIColor._2499090()
+        lblRequestResult.textAlignment = .center
+        view.addSubview(lblRequestResult)
+        lblRequestResult.isHidden = true
         
         let remainingCount = 30 - strFieldText.count
         
@@ -119,6 +129,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
             lblEditIntro.textColor = UIColor._138138138()
         }
         lblPlaceholder.isHidden = count != 0
+        lblRequestResult.isHidden = true
     }
     
     @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
@@ -127,12 +138,33 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         }
     }
     
+    func setRequestResult(_ prompt: String) {
+        lblRequestResult.text = prompt
+        lblRequestResult.isHidden = false
+    }
+    
     @objc func actionSaveIntro(_ sender: UIButton) {
-        delegate?.protSaveIntro(txtIntro: textView.text)
-        if let nav = navigationController {
-            nav.popViewController(animated: true)
-        } else {
-            dismiss(animated: true, completion: nil)
+        let user = FaeUser()
+        user.whereKey("short_intro", value: textView.text!)
+        user.updateNameCard { (status, message) in
+            if status / 100 == 2 { // TODO: error code undecided
+                self.delegate?.protSaveIntro(txtIntro: self.textView.text)
+                if let nav = self.navigationController {
+                    nav.popViewController(animated: true)
+                } else {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            } else if status == 500 {
+                self.setRequestResult("Internal Service Error!")
+            } else {
+                felixprint("update short intro failed")
+                let messageJSON = JSON(message!)
+                if let error_code = messageJSON["error_code"].string {
+                    handleErrorCode(.auth, error_code, { (prompt) in
+                        self.setRequestResult("Save Failed! Please try later!")
+                    })
+                }
+            }
         }
     }
     

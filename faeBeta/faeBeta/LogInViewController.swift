@@ -213,28 +213,26 @@ class LogInViewController: UIViewController {
                 let vcNext = InitialPageController()
                 self.navigationController?.pushViewController(vcNext, animated: true)
                 self.navigationController?.viewControllers = [vcNext]
-            } else {
-                // Vicky 07/12/2017  - 把使用error message的判断改为使用error code判断
+            } else if status == 500 {
+                self.setLoginResult("Internal Service Error!")
+            } else { // TODO: error code done
                 print("[LOGIN STATUS]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
-                
-                if status == 500 {
-                    self.setLoginResult("Internet Error!")
-                }
-                
                 let loginJSONInfo = JSON(message!)
-                if let errorCode = loginJSONInfo["error_code"].string {
-                    if errorCode == "404-3" {
+                if let error_code = loginJSONInfo["error_code"].string {
+                    handleErrorCode(.auth, error_code, { (prompt) in
+                        self.setLoginResult(prompt)
+                    }, "login")
+                    /*if error_code == "404-3" {
                         self.setLoginResult("Oops… Can’t find any Accounts\nwith this Username!")
-                    } else if errorCode == "401-1" {
+                    } else if error_code == "401-1" {
                         self.setLoginResult("That’s not the Correct Password!\nPlease Check your Password!")
-                    } else if errorCode == "401-2" {
+                    } else if error_code == "401-2" {
                         self.setLoginResult("Oops… This Email has not\nbeen linked to an Account.")
                     } else {
                         self.setLoginResult("Internet Error!")
-                    }
+                    }*/
                 }
                 self.indicatorActivity.stopAnimating()
-                // Vicky 07/12/2017 End
             }
         }
     }

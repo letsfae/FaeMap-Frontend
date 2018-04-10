@@ -1643,10 +1643,10 @@
 			isa = PBXGroup;
 			children = (
 				B0714E171D62534A00356705 /* LogInViewController.swift */,
-				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
 				B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */,
 				B38FE86D1F679C4000F3C83E /* SignInPhoneViewController.swift */,
 				B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */,
+				B0714E1F1D6253A600356705 /* SignInSupportNewPassViewController.swift */,
 			);
 			name = Login;
 			sourceTree = "<group>";
