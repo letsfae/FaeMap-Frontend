@@ -108,7 +108,16 @@ extension Realm {
     }
     
     func filterFriends() -> Results<RealmUser> {
-        return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation != %@", "\(Key.shared.user_id)", NO_RELATION).sorted(byKeyPath: "display_name")
+        //return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation != %@", "\(Key.shared.user_id)", NO_RELATION).sorted(byKeyPath: "display_name")
+        return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", IS_FRIEND).sorted(byKeyPath: "display_name")
+    }
+    
+    func filterReceivedFriendRequest() -> Results<RealmUser> {
+        return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", FRIEND_REQUESTED_BY).sorted(byKeyPath: "created_at", ascending: false)
+    }
+    
+    func filterSentFriendRequest() -> Results<RealmUser> {
+        return self.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", FRIEND_REQUESTED).sorted(byKeyPath: "created_at", ascending: false)
     }
 }
 
