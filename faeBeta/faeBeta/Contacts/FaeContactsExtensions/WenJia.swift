@@ -64,15 +64,14 @@ extension ContactsViewController {
     
     @objc func switchTabs(_ sender: UIButton) {
         var targetCenter: CGFloat = 0
-        if(sender.tag == 1) {
+        if sender.tag == 1 {
             cellStatus = 3
             btnRequested.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnRequested.setTitleColor(UIColor._2499090(), for: .normal)
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-Regular", size: 18)
             btnReceived.setTitleColor(UIColor._146146146(), for: .normal)
             targetCenter = btnRequested.center.x
-        }
-        else {
+        } else {
             cellStatus = 2
             btnReceived.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18)
             btnReceived.setTitleColor(UIColor._2499090(), for: .normal)

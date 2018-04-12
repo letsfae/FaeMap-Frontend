@@ -219,7 +219,7 @@ class FaeScrollBar: UIView {
     }
 }
 
-// MARK: extension to know whether the ScrollView is at the top or bottom
+// MARK: - extension to know whether the ScrollView is at the top or bottom
 extension UIScrollView {
     var isAtTop: Bool {
         return contentOffset.y <= verticalOffsetForTop

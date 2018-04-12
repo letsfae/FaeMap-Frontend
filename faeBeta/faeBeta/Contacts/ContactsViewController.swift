@@ -198,6 +198,10 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
     var btnNavBarMenu: UIButton!
     var contactStore = CNContactStore()
     
+    var realmFriends: Results<RealmUser>!
+    var realmReceivedRequests: Results<RealmUser>!
+    var realmSentRequests: Results<RealmUser>!
+    
     // JustinHe.swift variable declaration for UI objects
     //var arrFriends: [Friends] = []
     var arrRealmFriends: [RealmUser] = []
@@ -221,7 +225,7 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
     var uiviewBottomNav: UIView!
     var btnFFF: UIButton! // btnFFF switches to friends, following, followed.
     var btnRR: UIButton! // btnRR switches to requests, requested.
-    var cellStatus = 0 // 3 cases: 1st case is Contacts, 2nd is RecievedRequests, 3rd is Requested.
+    var cellStatus = 0 // 3 cases: 1st case is Contacts - 0, 2nd is RecievedRequests - 1, 3rd is Requested - 2.
                        // This is used to switch out cell types and cells in the main table (tblContacts)
     
     // attempting api calls to pull some information.
@@ -284,7 +288,8 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
         //setupScrollBar()
         view.backgroundColor = .white
         definesPresentationContext = true
-        observeOnFriendsChange()
+        //observeOnFriendsChange()
+        observeOnRelationChange()
     }
     
     deinit {
@@ -292,9 +297,13 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
     }
     
     func getFriendStatus() {
-        getFriendsList()
-        getSentRequests()
-        getReceivedRequests()
+        let realm = try! Realm()
+        realmFriends = realm.filterFriends()
+        realmReceivedRequests = realm.filterReceivedFriendRequest()
+        realmSentRequests = realm.filterSentFriendRequest()
+        //getFriendsList()
+        //getSentRequests()
+        //getReceivedRequests()
         
         /*apiCalls.getFollowees(userId: String(Key.shared.user_id)) {(status: Int, message: Any?) in
             self.arrFollowees = []
@@ -513,8 +522,9 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                 //self.tblContacts.reloadData()
                 self.setupScrollBar()
             case .update(_, let deletions, let insertions, let modifications):
+                break
                 //felixprint("contact update")
-                for index in insertions {
+                /*for index in insertions {
                     let insertedUser = self.resultsRealmFriends[index]
                     if insertedUser.relation & IS_FRIEND == IS_FRIEND {
                         self.arrRealmFriends.append(insertedUser)
@@ -586,7 +596,40 @@ class ContactsViewController: UIViewController, ContactsReceivedRequestsDelegate
                     for id in self.arrDeletedRequested {
                         self.arrRealmRequested = self.arrRealmRequested.filter() { $0.id != id }
                     }
-                }
+                }*/
+            case .error:
+                felixprint("error")
+            }
+        }
+    }
+    
+    func observeOnRelationChange() {
+        var tableDataSource: Results<RealmUser>!
+        if cellStatus == 1 {
+            tableDataSource = realmReceivedRequests
+        } else if cellStatus == 2 {
+            tableDataSource = realmSentRequests
+        } else {
+            tableDataSource = realmFriends
+        }
+        notificationToken?.invalidate()
+        guard let tableView = tblContacts else { return }
+        notificationToken = tableDataSource.observe { (changes: RealmCollectionChange) in
+            switch changes {
+            case .initial:
+                felixprint("contacts initial")
+                tableView.reloadData()
+                self.setupScrollBar()
+            case .update(_, let deletions, let insertions, let modifications):
+                guard let seachBar = self.schbarContacts else { break }
+                if self.cellStatus == 0 && seachBar.txtSchField.text != "" { break }
+                UIView.setAnimationsEnabled(false)
+                tableView.beginUpdates()
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableView.endUpdates()
+                UIView.setAnimationsEnabled(true)
             case .error:
                 felixprint("error")
             }

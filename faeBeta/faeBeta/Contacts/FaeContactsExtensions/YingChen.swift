@@ -96,7 +96,7 @@ extension ContactsViewController {
     fileprivate func updateFriendCount() {
         let attributedStr = NSMutableAttributedString()
         let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
-        let count = NSAttributedString(string: "(\(arrRealmFriends.count))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
+        let count = NSAttributedString(string: "(\(realmFriends.count))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
         attributedStr.append(strFriends)
         attributedStr.append(count)
         
@@ -105,13 +105,13 @@ extension ContactsViewController {
         let attributedStr2 = NSMutableAttributedString()
         if cellStatus == 1 {
             //countRequests = countReceived
-            countRequests = arrRealmReceivedRequests.count
+            countRequests = realmReceivedRequests.count
         } else if cellStatus == 2 {
             //countRequests = countSent
-            countRequests = arrRealmRequested.count
+            countRequests = realmSentRequests.count
         } else {
             //countRequests = countReceived + countSent
-            countRequests = arrRealmReceivedRequests.count + arrRealmRequested.count
+            countRequests = realmReceivedRequests.count + realmSentRequests.count
         }
         let strRequests = NSAttributedString(string: "Requests ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
         let strTotal = NSAttributedString(string: "(\(countRequests))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
@@ -120,7 +120,7 @@ extension ContactsViewController {
         
         lblBottom.attributedText = attributedStr2
         
-        imgDot.isHidden = arrRealmReceivedRequests.count == 0
+        imgDot.isHidden = realmReceivedRequests.count == 0
     }
     
     func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
