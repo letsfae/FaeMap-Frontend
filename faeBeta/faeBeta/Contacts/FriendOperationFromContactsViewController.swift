@@ -15,6 +15,8 @@ protocol FriendOperationFromContactsDelegate: class {
 }
 
 class FriendOperationFromContactsViewController: UIViewController {
+    
+    // MARK: - Properties
     weak var delegate: FriendOperationFromContactsDelegate?
     var uiviewChooseAction: UIView!
     var uiviewMsgSent: UIView!
@@ -50,7 +52,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     var statusMode: FriendStatus = .defaultMode
     var action: String = ""
     
-    // MARK: life cycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._107105105_a50()
@@ -62,14 +64,12 @@ class FriendOperationFromContactsViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    // MARK: setup UI
     fileprivate func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
         indicatorView.hidesWhenStopped = true
         indicatorView.color = UIColor._2499090()
-        
         view.addSubview(indicatorView)
         view.bringSubview(toFront: indicatorView)
     }
@@ -178,22 +178,15 @@ class FriendOperationFromContactsViewController: UIViewController {
             faeContact.sendFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
-                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: String(self.userId)) {
                         try! realm.write {
                             user.relation = FRIEND_REQUESTED
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.calendar = Calendar(identifier: .gregorian)
-                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
-                            user.created_at = dateFormatter.string(from: Date())
+                            user.created_at = RealmUser.formateTime(Date())
                         }
                     }
-                    
                     FaeChat.sendContactMessage(to: "\(self.userId)", with: "send friend request")
-                    
+                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -267,7 +260,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         }
     }
     
-    // MARK: actions
+    // MARK: - Button actions
     @objc func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
@@ -360,11 +353,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                         let realm = try! Realm()
                         if let user = realm.filterUser(id: "\(self.userId)") {
                             try! realm.write {
-                                let dateFormatter = DateFormatter()
-                                dateFormatter.calendar = Calendar(identifier: .gregorian)
-                                dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                                dateFormatter.dateFormat = "yyyyMMddhhmmss"
-                                user.created_at = dateFormatter.string(from: Date())
+                                user.created_at = RealmUser.formateTime(Date())
                             }
                         }
                         FaeChat.sendContactMessage(to: "\(self.userId)", with: "resend friend request")
@@ -419,7 +408,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         }
     }
     
-    // MARK: animations
+    // MARK: - Animations
     func animationActionView() {
         uiviewChooseAction.isHidden = true
         uiviewChooseAction.alpha = 0

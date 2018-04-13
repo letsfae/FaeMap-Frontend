@@ -38,6 +38,8 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         lblOption.textColor = UIColor._898989()
         lblOption.font = UIFont(name: "AvenirNext-Medium", size: 18)
         addSubview(lblOption)
+        addConstraintsWithFormat("H:|-63-[v0]-0-|", options: [], views: lblOption)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: lblOption)
         
         imgArrow = UIImageView()
         imgArrow.frame = CGRect(x: screenWidth - 25, y: 19, width: 8.57, height: 15)
@@ -50,12 +52,5 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-
-        
-        /* Joshua 06/16/17
-         put every single constraint at the end of each component, it is ok to put contraints for a group of components
-         */
-        addConstraintsWithFormat("H:|-63-[v0]-0-|", options: [], views: lblOption)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: lblOption)
     }
 }

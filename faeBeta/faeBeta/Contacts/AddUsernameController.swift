@@ -23,8 +23,9 @@ struct UserNameCard {
     }
 }
 
-class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
+class AddUsernameController: UIViewController {
     
+    // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var uiviewSchbar: UIView!
     var schbarUsernames: FaeSearchBarTest!
@@ -38,10 +39,8 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
     var indicatorView: UIActivityIndicatorView!
     
     var filtered = [UserNameCard]()
-    var arrRealmFriends = [RealmUser]()
-    var arrRealmReceivedRequests = [RealmUser]()
-    var arrRealmRequested = [RealmUser]()
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSearchTable()
@@ -51,24 +50,16 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         schbarUsernames.txtSchField.becomeFirstResponder()
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    func createActivityIndicator() {
-        indicatorView = UIActivityIndicatorView()
-        indicatorView.activityIndicatorViewStyle = .whiteLarge
-        indicatorView.center = view.center
-        indicatorView.hidesWhenStopped = true
-        indicatorView.color = UIColor._2499090()
-        
-        view.addSubview(indicatorView)
+    func loadNavBar() {
+        uiviewNavBar = FaeNavBar(frame: .zero)
+        view.addSubview(uiviewNavBar)
+        uiviewNavBar.rightBtn.isHidden = true
+        uiviewNavBar.loadBtnConstraints()
+        uiviewNavBar.lblTitle.text = "Add Username"
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
     }
     
     func loadSearchTable() {
-        /* Joshua 06/16/17
-         tblUsernames' height should be screenHeight - 65 - height of schbar
-         */
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
         schbarUsernames.txtSchField.placeholder = "Search Username"
@@ -82,10 +73,6 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         
         view.addSubview(uiviewSchbar)
         
-        /* Joshua 06/16/17
-         1. name components as short and easy-recoginized as possible
-         2. group each component for readability
-         */
         lblMyUsername = UILabel()
         lblMyUsername.textAlignment = .center
         lblMyUsername.text = "My Username:"
@@ -129,7 +116,7 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         tblUsernames.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
         tblUsernames.dataSource = self
         tblUsernames.delegate = self
-        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(self.tapOutsideToDismissKeyboard(_:)))
+        let tapToDismissKeyboard = UITapGestureRecognizer(target: self, action: #selector(tapOutsideToDismissKeyboard(_:)))
         tblUsernames.addGestureRecognizer(tapToDismissKeyboard)
         tblUsernames.register(FaeAddUsernameCell.self, forCellReuseIdentifier: "FaeAddUsernameCell")
         tblUsernames.isHidden = false
@@ -143,39 +130,89 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         imgGhost.image = #imageLiteral(resourceName: "ghostBubble")
         view.addSubview(imgGhost)
         imgGhost.isHidden = true // default hidden
+    }
+    
+    func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = view.center
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        view.addSubview(indicatorView)
+    }
+    
+    // MARK: - Button action & gesture action
+    @objc func actionGoBack(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+        schbarUsernames.txtSchField.resignFirstResponder()
+    }
+}
 
+// MARK: - UITableViewDataSource & UITableViewDelegate
+extension AddUsernameController: UITableViewDataSource, UITableViewDelegate  {
+    // UITableViewDataSource
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if schbarUsernames.txtSchField.text != "" {
+            tblUsernames.isHidden = false
+            if filtered.count == 0 { // this means no results.
+                imgGhost.isHidden = false
+            } else {
+                imgGhost.isHidden = true
+            }
+            return filtered.count
+        } else {
+            tblUsernames.isHidden = true
+            imgGhost.isHidden = true
+            return 0
+        }
     }
     
-    func loadNavBar() {
-        uiviewNavBar = FaeNavBar(frame: .zero)
-        view.addSubview(uiviewNavBar)
-        uiviewNavBar.rightBtn.isHidden = true
-        uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.lblTitle.text = "Add Username"
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
+        let user = filtered[indexPath.row]
+        if schbarUsernames.txtSchField.text != "" {
+            cell.indexPath = indexPath
+            cell.delegate = self
+            cell.setValueForCell(user: user)
+            cell.userId = user.userId
+            cell.getFriendStatus(id: cell.userId)
+        }
+        return cell
     }
     
-    // Vicky 07/28/17
-    // FaeSearchBarTestDelegate
+    // UITableViewDelegate
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 74
+    }
+}
+
+// MARK: - FaeSearchBarTestDelegate
+extension AddUsernameController: FaeSearchBarTestDelegate {
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {}
+    
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         schbarUsernames.txtSchField.becomeFirstResponder()
     }
+    
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
         if !boolSearched {
             filter(searchText: searchBar.txtSchField.text!)
         }
     }
+    
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         filter(searchText: "")
     }
-    // End of FaeSearchBarTestDelegate
     
+    // search on the input text
     func filter(searchText: String) {
         boolSearched = true
         filtered.removeAll()
         if searchText == "" {
-            self.tblUsernames.reloadData()
+            tblUsernames.reloadData()
             boolSearched = false
             return
         }
@@ -221,84 +258,10 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
     }
-    // End of Vicky 07/28/17
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if schbarUsernames.txtSchField.text != "" {
-            tblUsernames.isHidden = false
-            if filtered.count == 0 { // this means no results.
-                imgGhost.isHidden = false
-            } else {
-                imgGhost.isHidden = true
-            }
-            return filtered.count
-        } else {
-            tblUsernames.isHidden = true
-            imgGhost.isHidden = true
-            return 0
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FaeAddUsernameCell", for: indexPath) as! FaeAddUsernameCell
-        let user = filtered[indexPath.row]
-        if schbarUsernames.txtSchField.text != "" {
-            /*
-            cell.userId = user.userId
-            var findRes = false
-            if !findRes {
-                for friend in arrFriends {
-                    if friend.userId == cell.userId {
-                        cell.friendStatus = .accepted
-                        findRes = true
-                        break
-                    }
-                }
-            }
-            
-            if !findRes {
-                for friend in arrReceivedRequests {
-                    if friend.userId == cell.userId {
-                        cell.friendStatus = .requested
-                        cell.requestId = friend.requestId
-                        findRes = true
-                        break
-                    }
-                }
-            }
-            
-            if !findRes {
-                for friend in arrRequested {
-                    if friend.userId == cell.userId {
-                        cell.friendStatus = .pending
-                        cell.requestId = friend.requestId
-                        findRes = true
-                        break
-                    }
-                }
-            }
-            */
-            cell.indexPath = indexPath
-            cell.delegate = self
-            cell.setValueForCell(user: user)
-            cell.userId = user.userId
-            cell.getFriendStatus(id: cell.userId)
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 74
-    }
-    
-    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
-        schbarUsernames.txtSchField.resignFirstResponder()
-    }
+}
 
-    // MARK: FaeAddUsernameDelegate
+// MARK: - FaeAddUsernameDelegate
+extension AddUsernameController: FaeAddUsernameDelegate {
     func addFriend(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
@@ -348,8 +311,10 @@ class AddUsernameController: UIViewController, UITableViewDelegate, UITableViewD
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
     }
-    
-    // MARK: FriendOperationFromContactsDelegate
+}
+
+// MARK: - FriendOperationFromContactsDelegate
+extension AddUsernameController: FriendOperationFromContactsDelegate {
     func passFriendStatusBack(indexPath: IndexPath) {
         tblUsernames.reloadRows(at: [indexPath], with: .none)
     }

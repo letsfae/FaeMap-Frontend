@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, FaeSearchBarTestDelegate, NameCardDelegate, AddFriendFromNameCardDelegate {
+extension ContactsViewController {
     
     // MARK: Setup UI
     func loadSearchBar() {
@@ -36,7 +36,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         tblContacts.separatorStyle = .none
         tblContacts.showsVerticalScrollIndicator = false
         automaticallyAdjustsScrollViewInsets = false
-        tblContacts.addGestureRecognizer(setTapDismissDropdownMenu())
+        tblContacts.addGestureRecognizer(tapDismissGestureOnDropdownMenu())
   
         tblContacts.register(FaeContactsCell.self, forCellReuseIdentifier: "FaeContactsCell")
         tblContacts.register(FaeRequestedCell.self, forCellReuseIdentifier: "FaeRequestedCell")
@@ -46,7 +46,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     func loadTabView() {
         uiviewBottomNav = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
-        uiviewBottomNav.addGestureRecognizer(setTapDismissDropdownMenu())
+        uiviewBottomNav.addGestureRecognizer(tapDismissGestureOnDropdownMenu())
         view.addSubview(uiviewBottomNav)
         uiviewBottomNav.isHidden = true
         
@@ -55,8 +55,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewBottomNav.addSubview(line)
         
         btnFFF = UIButton()
-//        btnFFF.setImage(#imageLiteral(resourceName: "FFFunselected"), for: .normal)
-//        btnFFF.setImage(#imageLiteral(resourceName: "FFFselected"), for: .selected)
         btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSAttributedStringKey.foregroundColor: UIColor._146146146(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
         btnFFF.setAttributedTitle(NSAttributedString(string: "Received", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
         btnFFF.isSelected = true
@@ -67,8 +65,6 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewBottomNav.addConstraintsWithFormat("V:|-0-[v0]-\(device_offset_bot)-|", options: [], views: btnFFF)
         
         btnRR = UIButton()
-//        btnRR.setImage(#imageLiteral(resourceName: "RRunselected"), for: .normal)
-//        btnRR.setImage(#imageLiteral(resourceName: "RRselected"), for: .selected)
         btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSAttributedStringKey.foregroundColor: UIColor._146146146(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 18)!]), for: .normal)
         btnRR.setAttributedTitle(NSAttributedString(string: "Requested", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!]), for: .selected)
         btnRR.addTarget(self, action: #selector(pressbtnRR(button:)), for: .touchUpInside)
@@ -83,7 +79,37 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         uiviewNameCard.delegate = self
     }
     
-    // MARK: NameCardDelegate
+    // MARK: Bottom button functionalities
+    @objc func pressbtnFFF(button: UIButton) {
+        if btnRR.isSelected {
+            btnRR.isSelected = false
+            btnFFF.isSelected = true
+        }
+        cellStatus = 1
+        switchRealmObserverTarget()
+    }
+    
+    @objc func pressbtnRR(button: UIButton) {
+        if btnFFF.isSelected {
+            btnFFF.isSelected = false
+            btnRR.isSelected = true
+        }
+        cellStatus = 2
+        switchRealmObserverTarget()
+    }
+
+    func reloadAfterDelete() {
+        tblContacts.performUpdate({
+            self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
+        }) {
+            self.tblContacts.reloadData()
+            self.setupScrollBar()
+        }
+    }
+}
+
+// MARK: - NameCardDelegate
+extension ContactsViewController: NameCardDelegate {
     func openFaeUsrInfo() {
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
@@ -99,77 +125,34 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         vcChat.strChatId = "\(id)"
         navigationController?.pushViewController(vcChat, animated: true)
     }
-
+    
     func reportUser(id: Int) {
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
         present(reportPinVC, animated: true, completion: nil)
     }
-
+    
     func openAddFriendPage(userId: Int, status: FriendStatus) {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.contactsDelegate = self
         addFriendVC.userId = userId
-        //addFriendVC.requestId = requestId
         addFriendVC.statusMode = status
         addFriendVC.modalPresentationStyle = .overCurrentContext
         present(addFriendVC, animated: false)
     }
-    
-    func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
-        let vcChat = ChatViewController()
-        vcChat.arrUserIDs.append("\(Key.shared.user_id)")
-        vcChat.arrUserIDs.append("\(userId)")
-        navigationController?.pushViewController(vcChat, animated: true)
-    }
-    
-    // MARK: AddFriendFromNameCardDelegate
+}
+
+// MARK: - AddFriendFromNameCardDelegate
+extension ContactsViewController: AddFriendFromNameCardDelegate {
     func changeContactsTable(action: Int, userId: Int) {
-        print("changeContactsTable")
-        /*switch action {
-        case ACCEPT:
-            arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
-        case IGNORE:
-            arrRealmReceivedRequests.remove(at: indexPathGlobal.row)
-        case WITHDRAW:
-            arrRealmRequested.remove(at: indexPathGlobal.row)
-        case REMOVE:
-            arrRealmFriends.remove(at: indexPathGlobal.row)
-            self.uiviewNameCard.hide { }
-        case BLOCK:
-            arrRealmFriends.remove(at: indexPathGlobal.row)
-            self.uiviewNameCard.hide { }
-        default: break
-        }
-        self.reloadAfterDelete()*/
+        felixprint("changeContactsTable")
         uiviewNameCard.hide { }
     }
-    
-    // MARK: Bottom button functionalities
-    @objc func pressbtnFFF(button: UIButton) {
-        if btnRR.isSelected {
-            //getReceivedRequests()
-            btnRR.isSelected = false
-            btnFFF.isSelected = true
-        }
-        cellStatus = 1
-        //tblContacts.reloadData()
-        observeOnRelationChange()
-    }
-    
-    @objc func pressbtnRR(button: UIButton) {
-        if btnFFF.isSelected {
-            //getSentRequests()
-            btnFFF.isSelected = false
-            btnRR.isSelected = true
-        }
-        cellStatus = 2
-        //tblContacts.reloadData()
-        observeOnRelationChange()
-    }
-    
-    // MARK: FaeSearchBarTestDelegate
+}
+
+// MARK: - FaeSearchBarTestDelegate
+extension ContactsViewController: FaeSearchBarTestDelegate {
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         filter(searchText: searchText)
     }
@@ -186,18 +169,21 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         schbarContacts.txtSchField.resignFirstResponder()
     }
     
-    // MAKR: search on friend list
+    // helper - search on friend list
     func filter(searchText: String, scope: String = "All") {
         filteredRealm = realmFriends.filter({ ($0.display_name).lowercased().range(of: searchText.lowercased()) != nil })
         tblContacts.reloadData()
     }
-    
+}
+
+// MARK: - Received & Requested requests delegate
+extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequestedDelegate {
     // MARK: ContactsReceivedRequestsDelegate
     func refuseRequest(userId: Int, indexPath: IndexPath) {
         btnYes.tag = IGNORE
         indexPathGlobal = indexPath
         idGlobal = userId
-        self.chooseAnAction()
+        chooseAnAction()
     }
     
     func acceptRequest(userId: Int, indexPath: IndexPath) {
@@ -222,19 +208,132 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         showNoti(type: RESEND)
     }
     
+    // MARK: Contact actions
+    func animateWithdrawal(listType: Int) {
+        switch listType {
+        case WITHDRAW:
+            apiCalls.withdrawFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.lblNotificationText.text = "Request Withdraw \nSuccessfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: self.idGlobal) {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                            user.created_at = ""
+                        }
+                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "withdraw friend request")
+                    }
+                } else {
+                    self.lblNotificationText.text = "Request Withdraw \nFail!"
+                    print("[Contacts Request Withdraw Fail] - \(status) \(message!)")
+                }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
+            }
+            break
+        case BLOCK:
+            apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
+                if status / 100 == 2 {
+                    self.lblNotificationText.text = "The user has been \nblocked successfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: self.idGlobal) {
+                        try! realm.write {
+                            if user.relation & IS_FRIEND == IS_FRIEND {
+                                user.relation &= BLOCKED
+                            } else {
+                                user.relation = NO_RELATION
+                                user.created_at = ""
+                            }
+                        }
+                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "block")
+                    }
+                } else {
+                    self.lblNotificationText.text = "Block user \nFail!"
+                    print("[Contacts Block Fail] - \(status) \(message!)")
+                }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
+            }
+            break
+        case IGNORE:
+            apiCalls.ignoreFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
+                self.showNoti(type: self.IGNORE)
+                if status / 100 == 2 {
+                    self.lblNotificationText.text = "Ignore Request \nSuccessfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: self.idGlobal) {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                            user.created_at = ""
+                        }
+                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "ignore friend request")
+                    }
+                } else {
+                    self.lblNotificationText.text = "Ignore Request \nFail!"
+                    print("[Contacts Ignore Request Fail] - \(status) \(message!)")
+                }
+                self.indicatorView.stopAnimating()
+            }
+            break
+        case ACCEPT:
+            apiCalls.acceptFriendRequest(friendId: String(idGlobal)) { (status: Int, message: Any?) in
+                self.showNoti(type: self.ACCEPT)
+                if status / 100 == 2 {
+                    self.lblNotificationText.text = "Accept Request \nSuccessfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: self.idGlobal) {
+                        try! realm.write {
+                            user.relation = IS_FRIEND
+                            user.created_at = ""
+                        }
+                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "accept friend request")
+                    }
+                    print("[Contacts Accept Request Successfully]")
+                } else {
+                    self.lblNotificationText.text = "Accept Request \nFail!"
+                    print("[Contacts Accept Request Fail] - \(status) \(message!)")
+                }
+                self.indicatorView.stopAnimating()
+            }
+        case RESEND:
+            apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
+                if status / 100 == 2 {
+                    self.lblNotificationText.text = "Request Resent \nSuccessfully!"
+                    let realm = try! Realm()
+                    if let user = realm.filterUser(id: self.idGlobal) {
+                        try! realm.write {
+                            user.created_at = RealmUser.formateTime(Date())
+                        }
+                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "resend friend request")
+                    }
+                } else {
+                    self.lblNotificationText.text = "Request Resent \nFail!"
+                    print("[Contacts resend friend request fail]")
+                }
+                self.btnYes.setTitle("OK", for: .normal)
+                self.btnYes.tag = self.OK
+                self.indicatorView.stopAnimating()
+            }
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource & UITableViewDelegate
+extension ContactsViewController: UITableViewDataSource, UITableViewDelegate {
     // MARK: TableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if cellStatus == 1 {
-            //return arrRealmReceivedRequests.count
             return realmReceivedRequests.count
         } else if cellStatus == 2 {
-            //return arrRealmRequested.count
             return realmSentRequests.count
         } else {
             if schbarContacts.txtSchField.text != "" {
                 return filteredRealm.count
             } else {
-                //return arrRealmFriends.count
                 return realmFriends.count
             }
         }
@@ -243,6 +342,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if cellStatus == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeReceivedCell", for: indexPath as IndexPath) as! FaeReceivedCell
+            //if indexPath.row > realmReceivedRequests.count { return cell }
             let realmUser = realmReceivedRequests[indexPath.row]
             cell.userId = Int(realmUser.id)!
             if let data = realmUser.avatar?.userSmallAvatar {
@@ -258,9 +358,9 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             return cell
         } else if cellStatus == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FaeRequestedCell", for: indexPath as IndexPath) as! FaeRequestedCell
+            //if indexPath.row > realmSentRequests.count { return cell }
             let realmUser = realmSentRequests[indexPath.row]
             cell.userId = Int(realmUser.id)!
-            //cell.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
             if let data = realmUser.avatar?.userSmallAvatar {
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
@@ -278,6 +378,7 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
             if schbarContacts.txtSchField.text != "" {
                 realmUser = filteredRealm[indexPath.row]
             } else {
+                //if indexPath.row > realmFriends.count { return cell }
                 realmUser = realmFriends[indexPath.row]
             }
             if let data = realmUser.avatar?.userSmallAvatar {
@@ -298,10 +399,8 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
         indexPathGlobal = indexPath
         if cellStatus == 1 {
             uiviewNameCard.userId = Int(realmReceivedRequests[indexPath.row].id)!
-            //uiviewNameCard.requestId = Int(arrRealmReceivedRequests[indexPath.row].request_id)!
         } else if cellStatus == 2 {   // requested
             uiviewNameCard.userId = Int(realmSentRequests[indexPath.row].id)!
-            //uiviewNameCard.requestId = Int(arrRealmRequested[indexPath.row].request_id)!
         } else {
             if schbarContacts.txtSchField.text != "" {
                 uiviewNameCard.userId = Int(filteredRealm[indexPath.row].id)!
@@ -314,123 +413,5 @@ extension ContactsViewController: UITableViewDelegate, UITableViewDataSource, Fa
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
-    }
-    
-    // MARK: Contact actions
-    func animateWithdrawal(listType: Int) {
-        switch listType {
-        case WITHDRAW:
-            apiCalls.withdrawFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblNotificationText.text = "Request Withdraw \nSuccessfully!"
-                    let realm = try! Realm()
-                    try! realm.write {
-                        self.realmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
-                        self.realmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                    }
-                    //self.realmReceivedRequests.remove(at: self.indexPathGlobal.row)
-                    //self.reloadAfterDelete()
-                    FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "withdraw friend request")
-                } else {
-                    self.lblNotificationText.text = "Request Withdraw \nFail!"
-                    print("[Contacts Request Withdraw Fail] - \(status) \(message!)")
-                }
-                self.btnYes.setTitle("OK", for: .normal)
-                self.btnYes.tag = self.OK
-                self.indicatorView.stopAnimating()
-            }
-            break
-        case BLOCK:
-            apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
-                if status / 100 == 2 {
-                    self.lblNotificationText.text = "The user has been \nblocked successfully!"
-                    let realm = try! Realm()
-                    try! realm.write {
-                        if self.realmReceivedRequests[self.indexPathGlobal.row].relation & IS_FRIEND == IS_FRIEND {
-                            self.realmReceivedRequests[self.indexPathGlobal.row].relation &= BLOCKED
-                        } else {
-                            self.realmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
-                            self.realmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                        }
-                        
-                    }
-                    //self.realmReceivedRequests.remove(at: self.indexPathGlobal.row)
-                    //self.reloadAfterDelete()
-                    FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "block")
-                } else {
-                    self.lblNotificationText.text = "Block user \nFail!"
-                    print("[Contacts Block Fail] - \(status) \(message!)")
-                }
-                self.btnYes.setTitle("OK", for: .normal)
-                self.btnYes.tag = self.OK
-                self.indicatorView.stopAnimating()
-            }
-            break
-        case IGNORE:
-            apiCalls.ignoreFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
-                self.showNoti(type: self.IGNORE)
-                if status / 100 == 2 {
-                    self.lblNotificationText.text = "Ignore Request \nSuccessfully!"
-                    let realm = try! Realm()
-                    try! realm.write {
-                        self.realmReceivedRequests[self.indexPathGlobal.row].relation = NO_RELATION
-                        self.realmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                    }
-                    //self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
-                    //self.reloadAfterDelete()
-                    FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "ignore friend request")
-                } else {
-                    self.lblNotificationText.text = "Ignore Request \nFail!"
-                    print("[Contacts Ignore Request Fail] - \(status) \(message!)")
-                }
-                self.indicatorView.stopAnimating()
-            }
-            break
-        case ACCEPT:
-            apiCalls.acceptFriendRequest(friendId: String(idGlobal)) { (status: Int, message: Any?) in
-                self.showNoti(type: self.ACCEPT)
-                if status / 100 == 2 {
-                    self.lblNotificationText.text = "Accept Request \nSuccessfully!"
-                    let realm = try! Realm()
-                    try! realm.write {
-                        self.realmReceivedRequests[self.indexPathGlobal.row].relation = IS_FRIEND
-                        self.realmReceivedRequests[self.indexPathGlobal.row].created_at = ""
-                    }
-                    //self.arrRealmReceivedRequests.remove(at: self.indexPathGlobal.row)
-                    //self.reloadAfterDelete()
-                    FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "accept friend request")
-                    print("[Contacts Accept Request Successfully]")
-                } else {
-                    self.lblNotificationText.text = "Accept Request \nFail!"
-                    print("[Contacts Accept Request Fail] - \(status) \(message!)")
-                }
-                self.indicatorView.stopAnimating()
-            }
-        case RESEND:
-            apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
-                if status / 100 == 2 {
-                    self.lblNotificationText.text = "Request Resent \nSuccessfully!"
-                    // TODO: API modification needed
-                    FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "resend friend request")
-                } else {
-                    self.lblNotificationText.text = "Request Resent \nFail!"
-                    print("[Contacts resend friend request fail]")
-                }
-                self.btnYes.setTitle("OK", for: .normal)
-                self.btnYes.tag = self.OK
-                self.indicatorView.stopAnimating()
-            }
-        default:
-            break
-        }
-    }
-    
-    func reloadAfterDelete() {
-        tblContacts.performUpdate({
-            self.tblContacts.deleteRows(at: [indexPathGlobal], with: UITableViewRowAnimation.right)
-        }) {
-            self.tblContacts.reloadData()
-            self.setupScrollBar()
-        }
     }
 }

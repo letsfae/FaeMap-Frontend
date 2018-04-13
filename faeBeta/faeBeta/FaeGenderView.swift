@@ -72,7 +72,7 @@ class FaeGenderView: UIView {
                 if let userExist = realm.filterUser(id: id) {
                     relation = userExist.relation
                 }
-                let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id))", "\(Key.shared.user_id)", "\(id)", user_name, display_name, relation, age, canShowAge, gender, canShowGender, short_intro])
+                let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", "\(Key.shared.user_id)", "\(id)", user_name, display_name, relation, age, canShowAge, gender, canShowGender, short_intro])
                 try! realm.write {
                     realm.add(newUser, update: true)
                 }

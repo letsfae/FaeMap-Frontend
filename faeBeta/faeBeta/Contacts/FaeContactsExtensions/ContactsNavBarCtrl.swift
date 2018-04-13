@@ -12,30 +12,27 @@ import ContactsUI
 
 extension ContactsViewController {
     
+    // MARK: - setup UI
     func loadNavBar() {
         loadDropDownMenu()
         
-        // Initialize the navigation bar.
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         view.addSubview(uiviewNavBar)
-//        uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(40.5)]", options: [], views: uiviewNavBar.leftBtn)
         uiviewNavBar.addConstraintsWithFormat("V:|-\(22+device_offset_top)-[v0(38)]", options: [], views: uiviewNavBar.leftBtn)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(48)]-0-|", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.addConstraintsWithFormat("V:|-\(17+device_offset_top)-[v0(48)]", options: [], views: uiviewNavBar.rightBtn)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(backToMenu(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.addTarget(self, action: #selector(goToAddFriendView(_:)), for: .touchUpInside)
+        uiviewNavBar.rightBtn.addGestureRecognizer(tapDismissGestureOnDropdownMenu())
         
-        // Initialize the navigation bar menu
-        //        btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth-140)/2, y: 24, width: 140, height: 42))
         btnNavBarMenu = UIButton()
         uiviewNavBar.addSubview(btnNavBarMenu)
         view.addConstraintsWithFormat("H:|-100-[v0]-100-|", options: [], views: btnNavBarMenu)
         view.addConstraintsWithFormat("V:|-\(28+device_offset_top)-[v0(27)]", options: [], views: btnNavBarMenu)
-        btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.backToMenu(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.goToAddFriendView(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.addGestureRecognizer(setTapDismissDropdownMenu())
+        btnNavBarMenu.addTarget(self, action: #selector(toggleNavBarMenu(_:)), for: .touchUpInside)
         btnNavBarSetTitle()
     }
     
@@ -53,13 +50,13 @@ extension ContactsViewController {
         btnTop = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnTop)
         btnTop.tag = 0
-        btnTop.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnTop.addTarget(self, action: #selector(dropDownMenuAct(_:)), for: .touchUpInside)
         btnTop.backgroundColor = .clear
         
         btnBottom = UIButton(frame: CGRect(x: 0, y: 51, width: screenWidth, height: 50))
         uiviewDropDownMenu.addSubview(btnBottom)
         btnBottom.tag = 1
-        btnBottom.addTarget(self, action: #selector(self.dropDownMenuAct(_:)), for: .touchUpInside)
+        btnBottom.addTarget(self, action: #selector(dropDownMenuAct(_:)), for: .touchUpInside)
         btnBottom.backgroundColor = .clear
         
         let imgTop = UIImageView(frame: CGRect(x: 56, y: 14, width: 28, height: 28))
@@ -82,7 +79,7 @@ extension ContactsViewController {
         lblBottom.textColor = UIColor._898989()
         lblBottom.font = UIFont(name: "AvenirNext-Medium", size: 18)
         btnBottom.addSubview(lblBottom)
-        updateFriendCount()
+        updateUserCount()
         
         let uiviewDropMenuLineTop = UIView(frame: CGRect(x: 41, y: 50, width: screenWidth - 82, height: 1))
         uiviewDropDownMenu.addSubview(uiviewDropMenuLineTop)
@@ -93,37 +90,20 @@ extension ContactsViewController {
         uiviewDropDownMenu.addSubview(imgTick)
     }
     
-    fileprivate func updateFriendCount() {
-        let attributedStr = NSMutableAttributedString()
-        let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
-        let count = NSAttributedString(string: "(\(realmFriends.count))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
-        attributedStr.append(strFriends)
-        attributedStr.append(count)
-        
-        lblTop.attributedText = attributedStr
-        
-        let attributedStr2 = NSMutableAttributedString()
-        if cellStatus == 1 {
-            //countRequests = countReceived
-            countRequests = realmReceivedRequests.count
-        } else if cellStatus == 2 {
-            //countRequests = countSent
-            countRequests = realmSentRequests.count
-        } else {
-            //countRequests = countReceived + countSent
-            countRequests = realmReceivedRequests.count + realmSentRequests.count
-        }
-        let strRequests = NSAttributedString(string: "Requests ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
-        let strTotal = NSAttributedString(string: "(\(countRequests))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
-        attributedStr2.append(strRequests)
-        attributedStr2.append(strTotal)
-        
-        lblBottom.attributedText = attributedStr2
-        
-        imgDot.isHidden = realmReceivedRequests.count == 0
+    // MARK: - helper functions
+    // left button action
+    @objc fileprivate func backToMenu(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func setTapDismissDropdownMenu() -> UITapGestureRecognizer {
+    // right button action
+    @objc fileprivate func goToAddFriendView(_ sender: UIButton) {
+        let vc = AddFriendViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    // a tap gesture to hide drop down menu
+    func tapDismissGestureOnDropdownMenu() -> UITapGestureRecognizer {
         var tapRecognizer = UITapGestureRecognizer()
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
         tapRecognizer.numberOfTapsRequired = 1
@@ -135,15 +115,15 @@ extension ContactsViewController {
         hideDropdowmMenu()
     }
     
-    // function for drop down menu button, to show / hide the drop down menu (UIVisualView)
-    @objc func navBarMenuAct(_ sender: UIButton) {
+    // nav bar menu action
+    @objc fileprivate func toggleNavBarMenu(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
                 self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
             })
             navBarMenuBtnClicked = true
             btnNavBarSetTitle()
-            updateFriendCount()
+            updateUserCount()
         } else {
             hideDropdowmMenu()
         }
@@ -158,48 +138,25 @@ extension ContactsViewController {
         btnNavBarSetTitle()
     }
     
-    @objc func backToMenu(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    // function to move onto addFriendViewController swift scene
-    @objc func goToAddFriendView(_ sender: UIButton) {
-        let vc = AddFriendViewController()
-        vc.arrRealmFriends = arrRealmFriends
-        vc.arrRealmReceivedRequests = arrRealmReceivedRequests
-        vc.arrRealmRequested = arrRealmRequested
-        self.navigationController?.pushViewController(vc, animated: true)
-        //getContacts()
-    }
-    
-    fileprivate func getContacts() {
-        let entityType = CNEntityType.contacts
-        let authStatus = CNContactStore.authorizationStatus(for: entityType)
-        if (authStatus == CNAuthorizationStatus.notDetermined) {
-            contactStore.requestAccess(for: entityType, completionHandler: {_,_ in })
-        }
-    }
-    
-    // function for buttons in drop down menu
+    // drop down menu action
     @objc func dropDownMenuAct(_ sender: UIButton) {
         curtTitle = titleArray[sender.tag]
         
         if sender.tag == 0 {
-            getFriendsList()
             imgTick.frame.origin.y = 20
             uiviewNavBar.rightBtn.isHidden = false
             uiviewBottomNav.isHidden = true
             uiviewSchbar.isHidden = false
-            tblContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
             cellStatus = 0
+            tblContacts.frame = CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top)
             faeScrollBar?.isHidden = false
         } else {
             imgTick.frame.origin.y = 71
             uiviewNavBar.rightBtn.isHidden = true
             uiviewBottomNav.isHidden = false
             uiviewSchbar.isHidden = true
-            tblContacts.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 49 - device_offset_top - device_offset_bot) 
             cellStatus = btnFFF.isSelected ? 1 : 2
+            tblContacts.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - 49 - device_offset_top - device_offset_bot)
             faeScrollBar?.isHidden = true
         }
         
@@ -209,22 +166,11 @@ extension ContactsViewController {
         })
         navBarMenuBtnClicked = false
         btnNavBarSetTitle()
-        
-//        switchFriendsAndFollows()
-        tblContacts.reloadData()
-        tblContacts.scrollToTop(animated: false)
+        switchRealmObserverTarget()
+        //tblContacts.reloadData()
+        //tblContacts.scrollToTop(animated: false)
         //tblContacts.setContentOffset(CGPoint.zero, animated: false)
     }
-    
-//    fileprivate func switchFriendsAndFollows() {
-//        if curtTitle == "Friends" {
-//
-//        } else if curtTitle == "Followers" {
-//
-//        } else {   // curtTitle == "Following"
-//
-//        }
-//    }
     
     fileprivate func btnNavBarSetTitle() {
         let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
@@ -240,5 +186,33 @@ extension ContactsViewController {
         let curtTitlePlusImg = curtTitleStr
         curtTitlePlusImg.append(NSAttributedString(attachment: downAttachment))
         btnNavBarMenu.setAttributedTitle(curtTitlePlusImg, for: .normal)
+    }
+    
+    // update the count in the drop down menu
+    fileprivate func updateUserCount() {
+        let attributedStr = NSMutableAttributedString()
+        let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let count = NSAttributedString(string: "(\(realmFriends.count))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
+        attributedStr.append(strFriends)
+        attributedStr.append(count)
+        
+        lblTop.attributedText = attributedStr
+        
+        let attributedStr2 = NSMutableAttributedString()
+        if cellStatus == 1 {
+            countRequests = realmReceivedRequests.count
+        } else if cellStatus == 2 {
+            countRequests = realmSentRequests.count
+        } else {
+            countRequests = realmReceivedRequests.count + realmSentRequests.count
+        }
+        let strRequests = NSAttributedString(string: "Requests ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
+        let strTotal = NSAttributedString(string: "(\(countRequests))", attributes: [NSAttributedStringKey.foregroundColor : UIColor._155155155()])
+        attributedStr2.append(strRequests)
+        attributedStr2.append(strTotal)
+        
+        lblBottom.attributedText = attributedStr2
+        
+        imgDot.isHidden = realmReceivedRequests.count == 0
     }
 }

@@ -37,7 +37,6 @@ class FaeRecommendedCell: UITableViewCell {
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.clipsToBounds = true
-        //imgAvatar.backgroundColor = .red
         addSubview(imgAvatar)
         
         lblUserName = UILabel()
@@ -67,9 +66,6 @@ class FaeRecommendedCell: UITableViewCell {
         addSubview(btnAddFriend)
         addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnAddFriend)
         addConstraintsWithFormat("H:[v0(74)]-17-|", options: [], views: btnAddFriend)
-        /* Joshua 06/16/17
-         put every single constraint at the end of each component, it is ok to put contraints for a group of components
-         */
         
         addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]-3-[v2(16)]", options: [], views: lblUserName, lblUserSaying, lblUserRecommendReason)
         

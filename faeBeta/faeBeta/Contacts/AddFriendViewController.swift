@@ -7,42 +7,30 @@
 //
 
 import UIKit
-//import Contacts
-//import ContactsUI
 
 class AddFriendViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    // MARK: - Properties
     let optionsArray: [String] = ["Add by Username", "From Contacts", "Scan Nearby", "Share Username"]
     let recommendedFriendsArray: [Friends] = []
     let optionsImagesArray = [#imageLiteral(resourceName: "searchUsernamesIcon"), #imageLiteral(resourceName: "fromContactsIcon"), #imageLiteral(resourceName: "scanNearbyIcon"), #imageLiteral(resourceName: "shareUsernameIcon")]
     var tblOptions: UITableView!
-    //var contactStore = CNContactStore()
     var uiviewNavBar: FaeNavBar!
     var imgCity: UIImageView!
-    var arrRealmFriends = [RealmUser]()
-    var arrRealmReceivedRequests = [RealmUser]()
-    var arrRealmRequested = [RealmUser]()
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         loadNavBar()
         loadTable()
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    /* Joshua: 06/15/17
-     load the top nav bar
-     */
     func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.lblTitle.text = "New Friends"
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
     }
     
     func loadTable() {
@@ -60,6 +48,15 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         imgCity.contentMode = .scaleToFill
         imgCity.image = #imageLiteral(resourceName: "contact_city")
         view.addSubview(imgCity)
+    }
+    
+    @objc func actionGoBack(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: - UITableViewDataSource
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,34 +86,28 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         return UITableViewCell()
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let vc = AddUsernameController()
-                vc.arrRealmFriends = arrRealmFriends
-                vc.arrRealmReceivedRequests = arrRealmReceivedRequests
-                vc.arrRealmRequested = arrRealmRequested
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             } else if indexPath.row == 1 {
-                getContacts()
+                navigationController?.pushViewController(AddFromContactsController(), animated: true)
             } else if indexPath.row == 2 {
                 let vc = AddNearbyController()
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             } else {
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Add my Username: \(Key.shared.username)"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
-                self.present(activityVC, animated: true, completion: nil)
+                present(activityVC, animated: true, completion: nil)
             }
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
-    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 1 {
-            if (recommendedFriendsArray.count != 0) {
+            if recommendedFriendsArray.count != 0 {
                 imgCity.isHidden = true;
                 return 25
             }
@@ -155,30 +146,6 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
             return header
         }
         return nil
-    }
-    
-    func getContacts() {
-        navigationController?.pushViewController(AddFromContactsController(), animated: true)
-        /*let entityType = CNEntityType.contacts
-        let authStatus = CNContactStore.authorizationStatus(for: entityType)
-
-        let vc = AddFromContactsController()
-        if authStatus == .denied {
-            vc.boolAllowAccess = false
-            self.navigationController?.pushViewController(vc, animated: true)
-            // showAlert(title: "Denied Access to Contacts", message: "It seems that you have earlier denied FaeMap access to your Contacts. In order to grant this app access to your contacts, please go to your Settings > Privacy > Contacts and change accordingly.")
-        } else if authStatus == .authorized {
-            vc.boolAllowAccess = true
-            self.navigationController?.pushViewController(vc, animated: true)
-        }*/
-        
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .destructive)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
     }
 }
 

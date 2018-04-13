@@ -205,11 +205,10 @@
 		B33FB2481F267CA600EC6655 /* FaeReceivedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2371F267C0500EC6655 /* FaeReceivedCell.swift */; };
 		B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */; };
 		B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2391F267C0500EC6655 /* FaeRequestedCell.swift */; };
-		B33FB24B1F267CA600EC6655 /* ContactsLoading&TblCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */; };
-		B33FB24C1F267CA600EC6655 /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */; };
-		B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */; };
-		B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23D1F267C0500EC6655 /* WenJia.swift */; };
-		B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* YingChen.swift */; };
+		B33FB24B1F267CA600EC6655 /* ContactsTableCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23A1F267C0500EC6655 /* ContactsTableCtrl.swift */; };
+		B33FB24C1F267CA600EC6655 /* ContactsNotificationCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23B1F267C0500EC6655 /* ContactsNotificationCtrl.swift */; };
+		B33FB24D1F267CA600EC6655 /* ContactsScrollBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */; };
+		B33FB24F1F267CA600EC6655 /* ContactsNavBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */; };
 		B35DD60F1FCD44D10099AC3E /* RealmCollectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */; };
 		B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
 		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
@@ -586,11 +585,10 @@
 		B33FB2371F267C0500EC6655 /* FaeReceivedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeReceivedCell.swift; sourceTree = "<group>"; };
 		B33FB2381F267C0500EC6655 /* FaeRecommendedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeRecommendedCell.swift; sourceTree = "<group>"; };
 		B33FB2391F267C0500EC6655 /* FaeRequestedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeRequestedCell.swift; sourceTree = "<group>"; };
-		B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContactsLoading&TblCtrl.swift"; sourceTree = "<group>"; };
-		B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
-		B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollingIndicatorChange.swift; sourceTree = "<group>"; };
-		B33FB23D1F267C0500EC6655 /* WenJia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WenJia.swift; sourceTree = "<group>"; };
-		B33FB23E1F267C0500EC6655 /* YingChen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YingChen.swift; sourceTree = "<group>"; };
+		B33FB23A1F267C0500EC6655 /* ContactsTableCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableCtrl.swift; sourceTree = "<group>"; };
+		B33FB23B1F267C0500EC6655 /* ContactsNotificationCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNotificationCtrl.swift; sourceTree = "<group>"; };
+		B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScrollBarCtrl.swift; sourceTree = "<group>"; };
+		B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavBarCtrl.swift; sourceTree = "<group>"; };
 		B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCollectionBase.swift; sourceTree = "<group>"; };
 		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
@@ -1379,11 +1377,10 @@
 		B33FB22E1F267C0500EC6655 /* FaeContactsExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				B33FB23B1F267C0500EC6655 /* NotificationExtension.swift */,
-				B33FB23A1F267C0500EC6655 /* ContactsLoading&TblCtrl.swift */,
-				B33FB23D1F267C0500EC6655 /* WenJia.swift */,
-				B33FB23E1F267C0500EC6655 /* YingChen.swift */,
-				B33FB23C1F267C0500EC6655 /* ScrollingIndicatorChange.swift */,
+				B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */,
+				B33FB23A1F267C0500EC6655 /* ContactsTableCtrl.swift */,
+				B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */,
+				B33FB23B1F267C0500EC6655 /* ContactsNotificationCtrl.swift */,
 				9F64B3F420019BD40007848B /* FaeScrollBar.swift */,
 			);
 			path = FaeContactsExtensions;
@@ -1900,12 +1897,11 @@
 				507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */,
 				B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */,
 				B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */,
-				B33FB24B1F267CA600EC6655 /* ContactsLoading&TblCtrl.swift in Sources */,
+				B33FB24B1F267CA600EC6655 /* ContactsTableCtrl.swift in Sources */,
 				B37E5DBC1F831040008A6B4B /* SetInfoViewController.swift in Sources */,
-				B33FB24C1F267CA600EC6655 /* NotificationExtension.swift in Sources */,
-				B33FB24D1F267CA600EC6655 /* ScrollingIndicatorChange.swift in Sources */,
-				B33FB24E1F267CA600EC6655 /* WenJia.swift in Sources */,
-				B33FB24F1F267CA600EC6655 /* YingChen.swift in Sources */,
+				B33FB24C1F267CA600EC6655 /* ContactsNotificationCtrl.swift in Sources */,
+				B33FB24D1F267CA600EC6655 /* ContactsScrollBarCtrl.swift in Sources */,
+				B33FB24F1F267CA600EC6655 /* ContactsNavBarCtrl.swift in Sources */,
 				DCC59D121F8C28D000B2A27F /* SelectedFriendCollectionViewCell.swift in Sources */,
 				B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */,
 				B894651B1F16D86F00561CFA /* FMAnnotations.swift in Sources */,
