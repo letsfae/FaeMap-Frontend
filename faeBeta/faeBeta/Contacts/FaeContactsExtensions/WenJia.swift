@@ -11,10 +11,7 @@ import UIKit
 extension ContactsViewController {
     
     func RequestsPressed() {
-//        uiviewNavBar2 = FaeNavBar(frame: .zero)
-//        view.addSubview(uiviewNavBar2)
         uiviewNavBar.lblTitle.text = "Requests"
-//        uiviewNavBar.lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
         uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.bottomLine.isHidden = true
         uiviewNavBar.lblTitle.isHidden = false

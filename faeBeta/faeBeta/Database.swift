@@ -114,6 +114,26 @@ class RealmUser: Object {
             General.shared.avatar(userid: Int(user_id)!) {_ in }
         }
     }
+    
+    static func formateTime(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "yyyyMMddhhmmss"
+        return dateFormatter.string(from: date)
+    }
+    
+    static func formateTime(_ str: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        if let date = dateFormatter.date(from: str) {
+            dateFormatter.dateFormat = "yyyyMMddhhmmss"
+            return dateFormatter.string(from: date)
+        }
+        return str
+    }
 }
 //ENDBryan
 

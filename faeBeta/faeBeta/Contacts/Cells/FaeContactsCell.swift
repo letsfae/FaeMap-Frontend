@@ -38,21 +38,6 @@ class FaeContactsCell: UITableViewCell {
         imgAvatar.image = nil
     }
     
-    func getFriendStatus(id: Int) {
-        FaeUser().getUserRelation(String(id)) { (status: Int, message: Any?) in
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                let relation = Relations(json: json)
-                if relation.blocked {   // blocked & blocked_by
-                    self.friendStatus = .blocked
-                    self.lblStatus.text = "Blocked"
-                }
-            } else {
-                print("[get friend status fail] - \(status) \(message!)")
-            }
-        }
-    }
-    
     fileprivate func loadFriendsCellContent() {
         imgAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25

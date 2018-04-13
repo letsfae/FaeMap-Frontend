@@ -21,7 +21,6 @@ protocol FaeAddUsernameDelegate: class {
 class FaeAddUsernameCell: UITableViewCell {
     
     var userId: Int = -1
-    //var requestId: Int = -1
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
@@ -115,25 +114,9 @@ class FaeAddUsernameCell: UITableViewCell {
         } else if relation.requested {
             self.friendStatus = .pending
             realationRealm = FRIEND_REQUESTED
-            /*self.faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
-                let json = JSON(message!)
-                for i in 0..<json.count {
-                    if json[i]["requested_user_id"].intValue == self.userId {
-                        //self.requestId = json[i]["friend_request_id"].intValue
-                    }
-                }
-            }*/
         } else if relation.requested_by {
             self.friendStatus = .requested
             realationRealm = FRIEND_REQUESTED_BY
-            /*self.faeContact.getFriendRequests() {(status: Int, message: Any?) in
-                let json = JSON(message!)
-                for i in 0..<json.count {
-                    if json[i]["request_user_id"].intValue == self.userId {
-                        //self.requestId = json[i]["friend_request_id"].intValue
-                    }
-                }
-            }*/
         }
         
         self.setButtonImage()
@@ -231,7 +214,6 @@ class FaeAddUsernameCell: UITableViewCell {
         
         btnRefuseRequest = UIButton()
         addSubview(btnRefuseRequest)
-//        btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
         btnRefuseRequest.isHidden = true
         btnRefuseRequest.addTarget(self, action: #selector(self.refuseWithdrawRequest(_:)), for: .touchUpInside)
         addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnAcceptRequest)
@@ -259,20 +241,16 @@ class FaeAddUsernameCell: UITableViewCell {
     @objc func acceptResendRequest(_ sender: UIButton) {
         if friendStatus == .pending {
             delegate.resendRequest(indexPath: indexPath, user_id: userId)
-            print("resend")
         } else {
             delegate.acceptRequest(indexPath: indexPath, user_id: userId)
-            print("accept")
         }
     }
     
     @objc func refuseWithdrawRequest(_ sender: UIButton) {
         if friendStatus == .pending {
             delegate.withdrawRequest(indexPath: indexPath, user_id: userId)
-            print("withdraw")
         } else {
             delegate.ignoreRequest(indexPath: indexPath, user_id: userId)
-            print("refuse")
         }
     }
 }

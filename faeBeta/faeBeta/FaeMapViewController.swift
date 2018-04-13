@@ -656,6 +656,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     func initUserDataFromServer() {
         storeRealmCollectionFromServer()
         ContactsViewController.loadFriendsList()
+        ContactsViewController.loadReceivedFriendRequests()
         ContactsViewController.loadSentFriendRequests()
     }
     
