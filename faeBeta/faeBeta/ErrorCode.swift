@@ -56,7 +56,26 @@ func handleErrorCode(_ type: ErrorType, _ code: String, _ completion: ((String) 
         default: break
         }
     case .map: //joshua
-        break
+        switch code {
+        case "400-5":
+            completion?("Not on mobile phone") // 当前客户端非手机，无法使用定位模块
+        case "404-6":
+            completion?("") // Session不存在
+        case "400-7":
+            completion?("") // 输入type错误
+        case "404-11":
+            completion?("") // POST or UPDATE Locations file_ids if cannot match a file_id -> File不存在
+        case "404-16":
+            completion?("") // Location(PIN)不存在
+        case "400-3":
+            completion?("") // 输入ID非数字
+        case "403-2":
+            completion?("") // 用户不是PIN创建人，无权操作修改
+        case "404-3":
+            completion?("") // User不存在
+        default:
+            completion?("Fail to do")
+        }
     case .collection: //vicky
         switch code {
         case "404-13":   // 创建/删除memo时 -> PIN不存在
@@ -95,6 +114,15 @@ func handleErrorCode(_ type: ErrorType, _ code: String, _ completion: ((String) 
     case .chat: //jichao
         break
     case .file: //joshua
-        break
+        switch code {
+        case "404-11":
+            completion?("File does not exist")
+        case "404-18":
+            completion?("Image does not exist")
+        case "400-3":
+            completion?("input id is not a number")
+        default:
+            completion?("Fail to do")
+        }
     }
 }

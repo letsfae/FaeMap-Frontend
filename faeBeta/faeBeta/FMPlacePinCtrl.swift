@@ -120,7 +120,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         PLACE_ENABLE = false
         // remove place pins but don't delete them
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
-        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
+        placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
             self.tempFaePins.removeAll()
             self.tempFaePins.append(pin)
             self.locationPinClusterManager.addAnnotations(self.tempFaePins, withCompletionHandler: nil)
@@ -505,9 +505,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     // MARK: - Reload Place Pins
     func reloadPlacePinsOnMap(places: [PlacePin], completion: @escaping () -> Void) {
         placeClusterManager.isForcedRefresh = true
-        placeClusterManager.removeAnnotations(placesFromSearch) {
-            self.placesFromSearch = places.map({ FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0 as AnyObject) })
-            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+        placeClusterManager.removeAnnotations(pinsFromSearch) {
+            self.pinsFromSearch = places.map({ FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0 as AnyObject) })
+            self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
                 self.placeClusterManager.isForcedRefresh = false
                 completion()
             })

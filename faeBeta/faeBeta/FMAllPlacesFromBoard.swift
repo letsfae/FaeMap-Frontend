@@ -15,15 +15,15 @@ extension FaeMapViewController: AllPlacesDelegate {
     func jumpToAllPlaces(places: [PlacePin]) {
         guard places.count > 0 else { return }
         PLACE_ENABLE = false
-        placesFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+        pinsFromSearch = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         removePlaceUserPins({
-            self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+            self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
                 self.visibleClusterPins = self.visiblePlaces(full: true)
                 self.arrExpPlace = places
                 self.clctViewMap.reloadData()
                 self.highlightPlace(0)
             })
-            self.zoomToFitAllAnnotations(annotations: self.placesFromSearch)
+            self.zoomToFitAllAnnotations(annotations: self.pinsFromSearch)
         }, nil)
         modeAllPlaces = .on
         animateMainItems(show: true, animated: false)
@@ -40,7 +40,7 @@ extension FaeMapViewController: AllPlacesDelegate {
         modeAllPlaces = .off
         PLACE_ENABLE = true
         faeMapView.blockTap = false
-        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
+        placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
             self.reAddPlacePins()
         })
         animateMainItems(show: false, animated: false)

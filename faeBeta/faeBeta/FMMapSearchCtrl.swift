@@ -18,7 +18,7 @@ extension FaeMapViewController: MapSearchDelegate {
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         PLACE_ENABLE = false
         let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
-        placesFromSearch.append(pin)
+        pinsFromSearch.append(pin)
         if searchText == "fromPlaceDetail" {
             // mapMode = .pinDetail
             modePinDetail = .on
@@ -75,10 +75,10 @@ extension FaeMapViewController: MapSearchDelegate {
             swipingState = .multipleSearch
             tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places)
             tblPlaceResult.loading(current: places[0])
-            placesFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+            pinsFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
             removePlaceUserPins({
                 self.PLACE_INSTANT_SHOWUP = true
-                self.placeClusterManager.addAnnotations(self.placesFromSearch, withCompletionHandler: {
+                self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
                     if let first = places.first {
                         self.goTo(annotation: nil, place: first, animated: true)
                     }

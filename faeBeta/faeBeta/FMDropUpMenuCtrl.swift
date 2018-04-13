@@ -137,12 +137,14 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         }
         animateMainItems(show: true, animated: false)
         PLACE_ENABLE = false
-        self.desiredCount = savedPinIds.count
-        self.completionCount = 0
+        desiredCount = savedPinIds.count
+        completionCount = 0
         placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
-        placeClusterManager.removeAnnotations(placesFromSearch, withCompletionHandler: {
-            self.placesFromSearch.removeAll(keepingCapacity: true)
+        placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
+            self.pinsFromSearch.removeAll()
+            self.placesFromSearch.removeAll()
+            self.locationsFromSearch.removeAll()
             for id in savedPinIds {
                 FaeMap.shared.getPin(type: type, pinId: String(id), completion: { (status, message) in
                     guard status / 100 == 2 else { return }
@@ -150,16 +152,15 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                     let resultJson = JSON(message!)
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
+                        self.placesFromSearch.append(pinData)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
-                        self.placesFromSearch.append(pin)
-//                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                        self.pinsFromSearch.append(pin)
                     } else if type == "location" {
                         let pinData = LocationPin(json: resultJson)
+                        self.locationsFromSearch.append(pinData)
                         let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
-                        self.placesFromSearch.append(pin)
-//                        self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
+                        self.pinsFromSearch.append(pin)
                     }
-                    
                     self.completionCount += 1
                 })
             }

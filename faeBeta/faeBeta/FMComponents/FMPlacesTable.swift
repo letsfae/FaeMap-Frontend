@@ -404,15 +404,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         lineVConstraint = returnConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: grayLine)
     }
     
-    func updatePlacesArray(places: [PlacePin]) -> [PlacePin] {
+    func updatePlacesArray(places: [PlacePin], numbered: Bool = true) -> [PlacePin] {
         arrPlaces.removeAll()
         allPlaces.removeAll()
         groupLastSelected.removeAll()
         altitude = 0
         var groupPlaces = [PlacePin]()
-        for i in 0..<places.count-1 {
+        for i in 0..<places.count {
             let place = places[i]
-            place.name = "\(i+1). " + place.name
+            if numbered {
+                place.name = "\(i+1). " + place.name
+            }
             arrPlaces.append(place)
             groupPlaces.append(place)
             if groupPlaces.count % 20 == 0 {
