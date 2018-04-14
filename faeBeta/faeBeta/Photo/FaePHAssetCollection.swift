@@ -76,10 +76,10 @@ struct FaePHAsset {
     func cloudImageDownload(progress: @escaping (Double) -> Void, completion: @escaping (Data?) -> Void) -> PHImageRequestID? {
         guard let phAsset = self.phAsset else { return nil }
         let options = PHImageRequestOptions()
-        options.isSynchronous = true
+        options.isSynchronous = false
         options.isNetworkAccessAllowed = true
         options.deliveryMode = .highQualityFormat
-        options.version = .current
+        options.version = .original
         options.resizeMode = .none
         options.progressHandler = { (progressHandler, error, stop, info) in
             progress(progressHandler)

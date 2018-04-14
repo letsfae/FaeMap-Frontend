@@ -410,6 +410,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 if let str = nickNameInfo["nick_name"].string {
                     Key.shared.nickname = str
                 }
+                if let intro = nickNameInfo["short_intro"].string {
+                    Key.shared.introduction = intro
+                }
             }
         }
     }

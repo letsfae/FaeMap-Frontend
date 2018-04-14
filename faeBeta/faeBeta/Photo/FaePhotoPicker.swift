@@ -315,7 +315,7 @@ extension FaePhotoPicker: UICollectionViewDelegate {
         } else {
             if let index = selectedAssets.index(where: { $0.phAsset == asset.phAsset }) {
                 selectedAssets.remove(at: index)
-                selectedAssets = selectedAssets.enumerated().flatMap({ (offset, asset) -> FaePHAsset? in
+                selectedAssets = selectedAssets.enumerated().compactMap({ (offset, asset) -> FaePHAsset? in
                     var asset = asset
                     asset.selectedOrder = offset + 1
                     return asset
