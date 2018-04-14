@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 class FMUserInfo: UIViewController {
     
@@ -51,7 +52,6 @@ class FMUserInfo: UIViewController {
     var lblContent: UILabel!
     var uiviewCardPrivacy: FaeGenderView!
     let faeContact = FaeContact()
-    //var requestId: Int = -1
     
     let ADD_FRIEND_ACT = 1
     let FOLLOW_ACT = 2
@@ -77,7 +77,17 @@ class FMUserInfo: UIViewController {
     }
     
     func getStatusMode() {
-        faeContact.getFriends() {(status: Int, message: Any?) in
+        let realm = try! Realm()
+        if let user = realm.filterUser(id: userId) {
+            if user.relation & IS_FRIEND == IS_FRIEND {
+                statusMode = .accepted
+            }
+            if (user.relation == FRIEND_REQUESTED) || (user.relation == FRIEND_REQUESTED_BY) {
+                statusMode = .pending
+            }
+        }
+        switchBtmSecondBtn()
+        /*faeContact.getFriends() {(status: Int, message: Any?) in
             if status / 100 == 2 {
                 let json = JSON(message!)
                 if json.count != 0 {
@@ -109,7 +119,7 @@ class FMUserInfo: UIViewController {
             } else {
                 print("[FMUserInfo get requested friends list fail] - \(status) \(message!)")
             }
-        }
+        }*/
     }
     
     // setupUI
@@ -476,6 +486,14 @@ class FMUserInfo: UIViewController {
                         self.lblFriendSent.text = "Friend Request Sent Successfully!"
                         self.statusMode = .pending
                         self.btnBelowSecond.setImage(#imageLiteral(resourceName: "questionIcon"), for: .normal)
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: self.userId) {
+                            try! realm.write {
+                                user.relation = FRIEND_REQUESTED
+                                user.created_at = RealmUser.formateTime(Date())
+                            }
+                        }
+                        FaeChat.sendContactMessage(to: self.userId, with: "send friend request")
                     } else if status == 400 {
                         self.lblFriendSent.text = "You've Already Sent Friend Request!"
                         self.statusMode = .pending
@@ -502,33 +520,26 @@ class FMUserInfo: UIViewController {
             if type == WITHDRAW_ACT {    // "Withdraw" button pressed
                 btnFriendOK.tag = WITHDRAW_ACT
                 // withdraw friend request
-                faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
+                faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
-                        let json = JSON(message!)
-                        for i in 0..<json.count {
-                            print("json request_id \(json[i]["requested_user_id"].intValue)")
-                            if json[i]["requested_user_id"].intValue == self.userId {
-                                //self.requestId = json[i]["friend_request_id"].intValue
-                                break
+                        self.lblFriendSent.text = "Request Withdraw Successfully!"
+                        self.statusMode = .defaultMode
+                        self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: self.userId) {
+                            try! realm.write {
+                                user.relation = NO_RELATION
+                                user.created_at = ""
                             }
                         }
-                        self.faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                            if status / 100 == 2 {
-                                self.lblFriendSent.text = "Request Withdraw Successfully!"
-                                self.statusMode = .defaultMode
-                                self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-                            } else if status == 404 {
-                                self.lblFriendSent.text = "You haven't Sent Friend Request!"
-                                self.statusMode = .defaultMode
-                                self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
-                            } else {
-                                self.lblFriendSent.text = "Request Withdraw Fail!"
-                                print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
-                            }
-                        }
+                        FaeChat.sendContactMessage(to: self.userId, with: "withdraw friend request")
+                    } else if status == 404 {
+                        self.lblFriendSent.text = "You haven't Sent Friend Request!"
+                        self.statusMode = .defaultMode
+                        self.btnBelowSecond.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
                     } else {
-                        self.lblFriendSent.text = "Internet Error"
-                        print("[FMUserInfo getFriendRequestsSent Fail] - \(status) \(message!)")
+                        self.lblFriendSent.text = "Request Withdraw Fail!"
+                        print("[FMUserInfo Request Withdraw Fail] - \(status) \(message!)")
                     }
                 }
             } else if type == RESEND_ACT {   // "Resend" button pressed
@@ -536,6 +547,13 @@ class FMUserInfo: UIViewController {
                 faeContact.sendFriendRequest(friendId: String(self.userId), boolResend: "true") {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblFriendSent.text = "Request Resent Successfully!"
+                        let realm = try! Realm()
+                        if let user = realm.filterUser(id: self.userId) {
+                            try! realm.write {
+                                user.created_at = RealmUser.formateTime(Date())
+                            }
+                        }
+                        FaeChat.sendContactMessage(to: self.userId, with: "resend friend request")
                     } else if status == 400 {
                         self.lblFriendSent.text = "The User Has Already Sent You a Friend Request!"
                     } else {
