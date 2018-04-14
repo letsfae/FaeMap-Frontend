@@ -24,7 +24,7 @@ class SetAvatar {
         case "firstTimeLogin":
             let currentVC = vc as! FirstTimeLoginViewController
             activityIndicator = currentVC.activityIndicator
-            imgView = currentVC.imageViewAvatar
+            imgView = currentVC.imgAvatar
         case "setInfoNamecard":
             let currentVC = vc as! SetInfoNamecard
             activityIndicator = currentVC.activityIndicator
@@ -172,12 +172,13 @@ class SetAvatar {
 }
 
 protocol ChooseAvatarDelegate: class {
-    func finishChoosingAvatar(with faePHAsset: FaePHAsset)
+    func finishChoosingAvatar(with imageData: Data)
 }
 
 class ChooseAvatarViewController: UIViewController {
     var faePhotoPicker: FaePhotoPicker!
     weak var delegate: ChooseAvatarDelegate?
+    var activityIndicator: UIActivityIndicatorView!
     
     enum ComeFromType: String {
         case leftSlidingMenu
@@ -197,6 +198,18 @@ class ChooseAvatarViewController: UIViewController {
         faePhotoPicker.leftBtnHandler = cancel
         faePhotoPicker.rightBtnHandler = handleDone
         view.addSubview(faePhotoPicker)
+        
+        loadActivityIndicator()
+    }
+    
+    func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
     }
     
     override func didReceiveMemoryWarning() {
@@ -231,8 +244,38 @@ class ChooseAvatarViewController: UIViewController {
                 vcComeFrom.present(imagePicker, animated: true, completion: nil)
             }
         } else {
-            delegate?.finishChoosingAvatar(with: results[0])
-            dismiss(animated: true, completion: nil)
+            guard results.count == 1 else {
+                dismiss(animated: true, completion: nil)
+                return
+            }
+            if let data = results[0].fullResolutionImageData {
+                delegate?.finishChoosingAvatar(with: data)
+                dismiss(animated: true, completion: nil)
+            } else {
+                var asset = results[0]
+                asset.state = .ready
+                _ = asset.cloudImageDownload(progress: { [weak self] (progress) in
+                    if asset.state == .ready {
+                        asset.state = .progress
+                    }
+                    felixprint("[icloud download - \(progress)]")
+                    DispatchQueue.main.async {
+                        self?.activityIndicator.startAnimating()
+                    }
+                    }, completion: { [weak self] (data) in
+                        asset.state = .complete
+                        if let data = data {
+                            DispatchQueue.main.async {
+                                self?.activityIndicator.stopAnimating()
+                                self?.delegate?.finishChoosingAvatar(with: data)
+                                self?.dismiss(animated: true, completion: nil)
+                            }
+                        } else {
+                            // TODO: icloud download failed
+                            self?.dismiss(animated: true, completion: nil)
+                        }
+                })
+            }
         }
     }
     

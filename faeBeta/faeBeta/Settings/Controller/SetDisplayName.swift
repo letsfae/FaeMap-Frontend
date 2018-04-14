@@ -9,13 +9,13 @@
 import UIKit
 import SwiftyJSON
 
-protocol ViewControllerNameDelegate: class {
-    func protSaveName(txtName: String?)
+protocol PassDisplayNameBackDelegate: class {
+    func protSaveDisplayName(txtName: String?)
 }
 
 class SetDisplayName: UIViewController, UITextViewDelegate {
     
-    weak var delegate: ViewControllerNameDelegate?
+    weak var delegate: PassDisplayNameBackDelegate?
     var btnBack: UIButton!
     var lblTitle: UILabel!
     var textField: FAETextField!
@@ -127,7 +127,7 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
         user.whereKey("nick_name", value: textField.text!)
         user.updateNameCard { (status, message) in
             if status / 100 == 2 { // TODO: error code undecided
-                self.delegate?.protSaveName(txtName: self.textField.text)
+                self.delegate?.protSaveDisplayName(txtName: self.textField.text)
                 self.actionGoBack(sender)
             } else if status == 500 {
                 self.setRequestResult("Internal Service Error!")

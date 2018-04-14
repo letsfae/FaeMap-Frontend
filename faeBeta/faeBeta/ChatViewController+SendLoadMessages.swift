@@ -189,19 +189,23 @@ extension ChatViewController: OutgoingMessageProtocol {
     func sendMediaMessage(with faePHAssets: [FaePHAsset]) {
         for faePHAsset in faePHAssets {
             switch faePHAsset.assetType {
-            case .photo:
+            case .photo, .livePhoto:
                 var messageType = ""
                 if faePHAsset.fileFormat() == .gif {
                     messageType = "[Gif]"
+                    /*_ = faePHAsset.tempCopyMediaFile(complete: { (url) in
+                        if let data = try? Data(contentsOf: url) {
+                            self.sendMeaages_v2(type: messageType, text: messageType, media: data)
+                        }
+                    })*/
                 } else {
                     messageType = "[Picture]"
                 }
-                //if let data = faePHAsset.fullResolutionImageData {
-                    //sendMeaages_v2(type: messageType, text: messageType, media: data)
-                //} else {
-                    
+                if let data = faePHAsset.fullResolutionImageData {
+                    sendMeaages_v2(type: messageType, text: messageType, media: data)
+                } else {
                     var asset = faePHAsset
-                    if asset.state != .complete {
+                    //if asset.state != .complete {
                         asset.state = .ready
                         _ = asset.cloudImageDownload(progress: { (_) in
                             if asset.state == .ready {
@@ -214,9 +218,14 @@ extension ChatViewController: OutgoingMessageProtocol {
                                 self.sendMeaages_v2(type: messageType, text: messageType, media: data)
                             }
                         })
-                } else if let data = faePHAsset.fullResolutionImageData {
-                        sendMeaages_v2(type: messageType, text: messageType, media: data)
-                    }
+                    //}
+                    
+                }
+                //if let data = faePHAsset.fullResolutionImageData {
+                    //sendMeaages_v2(type: messageType, text: messageType, media: data)
+                //} else {
+                    
+                
                 //}
             case .video:
                 _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
@@ -225,7 +234,6 @@ extension ChatViewController: OutgoingMessageProtocol {
                     }
                 })
                 break
-            default: break
             }
         }
     }

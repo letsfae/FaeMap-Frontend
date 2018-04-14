@@ -9,13 +9,13 @@
 import UIKit
 import SwiftyJSON
 
-protocol ViewControllerIntroDelegate: class {
-    func protSaveIntro(txtIntro: String?)
+protocol PassShortIntroBackDelegate: class {
+    func protSaveShortIntro(txtIntro: String?)
 }
 
 class SetShortIntro: UIViewController, UITextViewDelegate {
     
-    weak var delegate: ViewControllerIntroDelegate?
+    weak var delegate: PassShortIntroBackDelegate?
     var btnBack: UIButton!
     var lblTitle: UILabel!
     var lblPlaceholder: UILabel!
@@ -148,7 +148,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         user.whereKey("short_intro", value: textView.text!)
         user.updateNameCard { (status, message) in
             if status / 100 == 2 { // TODO: error code undecided
-                self.delegate?.protSaveIntro(txtIntro: self.textView.text)
+                self.delegate?.protSaveShortIntro(txtIntro: self.textView.text)
                 if let nav = self.navigationController {
                     nav.popViewController(animated: true)
                 } else {
