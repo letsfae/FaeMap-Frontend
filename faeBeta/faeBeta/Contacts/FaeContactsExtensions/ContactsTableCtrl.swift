@@ -221,7 +221,7 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                             user.relation = NO_RELATION
                             user.created_at = ""
                         }
-                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "withdraw friend request")
+                        FaeChat.sendContactMessage(to: self.idGlobal, with: "withdraw friend request")
                     }
                 } else {
                     self.lblNotificationText.text = "Request Withdraw \nFail!"
@@ -246,7 +246,7 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                                 user.created_at = ""
                             }
                         }
-                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "block")
+                        FaeChat.sendContactMessage(to: self.idGlobal, with: "block")
                     }
                 } else {
                     self.lblNotificationText.text = "Block user \nFail!"
@@ -268,7 +268,7 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                             user.relation = NO_RELATION
                             user.created_at = ""
                         }
-                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "ignore friend request")
+                        FaeChat.sendContactMessage(to: self.idGlobal, with: "ignore friend request")
                     }
                 } else {
                     self.lblNotificationText.text = "Ignore Request \nFail!"
@@ -288,7 +288,7 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                             user.relation = IS_FRIEND
                             user.created_at = ""
                         }
-                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "accept friend request")
+                        FaeChat.sendContactMessage(to: self.idGlobal, with: "accept friend request")
                     }
                     print("[Contacts Accept Request Successfully]")
                 } else {
@@ -306,7 +306,7 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                         try! realm.write {
                             user.created_at = RealmUser.formateTime(Date())
                         }
-                        FaeChat.sendContactMessage(to: "\(self.idGlobal)", with: "resend friend request")
+                        FaeChat.sendContactMessage(to: self.idGlobal, with: "resend friend request")
                     }
                 } else {
                     self.lblNotificationText.text = "Request Resent \nFail!"

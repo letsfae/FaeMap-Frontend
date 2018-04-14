@@ -134,6 +134,10 @@ class FaeChat {
         
     }
     
+    static func sendContactMessage(to userId: Int, with message: String) {
+        sendContactMessage(to: "\(userId)", with: message)
+    }
+    
     static func sendContactMessage(to userId: String, with message: String) {
         postToURL("chats_v2", parameter: ["receiver_id": userId, "message": message, "type": "customize"], authentication: Key.shared.headerAuthentication(), completion: { statusCode, result in
             if statusCode / 100 == 2 {
