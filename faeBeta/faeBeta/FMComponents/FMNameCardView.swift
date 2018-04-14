@@ -263,6 +263,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     }
     
     func updateNameCard(with userId: Int) {
+        uiviewPrivacy.isHidden = true
         if userId == 1 {
             imgAvatar.image = UIImage(named: "faeAvatar")
             imgAvatar.isUserInteractionEnabled = false
@@ -515,6 +516,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         uiviewPrivacy = FaeGenderView(frame: initialFrame)
         uiviewPrivacy.layer.anchorPoint = nameCardAnchor
         addSubview(uiviewPrivacy)
+        uiviewPrivacy.isHidden = true
         
         btnCloseOptions = UIButton(frame: CGRect(x: 0, y: 0, w: 320, h: 350)) // 26 29
         addSubview(btnCloseOptions)
