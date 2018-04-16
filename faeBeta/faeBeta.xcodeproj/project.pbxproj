@@ -34,6 +34,7 @@
 		50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */; };
 		5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */; };
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
+		503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503BF9D6208517AA00635E65 /* RoutingMapController.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
 		504CE4D21F67BF4500070284 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504CE4D11F67BF4500070284 /* ExploreViewController.swift */; };
 		505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */; };
@@ -393,6 +394,7 @@
 		50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationPin.swift; sourceTree = "<group>"; };
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
+		503BF9D6208517AA00635E65 /* RoutingMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingMapController.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
 		504CE4D11F67BF4500070284 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist"; sourceTree = "<group>"; };
@@ -901,6 +903,7 @@
 			isa = PBXGroup;
 			children = (
 				50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */,
+				503BF9D6208517AA00635E65 /* RoutingMapController.swift */,
 			);
 			name = BasicMapController;
 			sourceTree = "<group>";
@@ -2113,6 +2116,7 @@
 				B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */,
 				9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */,
 				B064EEAA1D6E0CA100C078F5 /* IncomingMessage.swift in Sources */,
+				503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */,
 				B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */,
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,

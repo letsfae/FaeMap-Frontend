@@ -109,15 +109,15 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
         view.addSubview(btnLocat)
         view.addConstraintsWithFormat("H:[v0(60)]-21-|", options: [], views: btnLocat)
-        view.addConstraintsWithFormat("V:[v0(60)]-\(13+device_offset_bot)-|", options: [], views: btnLocat)
+        view.addConstraintsWithFormat("V:[v0(60)]-\(13+device_offset_bot_main)-|", options: [], views: btnLocat)
 
         btnZoom = FMZoomButton()
-        btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
+        btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot_main - 13
         btnZoom.mapView = faeMapView
         view.addSubview(btnZoom)
         btnZoom.isHidden = true
         
-        faeMapView.cgfloatCompassOffset = 73 + device_offset_bot - device_offset_bot_main //134
+        faeMapView.cgfloatCompassOffset = 73 + device_offset_bot_main - device_offset_bot_main //134
         faeMapView.layoutSubviews()
     }
     

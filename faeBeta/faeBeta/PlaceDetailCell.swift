@@ -225,7 +225,7 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         
         // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
         
-        if todayHour == "N/A" || todayHour == "24 Hours" {
+        if todayHour == "N/A" || todayHour == "24 Hours" || todayHour == "None" {
             return todayHour
         }
         

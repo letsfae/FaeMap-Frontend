@@ -427,6 +427,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc func routeToThisPin() {
+        let vc = RoutingMapController()
+        navigationController?.pushViewController(vc, animated: false)
+        
+        return
         var arrCtrlers = navigationController?.viewControllers
         if let ctrler = Key.shared.FMVCtrler {
             ctrler.arrCtrlers = arrCtrlers!
