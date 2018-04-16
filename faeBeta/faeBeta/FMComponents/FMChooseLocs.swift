@@ -101,9 +101,13 @@ class FMChooseLocs: UIView {
         }
     }
     
-    func show() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+    func show(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                self.frame.origin.y = 0
+            })
+        } else {
             self.frame.origin.y = 0
-        })
+        }
     }
 }
