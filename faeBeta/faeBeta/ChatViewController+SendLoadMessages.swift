@@ -193,11 +193,6 @@ extension ChatViewController: OutgoingMessageProtocol {
                 var messageType = ""
                 if faePHAsset.fileFormat() == .gif {
                     messageType = "[Gif]"
-                    /*_ = faePHAsset.tempCopyMediaFile(complete: { (url) in
-                        if let data = try? Data(contentsOf: url) {
-                            self.sendMeaages_v2(type: messageType, text: messageType, media: data)
-                        }
-                    })*/
                 } else {
                     messageType = "[Picture]"
                 }
@@ -205,28 +200,19 @@ extension ChatViewController: OutgoingMessageProtocol {
                     sendMeaages_v2(type: messageType, text: messageType, media: data)
                 } else {
                     var asset = faePHAsset
-                    //if asset.state != .complete {
-                        asset.state = .ready
-                        _ = asset.cloudImageDownload(progress: { (_) in
-                            if asset.state == .ready {
-                                asset.state = .progress
-                            }
-                        }, completion: { [weak self] (data) in
-                            guard let `self` = self else { return }
-                            asset.state = .complete
-                            DispatchQueue.main.async {
-                                self.sendMeaages_v2(type: messageType, text: messageType, media: data)
-                            }
-                        })
-                    //}
-                    
+                    asset.state = .ready
+                    _ = asset.cloudImageDownload(progress: { (_) in
+                        if asset.state == .ready {
+                            asset.state = .progress
+                        }
+                    }, completion: { [weak self] (data) in
+                        guard let `self` = self else { return }
+                        asset.state = .complete
+                        DispatchQueue.main.async {
+                            self.sendMeaages_v2(type: messageType, text: messageType, media: data)
+                        }
+                    })
                 }
-                //if let data = faePHAsset.fullResolutionImageData {
-                    //sendMeaages_v2(type: messageType, text: messageType, media: data)
-                //} else {
-                    
-                
-                //}
             case .video:
                 _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
                     if let data = try? Data(contentsOf: url) {
