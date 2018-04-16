@@ -20,7 +20,7 @@ struct FaePhotoPickerConfigure {
 
 class FaePhotoPicker: UIView {
     
-    // MARK: - properties
+    // MARK: - Properties
     var collectionView: UICollectionView!
     var lblTilte: UILabel?
     var tblAlbums: UITableView?
@@ -49,7 +49,7 @@ class FaePhotoPicker: UIView {
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
     var alertHandler: ((String) -> Void)? = nil
     
-    // MARK: configuration
+    // MARK: Configuration
     var configuration = FaePhotoPickerConfigure()
     var scrollDirection: UICollectionViewScrollDirection { return boolFullPicker ? .vertical : .horizontal }
     var boolFullPicker: Bool { return configuration.boolFullPicker }
@@ -327,11 +327,26 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                     alertHandler?("You can only select up to \(intMaxSelectedAssets) images at the same time")
                     return
                 }
-                asset.selectedOrder = selectedAssets.count + 1
-                selectedAssets.append(asset)
-                requestCloudDownload(asset: asset, indexPath: indexPath)
-                cell.boolIsSelected = true
-                cell.intSelectedOrder = asset.selectedOrder
+                if asset.assetType == .video {
+                    guard let phAsset = asset.phAsset else { return }
+                    videoFileSizeCheck(asset) { (result) in
+                        if !result && (phAsset.duration > 164.0) {
+                            self.alertHandler?("You can only select video that is less than 16MB")
+                        } else {
+                            asset.selectedOrder = self.selectedAssets.count + 1
+                            self.selectedAssets.append(asset)
+                            self.requestCloudDownload(asset: asset, indexPath: indexPath)
+                            cell.boolIsSelected = true
+                            cell.intSelectedOrder = asset.selectedOrder
+                        }
+                    }
+                } else {
+                    asset.selectedOrder = selectedAssets.count + 1
+                    selectedAssets.append(asset)
+                    requestCloudDownload(asset: asset, indexPath: indexPath)
+                    cell.boolIsSelected = true
+                    cell.intSelectedOrder = asset.selectedOrder
+                }
             }
         }
     }
@@ -441,6 +456,16 @@ extension FaePhotoPicker {
             return true
         }
         return false
+    }
+    
+    func videoFileSizeCheck(_ asset: FaePHAsset, completion: @escaping ((Bool) -> Void)) {
+        asset.videoSize { (size) in
+            if size > 16 * 1024 * 1024 {
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
     }
     
     func selectAlbum(collection: FaePHAssetCollection) {
