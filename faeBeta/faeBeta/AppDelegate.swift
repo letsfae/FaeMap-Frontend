@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FaeCoreData.shared.readLogInfo()
         
         let vc = LaunchLoadingController()
-//        let vc = PlaceViewMapController()
+//        let vc = RoutingMapController()
         self.navMain.viewControllers = [vc]
         self.navMain.navigationBar.isHidden = true
         self.window = UIWindow(frame: UIScreen.main.bounds)
