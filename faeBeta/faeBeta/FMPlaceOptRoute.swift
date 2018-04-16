@@ -145,6 +145,10 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         
         animateMainItems(show: true)
         deselectAllAnnotations()
+        
+        faeMapView.singleTap.isEnabled = false
+        faeMapView.doubleTap.isEnabled = false
+        faeMapView.longPress.isEnabled = false
     }
     
     // FMRouteCalculateDelegate
@@ -182,6 +186,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         
         deselectAllAnnotations()
         
+        faeMapView.singleTap.isEnabled = true
+        faeMapView.doubleTap.isEnabled = true
+        faeMapView.longPress.isEnabled = true
     }
     
     func animateMainItems(show: Bool, animated: Bool = true) {

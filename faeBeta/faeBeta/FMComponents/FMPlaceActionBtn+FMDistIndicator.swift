@@ -57,16 +57,24 @@ class FMDistIndicator: UIImageView {
         show()
     }
     
-    func hide() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+    func hide(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                self.frame.origin.y = screenHeight + 10
+            })
+        } else {
             self.frame.origin.y = screenHeight + 10
-        })
+        }
     }
     
-    func show() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+    func show(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+                self.frame.origin.y = screenHeight - 74 - device_offset_bot_main
+            })
+        } else {
             self.frame.origin.y = screenHeight - 74 - device_offset_bot_main
-        })
+        }
     }
 }
 
