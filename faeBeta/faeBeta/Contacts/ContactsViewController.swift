@@ -167,18 +167,10 @@ class ContactsViewController: UIViewController {
     var cellStatus = 0 // 3 cases: 1st case is Contacts - 0, 2nd is RecievedRequests - 1, 3rd is Requested - 2.
                        // This is used to switch out cell types and cells in the main table (tblContacts)
     
-    // attempting api calls to pull some information.
     let apiCalls = FaeContact()
-    
-    // Wenjia.swift variable declaration for UI objects.
-    var uiviewTabView: UIView!
-    var btnReceived: UIButton!
-    var btnRequested: UIButton!
-    var uiviewBottomLine: UIView!
-    var uiviewRedBottomLine: UIView!
     var indicatorView: UIActivityIndicatorView!
     
-    // NotificationExtension.swift variable declaration for UI objects
+    // ContactsNotificationCtrl.swift variable declaration for UI objects
     var uiviewChooseAction: UIView!
     var uiviewNotification: UIView!
     var lblTitleInActions: UILabel!
@@ -214,7 +206,7 @@ class ContactsViewController: UIViewController {
     
     var uiviewNameCard = FMNameCardView()
     
-    // MARK: - life cycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         getFriendStatus()

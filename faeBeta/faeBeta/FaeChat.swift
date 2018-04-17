@@ -118,6 +118,12 @@ class FaeChat {
                 if statusCode / 100 == 2 {
                     if (result as? NSDictionary) != nil {
                         print("\(statusCode) \(String(describing: message["index"]))")
+                        let realm = try! Realm()
+                        if let sentMessage = realm.filterMessage("\(Key.shared.user_id)_0_\(members[1])_\(message["index"]!)") {
+                            try! realm.write {
+                                sentMessage.upload_to_server = true
+                            }
+                        }
                     }
                 } else if statusCode == 500 {
                     
@@ -358,6 +364,7 @@ class FaeChat {
                     messageRealm.media = decodeData as NSData
                 }
             }
+            messageRealm.upload_to_server = true
             messageRealm.unread_count = unread_count
             
             let recentRealm = RealmRecent_v2()
