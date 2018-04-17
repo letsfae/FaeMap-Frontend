@@ -280,23 +280,29 @@ extension ChatViewController: OutgoingMessageProtocol {
             switch changes {
             case .initial:
                 felixprint("initial")
-            case .update(_, _, let insertions, _):
-                print("chat update")
+            case .update(_, _, let insertions, let modifications):
+                felixprint("[chat update]")
+                guard let `self` = self else { return }
                 if insertions.count > 0 {
-                    let insertMessage = self!.resultRealmMessages[insertions[0]]
+                    let insertMessage = self.resultRealmMessages[insertions[0]]
                     let incomingMessage = IncomingMessage(collectionView_: collectionView)
                     let messageJSQ = incomingMessage.createJSQMessage(insertMessage)
-                    self!.arrJSQMessages.append(messageJSQ)
-                    self!.arrRealmMessages.append(insertMessage)
-                    self!.finishReceivingMessage(animated: false)
+                    self.arrJSQMessages.append(messageJSQ)
+                    self.arrRealmMessages.append(insertMessage)
+                    self.finishReceivingMessage(animated: false)
                     if incomingMessage.senderId != "\(Key.shared.user_id)" {
                         realm.beginWrite()
                         insertMessage.unread_count = 0
                         try! realm.commitWrite()
                     }                    
                 }
+                if modifications.count > 0 {
+                    for item in modifications {
+                        self.collectionView.reloadItems(at: [IndexPath(row: item, section: 0)])
+                    }
+                }
             case .error:
-                print("error")
+                felixprint("error")
             }
         }
     }

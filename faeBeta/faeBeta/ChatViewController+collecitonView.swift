@@ -35,7 +35,8 @@ extension ChatViewController {
         cell.avatarImageView.layer.masksToBounds = true
         //let object = arrDictMessages[indexPath.row]
         let index = resultRealmMessages.count - (arrJSQMessages.count - indexPath.row)
-        let messageType = resultRealmMessages[index].type
+        let realmMessage = resultRealmMessages[index]
+        let messageType = realmMessage.type
         switch messageType {
             case "text":
                 cell.contentType = Text
@@ -57,6 +58,16 @@ extension ChatViewController {
                 }
             case "[Video]":
                 cell.contentType = Video
+                let JSQMessage = arrJSQMessages[indexPath.row]
+                if let message = JSQMessage.media as? JSQVideoMediaItemCustom {
+                    if let sender = realmMessage.sender, sender.id == "\(Key.shared.user_id)" {
+                        if realmMessage.upload_to_server {
+                            message.stopAnimating()
+                        } else {
+                            message.startAnimating()
+                        }
+                    }
+                }
             // if it's a unknow message type, display a unknow message type
             default:
                 cell.contentType = Text

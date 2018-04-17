@@ -405,6 +405,9 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
                             completion(-500, "Internet error")
                         }
                     }
+                    upload.uploadProgress { progress in
+                        print("[upload progress ", progress.fractionCompleted, "]")
+                    }
                 case .failure(let encodingError):
                     completion(-400, "failure")
                     print(encodingError)
