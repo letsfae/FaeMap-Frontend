@@ -172,7 +172,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             //let chatWithUser = realm.filterUser("\(Key.shared.user_id)", id: "\(IDs[0])")!
             //vcChat.arrRealmUsers.append(chatWithUser)
             //vcChat.realmWithUser = chatWithUser
-            //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
+            //if let message = realm.objects(RealmMessage.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
             vcChat.strChatId = "\(IDs[0])"
             startChat_v2(vcChat)
             /*if let message = chatWithUser.message {
@@ -317,7 +317,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
                 })
             }*/
             //sendMessage(to: shareToUser, chat_id: chat_id, newIndex: newIndex)
-            let newMessage = RealmMessage_v2()
+            let newMessage = RealmMessage()
             newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, newIndex)
             let selfUser = realm.filterUser(login_user_id, id: login_user_id)!
             newMessage.sender = selfUser
@@ -341,7 +341,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             default:
                 break
             }
-            let recentRealm = RealmRecent_v2()
+            let recentRealm = RealmRecentMessage()
             recentRealm.created_at = newMessage.created_at
             recentRealm.unread_count = 0
             recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
@@ -355,7 +355,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
     func sendMessage(to shareToUser: RealmUser, chat_id: String, newIndex: Int) {
         let login_user_id = String(Key.shared.user_id)
         let realm = try! Realm()
-        let newMessage = RealmMessage_v2()
+        let newMessage = RealmMessage()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, newIndex)
         let selfUser = realm.filterUser(id: login_user_id)!
         newMessage.sender = selfUser
@@ -375,7 +375,7 @@ class NewChatShareController: UIViewController, UICollectionViewDataSource, UICo
             newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
         default: break
         }
-        let recentRealm = RealmRecent_v2()
+        let recentRealm = RealmRecentMessage()
         recentRealm.created_at = newMessage.created_at
         recentRealm.unread_count = 0
         recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)

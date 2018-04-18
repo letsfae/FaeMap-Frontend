@@ -155,7 +155,7 @@ class RecentTableViewCell: UITableViewCell {
     }
     
     // MARK: bind data to the cell
-    func bindData_v2(_ recent: RealmRecent_v2) {
+    func bindData_v2(_ recent: RealmRecentMessage) {
         /*if let myInteger = Int(latest.withUserID) {
             imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
         }*/
@@ -231,41 +231,6 @@ class RecentTableViewCell: UITableViewCell {
         //        General.shared.avatar(userid: userid) { (avatarImage) in
         //            avatarDic[userid] = avatarImage
         //        }
-    }
-
-    func bindData(_ recent : RealmRecent) {
-        if let myInteger = Int(recent.withUserID) {
-            imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
-        }
-        
-        lblName.text = recent.withUserNickName
-        lblLastMessage.text = recent.message
-        
-        if recent.unread > 0 {
-            lblCounter.isHidden = false
-            lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
-            if lblCounter.text?.count >= 2 {
-                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
-                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
-            } else {
-                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(22)]", options: [], views: lblCounter)
-                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
-            }
-        } else {
-            lblCounter.isHidden = true
-        }
-        
-        let date = recent.date
-        let seconds = Date().timeIntervalSince(date as Date)
-        lblDate.text = TimeElipsed(seconds,lastMessageTime:date as Date)
-        lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
-        lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-        
-//        guard let userid = Int(recent.withUserID) else { return }
-//        guard avatarDic[userid] == nil else { return }
-//        General.shared.avatar(userid: userid) { (avatarImage) in
-//            avatarDic[userid] = avatarImage
-//        }
     }
 
     

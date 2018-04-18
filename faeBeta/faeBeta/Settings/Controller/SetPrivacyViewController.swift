@@ -339,8 +339,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     
     func clearChatHistory(completion: @escaping ((Bool) -> Void)) {
         let realm = try! Realm()
-        let allMessages = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
-        let allRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        let allMessages = realm.objects(RealmMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        let allRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
         try! realm.write {
             realm.delete(allMessages)
             realm.delete(allRecents)

@@ -29,7 +29,7 @@ extension FaeMapViewController {
     
     func updateUnreadChatIndicator() {
         let realm = try! Realm()
-        let resultRealmRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", String(Key.shared.user_id))
+        let resultRealmRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", String(Key.shared.user_id))
         unreadNotiToken = resultRealmRecents.observe { (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
@@ -58,7 +58,7 @@ extension FaeMapViewController {
         }*/
     }
     
-    func setupUnreadNum(_ currentRecents: Results<RealmRecent_v2>) {
+    func setupUnreadNum(_ currentRecents: Results<RealmRecentMessage>) {
         var unreadCount = 0
         for recent in currentRecents {
             unreadCount += recent.unread_count
