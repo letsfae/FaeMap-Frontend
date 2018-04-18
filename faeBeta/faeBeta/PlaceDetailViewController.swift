@@ -428,9 +428,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     @objc func routeToThisPin() {
         let vc = RoutingMapController()
+        vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+        vc.destinationAddr = RouteAddress(name: place.name, coordinate: place.coordinate)
+        vc.destPlaceInfo = self.place
+        vc.mode = .place
         navigationController?.pushViewController(vc, animated: false)
         
-        return
+        /*
         var arrCtrlers = navigationController?.viewControllers
         if let ctrler = Key.shared.FMVCtrler {
             ctrler.arrCtrlers = arrCtrlers!
@@ -444,6 +448,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         featureDelegate?.getRouteToPin(mode: .place, placeInfo: place)
         Key.shared.initialCtrler?.goToFaeMap(animated: false)
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
+        */
     }
     
     @objc func shareThisPin() {
