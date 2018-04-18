@@ -11,57 +11,17 @@ import RealmSwift
 import SwiftyJSON
 
 class FaeChat {
-    let apiCalls = FaeContact()
-    
     var token: NotificationToken?
     var notificationRunLoop: CFRunLoop?
-    var intLastSentIndex: Int = -1
     
-    func updateFriendsList() {
-        let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, true, Key.shared.gender, true, "", ""])
-        let realm = try! Realm()
-        try! realm.write {
-            realm.add(realmUser, update: true)
-        }
-        let realmFae = RealmUser(value: ["\(Key.shared.user_id)_1", String(Key.shared.user_id), "1", "Fae Maps Team", "Fae Maps Team", IS_FRIEND, "", true, "", true])
-        let realmFaeAvatar = UserImage()
-        realmFaeAvatar.user_id = "1"
-        realmFaeAvatar.userSmallAvatar = RealmChat.compressImageToData(UIImage(named: "faeAvatar")!)! as NSData
-        try! realm.write {
-            realm.add(realmFae, update: true)
-            realm.add(realmFaeAvatar, update: true)
-        }
-        apiCalls.getFriends { (status: Int, message: Any?) in
-            let json = JSON(message!)
-            if status / 100 != 2 {
-                return
-            }
-            if json.count != 0 {
-                for i in 1...json.count {
-                    let user_id = json[i - 1]["friend_id"].stringValue
-                    let user_name = json[i - 1]["friend_user_name"].stringValue
-                    let display_name = json[i - 1]["friend_user_nick_name"].stringValue
-                    let user_age = json[i - 1]["friend_user_age"].stringValue
-                    let user_gender = json[i - 1]["friend_user_gender"].stringValue
-                    let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(user_id)", String(Key.shared.user_id), user_id, user_name, display_name, IS_FRIEND, user_age, user_gender])
-                    try! realm.write {
-                        realm.add(realmUser, update: true)
-                    }
-                    General.shared.avatar(userid: Int(user_id)!) { _ in
-                    }
-                }
-            }
-        }
-    }
-    
+    // MARK: - Handle sending messages
     func observeMessageChange() {
-        // let messageRef = ThreadSafeReference()
         DispatchQueue.global(qos: .background).async {
             autoreleasepool {
                 self.notificationRunLoop = CFRunLoopGetCurrent()
                 CFRunLoopPerformBlock(self.notificationRunLoop, CFRunLoopMode.defaultMode.rawValue) {
                     let realm = try! Realm()
-                    let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
+                    let messages = realm.objects(RealmMessage.self).filter("login_user_id = '\(Key.shared.user_id)'")
                     self.token = messages.observe { [weak self] (changes: RealmCollectionChange) in
                         switch changes {
                         case .initial:
@@ -69,15 +29,9 @@ class FaeChat {
                             break
                         case .update(_, _, let insertions, _):
                             // print("update")
+                            guard let `self` = self else { return }
                             for insert in insertions {
-                                // print(insert)
-                                // print(self?.intLastSentIndex)
-                                if messages[insert].sender?.id != String(Key.shared.user_id) || insert == self?.intLastSentIndex || messages[insert].chat_id == "\(Key.shared.user_id)" {
-                                    
-                                } else {
-                                    self?.intLastSentIndex = insert
-                                    self?.sendNewMessageToServer(messages[insert])
-                                }
+                                self.sendNewMessageToServer(messages[insert])
                             }
                         case .error:
                             // print("error")
@@ -97,7 +51,7 @@ class FaeChat {
         }
     }
     
-    func sendNewMessageToServer(_ newMessage: RealmMessage_v2) {
+    func sendNewMessageToServer(_ newMessage: RealmMessage) {
         let message = newMessage.toDictionary()
         var members: [String] = []
         for user in newMessage.members {
@@ -136,10 +90,162 @@ class FaeChat {
         }
     }
     
-    func keepFetchMessages() {
-        
+    // MARK: - Handle receiving messages
+    func getMessageFromServer() {
+        getFromURL("chats_v2/unread", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+            if status / 2 == 100 {
+                if let unreadList = result as? NSArray {
+                    for item in unreadList {
+                        let dictItem: NSDictionary = item as! NSDictionary
+                        let chat_id = dictItem["last_message_sender_id"] as! Int
+                        let unread_count = dictItem["unread_count"] as! Int
+                        let chatIdOnServer = dictItem["chat_id"] as! Int
+                        if chat_id == 1 {
+                            deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], completion: { statusCode, _ in
+                                if statusCode / 100 == 2 {
+                                    felixprint("[delete chat \(chatIdOnServer) successfully]")
+                                }
+                            })
+                        } else {
+                            for _ in 0...unread_count / 50 {
+                               self.getMessages(in: "\(chat_id)")
+                            }
+                        }
+                    }
+                }
+            } else if status == 500 {
+                
+            } else { // TODO: error code undecided
+                
+            }
+        }
     }
     
+    func getMessages(in chat_id: String) {
+        getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+            if status / 2 == 100 {
+                if let response = result as? NSDictionary, let unreadMessages = response["messages"] as? NSArray {
+                    for unreadMessage in unreadMessages {
+                        if let msgDict = unreadMessage as? NSDictionary, let type = msgDict["type"] as? String, let message = msgDict["message"] as? String {
+                            if chat_id == "1" { break }
+                            if type != "text", let timestamp = msgDict["message_timestamp"] as? String {
+                                self.handleFriendRelation(with: "\(chat_id)", on: message, time: timestamp)
+                            } else {
+                                self.storeToRealm(message, with: chat_id, is_group: 0)
+                            }
+                        }
+                    }
+                } else {
+                    // print("no more new message")
+                }
+            } else if status == 500 {
+                
+            } else { // TODO: error code undeciced
+                
+            }
+        }
+    }
+    
+    func storeToRealm(_ message: String, with chat_id: String, is_group: Int) {
+        guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
+        let messageJSON = JSON(data: messageData)
+        let login_user_id = "\(Key.shared.user_id)"
+        let realm = try! Realm()
+        let callGroup = DispatchGroup()
+        for user in messageJSON["members"].arrayValue {
+            callGroup.enter()
+            if let _ = realm.filterUser(id: user.string!) {
+                callGroup.leave()
+            } else {
+                getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+                    if status / 100 == 2, let result = result {
+                        let profileJSON = JSON(result)
+                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, NO_RELATION, profileJSON["age"].stringValue, profileJSON["show_age"].boolValue, profileJSON["gender"].stringValue, profileJSON["show_gender"].boolValue, profileJSON["short_intro"].stringValue, ""])
+                        try! realm.write {
+                            realm.add(newUser, update: true)
+                        }
+                        General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
+                        }
+                        callGroup.leave()
+                    } else if status == 500 {
+                        
+                    } else { // TODO: error code undecided
+                        
+                    }
+                }
+            }
+        }
+        callGroup.notify(queue: .main) {
+            let messageRealm = RealmMessage()
+            let messagesInThisChat = realm.filterAllMessages(is_group, chat_id)
+            var newIndex = 0
+            var unread_count = 1
+            if messagesInThisChat.count > 0, let last = messagesInThisChat.last {
+                newIndex = last.index + 1
+                unread_count = last.unread_count + 1
+            }
+            messageRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id, newIndex)
+            for user in messageJSON["members"].arrayValue {
+                if let userRealm = realm.filterUser(id: user.stringValue) {
+                    if user.stringValue == login_user_id {
+                        messageRealm.members.insert(userRealm, at: 0)
+                    } else {
+                        messageRealm.members.append(userRealm)
+                    }
+                    if let sender = messageJSON["sender"].string, userRealm.loginUserID_id == "\(login_user_id)_\(sender)" {
+                        messageRealm.sender = userRealm
+                    }
+                } else {
+                    
+                }
+            }
+            messageRealm.created_at = messageJSON["created_at"].stringValue
+            messageRealm.type = messageJSON["type"].stringValue
+            messageRealm.text = messageJSON["text"].stringValue
+            switch messageRealm.type {
+            case "[Place]":
+                self.downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
+            default: break
+            }
+            if let media = messageJSON["media"].string, let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue: 0)) {
+                messageRealm.media = decodeData as NSData
+            }
+            messageRealm.upload_to_server = true
+            messageRealm.unread_count = unread_count
+            
+            let recentRealm = RealmRecentMessage()
+            recentRealm.created_at = messageJSON["created_at"].stringValue
+            recentRealm.unread_count = unread_count
+            recentRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id)
+            
+            try! realm.write {
+                realm.add(messageRealm, update: false)
+                realm.add(recentRealm, update: true)
+            }
+        }
+    }
+    
+    func downloadImageFor(_ message: JSON, primary_key: String) {
+        let strDetail = message["text"].stringValue.replacingOccurrences(of: "\\", with: "")
+        guard let dataDetail = strDetail.data(using: .utf8) else { return }
+        guard let imageURL = JSON(data: dataDetail)["imageURL"].string else { return }
+        downloadImage(URL: imageURL) { rawData in
+            guard let data = rawData else { return }
+            DispatchQueue.global(qos: .userInitiated).async {
+                DispatchQueue.main.async {
+                    let realm = try! Realm()
+                    if let target = realm.filterMessage(primary_key) {
+                        try! realm.write {
+                            target.media = data as NSData
+                            realm.add(target, update: true)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Handle user relation message
     static func sendContactMessage(to userId: Int, with message: String) {
         sendContactMessage(to: "\(userId)", with: message)
     }
@@ -206,201 +312,6 @@ class FaeChat {
                 }
             }
         default: break
-        }
-    }
-    
-    func getMessageFromServer() {
-        getFromURL("chats_v2/unread", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
-            /*
-            if status == 401 {
-                if let root = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController {
-                    if Key.shared.is_Login {
-                        let welcomeVC = WelcomeViewController()
-                        root.viewControllers = [welcomeVC]
-                        Key.shared.navOpenMode = .welcomeFirst
-                        Key.shared.is_Login = false
-                        let alertController = UIAlertController(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", preferredStyle: UIAlertControllerStyle.alert)
-                        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-                        alertController.addAction(okAction)
-                        root.present(alertController, animated: true, completion: nil)
-                    }
-                }
-            }
-            */
-            if status / 2 == 100 {
-                if let unreadList = result as? NSArray {
-                    for item in unreadList {
-                        let dictItem: NSDictionary = item as! NSDictionary
-                        let chat_id = dictItem["last_message_sender_id"] as! Int
-                        let unread_count = dictItem["unread_count"] as! Int
-                        let chatIdOnServer = dictItem["chat_id"] as! Int
-                        if chat_id == 1 {
-                            deleteFromURL("chats_v2/\(chatIdOnServer)", parameter: [:], completion: { statusCode, _ in
-                                if statusCode / 100 == 2 {
-                                    print("delete \(chatIdOnServer) successfully")
-                                }
-                            })
-                        } else {
-                            let callGroup = DispatchGroup()
-                            // while unread_count > 0 {
-                            for _ in 0...unread_count / 50 {
-                                callGroup.enter()
-                                getFromURL("chats_v2/\(Key.shared.user_id)/\(chat_id)", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
-                                    if status / 2 == 100 {
-                                        if let response = result as? NSDictionary {
-                                            // unread_count = response["unread_count"] as! Int
-                                            let unreadMessages = response["messages"] as! NSArray
-                                            for unreadMessage in unreadMessages {
-                                                if let message = unreadMessage as? NSDictionary {
-                                                    if chat_id == 1 { break }
-                                                    if message["type"] as! String != "text" {
-                                                        self.handleFriendRelation(with: "\(chat_id)", on: message["message"] as! String, time: message["message_timestamp"] as! String)
-                                                        return
-                                                    }
-                                                    self.storeMessageToRealm(message["message"] as! String, is_group: 0, chatID: chat_id)
-                                                }
-                                            }
-                                            callGroup.leave()
-                                        } else {
-                                            // print("no more new message")
-                                        }
-                                    } else if status == 500 {
-                                        
-                                    } else { // TODO: error code undeciced
-                                        
-                                    }
-                                    
-                                }
-                            }
-                            callGroup.notify(queue: .main) {
-                                // print("finish reading")
-                                // postToURL("chats/read", parameter: ["chat_id": chat_id as AnyObject], authentication: headerAuthentication(), completion: { (statusCode, result) in
-                                // print("\(statusCode)")
-                                // })
-                            }
-                        }
-                    }
-                }
-            } else if status == 500 {
-                
-            } else { // TODO: error code undecided
-                
-            }
-        }
-    }
-    
-    func storeMessageToRealm(_ message: String, is_group: Int, chatID: Int) {
-        // if message == "[GET_CHAT_ID]" { return }
-        // print("\(message)")
-        guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
-        let messageJSON = JSON(data: messageData)
-        let login_user_id = "\(Key.shared.user_id)"
-        let realm = try! Realm()
-        let callGroup = DispatchGroup()
-        for user in messageJSON["members"].arrayValue {
-            callGroup.enter()
-            if let _ = realm.filterUser(id: user.string!) {
-                callGroup.leave()
-            } else {
-                getFromURL("users/\(user.string!)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
-                    if status / 100 == 2 && result != nil {
-                        let profileJSON = JSON(result!)
-                        let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(user.string!)", String(Key.shared.user_id), "\(user.string!)", profileJSON["user_name"].stringValue, profileJSON["user_name"].stringValue, NO_RELATION, profileJSON["age"].stringValue, profileJSON["show_age"].boolValue, profileJSON["gender"].stringValue, profileJSON["show_gender"].boolValue, profileJSON["short_intro"].stringValue, ""])
-                        try! realm.write {
-                            realm.add(newUser, update: true)
-                        }
-                        General.shared.avatar(userid: Int(user.stringValue)!) { (avatarImage) in
-                        }
-                        callGroup.leave()
-                    } else if status == 500 {
-                        
-                    } else { // TODO: error code undecided
-                        
-                    }
-                }
-            }
-        }
-        callGroup.notify(queue: .main) {
-            let messageRealm = RealmMessage_v2()
-            // messageRealm.login_user_id = login_user_id
-            let chat_id = "\(chatID)"
-            // messageRealm.chat_id = chat_id
-            
-            let messagesInThisChat = realm.filterAllMessages(is_group, chat_id) // realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", login_user_id, chat_id).sorted(byKeyPath: "index")
-            var newIndex = 0
-            var unread_count = 1
-            if messagesInThisChat.count > 0 {
-                newIndex = (messagesInThisChat.last?.index)! + 1
-                unread_count = (messagesInThisChat.last?.unread_count)! + 1
-            }
-            // messageRealm.index = newIndex
-            messageRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id, newIndex)
-            // let primaryKey = "\(login_user_id)_\(chat_id)_\(newIndex)"
-            // messageRealm.loginUserID_chatID_index = primaryKey
-            for user in messageJSON["members"].arrayValue {
-                if let userRealm = realm.filterUser(id: user.string!) { // objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", login_user_id, user.string!).first {
-                    if user.string! == login_user_id {
-                        messageRealm.members.insert(userRealm, at: 0)
-                    } else {
-                        messageRealm.members.append(userRealm)
-                    }
-                    if userRealm.loginUserID_id == "\(login_user_id)_\(messageJSON["sender"].string!)" {
-                        messageRealm.sender = userRealm
-                    }
-                } else {
-                    
-                }
-            }
-            messageRealm.created_at = messageJSON["created_at"].string!
-            messageRealm.type = messageJSON["type"].string!
-            messageRealm.text = messageJSON["text"].string!
-            switch messageRealm.type {
-            case "[Place]":
-                self.downloadImageFor(messageJSON, primary_key: messageRealm.primary_key)
-            default: break
-            }
-            if let media = messageJSON["media"].string {
-                if let decodeData = Data(base64Encoded: media, options: NSData.Base64DecodingOptions(rawValue: 0)) {
-                    messageRealm.media = decodeData as NSData
-                }
-            }
-            messageRealm.upload_to_server = true
-            messageRealm.unread_count = unread_count
-            
-            let recentRealm = RealmRecent_v2()
-            // recentRealm.login_user_id = login_user_id
-            // recentRealm.chat_id = chat_id
-            recentRealm.created_at = messageJSON["created_at"].string!
-            recentRealm.unread_count = unread_count
-            // recentRealm.loginUserID_chatID = "\(login_user_id)_\(chat_id)"
-            recentRealm.setPrimaryKeyInfo(login_user_id, is_group, chat_id)
-            try! realm.write {
-                realm.add(messageRealm, update: false)
-                realm.add(recentRealm, update: true)
-            }
-        }
-    }
-    
-    func downloadImageFor(_ message: JSON, primary_key: String) {
-        let strDetail = message["text"].stringValue.replacingOccurrences(of: "\\", with: "")
-        let dataDetail = strDetail.data(using: .utf8)
-        let jsonDetail = JSON(data: dataDetail!)
-        let imageURL = jsonDetail["imageURL"].stringValue
-        if imageURL != "" {
-            downloadImage(URL: imageURL) { rawData in
-                guard let data = rawData else { return }
-                DispatchQueue.global(qos: .userInitiated).async {
-                    DispatchQueue.main.async {
-                        let realm = try! Realm()
-                        if let target = realm.filterMessage(primary_key) {
-                            try! realm.write {
-                                target.media = data as NSData
-                                realm.add(target, update: true)
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

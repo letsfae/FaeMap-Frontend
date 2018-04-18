@@ -107,10 +107,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let floatToolBarContentHeight: CGFloat = 271 + device_offset_bot
   
     //let realm = try! Realm()
-    var arrRealmMessages: [RealmMessage_v2] = []
+    var arrRealmMessages: [RealmMessage] = []
     var arrRealmUsers: [RealmUser] = []
     var arrUserIDs: [String] = []
-    var resultRealmMessages: Results<RealmMessage_v2>!
+    var resultRealmMessages: Results<RealmMessage>!
     var notificationToken: NotificationToken?
     var intIsGroup: Int = 0
     // not used now

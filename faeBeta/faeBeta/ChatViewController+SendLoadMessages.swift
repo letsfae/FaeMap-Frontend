@@ -12,11 +12,11 @@ import RealmSwift
 
 extension ChatViewController: OutgoingMessageProtocol {
     func sendMeaages_v2(type: String, text: String, media: Data? = nil) {
-        let newMessage = RealmMessage_v2()
+        let newMessage = RealmMessage()
         let login_user_id = String(Key.shared.user_id)
         //newMessage.login_user_id = login_user_id
         let realm = try! Realm()
-        //let messages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        //let messages = realm.objects(RealmMessage.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
         let messages = realm.filterAllMessages(intIsGroup, strChatId!)
         var newIndex = 0
         if messages.count > 0 {
@@ -41,7 +41,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         if media != nil {
             newMessage.media = media! as NSData
         }
-        let recentRealm = RealmRecent_v2()
+        let recentRealm = RealmRecentMessage()
         //recentRealm.login_user_id = login_user_id
         //recentRealm.chat_id = strChatId!
         recentRealm.created_at = newMessage.created_at
@@ -254,7 +254,7 @@ extension ChatViewController: OutgoingMessageProtocol {
     
     func loadMessagesFromRealm() {
         let realm = try! Realm()
-        //resultRealmMessages = realm.objects(RealmMessage_v2.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
+        //resultRealmMessages = realm.objects(RealmMessage.self).filter("chat_id == %@ AND login_user_id == %@", strChatId, String(Key.shared.user_id)).sorted(byKeyPath: "index")
         resultRealmMessages = realm.filterAllMessages(intIsGroup, strChatId)
         let count = resultRealmMessages.count
         for i in (count - intNumberOfMessagesOneTime)..<count {
@@ -384,7 +384,7 @@ extension ChatViewController: OutgoingMessageProtocol {
         }
     }*/
     
-    func insertMessage_v2(_ message: RealmMessage_v2) -> Bool {
+    func insertMessage_v2(_ message: RealmMessage) -> Bool {
         _ = IncomingMessage(collectionView_: self.collectionView!)
         return false
     }

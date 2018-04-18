@@ -32,7 +32,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     var btnDismiss: UIButton!
     
     private var recents: JSON? // an array of dic to store recent chatting informations
-    private var realmRecents: Results<RealmRecent>?
     private var cellsCurrentlyEditing: NSMutableSet! = NSMutableSet() // a set storing all the cell that the delete button is displaying
     private var loadingRecentTimer: Timer!
     private var indexToDelete = IndexPath() // index of cell whose delete button is tapped
@@ -40,10 +39,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     private var indexSelected = -1
     var backClosure: BackClosure? // used to pass current # of unread messages to main map view
     
-    private var arrRecentsRealm: [String: RealmMessage_v2] = [:]
+    private var arrRecentsRealm: [String: RealmMessage] = [:]
     let realm = try! Realm()
     var notificationToken: NotificationToken? = nil
-    private var resultRealmRecents: Results<RealmRecent_v2>!
+    private var resultRealmRecents: Results<RealmRecentMessage>!
     private var timerUpdateTimestamp: Timer!
     
     var boolFingerMoved: Bool = false
@@ -404,10 +403,10 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
     
     // MARK: load recent messages from the server
     private func loadRecentsFromRealm() {
-        resultRealmRecents = realm.objects(RealmRecent_v2.self).filter("login_user_id == %@", String(Key.shared.user_id)).sorted(byKeyPath: "created_at", ascending: false)
-        /*let allChatID = Set(realm.objects(RealmMessage_v2.self).filter("login_user_id == %@", String(Key.shared.user_id)).value(forKey: "chat_id") as! [String])
+        resultRealmRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", String(Key.shared.user_id)).sorted(byKeyPath: "created_at", ascending: false)
+        /*let allChatID = Set(realm.objects(RealmMessage.self).filter("login_user_id == %@", String(Key.shared.user_id)).value(forKey: "chat_id") as! [String])
         for chatID in allChatID {
-            let lastMessage = realm.objects(RealmMessage_v2.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), chatID).sorted(byKeyPath: "index").last
+            let lastMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND chat_id == %@", String(Key.shared.user_id), chatID).sorted(byKeyPath: "index").last
             arrRecentsRealm.append(lastMessage!)
         }
         arrRecentsRealm.sort { $0.created_at > $1.created_at }*/
