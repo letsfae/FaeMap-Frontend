@@ -37,6 +37,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     // Boolean values
     var fullyLoaded = false // if all ui components are fully loaded
+    var PLACE_INSTANT_SHOWUP = false
     
     var mapCenter: MapCenter = .currentUser
     var placePin: PlacePin?
@@ -164,6 +165,18 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
             } else if firstAnn.type == "location" {
                 return viewForLocation(annotation: annotation, first: firstAnn)
             }
+        } else if annotation is AddressAnnotation {
+            guard let addressAnno = annotation as? AddressAnnotation else { return nil }
+            let identifier = addressAnno.isStartPoint ? "start_point" : "destination"
+            var anView: AddressAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? AddressAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
+            return anView
         }
         return nil
     }
@@ -180,14 +193,19 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
-                anView.alpha = 0
-                anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
-                let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
-                        anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
-                        anView.alpha = 1
-                    }, completion: nil)
+                if PLACE_INSTANT_SHOWUP { // immediatelly show up
+                    anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
+                    anView.alpha = 1
+                } else {
+                    anView.alpha = 0
+                    anView.imgIcon.frame = CGRect(x: 20, y: 46, width: 0, height: 0)
+                    let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                            anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
+                            anView.alpha = 1
+                        }, completion: nil)
+                    }
                 }
             } else if let anView = annotationView as? LocPinAnnotationView {
                 anView.alpha = 0
