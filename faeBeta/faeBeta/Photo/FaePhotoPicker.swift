@@ -62,6 +62,7 @@ class FaePhotoPicker: UIView {
     init(frame: CGRect, with configure: FaePhotoPickerConfigure) {
         self.configuration = configure
         super.init(frame: frame)
+        setupUI(frame: frame)
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization { [weak self] _ in
                 self?.photoLibrary.delegate = self
@@ -75,7 +76,6 @@ class FaePhotoPicker: UIView {
                 photoLibrary.fetchCollection(with: configuration)
             }
         }
-        setupUI(frame: frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
