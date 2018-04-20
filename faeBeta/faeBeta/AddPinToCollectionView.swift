@@ -40,8 +40,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     var fullLoaded = false
-    var tokenPlace: NotificationToken? = nil
-    var tokenLoc: NotificationToken? = nil
+    var notificationToken: NotificationToken? = nil
     var fromLocDetail = false
     var locId = -1
     private var showed: Bool = false
@@ -56,8 +55,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     deinit {
-        tokenPlace?.invalidate()
-        tokenLoc?.invalidate()
+        notificationToken?.invalidate()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,8 +63,10 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     func loadCollectionData() {
-        realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
-        realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
+        /*realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
+        realmColLocations = RealmCollection.filterCollectedTypes(type: "location")*/
+        realmColPlaces = realm.filterCollectedTypes(type: "place")
+        realmColLocations = realm.filterCollectedTypes(type: "location")
     }
     
     func show() {
@@ -290,45 +290,21 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     private func observeOnCollectionChange() {
-        if tableMode == .place {
-            tokenLoc?.invalidate()
-            tokenPlace = realmColPlaces.observe { (changes: RealmCollectionChange) in
-                guard let tableview = self.tblAddCollection else { return }
-                switch changes {
-                case .initial:
-//                    print("initial place")
-                    tableview.reloadData()
-                case .update(_, let deletions, let insertions, let modifications):
-//                    print("update place from addPin")
-                    
-                    tableview.beginUpdates()
-                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
-                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                    tableview.endUpdates()
-                case .error:
-                    print("error")
-                }
-            }
-        } else {
-            tokenPlace?.invalidate()
-            tokenLoc = realmColLocations.observe { (changes: RealmCollectionChange) in
-                guard let tableview = self.tblAddCollection else { return }
-                switch changes {
-                case .initial:
-//                    print("initial location")
-                    tableview.reloadData()
-                case .update(_, let deletions, let insertions, let modifications):
-//                    print("recent update location")
-                    
-                    tableview.beginUpdates()
-                    tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                    tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
-                    tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                    tableview.endUpdates()
-                case .error:
-                    print("error")
-                }
+        let datasource = tableMode == .place ? realmColPlaces : realmColLocations
+        notificationToken?.invalidate()
+        notificationToken = datasource?.observe { (changes: RealmCollectionChange) in
+            guard let tableview = self.tblAddCollection else { return }
+            switch changes {
+            case .initial:
+                tableview.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableview.beginUpdates()
+                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.endUpdates()
+            case .error:
+                print("error")
             }
         }
     }

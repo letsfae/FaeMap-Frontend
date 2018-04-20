@@ -603,33 +603,33 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func storeRealmCollectionFromServer() {
+        let realm = try! Realm()
+        var setDeletedCollection = Set(realm.filterMyCollections().map { $0.collection_id })
         FaeCollection.shared.getCollections {(status: Int, message: Any?) in
             if status / 100 == 2 {
-                let collections = JSON(message!)
-                guard let colArray = collections.array else {
+                let json = JSON(message!)
+                guard let collections = json.array else {
                     print("[loadCollectionData] fail to parse collections info")
                     return
                 }
-                
                 let realm = try! Realm()
-                let realmCol = realm.objects(RealmCollection.self)
-                if realmCol.count == colArray.count {
-                    return
-                }
-                
-                if realmCol.count != 0 {
-                    try! realm.write {
-                        realm.delete(realmCol)
+                for collection in collections {
+                    let collection_id = collection["collection_id"].intValue
+                    if let existCollection = realm.filterCollection(id: collection_id) {
+                        if existCollection.last_updated_at != collection["last_updated_at"].stringValue {
+                            self.storeRealmColItemsFromServer(colId: collection_id)
+                        }
+                    } else {
+                        self.storeRealmColItemsFromServer(colId: collection_id)
                     }
+                    setDeletedCollection.remove(collection_id)
                 }
-                
-                for col in colArray {
-                    self.storeRealmColItemsFromServer(colId: col["collection_id"].intValue)
-//                    let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
-//
-//                    try! realm.write {
-//                        realm.add(realmCol, update: true)
-//                    }
+                for collectionId in setDeletedCollection {
+                    if let coll = realm.filterCollection(id: collectionId) {
+                        try! realm.write {
+                            realm.delete(coll)
+                        }
+                    }
                 }
             } else {
                 print("[Get Collections] Fail to Get \(status) \(message!)")
@@ -644,17 +644,18 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             let col = JSON(message!)
 
             let realm = try! Realm()
-            let realmCol = RealmCollection(collection_id: col["collection_id"].intValue, name: col["name"].stringValue, user_id: col["user_id"].intValue, desp: col["description"].stringValue, type: col["type"].stringValue, is_private: col["is_private"].boolValue, created_at: col["created_at"].stringValue, count: col["count"].intValue, last_updated_at: col["last_updated_at"].stringValue)
+            let realmCol = RealmCollection(value: [col["collection_id"].intValue, col["name"].stringValue, col["user_id"].intValue, col["description"].stringValue, col["type"].stringValue, col["is_private"].boolValue, col["created_at"].stringValue, col["count"].intValue, col["last_updated_at"].stringValue])
 
             try! realm.write {
                 realm.add(realmCol, update: true)
+                realmCol.pins.removeAll()
             }
 
             for pin in col["pins"].arrayValue {
-                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
-                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
 
                 try! realm.write {
+                    realm.add(collectedPin, update: true)
                     realmCol.pins.append(collectedPin)
                 }
             }

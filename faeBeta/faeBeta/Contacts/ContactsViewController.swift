@@ -98,6 +98,7 @@ class ContactsViewController: UIViewController {
                     RealmUser.getUpdated([user["friend_id"].stringValue, user["friend_user_name"].stringValue, user["friend_user_nick_name"].stringValue, user["friend_user_age"].stringValue, user["friend_user_gender"].stringValue, ""], with: IS_FRIEND)
                     setDeletedFriends.remove(user["friend_id"].stringValue)
                 }
+                setDeletedFriends.remove("1")
                 let realm = try! Realm()
                 for userId in setDeletedFriends {
                     if let user = realm.filterUser(id: userId) {

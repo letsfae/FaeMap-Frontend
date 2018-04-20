@@ -518,8 +518,7 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
 
             for pin in arrLocPinId {
                 arrSavedPinIds.append(pin["pin_id"].intValue)
-                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
-                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
                 
                 try! self.realm.write {
                     colInfo.pins.append(collectedPin)

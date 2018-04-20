@@ -25,7 +25,7 @@ class RealmCollection: Object {
         return "collection_id"
     }
     
-    convenience init(collection_id: Int, name: String, user_id: Int, desp: String, type: String, is_private: Bool, created_at: String, count: Int, last_updated_at: String) {
+    /*convenience init(collection_id: Int, name: String, user_id: Int, desp: String, type: String, is_private: Bool, created_at: String, count: Int, last_updated_at: String) {
         self.init()
         self.collection_id = collection_id
         self.name = name
@@ -36,7 +36,7 @@ class RealmCollection: Object {
         self.created_at = created_at
         self.count = count
         self.last_updated_at = last_updated_at
-    }
+    }*/
 
     static func filterCollectedTypes(type: String) -> Results<RealmCollection> {
         let realm = try! Realm()
@@ -53,8 +53,7 @@ class RealmCollection: Object {
         dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         let added_at = dateformatter.string(from: curtDate)
         
-        let pin = CollectedPin(pin_id: pin_id, added_at: added_at)
-        pin.setPrimaryKeyInfo(pin_id, added_at)
+        let pin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin_id)", Key.shared.user_id, pin_id, added_at])
         
         let realm  = try! Realm()
         guard let col = filterCollectedPin(collection_id: collection_id) else {
@@ -96,25 +95,40 @@ class RealmCollection: Object {
     }
 }
 
+extension Realm {
+    func filterMyCollections() -> Results<RealmCollection> {
+        return self.objects(RealmCollection.self).filter("user_id == %@", Key.shared.user_id)
+    }
+    
+    func filterCollection(id: Int) -> RealmCollection? {
+        return self.object(ofType: RealmCollection.self, forPrimaryKey: id)
+    }
+    
+    func filterCollectedTypes(type: String) -> Results<RealmCollection> {
+        return self.objects(RealmCollection.self).filter("user_id == %@ AND type == %@", Key.shared.user_id, type).sorted(byKeyPath: "collection_id")
+    }
+}
+
 class CollectedPin: Object {
+    @objc dynamic var primary_key: String = ""
+    @objc dynamic var user_id: Int = 0
     @objc dynamic var pin_id: Int = 0
     @objc dynamic var added_at: String = ""
-    @objc dynamic var primary_key: String = ""
     
-    convenience init(pin_id: Int, added_at: String) {
+    /*convenience init(pin_id: Int, added_at: String) {
         self.init()
         self.pin_id = pin_id
         self.added_at = added_at
-    }
+        self.user_id = Key.shared.user_id
+    }*/
     
     override static func primaryKey() -> String? {
         return "primary_key"
     }
     
-    func setPrimaryKeyInfo(_ pin_id: Int, _ added_at: String) {
+    /*func setPrimaryKeyInfo(_ pin_id: Int) {
         self.pin_id = pin_id
-        self.added_at = added_at
-        self.primary_key = "\(pin_id)_\(added_at)"
-    }
+        self.primary_key = "\(Key.shared.user_id)_\(pin_id)"
+    }*/
 }
 

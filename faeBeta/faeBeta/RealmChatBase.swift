@@ -100,11 +100,13 @@ extension Realm {
     }
     
     func filterMessage(_ primary_key: String) -> RealmMessage? {
-        return self.objects(RealmMessage.self).filter("login_user_id == %@ AND primary_key == %@", "\(Key.shared.user_id)", primary_key).first
+        //return self.objects(RealmMessage.self).filter("login_user_id == %@ AND primary_key == %@", "\(Key.shared.user_id)", primary_key).first
+        return self.object(ofType: RealmMessage.self, forPrimaryKey: primary_key)
     }
     
     func filterUser(id: String) -> RealmUser? {
-        return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", "\(Key.shared.user_id)", id).first
+        //return self.objects(RealmUser.self).filter("login_user_id == %@ AND id == %@", "\(Key.shared.user_id)", id).first
+        return self.object(ofType: RealmUser.self, forPrimaryKey: "\(Key.shared.user_id)_\(id)")
     }
     
     func filterUser(id: Int) -> RealmUser? {
