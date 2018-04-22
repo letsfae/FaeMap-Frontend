@@ -133,6 +133,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         // remove user pins but don't delete them
         userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
         startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+        // destinationAddr has been set in FMLocationPin.swift when create a temporary location pin on map
     }
     
     // PlacePinAnnotationDelegate
