@@ -381,8 +381,17 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     @objc func routeToThisPin() {
-        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
-        navigationController?.popViewController(animated: false)
+        guard coordinate != nil else {
+            showAlert(title: "Unexpected Error Occured!", message: "Please try again later", viewCtrler: self)
+            return
+        }
+        let vc = RoutingMapController()
+        vc.mode = .location
+        vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+        vc.destinationAddr = RouteAddress(name: strLocName, coordinate: coordinate)
+        navigationController?.pushViewController(vc, animated: false)
+//        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
+//        navigationController?.popViewController(animated: false)
     }
     
     @objc func shareThisPin() {
