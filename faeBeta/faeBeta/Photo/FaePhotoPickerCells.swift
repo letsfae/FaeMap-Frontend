@@ -15,9 +15,9 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     
     var imgPhoto: UIImageView!
     var imgChosenIndicator: UIImageView!
-    var uiviewVideoIndicator: UIView!
-    var lblVideoDuration: UILabel!
-    var imgCameraIcon: UIImageView!
+    private var uiviewVideoIndicator: UIView!
+    private var lblVideoDuration: UILabel!
+    private var imgCameraIcon: UIImageView!
     
     var boolIsSelected: Bool = false {
         willSet(newValue) {
@@ -34,7 +34,7 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    var duration: TimeInterval? {
+    private var duration: TimeInterval? {
         didSet {
             guard let duration = self.duration else { return }
             lblVideoDuration.text = timeFormatted(timeInterval: duration)
@@ -74,7 +74,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         
         addSubview(uiviewVideoIndicator)
         uiviewVideoIndicator.isHidden = true
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -142,8 +141,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
             return String(format: "%02d:%02d", minute, second)
         }
     }
-    
-    
 }
 
 // MARK: - AlbumsTableViewCell

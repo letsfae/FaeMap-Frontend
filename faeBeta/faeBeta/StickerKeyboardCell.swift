@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MARK: - StickerCell
 class StickerCell: UICollectionViewCell {
     var imgSticker: UIImageView!
     var lblIndex: UILabel!
@@ -30,6 +31,7 @@ class StickerCell: UICollectionViewCell {
     }
 }
 
+// MARK: - StickerTabCell
 class StickerTabCell: UICollectionViewCell {
     var imgBtn: UIImageView!
     var line: UIView!

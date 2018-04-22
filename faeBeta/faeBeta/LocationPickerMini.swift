@@ -17,19 +17,13 @@ protocol LocationPickerMiniDelegate: class {
 }
 
 class LocationPickerMini: UIView, MKMapViewDelegate {
-    
+    // MARK: - Properties
+    var mapView: MKMapView!
+    private var btnSearch: UIButton!
+    private var btnSend: UIButton!
     weak var delegate: LocationPickerMiniDelegate?
     
-    // MARK: properties
-    var mapView: MKMapView!
-    var btnSearch: UIButton!
-    var btnSend: UIButton!
-    
-    // Coordinates to send
-    var latitudeForPin: CLLocationDegrees = 0.0
-    var longitudeForPin: CLLocationDegrees = 0.0
-    
-    // MARK: init
+    // MARK: - init
     init() {
         super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271 + device_offset_bot))
         loadMapView()
@@ -41,7 +35,7 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: setup
+    // MARK: - Setup UI
     func loadMapView() {
         mapView = MKMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 271 + device_offset_bot))
         mapView.layer.zPosition = 100
@@ -57,24 +51,6 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
         mapView.setCamera(camera, animated: false)
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 800, 800)
         mapView.setRegion(coordinateRegion, animated: false)
-    }
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        if annotation is MKUserLocation {
-            let identifier = "self_selected_mode"
-            var anView: SelfAnnotationView
-            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
-                dequeuedView.annotation = annotation
-                anView = dequeuedView
-            } else {
-                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            }
-            return anView
-        }
-        
-        return nil
-        
     }
     
     func loadPin() {
@@ -98,12 +74,23 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
         btnSend.addTarget(self, action: #selector(sendLocationMessageFromMini), for: .touchUpInside)
     }
     
-    func actionSelfPosition(_ sender: UIButton) {
-        let camera = mapView.camera
-        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-        mapView.setCamera(camera, animated: true)
+    // MARK: - MKMapViewDelegate
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation is MKUserLocation {
+            let identifier = "self_selected_mode"
+            var anView: SelfAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? SelfAnnotationView {
+                dequeuedView.annotation = annotation
+                anView = dequeuedView
+            } else {
+                anView = SelfAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            }
+            return anView
+        }
+        return nil
     }
     
+    // MARK: - Button actions
     @objc func showFullLocationView() {
         delegate?.showFullLocationView()
     }
@@ -112,4 +99,9 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
         delegate?.sendLocationMessageFromMini()
     }
     
+    func actionSelfPosition(_ sender: UIButton) {
+        let camera = mapView.camera
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+        mapView.setCamera(camera, animated: true)
+    }
 }

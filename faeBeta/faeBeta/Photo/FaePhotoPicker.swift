@@ -21,10 +21,10 @@ struct FaePhotoPickerConfigure {
 class FaePhotoPicker: UIView {
     
     // MARK: - Properties
-    var collectionView: UICollectionView!
-    var lblTilte: UILabel?
-    var tblAlbums: UITableView?
-    var btnRight: UIButton?
+    private var collectionView: UICollectionView!
+    private var lblTilte: UILabel?
+    private var tblAlbums: UITableView?
+    private var btnRight: UIButton?
     
     var selectedAssets = [FaePHAsset]() {
         didSet {
@@ -37,26 +37,26 @@ class FaePhotoPicker: UIView {
         }
     }
     var collections = [FaePHAssetCollection]()
-    var currentCollection: FaePHAssetCollection? = nil
-    var requestIds = [IndexPath: PHImageRequestID]()
-    var cloudRequestIds = [IndexPath: PHImageRequestID]()
-    var photoLibrary = FaePhotoLibrary()
+    private var currentCollection: FaePHAssetCollection? = nil
+    private var requestIds = [IndexPath: PHImageRequestID]()
+    private var cloudRequestIds = [IndexPath: PHImageRequestID]()
+    private var photoLibrary = FaePhotoLibrary()
     
-    var prefetchQueue = DispatchQueue(label: "prefetchQueue")
-    var intMaxSelectedAssets: Int = 9
-    var activityIndicator: UIActivityIndicatorView?
+    private var prefetchQueue = DispatchQueue(label: "prefetchQueue")
+    private var intMaxSelectedAssets: Int = 9
+    private var activityIndicator: UIActivityIndicatorView?
     var leftBtnHandler: (() -> Void)? = nil
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
     var alertHandler: ((String) -> Void)? = nil
     
     // MARK: Configuration
-    var configuration = FaePhotoPickerConfigure()
-    var scrollDirection: UICollectionViewScrollDirection { return boolFullPicker ? .vertical : .horizontal }
-    var boolFullPicker: Bool { return configuration.boolFullPicker }
-    var strRightBtnTitle: String { return configuration.strRightBtnTitle }
-    var boolSingleSelection: Bool { return configuration.boolSingleSelection }
-    var boolAllowedVideo: Bool { return configuration.boolAllowdVideo }
-    var thumbnailSize: CGSize { return configuration.sizeThumbnail }
+    private var configuration = FaePhotoPickerConfigure()
+    private var scrollDirection: UICollectionViewScrollDirection { return boolFullPicker ? .vertical : .horizontal }
+    private var boolFullPicker: Bool { return configuration.boolFullPicker }
+    private var strRightBtnTitle: String { return configuration.strRightBtnTitle }
+    private var boolSingleSelection: Bool { return configuration.boolSingleSelection }
+    private var boolAllowedVideo: Bool { return configuration.boolAllowdVideo }
+    private var thumbnailSize: CGSize { return configuration.sizeThumbnail }
     
     // MARK: - init & setup
     init(frame: CGRect, with configure: FaePhotoPickerConfigure) {

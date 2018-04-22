@@ -14,14 +14,14 @@ protocol AudioRecorderViewDelegate: class {
 
 class AudioRecorderView: UIView {
 
-    // MARK: properties
-    var btnMain: UIButton!
-    var btnLeft: UIButton!
-    var btnRight: UIButton!
-    var lblInfo: UILabel!
-    var imgSignal: UIImageView!
+    // MARK: - Properties
+    private var btnMain: UIButton!
+    private var btnLeft: UIButton!
+    private var btnRight: UIButton!
+    private var lblInfo: UILabel!
+    private var imgSignal: UIImageView!
     
-    fileprivate var isRecordMode = true // true: record mode  false: play mode
+    private var isRecordMode = true // true: record mode  false: play mode
     private var isPressingMainButton = false
     private var flowTimer: Timer! // the timer to display flow
     private var timeTimer: Timer! // the timer to count the time
@@ -40,10 +40,7 @@ class AudioRecorderView: UIView {
     
     private let leftAndRightButtonResizingFactorMax: CGFloat = 1.3 // while recording, the buttom left & right button will become larger when you move your finger toward to it. This factor limit the maximum size of it
     
-    //@IBOutlet private weak var signalIconHeight: NSLayoutConstraint!
-    //@IBOutlet private weak var signalIconWidth: NSLayoutConstraint!
-    
-    // MARK: init
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -99,7 +96,7 @@ class AudioRecorderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: button actions
+    // MARK: - Button actions
     @objc private func mainButtonPressing(_ sender: UIButton) {
         if isRecordMode {
             isPressingMainButton = true
@@ -297,7 +294,7 @@ class AudioRecorderView: UIView {
         }
     }
     
-    //MARK: switch mode
+    // MARK: - Switch mode
     func switchToPlayMode() {
         UIView.animate(withDuration: 0.2, animations: {
             self.isRecordMode = false
@@ -336,7 +333,7 @@ class AudioRecorderView: UIView {
         }) 
     }
     
-    //MARK: recorder
+    // MARK: Recorder
     private func setupRecorder() {
         recordingSession = AVAudioSession.sharedInstance()
         do {
@@ -372,9 +369,6 @@ class AudioRecorderView: UIView {
         }
     }
     
-    /// stop recording audio
-    ///
-    /// - Returns: whether the record is valid
     private func stopRecord() -> Bool {
         soundRecorder.stop()
         if timeTimer != nil {
@@ -397,7 +391,7 @@ class AudioRecorderView: UIView {
         return true
     }
     
-    //MARK: helper
+    // MARK: - Helper methods
     func setInfoLabel(_ text:String, color: UIColor) {
         let attributedText = NSAttributedString(string:text, attributes: [NSAttributedStringKey.foregroundColor: color, NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 18)!])
         lblInfo.attributedText = attributedText
@@ -458,8 +452,7 @@ class AudioRecorderView: UIView {
     func requireForPermission(_ completion: ((Bool) -> ())?) {
         // add this line to active microphone check
         recordingSession = AVAudioSession.sharedInstance()
-        recordingSession.requestRecordPermission{
-            BOOL in
+        recordingSession.requestRecordPermission { BOOL in
             if completion != nil {
                 completion!(BOOL)
             }
@@ -504,7 +497,7 @@ class AudioRecorderView: UIView {
     }
 }
 
-// MARK: AVAudioPlayerDelegate
+// MARK: - AVAudioPlayerDelegate
 extension AudioRecorderView:  AVAudioRecorderDelegate, AVAudioPlayerDelegate{
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         if flag && !isRecordMode {

@@ -76,14 +76,14 @@ extension FaeMapViewController {
         chatVC.hidesBottomBarWhenPushed = true
         
         //            chatVC.recent = recent
-        chatVC.strChatRoomId = Key.shared.user_id < Int(truncating: withUserId) ? "\(Key.shared.user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(Key.shared.user_id)"
+        //chatVC.strChatRoomId = Key.shared.user_id < Int(truncating: withUserId) ? "\(Key.shared.user_id)-\(withUserId.stringValue)" : "\(withUserId.stringValue)-\(Key.shared.user_id)"
         //        chatVC.chat_id = recent["chat_id"].number?.stringValue
         //        chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
         
         // Bryan
-        chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.id = withUserId.stringValue
-        chatVC.realmWithUser!.user_name = withUserName
+        //chatVC.realmWithUser = RealmUser()
+        //chatVC.realmWithUser!.id = withUserId.stringValue
+        //chatVC.realmWithUser!.user_name = withUserName
         
         // EndBryan
         self.present(chatVC, animated: true, completion: nil)
