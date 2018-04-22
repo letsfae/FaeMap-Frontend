@@ -27,16 +27,4 @@ struct StickerInfoStrcut {
     "faeEmoji" :
         ["Happy", "LOL", "WarmSmile", "Hehe", "Smile", "CrySmile", "CoverSmile", "Love", "Huehue", "Beauty", "Wink", "LoveLove", "Slurp", "Kiss", "Bye", "WarmBye", "Heyy", "Sly", "Clapclap", "Cash", "Stare", "Blush", "WowStare", "Awkward", "Surprise", "Scared", "Opposite", "erase", "Unhappy", "Sigh", "welp", "Sad", "mmm", "Please", "Crying", "Tears", "holdtears", "Waterfall", "Shush", "Sick", "Dizzy", "DizzyCold", "Cold", "Gross", "Puke", "Sleepy", "Yawn", "Sleeping", "Snore", "Slap", "Pound", "Burnt", "Ignore", "Tantrum", "Scold", "erase", "Angry", "Mad", "Hmm", "Processing", "Hesitate", "Dontknow", "Wat", "Thinking", "Whistle", "Shhh", "Hmph", "Hmph2", "Speechless", "Uhh", "Boo", "Embarass", "Awkward2", "Shy", "Pick Nose", "Smirk", "Soldier", "TooCool", "Warrior", "CreepSun" ,"CreepMoon", "HappyDevil", "UnhappyDevil", "erase", "Doge", "Piggy" ,"Alpaca", "PoopFace", "Skull", "Sunglass", "SmilingSun", "Night", "Poop", "erase"]
 ]
-
-    // the tabs
-    static var stickerIndex = ["stickerHistory", "stickerLike", "faeEmoji", "faeSticker", "faeGuy", "steamBun"]
-
-    // store how many pages does each album need
-    static var pageNumDictionary = [/*"stickerMore": 0,*/
-                             "stickerHistory": 0,
-                             "stickerLike": 0,
-                             "faeEmoji": 0,
-                             "faeSticker": 0,
-                             "faeGuy": 0,
-                             "steamBun": 0]
 }

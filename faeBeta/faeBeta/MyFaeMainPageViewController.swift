@@ -10,7 +10,7 @@
 import UIKit
 import Photos
 
-class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SendMutipleImagesDelegate, UIGestureRecognizerDelegate {
+class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
 //    var fullAlbumVC: FullAlbumCollectionViewController!
 
@@ -257,20 +257,20 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     fileprivate func checkLibraryAccessStatus() {
         let photoStatus = PHPhotoLibrary.authorizationStatus()
         switch photoStatus {
-        case .authorized:
+        case .authorized: break
             //let nav = UIStoryboard(name: "Chat", bundle: nil).instantiateViewController(withIdentifier: "FullAlbumNavigationController")
             //let nav = FullAlbumCollectionViewController()
             //let imagePicker = nav.childViewControllers.first as! FullAlbumCollectionViewController
             //layout.scrollDirection = .vertical
             //layout.itemSize = CGSize(width: (screenWidth - 4) / 3, height: (screenWidth - 4) / 3)
             //layout.sectionInset = UIEdgeInsetsMake(1, 1, 1, 1)
-            let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
+            /*let imagePicker = FullAlbumCollectionViewController(collectionViewLayout: UICollectionViewFlowLayout())
             imagePicker.imageDelegate = self
             imagePicker.boolSelectingAvatar = true
             imagePicker._maximumSelectedPhotoNum = 1
             self.present(imagePicker, animated: true, completion: {
                 UIApplication.shared.statusBarStyle = .default
-            })
+            })*/
         case .denied:
             self.alertToEncourageAccess("library")
             return
