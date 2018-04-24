@@ -14,10 +14,6 @@ import CoreMedia
 import AVFoundation
 import RealmSwift
 
-public let kAVATARSTATE = "avatarState"
-public let kFIRSTRUN = "firstRun"
-public var headerDeviceToken: Data!
-
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
