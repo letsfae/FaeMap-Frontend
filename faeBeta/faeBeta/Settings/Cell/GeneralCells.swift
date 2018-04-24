@@ -13,8 +13,10 @@ protocol GeneralTitleCellDelegate: class {
     func stopUpdating()
 }
 
+// MARK: -
 class GeneralTitleCell: UITableViewCell {
     
+    // MARK: Properties
     // Cell Height = 60 or 110
     
     weak var delegate: GeneralTitleCellDelegate?
@@ -27,7 +29,7 @@ class GeneralTitleCell: UITableViewCell {
     
     var uiviewBackground: UIView?
     
-    internal var lblDesContraint = [NSLayoutConstraint]() {
+    private var lblDesContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 self.removeConstraints(oldValue)
@@ -38,7 +40,7 @@ class GeneralTitleCell: UITableViewCell {
         }
     }
     
-    internal var lblNameContraint = [NSLayoutConstraint]() {
+    private var lblNameContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 self.removeConstraints(oldValue)
@@ -49,6 +51,7 @@ class GeneralTitleCell: UITableViewCell {
         }
     }
     
+    // MARK: init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -56,11 +59,47 @@ class GeneralTitleCell: UITableViewCell {
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
     }
     
+    private func loadContent() {
+        
+        topGrayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 5))
+        topGrayLine.backgroundColor = UIColor._241241241()
+        addSubview(topGrayLine)
+        
+        lblName = FaeLabel(CGRect.zero, .left, .medium, 18, UIColor._898989())
+        addSubview(lblName)
+        addConstraintsWithFormat("H:|-20-[v0]-60-|", options: [], views: lblName)
+        lblName.numberOfLines = 0
+        
+        switchIcon = UISwitch()
+        switchIcon.isOn = false
+        switchIcon.onTintColor = UIColor._2499090()
+        switchIcon.transform = CGAffineTransform(scaleX: 35 / 51, y: 21 / 31)
+        switchIcon.addTarget(self, action: #selector(actionSwitchFunc(_:)), for: .valueChanged)
+        addSubview(switchIcon)
+        addConstraintsWithFormat("H:[v0(38)]-19-|", options: [], views: switchIcon)
+        addConstraintsWithFormat("V:|-18-[v0(23)]", options: [], views: switchIcon)
+        
+        lblDes = FaeLabel(CGRect.zero, .left, .mediumItalic, 15, UIColor._168168168())
+        addSubview(lblDes)
+        lblDes.numberOfLines = 0
+        lblDes.lineBreakMode = .byWordWrapping
+        addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDes)
+        lblDes.isHidden = true
+        
+        imgView = UIImageView()
+        addSubview(imgView)
+        imgView.image = #imageLiteral(resourceName: "Settings_next")
+        addConstraintsWithFormat("H:[v0(9)]-20-|", options: [], views: imgView)
+        addConstraintsWithFormat("V:|-25-[v0(17)]", options: [], views: imgView)
+        
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func actionSwitchFunc(_ sender: UISwitch) {
+    // MARK: Switch action
+    @objc private func actionSwitchFunc(_ sender: UISwitch) {
         switch sender.tag {
         case 31:
             if Key.shared.userEmailVerified == false {
@@ -115,41 +154,7 @@ class GeneralTitleCell: UITableViewCell {
         }
     }
     
-    fileprivate func loadContent() {
-        
-        topGrayLine = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 5))
-        topGrayLine.backgroundColor = UIColor._241241241()
-        addSubview(topGrayLine)
-        
-        lblName = FaeLabel(CGRect.zero, .left, .medium, 18, UIColor._898989())
-        addSubview(lblName)
-        addConstraintsWithFormat("H:|-20-[v0]-60-|", options: [], views: lblName)
-        lblName.numberOfLines = 0
-        
-        switchIcon = UISwitch()
-        switchIcon.isOn = false
-        switchIcon.onTintColor = UIColor._2499090()
-        switchIcon.transform = CGAffineTransform(scaleX: 35 / 51, y: 21 / 31)
-        switchIcon.addTarget(self, action: #selector(actionSwitchFunc(_:)), for: .valueChanged)
-        addSubview(switchIcon)
-        addConstraintsWithFormat("H:[v0(38)]-19-|", options: [], views: switchIcon)
-        addConstraintsWithFormat("V:|-18-[v0(23)]", options: [], views: switchIcon)
-        
-        lblDes = FaeLabel(CGRect.zero, .left, .mediumItalic, 15, UIColor._168168168())
-        addSubview(lblDes)
-        lblDes.numberOfLines = 0
-        lblDes.lineBreakMode = .byWordWrapping
-        addConstraintsWithFormat("H:|-20-[v0]-20-|", options: [], views: lblDes)
-        lblDes.isHidden = true
-        
-        imgView = UIImageView()
-        addSubview(imgView)
-        imgView.image = #imageLiteral(resourceName: "Settings_next")
-        addConstraintsWithFormat("H:[v0(9)]-20-|", options: [], views: imgView)
-        addConstraintsWithFormat("V:|-25-[v0(17)]", options: [], views: imgView)
-        
-    }
-    
+    // MARK: Helper methods for controling constraints
     func setContraintsForDes(desp exist: Bool = true) {
         if exist {
             lblDesContraint = returnConstraintsWithFormat("V:|-50-[v0]-20-|", options: [], views: lblDes)            
@@ -161,11 +166,11 @@ class GeneralTitleCell: UITableViewCell {
         removeConstraints(lblDesContraint)
         lblNameContraint = returnConstraintsWithFormat("V:|-20-[v0]-15-|", options: [], views: lblName)
     }
-    
 }
 
+// MARK: -
 class GeneralSubTitleCell: UITableViewCell {
-    
+    // MARK: Properties
     // cell height = 47
     
     var lblName: FaeLabel!
@@ -174,7 +179,7 @@ class GeneralSubTitleCell: UITableViewCell {
     var btnSelect: UIButton!
     var imgView: UIImageView!
     
-    internal var lblContraint = [NSLayoutConstraint]() {
+    private var lblContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 self.removeConstraints(oldValue)
@@ -185,6 +190,7 @@ class GeneralSubTitleCell: UITableViewCell {
         }
     }
     
+    // MARK: init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -192,40 +198,7 @@ class GeneralSubTitleCell: UITableViewCell {
         loadContent()
     }
     
-    @objc func actionSwitchFunc(_ sender: UISwitch) {
-        switch sender.tag {
-        case 11, 12, 13, 14, 15:
-            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
-            break
-        default:
-            break
-        }
-    }
-    
-    func updateName(name: String) {
-        var arrNames = name.split(separator: " ")
-        var array = [String]()
-        guard arrNames.count >= 1 else { return }
-        for i in 0..<arrNames.count {
-            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
-            array.append(name)
-        }
-        
-        let fullAttrStr = NSMutableAttributedString()
-        
-        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        let title_0_attr = NSMutableAttributedString(string: array[0] + " ", attributes: attrs_0)
-        
-        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._168168168(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        let title_1_attr = NSMutableAttributedString(string: array[1] + "  ", attributes: attrs_1)
-        
-        fullAttrStr.append(title_0_attr)
-        fullAttrStr.append(title_1_attr)
-        
-        lblName.attributedText = fullAttrStr
-    }
-    
-    fileprivate func loadContent() {
+    private func loadContent() {
         lblName = FaeLabel(CGRect.zero, .left, .medium, 16, UIColor._898989())
         addSubview(lblName)
         addConstraintsWithFormat("H:|-30-[v0]-60-|", options: [], views: lblName)
@@ -261,6 +234,41 @@ class GeneralSubTitleCell: UITableViewCell {
         addConstraintsWithFormat("H:|-30-[v0]-45-|", options: [], views: lblDes)
         lblDes.isHidden = true
         lblDes.text = "Enable to allow Fae Map to send you notifications such as new chats and new places to discover."
+    }
+    
+    // MARK: Switch action
+    @objc func actionSwitchFunc(_ sender: UISwitch) {
+        switch sender.tag {
+        case 11, 12, 13, 14, 15:
+            UIApplication.shared.openURL(URL(string: UIApplicationOpenSettingsURLString)!)
+            break
+        default:
+            break
+        }
+    }
+    
+    // MARK: Helper methods
+    func updateName(name: String) {
+        var arrNames = name.split(separator: " ")
+        var array = [String]()
+        guard arrNames.count >= 1 else { return }
+        for i in 0..<arrNames.count {
+            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
+            array.append(name)
+        }
+        
+        let fullAttrStr = NSMutableAttributedString()
+        
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_0_attr = NSMutableAttributedString(string: array[0] + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._168168168(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_1_attr = NSMutableAttributedString(string: array[1] + "  ", attributes: attrs_1)
+        
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+        
+        lblName.attributedText = fullAttrStr
     }
     
     func setContraintsForDes() {

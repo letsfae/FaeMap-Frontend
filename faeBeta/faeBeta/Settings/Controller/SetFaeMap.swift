@@ -7,17 +7,17 @@
 //
 
 import UIKit
-// Vicky 09/17/17 右边滑动条，参照Sketch文件，老板需要的是大红色 _2499090()，注意改一下。
 
 class SetFaeMap: UIViewController, UIScrollViewDelegate {
+    // MARK: - Properties
+    private var scrollview: UIScrollView!
+    private var imgviewPic: UIImageView!
+    private var btnBack: UIButton!
+    private var lblTitle: UILabel!
+    private var lblSubtitle: UILabel!
+    private var textView: UITextView!
     
-    var scrollview: UIScrollView!
-    var imgviewPic: UIImageView!
-    var btnBack: UIButton!
-    var lblTitle: UILabel!
-    var lblSubtitle: UILabel!
-    var textView: UITextView!
-    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         automaticallyAdjustsScrollViewInsets = false
@@ -32,22 +32,17 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         loadContent()
     }
     
-    func loadContent() {
-        
-        //btnBack = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 36/736*screenHeight, width: 18, height: 18))
+    private func loadContent() {
         btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
         
-        //imgviewPic = UIImageView(frame: CGRect(x:screenWidth/2-25/414*screenWidth, y: 50/736*screenHeight, width: 50/414*screenWidth, height: 50/414*screenWidth))
         imgviewPic = UIImageView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
         imgviewPic.center.x = screenWidth / 2
         scrollview.addSubview(imgviewPic)
         imgviewPic.image = #imageLiteral(resourceName: "Settings_map")
         
-        //let lblX = 315/414*screenWidth
-        //lblTitle = UILabel(frame:CGRect(x: (screenWidth-lblX)/2, y: 114/736*screenHeight, width: lblX, height: 18))
         lblTitle = UILabel(frame: CGRect(x: 0, y: 54, width: 200, height: 18))
         lblTitle.center.x = screenWidth / 2
         scrollview.addSubview(lblTitle)
@@ -56,7 +51,6 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         lblTitle.text = "About Fae Map"
         lblTitle.textAlignment = .center
         
-        //lblSubtitle = UILabel(frame:CGRect(x: (screenWidth-lblX)/2, y: 132/736*screenHeight, width: lblX, height: 18))
         lblSubtitle = UILabel(frame: CGRect(x: 0, y: 72, width: 200, height: 18))
         lblSubtitle.center.x = screenWidth / 2
         scrollview.addSubview(lblSubtitle)
@@ -79,6 +73,7 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         scrollview.contentSize.height = 100.0 + textView.frame.size.height + 42.5 * screenWidthFactor
     }
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
             indicator.backgroundColor = UIColor._2499090()
@@ -88,7 +83,8 @@ class SetFaeMap: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    // MARK: - Button action
+    @objc private func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
 }

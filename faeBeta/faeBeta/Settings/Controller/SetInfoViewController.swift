@@ -9,14 +9,15 @@
 import UIKit
 
 class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, GeneralTitleCellDelegate {
-    
-    var tblInfo: UITableView!
-    var uiviewNavBar: FaeNavBar!
-    var arrTitle: [String] = ["Edit NameCard", "Hide NameCard Options", "Disable Gender", "Disable Age"]
-    var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCard Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
-    var activityIndicator: UIActivityIndicatorView!
+    // MARK: - Properties
+    private var tblInfo: UITableView!
+    private var uiviewNavBar: FaeNavBar!
+    private var arrTitle: [String] = ["Edit NameCard", "Hide NameCard Options", "Disable Gender", "Disable Age"]
+    private var arrDetail: [String] = ["Preview and Edit Information on your NameCard.", "Hide the bottom NameCard Options for you and other users. Contacts are excluded.", "Gender will be hidden for you and all other users. You will no longer be able to use Gender Filters.", "Age will be hidden for you and all other users. You will no longer be able to use Age Filters."]
+    private var activityIndicator: UIActivityIndicatorView!
     var enterMode: SetInfoEnterMode!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -26,19 +27,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         loadActivityIndicator()
     }
     
-    // GeneralTitleCellDelegate
-    func startUpdating() {
-        activityIndicator.startAnimating()
-        view.isUserInteractionEnabled = false
-    }
-    
-    // GeneralTitleCellDelegate
-    func stopUpdating() {
-        activityIndicator.stopAnimating()
-        view.isUserInteractionEnabled = true
-    }
-    
-    func loadActivityIndicator() {
+    private func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -48,7 +37,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         view.bringSubview(toFront: activityIndicator)
     }
     
-    func loadNavBar() {
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.lblTitle.text = "My Information"
@@ -57,7 +46,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
     }
     
-    func loadTableView() {
+    private func loadTableView() {
         tblInfo = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblInfo)
         tblInfo.separatorStyle = .none
@@ -68,6 +57,27 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         tblInfo.rowHeight = UITableViewAutomaticDimension
     }
     
+    // MARK:- Button action
+    @objc private func actionGoBack(_ sender: UIButton) {
+        if enterMode == .nameCard {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    // MARK: - GeneralTitleCellDelegate
+    func startUpdating() {
+        activityIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+    }
+    
+    func stopUpdating() {
+        activityIndicator.stopAnimating()
+        view.isUserInteractionEnabled = true
+    }
+    
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
@@ -86,14 +96,12 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.switchIcon.isHidden = true
             cell.imgView.isHidden = false
             cell.topGrayLine.isHidden = true
-        }
-        else {
+        } else {
             cell.switchIcon.isHidden = false
             cell.switchIcon.tag = indexPath.section + 100
             if indexPath.section == 1 {
                 cell.switchIcon.setOn(!Key.shared.showNameCardOption, animated: false)
-            }
-            else if indexPath.section == 2 {
+            } else if indexPath.section == 2 {
                 cell.switchIcon.setOn(Key.shared.disableGender, animated: false)
             } else if indexPath.section == 3 {
                 cell.switchIcon.setOn(Key.shared.disableAge, animated: false)
@@ -117,14 +125,6 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
                 present(vc, animated: true)
             }
         default: break
-        }
-    }
-    
-    @objc func actionGoBack(_ sender: UIButton) {
-        if enterMode == .nameCard {
-            dismiss(animated: true)
-        } else {
-            navigationController?.popViewController(animated: true)
         }
     }
 }

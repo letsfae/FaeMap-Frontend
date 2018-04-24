@@ -9,8 +9,8 @@
 import UIKit
 
 class SetWebViewController: UIViewController, UIWebViewDelegate {
-    var uiviewNavBar: FaeNavBar!
-    var webView: UIWebView!
+    private var uiviewNavBar: FaeNavBar!
+    private var webView: UIWebView!
     var strURL: String = "https://www.faemaps.com"
     
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class SetWebViewController: UIViewController, UIWebViewDelegate {
         }
     }
     
-    @objc func leftBtnTapped() {
+    @objc private func leftBtnTapped() {
         navigationController?.popViewController(animated: true)
     }
 }
