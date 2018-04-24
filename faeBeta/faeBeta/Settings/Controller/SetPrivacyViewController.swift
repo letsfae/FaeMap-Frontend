@@ -11,30 +11,31 @@ import RealmSwift
 import SwiftyJSON
 
 class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    // MARK: - Properties
+    private var uiviewNavBar: FaeNavBar!
+    private var tblPrivacy: UITableView!
+    private var arrTitle = ["00":"Go Invisible", "10":"Shadow Location System", "11":"Minimal Effect", "12":"Normal Effect", "13":"Maximum Effect", "20":"Blocked List", "30":"Clear Chat History"]
+    private var arrDetail: [String] = ["Hide your own Map Avatar and all other Avatars. You can't see others and others can't see you.", "Now you see me, now you don't! S.L.S is used to protect your true location in public.", "List for all the users you blocked. Banned users will no longer appear in the list.", "Clears all chat contents excluding those with Official Accounts. This does not delete the chat itself."]
     
-    var uiviewNavBar: FaeNavBar!
-    var tblPrivacy: UITableView!
-    var arrTitle = ["00":"Go Invisible", "10":"Shadow Location System", "11":"Minimal Effect", "12":"Normal Effect", "13":"Maximum Effect", "20":"Blocked List", "30":"Clear Chat History"]
-    var arrDetail: [String] = ["Hide your own Map Avatar and all other Avatars. You can't see others and others can't see you.", "Now you see me, now you don't! S.L.S is used to protect your true location in public.", "List for all the users you blocked. Banned users will no longer appear in the list.", "Clears all chat contents excluding those with Official Accounts. This does not delete the chat itself."]
+    private var uiviewHidden: UIView!
+    private var lblHiddenModel: UILabel!
+    private var imgviewHidden: UIImageView!
+    private var lblHiddenDes: UILabel!
+    private var lblHiddenDes2: UILabel!
+    private var btnGot: UIButton!
     
-    var uiviewHidden: UIView!
-    var lblHiddenModel: UILabel!
-    var imgviewHidden: UIImageView!
-    var lblHiddenDes: UILabel!
-    var lblHiddenDes2: UILabel!
-    var btnGot: UIButton!
+    private var btnBackground: UIButton!
+    private var uiviewBackground: UIView!
     
-    var btnBackground: UIButton!
-    var uiviewBackground: UIView!
-    
-    var uiviewAlert: UIView!
-    var lblAlert: UILabel!
-    var btnAlert: UIButton!
-    var btnDelete: UIButton!
+    private var uiviewAlert: UIView!
+    private var lblAlert: UILabel!
+    private var btnAlert: UIButton!
+    private var btnDelete: UIButton!
     
     //tag = 0 means ask clear chat history view; tag = 1 means chat history has been cleared
-    var tag = 0
+    private var tag = 0
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -46,7 +47,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         loaduiviewAlert()
     }
     
-    func loadNavBar() {
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.lblTitle.text = "Privacy"
@@ -55,7 +56,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewNavBar.rightBtn.setImage(nil, for: .normal)
     }
     
-    func loadTableView() {
+    private func loadTableView() {
         tblPrivacy = UITableView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(tblPrivacy)
         tblPrivacy.delegate = self
@@ -66,7 +67,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         tblPrivacy.rowHeight = UITableViewAutomaticDimension
     }
     
-    func loadHiddenView() {
+    private func loadHiddenView() {
         uiviewHidden = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
         uiviewHidden.backgroundColor = .white
         uiviewHidden.layer.cornerRadius = 16 * screenWidthFactor
@@ -101,9 +102,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         btnGot.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
     }
     
-    func loadBackground() {
+    private func loadBackground() {
         btnBackground = UIButton(frame: self.view.frame)
-        //btnBackground.addTarget(self, action: #selector(notouch(_:)), for: .touchUpInside)
         view.addSubview(btnBackground)
         
         uiviewBackground = UIView(frame: self.view.frame)
@@ -114,16 +114,13 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewBackground.isHidden = true
     }
     
-    func loaduiviewAlert() {
-        //let uiviewAlertX = 290/414*screenWidth
-        //uiviewAlert = UIView(frame: CGRect(x: (screenWidth-uiviewAlertX)/2, y: 200/736*screenHeight, width: 290/414*screenWidth, height: 161))
+    private func loaduiviewAlert() {
         uiviewAlert = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
         uiviewAlert.center.x = screenWidth / 2
         uiviewAlert.backgroundColor = .white
         uiviewAlert.layer.cornerRadius = 19 * screenHeightFactor
         uiviewBackground.addSubview(uiviewAlert)
         
-        //let btnAlertX = 210/414*screenWidth
         lblAlert = UILabel(frame: CGRect(x: 0, y: 30, w: 205, h: 50))
         lblAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(lblAlert)
@@ -139,7 +136,6 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         lblAlert.numberOfLines = 0
         lblAlert.lineBreakMode = .byWordWrapping
         
-        //btnAlert = UIButton(frame: CGRect(x: (uiviewAlertX-btnAlertX)/2, y: 102/736*screenHeight, width: btnAlertX, height: 39))
         btnAlert = UIButton(frame: CGRect(x: 0, y: 102, w: 210, h: 39))
         btnAlert.center.x = uiviewAlert.frame.width / 2
         uiviewAlert.addSubview(btnAlert)
@@ -149,23 +145,64 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         if tag == 0 {
             btnAlert.setTitle("Yes", for: .normal)
             btnAlert.addTarget(self, action: #selector(getintoNextClear(_:)), for: .touchUpInside)
-        }
-        else {
+        } else {
             btnAlert.setTitle("Ok!", for: .normal)
             btnAlert.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
         }
         btnAlert.backgroundColor = UIColor._2499090()
         btnAlert.layer.cornerRadius = 19 * screenHeightFactor
-        
-        //btnDelete = UIButton(frame: CGRect(x: 15/414*screenWidth, y: 15/736*screenHeight, width: 17/414*screenWidth, height: 17/414*screenWidth))
+
         btnDelete = UIButton(frame: CGRect(x: 0, y: 0, w: 47, h: 45))
         uiviewAlert.addSubview(btnDelete)
         btnDelete.setImage(#imageLiteral(resourceName: "Settings_delete"), for: .normal)
         btnDelete.addTarget(self, action: #selector(showMainView(_:)), for: .touchUpInside)
-        
+    }
+    
+    // MARK: - Button & switch actions
+    @objc private func actionGoBack(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    @objc private func showMainView(_ sender: UIButton) {
+        uiviewHidden.isHidden = true
+        uiviewBackground.isHidden = true
+    }
+    
+    private func invisibleModeDimClicked(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.3, animations: {
+            sender.alpha = 0
+        }, completion: { _ in
+            sender.removeFromSuperview()
+        })
+    }
+    
+    private func clearChatHistory(completion: @escaping ((Bool) -> Void)) {
+        let realm = try! Realm()
+        let allMessages = realm.objects(RealmMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        let allRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
+        try! realm.write {
+            realm.delete(allMessages)
+            realm.delete(allRecents)
+        }
+        completion(true)
+    }
+    
+    @objc private func getintoNextClear(_ sender: UIButton) {
+        tag = 1
+        loaduiviewAlert()
+    }
+    
+    @objc private func getintoHiddenModel(_ sender: UISwitch) {
+        if sender.isOn == true {
+            sender.isOn = false
+        } else {
+            // TODO: show main map and uiviewAlert, need to add mainscreen map here
+            sender.isOn = true
+            uiviewHidden.isHidden = false
+        }
     }
 
-    
+    // MARK: - UITableViewDataSource
     func numberOfSections(in tableView: UITableView) -> Int {
         return 4
     }
@@ -211,13 +248,11 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             cell.switchIcon.isOn = Key.shared.onlineStatus == 5
             cell.switchIcon.addTarget(self, action: #selector(getintoHiddenModel(_:)), for: .valueChanged)
             cell.topGrayLine.isHidden = true
-        }
-        else if section == 1 {
+        } else if section == 1 {
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = true
             cell.topGrayLine.isHidden = false
-        }
-        else {
+        } else {
             cell.imgView.isHidden = false
             cell.switchIcon.isHidden = true
             cell.topGrayLine.isHidden = false
@@ -230,6 +265,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = indexPath.section
         let row = indexPath.row
@@ -242,8 +278,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 uiviewAlert.isHidden = true
                 uiviewHidden.isHidden = false
             }
-        }
-        else if section == 1 {
+        } else if section == 1 {
             var effect = "normal"
             switch row {
             case 1:
@@ -309,47 +344,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    @objc func getintoHiddenModel(_ sender: UISwitch) {
-        if sender.isOn == true {
-            sender.isOn = false
-        }
-        else {
-            //show main map and uiviewAlert, need to add mainscreen map here
-            sender.isOn = true
-            uiviewHidden.isHidden = false
-        }
-    }
+ 
     
-    @objc func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @objc func showMainView(_ sender: UIButton) {
-        uiviewHidden.isHidden = true
-        uiviewBackground.isHidden = true
-    }
-    
-    func invisibleModeDimClicked(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: {
-            sender.alpha = 0
-        }, completion: { _ in
-            sender.removeFromSuperview()
-        })
-    }
-    
-    func clearChatHistory(completion: @escaping ((Bool) -> Void)) {
-        let realm = try! Realm()
-        let allMessages = realm.objects(RealmMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
-        let allRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", "\(Key.shared.user_id)")
-        try! realm.write {
-            realm.delete(allMessages)
-            realm.delete(allRecents)
-        }
-        completion(true)
-    }
-    
-    @objc func getintoNextClear(_ sender: UIButton) {
-        tag = 1
-        loaduiviewAlert()
-    }
+
 }

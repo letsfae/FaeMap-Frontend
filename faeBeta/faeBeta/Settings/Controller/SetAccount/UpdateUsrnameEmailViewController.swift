@@ -14,22 +14,22 @@ protocol UpdateUsrnameEmailDelegate: class {
 }
 
 class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
-    var lblTitle: FaeLabel!
-    var lblHint: FaeLabel!
-    var btnUpdate: UIButton!
-    var lblHintRed: FaeLabel!
-    var lblHintHead: FaeLabel!
+    // MARK: - Properties
+    private var lblTitle: FaeLabel!
+    private var lblHint: FaeLabel!
+    private var btnUpdate: UIButton!
+    private var lblHintRed: FaeLabel!
+    private var lblHintHead: FaeLabel!
     
     var strEmail: String? = ""
     var strUsername: String? = ""
     var strPhone: String? = ""
     var strCountry: String? = "United States +1"
-    var indicatorView: UIActivityIndicatorView!
-//    var boolVerified: Bool = false
-    var uiviewShadowBG: UIView!
-    var uiviewMsg: UIView!
+    private var indicatorView: UIActivityIndicatorView!
+    private var uiviewShadowBG: UIView!
+    private var uiviewMsg: UIView!
     
-    var faeUser = FaeUser()
+    private var faeUser = FaeUser()
     weak var delegate: UpdateUsrnameEmailDelegate?
     
     enum SettingEnterMode {
@@ -39,22 +39,23 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     }
     
     var enterMode: SettingEnterMode!
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
-//        navigationController?.interactivePopGestureRecognizer?.addTarget(<#T##target: Any##Any#>, action: <#T##Selector#>)
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         lblTitle = FaeLabel(CGRect(x: 0, y: 99, width: screenWidth, height: 27), .center, .medium, 20, UIColor._898989())
         lblTitle.numberOfLines = 0
         view.addSubview(lblTitle)
@@ -81,7 +82,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         }
     }
     
-    fileprivate func loadEmail() {
+    private func loadEmail() {
         lblTitle.text = "Your Primary Email:"
         btnUpdate.setTitle("Change Email", for: UIControlState())
         lblHint.text = "You can use your Email for Log in,\nSubscriptions, and Verifications."
@@ -101,7 +102,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         createActivityIndicator()
     }
     
-    fileprivate func setHintRedLabel() {
+    private func setHintRedLabel() {
         let attr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
         let attrBold = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]
         let txt = NSMutableAttributedString()
@@ -124,7 +125,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         lblHintRed.attributedText = txt
     }
     
-    fileprivate func loadUserName() {
+    private func loadUserName() {
         lblTitle.text = "Your Faevorite Username:"
         //btnUpdate.setTitle("Request Reset", for: UIControlState())
         btnUpdate.setTitle("Change Username", for: UIControlState())
@@ -154,7 +155,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         loadUserNameShadow()
     }
     
-    fileprivate func loadUserNameShadow() {
+    private func loadUserNameShadow() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewShadowBG.backgroundColor = UIColor._107105105_a50()
         view.addSubview(uiviewShadowBG)
@@ -195,7 +196,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         uiviewMsg.addSubview(btnCancel)
     }
     
-    fileprivate func loadPhone() {
+    private func loadPhone() {
         lblTitle.text = "Your Linked Phone Number"
         btnUpdate.setTitle("Change Number", for: UIControlState())
         lblHint.text = "You can use your Phone Number for,\nAdding Contacts and Verifications."
@@ -209,7 +210,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         view.addSubview(lblPhone)
     }
     
-    func createActivityIndicator() {
+    private func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
@@ -220,7 +221,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         view.bringSubview(toFront: indicatorView)
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    // MARK: - Button & gesture actions
+    @objc private func actionBack(_ sender: UIButton) {
         if enterMode == .email {
             delegate?.updateEmail()
         } else if enterMode == .phone {
@@ -237,7 +239,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         navigationController?.popViewController(animated: true)
     }
         
-    @objc func actionUpdate(_ sender: UIButton) {
+    @objc private func actionUpdate(_ sender: UIButton) {
         switch enterMode {
         case .email:
             let vc = SetNameViewController()
@@ -254,15 +256,15 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         }
     }
     
-    @objc func actionCancel(_ sender: UIButton) {
+    @objc private func actionCancel(_ sender: UIButton) {
         animationHideView()
     }
     
-    @objc func actionYes(_ sender: UIButton) {
+    @objc private func actionYes(_ sender: UIButton) {
         animationHideView()
     }
 
-    @objc func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
+    @objc private func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
         let vc = VerifyCodeViewController()
         vc.delegate = self
         vc.enterMode = .email
@@ -281,8 +283,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         }
     }
     
-    // animations
-    func animationShowView() {
+    // MARK: - Animations
+    private func animationShowView() {
         uiviewShadowBG.alpha = 0
         uiviewMsg.alpha = 0
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
@@ -291,7 +293,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         })
     }
     
-    func animationHideView() {
+    private func animationHideView() {
         uiviewShadowBG.alpha = 1
         uiviewMsg.alpha = 1
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
@@ -299,9 +301,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             self.uiviewShadowBG.alpha = 0
         })
     }
-    // animations end
 
-    // VerifyCodeDelegate
+    // MARK: - VerifyCodeDelegate
     func verifyEmailSucceed() {
         setHintRedLabel()
     }

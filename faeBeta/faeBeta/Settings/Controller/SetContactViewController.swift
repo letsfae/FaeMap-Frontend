@@ -9,11 +9,12 @@
 import UIKit
 
 class SetContactViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    // MARK: - Properties
+    private var uiviewNavbar: FaeNavBar!
+    private var tblContact: UITableView!
+    private var arrContact: [String] = ["Say Hello", "Support & Help", "Report Problem", "Provide Feedback", "Questions", "Join Us"]
     
-    var uiviewNavbar: FaeNavBar!
-    var tblContact: UITableView!
-    var arrContact: [String] = ["Say Hello", "Support & Help", "Report Problem", "Provide Feedback", "Questions", "Join Us"]
-    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -33,10 +34,12 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         tblContact.register(GeneralTitleCell.self, forCellReuseIdentifier: "GeneralTitleCell")
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+    // MARK: - Button action
+    @objc private func actionGoBack(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrContact.count
     }
@@ -56,6 +59,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:

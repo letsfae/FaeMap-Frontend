@@ -16,18 +16,18 @@ enum SetInfoEnterMode {
 
 class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, PassDisplayNameBackDelegate, PassShortIntroBackDelegate, UIImagePickerControllerDelegate, ChooseAvatarDelegate {
 
-    // MARK: Properties
-    var faeNavBar: FaeNavBar!
+    // MARK: - Properties
+    private var faeNavBar: FaeNavBar!
     var uiviewNameCard: FMNameCardView!
-    var uiviewInterval: UIView!
-    var tblNameCard: UITableView!
-    var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
-    var strDisplayName: String?
-    var strShortIntro: String?
+    private var uiviewInterval: UIView!
+    private var tblNameCard: UITableView!
+    private var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
+    private var strDisplayName: String?
+    private var strShortIntro: String?
     var enterMode: SetInfoEnterMode!
     
     var activityIndicator: UIActivityIndicatorView!
-    var isProfilePhoto: Bool = true
+    private var isProfilePhoto: Bool = true
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -43,7 +43,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         uiviewNameCard.userId = Key.shared.user_id // refresh user namecard
     }
     
-    func loadContent() {
+    private func loadContent() {
         faeNavBar = FaeNavBar()
         view.addSubview(faeNavBar)
         faeNavBar.lblTitle.text = "Edit NameCard"
@@ -72,7 +72,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         tblNameCard.alwaysBounceVertical = false
     }
     
-    func loadActivityIndicator() {
+    private func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -82,7 +82,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         view.bringSubview(toFront: activityIndicator)
     }
     
-    func updateInfo() {
+    private func updateInfo() {
         strDisplayName = Key.shared.nickname
         strShortIntro = Key.shared.introduction
         getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
@@ -95,7 +95,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     }
     
     // MARK: - Button action
-    @objc func actionGoBack(_ sender: UIButton) {
+    @objc private func actionGoBack(_ sender: UIButton) {
         if enterMode == .nameCard {
             dismiss(animated: true)
         } else {
@@ -107,6 +107,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrInfo.count
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }

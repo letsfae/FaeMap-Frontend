@@ -211,7 +211,6 @@
 		B37E5DB71F831040008A6B4B /* SetAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */; };
 		B37E5DB81F831040008A6B4B /* SetFaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */; };
 		B37E5DB91F831040008A6B4B /* SetAboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */; };
-		B37E5DBA1F831040008A6B4B /* SetEnterPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */; };
 		B37E5DBB1F831040008A6B4B /* SetMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */; };
 		B37E5DBC1F831040008A6B4B /* SetInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */; };
 		B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */; };
@@ -223,7 +222,6 @@
 		B37E5DC41F831040008A6B4B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */; };
 		B37E5DC51F831040008A6B4B /* SetSpreadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */; };
 		B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */; };
-		B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB41F831040008A6B4B /* SetAlertController.swift */; };
 		B37E5DC81F831040008A6B4B /* SetGeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */; };
 		B37E5DC91F831040008A6B4B /* SetInfoNamecard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */; };
 		B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */; };
@@ -577,7 +575,6 @@
 		B37E5DA41F83103E008A6B4B /* SetAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAccountViewController.swift; sourceTree = "<group>"; };
 		B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetFaeMap.swift; sourceTree = "<group>"; };
 		B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAboutViewController.swift; sourceTree = "<group>"; };
-		B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetEnterPasswordViewController.swift; sourceTree = "<group>"; };
 		B37E5DA81F83103E008A6B4B /* SetMapsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetMapsViewController.swift; sourceTree = "<group>"; };
 		B37E5DA91F83103E008A6B4B /* SetInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInfoViewController.swift; sourceTree = "<group>"; };
 		B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetCloseViewController.swift; sourceTree = "<group>"; };
@@ -589,7 +586,6 @@
 		B37E5DB11F83103F008A6B4B /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetSpreadViewController.swift; sourceTree = "<group>"; };
 		B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetDeactiveViewController.swift; sourceTree = "<group>"; };
-		B37E5DB41F831040008A6B4B /* SetAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetAlertController.swift; sourceTree = "<group>"; };
 		B37E5DB51F831040008A6B4B /* SetGeneralViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGeneralViewController.swift; sourceTree = "<group>"; };
 		B37E5DB61F831040008A6B4B /* SetInfoNamecard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetInfoNamecard.swift; sourceTree = "<group>"; };
 		B385802A1F9F069900E40284 /* VerifyCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyCodeViewController.swift; sourceTree = "<group>"; };
@@ -1361,12 +1357,10 @@
 				B37E5DA61F83103E008A6B4B /* SetAboutViewController.swift */,
 				B37E5DAB1F83103F008A6B4B /* SetContactViewController.swift */,
 				B37E5DB21F83103F008A6B4B /* SetSpreadViewController.swift */,
-				B37E5DB41F831040008A6B4B /* SetAlertController.swift */,
 				B37E5DAA1F83103F008A6B4B /* SetCloseViewController.swift */,
 				9FCE363D1FB958F1008CE5A1 /* SetContactDetailViewController.swift */,
 				B37E5DB31F831040008A6B4B /* SetDeactiveViewController.swift */,
 				B37E5DB01F83103F008A6B4B /* SetDisplayName.swift */,
-				B37E5DA71F83103E008A6B4B /* SetEnterPasswordViewController.swift */,
 				B37E5DAC1F83103F008A6B4B /* SetFaeInc.swift */,
 				B37E5DA51F83103E008A6B4B /* SetFaeMap.swift */,
 				B37E5DAE1F83103F008A6B4B /* SetShortIntro.swift */,
@@ -1881,7 +1875,6 @@
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
-				B37E5DC71F831040008A6B4B /* SetAlertController.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				50188F3B1FC36C390038CAFF /* CCHCenterOfMassMapClusterer.m in Sources */,
 				50188F3F1FC36C390038CAFF /* CCHMapClusterAnnotation.m in Sources */,
@@ -2071,7 +2064,6 @@
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
-				B37E5DBA1F831040008A6B4B /* SetEnterPasswordViewController.swift in Sources */,
 				9F64B3F520019BD40007848B /* FaeScrollBar.swift in Sources */,
 				B37E5DA31F831019008A6B4B /* SetAccountCell.swift in Sources */,
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
