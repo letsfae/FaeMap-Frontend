@@ -39,6 +39,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
     weak var delegate: SignInPhoneDelegate?
     let user = FaeUser()
     var enterFrom: EnterFromMode!
+    var strUsername: String = ""
     
     fileprivate var numberKeyboard: FAENumberKeyboard!
     fileprivate var indicatorView: UIActivityIndicatorView!
@@ -220,7 +221,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                         self.setRequestResult("We could’t find an account linked \nwith this Phone Number!")
                     } else {
                         self.user.whereKey("phone", value: "(" + self.phoneCode + ")" + self.phoneNumber)
-                        self.user.whereKey("user_name", value: "username23") //TODO jichao: username
+                        self.user.whereKey("user_name", value: self.strUsername) //TODO jichao: username
                         self.user.resetPassword {(status: Int, message: Any?) in
                             if status / 100 == 2 {
                                 self.setupEnteringVerificationCode()
