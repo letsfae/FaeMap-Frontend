@@ -433,9 +433,14 @@ extension LogInViewController {
     
     @objc func actionChooseMethod(_ sender: UIButton) {
         if sender.tag == 0 {  // use phone
-            let vc = SignInPhoneViewController()
+            /*let vc = SignInPhoneViewController()
             vc.enterMode = .signInSupport
             vc.enterFrom = .login
+            navigationController?.pushViewController(vc, animated: true)*/
+            let vc = SignInPhoneUsernameViewController()
+            if !txtUsername.text!.contains("@") {
+                vc.strUsername = txtUsername.text!
+            }
             navigationController?.pushViewController(vc, animated: true)
         } else {  // use email
             let vc = SignInEmailViewController()
