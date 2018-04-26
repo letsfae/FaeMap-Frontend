@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import IDMPhotoBrowser
 
 class InfiniteScrollingView: UIView {
     var placePhotos = [UIImage]()
@@ -84,17 +83,12 @@ class InfiniteScrollingView: UIView {
     }
     
     @objc func tapToShowImage() {
-        var photos = [IDMPhoto]()
-        //for photo in placePhotos {
-        //    if let idmPhoto = IDMPhoto(image: photo) {
-        //        photos.append(idmPhoto)
-        //    }
-        //}
-        guard let idmPhoto = IDMPhoto(image: imgPic_1.image) else { return }
-        photos.append(idmPhoto)
-        guard let browser = IDMPhotoBrowser(photos: photos) else { return }
-        browser.displayToolbar = false
-        browser.displayDoneButton = false
+        var photos = [SKPhoto]()
+        guard let image = imgPic_1.image else { return }
+        let photo = SKPhoto.photoWithImage(image)
+        photos.append(photo)
+        let browser = SKPhotoBrowser(photos: photos)
+        browser.initializePageIndex(0)
         viewCtrler?.present(browser, animated: true, completion: nil)
     }
     

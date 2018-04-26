@@ -8,11 +8,11 @@
 
 import UIKit
 import JSQMessagesViewController
-import IDMPhotoBrowser
 import Photos
 import AVKit
 import AVFoundation
 import SwiftyJSON
+import RealmSwift
 
 extension ChatViewController {
     // MARK: - collection view delegate
@@ -153,12 +153,27 @@ extension ChatViewController {
         let message = arrRealmMessages[indexPath.row]
         switch message.type {
         case "[Picture]", "[Gif]":
-            let messageJSQ = arrJSQMessages[indexPath.row]
-            if let mediaItem = messageJSQ.media as? JSQPhotoMediaItemCustom {
-                let photo = IDMPhoto.photos(withImages: [mediaItem.image])
-                let browser = IDMPhotoBrowser(photos: photo)
-                present(browser!, animated: true, completion: nil)
+            /*let messageJSQ = arrJSQMessages[indexPath.row]
+              if let mediaItem = messageJSQ.media as? JSQPhotoMediaItemCustom {
+                var images = [SKPhoto]()
+                let photo = SKPhoto.photoWithImage(mediaItem.image)
+                images.append(photo)
+                let browser = SKPhotoBrowser(photos: images)
+                browser.initializePageIndex(0)
+                present(browser, animated: true, completion: nil)
+            }*/
+            let realmMessage = arrRealmMessages[indexPath.row]
+            var images = [SKPhoto]()
+            let realm = try! Realm()
+            let allMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@ AND type IN {'[Picture]', '[Gif]'}", "\(Key.shared.user_id)", intIsGroup, strChatId).sorted(byKeyPath: "index")
+            for message in allMessage {
+                let photo = SKPhoto.photoWithRealmMessage(message)
+                images.append(photo)
             }
+            let index = allMessage.index(where: { $0.index == realmMessage.index })
+            let browser = SKPhotoBrowser(photos: images)
+            browser.initializePageIndex(index ?? 0)
+            present(browser, animated: true, completion: nil)
         case "[Video]":
             let messageJSQ = arrJSQMessages[indexPath.row]
             if let mediaItem = messageJSQ.media as? JSQVideoMediaItemCustom {

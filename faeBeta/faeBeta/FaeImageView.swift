@@ -8,7 +8,6 @@
 
 import UIKit
 import RealmSwift
-import IDMPhotoBrowser
 
 let faeImageCache = NSCache<AnyObject, AnyObject>()
 let faeChatRoomImageCache = NSCache<AnyObject, AnyObject>()
@@ -81,42 +80,52 @@ class FaeImageView: UIImageView {
                         }
                         guard imageRawData != nil else { return }
                         guard let image = UIImage(data: imageRawData!) else { return }
-                        let photos = IDMPhoto.photos(withImages: [image])
-                        self.presentPhotoBrowser(photos: photos)
+                        var images = [SKPhoto]()
+                        let photo = SKPhoto.photoWithImage(image)
+                        images.append(photo)
+                        self.presentPhotoBrowser(photos: images)
                     } else {
                         // Otherwise use the current imageView.image
                         print("[FaeAvatarView] get large image fail")
                         let imageView = sender.view as! UIImageView
                         guard let image = imageView.image else { return }
-                        let photos = IDMPhoto.photos(withImages: [image])
-                        self.presentPhotoBrowser(photos: photos)
+                        var images = [SKPhoto]()
+                        let photo = SKPhoto.photoWithImage(image)
+                        images.append(photo)
+                        self.presentPhotoBrowser(photos: images)
                     }
                 }
             } else {
                 // Otherwise use the large avatar stored in realm
                 print("[FaeAvatarView] large image exists")
                 guard let image = UIImage(data: avatarRealm.userLargeAvatar as Data!) else { return }
-                let photos = IDMPhoto.photos(withImages: [image])
-                self.presentPhotoBrowser(photos: photos)
+                var images = [SKPhoto]()
+                let photo = SKPhoto.photoWithImage(image)
+                images.append(photo)
+                self.presentPhotoBrowser(photos: images)
             }
         } else {
             // If no RealmUser obj found with userID
             print("[FaeAvatarView] get large image fail")
             let imageView = sender.view as! UIImageView
             guard let image = imageView.image else { return }
-            let photos = IDMPhoto.photos(withImages: [image])
-            self.presentPhotoBrowser(photos: photos)
+            var images = [SKPhoto]()
+            let photo = SKPhoto.photoWithImage(image)
+            images.append(photo)
+            self.presentPhotoBrowser(photos: images)
         }
     }
     
-    fileprivate func presentPhotoBrowser(photos: [Any]?) {
-        guard let browser = IDMPhotoBrowser(photos: photos) else {
+    fileprivate func presentPhotoBrowser(photos: [SKPhotoProtocol]) {
+        let browser = SKPhotoBrowser(photos: photos)
+        browser.initializePageIndex(0)
+        /*guard let browser = IDMPhotoBrowser(photos: photos) else {
             print("[FaeAvatarView - openThisMedia] Photo Browser doesn't exist!")
             return
-        }
-        browser.displayDoneButton = false
-        browser.displayActionButton = false
-        browser.dismissOnTouch = true
+        }*/
+        //browser.displayDoneButton = false
+        //browser.displayActionButton = false
+        //browser.dismissOnTouch = true
         UIApplication.shared.keyWindow?.visibleViewController?.present(browser, animated: true, completion: nil)
     }
 }

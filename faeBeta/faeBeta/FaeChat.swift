@@ -31,6 +31,9 @@ class FaeChat {
                             // print("update")
                             guard let `self` = self else { return }
                             for insert in insertions {
+                                if let sender = messages[insert].sender, sender.id != "\(Key.shared.user_id)" {
+                                    continue
+                                }
                                 self.sendNewMessageToServer(messages[insert])
                             }
                         case .error:
