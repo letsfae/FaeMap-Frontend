@@ -10,12 +10,14 @@
 import UIKit
 
 class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
-    var textView: UITextView!
+    // MARK: - Properties
+    private var textView: UITextView!
     var boolPush = false
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,18 +29,10 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 25 + device_offset_top, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.addTarget(self, action: #selector(self.backButtonTapped(_:)), for: .touchUpInside)
-        self.view.addSubview(btnBack)
+        view.addSubview(btnBack)
         
-        self.view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.white
         generateScrollView()
-    }
-    
-    @objc func backButtonTapped(_ sender:UIButton) {
-        if boolPush {
-            navigationController?.popViewController(animated: true)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
     }
     
     private func generateScrollView() {
@@ -83,11 +77,23 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         scrollView.indicatorStyle = .white
         scrollView.delegate = self
     }
-    @objc func jumpToPrivacyPolicy(_ sender: Any) {
+    
+    // MARK: - Button actions
+    @objc private func backButtonTapped(_ sender:UIButton) {
+        if boolPush {
+            navigationController?.popViewController(animated: true)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    @objc private func jumpToPrivacyPolicy(_ sender: Any) {
         if textView.textColor == UIColor._2499090() {
             print("jumpToPrivacyPolicy")
         }
     }
+    
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
             //indicator.backgroundColor = .red//UIColor._2499090()
@@ -99,6 +105,7 @@ class TermsOfServiceViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    // MARK: - Helper method
     private func astrContent() -> NSAttributedString {
         func numberBullet(_ num: Int) -> String {
             return "        \(num).  "

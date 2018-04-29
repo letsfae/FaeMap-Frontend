@@ -21,7 +21,6 @@ class RegisterBaseViewController: UIViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.navigationController?.isNavigationBarHidden = true
         addTapGesture()
         self.view.backgroundColor = .white
         automaticallyAdjustsScrollViewInsets = false
@@ -49,13 +48,13 @@ class RegisterBaseViewController: UIViewController {
         view.endEditing(true)
     }
     
-    // MARK: - Memory Management
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 }
 
+// MARK: - Setup UI
 extension RegisterBaseViewController {
     
     func createTopView(_ imageNamed: String) {
@@ -64,7 +63,7 @@ extension RegisterBaseViewController {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 25, width: 48, height: 40))
         btnBack.setImage(#imageLiteral(resourceName: "Fill 1"), for: UIControlState())
         btnBack.setTitleColor(UIColor.blue, for: UIControlState())
-        btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
+        btnBack.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         
         imgProgress = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 45, y: 40, width: 90, height: 10))
         imgProgress.image = UIImage(named: imageNamed)
@@ -87,7 +86,7 @@ extension RegisterBaseViewController {
         btnContinue.backgroundColor = UIColor(red: 255/255, green: 160/255, blue: 160/255, alpha: 1.0)
         
         btnContinue.isEnabled = false
-        btnContinue.addTarget(self, action: #selector(self.continueButtonPressed), for: .touchUpInside)
+        btnContinue.addTarget(self, action: #selector(continueButtonPressed), for: .touchUpInside)
         
         uiviewBottom.addSubview(subview)
         uiviewBottom.addSubview(btnContinue)
@@ -104,7 +103,6 @@ extension RegisterBaseViewController {
         } else {
             btnContinue.backgroundColor = UIColor._255160160()
         }
-        
     }
     
     func createTableView(_ height: CGFloat) {
@@ -125,7 +123,6 @@ extension RegisterBaseViewController {
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
         activityIndicator.color = UIColor._2499090()
-        
         view.addSubview(activityIndicator)
         view.bringSubview(toFront: activityIndicator)
     }
@@ -148,6 +145,7 @@ extension RegisterBaseViewController {
     }
 }
 
+// MARK: - Keyboard Observer
 extension RegisterBaseViewController {
     
     func registerForNotifications() {

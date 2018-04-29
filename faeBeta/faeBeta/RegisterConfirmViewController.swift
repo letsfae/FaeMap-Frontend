@@ -11,25 +11,19 @@ import UIKit
 import SwiftyJSON
 
 class RegisterConfirmViewController: RegisterBaseViewController {
+    // MARK: - Properties
     var faeUser: FaeUser!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        self.createView()
+        createView()
     }
     
-    // MARK: Functions
-    func createView() {
+    private func createView() {
         let btnBack = UIButton(frame: CGRect(x: 10, y: 25 + device_offset_top, width: 40, height: 40))
         btnBack.setImage(UIImage(named: "NavigationBackNew"), for: UIControlState())
-        btnBack.addTarget(self, action: #selector(self.backButtonPressed), for: .touchUpInside)
-        
-//        let lblTitle = UILabel(frame: CGRect(x: 0, y: 98 * screenHeightFactor, width: screenWidth, height: 35))
-//        lblTitle.textColor = UIColor._898989()
-//        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 25)
-//        lblTitle.textAlignment = .center
-//        lblTitle.text = "All Finished!"
+        btnBack.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
         
         let imgFaePic = UIImageView(frame: CGRect(x: 32, y: 160 + device_offset_top, w: 350, h: 300))
         imgFaePic.image = #imageLiteral(resourceName: "WelcomeFae")
@@ -77,10 +71,9 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         
         let btnPrivacyPolicy = UIButton(frame: CGRect(x: 0, y: 0, width: 110, height: 25))
         btnPrivacyPolicy.frame.origin = CGPoint(x: screenWidth / 2 + 23, y: lblTermsOfService.frame.origin.y + 15)
-        btnPrivacyPolicy.addTarget(self, action: #selector(self.privacyPolicyButtonTapped(_:)), for: .touchUpInside)
+        btnPrivacyPolicy.addTarget(self, action: #selector(privacyPolicyButtonTapped(_:)), for: .touchUpInside)
         
         view.addSubview(btnBack)
-//        view.addSubview(lblTitle)
         view.addSubview(imgFaePic)
         view.addSubview(lblWelcome)
         view.addSubview(btnFinish)
@@ -91,27 +84,26 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         view.bringSubview(toFront: btnBack)
     }
     
-    @objc func termOfServiceButtonTapped(_ sender: UIButton) {
+    // MARK: - Button actions
+    @objc private func termOfServiceButtonTapped(_ sender: UIButton) {
         let vcTermsofService = TermsOfServiceViewController()
-        self.present(vcTermsofService, animated: true, completion: nil)
+        present(vcTermsofService, animated: true, completion: nil)
     }
     
-    @objc func privacyPolicyButtonTapped(_ sender: UIButton) {
+    @objc private func privacyPolicyButtonTapped(_ sender: UIButton) {
         let vcPrivacy = PrivacyPolicyViewController()
-        self.present(vcPrivacy, animated: true, completion: nil)
+        present(vcPrivacy, animated: true, completion: nil)
     }
     
     override func backButtonPressed() {
-        _ = navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
-    @objc func finishButtonPressed() {
-        //self.signUpUser()
-        self.jumpToEnableNotification()
+    @objc private func finishButtonPressed() {
+        jumpToEnableNotification()
         let vcNext = InitialPageController()
-        self.navigationController?.pushViewController(vcNext, animated: true)
-        self.navigationController?.viewControllers = [vcNext]
-        //loginUser()
+        navigationController?.pushViewController(vcNext, animated: true)
+        navigationController?.viewControllers = [vcNext]
         FaeCoreData.shared.removeByKey("signup")
         FaeCoreData.shared.removeByKey("signup_first_name")
         FaeCoreData.shared.removeByKey("signup_last_name")
@@ -122,6 +114,7 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         FaeCoreData.shared.removeByKey("signup_email")
     }
     
+    // MARK: - Helper methods
     func signUpUser() {
         showActivityIndicator()
         print(self.faeUser.keyValue)
@@ -137,20 +130,17 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func loginUser() {
         showActivityIndicator()
-        self.faeUser.logInBackground({ (status: Int, message: Any?) in
-            DispatchQueue.main.async(execute: {
-                self.hideActivityIndicator()
-                if status / 100 == 2 {
-                    self.jumpToEnableNotification()
-                    let vcNext = InitialPageController()
-                    self.navigationController?.pushViewController(vcNext, animated: true)
-                    //self.navigationController?.viewControllers = [vcNext]
-                }
-            })
+        faeUser.logInBackground({ (status: Int, message: Any?) in
+            self.hideActivityIndicator()
+            if status / 100 == 2 {
+                self.jumpToEnableNotification()
+                let vcNext = InitialPageController()
+                self.navigationController?.pushViewController(vcNext, animated: true)
+            }
         })
     }
     
-    func jumpToEnableNotification() {
+    private func jumpToEnableNotification() {
         let notificationType = UIApplication.shared.currentUserNotificationSettings
         if notificationType?.types == UIUserNotificationType() {
             let vc = EnableNotificationViewController()
