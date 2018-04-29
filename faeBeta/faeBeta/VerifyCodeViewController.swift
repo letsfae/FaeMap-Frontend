@@ -15,79 +15,68 @@ import SwiftyJSON
 }
 
 enum EnterVerifyCodeMode {
-    case email
-    case phone
-    case oldPswd
+    case email, phone, oldPswd
 }
 
 enum EnterEmailMode {
-    case signInSupport
-    case settings
-    case signup
+    case signInSupport, settings, signup
 }
 
-class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //}, UpdateUsrnameEmailDelegate {
+class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
+    // MARK: - Properties
     var enterMode: EnterVerifyCodeMode = .email
     var enterPhoneMode: EnterPhoneMode = .settings
     var enterEmailMode: EnterEmailMode = .settings
-    var lblTitle: UILabel!
-    var lblPhoneNumber: UILabel!
-    var lblSecure: UILabel!
-    var btnOtherMethod: UIButton!
-    var btnResendCode: UIButton!
-    var btnContinue: UIButton!
+    var enterFrom: EnterFromMode!
+    private var lblTitle: UILabel!
+    private var lblPhoneNumber: UILabel!
+    private var btnResendCode: UIButton!
+    private var btnContinue: UIButton!
+    private var verificationCodeView: FAEVerificationCodeView!
+    private var indicatorView: UIActivityIndicatorView!
+    private var numberKeyboard: FAENumberKeyboard!
+    private var uiviewAlert: UIView!
+    private var timer: Timer!
+    private var remainingTime = 59
+    
     var strCountry = ""
     var strCountryCode = ""
     var strPhoneNumber = ""
     var strEmail = ""
     var boolUpdateEmail = false
-    var delegate: VerifyCodeDelegate!
-    var updatePhoneDelegate: UpdateUsrnameEmailDelegate!
+    weak var delegate: VerifyCodeDelegate?
     var faeUser = FaeUser()
-    fileprivate var verificationCodeView: FAEVerificationCodeView!
-    fileprivate var timer: Timer!
-    fileprivate var remainingTime = 59
-    fileprivate var indicatorView: UIActivityIndicatorView!
-    fileprivate var numberKeyboard: FAENumberKeyboard!
-    var enterFrom: EnterFromMode!
     
-    var uiviewAlert: UIView!
-    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
         createActivityIndicator()
-        //loadOtherMethod()
-        
-        self.startTimer()
+        startTimer()
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         let uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "NavigationBackNew"), for: .normal)
 
         uiviewNavBar.loadBtnConstraints()
         if enterEmailMode == .signup || enterPhoneMode == .signup {
-            //uiviewNavBar.addConstraintsWithFormat("H:|-0-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
-            //uiviewNavBar.addConstraintsWithFormat("V:|-\(21+device_offset_top)-[v0(48)]", options: [], views: uiviewNavBar.leftBtn)
             uiviewNavBar.rightBtn.setImage(UIImage(), for: .normal)
             uiviewNavBar.rightBtn.setTitle("Later  ", for: .normal)
             uiviewNavBar.rightBtn.setTitleColor(UIColor._182182182(), for: .normal)
             setupLater()
         } else {
-            //uiviewNavBar.loadBtnConstraints()
             uiviewNavBar.rightBtn.isHidden = true
         }
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionBack(_:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.addTarget(self, action: #selector(actionLater(_:)), for: .touchUpInside)
-        //uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.bottomLine.isHidden = true
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         lblTitle = FaeLabel(CGRect(x: 30, y: 75, width: screenWidth - 60, height: 60), .center, .medium, 18, UIColor._898989())
         lblTitle.numberOfLines = 2
         lblTitle.center.x = screenWidth / 2
@@ -131,7 +120,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         getTitle()
     }
     
-    fileprivate func getTitle() {
+    private func getTitle() {
         if enterMode == .email {
             btnResendCode.frame.origin.y = screenHeight - 244 * screenHeightFactor - 21 - 50 * screenHeightFactor - 36 - device_offset_bot
             lblPhoneNumber.isHidden = true
@@ -162,48 +151,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
-    func loadOtherMethod() {
-        switch enterMode {
-        case .email:
-            if enterEmailMode == .signup {
-                let imgProgress = UIImageView(frame: CGRect(x: screenWidth / 2 - 45, y: 40, width: 90, height: 10))
-                imgProgress.image = #imageLiteral(resourceName: "ProgressBar5")
-                view.addSubview(imgProgress)
-                
-                lblSecure = UILabel(frame: CGRect(x: screenWidth / 2 - 77, y: 260 * screenHeightFactor, width: 109 , height: 25))
-                lblSecure.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()])
-                view.addSubview(lblSecure)
-                
-                btnOtherMethod = UIButton(frame: CGRect(x: screenWidth / 2 + 32, y: 260 * screenHeightFactor, width: 47, height: 25))
-                let attributedTitle = NSAttributedString(string: "Phone.", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
-                btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
-                btnOtherMethod.addTarget(self, action: #selector(changeSecureMethod), for: .touchUpInside)
-                view.addSubview(btnOtherMethod)
-            }
-            break
-        case .phone:
-            if enterPhoneMode == .signup {
-                let imgProgress = UIImageView(frame: CGRect(x: screenWidth / 2 - 45, y: 40, width: 90, height: 10))
-                imgProgress.image = #imageLiteral(resourceName: "ProgressBar5")
-                view.addSubview(imgProgress)
-                
-                lblSecure = UILabel(frame: CGRect(x: screenWidth / 2 - 74.5, y: 260 * screenHeightFactor, width: 109, height: 25))
-                lblSecure.attributedText = NSAttributedString(string: "Secure using your ", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()])
-                view.addSubview(lblSecure)
-                
-                btnOtherMethod = UIButton(frame: CGRect(x: screenWidth / 2 + 34.5, y: 260 * screenHeightFactor, width: 40, height: 25))
-                let attributedTitle = NSAttributedString(string: "Email.", attributes: [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()])
-                btnOtherMethod.setAttributedTitle(attributedTitle, for: UIControlState())
-                btnOtherMethod.addTarget(self, action: #selector(changeSecureMethod), for: .touchUpInside)
-                view.addSubview(btnOtherMethod)
-            }
-            break
-        default:
-            break
-        }
-    }
-    
-    func setupLater() {
+    private func setupLater() {
         uiviewAlert = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewAlert.backgroundColor  = UIColor._107105105_a50()
         uiviewAlert.layer.zPosition = 1
@@ -255,20 +203,20 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         uiviewAlert.isHidden = true
     }
     
-    func createActivityIndicator() {
+    private func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
         indicatorView.hidesWhenStopped = true
         indicatorView.color = UIColor._2499090()
-        
         view.addSubview(indicatorView)
         view.bringSubview(toFront: indicatorView)
     }
     
-    func actionSendCode() {
+    // MARK: - Button actions
+    private func actionSendCode() {
         indicatorView.startAnimating()
-        self.view.endEditing(true)
+        view.endEditing(true)
         let user = FaeUser()
         user.whereKey("phone", value: "(" + strCountryCode + ")" + strPhoneNumber)
         user.updatePhoneNumber {(status, message) in
@@ -282,7 +230,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    @objc private func actionBack(_ sender: UIButton) {
         if enterMode == .phone && enterPhoneMode == .contacts {
             dismiss(animated: false)
         } else {
@@ -290,52 +238,21 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
-    @objc func actionLater(_ sender: UIButton) {
+    @objc private func actionLater(_ sender: UIButton) {
         uiviewAlert.isHidden = false
     }
     
-    @objc func laterContinue() {
+    @objc private func laterContinue() {
         let nextRegister = RegisterConfirmViewController()
         nextRegister.faeUser = self.faeUser
-        self.navigationController?.pushViewController(nextRegister, animated: false)
+        navigationController?.pushViewController(nextRegister, animated: false)
     }
     
-    @objc func laterDismiss() {
+    @objc private func laterDismiss() {
         uiviewAlert.isHidden = true
     }
     
-    @objc func changeSecureMethod() {
-        switch enterMode {
-        case .email:
-            var arrControllers = navigationController?.viewControllers
-            arrControllers?.removeLast()
-            arrControllers?.removeLast()
-            let vcPhone = RegisterPhoneViewController()
-            vcPhone.faeUser = faeUser
-            arrControllers?.append(vcPhone)
-            navigationController?.setViewControllers(arrControllers!, animated: true)
-        case .phone:
-            var arrControllers = navigationController?.viewControllers
-            arrControllers?.removeLast()
-            arrControllers?.removeLast()
-            let vcEmail = RegisterEmailViewController()
-            vcEmail.faeUser = faeUser
-            arrControllers?.append(vcEmail)
-            navigationController?.setViewControllers(arrControllers!, animated: true)
-        default: break
-        }
-    }
-    
-    func setVerifyResult(_ prompt: String, resetCodeView isReset: Bool = true) {
-        lblTitle.text = prompt
-        if isReset {
-            for _ in 0..<6 { verificationCodeView.addDigit(-1) }
-            btnContinue.isEnabled = false
-            btnContinue.backgroundColor = UIColor._255160160()
-        }
-    }
-    
-    @objc func actionVerifyCode(_ sender: UIButton) {
+    @objc private func actionVerifyCode(_ sender: UIButton) {
         indicatorView.startAnimating()
         if enterMode == .email {
             faeUser.whereKey("email", value: strEmail)
@@ -486,7 +403,46 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
         }
     }
     
-    // FAENumberKeyboardDelegate
+    // MARK: - Helper methods
+    private func setVerifyResult(_ prompt: String, resetCodeView isReset: Bool = true) {
+        lblTitle.text = prompt
+        if isReset {
+            for _ in 0..<6 { verificationCodeView.addDigit(-1) }
+            btnContinue.isEnabled = false
+            btnContinue.backgroundColor = UIColor._255160160()
+        }
+    }
+
+    private func startTimer() {
+        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func updateTime() {
+        if remainingTime > 0 {
+            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
+            remainingTime = remainingTime - 1
+        } else {
+            remainingTime = 59
+            timer.invalidate()
+            timer = nil
+            btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
+            btnResendCode.removeTarget(nil, action: nil, for: .touchUpInside)
+            btnResendCode.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
+        }
+    }
+    
+    @objc private func resendVerificationCode() {
+        if enterMode == .email { // TODO: error code undecided
+            postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
+        } else {
+            actionSendCode()
+        }
+        startTimer()
+        btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
+    }
+    
+    // MARK: - FAENumberKeyboardDelegate
     func keyboardButtonTapped(_ num: Int) {
         let num = verificationCodeView.addDigit(num)
         // means the user entered 6 digits
@@ -498,42 +454,5 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate { //
             btnContinue.isEnabled = false
             btnContinue.backgroundColor = UIColor._255160160()
         }
-    }
-
-    func startTimer() {
-        btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code 60", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
-    }
-    
-    @objc func updateTime() {
-        if(remainingTime > 0) {
-            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code \(remainingTime)", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]), for: UIControlState())
-            remainingTime = remainingTime - 1
-        }
-        else {
-            remainingTime = 59
-            timer.invalidate()
-            timer = nil
-            self.btnResendCode.setAttributedTitle(NSAttributedString(string: "Resend Code", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Bold", size: 13)!]), for: UIControlState())
-            self.btnResendCode.removeTarget(nil, action: nil, for: .touchUpInside)
-            self.btnResendCode.addTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
-        }
-    }
-    
-    @objc func resendVerificationCode() {
-        if enterMode == .email { // TODO: error code undecided
-            postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
-        } else {
-            actionSendCode()
-        }
-        startTimer()
-        btnResendCode.removeTarget(self, action: #selector(resendVerificationCode), for: .touchUpInside)
-    }
-    
-    // UpdateUsrnameEmailDelegate
-    func updateEmail() {}
-    
-    func updatePhone() {
-
     }
 }

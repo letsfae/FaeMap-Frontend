@@ -9,9 +9,10 @@
 import UIKit
 
 class EnterCodeTableViewCell: UITableViewCell {
-    
-    var textfield: UITextField!
+    // MARK: - Property
+    private var textfield: UITextField!
 
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadContent()
@@ -21,7 +22,7 @@ class EnterCodeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadContent() {
+    private func loadContent() {
         textfield = UITextField(frame: CGRect(x: 0, y: 0, width: 320, height: 79))
         textfield.center.x = screenWidth / 2
         textfield.textAlignment = .center
@@ -30,7 +31,7 @@ class EnterCodeTableViewCell: UITableViewCell {
         addSubview(textfield)
     }
     
-    // MARK: - Functions
+    // MARK: - Helper methods
     func makeFirstResponder() {
         textfield.becomeFirstResponder()
     }

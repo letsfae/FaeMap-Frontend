@@ -9,11 +9,11 @@
 import UIKit
 
 class EnableNotificationViewController: UIViewController {
-    fileprivate var imageView: UIImageView!
-    fileprivate var titleLabel: UILabel!
-    fileprivate var descriptionLabel: UILabel!
-    fileprivate var enableNotificationButton: UIButton!
-    fileprivate var notNowButton: UIButton!
+    private var imageView: UIImageView!
+    private var titleLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var enableNotificationButton: UIButton!
+    private var notNowButton: UIButton!
     // bool value used to check whether the current ViewController is EnableNotificationViewController
     static var boolCurtVCisNoti = false
     
@@ -29,7 +29,7 @@ class EnableNotificationViewController: UIViewController {
         EnableNotificationViewController.boolCurtVCisNoti = false
     }
     
-    fileprivate func setup() {
+    private func setup() {
         self.view.backgroundColor = .white
         imageView = UIImageView(frame: CGRect(x: 68, y: 159, w: 291, h: 255))
         imageView.image = #imageLiteral(resourceName: "EnableNotificationImage")

@@ -15,35 +15,33 @@ protocol SignInPhoneDelegate: class {
 }
 
 enum EnterPhoneMode {
-    case contacts
-    case signInSupport
-    case settings
-    case settingsUpdate
-    case signup
+    case contacts, signInSupport, settings, settingsUpdate, signup
 }
 
 class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, CountryCodeDelegate, VerifyCodeDelegate {
-    fileprivate var lblTitle: UILabel!
-    fileprivate var lblPhone: UILabel!
-    fileprivate var btnCountryCode: UIButton!
-    fileprivate var lblCannotFind: UILabel!
-    fileprivate var btnResendCode: UIButton!
-    fileprivate var btnSendCode: UIButton!
-    fileprivate var curtCountry = "United States +1"
-    fileprivate var strCountryName = "United States"
-    fileprivate var phoneNumber = ""
-    fileprivate var pointer = 0
-    fileprivate var phoneCode = "1"
-    var boolClosePage: Bool = false
+    // MARK: - Properties
+    private var lblTitle: UILabel!
+    private var lblPhone: UILabel!
+    private var btnCountryCode: UIButton!
+    private var lblCannotFind: UILabel!
+    private var btnResendCode: UIButton!
+    private var btnSendCode: UIButton!
+    private var curtCountry = "United States +1"
+    private var strCountryName = "United States"
+    private var phoneNumber = ""
+    private var pointer = 0
+    private var phoneCode = "1"
+    private var boolClosePage: Bool = false
     var enterMode: EnterPhoneMode!
     weak var delegate: SignInPhoneDelegate?
-    let user = FaeUser()
+    private let user = FaeUser()
     var enterFrom: EnterFromMode!
     var strUsername: String = ""
     
-    fileprivate var numberKeyboard: FAENumberKeyboard!
-    fileprivate var indicatorView: UIActivityIndicatorView!
+    private var numberKeyboard: FAENumberKeyboard!
+    private var indicatorView: UIActivityIndicatorView!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .white
@@ -61,7 +59,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         }
     }
     
-    fileprivate func setupNavigationBar() {
+    private func setupNavigationBar() {
         let uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         if enterMode != .contacts {
@@ -77,7 +75,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         uiviewNavBar.bottomLine.isHidden = true
     }
     
-    fileprivate func setupInterface() {
+    private func setupInterface() {
         // set up the title label
         lblTitle = FaeLabel(CGRect(x: 30, y: 72 + device_offset_top, width: screenWidth - 60, height: 60), .center, .medium, 20, UIColor._898989())
         lblTitle.numberOfLines = 2
@@ -141,7 +139,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         }
     }
     
-    fileprivate func setCountryName() {
+    private func setCountryName() {
         let curtCountryAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 22)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtCountryStr = NSMutableAttributedString(string: "", attributes: curtCountryAttr)
         
@@ -155,41 +153,33 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         btnCountryCode.setAttributedTitle(curtCountryStr, for: .normal)
     }
     
-    func setupEnteringVerificationCode() {
-        let vc = VerifyCodeViewController()
-        vc.delegate = self
-        vc.enterMode = .phone
-        vc.enterPhoneMode = self.enterMode
-        vc.enterFrom = enterFrom
-        vc.strCountry = strCountryName
-        vc.strCountryCode = phoneCode
-        vc.strPhoneNumber = phoneNumber
-        if self.enterMode == .contacts {
-            self.present(vc, animated: false)
-        } else {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-        self.view.endEditing(true)
-    }
-    
-    func createActivityIndicator() {
+    private func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
         indicatorView.hidesWhenStopped = true
         indicatorView.color = UIColor._2499090()
-        
         view.addSubview(indicatorView)
         view.bringSubview(toFront: indicatorView)
     }
     
-    func setRequestResult(_ prompt: String) {
-        lblCannotFind.text = prompt
-        lblCannotFind.textColor = UIColor._2499090()
-        lblCannotFind.alpha = 1
+    // MARK: - Button actions
+    @objc private func actionSelectCountry(_ sender: UIButton) {
+        let vc = CountryCodeViewController()
+        vc.delegate = self
+        present(vc, animated: true)
     }
     
-    @objc func actionSendCode() {
+    @objc private func actionBack(_ sender: UIButton) {
+        if enterMode == .contacts {
+            delegate?.backToContacts()
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    @objc private func actionSendCode() {
         indicatorView.startAnimating()
         self.view.endEditing(true)
         user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
@@ -249,7 +239,36 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         }
     }
     
-    //MARK: - FAENumberKeyboard delegate
+    // MARK: - Helper methods
+    private func setRequestResult(_ prompt: String) {
+        lblCannotFind.text = prompt
+        lblCannotFind.textColor = UIColor._2499090()
+        lblCannotFind.alpha = 1
+    }
+    
+    private func setupEnteringVerificationCode() {
+        let vc = VerifyCodeViewController()
+        vc.delegate = self
+        vc.enterMode = .phone
+        vc.enterPhoneMode = self.enterMode
+        vc.enterFrom = enterFrom
+        vc.strCountry = strCountryName
+        vc.strCountryCode = phoneCode
+        vc.strPhoneNumber = phoneNumber
+        if self.enterMode == .contacts {
+            present(vc, animated: false)
+        } else {
+            navigationController?.pushViewController(vc, animated: true)
+        }
+        view.endEditing(true)
+    }
+    
+    private func isValidPhoneNumber(_ testStr:String) -> Bool {
+        let result = testStr.count >= 10 ? true : false
+        return result
+    }
+    
+    // MARK: - FAENumberKeyboard delegate
     func keyboardButtonTapped(_ num:Int) {
         // input phone number
         if num >= 0 && pointer < 12 {
@@ -289,29 +308,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         }
     }
     
-    @objc func actionBack(_ sender: UIButton) {
-        if enterMode == .contacts {
-            delegate?.backToContacts()
-            dismiss(animated: true)
-        } else {
-            _ = self.navigationController?.popViewController(animated: true)
-        }
-    }
-    // MARK: - keyboard
-    
-    //MARK: - helper
-    func isValidPhoneNumber(_ testStr:String) -> Bool {
-        let result = testStr.count >= 10 ? true : false
-        return result
-    }
-    
-    @objc func actionSelectCountry(_ sender: UIButton) {
-        let vc = CountryCodeViewController()
-        vc.delegate = self
-        present(vc, animated: true)
-    }
-    
-    // CountryCodeDelegate
+    // MARK: - CountryCodeDelegate
     func sendSelectedCountry(country: CountryCodeStruct) {
         phoneCode = country.phoneCode
         strCountryName = country.countryName
@@ -319,7 +316,7 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         setCountryName()
     }
     
-    // VerifyCodeDelegate
+    // MARK: - VerifyCodeDelegate
     func verifyPhoneSucceed() {
         boolClosePage = true
     }

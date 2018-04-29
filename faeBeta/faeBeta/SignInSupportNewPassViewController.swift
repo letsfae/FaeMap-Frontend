@@ -32,26 +32,24 @@ fileprivate func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 enum EnterFromMode {
-    case login
-    case settings
+    case login, settings
 }
 
 class SignInSupportNewPassViewController: RegisterBaseViewController {
-    
+    // MARK: - Properties
     var cellPassword: RegisterTextfieldTableViewCell!
     var oldPassword: String?
-    var password: String?
+    private var password: String?
     var faeUser = FaeUser()
     var email: String?
     var phone: String?
     var code: String?
     var enterMode: EnterVerifyCodeMode!
-    
     var enterFrom: EnterFromMode!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         createBottomView(getInfoView())
         createTableView(59 + 135 * screenHeightFactor)
         btnContinue.setTitle("Update", for: UIControlState())
@@ -68,6 +66,27 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         cellPassword.makeFirstResponder()
     }
     
+    private func getInfoView() -> UIView {
+        let uiviewInfo = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
+        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width / 2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
+        imgInfoPwd.image = UIImage(named: "InfoPassword")
+        uiviewInfo.addSubview(imgInfoPwd)
+        
+        return uiviewInfo
+    }
+    
+    private func registerCell() {
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Button actions
     override func backButtonPressed() {
         view.endEditing(true)
         navigationController?.popViewController(animated: true)
@@ -78,28 +97,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         updatePasswordInUser()
     }
     
-    func jumpToRegisterInfo() {
-        let boardLogin = RegisterInfoViewController()
-        boardLogin.faeUser = faeUser
-        navigationController?.pushViewController(boardLogin, animated: false)
-    }
-    
-    func getInfoView() -> UIView {
-        let uiviewInfo = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
-        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width / 2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
-        imgInfoPwd.image = UIImage(named: "InfoPassword")
-        uiviewInfo.addSubview(imgInfoPwd)
-        
-        return uiviewInfo
-    }
-    
-    func validation() {
-        var boolIsValid = false
-        boolIsValid = password != nil && password?.count > 7
-        enableContinueButton(boolIsValid)
-    }
-    
-    func updatePasswordInUser() {
+    private func updatePasswordInUser() {
         shouldShowActivityIndicator(true)
         if enterMode == .email {
             let param = ["email": email!,
@@ -208,19 +206,9 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
             }
         }
     }
-    
-    func registerCell() {
-        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 }
 
+// MARK: - UITableView
 extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
@@ -265,6 +253,7 @@ extension SignInSupportNewPassViewController: UITableViewDelegate, UITableViewDa
     }
 }
 
+// MARK: - RegisterTextfieldProtocol
 extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
     func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
@@ -286,5 +275,11 @@ extension SignInSupportNewPassViewController: RegisterTextfieldProtocol {
         default: break
         }
         validation()
+    }
+    
+    private func validation() {
+        var boolIsValid = false
+        boolIsValid = password != nil && password?.count > 7
+        enableContinueButton(boolIsValid)
     }
 }

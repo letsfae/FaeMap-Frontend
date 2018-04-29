@@ -14,10 +14,9 @@ class WelcomeImageContainerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.containerView = WelcomeContentContainerFace()
-        self.view.insertSubview(containerView, at: 0)
-        self.containerView.frame = self.view.bounds
-        // Do any additional setup after loading the view.
+        containerView = WelcomeContentContainerFace()
+        view.insertSubview(containerView, at: 0)
+        containerView.frame = view.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -31,7 +30,7 @@ class WelcomeImageContainerViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.containerView.frame = self.view.bounds
+        containerView.frame = view.bounds
     }
     
     func setupContentContainer() {
@@ -41,7 +40,6 @@ class WelcomeImageContainerViewController: UIViewController {
         switch index {
         case 0:
             title = "Faevorite Map"
-//            self.containerView.titleIcon.image = UIImage(named: "FaeMapLabelIcon")
             description = "Connecting People to Favorite\nPlaces and Communities."
         case 1:
             title = "More of your City"
@@ -57,6 +55,6 @@ class WelcomeImageContainerViewController: UIViewController {
             description = "Our Security System protects\nyour True Location at all times."
         default: break
         }
-        self.containerView.populateContentContainer(imageName, title: title, description: description)
+        containerView.populateContentContainer(imageName, title: title, description: description)
     }
 }

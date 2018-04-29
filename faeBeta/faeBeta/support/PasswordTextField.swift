@@ -36,10 +36,10 @@ class PasswordTexField: UITextField {
         imageName = "check_eye_close_red"
         self.isSecureTextEntry = true
         self.rightView = btnRight
-        btnRight.addTarget(self, action: #selector(PasswordTexField.rightButtonClicked), for: UIControlEvents.touchUpInside)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingChanged)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingDidEnd)
-        self.addTarget(self, action: #selector(PasswordTexField.decideButtonImage), for: .editingDidBegin)
+        btnRight.addTarget(self, action: #selector(rightButtonClicked), for: UIControlEvents.touchUpInside)
+        self.addTarget(self, action: #selector(decideButtonImage), for: .editingChanged)
+        self.addTarget(self, action: #selector(decideButtonImage), for: .editingDidEnd)
+        self.addTarget(self, action: #selector(decideButtonImage), for: .editingDidBegin)
         self.clearButtonMode = UITextFieldViewMode.never
     }
     
@@ -67,7 +67,7 @@ class PasswordTexField: UITextField {
         }
     }
     
-    @objc func decideButtonImage() {
+    @objc private func decideButtonImage() {
         if self.text?.count < 8 {
             if self.isSecureTextEntry {
                 btnRight.setImage(UIImage(named: "check_eye_close_yellow")!, for: UIControlState())
@@ -95,7 +95,7 @@ class PasswordTexField: UITextField {
         }
     }
     
-    func isValidPassword(_ testStr:String) -> Bool {
+    private func isValidPassword(_ testStr:String) -> Bool {
         var uppercase = 0
         var symbol = 0
         var digit = 0

@@ -15,14 +15,15 @@ protocol RegisterTextfieldProtocol: class {
 }
 
 class RegisterTextfieldTableViewCell: UITableViewCell {
+    // MARK: - Properties
     var textfield: FAETextField!
-    // MARK: - Variables
     weak var delegate: RegisterTextfieldProtocol?
     var indexPath: IndexPath!
     var isUsernameField = false
     var isCharacterLimit = false
     var limitNumber: Int = Int.max
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadContent()
@@ -32,13 +33,14 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadContent() {
+    private func loadContent() {
         textfield = FAETextField(frame: CGRect(x: 15, y: 18 * screenHeightFactor, width: screenWidth - 30, height: 44))
         addSubview(textfield)
         textfield.delegate = self
-        textfield.addTarget(self, action: #selector(self.textFieldDidChange(_:)), for: .editingChanged )
+        textfield.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged )
     }
 
+    // MARK: - Helper methods
     func setPlaceholderLabelText(_ text: String, indexPath: IndexPath)  {
         textfield.placeholder = text
         self.indexPath = indexPath
@@ -107,6 +109,7 @@ class RegisterTextfieldTableViewCell: UITableViewCell {
     }
 }
 
+// MARK: - UITextFieldDelegate
 extension RegisterTextfieldTableViewCell: UITextFieldDelegate {
     @objc func textFieldDidChange(_ textField: UITextField) {
         delegate?.textFieldDidChange(textfield.text!, indexPath: indexPath)

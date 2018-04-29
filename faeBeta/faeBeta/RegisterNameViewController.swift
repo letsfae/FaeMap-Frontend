@@ -33,17 +33,18 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 class RegisterNameViewController: RegisterBaseViewController {
-    var cellTxtFirstName: RegisterTextfieldTableViewCell!
-    var cellTxtLastName: RegisterTextfieldTableViewCell!
-    var firstName: String?
-    var lastName: String?
-    var faeUser: FaeUser?
+    // MARK: - Properties
+    private var cellTxtFirstName: RegisterTextfieldTableViewCell!
+    private var cellTxtLastName: RegisterTextfieldTableViewCell!
+    private var firstName: String?
+    private var lastName: String?
+    private var faeUser: FaeUser?
 
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         createTableView(210 * screenHeightFactor + 59)
         createTopView("ProgressBar1")
-        //createBottomView(createAlreadyGotAnAccountView())
         createBottomView(UIView())
         registerCell()
         
@@ -91,6 +92,12 @@ class RegisterNameViewController: RegisterBaseViewController {
         return createAlreadyGotAnAccountView
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Button actions
     override func backButtonPressed() {
         view.endEditing(true)
         FaeCoreData.shared.removeByKey("signup_first_name")
@@ -111,16 +118,7 @@ class RegisterNameViewController: RegisterBaseViewController {
         jumpToRegisterNext()
     }
     
-    func jumpToRegisterNext() {
-        //let boardRegister = RegisterEmailViewController()
-        //boardRegister.faeUser = faeUser
-        //self.navigationController?.pushViewController(boardRegister, animated: false)
-        let nextRegister = RegisterUsernameViewController()
-        nextRegister.faeUser = faeUser
-        navigationController?.pushViewController(nextRegister, animated: false)
-    }
-    
-    func createUser() {
+    private func createUser() {
         if faeUser == nil {
             faeUser = FaeUser()
         }
@@ -128,26 +126,19 @@ class RegisterNameViewController: RegisterBaseViewController {
         faeUser?.whereKey("last_name", value: lastName!)
     }
     
-    @objc func loginButtonTapped() {
+    private func jumpToRegisterNext() {
+        let nextRegister = RegisterUsernameViewController()
+        nextRegister.faeUser = faeUser
+        navigationController?.pushViewController(nextRegister, animated: false)
+    }
+    
+    @objc private func loginButtonTapped() {
         let boardLoginController = LogInViewController()
         self.navigationController?.pushViewController(boardLoginController, animated: true)
     }
-    
-    func validation() {
-        var boolIsValid = false
-        boolIsValid = firstName != nil && firstName?.count > 0
-        boolIsValid = boolIsValid && lastName != nil && lastName?.count > 0
-        
-        enableContinueButton(boolIsValid)
-    }
-    
-    // MARK: Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 }
 
+// MARK: - UITableView
 extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -209,6 +200,7 @@ extension RegisterNameViewController: UITableViewDelegate, UITableViewDataSource
     }
 }
 
+// MARK: - RegisterTextfieldProtocol
 extension RegisterNameViewController: RegisterTextfieldProtocol {
     
     func textFieldDidBeginEditing(_ indexPath: IndexPath) {
@@ -240,5 +232,12 @@ extension RegisterNameViewController: RegisterTextfieldProtocol {
         default: break
         }
         validation()
+    }
+    
+    private func validation() {
+        var boolIsValid = false
+        boolIsValid = firstName != nil && firstName?.count > 0
+        boolIsValid = boolIsValid && lastName != nil && lastName?.count > 0
+        enableContinueButton(boolIsValid)
     }
 }

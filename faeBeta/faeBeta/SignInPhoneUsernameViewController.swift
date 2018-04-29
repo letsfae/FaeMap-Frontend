@@ -133,19 +133,17 @@ class SignInPhoneUsernameViewController: UIViewController {
             if status / 100 == 2 {
                 let valueInfo = JSON(message!)
                 if let value = valueInfo["existence"].int {
-                    DispatchQueue.main.async {
-                        self.indicatorView.stopAnimating()
-                        if value == 0 {
-                            self.setResetResult("Oops… Can’t find any Accounts\nwith this Username!")
-                            self.btnContinue.isEnabled = false
-                            self.btnContinue.backgroundColor = UIColor._255160160()
-                        } else {
-                            let vc = SignInPhoneViewController()
-                            vc.enterMode = .signInSupport
-                            vc.enterFrom = .login
-                            vc.strUsername = self.txtUsername.text!
-                            self.navigationController?.pushViewController(vc, animated: true)
-                        }
+                    self.indicatorView.stopAnimating()
+                    if value == 0 {
+                        self.setResetResult("Oops… Can’t find any Accounts\nwith this Username!")
+                        self.btnContinue.isEnabled = false
+                        self.btnContinue.backgroundColor = UIColor._255160160()
+                    } else {
+                        let vc = SignInPhoneViewController()
+                        vc.enterMode = .signInSupport
+                        vc.enterFrom = .login
+                        vc.strUsername = self.txtUsername.text!
+                        self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }
             } else {

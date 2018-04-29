@@ -36,16 +36,15 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class RegisterUsernameViewController: RegisterBaseViewController {
-
-    var cellUsername: RegisterTextfieldTableViewCell!
-    var username: String?
+    // MARK: - Properties
+    private var cellUsername: RegisterTextfieldTableViewCell!
+    private var username: String?
     var faeUser: FaeUser!
-    var lblError: UILabel!
+    private var lblError: UILabel!
     
-    // MARK: View Lifecycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         createTopView("ProgressBar2")
         createTableView(59 + 135 * screenHeightFactor)
         createBottomView(getErrorView())
@@ -63,7 +62,31 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         FaeCoreData.shared.save("signup", value: "username")
     }
     
-    // MARK: - Functions
+    private func getErrorView() -> UIView {
+        let uiviewError = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        lblError = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
+        lblError.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblError.numberOfLines = 2
+        lblError.textAlignment = .center
+        lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
+        lblError.textColor = UIColor._138138138()
+        
+        uiviewError.addSubview(lblError)
+        return uiviewError
+    }
+    
+    private func registerCell() {
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Button actions
     override func backButtonPressed() {
         view.endEditing(true)
         if username != nil {
@@ -87,78 +110,43 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         FaeCoreData.shared.save("signup_username", value: username!)
     }
     
-    func jumpToRegisterNext() {
+    private func checkForUniqueUsername() {
+        faeUser.whereKey("user_name", value: username!)
+        showActivityIndicator()
+        faeUser.checkUserExistence {(status, message) in
+            self.hideActivityIndicator()
+            if status/100 == 2 {
+                let valueInfo = JSON(message!)
+                if let value = valueInfo["existence"].int {
+                    if value == 0 {
+                        self.jumpToRegisterNext()
+                        self.lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
+                        self.lblError.textColor = UIColor._138138138()
+                    } else {
+                        self.lblError.text = "This Username is currently Unavailable. \n Choose Another One!"
+                        self.lblError.textColor = UIColor._2499090()
+                    }
+                }
+            } else {
+                let messageJSON = JSON(message!)
+                if let error_code = messageJSON["error_code"].string {
+                    handleErrorCode(.auth, error_code, { (prompt) in
+                        // handle
+                        felixprint("\(error_code)")
+                    })
+                }
+            }
+        }
+    }
+    
+    private func jumpToRegisterNext() {
         let nextRegister = RegisterPasswordViewController()
         nextRegister.faeUser = faeUser
         navigationController?.pushViewController(nextRegister, animated: false)
     }
-    
-    func getErrorView() -> UIView {
-        let uiviewError = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        lblError = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 40))
-        lblError.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblError.numberOfLines = 2
-        lblError.textAlignment = .center
-        lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
-        lblError.textColor = UIColor._138138138()
-        
-        uiviewError.addSubview(lblError)
-        return uiviewError
-    }
-    
-    func validation() {
-        if username == nil { return }
-        var boolIsValid = false
-        let userNameRegEx = ".*[^a-zA-Z0-9_-.].*"
-        let range = username!.range(of: userNameRegEx, options: .regularExpression)
-        let result = range != nil ? false : true
-        boolIsValid = username != nil && username?.count > 2 && result
-        self.enableContinueButton(boolIsValid)
-    }
-    
-    func checkForUniqueUsername() {
-        faeUser.whereKey("user_name", value: username!)
-        showActivityIndicator()
-        faeUser.checkUserExistence {(status, message) in DispatchQueue.main.async(execute: {
-                self.hideActivityIndicator()
-                if status/100 == 2 {
-                    let valueInfo = JSON(message!)
-                    if let value = valueInfo["existence"].int {
-                        if value == 0 {
-                            self.jumpToRegisterNext()
-                            self.lblError.text = "You can use your Username for Log In, \nAdding People, and Starting Chats."
-                            self.lblError.textColor = UIColor._138138138()
-                        } else {
-                            self.lblError.text = "This Username is currently Unavailable. \n Choose Another One!"
-                            self.lblError.textColor = UIColor._2499090()
-                        }
-                    }
-                } else {
-                    let messageJSON = JSON(message!)
-                    if let error_code = messageJSON["error_code"].string {
-                        handleErrorCode(.auth, error_code, { (prompt) in
-                            // handle
-                            felixprint("\(error_code)")
-                        })
-                    }
-                }
-            })
-        }
-    }
-    
-    func registerCell() {
-        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
-    }
-    
-    // MARK: - Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
 }
 
+// MARK: - UITableView
 extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
@@ -210,10 +198,12 @@ extension RegisterUsernameViewController: UITableViewDelegate, UITableViewDataSo
     }
 }
 
+// MARK: - RegisterTextfieldProtocol
 extension RegisterUsernameViewController: RegisterTextfieldProtocol {
     func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
     }
+    
     func textFieldShouldReturn(_ indexPath: IndexPath) {
         switch indexPath.row {
         case 2:
@@ -231,5 +221,15 @@ extension RegisterUsernameViewController: RegisterTextfieldProtocol {
         default: break
         }
         validation()
+    }
+    
+    private func validation() {
+        if username == nil { return }
+        var boolIsValid = false
+        let userNameRegEx = ".*[^a-zA-Z0-9_-.].*"
+        let range = username!.range(of: userNameRegEx, options: .regularExpression)
+        let result = range != nil ? false : true
+        boolIsValid = username != nil && username?.count > 2 && result
+        enableContinueButton(boolIsValid)
     }
 }
