@@ -226,12 +226,21 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
         
         // TODO YUE 这个地方经常报错
+        Key.shared.FMVCtrler?.useActivityIndicator(on: true)
         mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
             FaeImage.shared.type = "image"
             FaeImage.shared.image = snapShotImage
             FaeImage.shared.faeUploadFile { (status, message) in
-                guard status / 100 == 2 else { return }
-                guard message != nil else { return }
+                guard status / 100 == 2 else {
+                    Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                    showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
+                    return
+                }
+                guard message != nil else {
+                    Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                    showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
+                    return
+                }
                 let fileIDJSON = JSON(message!)
                 let fileId = fileIDJSON["file_id"].intValue
                 FaeMap.shared.whereKey("content", value: "\(fileId)")
@@ -239,8 +248,16 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
                 FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
                 FaeMap.shared.postPin(type: "location", completion: { (status, message) in
-                    guard status / 100 == 2 else { return }
-                    guard message != nil else { return }
+                    guard status / 100 == 2 else {
+                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
+                        return
+                    }
+                    guard message != nil else {
+                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
+                        return
+                    }
                     let idJSON = JSON(message!)
                     let locationId = idJSON["location_id"].intValue
                     print("locationId \(locationId)")
@@ -253,7 +270,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     
     func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
         FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
-            guard code / 100 == 2 else { return }
+            Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+            guard code / 100 == 2 else {
+                showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
+                return
+            }
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.collection_id)
