@@ -151,7 +151,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: FMLocationInfoBar!
     var locAnnoView: LocPinAnnotationView?
-    var activityIndicator: UIActivityIndicatorView!
+    var activityIndicatorLocPin: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
     // Chat
@@ -203,6 +203,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     var desiredCount = 0
     
+    // Auxiliary
+    var activityIndicator: UIActivityIndicatorView!
+    
     // System Functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -228,6 +231,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadDistanceComponents()
         loadSmallClctView()
         loadLocationView()
+        loadActivityIndicator()
         
         timerSetup()
         updateSelfInfo()
@@ -299,7 +303,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             if modeLocCreating == .off {
                 uiviewLocationBar.hide()
-                activityIndicator.stopAnimating()
+                activityIndicatorLocPin.stopAnimating()
                 if uiviewAfterAdded.frame.origin.y != screenHeight {
                     uiviewAfterAdded.hide()
                 }
@@ -691,6 +695,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 
             }
+        }
+    }
+    
+    func useActivityIndicator(on: Bool) {
+        if on {
+            activityIndicator.startAnimating()
+            view.isUserInteractionEnabled = false
+        } else {
+            activityIndicator.stopAnimating()
+            view.isUserInteractionEnabled = true
         }
     }
     
