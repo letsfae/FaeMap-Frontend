@@ -45,6 +45,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
     var boolSavedSignup: Bool! = false
     var faeUser: FaeUser!
     
+    private var uiviewBackground: UIView!
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +59,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
         
         uiviewAtBottom = setupBottomView()
         createBottomView(uiviewAtBottom)
-        
+        setupBackConfirm()
         btnContinue.setTitle("Continue", for: UIControlState())
         if let savedEmail = FaeCoreData.shared.readByKey("signup_email") {            
             email = savedEmail as? String
@@ -88,6 +90,57 @@ class RegisterEmailViewController: RegisterBaseViewController {
         return uiviewBtm
     }
     
+    private func setupBackConfirm() {
+        uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
+        
+        let uiviewBackConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewBackConfirm.center.x = screenWidth / 2
+        uiviewBackConfirm.backgroundColor = .white
+        uiviewBackConfirm.layer.cornerRadius = 21 * screenWidthFactor
+        uiviewBackground.addSubview(uiviewBackConfirm)
+        
+        let lblConfirmLine1 = UILabel(frame: CGRect(x: 0, y: 30, w: 185, h: 50))
+        lblConfirmLine1.center.x = uiviewBackConfirm.frame.width / 2
+        lblConfirmLine1.textAlignment = .center
+        lblConfirmLine1.lineBreakMode = .byWordWrapping
+        lblConfirmLine1.numberOfLines = 2
+        lblConfirmLine1.text = "Are you sure you want to exit signup?"
+        lblConfirmLine1.textColor = UIColor._898989()
+        lblConfirmLine1.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewBackConfirm.addSubview(lblConfirmLine1)
+        
+        let lblConfirmLine2 = UILabel(frame: CGRect(x: 0, y: 93, w: 185, h: 36))
+        lblConfirmLine2.center.x = uiviewBackConfirm.frame.width / 2
+        lblConfirmLine2.textAlignment = .center
+        lblConfirmLine2.lineBreakMode = .byWordWrapping
+        lblConfirmLine2.numberOfLines = 2
+        lblConfirmLine2.text = "You may lose access to the account you have begun creating."
+        lblConfirmLine2.textColor = UIColor._138138138()
+        lblConfirmLine2.font = UIFont(name: "AvenirNext-Medium", size: 13 * screenHeightFactor)
+        uiviewBackConfirm.addSubview(lblConfirmLine2)
+        
+        let btnBackConfirm = UIButton(frame: CGRect(x: 0, y: 149, w: 208, h: 39))
+        btnBackConfirm.center.x = uiviewBackConfirm.frame.width / 2
+        btnBackConfirm.setTitle("Yes", for: .normal)
+        btnBackConfirm.setTitleColor(UIColor.white, for: .normal)
+        btnBackConfirm.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnBackConfirm.backgroundColor = UIColor._2499090()
+        btnBackConfirm.addTarget(self, action: #selector(confirmBack), for: .touchUpInside)
+        btnBackConfirm.layer.borderWidth = 2
+        btnBackConfirm.layer.borderColor = UIColor._2499090().cgColor
+        btnBackConfirm.layer.cornerRadius = 19 * screenWidthFactor
+        uiviewBackConfirm.addSubview(btnBackConfirm)
+        
+        let btnDismiss = UIButton(frame: CGRect(x: 15, y: 15, w: 17, h: 17))
+        btnDismiss.setImage(UIImage.init(named: "btn_close"), for: .normal)
+        btnDismiss.addTarget(self, action: #selector(dismissBack), for: .touchUpInside)
+        uiviewBackConfirm.addSubview(btnDismiss)
+        
+        view.addSubview(uiviewBackground)
+        uiviewBackground.isHidden = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -98,20 +151,13 @@ class RegisterEmailViewController: RegisterBaseViewController {
         view.endEditing(true)
         if boolSavedSignup {
             // alert
-            FaeCoreData.shared.removeByKey("signup")
-            FaeCoreData.shared.removeByKey("signup_first_name")
-            FaeCoreData.shared.removeByKey("signup_last_name")
-            FaeCoreData.shared.removeByKey("signup_username")
-            FaeCoreData.shared.removeByKey("signup_password")
-            FaeCoreData.shared.removeByKey("signup_gender")
-            FaeCoreData.shared.removeByKey("signup_dateofbirth")
-            FaeCoreData.shared.removeByKey("signup_email")
+            uiviewBackground.isHidden = false
         } else {
             if email != nil {
                 FaeCoreData.shared.save("signup_email", value: email!)
             }
+            navigationController?.popViewController(animated: false)
         }
-        navigationController?.popViewController(animated: false)
     }
     
     override func continueButtonPressed() {
@@ -191,6 +237,22 @@ class RegisterEmailViewController: RegisterBaseViewController {
         email = ""
         btnClear.isHidden = true
         imgError.isHidden = true
+    }
+    
+    @objc private func confirmBack() {
+        FaeCoreData.shared.removeByKey("signup")
+        FaeCoreData.shared.removeByKey("signup_first_name")
+        FaeCoreData.shared.removeByKey("signup_last_name")
+        FaeCoreData.shared.removeByKey("signup_username")
+        FaeCoreData.shared.removeByKey("signup_password")
+        FaeCoreData.shared.removeByKey("signup_gender")
+        FaeCoreData.shared.removeByKey("signup_dateofbirth")
+        FaeCoreData.shared.removeByKey("signup_email")
+        navigationController?.popViewController(animated: false)
+    }
+    
+    @objc private func dismissBack() {
+        uiviewBackground.isHidden = true
     }
     
     // MARK: - Helper methods
