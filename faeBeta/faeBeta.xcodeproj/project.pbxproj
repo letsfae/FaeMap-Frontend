@@ -94,7 +94,6 @@
 		9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */; };
 		9FAAA4AD2091418E008BB358 /* UIApplication+UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */; };
 		9FAAA4AE2091418E008BB358 /* SKMesurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4962091418A008BB358 /* SKMesurement.swift */; };
-		9FAAA4AF2091418E008BB358 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9FAAA4972091418A008BB358 /* Info.plist */; };
 		9FAAA4B02091418E008BB358 /* SKPaginationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4982091418B008BB358 /* SKPaginationView.swift */; };
 		9FAAA4B12091418E008BB358 /* SKPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4992091418B008BB358 /* SKPhoto.swift */; };
 		9FAAA4B22091418E008BB358 /* SKDetectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA49A2091418B008BB358 /* SKDetectingView.swift */; };
@@ -463,6 +462,7 @@
 		9F4736CC1FB811440058770C /* SetAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAvatar.swift; sourceTree = "<group>"; };
 		9F64B3F420019BD40007848B /* FaeScrollBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeScrollBar.swift; sourceTree = "<group>"; };
 		9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneViewController.swift; sourceTree = "<group>"; };
+		9F7A80B520976F7200ECAE1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9F87402F20927D7100E3CA75 /* SignInPhoneUsernameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInPhoneUsernameViewController.swift; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPicker.swift; sourceTree = "<group>"; };
@@ -472,7 +472,6 @@
 		9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAlbumViewController.swift; sourceTree = "<group>"; };
 		9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+UIWindow.swift"; sourceTree = "<group>"; };
 		9FAAA4962091418A008BB358 /* SKMesurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKMesurement.swift; sourceTree = "<group>"; };
-		9FAAA4972091418A008BB358 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../../../workspace/SKPhotoBrowser/SKPhotoBrowser/Info.plist; sourceTree = "<group>"; };
 		9FAAA4982091418B008BB358 /* SKPaginationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPaginationView.swift; sourceTree = "<group>"; };
 		9FAAA4992091418B008BB358 /* SKPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPhoto.swift; sourceTree = "<group>"; };
 		9FAAA49A2091418B008BB358 /* SKDetectingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKDetectingView.swift; sourceTree = "<group>"; };
@@ -493,8 +492,8 @@
 		9FAAA4AA2091418D008BB358 /* SKDetectingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKDetectingImageView.swift; sourceTree = "<group>"; };
 		9FAAA4AB2091418E008BB358 /* SKPhotoBrowserDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPhotoBrowserDelegate.swift; sourceTree = "<group>"; };
 		9FAAA4AC2091418E008BB358 /* SKZoomingScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKZoomingScrollView.swift; sourceTree = "<group>"; };
-		9FAAA4C5209145EC008BB358 /* UIImage+Rotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIImage+Rotation.swift"; path = "extensions/UIImage+Rotation.swift"; sourceTree = "<group>"; };
-		9FAAA4C6209145EC008BB358 /* UIView+Radius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Radius.swift"; path = "extensions/UIView+Radius.swift"; sourceTree = "<group>"; };
+		9FAAA4C5209145EC008BB358 /* UIImage+Rotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Rotation.swift"; sourceTree = "<group>"; };
+		9FAAA4C6209145EC008BB358 /* UIView+Radius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Radius.swift"; sourceTree = "<group>"; };
 		9FC6AAFD1FA167BA0024B9B8 /* SetWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWebViewController.swift; sourceTree = "<group>"; };
 		9FC92AC42015526B00DD3250 /* StickerKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerKeyboardView.swift; sourceTree = "<group>"; };
 		9FC92AC6201553B600DD3250 /* StickerKeyboardViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerKeyboardViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -944,21 +943,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		9F979601208C519B00DF60D6 /* Recents */ = {
+		9F7A80B320976F4A00ECAE1F /* PhotoBrowser */ = {
 			isa = PBXGroup;
 			children = (
-				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
-				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
-				DCC59D101F8C279A00B2A27F /* ContactsPicker */,
-			);
-			name = Recents;
-			sourceTree = "<group>";
-		};
-		9FAAA45020912FFB008BB358 /* PhotoBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				9FAAA4C4209145DE008BB358 /* extensions */,
-				9FAAA4972091418A008BB358 /* Info.plist */,
+				9F7A80B520976F7200ECAE1F /* Info.plist */,
 				9FAAA49E2091418C008BB358 /* SKActionView.swift */,
 				9FAAA4A12091418C008BB358 /* SKAnimator.swift */,
 				9FAAA4A82091418D008BB358 /* SKButtons.swift */,
@@ -981,17 +969,28 @@
 				9FAAA4A72091418D008BB358 /* SKToolbar.swift */,
 				9FAAA4AC2091418E008BB358 /* SKZoomingScrollView.swift */,
 				9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */,
+				9F7A80B720976FE200ECAE1F /* extensions */,
 			);
-			name = PhotoBrowser;
+			path = PhotoBrowser;
 			sourceTree = "<group>";
 		};
-		9FAAA4C4209145DE008BB358 /* extensions */ = {
+		9F7A80B720976FE200ECAE1F /* extensions */ = {
 			isa = PBXGroup;
 			children = (
 				9FAAA4C5209145EC008BB358 /* UIImage+Rotation.swift */,
 				9FAAA4C6209145EC008BB358 /* UIView+Radius.swift */,
 			);
 			name = extensions;
+			sourceTree = "<group>";
+		};
+		9F979601208C519B00DF60D6 /* Recents */ = {
+			isa = PBXGroup;
+			children = (
+				B0BF358B1D8DC96300B0540B /* RecentViewController.swift */,
+				B0BF358A1D8DC96300B0540B /* RecentTableViewCell.swift */,
+				DCC59D101F8C279A00B2A27F /* ContactsPicker */,
+			);
+			name = Recents;
 			sourceTree = "<group>";
 		};
 		B064EEB31D6E0CEA00C078F5 /* Photo */ = {
@@ -1068,7 +1067,7 @@
 		B0714D7F1D5E463B00356705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				9FAAA45020912FFB008BB358 /* PhotoBrowser */,
+				9F7A80B320976F4A00ECAE1F /* PhotoBrowser */,
 				C1DE0DE71E9F00C6003188BE /* Realm */,
 				9F979601208C519B00DF60D6 /* Recents */,
 				B0BF35581D8DC8D600B0540B /* JSQExtension */,
@@ -1812,7 +1811,6 @@
 				505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */,
 				B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */,
 				B064EF0B1D6E34E200C078F5 /* FAEVerificationCodeView.xib in Resources */,
-				9FAAA4AF2091418E008BB358 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
