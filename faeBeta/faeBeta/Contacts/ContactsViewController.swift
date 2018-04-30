@@ -90,11 +90,22 @@ class ContactsViewController: UIViewController {
             realm.add(realmFae, update: true)
             realm.add(realmFaeAvatar, update: true)
         }
+        var setDeletedFriends = Set(realm.filterFriends().map { $0.id })
         FaeContact().getFriends() {(status, message) in
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
                     RealmUser.getUpdated([user["friend_id"].stringValue, user["friend_user_name"].stringValue, user["friend_user_nick_name"].stringValue, user["friend_user_age"].stringValue, user["friend_user_gender"].stringValue, ""], with: IS_FRIEND)
+                    setDeletedFriends.remove(user["friend_id"].stringValue)
+                }
+                setDeletedFriends.remove("1")
+                let realm = try! Realm()
+                for userId in setDeletedFriends {
+                    if let user = realm.filterUser(id: userId) {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                        }
+                    }
                 }
             } else if status == 500 { // TODO: error code undecided
                 
@@ -105,11 +116,22 @@ class ContactsViewController: UIViewController {
     }
     
     static func loadReceivedFriendRequests() {
+        let realm = try! Realm()
+        var setDeletedReceived = Set(realm.filterReceivedFriendRequest().map { $0.id })
         FaeContact().getFriendRequests { (status, message) in
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
                     RealmUser.getUpdated([user["request_user_id"].stringValue, user["request_user_name"].stringValue, user["request_user_nick_name"].stringValue, user["request_user_age"].stringValue, user["request_user_gender"].stringValue, RealmUser.formateTime(user["created_at"].stringValue)], with: FRIEND_REQUESTED_BY)
+                    setDeletedReceived.remove(user["request_user_id"].stringValue)
+                }
+                let realm = try! Realm()
+                for userId in setDeletedReceived {
+                    if let user = realm.filterUser(id: userId) {
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                        }
+                    }
                 }
             } else if status == 500 {
                 
@@ -120,11 +142,20 @@ class ContactsViewController: UIViewController {
     }
     
     static func loadSentFriendRequests() {
+        let realm = try! Realm()
+        var setDeletedSent = Set(realm.filterSentFriendRequest().map { $0.id })
         FaeContact().getFriendRequestsSent { (status, message) in
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
                     RealmUser.getUpdated([user["requested_user_id"].stringValue, user["requested_user_name"].stringValue, user["requested_user_nick_name"].stringValue, user["requested_user_age"].stringValue, user["requested_user_gender"].stringValue, RealmUser.formateTime(user["created_at"].stringValue)], with: FRIEND_REQUESTED)
+                    setDeletedSent.remove(user["requested_user_id"].stringValue)
+                }
+                let realm = try! Realm()
+                for userId in setDeletedSent {
+                    if let user = realm.filterUser(id: userId) {
+                        user.relation = NO_RELATION
+                    }
                 }
             } else if status == 500 {
                 
@@ -167,18 +198,10 @@ class ContactsViewController: UIViewController {
     var cellStatus = 0 // 3 cases: 1st case is Contacts - 0, 2nd is RecievedRequests - 1, 3rd is Requested - 2.
                        // This is used to switch out cell types and cells in the main table (tblContacts)
     
-    // attempting api calls to pull some information.
     let apiCalls = FaeContact()
-    
-    // Wenjia.swift variable declaration for UI objects.
-    var uiviewTabView: UIView!
-    var btnReceived: UIButton!
-    var btnRequested: UIButton!
-    var uiviewBottomLine: UIView!
-    var uiviewRedBottomLine: UIView!
     var indicatorView: UIActivityIndicatorView!
     
-    // NotificationExtension.swift variable declaration for UI objects
+    // ContactsNotificationCtrl.swift variable declaration for UI objects
     var uiviewChooseAction: UIView!
     var uiviewNotification: UIView!
     var lblTitleInActions: UILabel!
@@ -214,7 +237,7 @@ class ContactsViewController: UIViewController {
     
     var uiviewNameCard = FMNameCardView()
     
-    // MARK: - life cycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         getFriendStatus()

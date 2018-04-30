@@ -9,10 +9,12 @@
 import UIKit
 
 class SetAboutViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var uiviewNavBar: FaeNavBar!
-    var arrAboutString: [String] = ["Company", "About Fae Map", "Fae Map Website", "Terms of Service", "Privacy Policy"]
-    var tblAbout: UITableView!
+    // MARK: - Properties
+    private var uiviewNavBar: FaeNavBar!
+    private var arrAboutString: [String] = ["Company", "About Fae Map", "Fae Map Website", "Terms of Service", "Privacy Policy"]
+    private var tblAbout: UITableView!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -33,10 +35,12 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
         tblAbout.estimatedRowHeight = 60
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    // MARK: - Button action
+    @objc private func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrAboutString.count
     }
@@ -56,6 +60,7 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
         return cell
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
@@ -74,6 +79,5 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
             navigationController?.pushViewController(vc, animated: true)
         default: break
         }
-        
     }
 }

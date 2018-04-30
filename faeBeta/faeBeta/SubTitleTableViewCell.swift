@@ -10,7 +10,7 @@ import UIKit
 
 class SubTitleTableViewCell: UITableViewCell {
 
-    var subTitleLabel: UILabel!
+    private var subTitleLabel: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,7 +21,7 @@ class SubTitleTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadContent() {
+    private func loadContent() {
         subTitleLabel = UILabel(frame:CGRect(x: 0, y: 20, width: screenWidth, height: 24))
         subTitleLabel.textAlignment = .center
         subTitleLabel.numberOfLines = 0

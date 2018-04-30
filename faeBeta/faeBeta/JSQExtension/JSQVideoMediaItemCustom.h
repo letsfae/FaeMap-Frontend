@@ -55,4 +55,6 @@
  */
 - (instancetype)initWithFileURL:(NSURL *)fileURL snapImage: (UIImage *)image duration:(int)duration isReadyToPlay:(BOOL)isReadyToPlay;
 
+- (void)startAnimating;
+- (void)stopAnimating;
 @end

@@ -154,7 +154,7 @@ class NewChatShareController: UIViewController, UITextFieldDelegate, UITableView
             let chatWithUser = realm.objects(RealmUser.self).filter("loginUserID_id = '\(Key.shared.user_id)_\(IDs[0])'").first!
             //vcChat.arrRealmUsers.append(chatWithUser)
             //vcChat.realmWithUser = chatWithUser
-            //if let message = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
+            //if let message = realm.objects(RealmMessage.self).filter("login_user_id = '\(Key.shared.user_id)' AND \(chatWithUser) in members AND members.count = 2").sorted(byKeyPath: "index").first {
             if let message = chatWithUser.message {
                 vcChat.strChatId = message.chat_id
                 startChat_v2(vcChat)

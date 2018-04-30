@@ -22,7 +22,6 @@ extension FaeMapViewController: NameCardDelegate {
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.userId = userId
-        //addFriendVC.requestId = requestId
         addFriendVC.statusMode = status
         addFriendVC.modalPresentationStyle = .overCurrentContext
         present(addFriendVC, animated: false)
@@ -53,66 +52,6 @@ extension FaeMapViewController: NameCardDelegate {
             navigationController?.pushViewController(vcChat, animated: true)
         } else {
             assert(false, "[Chat - check why this user is not in Realm]")
-            /*getFromURL("users/\(id)/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
-                if status / 100 == 2 && result != nil {
-                    let profileJSON = JSON(result!)
-                    let newUser = RealmUser(value: ["\(Key.shared.user_id)_\(id)", String(Key.shared.user_id), "\(id)", profileJSON["user_name"].stringValue, profileJSON["nick_name"].stringValue, NO_RELATION, "", ""])
-                    try! realm.write {
-                        realm.add(newUser, update: true)
-                    }
-                    General.shared.avatar(userid: id) { (avatarImage) in
-                    }
-                    self.navigationController?.pushViewController(vcChat, animated: true)
-                }
-            }*/
         }
-//        uiviewNameCard.hide() {
-//            self.mapGesture(isOn: true)
-//        }
-        // First get chatroom id
-       /* getFromURL("chats/users/\(Key.shared.user_id)/\(id)", parameter: nil, authentication: headerAuthentication()) { status, result in
-            var resultJson1 = JSON([])
-            if status / 100 == 2 {
-                resultJson1 = JSON(result!)
-            }
-            // then get with user name
-            getFromURL("users/\(id)/name_card", parameter: nil, authentication: headerAuthentication()) { status, result in
-                guard status / 100 == 2 else { return }
-                let resultJson2 = JSON(result!)
-                var chat_id: String?
-                if let id = resultJson1["chat_id"].number {
-                    chat_id = id.stringValue
-                }
-                if let nickName = resultJson2["nick_name"].string {
-                    self.startChat(chat_id, userId: id, nickName: nickName)
-                } else {
-                    self.startChat(chat_id, userId: id, nickName: nil)
-                }
-            }
-        }*/
-    }
-    
-    // MARK: go to chatting
-    func startChat(_ chat_id: String?, userId: Int, nickName: String?) {
-        let chatVC = ChatViewController()
-        chatVC.strChatRoomId = Key.shared.user_id < userId ? "\(Key.shared.user_id)-\(userId)" : "\(userId)-\(Key.shared.user_id)"
-        chatVC.strChatId = chat_id
-        // Bryan
-        let nickName = nickName ?? "Chat"
-        // ENDBryan
-        // chatVC.withUser = FaeWithUser(userName: withUserName, userId: withUserId.stringValue, userAvatar: nil)
-        
-        // Bryan
-        // TODO: Tell nickname and username apart
-        chatVC.realmWithUser = RealmUser()
-        chatVC.realmWithUser!.display_name = nickName
-        chatVC.realmWithUser!.id = "\(userId)"
-        // chatVC.realmWithUser?.userAvatar =
-        
-        // RealmChat.addWithUser(withUser: chatVC.realmWithUser!)
-        
-        // EndBryan
-//        self.present(chatVC, animated: true, completion: nil)
-        navigationController?.pushViewController(chatVC, animated: true)
     }
 }

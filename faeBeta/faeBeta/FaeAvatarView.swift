@@ -8,7 +8,6 @@
 
 import UIKit
 import RealmSwift
-import IDMPhotoBrowser
 
 let faeAvatarCache = NSCache<AnyObject, AnyObject>()
 
@@ -55,13 +54,18 @@ class FaeAvatarView: UIImageView {
             guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }
             guard let image = UIImage(data: imageRawData!) else { return }
-            let photos = IDMPhoto.photos(withImages: [image])
-            self.presentPhotoBrowser(photos: photos)
+            var images = [SKPhoto]()
+            let photo = SKPhoto.photoWithImage(image)
+            images.append(photo)
+            let browser = SKPhotoBrowser(photos: images)
+            browser.initializePageIndex(0)
+            UIApplication.shared.keyWindow?.visibleViewController?.present(browser, animated: true, completion: nil)
+            //self.presentPhotoBrowser(photos: images)
         }
     }
     
-    fileprivate func presentPhotoBrowser(photos: [Any]?) {
-        guard let browser = IDMPhotoBrowser(photos: photos) else {
+    /*fileprivate func presentPhotoBrowser(photos: [Any]?) {
+        guard let browser = SKPhotoBrowser(photos: photos) else {
             print("[FaeAvatarView - openThisMedia] Photo Browser doesn't exist!")
             return
         }
@@ -69,5 +73,5 @@ class FaeAvatarView: UIImageView {
         browser.displayActionButton = false
         browser.dismissOnTouch = true
         UIApplication.shared.keyWindow?.visibleViewController?.present(browser, animated: true, completion: nil)
-    }
+    }*/
 }

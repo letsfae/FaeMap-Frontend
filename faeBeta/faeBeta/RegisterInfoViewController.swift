@@ -33,22 +33,22 @@ fileprivate func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool {
 }
 
 class RegisterInfoViewController: RegisterBaseViewController {
-    
-    var textField: FAETextField!
-    var dateOfBirth: String? = ""
-    var numKeyPad: FAENumberKeyboard!
-    var gender: String?
-    var btnMale: UIButton!
-    var btnFemale: UIButton!
+    // MARK: - Properties
+    private var textField: FAETextField!
+    private var dateOfBirth: String? = ""
+    private var numKeyPad: FAENumberKeyboard!
+    private var gender: String?
+    private var btnMale: UIButton!
+    private var btnFemale: UIButton!
+    private var imgExclamationMark: UIImageView!
+    private var boolMeetMinAge: Bool = true
+    private var uiviewAtBottom: UIView!
+    private var lblCont: UILabel!
     var faeUser: FaeUser!
-    var imgExclamationMark: UIImageView!
-    var boolMeetMinAge: Bool = true
-    var uiviewAtBottom: UIView!
-    var lblCont: UILabel!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         createTopView("ProgressBar4")
         createDateOfBirthView()
         createGenderView()
@@ -71,71 +71,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         FaeCoreData.shared.save("signup", value: "info")
     }
     
-    func setupBottomView() -> UIView {
-        let uiviewBtm = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
-        lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
-        lblCont.numberOfLines = 2
-        lblCont.textAlignment = .center
-        lblCont.textColor = UIColor._2499090()
-        lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        lblCont.text = "Sorry! You don’t meet the minimum age\nrequirement for Fae Map."
-        uiviewBtm.addSubview(lblCont)
-        lblCont.isHidden = true
-        return uiviewBtm
-    }
-    
-    // MARK: - Functions
-    override func backButtonPressed() {
-        view.endEditing(true)
-        if gender != nil {
-            FaeCoreData.shared.save("signup_gender", value: gender!)
-        }
-        if dateOfBirth != nil {
-            FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)            
-        }
-        navigationController?.popViewController(animated: false)
-    }
-    
-    override func continueButtonPressed() {
-        if Key.shared.is_Login {
-            setValueInUser()
-            faeUser.updateAccountBasicInfo({ (_, _) in
-                self.jumpToRegisterNext()
-            })
-        } else {
-            setValueInUser()
-            jumpToRegisterNext()            
-        }
-        FaeCoreData.shared.save("signup_gender", value: gender!)
-        FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)
-    }
-    
-    func jumpToRegisterNext() {
-        //let boardRegister = RegisterConfirmViewController()
-        //boardRegister.faeUser = faeUser
-        //navigationController?.pushViewController(boardRegister, animated: true)
-        /*let secureMenu = UIAlertController(title: nil, message: "How do you want to secure your account?", preferredStyle: .actionSheet)
-        let useEmail = UIAlertAction(title: "Use Email", style: .default) { (alert: UIAlertAction) in
-            let secureByEmail = RegisterEmailViewController()
-            secureByEmail.faeUser = self.faeUser
-            self.navigationController?.pushViewController(secureByEmail, animated: true)
-        }
-        let usePhone = UIAlertAction(title: "Use Phone", style: .default) { (alert: UIAlertAction) in
-            let secureByPhone = RegisterPhoneViewController()
-            secureByPhone.faeUser = self.faeUser
-            self.navigationController?.pushViewController(secureByPhone, animated: true)
-        }
-        let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (alert: UIAlertAction) in }
-        secureMenu.addAction(useEmail)
-        secureMenu.addAction(usePhone)
-        secureMenu.addAction(cancel)
-        present(secureMenu, animated: true, completion: nil)*/
-        let nextRegister = RegisterEmailViewController()
-        nextRegister.faeUser = faeUser
-        navigationController?.pushViewController(nextRegister, animated: true)
-    }
-    
-    func createDateOfBirthView() {
+    private func createDateOfBirthView() {
         let uiviewDoB = UIView(frame: CGRect(x: 0, y: 99 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 120 * screenHeightFactor))
         let lblTitle = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
         lblTitle.textColor = UIColor._898989()
@@ -162,7 +98,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         view.addSubview(uiviewDoB)
     }
     
-    func createGenderView() {
+    private func createGenderView() {
         let genderView = UIView(frame: CGRect(x: 0, y: 245 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 150 * screenHeightFactor))
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
@@ -199,15 +135,77 @@ class RegisterInfoViewController: RegisterBaseViewController {
         }
     }
     
-    @objc func maleButtonTapped() {
+    private func setupBottomView() -> UIView {
+        let uiviewBtm = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 36))
+        lblCont.numberOfLines = 2
+        lblCont.textAlignment = .center
+        lblCont.textColor = UIColor._2499090()
+        lblCont.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        lblCont.text = "Sorry! You don’t meet the minimum age\nrequirement for Fae Map."
+        uiviewBtm.addSubview(lblCont)
+        lblCont.isHidden = true
+        return uiviewBtm
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Button actions
+    override func backButtonPressed() {
+        view.endEditing(true)
+        if gender != nil {
+            FaeCoreData.shared.save("signup_gender", value: gender!)
+        }
+        if dateOfBirth != nil {
+            FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)            
+        }
+        navigationController?.popViewController(animated: false)
+    }
+    
+    override func continueButtonPressed() {
+        if Key.shared.is_Login {
+            setValueInUser()
+            faeUser.updateAccountBasicInfo({ (_, _) in
+                self.jumpToRegisterNext()
+            })
+        } else {
+            setValueInUser()
+            jumpToRegisterNext()            
+        }
+        FaeCoreData.shared.save("signup_gender", value: gender!)
+        FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)
+    }
+    
+    private func setValueInUser() {
+        faeUser.whereKey("gender", value: gender!)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yyyy"
+        
+        let date = dateFormatter.date(from: dateOfBirth!)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: date!)
+        
+        faeUser.whereKey("birthday", value: dateString)
+    }
+    
+    private func jumpToRegisterNext() {
+        let nextRegister = RegisterEmailViewController()
+        nextRegister.faeUser = faeUser
+        navigationController?.pushViewController(nextRegister, animated: true)
+    }
+    
+    @objc private func maleButtonTapped() {
         showGenderSelected("male")
     }
     
-    @objc func femaleButtonTapped() {
+    @objc private func femaleButtonTapped() {
         showGenderSelected("female")
     }
     
-    func showGenderSelected(_ gender: String) {
+    private func showGenderSelected(_ gender: String) {
         self.gender = gender
         let isMaleSelected = gender == "male"
         btnMale.isSelected = isMaleSelected
@@ -215,7 +213,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
         validation()
     }
     
-    func validation() {
+    private func validation() {
         if gender == nil || dateOfBirth == nil { return }
         boolMeetMinAge = true
         var boolIsValid = false
@@ -236,10 +234,6 @@ class RegisterInfoViewController: RegisterBaseViewController {
             boolIsValid = boolIsValid && intAge <= 99 && intAge >= 13
             boolMeetMinAge = intAge >= 13
             
-            /*let currentYearInt = ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: date!))!
-            
-            boolIsValid = boolIsValid && currentYearInt > ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))! - 99 && currentYearInt < ((calendar as NSCalendar?)?.component(NSCalendar.Unit.year, from: Date()))!*/
-            
             imgExclamationMark.isHidden = boolIsValid
         }
         
@@ -251,28 +245,9 @@ class RegisterInfoViewController: RegisterBaseViewController {
         enableContinueButton(boolIsValid)
         lblCont.isHidden = boolMeetMinAge
     }
-    
-    func setValueInUser() {
-        faeUser.whereKey("gender", value: gender!)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yyyy"
-        
-        let date = dateFormatter.date(from: dateOfBirth!)
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        let dateString = dateFormatter.string(from: date!)
-        
-        faeUser.whereKey("birthday", value: dateString)
-    }
-    
-    // MARK: - Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
 }
 
+// MARK: - FAENumberKeyboardDelegate
 extension RegisterInfoViewController: FAENumberKeyboardDelegate {
     func keyboardButtonTapped(_ num: Int) {
         if num != -1 {
@@ -299,19 +274,12 @@ extension RegisterInfoViewController: FAENumberKeyboardDelegate {
     }
 }
 
+// MARK: - Keyboard observer
 extension RegisterInfoViewController {
     override func keyboardWillShow(_ notification: Notification) {
         textField.resignFirstResponder()
     }
     
     override func keyboardWillHide(_ notification: Notification) {
-    }
-    
-    func hideNumKeyboard() {
-        var frameBottom = uiviewBottom.frame
-        frameBottom.origin.y = view.frame.height - frameBottom.size.height
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
-            self.uiviewBottom.frame = frameBottom
-        })
     }
 }

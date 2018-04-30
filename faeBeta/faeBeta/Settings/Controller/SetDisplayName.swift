@@ -9,23 +9,24 @@
 import UIKit
 import SwiftyJSON
 
-protocol ViewControllerNameDelegate: class {
-    func protSaveName(txtName: String?)
+protocol PassDisplayNameBackDelegate: class {
+    func protSaveDisplayName(txtName: String?)
 }
 
 class SetDisplayName: UIViewController, UITextViewDelegate {
-    
-    weak var delegate: ViewControllerNameDelegate?
-    var btnBack: UIButton!
-    var lblTitle: UILabel!
-    var textField: FAETextField!
-    var lblEditIntro: UILabel!
-    var lblRequestResult: UILabel!
-    var btnSave: UIButton!
-    var txtName: String!
-    var boolWillDisappear: Bool = false
+    // MARK: - Properties
+    weak var delegate: PassDisplayNameBackDelegate?
+    private var btnBack: UIButton!
+    private var lblTitle: UILabel!
+    private var textField: FAETextField!
+    private var lblEditIntro: UILabel!
+    private var lblRequestResult: UILabel!
+    private var btnSave: UIButton!
+    private var txtName: String!
+    private var boolWillDisappear: Bool = false
     var strFieldText: String = ""
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -93,22 +94,24 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
         boolWillDisappear = true
     }
     
-    func addObersers() {
+    private func addObersers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    // MARK: - UITextViewDelegate
     func textViewDidChange(_ textView: UITextView) {
         lblRequestResult.isHidden = true
     }
     
-    @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    // MARK: - Button & gesture actions
+    @objc private func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             textField.resignFirstResponder()
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    @objc private func actionGoBack(_ sender: UIButton) {
         if let nav = navigationController {
             nav.popViewController(animated: true)
         } else {
@@ -117,17 +120,12 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
         }
     }
     
-    func setRequestResult(_ prompt: String) {
-        lblRequestResult.text = prompt
-        lblRequestResult.isHidden = false
-    }
-    
-    @objc func actionSaveName(_ sender: UIButton) {
+    @objc private func actionSaveName(_ sender: UIButton) {
         let user = FaeUser()
         user.whereKey("nick_name", value: textField.text!)
         user.updateNameCard { (status, message) in
             if status / 100 == 2 { // TODO: error code undecided
-                self.delegate?.protSaveName(txtName: self.textField.text)
+                self.delegate?.protSaveDisplayName(txtName: self.textField.text)
                 self.actionGoBack(sender)
             } else if status == 500 {
                 self.setRequestResult("Internal Service Error!")
@@ -143,6 +141,12 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
         }
     }
     
+    private func setRequestResult(_ prompt: String) {
+        lblRequestResult.text = prompt
+        lblRequestResult.isHidden = false
+    }
+    
+    // MARK: - Keyboard observer
     @objc func keyboardWillShow(_ notification: Notification) {
         if boolWillDisappear {
             return

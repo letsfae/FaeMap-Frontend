@@ -16,14 +16,15 @@ enum SetContactDetailType: Int {
 }
 
 class SetContactDetailViewController: UIViewController {
-    
+    // MARK: - Properties
     var detailType: SetContactDetailType = .supportHelp
-    var btnBack: UIButton!
-    var lblTitle: UILabel!
-    var textField: UITextField!
-    var btnSend: UIButton!
-    var boolWillDisappear: Bool = false
+    private var btnBack: UIButton!
+    private var lblTitle: UILabel!
+    private var textField: UITextField!
+    private var btnSend: UIButton!
+    private var boolWillDisappear: Bool = false
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         addObersers()
@@ -75,12 +76,12 @@ class SetContactDetailViewController: UIViewController {
         boolWillDisappear = true
     }
     
-    func addObersers() {
+    private func addObersers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func setTitleText() {
+    private func setTitleText() {
         switch detailType {
         case .supportHelp:
             lblTitle.text = "We’re here to help! Please let us\nknow what you need support on."
@@ -93,7 +94,7 @@ class SetContactDetailViewController: UIViewController {
         }
     }
     
-    func setPlaceholder() {
+    private func setPlaceholder() {
         switch detailType {
         case .supportHelp:
             textField.placeholder = "How can we help you?"
@@ -106,14 +107,16 @@ class SetContactDetailViewController: UIViewController {
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    // MARK: - Button actions
+    @objc private func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func actionSend(_ sender: UIButton) {
+    @objc private func actionSend(_ sender: UIButton) {
         
     }
     
+    // MARK: - Keyboard observer
     @objc func keyboardWillShow(_ notification: Notification) {
         if boolWillDisappear {
             return

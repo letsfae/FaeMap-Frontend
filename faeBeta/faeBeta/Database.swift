@@ -45,9 +45,9 @@ class RealmUser: Object {
     @objc dynamic var show_gender: Bool = true
     @objc dynamic var short_intro: String = ""
     @objc dynamic var created_at: String = ""
-    //let message = LinkingObjects(fromType: RealmMessage_v2.self, property: "members")
-    var message: RealmMessage_v2? {
-        return realm?.objects(RealmMessage_v2.self).filter("login_user_id = %@ AND members.@count = 2 AND %@ IN members", self.login_user_id, self).last
+    //let message = LinkingObjects(fromType: RealmMessage.self, property: "members")
+    var message: RealmMessage? {
+        return realm?.objects(RealmMessage.self).filter("login_user_id = %@ AND members.@count = 2 AND %@ IN members", self.login_user_id, self).last
     }
     var avatar: UserImage? {
         return realm?.objects(UserImage.self).filter("user_id == %@", self.id).first

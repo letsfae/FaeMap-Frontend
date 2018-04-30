@@ -10,11 +10,13 @@
 import UIKit
 
 class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
+    // MARK: - Property
     var boolPush = false
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,6 +73,16 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
         scrollView.delegate = self
     }
     
+    // MARK: - Button action
+    @objc func backButtonTapped(_ sender:UIButton) {
+        if boolPush {
+            navigationController?.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let indicator = scrollView.subviews.last as? UIImageView {
             //indicator.backgroundColor = .red//UIColor._2499090()
@@ -81,15 +93,8 @@ class PrivacyPolicyViewController: UIViewController, UIScrollViewDelegate {
             indicator.image = indicator.image?.withRenderingMode(.alwaysTemplate)
         }
     }
-    
-    @objc func backButtonTapped(_ sender:UIButton) {
-        if boolPush {
-            navigationController?.popViewController(animated: true)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
 
+    // MARK: - Helper method
     private func astrContent() -> NSAttributedString {
         func numberBullet(_ num: Int) -> String {
             return "        \(num).  "

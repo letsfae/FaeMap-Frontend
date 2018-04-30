@@ -51,7 +51,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     let realm = try! Realm()
     var realmColDetails: RealmCollection!
-    var notificationToken: NotificationToken? = nil
     var objectToken: NotificationToken? = nil
     var colId: Int = -1
     var loadFromServer = false
@@ -95,7 +94,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         if btnMapView != nil {
             btnMapView.isEnabled = false
         }
-        realmColDetails = RealmCollection.filterCollectedPin(collection_id: colId)
+        //realmColDetails = RealmCollection.filterCollectedPin(collection_id: colId)
+        realmColDetails = realm.filterCollection(id: colId)
         getSavedItems(colId: colId)
     }
     
@@ -464,12 +464,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 self.btnMapView.isEnabled = self.desiredCount != 0
             }
             
-            let col = RealmCollection.filterCollectedPin(collection_id: colId)
+            //let col = RealmCollection.filterCollectedPin(collection_id: colId)
+            let realm = try! Realm()
+            let col = realm.filterCollection(id: colId)
             for pin in arrLocPinId {
-                let collectedPin = CollectedPin(pin_id: pin["pin_id"].intValue, added_at: pin["added_at"].stringValue)
-                collectedPin.setPrimaryKeyInfo(pin["pin_id"].intValue, pin["added_at"].stringValue)
+                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
         
                 try! self.realm.write {
+                    realm.add(collectedPin, update: true)
                     col?.pins.append(collectedPin)
                 }
             }
@@ -795,18 +797,18 @@ extension CollectionsListDetailViewController {
                 guard let collection = self.realm.object(ofType: RealmCollection.self, forPrimaryKey: self.colId) else {
                     return
                 }
-                
-                try! self.realm.write {
+                let realm = try! Realm()
+                try! realm.write {
                     if collection.pins.count != 0 {
                         for pin in collection.pins {
                             guard let deletedPin = self.realm.object(ofType: CollectedPin.self, forPrimaryKey: "\(pin.pin_id)_\(pin.added_at)") else {
                                 continue
                             }
-                            self.realm.delete(deletedPin)
+                            realm.delete(deletedPin)
                         }
                     }
                     
-                    self.realm.delete(collection)
+                    realm.delete(collection)
                 }
                 
                 self.navigationController?.popViewController(animated: true)

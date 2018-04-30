@@ -10,7 +10,7 @@ import UIKit
 
 class TitleTableViewCell: UITableViewCell {
 
-    var titleLabel: UILabel!
+    private var titleLabel: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,7 +21,7 @@ class TitleTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadContent() {
+    private func loadContent() {
         titleLabel = UILabel(frame:CGRect(x: 0, y: 0, width: screenWidth, height: 56))
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
@@ -33,5 +33,4 @@ class TitleTableViewCell: UITableViewCell {
     func setTitleLabelText(_ titleText: String)  {
         titleLabel.text = titleText
     }
-
 }

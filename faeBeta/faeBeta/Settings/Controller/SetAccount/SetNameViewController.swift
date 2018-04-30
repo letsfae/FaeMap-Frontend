@@ -13,40 +13,41 @@ protocol SetNameBirthGenderDelegate: class {
     func updateInfo(target: String?)
 }
 
-class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UITextFieldDelegate {
-    var lblTitle: UILabel!
-    var btnSave: UIButton!
+class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
+    // MARK: - Properties
+    private var lblTitle: UILabel!
+    private var btnSave: UIButton!
     var fName: String? = ""
     var lName: String? = ""
-    var btnGender: UIButton!
+    private var btnGender: UIButton!
     
-    var textFName: FAETextField!
-    var textLName: FAETextField!
-    var textBirth: FAETextField!
-    var textPswd: FAETextField!
-    var textNewEmail: FAETextField!
+    private var textFName: FAETextField!
+    private var textLName: FAETextField!
+    private var textBirth: FAETextField!
+    private var textPswd: FAETextField!
+    private var textNewEmail: FAETextField!
     var dateOfBirth: String? = ""
-    var numKeyPad: FAENumberKeyboard!
+    private var numKeyPad: FAENumberKeyboard!
     var gender: String? = ""
-    var btnMale: UIButton!
-    var btnFemale: UIButton!
-    var faeUser = FaeUser()
-    var imgExclamationMark: UIImageView!
-    var keyboardHeight: CGFloat!
-    var btnForgot: UIButton!
-    var lblWrongPswd: FaeLabel!
-    var lblWrongEmail: FaeLabel!
-    var indicatorView: UIActivityIndicatorView!
+    private var btnMale: UIButton!
+    private var btnFemale: UIButton!
+    private var faeUser = FaeUser()
+    private var imgExclamationMark: UIImageView!
+    private var keyboardHeight: CGFloat!
+    private var btnForgot: UIButton!
+    private var lblWrongPswd: FaeLabel!
+    private var lblWrongEmail: FaeLabel!
+    private var indicatorView: UIActivityIndicatorView!
     
     weak var delegate: SetNameBirthGenderDelegate?
     
     // variables in extension file
-    var uiviewGrayBg: UIView!
-    var uiviewChooseMethod: UIView!
-    var lblChoose: UILabel!
-    var btnPhone: UIButton!
-    var btnEmail: UIButton!
-    var btnCancel: UIButton!
+    fileprivate var uiviewGrayBg: UIView!
+    fileprivate var uiviewChooseMethod: UIView!
+    fileprivate var lblChoose: UILabel!
+    fileprivate var btnPhone: UIButton!
+    fileprivate var btnEmail: UIButton!
+    fileprivate var btnCancel: UIButton!
     
     enum SettingEnterMode {
         case name
@@ -63,6 +64,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
     
     var enterMode: SettingEnterMode!
     var pswdEnterMode: PasswordEnterMode!
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -71,14 +74,14 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         createActivityIndicator()
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
         btnBack.setImage(#imageLiteral(resourceName: "Settings_back"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         lblTitle = FaeLabel(CGRect(x: 0, y: 72, width: screenWidth, height: 56), .center, .medium, 20, UIColor._898989())
         lblTitle.numberOfLines = 0
         view.addSubview(lblTitle)
@@ -120,7 +123,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    fileprivate func loadName() {
+    private func loadName() {
         textFName = FAETextField(frame: CGRect(x: 30, y: 174 * screenHeightFactor, width: screenWidth - 60, height: 34))
         textFName.fontSize = 25
         textFName.placeholder = "First Name"
@@ -144,7 +147,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    fileprivate func loadBirth() {
+    private func loadBirth() {
         textBirth = FAETextField(frame: CGRect(x: 15, y: 174, width: screenWidth - 30, height: 34))
         textBirth.fontSize = 25
         textBirth.placeholder = "MM/DD/YYYY"
@@ -165,7 +168,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         view.addSubview(imgExclamationMark)
     }
     
-    fileprivate func loadGenderImg() {
+    private func loadGenderImg() {
         btnMale = UIButton(frame: CGRect(x: screenWidth / 2 - 120, y: 220 * screenHeightFactor, width: 80, height: 80))
         btnMale.setImage(#imageLiteral(resourceName: "male_unselected"), for: .normal)
         btnMale.setImage(#imageLiteral(resourceName: "male_selected"), for: .selected)
@@ -185,7 +188,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    fileprivate func loadPassword() {
+    private func loadPassword() {
         btnSave.setTitle("Continue", for: .normal)
         enableSaveButton(false)
         btnForgot = UIButton(frame: CGRect(x: 0, y: screenHeight - 314 - 50 * screenHeightFactor, width: 120, height: 18))
@@ -213,7 +216,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         loadResetPassword()
     }
     
-    fileprivate func loadChangeEmailPage() {
+    private func loadChangeEmailPage() {
         btnSave.setTitle("Save", for: .normal)
         enableSaveButton(false)
         
@@ -230,11 +233,23 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         lblWrongEmail.isHidden = true
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    private func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = view.center
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        
+        view.addSubview(indicatorView)
+        view.bringSubview(toFront: indicatorView)
+    }
+    
+    // MARK: - Button actions
+    @objc private func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func actionSave(_ sender: UIButton) {
+    @objc private func actionSave(_ sender: UIButton) {
         indicatorView.startAnimating()
         var keyValue = [String: String]()
         switch enterMode {
@@ -338,22 +353,22 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    @objc func maleButtonTapped() {
+    @objc private func maleButtonTapped() {
         showGenderSelected("male")
     }
     
-    @objc func femaleButtonTapped() {
+    @objc private func femaleButtonTapped() {
         showGenderSelected("female")
     }
     
-    func showGenderSelected(_ gender: String) {
+    private func showGenderSelected(_ gender: String) {
         self.gender = gender
         let isMaleSelected = gender == "male"
         btnMale.isSelected = isMaleSelected
         btnFemale.isSelected = !isMaleSelected
     }
     
-    @objc func textFieldDidChange(_ textField: UITextField) {
+    @objc private func textFieldDidChange(_ textField: UITextField) {
         if enterMode == .name {
             print(textFName.text!)
             if textFName.text == "" || textLName.text == "" {
@@ -372,11 +387,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
-    @objc func actionForgot(_ sender: UIButton) {
+    @objc private func actionForgot(_ sender: UIButton) {
         animationShowSelf()
     }
     
-    //MARK: - FAENumberKeyboard delegate
+    // MARK: - FAENumberKeyboardDelegate
     func keyboardButtonTapped(_ num: Int) {
         if num != -1 {
             if (dateOfBirth?.count)! < 10 {
@@ -401,7 +416,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         textBirth.text = dateOfBirth
     }
     
-    func validation() {
+    // MARK: - Helper methods
+    private func validation() {
         var boolIsValid = false
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
@@ -428,14 +444,14 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         enableSaveButton(boolIsValid)
     }
     
-    func isValidEmail(_ testStr:String) -> Bool {
+    private func isValidEmail(_ testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let range = testStr.range(of: emailRegEx, options: .regularExpression)
         let result = range != nil ? true : false
         return result
     }
     
-    func enableSaveButton(_ enable: Bool) {
+    private func enableSaveButton(_ enable: Bool) {
         btnSave.isEnabled = enable
         if enable {
             btnSave.backgroundColor = UIColor._2499090()
@@ -444,6 +460,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
         }
     }
     
+    // MARK: - Keyboard observer
     @objc func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
@@ -457,22 +474,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate, UIText
             lblWrongEmail.frame.origin.y = screenHeight - keyboardHeight - 53 - 50 * screenHeightFactor
         }
     }
-    
-    func createActivityIndicator() {
-        indicatorView = UIActivityIndicatorView()
-        indicatorView.activityIndicatorViewStyle = .whiteLarge
-        indicatorView.center = view.center
-        indicatorView.hidesWhenStopped = true
-        indicatorView.color = UIColor._2499090()
-        
-        view.addSubview(indicatorView)
-        view.bringSubview(toFront: indicatorView)
-    }
 }
 
-// load choose reset password page
+// MARK: - Load choose reset password page
 extension SetNameViewController {
-    func loadResetPassword() {
+    fileprivate func loadResetPassword() {
         uiviewGrayBg = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         view.addSubview(uiviewGrayBg)
         uiviewGrayBg.backgroundColor = UIColor._107105105_a50()
@@ -483,7 +489,7 @@ extension SetNameViewController {
         uiviewGrayBg.isHidden = true
     }
     
-    fileprivate func loadForgotPswd() {
+    private func loadForgotPswd() {
         uiviewChooseMethod = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 262))
         uiviewChooseMethod.center.x = screenWidth / 2
         uiviewChooseMethod.backgroundColor = .white
@@ -528,11 +534,11 @@ extension SetNameViewController {
         view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
     }
     
-    @objc func actionCancel(_ sender: Any?) {
+    @objc private func actionCancel(_ sender: Any?) {
         animationHideSelf()
     }
     
-    @objc func actionChooseMethod(_ sender: UIButton) {
+    @objc private func actionChooseMethod(_ sender: UIButton) {
         if sender.tag == 0 {  // use phone
             let vc = SignInPhoneViewController()
             vc.enterMode = .signInSupport
@@ -546,8 +552,8 @@ extension SetNameViewController {
         }
     }
     
-    // animations
-    func animationShowSelf() {
+    // MARK: - Animations
+    fileprivate func animationShowSelf() {
         uiviewGrayBg.isHidden = false
         uiviewGrayBg.alpha = 0
         uiviewChooseMethod.alpha = 0
@@ -557,7 +563,7 @@ extension SetNameViewController {
         }, completion: nil)
     }
     
-    func animationHideSelf() {
+    fileprivate func animationHideSelf() {
         uiviewGrayBg.alpha = 1
         uiviewChooseMethod.alpha = 1
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
@@ -565,6 +571,5 @@ extension SetNameViewController {
             self.uiviewGrayBg.alpha = 0
         }, completion: nil)
     }
-    // animations end
 }
 

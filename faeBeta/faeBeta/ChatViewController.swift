@@ -14,82 +14,48 @@ import CoreMedia
 import AVFoundation
 import RealmSwift
 
-public let kAVATARSTATE = "avatarState"
-public let kFIRSTRUN = "firstRun"
-public var headerDeviceToken: Data!
-
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIGestureRecognizerDelegate, SendMutipleImagesDelegate, LocationSendDelegate, FaeChatToolBarContentViewDelegate, CAAnimationDelegate, BoardsSearchDelegate, JSQAudioMediaItemDelegateCustom, LocationPickerMiniDelegate {
+class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
-    
-    var playingAudio: JSQAudioMediaItemCustom?
-    
-    func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
-    }
-    
-    func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
-        if let current = playingAudio {
-            if current != audioMediaItem {
-               current.finishPlaying()
-            }
-        }
-        playingAudio = audioMediaItem
-    }
-    
-    // MARK: properties
-    var uiviewNavBar: FaeNavBar!
+    // MARK: - Properties
+    private var uiviewNavBar: FaeNavBar!
     var uiviewLocationExtend = LocationExtendView()
-    var toolbarContentView: FaeChatToolBarContentView!
+    private var toolbarContentView: FaeChatToolBarContentView!
     var uiviewNameCard: FMNameCardView!
     // custom toolBar the bottom toolbar button
-    var btnSet = [UIButton]()
-    var btnSend: UIButton!
-    var btnKeyBoard: UIButton!
-    var btnSticker: UIButton!
-    var btnImagePicker: UIButton!
-    var btnVoiceRecorder: UIButton!
-    var btnLocation: UIButton!
+    private var btnSet = [UIButton]()
+    private var btnSend: UIButton!
+    private var btnKeyBoard: UIButton!
+    private var btnSticker: UIButton!
+    private var btnImagePicker: UIButton!
+    private var btnVoiceRecorder: UIButton!
+    private var btnLocation: UIButton!
     // heart animation related
-    var imgHeart: UIImageView!
-    var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
+    private var imgHeart: UIImageView!
+    private var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
+    private var animatingHeartTimer: Timer!
     // the proxy of the keyboard
-    var uiviewKeyboard: UIView!
+    private var uiviewKeyboard: UIView!
     
-    var dictArrInitMessages: [NSDictionary] = [] // load latest 15 messages before showing chatting
+    // Chat info & data source
+    var strChatId: String = ""
+    var intIsGroup: Int = 0
+    var arrUserIDs: [String] = []
+    var arrRealmUsers: [RealmUser] = []
+    var arrRealmMessages: [RealmMessage] = []
     var arrJSQMessages: [JSQMessage] = [] // data source of collectionView
-    var arrStrMessagesKey: [String] = [] // the key of each message to tell whether it is loaded
-    var arrDictMessages: [NSDictionary] = [] // same content as JSQMessages, but in dictionary format
-    var dictMessageSent: NSDictionary = [:] // the message just sent, used to reload collectionView
+    var resultRealmMessages: Results<RealmMessage>!
+    var notificationToken: NotificationToken?
     let intNumberOfMessagesOneTime = 15
-    var intNumberOfMessagesLoaded = 0
-    var intTotalNumberOfMessages: Int {
-        get {
-            if let lastMessage = arrDictMessages.last {
-                return lastMessage["index"] as! Int
-            }
-            return 0
-        }
-    }
-    
-    var realmWithUser: RealmUser? // info of the other user of chatting
-    var avatarDictionary: NSMutableDictionary! = [:] // avatars of users in this chatting
-    var strChatRoomId: String! // chatRoomId in the firebase
-    var strChatId: String! = "" // the chat Id returned by our server
-    
-    // the message bubble of mine
-    var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImage(with: UIColor._2499090())
-    // the message bubble of the other user
-    let incomingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).incomingMessagesBubbleImage(with: UIColor.white)
-    var boolInitialLoadComplete = false // the first time open this chat room
-    var boolLoadingPreviousMessages = false // load previous message when scroll to the top
-    var dateLastMarker: Date! = Date.distantPast // time of last messages sent
-    var boolSentInLast5s = false // avoid mutiple timestamps when sending photos
-    private var animatingHeartTimer: Timer! // a timer to show heart animation continously
-    var boolJustSentHeart = false // check if user just sent a heart sticker and avoid sending heart continuously
-    
+
+    // Control of UI position
     var boolGoToFullContent = true // go to full album, full map, taking photo from chatting
-    var boolClosingToolbarContentView = false
-    var floatScrollViewOriginOffset: CGFloat = 0.0 // origin offset when starting dragging
-    var floatDistanceInputBarToBottom: CGFloat {
+    private var boolClosingToolbarContentView = false
+    private var floatScrollViewOriginOffset: CGFloat = 0.0 // origin offset when starting dragging
+    private let floatLocExtendHeight: CGFloat = 76
+    var floatInputBarHeight: CGFloat { return self.toolbarHeightConstraint.constant }
+    private let floatToolBarContentHeight: CGFloat = 271 + device_offset_bot
+    var floatContentOffsetY: CGFloat = 0.0
+    private var floatDistanceInputBarToBottom: CGFloat {
         get {
             return self.toolbarBottomLayoutGuide.constant
         }
@@ -97,36 +63,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             self.toolbarBottomLayoutGuide.constant = newValue
         }
     }
-    let floatLocExtendHeight: CGFloat = 76
-    //let floatInputBarHeight: CGFloat = 90
-    var floatInputBarHeight: CGFloat {
-        get {
-            return self.toolbarHeightConstraint.constant
-        }
-    }
-    let floatToolBarContentHeight: CGFloat = 271 + device_offset_bot
-  
-    //let realm = try! Realm()
-    var arrRealmMessages: [RealmMessage_v2] = []
-    var arrRealmUsers: [RealmUser] = []
-    var arrUserIDs: [String] = []
-    var resultRealmMessages: Results<RealmMessage_v2>!
-    var notificationToken: NotificationToken?
-    var intIsGroup: Int = 0
-    // not used now
-    let userDefaults = UserDefaults.standard
-    var showAvatar: Bool = true //false not show avatar, true show avatar
-    var firstLoad: Bool? // whether it is the first time to load this room.
     
-//    let vcLocDetail = LocDetailViewController()
-//    let vcPlaceDetail = PlaceDetailViewController()
-//    let vcCollection = CollectionsListDetailViewController()
-    
+    var avatarDictionary: NSMutableDictionary = [:] // avatars of users in this chatting
+    var boolLoadingPreviousMessages = false // load previous message when scroll to the top
+    var boolJustSentHeart = false // avoid sending heart continuously
+    private var playingAudio: JSQAudioMediaItemCustom?
     weak var mapDelegate: LocDetailDelegate?
     
-    var floatContentOffsetY: CGFloat = 0.0
-    
-    // MARK: lifecycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = UIColor._241241241()
@@ -134,23 +78,47 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             collectionView.contentInsetAdjustmentBehavior = .never
         }
         
+        setUserInfo()
+        loadLatestMessagesFromRealm()
+        navigationBarSet()
+        loadInputBarComponent()
+        setupToolbarContentView()
+        setupLoctionExtendView()
+        DispatchQueue.main.async { self.moveDownInputBar() }
+        setupNameCard()
+        inputToolbar.contentView.textView.becomeFirstResponder()
+        inputToolbar.contentView.textView.resignFirstResponder()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addObservers()
+        
+        if boolGoToFullContent {
+            scrollToBottom(false)
+            boolGoToFullContent = false
+        } else if collectionView.contentOffset.y != floatContentOffsetY {
+            collectionView.setContentOffset(CGPoint(x: 0, y: floatContentOffsetY), animated: false)
+            collectionView.setNeedsLayout()
+            collectionView.layoutIfNeeded()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        playingAudio?.finishPlaying()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        closeLocExtendView()
+        moveDownInputBar()
+        toolbarContentView.clearToolBarViews()
+    }
+    
+    // MARK: - Setup UI
+    private func setUserInfo() {
         senderId = "\(Key.shared.user_id)"
-        //senderDisplayName = realmWithUser!.display_name
-        
-        /*let realm = try! Realm()
-        let messages = realm.objects(RealmMessage_v2.self).filter("login_user_id = '\(Key.shared.user_id)'")
-        notificationToken = messages.addNotificationBlock { [weak self] (changes: RealmCollectionChange) in
-            switch changes {
-            case .initial:
-                print("initial")
-                break
-            case .update:
-                print("update")
-            case .error:
-                print("error")
-            }
-        }*/
-        
         let realm = try! Realm()
         for user_id in arrUserIDs {
             if let user = realm.filterUser(id: "\(user_id)") {
@@ -158,88 +126,27 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             }
         }
         senderDisplayName = arrRealmUsers[1].display_name
-        setAvatar()
-        loadMessagesFromRealm()
-        navigationBarSet()
-        loadInputBarComponent()
-        setupToolbarContentView()
-        uiviewLocationExtend.isHidden = true
-        uiviewLocationExtend.buttonCancel.addTarget(self, action: #selector(closeLocExtendView), for: .touchUpInside)
-        view.addSubview(uiviewLocationExtend)
-        DispatchQueue.main.async {
-            self.moveDownInputBar()
+        createAvatars()
+        collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
+        collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
+        if collectionView != nil {
+            collectionView.reloadData()
         }
-        setupNameCard()
-        inputToolbar.contentView.textView.becomeFirstResponder()
-        inputToolbar.contentView.textView.resignFirstResponder()
-        
-        /*for message in dictArrInitMessages {
-            _ = insertMessage(message)
-            self.intNumberOfMessagesLoaded += 1
-        }
-        self.finishReceivingMessage(animated: false)*/
-        /* ///////// Felix
-         let realm = try! Realm()
-         let messagesToLoad = realm.objects(RealmMessage.self).filter("withUserID == %@", withUserId!).sorted(byKeyPath: "date")
-         for i in (messagesToLoad.count - 10)..<messagesToLoad.count {
-         let message = messagesToLoad[i]
-         let item: NSDictionary = ["type": message.type, "senderName": message.senderName, "senderId": message.senderID, "message": message.message, "date": message.date, "latitude": message.latitude.value, "longitude": message.longitude.value, "place": message.place, "snapImage": message.snapImage?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "videoDuration": message.videoDuration.value, "isHeartSticker": message.isHeartSticker, "data": message.data?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue : 0)), "keyValue": message.messageID, "hasTimeStamp": message.hasTimeStamp, "status": message.status]
-         //print("_")
-         _ = insertMessage(item)
-         }
-         ///////// */
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        addObservers()
-        loadUserDefault()
-        //loadNewMessage()
-        
-        if boolGoToFullContent {
-            scrollToBottom(false)
-            boolGoToFullContent = false
-        } else {
-            if collectionView.contentOffset.y != floatContentOffsetY {
-                collectionView.setContentOffset(CGPoint(x: 0, y: floatContentOffsetY), animated: false)
-                collectionView.setNeedsLayout()
-                collectionView.layoutIfNeeded()
+    private func createAvatars() {
+        for user in arrRealmUsers {
+            var avatarJSQ: JSQMessagesAvatarImage
+            if let avatarData = user.avatar?.userSmallAvatar {
+                let avatarImg = UIImage(data: avatarData as Data)
+                avatarJSQ = JSQMessagesAvatarImage(avatarImage: avatarImg, highlightedImage: avatarImg, placeholderImage: avatarImg)
+            } else {
+                avatarJSQ = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
             }
+            avatarDictionary.addEntries(from: [user.id : avatarJSQ])
         }
-        
-        /*if !boolInitialLoadComplete {
-            scrollToBottom(false)
-            boolInitialLoadComplete = true
-        }*/
-        //let initializeType = (FaeChatToolBarContentType.sticker.rawValue | FaeChatToolBarContentType.photo.rawValue | FaeChatToolBarContentType.audio.rawValue | FaeChatToolBarContentType.minimap.rawValue)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: {
-        //self.toolbarContentView.setup(FaeChatToolBarContentType.sticker.rawValue)
-        })
-        
-        
-        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        //toolbarContentView.setup(FaeChatToolBarContentType.sticker.rawValue)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        //removeObservers()
-        playingAudio?.finishPlaying()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        //ref.removeObserver(withHandle: _refHandle!)
-        closeLocExtendView()
-        moveDownInputBar()
-        toolbarContentView.clearToolBarViews()
-    }
-    
-    // MARK: setup    
     private func navigationBarSet() {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
@@ -252,8 +159,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewNavBar.lblTitle.text = arrRealmUsers[1].display_name
     }
     
-    func loadInputBarComponent() {
-        //        let camera = Camera(delegate_: self)
+    private func setupLoctionExtendView() {
+        uiviewLocationExtend.isHidden = true
+        uiviewLocationExtend.buttonCancel.addTarget(self, action: #selector(closeLocExtendView), for: .touchUpInside)
+        view.addSubview(uiviewLocationExtend)
+    }
+    
+    private func loadInputBarComponent() {
         let contentView = inputToolbar.contentView
         contentView?.backgroundColor = UIColor.white
         contentView?.textView.placeHolder = "Type Something..."
@@ -323,35 +235,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         contentView?.heartButton.addTarget(self, action: #selector(actionHoldingLikeButton(_:)), for: .touchDown)
         contentView?.heartButton.addTarget(self, action: #selector(actionLeaveLikeButton(_:)), for: .touchDragOutside)
         
-        
-        
         automaticallyAdjustsScrollViewInsets = false
     }
     
-    func setupToolbarContentView() {
+    private func setupToolbarContentView() {
         toolbarContentView = FaeChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatToolBarContentHeight))
         toolbarContentView.delegate = self
         toolbarContentView.inputToolbar = inputToolbar
-        //toolbarContentView.cleanUpSelectedPhotos()
         view.addSubview(toolbarContentView)
-        
     }
     
-    func setupNameCard() {
+    private func setupNameCard() {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
         view.addSubview(uiviewNameCard)
     }
     
-    @objc func navigationLeftItemTapped() {
+    @objc private func navigationLeftItemTapped() {
         self.navigationController?.popViewController(animated: true)
     }
     
-    func navigationRightItemTapped() {
+    @objc private func navigationRightItemTapped() {
         // TODO
     }
     
-    func addObservers() {
+    private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -376,37 +284,23 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    func removeObservers() {
+    private func removeObservers() {
         inputToolbar.contentView.textView.removeObserver(self, forKeyPath: "text", context: nil)
-    }
-    
-    // MARK: user default function
-    func loadUserDefault() {
-        firstLoad = userDefaults.bool(forKey: kFIRSTRUN)
-        
-        if !firstLoad! {
-            userDefaults.set(true, forKey: kFIRSTRUN)
-            userDefaults.set(showAvatar, forKey: kAVATARSTATE)
-            userDefaults.synchronize()
-        }
-        showAvatar = true
-        //        showAvatar = userDefaults.boolForKey(kAVATARSTATE)
     }
     
     // MARK: JSQMessages Delegate (useless, but require implementation)
     override func didPressSend(_ button: UIButton!, withMessageText text: String!, senderId: String!, senderDisplayName: String!, date: Date!) {
     }
     
-    //MARK: input bar tapped events
-    @objc func showKeyboard() {
+    // MARK: - Input bar button actions
+    @objc private func showKeyboard() {
         resetToolbarButtonIcon()
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         inputToolbar.contentView.textView.becomeFirstResponder()
         toolbarContentView.showKeyboard()
-        //scrollToBottom(false)
     }
     
-    @objc func showStikcer() {
+    @objc private func showStikcer() {
         toolbarContentView.setup(FaeChatToolBarContentView.STICKER)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
@@ -417,7 +311,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showLibrary() {
+    @objc private func showLibrary() {
         toolbarContentView.setup(FaeChatToolBarContentView.PHOTO)
         let status = PHPhotoLibrary.authorizationStatus()
         if status != .authorized {
@@ -435,7 +329,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showCamera() {
+    @objc private func showCamera() {
         view.endEditing(true)
         uiviewLocationExtend.isHidden = true
         boolGoToFullContent = true
@@ -446,7 +340,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         camera.presentPhotoCamera(self, canEdit: false)
     }
     
-    @objc func showRecord() {
+    @objc private func showRecord() {
         toolbarContentView.setup(FaeChatToolBarContentView.AUDIO)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
@@ -457,7 +351,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showMiniMap() {
+    @objc private func showMiniMap() {
         toolbarContentView.setup(FaeChatToolBarContentView.MINIMAP)
         toolbarContentView.viewMiniLoc.delegate = self
         resetToolbarButtonIcon()
@@ -469,23 +363,21 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func sendMessageButtonTapped() {
+    @objc private func sendMessageButtonTapped() {
         if uiviewLocationExtend.isHidden {
-            sendMeaages_v2(type: "text", text: inputToolbar.contentView.textView.text)
-            //sendMessage(text: inputToolbar.contentView.textView.text, date: Date())
+            storeChatMessageToRealm(type: "text", text: inputToolbar.contentView.textView.text)
         } else {
             switch uiviewLocationExtend.strType {
             case "Location":
                 let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
-                sendMeaages_v2(type: "[Location]", text: locDetail, media: uiviewLocationExtend.getImageData())
+                storeChatMessageToRealm(type: "[Location]", text: locDetail, media: uiviewLocationExtend.getImageData())
             case "Place":
                 if let place = uiviewLocationExtend.placeData {
                     let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\"}"
-                    sendMeaages_v2(type: "[Place]", text: placeDetail, media: uiviewLocationExtend.getImageData())
+                    storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: uiviewLocationExtend.getImageData())
                 }
             default: break
             }
-            //sendMessage(text: inputToolbar.contentView.textView.text, location: uiviewLocationExtend.location, snapImage: uiviewLocationExtend.getImageDate(), date: Date())
         }
         if uiviewLocationExtend.isHidden == false {
             uiviewLocationExtend.isHidden = true
@@ -493,8 +385,80 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         btnSend.isEnabled = false
     }
+
+    // after saving the photo, refresh the album
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
+        appWillEnterForeground()
+    }
+
+    // MARK: - Helper methods
+    // scroll to the bottom of all messages
+    private func scrollToBottom(_ animated: Bool) {
+        let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
+        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
+        let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
+        if currentHeight > currentVisibleHeight {
+            collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
+        }
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
+ 
+    }
     
-    //MARK: handle the position of input bar
+    // dismiss the toolbar content view
+    func closeToolbarContentView() {
+        resetToolbarButtonIcon()
+        moveDownInputBar()
+        scrollToBottom(false)
+        toolbarContentView.closeAll()
+    }
+    
+    // change every button to its origin state
+    func resetToolbarButtonIcon() {
+        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
+        btnSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
+        btnSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
+        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
+        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
+        btnLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
+        btnSend.isEnabled = !uiviewLocationExtend.isHidden || inputToolbar.contentView.textView.text.count > 0
+    }
+    
+    // show alert message
+    private func showAlertView(withWarning text: String) {
+        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+ 
+    // need to refresh the album because user might take a photo outside the app
+    @objc func appWillEnterForeground() {
+        collectionView.reloadData()
+        //toolbarContentView.reloadPhotoAlbum()
+    }
+
+    
+    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) { }
+}
+
+// MARK: - Input text field delegate
+extension ChatViewController {
+    override func textViewDidChange(_ textView: UITextView) {
+        btnSend.isEnabled = textView.text.count != 0
+    }
+    
+    override func textViewDidBeginEditing(_ textView: UITextView) {
+        btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
+        showKeyboard()
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0 || !uiviewLocationExtend.isHidden
+    }
+}
+
+// MARK: - Handle the position of input bar
+extension ChatViewController {
     func moveUpInputBarContentView(_ animated: Bool) {
         collectionView.isScrollEnabled = false
         if animated {
@@ -516,34 +480,26 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         setContraintsWhenInputBarMove(inputBarToBottom: device_offset_bot, keyboard: false)
     }
     
-    // MARK: input text field delegate
-    override func textViewDidChange(_ textView: UITextView) {
-        if textView.text.count == 0 {
-            // when text has no char, cannot send message
-            btnSend.isEnabled = false
-        } else {
-            btnSend.isEnabled = true
+    func setContraintsWhenInputBarMove(inputBarToBottom distance: CGFloat, keyboard notToolBar: Bool = true, isScrolling: Bool = false) {
+        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
+        floatDistanceInputBarToBottom = distance + 0.0
+        uiviewLocationExtend.frame.origin.y = screenHeight - distance - floatInputBarHeight - floatLocExtendHeight
+        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight - 0.0
+        if !notToolBar {
+            toolbarContentView.frame.origin.y = screenHeight - distance
+        }
+        //view.setNeedsUpdateConstraints()
+        //view.layoutIfNeeded()
+        if !isScrolling {
+            let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + floatInputBarHeight + extendHeight, 0.0)
+            self.collectionView.contentInset = insets
+            self.collectionView.scrollIndicatorInsets = insets
         }
     }
-    
-    override func textViewDidEndEditing(_ textView: UITextView) {
-    }
-    
-    override func textViewDidBeginEditing(_ textView: UITextView) {
-        btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
-        showKeyboard()
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0 || !uiviewLocationExtend.isHidden
-    }
-    
-    override func becomeFirstResponder() -> Bool {
-        return super.becomeFirstResponder()
-    }
-    
-    override func resignFirstResponder() -> Bool {
-        return super.resignFirstResponder()
-    }
-    
-    // MARK: keyboard delegate
+}
+
+// MARK: - Keyboard observer actions
+extension ChatViewController {
     @objc func keyboardWillShow(_ notification: NSNotification) {
         keyboardFrameChange(notification)
     }
@@ -554,7 +510,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //if UITextInputMode.activeInputModes.filter
         
     }
-
+    
     @objc func keyboardWillHide(_ notification: NSNotification) {
         if uiviewKeyboard == nil { // keyboard is not visiable
             return
@@ -615,27 +571,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 if endFrame?.origin.y != screenHeight {
                     self.scrollToBottom(false)
                 }
-            },
-            completion:{ (_) -> Void in
-                //TODO debug keyboard
+            }, completion:{ (_) -> Void in
+                            //TODO debug keyboard
             })
-        }
-    }
-    
-    func setContraintsWhenInputBarMove(inputBarToBottom distance: CGFloat, keyboard notToolBar: Bool = true, isScrolling: Bool = false) {
-        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
-        floatDistanceInputBarToBottom = distance + 0.0
-        uiviewLocationExtend.frame.origin.y = screenHeight - distance - floatInputBarHeight - floatLocExtendHeight
-        inputToolbar.frame.origin.y = screenHeight - distance - floatInputBarHeight - 0.0
-        if !notToolBar {
-            toolbarContentView.frame.origin.y = screenHeight - distance
-        }
-        //view.setNeedsUpdateConstraints()
-        //view.layoutIfNeeded()
-        if !isScrolling {
-            let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + floatInputBarHeight + extendHeight, 0.0)
-            self.collectionView.contentInset = insets
-            self.collectionView.scrollIndicatorInsets = insets
         }
     }
     
@@ -657,11 +595,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         uiviewKeyboard = keyboardViewProxy
     }
-    
-    // MARK: scroll view delegate
+}
+
+// MARK: - Scroll view delegate
+extension ChatViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if inputToolbar.contentView.textView.sizeChanged && toolbarContentView.boolKeyboardShow {
-            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)            
+            setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
             return
         }
         if scrollView == collectionView {
@@ -676,10 +616,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                         return
                     }
                     /*if inputToolbar.contentView.textView.sizeChanged {
-                        setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
-                        inputToolbar.contentView.textView.sizeChanged = false
-                        return
-                    }*/
+                     setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
+                     inputToolbar.contentView.textView.sizeChanged = false
+                     return
+                     }*/
                     let keyboardHeight = uiviewKeyboard.frame.height
                     if -dragDistanceY > keyboardHeight {
                         dragDistanceY = -keyboardHeight
@@ -731,31 +671,84 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             }
         }
     }
-    
-    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-    }
+}
 
-    // MARK: quick photo picker
+// MARK: - FaeChatToolBarContentViewDelegate
+extension ChatViewController: FaeChatToolBarContentViewDelegate {
+    func sendMediaMessage(with faePHAssets: [FaePHAsset]) {
+        for faePHAsset in faePHAssets {
+            switch faePHAsset.assetType {
+            case .photo, .livePhoto:
+                var messageType = ""
+                if faePHAsset.fileFormat() == .gif {
+                    messageType = "[Gif]"
+                } else {
+                    messageType = "[Picture]"
+                }
+                if let data = faePHAsset.fullResolutionImageData {
+                    storeChatMessageToRealm(type: messageType, text: messageType, media: data)
+                } else {
+                    var asset = faePHAsset
+                    asset.state = .ready
+                    _ = asset.cloudImageDownload(progress: { (_) in
+                        if asset.state == .ready {
+                            asset.state = .progress
+                        }
+                    }, completion: { [weak self] (data) in
+                        guard let `self` = self else { return }
+                        asset.state = .complete
+                        DispatchQueue.main.async {
+                            self.storeChatMessageToRealm(type: messageType, text: messageType, media: data)
+                        }
+                    })
+                }
+            case .video:
+                _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
+                    if let data = try? Data(contentsOf: url) {
+                        self.storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", media: data)
+                    }
+                })
+                break
+            }
+        }
+    }
+    
+    func sendStickerWithImageName(_ name: String) {
+        storeChatMessageToRealm(type: "[Sticker]", text: name)
+    }
+    
+    func sendAudioData(_ data: Data) {
+        storeChatMessageToRealm(type: "[Audio]", text: "[Audio]", media: data)
+    }
+    
     func showFullAlbum(with photoPicker: FaePhotoPicker) {
         closeToolbarContentView()
         boolGoToFullContent = true
         /*let layout = UICollectionViewFlowLayout()
-        let vcFullAlbum = FullAlbumCollectionViewController(collectionViewLayout: layout)
-        vcFullAlbum.imageDelegate = self
-        navigationController?.pushViewController(vcFullAlbum, animated: true)*/
+         let vcFullAlbum = FullAlbumCollectionViewController(collectionViewLayout: layout)
+         vcFullAlbum.imageDelegate = self
+         navigationController?.pushViewController(vcFullAlbum, animated: true)*/
         let vcFullAlbum = FullAlbumViewController()
         vcFullAlbum.prePhotoPicker = photoPicker
         vcFullAlbum.delegate = self
         navigationController?.pushViewController(vcFullAlbum, animated: true)
     }
     
-    // MARK: handle events after user took a photo/video
+    func endEdit() {  }
+    
+    func appendEmoji(_ name: String) { }
+    
+    func deleteLastEmoji() { }
+}
+
+// MARK: - Handle events after user took a photo/video
+extension ChatViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
         let type = info[UIImagePickerControllerMediaType] as! String
         switch type {
         case (kUTTypeImage as String as String):
             let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
-            sendMeaages_v2(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(picture))
+            storeChatMessageToRealm(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(picture))
             //sendMessage(picture: picture, date: Date())
             
             UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
@@ -768,39 +761,46 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             let seconds = Int(ceil(duration))
             
             /*let imageGenerator = AVAssetImageGenerator(asset: asset)
-            var time = asset.duration
-            time.value = 0
-            
-            //get snapImage
-            var snapImage = UIImage()
-            do {
-                let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: nil)
-                snapImage = UIImage(cgImage: imageRef)
-            } catch {
-                //Handle failure
-            }
-            
-            var imageData = UIImageJPEGRepresentation(snapImage, 1)
-            let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
-            imageData = UIImageJPEGRepresentation(snapImage, factor)*/
+             var time = asset.duration
+             time.value = 0
+             
+             //get snapImage
+             var snapImage = UIImage()
+             do {
+             let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: nil)
+             snapImage = UIImage(cgImage: imageRef)
+             } catch {
+             //Handle failure
+             }
+             
+             var imageData = UIImageJPEGRepresentation(snapImage, 1)
+             let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
+             imageData = UIImageJPEGRepresentation(snapImage, factor)*/
             
             let path = movieURL.path
             let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            sendMeaages_v2(type: "[Video]", text: "\(seconds)", media: data)
+            storeChatMessageToRealm(type: "[Video]", text: "\(seconds)", media: data)
         default: break
         }
         
         picker.dismiss(animated: true, completion: nil)
         
     }
-    
-    // after saving the photo, refresh the album
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
-        appWillEnterForeground()
+}
+
+// MARK: - Minimap related functionalities
+extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, BoardsSearchDelegate {
+    // Action of close buttion in location extend view
+    @objc func closeLocExtendView() {
+        uiviewLocationExtend.isHidden = true
+        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
+        self.collectionView.contentInset = insets
+        self.collectionView.scrollIndicatorInsets = insets
+        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
-    // MARK: mini-map picker
+    // LocationPickerMiniDelegate
     func showFullLocationView() {
         // TODO
         closeToolbarContentView()
@@ -811,54 +811,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         vc.delegate = self
         Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
         navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    // BoardsSearchDelegate
-    func sendLocationBack(address: RouteAddress) {
-        let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
-            (placemarks, error) -> Void in
-            guard let response = placemarks?[0] else { return }
-            self.addResponseToLocationExtend(response: response, withMini: false)
-        })
-        AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
-            self.uiviewLocationExtend.setAvator(image: snapShotImage)
-        }
-        
-        /*CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
-            guard let response = placemarks?[0] else { return }
-            
-            self.addResponseToLocationExtend(response: response, withMini: false)
-            //self.sendLocationMessageFromMini(UIButton())
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
-        })*/
-    }
-    
-    func sendPlaceBack(placeData: PlacePin) {
-        downloadImage(URL: placeData.imageURL) { (rawData) in
-            guard let data = rawData else { return }
-            self.uiviewLocationExtend.placeData = placeData
-            self.uiviewLocationExtend.setAvator(image: UIImage(data: data)!)
-            self.uiviewLocationExtend.setToPlace()
-            self.uiviewLocationExtend.isHidden = false
-            let extendHeight = self.uiviewLocationExtend.isHidden ? 0 : self.floatLocExtendHeight
-            var distance = self.floatInputBarHeight + extendHeight
-            distance += self.floatToolBarContentHeight
-            let insets = UIEdgeInsetsMake(0.0, 0.0, distance, 0.0)
-            self.collectionView.contentInset = insets
-            self.collectionView.scrollIndicatorInsets = insets
-            self.scrollToBottom(false)
-            self.btnSend.isEnabled = true
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
-        }
-    }
-    
-    @objc func closeLocExtendView() {
-        uiviewLocationExtend.isHidden = true
-        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
-        self.collectionView.contentInset = insets
-        self.collectionView.scrollIndicatorInsets = insets
-        btnSend.isEnabled = inputToolbar.contentView.textView.text.count > 0
     }
     
     func sendLocationMessageFromMini() {
@@ -883,15 +835,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             uiviewLocationExtend.setLabel(texts: lines)
         }
         /*texts.append((response.subThoroughfare)! + " " + (response.thoroughfare)!)
-        var cityText = response.locality
-        if response.administrativeArea != nil {
-            cityText = cityText! + ", " + (response.administrativeArea)!
-        }
-        if response.postalCode != nil {
-            cityText = cityText! + " " + (response.postalCode)!
-        }
-        texts.append(cityText!)
-        texts.append((response.country)!)*/
+         var cityText = response.locality
+         if response.administrativeArea != nil {
+         cityText = cityText! + ", " + (response.administrativeArea)!
+         }
+         if response.postalCode != nil {
+         cityText = cityText! + " " + (response.postalCode)!
+         }
+         texts.append(cityText!)
+         texts.append((response.country)!)*/
         
         //uiviewLocationExtend.setLabel(texts: texts)
         uiviewLocationExtend.location = CLLocation(latitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.latitude, longitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.longitude)
@@ -909,7 +861,60 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         btnSend.isEnabled = true
     }
     
-    // MARK: heart button related
+    // LocationSendDelegate
+    func sendPickedLocation(_ lat: CLLocationDegrees, lon: CLLocationDegrees, screenShot: UIImage) {
+        let location = CLLocation(latitude: lat, longitude: lon)
+        General.shared.getAddress(location: location, original: true) { (placeMark) in
+            guard let response = placeMark as? CLPlacemark else { return }
+            self.uiviewLocationExtend.setAvator(image: screenShot)
+            self.addResponseToLocationExtend(response: response, withMini: false)
+        }
+    }
+    
+    // BoardsSearchDelegate
+    func sendLocationBack(address: RouteAddress) {
+        let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
+        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+            (placemarks, error) -> Void in
+            guard let response = placemarks?[0] else { return }
+            self.addResponseToLocationExtend(response: response, withMini: false)
+        })
+        AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
+            self.uiviewLocationExtend.setAvator(image: snapShotImage)
+        }
+        
+        /*CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
+         guard let response = placemarks?[0] else { return }
+         
+         self.addResponseToLocationExtend(response: response, withMini: false)
+         //self.sendLocationMessageFromMini(UIButton())
+         self.inputToolbar.contentView.textView.becomeFirstResponder()
+         })*/
+    }
+    
+    func sendPlaceBack(placeData: PlacePin) {
+        downloadImage(URL: placeData.imageURL) { (rawData) in
+            guard let data = rawData else { return }
+            self.uiviewLocationExtend.placeData = placeData
+            self.uiviewLocationExtend.setAvator(image: UIImage(data: data)!)
+            self.uiviewLocationExtend.setToPlace()
+            self.uiviewLocationExtend.isHidden = false
+            let extendHeight = self.uiviewLocationExtend.isHidden ? 0 : self.floatLocExtendHeight
+            var distance = self.floatInputBarHeight + extendHeight
+            distance += self.floatToolBarContentHeight
+            let insets = UIEdgeInsetsMake(0.0, 0.0, distance, 0.0)
+            self.collectionView.contentInset = insets
+            self.collectionView.scrollIndicatorInsets = insets
+            self.scrollToBottom(false)
+            self.btnSend.isEnabled = true
+            self.inputToolbar.contentView.textView.becomeFirstResponder()
+        }
+    }
+}
+
+// MARK: - Heart related functionalites
+extension ChatViewController: CAAnimationDelegate {
+    // Heart button & gesture actions
     @objc private func heartButtonTapped() {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
@@ -917,8 +922,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         //animateHeart()
         if !boolJustSentHeart {
-            //sendMessage(sticker: #imageLiteral(resourceName: "pinDetailLikeHeartFullLarge"), isHeartSticker: true, date: Date())
-            sendMeaages_v2(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
+            storeChatMessageToRealm(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
             boolJustSentHeart = true
         }
     }
@@ -991,96 +995,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             imgHeartDic[anim] = nil
         }
     }
-    
-    // MARK: utilities
-    
-    private func setAvatar() {
-        createAvatars()
-        collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
-        collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
-        if collectionView != nil {
-            collectionView.reloadData()
-        }
+}
+
+// MARK: - JSQAudioMediaItemDelegateCustom
+extension ChatViewController: JSQAudioMediaItemDelegateCustom {
+    func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
     }
     
-    private func createAvatars() {
-        for user in arrRealmUsers {
-            var avatarJSQ: JSQMessagesAvatarImage
-            if let avatarData = user.avatar?.userSmallAvatar {
-                let avatarImg = UIImage(data: avatarData as Data)
-                avatarJSQ = JSQMessagesAvatarImage(avatarImage: avatarImg, highlightedImage: avatarImg, placeholderImage: avatarImg)
-            } else {
-                avatarJSQ = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+    func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
+        if let current = playingAudio {
+            if current != audioMediaItem {
+                current.finishPlaying()
             }
-            avatarDictionary.addEntries(from: [user.id : avatarJSQ])
         }
-        /*let currentUserAvatar = avatarDic[Key.shared.user_id] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Key.shared.user_id], highlightedImage: avatarDic[Key.shared.user_id], placeholderImage: avatarDic[Key.shared.user_id]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        let withUserAvatar = avatarDic[Int(realmWithUser!.id)!] != nil ? JSQMessagesAvatarImage(avatarImage: avatarDic[Int(realmWithUser!.id)!], highlightedImage: avatarDic[Int(realmWithUser!.id)!], placeholderImage: avatarDic[Int(realmWithUser!.id)!]) : JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-        avatarDictionary = ["\(Key.shared.user_id)": currentUserAvatar!, realmWithUser!.id: withUserAvatar!]*/
+        playingAudio = audioMediaItem
     }
-    
-    // scroll to the bottom of all messages
-    func scrollToBottom(_ animated: Bool) {
-        let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
-        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
-        let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
-        if currentHeight > currentVisibleHeight {
-            collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
-        }
-        collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()
-        
-        /*let item = collectionView(collectionView!, numberOfItemsInSection: 0) - 1
-        if item >= 0 {
-            let lastItemIndex = IndexPath(item: item, section: 0)
-            collectionView?.scrollToItem(at: lastItemIndex, at: UICollectionViewScrollPosition.top, animated: animated)
-        }*/
-    }
-    
-    // dismiss the toolbar content view
-    func closeToolbarContentView() {
-        resetToolbarButtonIcon()
-        moveDownInputBar()
-        scrollToBottom(false)
-        toolbarContentView.closeAll()
-    }
-    
-    // change every button to its origin state
-    func resetToolbarButtonIcon() {
-        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
-        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
-        btnSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
-        btnSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
-        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
-        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
-        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
-        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
-        btnLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
-        btnSend.isEnabled = !uiviewLocationExtend.isHidden || inputToolbar.contentView.textView.text.count > 0
-    }
-    
-    // allow adding timestamp to message (used in SendLoadMessages)
-    @objc func enableTimeStamp() {
-        boolSentInLast5s = false
-    }
-    
-    // show alert message
-    func showAlertView(withWarning text: String) {
-        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
- 
-    // need to refresh the album because user might take a photo outside the app
-    @objc func appWillEnterForeground() {
-        collectionView.reloadData()
-        //toolbarContentView.reloadPhotoAlbum()
-    }
-    func endEdit() {  }
-    
-    func appendEmoji(_ name: String) { }
-    
-    func deleteLastEmoji() { }
-    
-    func respondToSwipeGesture(_ gesture: UIGestureRecognizer) { }
 }

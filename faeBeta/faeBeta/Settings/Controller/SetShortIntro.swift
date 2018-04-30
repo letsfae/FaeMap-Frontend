@@ -9,23 +9,24 @@
 import UIKit
 import SwiftyJSON
 
-protocol ViewControllerIntroDelegate: class {
-    func protSaveIntro(txtIntro: String?)
+protocol PassShortIntroBackDelegate: class {
+    func protSaveShortIntro(txtIntro: String?)
 }
 
 class SetShortIntro: UIViewController, UITextViewDelegate {
-    
-    weak var delegate: ViewControllerIntroDelegate?
-    var btnBack: UIButton!
-    var lblTitle: UILabel!
-    var lblPlaceholder: UILabel!
-    var textView: UITextView!
-    var lblRequestResult: UILabel!
-    var lblEditIntro: UILabel!
-    var btnSave: UIButton!
-    var boolWillDisappear: Bool = false
+    // MARK: - Properties
+    weak var delegate: PassShortIntroBackDelegate?
+    private var btnBack: UIButton!
+    private var lblTitle: UILabel!
+    private var lblPlaceholder: UILabel!
+    private var textView: UITextView!
+    private var lblRequestResult: UILabel!
+    private var lblEditIntro: UILabel!
+    private var btnSave: UIButton!
+    private var boolWillDisappear: Bool = false
     var strFieldText: String = ""
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -110,11 +111,12 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         boolWillDisappear = true
     }
     
-    func addObersers() {
+    private func addObersers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
+    // MARK: - UITextViewDelegate
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         let maxCharacter: Int = 30
         return (textView.text?.utf16.count ?? 0) + text.utf16.count - range.length <= maxCharacter
@@ -132,23 +134,19 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         lblRequestResult.isHidden = true
     }
     
-    @objc func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
+    // MARK: - Button & gesture actions
+    @objc private func handleTapGesture(_ recognizer: UITapGestureRecognizer) {
         if recognizer.state == .ended {
             textView.resignFirstResponder()
         }
     }
     
-    func setRequestResult(_ prompt: String) {
-        lblRequestResult.text = prompt
-        lblRequestResult.isHidden = false
-    }
-    
-    @objc func actionSaveIntro(_ sender: UIButton) {
+    @objc private func actionSaveIntro(_ sender: UIButton) {
         let user = FaeUser()
         user.whereKey("short_intro", value: textView.text!)
         user.updateNameCard { (status, message) in
             if status / 100 == 2 { // TODO: error code undecided
-                self.delegate?.protSaveIntro(txtIntro: self.textView.text)
+                self.delegate?.protSaveShortIntro(txtIntro: self.textView.text)
                 if let nav = self.navigationController {
                     nav.popViewController(animated: true)
                 } else {
@@ -168,7 +166,12 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    private func setRequestResult(_ prompt: String) {
+        lblRequestResult.text = prompt
+        lblRequestResult.isHidden = false
+    }
+    
+    @objc private func actionGoBack(_ sender: UIButton) {
         if let nav = navigationController {
             nav.popViewController(animated: true)
         } else {
@@ -177,6 +180,7 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - Keyboard observer
     @objc func keyboardWillShow(_ notification: Notification) {
         if boolWillDisappear {
             return

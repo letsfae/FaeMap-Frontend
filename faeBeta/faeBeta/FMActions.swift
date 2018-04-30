@@ -148,10 +148,6 @@ extension FaeMapViewController {
         // check if the user's logged in the backendless
         //let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()! as! RecentViewController
         let chatVC = RecentViewController()
-        chatVC.backClosure = {
-            (backNum: Int) -> Void in
-            //self.count = backNum
-        }
         navigationController?.pushViewController(chatVC, animated: true)
     }
     

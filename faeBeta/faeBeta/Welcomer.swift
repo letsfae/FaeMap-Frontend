@@ -14,14 +14,6 @@ func sendWelcomeMessage() {
     
     let text = "Hey there! Welcome to Faevorite Map! We are here to ensure that you have the best experience on our new platform. Kindly let us know if you encounter any problems or what we can do to make your experience better. Feel free to chat with us here. Happy Discovering!"
     
-    //_ = OutgoingMessage.init(message : text, senderId : "1", senderName : "Fae Map Crew", date: Date(), status : "Delivered", type : "text", index : 1, hasTimeStamp: true)
-    
-    //print("[my user_id] :" + user_id.stringValue)
-    //print("[my username] :" + username!)
-    
-    //Bryan
-    //message.sendMessageWithWelcomeInformation("1-" + user_id.stringValue , withUser: RealmWithUser(userName: username!, userId: user_id.stringValue, userAvatar: nil))
-    //ENDBryan
     let realm = try! Realm()
     let login_user_id = String(Key.shared.user_id)
     let fae = realm.filterUser(id: "1")!
@@ -29,7 +21,7 @@ func sendWelcomeMessage() {
     if let _ = fae.message {
     } else {
         let chat_id = "1"
-        let newMessage = RealmMessage_v2()
+        let newMessage = RealmMessage()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, chat_id, 0)
         newMessage.sender = fae
         newMessage.members.append(selfUser)
@@ -38,7 +30,7 @@ func sendWelcomeMessage() {
         newMessage.type = "text"
         newMessage.text = text
         newMessage.unread_count = 1
-        let recentRealm = RealmRecent_v2()
+        let recentRealm = RealmRecentMessage()
         recentRealm.created_at = newMessage.created_at
         recentRealm.unread_count = 1
         recentRealm.setPrimaryKeyInfo(login_user_id, 0, chat_id)
@@ -48,7 +40,7 @@ func sendWelcomeMessage() {
         }
     }
     /*if realm.filterAllMessages(login_user_id, 0, login_user_id).count == 0 {
-        let newMessage = RealmMessage_v2()
+        let newMessage = RealmMessage()
         newMessage.setPrimaryKeyInfo(login_user_id, 0, login_user_id, -1)
         newMessage.sender = selfUser
         newMessage.members.append(selfUser)
@@ -57,7 +49,7 @@ func sendWelcomeMessage() {
         newMessage.type = "text"
         newMessage.text = ""
         newMessage.unread_count = 0
-        let recentRealm = RealmRecent_v2()
+        let recentRealm = RealmRecentMessage()
         recentRealm.created_at = newMessage.created_at
         recentRealm.unread_count = 0
         recentRealm.setPrimaryKeyInfo(login_user_id, 0, login_user_id)

@@ -28,6 +28,7 @@
 
 @property (strong, nonatomic) UIImageView *cachedVideoImageView;
 @property (nonatomic) int videoDuration;
+@property (strong, nonatomic) UIActivityIndicatorView *activity;
 
 @end
 
@@ -43,6 +44,7 @@
         _fileURL = [fileURL copy];
         _isReadyToPlay = isReadyToPlay;
         _cachedVideoImageView = nil;
+        _activity = nil;
         _snapImage = image;
         _videoDuration = duration;
     }
@@ -120,7 +122,11 @@
         durationLabel.attributedText = [[NSAttributedString alloc] initWithString:durationString attributes:@{ NSFontAttributeName : [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0f] , NSForegroundColorAttributeName: [UIColor whiteColor]}];
         durationLabel.textAlignment = NSTextAlignmentLeft;
         [videoIndicatorView addSubview:durationLabel];
-        
+    
+    self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activity.frame = CGRectMake(size.width/2 - 30, size.height/2 - 30, 60, 60);
+    [imageView addSubview:self.activity];
+    
         imageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
         [imageView addSubview:videoIndicatorView];
         imageView.contentMode = UIViewContentModeCenter;
@@ -130,6 +136,14 @@
     //}
     
     return self.cachedVideoImageView;
+}
+
+- (void)startAnimating {
+    [self.activity startAnimating];
+}
+
+- (void)stopAnimating {
+    [self.activity stopAnimating];
 }
 
 - (NSUInteger)mediaHash

@@ -26,12 +26,14 @@ protocol CountryCodeDelegate: class {
 }
 
 class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource {
-    var schbarCountryCode: FaeSearchBarTest!
-    var tblCountryCode: UITableView!
-    var arrCountries = [CountryCodeStruct]()
-    var filteredCountries = [CountryCodeStruct]()
+    // MARK: - Properties
+    private var schbarCountryCode: FaeSearchBarTest!
+    private var tblCountryCode: UITableView!
+    private var arrCountries = [CountryCodeStruct]()
+    private var filteredCountries = [CountryCodeStruct]()
     weak var delegate: CountryCodeDelegate?
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -46,7 +48,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         // Dispose of any resources that can be recreated.
     }
     
-    fileprivate func getPhoneCode() {
+    private func getPhoneCode() {
         let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
         let jsonData = NSData(contentsOfFile: path!)
         let json = JSON(data: jsonData! as Data)["data"]
@@ -59,7 +61,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         tblCountryCode.reloadData()
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         let uiviewNavBar = UIView(frame: CGRect(x: 0, y: device_offset_top, width: screenWidth, height: 65))
         view.addSubview(uiviewNavBar)
         
@@ -72,7 +74,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         btnCancel.setTitle("Cancel", for: .normal)
         btnCancel.setTitleColor(UIColor._115115115(), for: .normal)
         btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        btnCancel.addTarget(self, action: #selector(self.actionCancel(_:)), for: .touchUpInside)
+        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
         
         let lblTitle = UILabel(frame: CGRect(x: (screenWidth - 145) / 2, y: 28, width: 145, height: 27))
         uiviewNavBar.addSubview(lblTitle)
@@ -82,12 +84,12 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         lblTitle.text = "Countries"
     }
     
-    @objc func actionCancel(_ sender: UIButton) {
+    @objc private func actionCancel(_ sender: UIButton) {
         schbarCountryCode.txtSchField.resignFirstResponder()
         dismiss(animated: true)
     }
 
-    fileprivate func loadSearchBar() {
+    private func loadSearchBar() {
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         view.addSubview(uiviewSchbar)
         
@@ -102,7 +104,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         uiviewSchbar.addSubview(bottomLine)
     }
     
-    fileprivate func loadTable() {
+    private func loadTable() {
         tblCountryCode = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top), style: .plain)
         view.addSubview(tblCountryCode)
         tblCountryCode.backgroundColor = .white
@@ -112,17 +114,13 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         tblCountryCode.showsVerticalScrollIndicator = false
     }
     
-    func filter(searchText: String, scope: String = "All") {
-        filteredCountries = arrCountries.filter({(($0.countryName).lowercased()).range(of: searchText.lowercased()) != nil})
-        tblCountryCode.reloadData()
-    }
-    
-    // FaeSearchBarTestDelegate
+    // MARK: - FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
     }
     
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
-        filter(searchText: searchText)
+        filteredCountries = arrCountries.filter({(($0.countryName).lowercased()).range(of: searchText.lowercased()) != nil})
+        tblCountryCode.reloadData()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
@@ -133,8 +131,8 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         schbarCountryCode.txtSchField.text = ""
         tblCountryCode.reloadData()
     }
-    // FaeSearchBarTestDelegate End
     
+    // MARK: - UITableView DataSource & Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return schbarCountryCode.txtSchField.text != "" ? filteredCountries.count : arrCountries.count
     }
@@ -153,6 +151,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         dismiss(animated: true)
     }
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         schbarCountryCode.txtSchField.resignFirstResponder()
     }

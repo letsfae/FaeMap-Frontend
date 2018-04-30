@@ -9,18 +9,12 @@
 import UIKit
 
 class WelcomeContentContainerFace: UIView {
+    // MARK: - Properties
+    private var imgWelcome: UIImageView!
+    private var lblTitle: UILabel!
+    private var lblDescription: UILabel!
     
-    //MARK: container view properties
-    //@IBOutlet weak var imageView: UIImageView!
-    //@IBOutlet weak var titleLabel: UILabel!
-    //@IBOutlet weak var descriptionLabel: UILabel!
-    //@IBOutlet weak var titleIcon: UIImageView!
-    var uiview: UIView?
-    
-    var imgWelcome: UIImageView!
-    var lblTitle: UILabel!
-    var lblDescription: UILabel!
-    
+    // MARK: - init
     init() {
         super.init(frame: CGRect(x: 0, y: 100 + device_offset_top, width: 300, height: 400))
         setup()
@@ -30,25 +24,8 @@ class WelcomeContentContainerFace: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    /*override init(frame: CGRect) {
-        super.init(frame: frame)
-        loadNib()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)!
-        loadNib()
-    }*/
-    
-    //MARK: - setup
-    /*fileprivate func loadNib() {
-        uiview = Bundle.main.loadNibNamed("WelcomeContentContainerFace", owner: self, options: nil)![0] as? UIView
-        self.insertSubview(uiview!, at: 0)
-        uiview!.frame = self.bounds
-        uiview!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    }*/
-    
-    func setup() {
+    // MARK: - Helper methods
+    private func setup() {
         imgWelcome = UIImageView(frame: CGRect(x: (screenWidth - 300 * screenWidthFactor) / 2.0, y: 0, width: 300 * screenWidthFactor, height: 300 * screenWidthFactor))
         addSubview(imgWelcome)
         

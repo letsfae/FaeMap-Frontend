@@ -34,12 +34,12 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 class RegisterPasswordViewController: RegisterBaseViewController {
-  
-    var cellPassword: RegisterTextfieldTableViewCell!
-    var password: String?
+    // MARK: - Properties
+    private var cellPassword: RegisterTextfieldTableViewCell!
+    private var password: String?
     var faeUser: FaeUser!
     
-    // MARK: - View LifeCycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -60,7 +60,27 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         FaeCoreData.shared.save("signup", value: "password")
     }
     
-    // MARK: - Functions
+    private func getInfoView() -> UIView {
+        let uiviewInfo = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
+        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
+        imgInfoPwd.image = UIImage(named: "InfoPassword")
+        
+        uiviewInfo.addSubview(imgInfoPwd)
+        return uiviewInfo
+    }
+    
+    private func registerCell() {
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
+        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
+        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK: - Button actions
     override func backButtonPressed() {
         view.endEditing(true)
         if password != nil {
@@ -88,44 +108,18 @@ class RegisterPasswordViewController: RegisterBaseViewController {
         }
         FaeCoreData.shared.save("signup_password", value: password!)
     }
-    func jumpToRegisterNext() {
+    private func jumpToRegisterNext() {
         let nextRegister = RegisterInfoViewController()
         nextRegister.faeUser = faeUser
         self.navigationController?.pushViewController(nextRegister, animated: false)
     }
     
-    func getInfoView() -> UIView {
-        let uiviewInfo = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 85 * screenHeightFactor))
-        let imgInfoPwd = UIImageView(frame: CGRect(x: view.frame.size.width/2.0 - 160 * screenWidthFactor, y: 0, width: 320 * screenWidthFactor, height: 85 * screenHeightFactor))
-        imgInfoPwd.image = UIImage(named: "InfoPassword")
-        
-        uiviewInfo.addSubview(imgInfoPwd)
-        return uiviewInfo
-    }
-    
-    func validation() {
-        var boolIsValid = false
-        boolIsValid = password != nil && password?.count > 7
-        enableContinueButton(boolIsValid)
-    }
-    
-    func savePasswordInUser() {
+    private func savePasswordInUser() {
         faeUser.whereKey("password", value: password!)
-    }
-    
-    func registerCell() {
-        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: "TitleTableViewCellIdentifier")
-        tableView.register(SubTitleTableViewCell.self, forCellReuseIdentifier: "SubTitleTableViewCellIdentifier")
-        tableView.register(RegisterTextfieldTableViewCell.self, forCellReuseIdentifier: "RegisterTextfieldTableViewCellIdentifier")
-    }
-    
-    // MARK: - Memory Management
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
+// MARK: - UITableView
 extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -175,6 +169,7 @@ extension RegisterPasswordViewController: UITableViewDelegate, UITableViewDataSo
     }
 }
 
+// MARK: - RegisterTextfieldProtocol
 extension RegisterPasswordViewController: RegisterTextfieldProtocol {
     func textFieldDidBeginEditing(_ indexPath: IndexPath) {
         activeIndexPath = indexPath
@@ -196,5 +191,11 @@ extension RegisterPasswordViewController: RegisterTextfieldProtocol {
         default: break
         }
         validation()
+    }
+    
+    private func validation() {
+        var boolIsValid = false
+        boolIsValid = password != nil && password?.count > 7
+        enableContinueButton(boolIsValid)
     }
 }

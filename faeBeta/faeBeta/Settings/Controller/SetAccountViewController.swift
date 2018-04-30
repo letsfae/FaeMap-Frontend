@@ -9,15 +9,16 @@
 import UIKit
 
 class SetAccountViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SetNameBirthGenderDelegate, UpdateUsrnameEmailDelegate {
-    
-    var uiviewNavBar: FaeNavBar!
-    var arrTitle: [String] = ["Name", "Birthday", "Gender", "Email", "Username", "Phone", "Change Password", "Deactivate Account", "Close Account"]
-    var tblAccount: UITableView!
-    let faeUser = FaeUser()
+    // MARK: - Properties
+    private var uiviewNavBar: FaeNavBar!
+    private var arrTitle: [String] = ["Name", "Birthday", "Gender", "Email", "Username", "Phone", "Change Password", "Deactivate Account", "Close Account"]
+    private var tblAccount: UITableView!
+    private let faeUser = FaeUser()
     var boolResetPswd = false
-    var uiviewGrayBG: UIView!
-    var uiviewMsgSent: UIView!
+    private var uiviewGrayBG: UIView!
+    private var uiviewMsgSent: UIView!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -44,10 +45,56 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    private func loadResetPswdSucceedPage() {
+        uiviewGrayBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        uiviewGrayBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
+        view.addSubview(uiviewGrayBG)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionOK(_:)))
+        uiviewGrayBG.addGestureRecognizer(tapGesture)
+        
+        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewMsgSent.backgroundColor = .white
+        uiviewMsgSent.center.x = screenWidth / 2
+        uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor
+        uiviewGrayBG.addSubview(uiviewMsgSent)
+        
+        let btnCancel = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
+        btnCancel.tag = 0
+        btnCancel.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
+        btnCancel.addTarget(self, action: #selector(actionOK(_:)), for: .touchUpInside)
+        uiviewMsgSent.addSubview(btnCancel)
+        
+        let lblMsgSent = FaeLabel(CGRect(x: 0, y: 30, w: 290, h: 50), .center, .medium, 18 * screenHeightFactor, UIColor._898989())
+        lblMsgSent.numberOfLines = 2
+        lblMsgSent.text = "Your Password has been\nReset Successfully!"
+        uiviewMsgSent.addSubview(lblMsgSent)
+        
+        let btnOK = UIButton()
+        uiviewMsgSent.addSubview(btnOK)
+        btnOK.setTitleColor(.white, for: .normal)
+        btnOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
+        btnOK.backgroundColor = UIColor._2499090()
+        btnOK.layer.cornerRadius = 19 * screenWidthFactor
+        btnOK.addTarget(self, action: #selector(actionOK(_:)), for: .touchUpInside)
+        btnOK.setTitle("OK", for: .normal)
+        let padding = (290 - 208) / 2 * screenWidthFactor
+        uiviewMsgSent.addConstraintsWithFormat("H:|-\(padding)-[v0]-\(padding)-|", options: [], views: btnOK)
+        uiviewMsgSent.addConstraintsWithFormat("V:[v0(\(39 * screenHeightFactor))]-\(20 * screenHeightFactor)-|", options: [], views: btnOK)
+        
+        uiviewGrayBG.alpha = 0
+        uiviewMsgSent.alpha = 0
+    }
+    
+    // MARK: - Button actions
+    @objc private func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @objc private func actionOK(_ sender: Any) {
+        animationHideMsgHint()
+    }
+    
+    // MARK: - UITbaleViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrTitle.count
     }
@@ -111,6 +158,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
+    // MARK: - UITbaleViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! SetAccountCell
         switch indexPath.row {
@@ -172,7 +220,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    // SetNameBirthGenderDelegate
+    // MARK: - SetNameBirthGenderDelegate
     func updateInfo(target: String?) {
         if target == "name" {
             tblAccount.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
@@ -183,7 +231,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
-    // UpdateUsrnameEmailDelegate
+    // MARK: - UpdateUsrnameEmailDelegate
     func updateEmail() {
         tblAccount.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .none)
     }
@@ -192,51 +240,8 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         tblAccount.reloadRows(at: [IndexPath(row: 5, section: 0)], with: .none)
     }
     
-    fileprivate func loadResetPswdSucceedPage() {
-        uiviewGrayBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
-        uiviewGrayBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
-        view.addSubview(uiviewGrayBG)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionOK(_:)))
-        uiviewGrayBG.addGestureRecognizer(tapGesture)
-        
-        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
-        uiviewMsgSent.backgroundColor = .white
-        uiviewMsgSent.center.x = screenWidth / 2
-        uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor
-        uiviewGrayBG.addSubview(uiviewMsgSent)
-        
-        let btnCancel = UIButton(frame: CGRect(x: 0, y: 0, w: 42, h: 40))
-        btnCancel.tag = 0
-        btnCancel.setImage(#imageLiteral(resourceName: "check_cross_red"), for: .normal)
-        btnCancel.addTarget(self, action: #selector(actionOK(_:)), for: .touchUpInside)
-        uiviewMsgSent.addSubview(btnCancel)
-        
-        let lblMsgSent = FaeLabel(CGRect(x: 0, y: 30, w: 290, h: 50), .center, .medium, 18 * screenHeightFactor, UIColor._898989())
-        lblMsgSent.numberOfLines = 2
-        lblMsgSent.text = "Your Password has been\nReset Successfully!"
-        uiviewMsgSent.addSubview(lblMsgSent)
-        
-        let btnOK = UIButton()
-        uiviewMsgSent.addSubview(btnOK)
-        btnOK.setTitleColor(.white, for: .normal)
-        btnOK.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 18 * screenHeightFactor)
-        btnOK.backgroundColor = UIColor._2499090()
-        btnOK.layer.cornerRadius = 19 * screenWidthFactor
-        btnOK.addTarget(self, action: #selector(actionOK(_:)), for: .touchUpInside)
-        btnOK.setTitle("OK", for: .normal)
-        let padding = (290 - 208) / 2 * screenWidthFactor
-        uiviewMsgSent.addConstraintsWithFormat("H:|-\(padding)-[v0]-\(padding)-|", options: [], views: btnOK)
-        uiviewMsgSent.addConstraintsWithFormat("V:[v0(\(39 * screenHeightFactor))]-\(20 * screenHeightFactor)-|", options: [], views: btnOK)
-        
-        uiviewGrayBG.alpha = 0
-        uiviewMsgSent.alpha = 0
-    }
-    
-    @objc func actionOK(_ sender: Any) {
-        animationHideMsgHint()
-    }
-    
-    func animationShowMsgHint() {
+    // MARK: - Helper methods
+    private func animationShowMsgHint() {
         uiviewGrayBG.alpha = 0
         uiviewMsgSent.alpha = 0
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
@@ -245,7 +250,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
-    func animationHideMsgHint() {
+    private func animationHideMsgHint() {
         uiviewGrayBG.alpha = 1
         uiviewMsgSent.alpha = 1
         UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {

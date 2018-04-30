@@ -43,16 +43,16 @@ protocol SwipeableCellDelegate: class {
 
 class RecentTableViewCell: UITableViewCell {
     
-    // MARK: - properties
-    var imgAvatar: UIImageView!
-    var lblCounter: UILabel!
-    var lblName: UILabel!
-    var lblLastMessage: UILabel!
+    // MARK: - Properties
+    private var imgAvatar: UIImageView!
+    private var lblCounter: UILabel!
+    private var lblName: UILabel!
+    private var lblLastMessage: UILabel!
     var lblDate: UILabel!
     var uiviewMain: UIView!
     var btnDelete: UIButton!
-    var distanceToRight: NSLayoutConstraint!
-    var distanceToLeft: NSLayoutConstraint!
+    private var distanceToRight: NSLayoutConstraint!
+    private var distanceToLeft: NSLayoutConstraint!
     
     private var panRecognizer: UIPanGestureRecognizer!
     private var pointPanStart: CGPoint!
@@ -62,7 +62,7 @@ class RecentTableViewCell: UITableViewCell {
     
     weak var delegate: SwipeableCellDelegate!
     
-    // MARK: init
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -108,13 +108,10 @@ class RecentTableViewCell: UITableViewCell {
         lblLastMessage.text = ""
         lblLastMessage.textAlignment = .left
         lblLastMessage.textColor = UIColor._146146146()
-        //lblLastMessage.lineBreakMode = .byWordWrapping
         lblLastMessage.numberOfLines = 0
         
         lblLastMessage.font = UIFont(name: "AvenirNext-Medium", size: 15)
         uiviewMain.addSubview(lblLastMessage)
-        //uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
-        //uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
         
         lblDate = UILabel()
         lblDate.text = ""
@@ -150,16 +147,154 @@ class RecentTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
+        resetConstraintContstantsToZero(false, notifyDelegateDidClose: false)
         lblLastMessage.removeConstraints(lblLastMessage.constraints)
     }
     
-    // MARK: bind data to the cell
-    func bindData_v2(_ recent: RealmRecent_v2) {
-        /*if let myInteger = Int(latest.withUserID) {
-            imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
-        }*/
-        let latest = recent.latest_message!
+    // MARK: - Button & pan gesture actions
+    @objc private func deleteButtonTapped(_ sender: UIButton) {
+        self.delegate.deleteButtonTapped(self)
+    }
+    
+    @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
+        switch (recognizer.state) {
+        case .began:
+            pointPanStart = recognizer.translation(in: uiviewMain)
+            floatStartingRightLayoutConstraintConstant = distanceToRight.constant
+            uiviewMain.backgroundColor = .white
+            btnDelete.isHidden = false
+        case .changed:
+            let currentPoint = recognizer.translation(in: uiviewMain)
+            let deltaX = currentPoint.x - pointPanStart.x
+            var panningLeft = false
+            if currentPoint.x < pointPanStart.x {  //1
+                panningLeft = true
+            }
+            
+            if floatStartingRightLayoutConstraintConstant == 0 { //2
+                //The cell was closed and is now opening
+                if !panningLeft {
+                    let constant = max(-deltaX, 0) //3
+                    if constant == 0 { //4
+                        resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
+                    } else { //5
+                        distanceToRight.constant = constant
+                    }
+                } else {
+                    delegate.cellwillOpen(self)
+                    let constant = min(-deltaX, floatButtonTotalWidth) //6
+                    if constant == floatButtonTotalWidth { //7
+                        setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
+                    } else { //8
+                        distanceToRight.constant = constant
+                    }
+                }
+                
+            } else {
+                let adjustment = floatStartingRightLayoutConstraintConstant - deltaX //1
+                if !panningLeft {
+                    let constant = max(adjustment, 0) //2
+                    if constant == 0 { //3
+                        resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
+                    } else { //4
+                        distanceToRight.constant = constant
+                    }
+                } else {
+                    let constant = min(adjustment, self.floatButtonTotalWidth) //5
+                    if constant == self.floatButtonTotalWidth { //6
+                        setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
+                    } else { //7
+                        distanceToRight.constant = constant
+                    }
+                }
+            }
+            distanceToLeft.constant = -distanceToRight.constant //8
+        case .ended:
+            // if (self.startingRightLayoutConstraintConstant == 0) { //1
+            //Cell was opening
+            let halfOfButtonOne = btnDelete.frame.width / 2 //2
+            if self.distanceToRight.constant >= halfOfButtonOne { //3
+                //Open all the way
+                setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
+            } else {
+                //Re-close
+                resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
+            }
+        case .cancelled:
+            if floatStartingRightLayoutConstraintConstant == 0 {
+                //Cell was closed - reset everything to 0
+                resetConstraintContstantsToZero(true, notifyDelegateDidClose:true)
+            } else {
+                //Cell was open - reset to the open state
+                setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
+            }
+        default: break
+        }
+    }
+    
+    // MARK: Helper methods for pan gesture
+    private func resetConstraintContstantsToZero(_ animated: Bool, notifyDelegateDidClose notifyDelegate:Bool) {
+        if floatStartingRightLayoutConstraintConstant == 0 && distanceToRight.constant == 0 {
+            //Already all the way closed, no bounce necessary
+            return
+        }
+        
+        distanceToRight.constant = -floatKBounceValue;
+        distanceToLeft.constant = floatKBounceValue;
+        
+        //UIView.animate(withDuration: 0.3, animations: {
+        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            self.distanceToRight.constant = 0
+            self.distanceToLeft.constant = 0
+            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
+                if notifyDelegate {
+                    self.delegate.cellDidClose(self)
+                }
+            })
+        })
+        //})
+    }
+    
+    private func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool) {
+        if (notifyDelegate) {
+            delegate.cellDidOpen(self)
+        }
+        
+        if floatStartingRightLayoutConstraintConstant == floatButtonTotalWidth &&
+            distanceToRight.constant == floatButtonTotalWidth {
+            return
+        }
+        //2
+        distanceToLeft.constant = -floatButtonTotalWidth - floatKBounceValue
+        distanceToRight.constant = floatButtonTotalWidth + floatKBounceValue
+        
+        //UIView.animate(withDuration: 0.3, animations: {
+        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            //3
+            self.distanceToLeft.constant = -self.floatButtonTotalWidth
+            self.distanceToRight.constant = self.floatButtonTotalWidth
+            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+                //4
+                self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
+            })
+        })
+        //})
+    }
+    
+    private func updateConstraintsIfNeeded(_ animated:Bool, completion: @escaping ( (_ finised:Bool) -> Void)) {
+        var duration:Double = 0
+        if animated {
+            duration = 0.1
+        }
+        UIView.animate(withDuration: duration, delay: 0, options:.curveEaseOut , animations: {
+            self.layoutIfNeeded()
+        }, completion: completion)
+    }
+    
+    // MARK: - Bind data to the cell
+    func bindData(_ recent: RealmRecentMessage) {
+        guard let latest = recent.latest_message else { return }
         for user in latest.members {
             if user.id != user.login_user_id || latest.chat_id == user.login_user_id {
                 lblName.text = user.display_name
@@ -170,12 +305,8 @@ class RecentTableViewCell: UITableViewCell {
                 }
             }
         }
-        var latestContent: String = ""
-        if latest.sender?.id == "\(Key.shared.user_id)" {
-            latestContent = "You"
-        } else {
-            latestContent = (latest.sender?.display_name)!
-        }
+        guard let sender = latest.sender else { return }
+        var latestContent = sender.id == "\(Key.shared.user_id)" ? "You" : sender.display_name
         latestContent += " shared a "
         switch latest.type {
         case "text":
@@ -195,7 +326,6 @@ class RecentTableViewCell: UITableViewCell {
         if height > onelineHeight {
             uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
             uiviewMain.addConstraintsWithFormat("V:|-29-[v0(41)]", options: [], views: lblLastMessage)
-            //lblLastMessage.numberOfLines = 2
         } else {
             uiviewMain.addConstraintsWithFormat("H:|-89-[v0]-56-|", options: [], views: lblLastMessage)
             uiviewMain.addConstraintsWithFormat("V:|-29-[v0(22)]", options: [], views: lblLastMessage)
@@ -215,61 +345,14 @@ class RecentTableViewCell: UITableViewCell {
             lblCounter.isHidden = true
         }
         
-        //let dateFormatter = DateFormatter()
-        //dateFormatter.calendar = Calendar(identifier: .gregorian)
-        //dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-        //dateFormatter.dateFormat = "yyyyMMddHHmmssSSS"
-        //let date = dateFormatter.date(from: latest.created_at)
-        let date = dateFormatter().date(from: latest.created_at)
-        let seconds = Date().timeIntervalSince(date!)
-        lblDate.text = TimeElipsed(seconds, lastMessageTime: date!)
+        let date = RealmChat.dateConverter(str: latest.created_at)
+        let seconds = Date().timeIntervalSince(date)
+        lblDate.text = TimeElipsed(seconds, lastMessageTime: date)
         lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
         lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-        
-        //        guard let userid = Int(recent.withUserID) else { return }
-        //        guard avatarDic[userid] == nil else { return }
-        //        General.shared.avatar(userid: userid) { (avatarImage) in
-        //            avatarDic[userid] = avatarImage
-        //        }
     }
 
-    func bindData(_ recent : RealmRecent) {
-        if let myInteger = Int(recent.withUserID) {
-            imgAvatar.image = avatarDic[myInteger] == nil ? UIImage(named: "avatarPlaceholder") : avatarDic[myInteger]
-        }
-        
-        lblName.text = recent.withUserNickName
-        lblLastMessage.text = recent.message
-        
-        if recent.unread > 0 {
-            lblCounter.isHidden = false
-            lblCounter.text = recent.unread > 99 ? "•••" : "\(recent.unread)"
-            if lblCounter.text?.count >= 2 {
-                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(28)]", options: [], views: lblCounter)
-                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
-            } else {
-                uiviewMain.addConstraintsWithFormat("H:|-56-[v0(22)]", options: [], views: lblCounter)
-                uiviewMain.addConstraintsWithFormat("V:|-7-[v0(22)]", options: [], views: lblCounter)
-            }
-        } else {
-            lblCounter.isHidden = true
-        }
-        
-        let date = recent.date
-        let seconds = Date().timeIntervalSince(date as Date)
-        lblDate.text = TimeElipsed(seconds,lastMessageTime:date as Date)
-        lblDate.textColor = lblCounter.isHidden ? UIColor._138138138() : UIColor._2499090()
-        lblDate.font = lblCounter.isHidden ? UIFont(name: "AvenirNext-Regular", size: 13) : UIFont(name: "AvenirNext-DemiBold", size: 13)
-        
-//        guard let userid = Int(recent.withUserID) else { return }
-//        guard avatarDic[userid] == nil else { return }
-//        General.shared.avatar(userid: userid) { (avatarImage) in
-//            avatarDic[userid] = avatarImage
-//        }
-    }
-
-    
-    // MARK: helper
+    // Helper
     private func TimeElipsed(_ seconds: TimeInterval, lastMessageTime: Date) -> String {
         let dayFormatter = DateFormatter()
         dayFormatter.dateFormat = "yyyyMMdd"
@@ -295,157 +378,7 @@ class RecentTableViewCell: UITableViewCell {
         return elipsed!
     }
     
-    //MARK: handle delete button tapped
-    @objc func deleteButtonTapped(_ sender: UIButton) {
-        self.delegate.deleteButtonTapped(self)
-    }
-    
-    //MARK: handle cell pan
-    @objc private func panThisCell(_ recognizer:UIPanGestureRecognizer){
-        switch (recognizer.state) {
-        case .began:
-            isDraggingRecentTableViewCell = true
-            pointPanStart = recognizer.translation(in: uiviewMain)
-            floatStartingRightLayoutConstraintConstant = distanceToRight.constant
-            self.uiviewMain.backgroundColor = .white
-            self.btnDelete.isHidden = false
-        case .changed:
-            let currentPoint = recognizer.translation(in: uiviewMain)
-            let deltaX = currentPoint.x - pointPanStart.x
-            var panningLeft = false
-            if currentPoint.x < pointPanStart.x {  //1
-                panningLeft = true
-            }
-            
-            if floatStartingRightLayoutConstraintConstant == 0 { //2
-                //The cell was closed and is now opening
-                if (!panningLeft) {
-                    let constant = max(-deltaX, 0) //3
-                    if constant == 0 { //4
-                        resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
-                    } else { //5
-                        distanceToRight.constant = constant
-                    }
-                } else {
-                    delegate.cellwillOpen(self)
-                    let constant = min(-deltaX, floatButtonTotalWidth) //6
-                    if constant == floatButtonTotalWidth { //7
-                        setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
-                    } else { //8
-                        distanceToRight.constant = constant
-                    }
-                }
-            
-            } else {
-                let adjustment = floatStartingRightLayoutConstraintConstant - deltaX //1
-                if !panningLeft {
-                    let constant = max(adjustment, 0) //2
-                    if constant == 0 { //3
-                        resetConstraintContstantsToZero(true, notifyDelegateDidClose: false)
-                    } else { //4
-                        distanceToRight.constant = constant
-                    }
-                } else {
-                    let constant = min(adjustment, self.floatButtonTotalWidth) //5
-                    if constant == self.floatButtonTotalWidth { //6
-                        setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:false)
-                    } else { //7
-                        distanceToRight.constant = constant
-                    }
-                }
-            }
-            distanceToLeft.constant = -distanceToRight.constant //8
-        case .ended:
-                // if (self.startingRightLayoutConstraintConstant == 0) { //1
-                //Cell was opening
-                let halfOfButtonOne = btnDelete.frame.width / 2 //2
-                if self.distanceToRight.constant >= halfOfButtonOne { //3
-                    //Open all the way
-                    setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
-                } else {
-                    //Re-close
-                    resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
-                }
-        case .cancelled:
-            if floatStartingRightLayoutConstraintConstant == 0 {
-                //Cell was closed - reset everything to 0
-                resetConstraintContstantsToZero(true, notifyDelegateDidClose:true)
-            } else {
-                //Cell was open - reset to the open state
-                setConstraintsToShowAllButtons(true, notifyDelegateDidOpen:true)
-            }
-        default: break
-        }
-    }
-    
-    private func resetConstraintContstantsToZero(_ animated: Bool, notifyDelegateDidClose notifyDelegate:Bool) {
-        /*if (notifyDelegate) {
-            delegate.cellDidClose(self)
-        }*/
-        
-        if floatStartingRightLayoutConstraintConstant == 0 && distanceToRight.constant == 0 {
-            //Already all the way closed, no bounce necessary
-            return
-        }
-        
-        distanceToRight.constant = -floatKBounceValue;
-        distanceToLeft.constant = floatKBounceValue;
-        
-        //UIView.animate(withDuration: 0.3, animations: {
-            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                self.distanceToRight.constant = 0
-                self.distanceToLeft.constant = 0
-                self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                    self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
-                    isDraggingRecentTableViewCell = false
-                    if notifyDelegate {
-                        self.delegate.cellDidClose(self)
-                    }
-                })
-            })
-        //})
-    }
-    
-    private func setConstraintsToShowAllButtons(_ animated: Bool, notifyDelegateDidOpen notifyDelegate:Bool) {
-        if (notifyDelegate) {
-            delegate.cellDidOpen(self)
-        }
-        
-        if floatStartingRightLayoutConstraintConstant == floatButtonTotalWidth &&
-            distanceToRight.constant == floatButtonTotalWidth {
-            return
-        }
-        //2
-        distanceToLeft.constant = -floatButtonTotalWidth - floatKBounceValue
-        distanceToRight.constant = floatButtonTotalWidth + floatKBounceValue
-        
-        //UIView.animate(withDuration: 0.3, animations: {
-            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                //3
-                self.distanceToLeft.constant = -self.floatButtonTotalWidth
-                self.distanceToRight.constant = self.floatButtonTotalWidth
-                self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
-                    //4
-                    self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
-                })
-            })
-        //})
-    }
-    
-    private func updateConstraintsIfNeeded(_ animated:Bool, completion: @escaping ( (_ finised:Bool) -> Void)) {
-        var duration:Double = 0
-        if animated {
-            duration = 0.1
-        }
-        UIView.animate(withDuration: duration, delay: 0, options:.curveEaseOut , animations: {
-            self.layoutIfNeeded()
-        }, completion: completion)
-    }
-    
-    func openCell() {
-        setConstraintsToShowAllButtons(false, notifyDelegateDidOpen: false)
-    }
-    
+    // MARK: - Close the cell
     func closeCell() {
         resetConstraintContstantsToZero(true, notifyDelegateDidClose: true)
     }

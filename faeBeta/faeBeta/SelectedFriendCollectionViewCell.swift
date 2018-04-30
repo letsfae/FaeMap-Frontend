@@ -8,41 +8,35 @@
 
 import UIKit
 
-protocol CustomTextFieldDelegate: UITextFieldDelegate {
+protocol SearchBarTextFieldDelegate: UITextFieldDelegate {
     func textFieldDidChange(_ textField: UITextField)
     func textFieldDidBeginEditing(_ textField: UITextField)
     func textFieldDidDelete(_ textField: UITextField)
 }
 
-protocol DeleteCellDelegate: NSObjectProtocol {
+protocol KeyboardDeleteTappedDelegate: NSObjectProtocol {
     func deleteIsTapped()
 }
 
+// MARK: -
 class SelectedFriendCollectionViewCell: UICollectionViewCell, UIKeyInput {
-    var hasText: Bool {
-        get {
-            return boolSelected
-        }
-    }
+    // MARK: UIKeyInput
+    var hasText: Bool { return boolSelected }
     
     func insertText(_ text: String) {
-        print("insert")
+        //print("insert")
     }
     
     func deleteBackward() {
-        print("delelte in select")
+        //print("delelte in select")
         deleteDelegate?.deleteIsTapped()
     }
     
-    override var canBecomeFirstResponder: Bool {
-        get {
-            return true
-        }
-    }
-    
+    // MARK: Properties
     var lblSelected: UILabel!
     var boolSelected: Bool = false
-    weak var deleteDelegate: DeleteCellDelegate?
+    weak var deleteDelegate: KeyboardDeleteTappedDelegate?
+    override var canBecomeFirstResponder: Bool { return true }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,12 +69,13 @@ class SelectedFriendCollectionViewCell: UICollectionViewCell, UIKeyInput {
     }
 }
 
+// MARK: -
 class TextFieldCollectionViewCell: UICollectionViewCell {
-    var tfInput: CustomUITextField!
+    var tfInput: SearchBarUITextField!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        tfInput = CustomUITextField(frame: frame)
+        tfInput = SearchBarUITextField(frame: frame)
         tfInput.text = ""
         tfInput.tintColor = UIColor._2499090()
         tfInput.font = UIFont(name: "AvenirNext-Medium", size: 18)
@@ -98,9 +93,10 @@ class TextFieldCollectionViewCell: UICollectionViewCell {
     
 }
 
-class CustomUITextField: UITextField {
+// MARK: -
+class SearchBarUITextField: UITextField {
     
-    weak var customDelegate: CustomTextFieldDelegate?
+    weak var searchBarDelegate: SearchBarTextFieldDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,15 +110,15 @@ class CustomUITextField: UITextField {
     
     override func deleteBackward() {
         super.deleteBackward()
-        customDelegate?.textFieldDidDelete(self)
+        searchBarDelegate?.textFieldDidDelete(self)
     }
     
     @objc func changeDelegate(_ textField: UITextField) {
-        customDelegate?.textFieldDidChange(textField)
+        searchBarDelegate?.textFieldDidChange(textField)
     }
     
     @objc func beginDelegate(_ textField: UITextField) {
-        customDelegate?.textFieldDidBeginEditing(textField)
+        searchBarDelegate?.textFieldDidBeginEditing(textField)
     }
     
     /*override func becomeFirstResponder() -> Bool {

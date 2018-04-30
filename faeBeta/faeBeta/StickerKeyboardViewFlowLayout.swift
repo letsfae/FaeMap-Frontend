@@ -11,24 +11,23 @@ import UIKit
 class StickerKeyboardViewFlowLayout: UICollectionViewFlowLayout {
     let screenWidth = UIScreen.main.bounds.width
     
+    // MARK: - Properties
     //var intNumOfStickerCollection: Int = 0
     var intNumOfTotalCollections: Int { return collectionView!.numberOfSections }
+    var cumulativePages: [Int] { return dataSource!.arrPageNumIndex }
     
     var dictEmojiPrePos: [Int: CGPoint] = [:]
     var dictCollectionPrePos: [Int: CGPoint] = [:]
-    
     var dictPositions: [IndexPath: UICollectionViewLayoutAttributes] = [:]
     
     weak var dataSource: StickerKeyboardView?
-    
     var datasource: [StickerCollection] { return dataSource!.arrStickerCollection }
-    
-    var cumulativePages: [Int] { return dataSource!.arrPageNumIndex }
     
     override var collectionViewContentSize: CGSize {
         return CGSize(width: screenWidth * CGFloat(cumulativePages.last!), height: collectionView!.frame.size.height)
     }
     
+    // MARK: - Override
     override func prepare() {
         super.prepare()
         calculatePrePosition()
@@ -56,6 +55,7 @@ class StickerKeyboardViewFlowLayout: UICollectionViewFlowLayout {
         
     }
     
+    // Helper method
     func calculatePrePosition() {
         let spaceEmoji = (screenWidth - 26.0 * 2 - 32.0 * 7) / 6
         for index in 0..<28 {
@@ -70,8 +70,6 @@ class StickerKeyboardViewFlowLayout: UICollectionViewFlowLayout {
             dictCollectionPrePos[index] = CGPoint(x: x, y: y)
         }
     }
-    
-    
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
