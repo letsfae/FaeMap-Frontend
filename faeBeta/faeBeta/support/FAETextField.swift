@@ -10,22 +10,28 @@ import Foundation
 import UIKit
 
 class FAETextField: UITextField {
-    //MARK: - Interface
-    fileprivate var contentInset: CGFloat! = 30
-    fileprivate var lblLeft: UILabel!
-    fileprivate var btnRight: UIButton!
+    // MARK: - Properties
+    private var contentInset: CGFloat! = 30
+    private var lblLeft: UILabel!
+    private var btnRight: UIButton!
     var fontSize: CGFloat = 22
     var uiviewRightPlaceHolder: UIView!
     var uiviewLeftPlaceHolderView: UIView!
     
-    fileprivate var _defaultTextColor = UIColor._2499090()
-    var defaultTextColor: UIColor {
-        get {
-            return _defaultTextColor
-        }
-        set {
-            _defaultTextColor = newValue
+    var defaultTextColor = UIColor._2499090() {
+        willSet {
             self.textColor = newValue
+        }
+    }
+    
+    var isUsernameTextField: Bool {
+        set {
+            if newValue && lblLeft == nil {
+                setupUsernameTextField()
+            }
+        }
+        get {
+            return self.isUsernameTextField
         }
     }
     
@@ -41,29 +47,14 @@ class FAETextField: UITextField {
         }
     }
     
-    var isUsernameTextField: Bool {
-        set {
-            if newValue && lblLeft == nil {
-                setupUsernameTextField()
-            }
-        }
-        get {
-            return self.isUsernameTextField
-        }
-    }
-    
-    fileprivate var _placeholder:String = ""
     override var placeholder: String? {
-        set {
-            _placeholder = newValue!
+        willSet {
             let font = UIFont(name: "AvenirNext-Regular", size: fontSize)
             self.attributedPlaceholder = NSAttributedString(string: newValue!, attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155(), NSAttributedStringKey.font:font!])
         }
-        get {
-            return _placeholder
-        }
     }
     
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -74,12 +65,7 @@ class FAETextField: UITextField {
         setup()
     }
     
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        setup()
-//    }
-    
-    fileprivate func setup() {
+    private func setup() {
         self.autocorrectionType = .no
         self.textColor = UIColor._898989()
         self.font = UIFont(name: "AvenirNext-Regular", size: fontSize)
@@ -98,21 +84,16 @@ class FAETextField: UITextField {
         self.minimumFontSize = 18
     }
     
-    fileprivate func setupPasswordTextField() {
+    // MARK: - Helper methods
+    private func setupPasswordTextField() {
         self.textColor = UIColor._2499090()
         btnRight = UIButton(frame: CGRect(x: 0, y: 0, width: 30, height: 40))
         btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
         uiviewRightPlaceHolder.addSubview(btnRight)
-        btnRight.addTarget(self, action: #selector(FAETextField.rightButtonTapped), for: UIControlEvents.touchUpInside)
+        btnRight.addTarget(self, action: #selector(rightButtonTapped), for: UIControlEvents.touchUpInside)
     }
     
-    fileprivate func setupUsernameTextField() {
-        lblLeft = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
-        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155(), NSAttributedStringKey.font:font!])
-        uiviewLeftPlaceHolderView.addSubview(lblLeft)
-    }
-    
-    @objc func rightButtonTapped() {
+    @objc private func rightButtonTapped() {
         isSecureTextEntry = !isSecureTextEntry
         if isSecureTextEntry {
             btnRight.setImage(UIImage(named: "check_eye_close_red_new")!, for: UIControlState())
@@ -123,9 +104,17 @@ class FAETextField: UITextField {
         }
     }
     
+    private func setupUsernameTextField() {
+        lblLeft = UILabel(frame: CGRect(x: contentInset - 20, y: 5, width: 20, height: 20))
+        lblLeft.attributedText = NSAttributedString(string: " ", attributes: [NSAttributedStringKey.foregroundColor: UIColor._155155155(), NSAttributedStringKey.font:font!])
+        uiviewLeftPlaceHolderView.addSubview(lblLeft)
+    }
+    
+    // MARK: - Override methods
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: contentInset, dy: 0)
     }
+    
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return textRect(forBounds: bounds)
     }

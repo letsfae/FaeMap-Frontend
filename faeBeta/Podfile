@@ -6,7 +6,6 @@ target 'faeBeta' do
     pod 'Alamofire’, '~> 4.1’
     pod 'SwiftyJSON’, '~> 3.1.4’
     pod 'JSQMessagesViewController'
-    pod 'IDMPhotoBrowser'
     pod 'RealmSwift'
     pod 'TTRangeSlider'
     pod 'Gifu'

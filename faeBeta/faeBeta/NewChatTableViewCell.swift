@@ -14,13 +14,11 @@ class NewChatTableViewCell: UITableViewCell {
     var lblNickName: UILabel!
     var lblUserName: UILabel!
     var imgStatus: UIImageView!
-    //var imgSeparator: UIImageView!
     var userID: Int = -1
     var statusSelected = false
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        //backgroundColor = .green
         
         imgAvatar = UIImageView()
         imgAvatar.image = #imageLiteral(resourceName: "avatarPlaceholder")
@@ -59,8 +57,6 @@ class NewChatTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
     
 }
 

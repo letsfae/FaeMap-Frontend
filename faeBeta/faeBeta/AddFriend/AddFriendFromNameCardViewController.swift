@@ -26,6 +26,8 @@ protocol AddFriendFromNameCardDelegate: class {
 }
 
 class AddFriendFromNameCardViewController: UIViewController {
+    
+    // MARK: - Properties
     weak var delegate: PassStatusFromViewToButtonDelegate?
     weak var contactsDelegate: AddFriendFromNameCardDelegate?
     var uiviewChooseAction: UIView!
@@ -43,7 +45,6 @@ class AddFriendFromNameCardViewController: UIViewController {
     
     var userId: Int = -1
     let faeContact = FaeContact()
-    //var requestId: Int = -1
     
     let OK = 0
     let ADD_FRIEND_ACT = 1
@@ -61,7 +62,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     
     var statusMode: FriendStatus = .defaultMode
     
-    // MARK: life cycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._107105105_a50()
@@ -75,18 +76,6 @@ class AddFriendFromNameCardViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animationShowSelf()
-    }
-    
-    // MARK: setup
-    fileprivate func createActivityIndicator() {
-        indicatorView = UIActivityIndicatorView()
-        indicatorView.activityIndicatorViewStyle = .whiteLarge
-        indicatorView.center = view.center
-        indicatorView.hidesWhenStopped = true
-        indicatorView.color = UIColor._2499090()
-        
-        view.addSubview(indicatorView)
-        view.bringSubview(toFront: indicatorView)
     }
     
     fileprivate func loadContent() {
@@ -231,10 +220,19 @@ class AddFriendFromNameCardViewController: UIViewController {
         }
     }
     
-    // MARK: actions
+    fileprivate func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = view.center
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        view.addSubview(indicatorView)
+        view.bringSubview(toFront: indicatorView)
+    }
+    
+    // MARK: - Button actions
     @objc func sentActRequest(_ sender: UIButton!) {
         if !(sender.tag == REPORT_ACT || sender.tag == EDIT_NAME_CARD || sender.tag == INFO_SETTING) {
-            print(sender.tag)
             uiviewChooseAction.isHidden = true
         }
         if sender.tag == BLOCK_ACT {
@@ -262,17 +260,13 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     self.statusMode = .pending
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = FRIEND_REQUESTED
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.calendar = Calendar(identifier: .gregorian)
-                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
-                            user.created_at = dateFormatter.string(from: Date())
+                            user.created_at = RealmUser.formateTime(Date())
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "send friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "send friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -311,13 +305,13 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = IS_FRIEND
                             user.created_at = ""
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "accept friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "accept friend request")
                     //print("[FMUserInfo Accept Request Successfully]")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
@@ -340,13 +334,13 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.contactsDelegate?.changeContactsTable(action: self.IGNORE_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = NO_RELATION
                             user.created_at = ""
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "ignore friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "ignore friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -392,7 +386,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         animationHideSelf()
     }
     
-    @objc func actionOK(_ sender: UIButton) { // TODO: jichao
+    @objc func actionOK(_ sender: UIButton) {
         if sender.tag == OK {
             delegate?.passFriendStatusFromView(status: statusMode)
             animationHideSelf()
@@ -405,12 +399,12 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.contactsDelegate?.changeContactsTable(action: self.REMOVE_FRIEND_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = NO_RELATION
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "remove friend")
+                    FaeChat.sendContactMessage(to: self.userId, with: "remove friend")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -434,7 +428,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.contactsDelegate?.changeContactsTable(action: self.BLOCK_ACT, userId: self.userId)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             if user.relation & IS_FRIEND == IS_FRIEND {
                                 user.relation = IS_FRIEND | BLOCKED
@@ -444,7 +438,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                             }
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "block")
+                    FaeChat.sendContactMessage(to: self.userId, with: "block")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -467,13 +461,13 @@ class AddFriendFromNameCardViewController: UIViewController {
                     self.statusMode = .defaultMode
                     self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = NO_RELATION
                             user.created_at = ""
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "withdraw friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "withdraw friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -488,84 +482,18 @@ class AddFriendFromNameCardViewController: UIViewController {
                 self.indicatorView.stopAnimating()
                 self.animationActionView()
             }
-            
-            /*if let user = realm.filterUser(id: String(userId)) {
-                //guard let request_id = Int(user.request_id) else { return }
-                //requestId = request_id
-                faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
-                        self.statusMode = .defaultMode
-                        self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
-                        
-                        try! realm.write {
-                            user.relation = NO_RELATION
-                        }
-                    } else if status == 500 {
-                        self.lblMsgSent.text = "Internal Server \n Error!"
-                    } else {
-                        if let errorCode = JSON(message!)["error_code"].string {
-                            handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                self.lblMsgSent.text = errorMsg
-                            })
-                        }
-                    }
-                }
-            } else {
-                faeContact.getFriendRequestsSent() {(status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        let json = JSON(message!)
-                        for i in 0..<json.count {
-                            if json[i]["requested_user_id"].intValue == self.userId {
-                                //self.requestId = json[i]["friend_request_id"].intValue
-                            }
-                        }
-                        self.faeContact.withdrawFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
-                            if status / 100 == 2 {
-                                self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
-                                self.statusMode = .defaultMode
-                                self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)                            
-                            } else if status == 500 {
-                                self.lblMsgSent.text = "Internal Server \n Error!"
-                            } else {
-                                if let errorCode = JSON(message!)["error_code"].string {
-                                    handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                        self.lblMsgSent.text = errorMsg
-                                    })
-                                }
-                            }
-                        }
-                    } else if status == 500 {
-                        self.lblMsgSent.text = "Internal Server \n Error!"
-                    } else {
-                        if let errorCode = JSON(message!)["error_code"].string {
-                            handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                self.lblMsgSent.text = errorMsg
-                            })
-                        }
-                    }
-                    self.btnOK.setTitle("OK", for: .normal)
-                    self.btnOK.tag = self.OK
-                    self.indicatorView.stopAnimating()
-                    self.animationActionView()
-                }
-            }*/
         } else if sender.tag == RESEND_ACT {
             indicatorView.startAnimating()
             faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Request Resent \nSuccessfully!"
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: "\(self.userId)") {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.calendar = Calendar(identifier: .gregorian)
-                            dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-                            dateFormatter.dateFormat = "yyyyMMddhhmmss"
-                            user.created_at = dateFormatter.string(from: Date())
+                            user.created_at = RealmUser.formateTime(Date())
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "resend friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "resend friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -583,7 +511,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         }
     }
     
-    // MARK: animations
+    // MARK: - Animations
     func animationActionView() {
         uiviewMsgSent.isHidden = false
         uiviewChooseAction.alpha = 0

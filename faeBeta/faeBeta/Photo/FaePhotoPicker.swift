@@ -20,11 +20,11 @@ struct FaePhotoPickerConfigure {
 
 class FaePhotoPicker: UIView {
     
-    // MARK: - properties
-    var collectionView: UICollectionView!
-    var lblTilte: UILabel?
-    var tblAlbums: UITableView?
-    var btnRight: UIButton?
+    // MARK: - Properties
+    private var collectionView: UICollectionView!
+    private var lblTilte: UILabel?
+    private var tblAlbums: UITableView?
+    private var btnRight: UIButton?
     
     var selectedAssets = [FaePHAsset]() {
         didSet {
@@ -37,31 +37,32 @@ class FaePhotoPicker: UIView {
         }
     }
     var collections = [FaePHAssetCollection]()
-    var currentCollection: FaePHAssetCollection? = nil
-    var requestIds = [IndexPath: PHImageRequestID]()
-    var cloudRequestIds = [IndexPath: PHImageRequestID]()
-    var photoLibrary = FaePhotoLibrary()
+    private var currentCollection: FaePHAssetCollection? = nil
+    private var requestIds = [IndexPath: PHImageRequestID]()
+    private var cloudRequestIds = [IndexPath: PHImageRequestID]()
+    private var photoLibrary = FaePhotoLibrary()
     
-    var prefetchQueue = DispatchQueue(label: "prefetchQueue")
-    var intMaxSelectedAssets: Int = 9
-    var activityIndicator: UIActivityIndicatorView?
+    private var prefetchQueue = DispatchQueue(label: "prefetchQueue")
+    private var intMaxSelectedAssets: Int = 9
+    private var activityIndicator: UIActivityIndicatorView?
     var leftBtnHandler: (() -> Void)? = nil
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
     var alertHandler: ((String) -> Void)? = nil
     
-    // MARK: configuration
-    var configuration = FaePhotoPickerConfigure()
-    var scrollDirection: UICollectionViewScrollDirection { return boolFullPicker ? .vertical : .horizontal }
-    var boolFullPicker: Bool { return configuration.boolFullPicker }
-    var strRightBtnTitle: String { return configuration.strRightBtnTitle }
-    var boolSingleSelection: Bool { return configuration.boolSingleSelection }
-    var boolAllowedVideo: Bool { return configuration.boolAllowdVideo }
-    var thumbnailSize: CGSize { return configuration.sizeThumbnail }
+    // MARK: Configuration
+    private var configuration = FaePhotoPickerConfigure()
+    private var scrollDirection: UICollectionViewScrollDirection { return boolFullPicker ? .vertical : .horizontal }
+    private var boolFullPicker: Bool { return configuration.boolFullPicker }
+    private var strRightBtnTitle: String { return configuration.strRightBtnTitle }
+    private var boolSingleSelection: Bool { return configuration.boolSingleSelection }
+    private var boolAllowedVideo: Bool { return configuration.boolAllowdVideo }
+    private var thumbnailSize: CGSize { return configuration.sizeThumbnail }
     
     // MARK: - init & setup
     init(frame: CGRect, with configure: FaePhotoPickerConfigure) {
         self.configuration = configure
         super.init(frame: frame)
+        setupUI(frame: frame)
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization { [weak self] _ in
                 self?.photoLibrary.delegate = self
@@ -75,7 +76,6 @@ class FaePhotoPicker: UIView {
                 photoLibrary.fetchCollection(with: configuration)
             }
         }
-        setupUI(frame: frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -315,7 +315,7 @@ extension FaePhotoPicker: UICollectionViewDelegate {
         } else {
             if let index = selectedAssets.index(where: { $0.phAsset == asset.phAsset }) {
                 selectedAssets.remove(at: index)
-                selectedAssets = selectedAssets.enumerated().flatMap({ (offset, asset) -> FaePHAsset? in
+                selectedAssets = selectedAssets.enumerated().compactMap({ (offset, asset) -> FaePHAsset? in
                     var asset = asset
                     asset.selectedOrder = offset + 1
                     return asset
@@ -327,11 +327,26 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                     alertHandler?("You can only select up to \(intMaxSelectedAssets) images at the same time")
                     return
                 }
-                asset.selectedOrder = selectedAssets.count + 1
-                selectedAssets.append(asset)
-                requestCloudDownload(asset: asset, indexPath: indexPath)
-                cell.boolIsSelected = true
-                cell.intSelectedOrder = asset.selectedOrder
+                if asset.assetType == .video {
+                    guard let phAsset = asset.phAsset else { return }
+                    videoFileSizeCheck(asset) { (result) in
+                        if !result && (phAsset.duration > 164.0) {
+                            self.alertHandler?("You can only select video that is less than 16MB")
+                        } else {
+                            asset.selectedOrder = self.selectedAssets.count + 1
+                            self.selectedAssets.append(asset)
+                            self.requestCloudDownload(asset: asset, indexPath: indexPath)
+                            cell.boolIsSelected = true
+                            cell.intSelectedOrder = asset.selectedOrder
+                        }
+                    }
+                } else {
+                    asset.selectedOrder = selectedAssets.count + 1
+                    selectedAssets.append(asset)
+                    requestCloudDownload(asset: asset, indexPath: indexPath)
+                    cell.boolIsSelected = true
+                    cell.intSelectedOrder = asset.selectedOrder
+                }
             }
         }
     }
@@ -441,6 +456,16 @@ extension FaePhotoPicker {
             return true
         }
         return false
+    }
+    
+    func videoFileSizeCheck(_ asset: FaePHAsset, completion: @escaping ((Bool) -> Void)) {
+        asset.videoSize { (size) in
+            if size > 16 * 1024 * 1024 {
+                completion(false)
+            } else {
+                completion(true)
+            }
+        }
     }
     
     func selectAlbum(collection: FaePHAssetCollection) {

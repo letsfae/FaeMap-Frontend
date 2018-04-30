@@ -13,11 +13,13 @@ protocol FullAlbumSelectionDelegate: class {
 }
 
 class FullAlbumViewController: UIViewController {
+    // MARK: - Properties
     var selectedAssets = [FaePHAsset]()
-    var faePhotoPicker: FaePhotoPicker!
+    private var faePhotoPicker: FaePhotoPicker!
     var prePhotoPicker: FaePhotoPicker?
     weak var delegate: FaeChatToolBarContentViewDelegate?
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let configure = FaePhotoPickerConfigure()
@@ -26,6 +28,7 @@ class FullAlbumViewController: UIViewController {
         //faePhotoPicker.selectedAssets = selectedAssets
         if let photoPicker = prePhotoPicker {
             //faePhotoPicker.collections = photoPicker.collections
+            faePhotoPicker.selectedAssets = photoPicker.selectedAssets
             faePhotoPicker.loadCameraRollCollection(collection: photoPicker.collections[0])
         }
         faePhotoPicker.rightBtnHandler = handleDone
@@ -38,20 +41,19 @@ class FullAlbumViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    func handleDone(_ results: [FaePHAsset], _ camera: Bool) {
-        print(results.count)
+    // MARK: - Button actions
+    private func handleDone(_ results: [FaePHAsset], _ camera: Bool) {
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
         delegate?.sendMediaMessage(with: results)
-        //complete?(results, camera)
     }
     
-    func cancel() {
+    private func cancel() {
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
     }
     
-    func handleAlert(_ message: String) {
+    private func handleAlert(_ message: String) {
         let alert = UIAlertController(title: message, message: "", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         present(alert, animated: true, completion: nil)

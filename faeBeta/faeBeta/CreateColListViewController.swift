@@ -204,10 +204,10 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     print("[Create Collection] Create Successfully \(status) \(message!)")
                     
                     // store to realm
-                    let realmCol = RealmCollection(collection_id: colId, name: self.txtListName, user_id: Key.shared.user_id, desp: self.txtListDesp, type: self.enterMode.rawValue, is_private: false, created_at: time, count: 0, last_updated_at: time)
-                    
-                    try! self.realm.write {
-                        self.realm.add(realmCol, update: false)
+                    let realmCol = RealmCollection(value: [colId, self.txtListName, Key.shared.user_id, self.txtListDesp, self.enterMode.rawValue, false, time, 0, time])
+                    let realm = try! Realm()
+                    try! realm.write {
+                        realm.add(realmCol, update: false)
                     }
                 } else {
                     print("[Create Collection] Fail to Create \(status) \(message!)")
@@ -223,8 +223,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 if status / 100 == 2 {
                     // store to realm
                     let realmCol = RealmCollection.filterCollectedPin(collection_id: self.colId)
-                    
-                    try! self.realm.write {
+                    let realm = try! Realm()
+                    try! realm.write {
                         realmCol?.name = self.txtListName
                         realmCol?.descrip = self.txtListDesp
                         realmCol?.last_updated_at = time

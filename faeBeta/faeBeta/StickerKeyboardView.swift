@@ -8,12 +8,19 @@
 
 import UIKit
 
+protocol SendStickerDelegate: class {
+    func sendStickerWithImageName(_ name : String)
+    func appendEmojiWithImageName(_ name: String)
+    func deleteEmoji()
+}
+
 class StickerKeyboardView: UIView {
-    var cllcSticker: UICollectionView!
-    var pageControl: UIPageControl!
-    var buttons: UICollectionView!
+    // MARK: - Properties
+    private var cllcSticker: UICollectionView!
+    private var pageControl: UIPageControl!
+    private var buttons: UICollectionView!
+    private var arrCollectionIndetifiers: [String] = ["stickerHistory", "stickerLike", "faeEmoji", "faeSticker", "faeGuy", "steamBun"]
     var arrPageNumIndex: [Int] = []
-    var arrCollectionIndetifiers: [String] = ["stickerHistory", "stickerLike", "faeEmoji", "faeSticker", "faeGuy", "steamBun"]
     var arrStickerCollection: [StickerCollection] = [] {
         didSet {
             arrPageNumIndex.removeAll()
@@ -21,7 +28,7 @@ class StickerKeyboardView: UIView {
         }
     }
     
-    var intCurrentSection: Int = 0 {
+    private var intCurrentSection: Int = 0 {
         didSet {
             let numPerPage = intCurrentSection == 2 ? 28 : 8
             let totalPages = Int(ceil(CGFloat(cllcSticker.numberOfItems(inSection: intCurrentSection)) / CGFloat(numPerPage)))
@@ -29,7 +36,7 @@ class StickerKeyboardView: UIView {
         }
     }
     
-    var intPageInSection: Int = 0 {
+    private var intPageInSection: Int = 0 {
         didSet {
             pageControl.currentPage = intPageInSection
         }
@@ -37,12 +44,12 @@ class StickerKeyboardView: UIView {
     
     weak var delegate: SendStickerDelegate?
     
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         
         setupCollections()
-        // Do any additional setup after loading the view, typically from a nib.
         
         let layout = StickerKeyboardViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -105,6 +112,7 @@ class StickerKeyboardView: UIView {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension StickerKeyboardView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if collectionView == cllcSticker {
@@ -131,7 +139,6 @@ extension StickerKeyboardView: UICollectionViewDataSource {
             } else {
                 cell.imgSticker.frame = CGRect(x: 0, y: 0, width: 82, height: 82)
             }
-            //cell.lblIndex.text = String(indexPath.row)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tabButton", for: indexPath) as! StickerTabCell
@@ -144,9 +151,9 @@ extension StickerKeyboardView: UICollectionViewDataSource {
             return cell
         }
     }
-    
 }
 
+// MARK: - UICollectionViewDelegate
 extension StickerKeyboardView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == cllcSticker {
@@ -172,6 +179,7 @@ extension StickerKeyboardView: UICollectionViewDelegate {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
 extension StickerKeyboardView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == cllcSticker {
@@ -187,9 +195,9 @@ extension StickerKeyboardView: UICollectionViewDelegateFlowLayout {
     
 }
 
+// MARK: - UIScrollViewDelegate
 extension StickerKeyboardView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        //print("scroll")
         if let collectionView = scrollView as? UICollectionView, collectionView == cllcSticker {
             let x = min(scrollView.contentOffset.x, screenWidth * CGFloat(arrPageNumIndex.last! - 1))
             buttons.reloadData()

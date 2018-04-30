@@ -30,6 +30,8 @@ func handleErrorCode(_ type: ErrorType, _ code: String, _ completion: ((String) 
                 completion?("Oops… Can’t find any Accounts\nwith this Username!")
             } else if subType == "resetByPhone" {
                 completion?("That isn't the phone number\n you previously verified!")
+            } else if subType == "resetByEmail" {
+                completion?("Oops… This Email has not\nbeen linked to an Account.")
             }
         /*case "404-3": // verify reset code - user not exists
             break*/

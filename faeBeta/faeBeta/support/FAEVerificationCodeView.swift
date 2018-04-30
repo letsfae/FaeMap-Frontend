@@ -14,7 +14,7 @@ class FAEVerificationCodeView: UIView {
     var uiview:UIView?
     @IBOutlet var numberLabels: [UILabel]!
 
-    fileprivate var pointer = 0
+    private var pointer = 0
     
     var displayValue: String {
         get {
@@ -40,14 +40,14 @@ class FAEVerificationCodeView: UIView {
     }
     
     //MARK: - setup
-    fileprivate func loadNib() {
+    private func loadNib() {
         uiview = Bundle.main.loadNibNamed("FAEVerificationCodeView", owner: self, options: nil)![0] as? UIView
         self.insertSubview(uiview!, at: 0)
         uiview!.frame = self.bounds
         uiview!.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
     
-    fileprivate func setup() {
+    private func setup() {
         for label in numberLabels {
             label.attributedText = NSAttributedString(string: "･", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 60)!])
             label.textAlignment = .center

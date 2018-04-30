@@ -179,13 +179,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = FRIEND_REQUESTED
                             user.created_at = RealmUser.formateTime(Date())
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "send friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "send friend request")
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
@@ -225,13 +225,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: String(self.userId)) {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = IS_FRIEND
                             user.created_at = ""
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "accept friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "accept friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -269,13 +269,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     let realm = try! Realm()
-                    if let user = realm.filterUser(id: "\(self.userId)") {
+                    if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
                             user.relation = NO_RELATION
                             user.created_at = ""
                         }
                     }
-                    FaeChat.sendContactMessage(to: "\(self.userId)", with: "ignore friend request")
+                    FaeChat.sendContactMessage(to: self.userId, with: "ignore friend request")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -325,13 +325,13 @@ class FriendOperationFromContactsViewController: UIViewController {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                         let realm = try! Realm()
-                        if let user = realm.filterUser(id: "\(self.userId)") {
+                        if let user = realm.filterUser(id: self.userId) {
                             try! realm.write {
                                 user.relation = NO_RELATION
                                 user.created_at = ""
                             }
                         }
-                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "withdraw friend request")
+                        FaeChat.sendContactMessage(to: self.userId, with: "withdraw friend request")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -351,12 +351,12 @@ class FriendOperationFromContactsViewController: UIViewController {
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Resent \nSuccessfully!"
                         let realm = try! Realm()
-                        if let user = realm.filterUser(id: "\(self.userId)") {
+                        if let user = realm.filterUser(id: self.userId) {
                             try! realm.write {
                                 user.created_at = RealmUser.formateTime(Date())
                             }
                         }
-                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "resend friend request")
+                        FaeChat.sendContactMessage(to: self.userId, with: "resend friend request")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -379,7 +379,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                         self.lblMsgSent.text = "The user has been \nblocked successfully!"
                         self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                         let realm = try! Realm()
-                        if let user = realm.filterUser(id: "\(self.userId)") {
+                        if let user = realm.filterUser(id: self.userId) {
                             try! realm.write {
                                 if user.relation & IS_FRIEND == IS_FRIEND {
                                     user.relation = IS_FRIEND | BLOCKED
@@ -389,7 +389,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                                 }
                             }
                         }
-                        FaeChat.sendContactMessage(to: "\(self.userId)", with: "block")
+                        FaeChat.sendContactMessage(to: self.userId, with: "block")
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {

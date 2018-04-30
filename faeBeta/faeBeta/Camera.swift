@@ -9,8 +9,6 @@
 import Foundation
 import MobileCoreServices
 
-
-// this is a class to present imagePicker, pick image from camera and library
 class Camera {
     
     weak var delegate : (UINavigationControllerDelegate & UIImagePickerControllerDelegate)?
@@ -18,42 +16,6 @@ class Camera {
     init(delegate_: (UINavigationControllerDelegate & UIImagePickerControllerDelegate)?) {
         delegate = delegate_
     }
-    
-//  View photo in system library
-    //    func PresentPhotoLibrary(_ target : UIViewController, canEdit : Bool) {
-//        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary)
-//            && !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.savedPhotosAlbum) {
-//            return
-//        }
-//        
-//        let type = kUTTypeImage as String
-//        let imagePicker = UIImagePickerController()
-//        
-//        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
-//            imagePicker.sourceType = .photoLibrary
-//            
-//            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary) {
-//                
-//                if (availableTypes as NSArray).contains(type) {
-//                    
-//                    imagePicker.mediaTypes = [type]
-//                    imagePicker.allowsEditing = canEdit
-//                }
-//            }
-//        } else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
-//            imagePicker.sourceType = .savedPhotosAlbum
-//            if let availableTypes = UIImagePickerController.availableMediaTypes(for: .savedPhotosAlbum) {
-//                if (availableTypes as NSArray).contains(type) {
-//                    imagePicker.mediaTypes = [type]
-//                }
-//            }
-//        } else {
-//            return
-//        }
-//        imagePicker.allowsEditing = canEdit
-//        imagePicker.delegate = delegate
-//        target.present(imagePicker, animated: true, completion: nil)
-//    }
     
     // for photo & video taking
     func presentPhotoCamera(_ target : UIViewController, canEdit : Bool) {

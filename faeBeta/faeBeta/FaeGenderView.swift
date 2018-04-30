@@ -76,16 +76,20 @@ class FaeGenderView: UIView {
                 try! realm.write {
                     realm.add(newUser, update: true)
                 }
-                self.showGenderAge(showGender: canShowGender, gender: gender, showAge: canShowAge, age: age)
+                self.showGenderAge(otherShowGender: canShowGender, gender: gender, otherShowAge: canShowAge, age: age)
                 completion(display_name, user_name, short_intro)
             })
         }
         
     }
     
-    fileprivate func showGenderAge(showGender: Bool, gender: String, showAge: Bool, age: String) {
+    fileprivate func showGenderAge(otherShowGender: Bool, gender: String, otherShowAge: Bool, age: String) {
         
         var marginDiff: CGFloat = 0
+        let selfShowGender = !Key.shared.disableGender
+        let selfShowAge = !Key.shared.disableAge
+        let showGender = !selfShowGender && otherShowGender
+        let showAge = !selfShowAge && otherShowAge
         
         if !showGender && !showAge {
             isHidden = true

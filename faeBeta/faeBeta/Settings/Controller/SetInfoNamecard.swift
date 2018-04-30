@@ -14,37 +14,24 @@ enum SetInfoEnterMode {
     case settings
 }
 
-class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, ViewControllerNameDelegate, ViewControllerIntroDelegate, UIImagePickerControllerDelegate, ChooseAvatarDelegate {
-    
-    func protSaveName(txtName: String?) {
-        strDisplayName = txtName
-        uiviewNameCard.lblNickName.text = txtName
-        tblNameCard.reloadData()
-    }
-    
-    func protSaveIntro(txtIntro: String?) {
-        strShortIntro = txtIntro
-        tblNameCard.reloadData()
-    }
-    
-    var faeNavBar: FaeNavBar!
+class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITableViewDelegate, UITableViewDataSource, PassDisplayNameBackDelegate, PassShortIntroBackDelegate, UIImagePickerControllerDelegate, ChooseAvatarDelegate {
+
+    // MARK: - Properties
+    private var faeNavBar: FaeNavBar!
     var uiviewNameCard: FMNameCardView!
-    var uiviewInterval: UIView!
-    var tblNameCard: UITableView!
-    var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
-    var strDisplayName: String?
-    var strShortIntro: String?
+    private var uiviewInterval: UIView!
+    private var tblNameCard: UITableView!
+    private var arrInfo: [String] = ["Display Name", "Short Info", "Change Profile Picture", "Change Cover Photo"]
+    private var strDisplayName: String?
+    private var strShortIntro: String?
     var enterMode: SetInfoEnterMode!
-    // Vicky 09/17/71 不要在这个地方单独操作，当你进入SetDisplayName()的时候，有一个push操作，直接在那个地方delegate=self。你在这个地方，是给了SetDisplayName()一个叫做vc的引用，在viewDidLoad里给这个引用的delegate=self,但你在pushViewController里是push了另一个引用，那个引用里需要将vc.delegate=self，否则是无效的。如果还不理解，周一再问我。
-    //    var vc = SetDisplayName()
     
     var activityIndicator: UIActivityIndicatorView!
-    var isProfilePhoto: Bool = true
+    private var isProfilePhoto: Bool = true
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
-        // super.viewDidLoad() missing here
         super.viewDidLoad()
-        //        vc.delegate = self
         view.backgroundColor = .white
         loadContent()
         loadActivityIndicator()
@@ -56,7 +43,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         uiviewNameCard.userId = Key.shared.user_id // refresh user namecard
     }
     
-    func loadContent() {
+    private func loadContent() {
         faeNavBar = FaeNavBar()
         view.addSubview(faeNavBar)
         faeNavBar.lblTitle.text = "Edit NameCard"
@@ -85,7 +72,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         tblNameCard.alwaysBounceVertical = false
     }
     
-    func loadActivityIndicator() {
+    private func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -95,7 +82,9 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         view.bringSubview(toFront: activityIndicator)
     }
     
-    func updateInfo() {
+    private func updateInfo() {
+        strDisplayName = Key.shared.nickname
+        strShortIntro = Key.shared.introduction
         getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
@@ -105,9 +94,20 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         }
     }
     
+    // MARK: - Button action
+    @objc private func actionGoBack(_ sender: UIButton) {
+        if enterMode == .nameCard {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrInfo.count
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
@@ -124,10 +124,10 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         return cell
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.row {
         case 0:
-            // Vicky 09/17/17
             let vc = SetDisplayName()
             if let str = strDisplayName {
                 vc.strFieldText = str
@@ -138,7 +138,6 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
             } else {
                 present(vc, animated: true)
             }
-            // Vicky 09/17/17 End
         case 1:
             let vc = SetShortIntro()
             if let str = strShortIntro {
@@ -160,37 +159,32 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         }
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
-        if enterMode == .nameCard {
-            dismiss(animated: true)
-        } else {
-            navigationController?.popViewController(animated: true)
-        }
+    // MARK: - PassDisplayNameBackDelegate
+    func protSaveDisplayName(txtName: String?) {
+        strDisplayName = txtName
+        uiviewNameCard.lblNickName.text = txtName
+        tblNameCard.reloadData()
     }
     
-    // SendMutipleImagesDelegate
-    func sendImages(_ images: [UIImage]) {
-        print("send image for avatar")
-        if let image = images.first {
-            //uploadProfileAvatar(image: image)
-            SetAvatar.uploadUserImage(image: image, vc: self, type: "setInfoNamecard", isProfilePic: self.isProfilePhoto)
-        }
+    // MARK: - PassShortIntroBackDelegate
+    func protSaveShortIntro(txtIntro: String?) {
+        strShortIntro = txtIntro
+        tblNameCard.reloadData()
     }
     
-    func finishChoosingAvatar(with faePHAsset: FaePHAsset) {
-        SetAvatar.uploadUserImage(image: UIImage(data: faePHAsset.fullResolutionImageData!)!, vc: self, type: "setInfoNamecard", isProfilePic: self.isProfilePhoto)
+    // MARK: - ChooseAvatarDelegate
+    func finishChoosingAvatar(with imageData: Data) {
+        SetAvatar.uploadUserImage(image: UIImage(data: imageData)!, vc: self, type: "setInfoNamecard", isProfilePic: self.isProfilePhoto)
     }
     
-    // UIImagePickerControllerDelegate
+    // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             picker.dismiss(animated: true, completion: nil)
-            //showAlert(title: "Taking Photo Failed", message: "please try again")
             SetAvatar.showAlert(title: "Taking Photo Failed", message: "please try again", vc: self)
             return
         }
         picker.dismiss(animated: true, completion: nil)
-        //uploadProfileAvatar(image: image)
         SetAvatar.uploadUserImage(image: image, vc: self, type: "setNamecard", isProfilePic: self.isProfilePhoto)
     }
 }

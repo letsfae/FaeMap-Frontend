@@ -10,12 +10,12 @@ import UIKit
 
 class EnableLocationViewController: UIViewController {
     // MARK: - Interface 
-    fileprivate var imageView: UIImageView!
-    fileprivate var titleLabel: UILabel!
-    fileprivate var descriptionLabel: UILabel!
-    fileprivate var infoLabel: UILabel!
-    fileprivate var enableLocationButton: UIButton!
-    fileprivate var timer: Timer!
+    private var imageView: UIImageView!
+    private var titleLabel: UILabel!
+    private var descriptionLabel: UILabel!
+    private var infoLabel: UILabel!
+    private var enableLocationButton: UIButton!
+    private var timer: Timer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +23,7 @@ class EnableLocationViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    fileprivate func setup() {
+    private func setup() {
         self.view.backgroundColor = .white
         imageView = UIImageView(frame: CGRect(x: 68, y: 159, w: 291, h: 255))
         imageView.image = #imageLiteral(resourceName: "EnableLocationImage")
