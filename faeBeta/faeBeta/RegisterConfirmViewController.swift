@@ -104,14 +104,9 @@ class RegisterConfirmViewController: RegisterBaseViewController {
         let vcNext = InitialPageController()
         navigationController?.pushViewController(vcNext, animated: true)
         navigationController?.viewControllers = [vcNext]
-        FaeCoreData.shared.removeByKey("signup")
-        FaeCoreData.shared.removeByKey("signup_first_name")
-        FaeCoreData.shared.removeByKey("signup_last_name")
-        FaeCoreData.shared.removeByKey("signup_username")
-        FaeCoreData.shared.removeByKey("signup_password")
-        FaeCoreData.shared.removeByKey("signup_gender")
-        FaeCoreData.shared.removeByKey("signup_dateofbirth")
-        FaeCoreData.shared.removeByKey("signup_email")
+        for key in ["signup", "signup_first_name", "signup_last_name", "signup_username", "signup_password", "signup_gender", "signup_dateofbirth", "signup_email"] {
+            FaeCoreData.shared.removeByKey(key)
+        }
     }
     
     // MARK: - Helper methods

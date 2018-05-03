@@ -212,6 +212,9 @@ class LogInViewController: UIViewController {
                 let vcNext = InitialPageController()
                 self.navigationController?.pushViewController(vcNext, animated: true)
                 self.navigationController?.viewControllers = [vcNext]
+                for key in ["signup", "signup_first_name", "signup_last_name", "signup_username", "signup_password", "signup_gender", "signup_dateofbirth", "signup_email"] {
+                    FaeCoreData.shared.removeByKey(key)
+                }
             } else if status == 500 {
                 self.setLoginResult("Internal Service Error!")
             } else { // TODO: error code done
