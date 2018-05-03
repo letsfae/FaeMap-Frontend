@@ -170,7 +170,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     vc.enterEmailMode = .signup
                     vc.strEmail = self.email!
                     vc.faeUser = self.faeUser
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    self.navigationController?.pushViewController(vc, animated: false)
                 })
             } else {
                 let vc = VerifyCodeViewController()
@@ -178,7 +178,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                 vc.enterEmailMode = .signup
                 vc.strEmail = email!
                 vc.faeUser = faeUser
-                navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: false)
             }
         } else {
             jumpToEnterCode()
@@ -202,7 +202,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                                 vc.enterEmailMode = .signup
                                 vc.strEmail = self.email!
                                 vc.faeUser = self.faeUser
-                                self.navigationController?.pushViewController(vc, animated: true)
+                                self.navigationController?.pushViewController(vc, animated: false)
                             } else {
                                 print("[Update Email Fail] \(status) \(message!)")
                                 let messageJSON = JSON(message!)
