@@ -14,25 +14,27 @@ protocol EXPCellDelegate: class {
 
 class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
+    // MARK: - Vars
+    
     weak var delegate: EXPCellDelegate?
     
-    var uiviewSub: UIView!
-    var uiviewBottom: UIView!
-    var lblPlaceName: FaeLabel!
-    var lblPlaceAddr: FaeLabel!
+    private var uiviewSub: UIView!
+    private var uiviewBottom: UIView!
+    private var lblPlaceName: FaeLabel!
+    private var lblPlaceAddr: FaeLabel!
     
-    var clctViewImages: UICollectionView!
+    private var clctViewImages: UICollectionView!
     
-    var uiviewPageCtrlSub: UIView!
-    var arrPageDot = [UIButton]()
+    private var uiviewPageCtrlSub: UIView!
+    private var arrPageDot = [UIButton]()
     
-    var intCurtPage = 0
+    private var intCurtPage = 0
     
-    var boolInMap = true
+    private var boolInMap = true
     
-    var placeInfo: PlacePin!
+    private var placeInfo: PlacePin!
     
-    var arrImgURL = [String]() {
+    private var arrImgURL = [String]() {
         didSet {
             
         }
@@ -95,7 +97,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         delegate?.jumpToPlaceDetail(placeInfo)
     }
     
-    func loadPageCtrl() {
+    private func loadPageCtrl() {
         
         for uiview in arrPageDot {
             uiview.removeFromSuperview()
@@ -119,7 +121,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         }
     }
     
-    func loadCollectionView() {
+    private func loadCollectionView() {
         
         let imgBack = UIImageView()
         imgBack.contentMode = .scaleAspectFit
@@ -156,7 +158,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
     }
     
-    func loadCellItems() {
+    private func loadCellItems() {
         uiviewBottom = UIView()
         uiviewBottom.backgroundColor = UIColor(r: 50, g: 50, b: 50, alpha: 80)
         uiviewSub.addSubview(uiviewBottom)
@@ -181,21 +183,21 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     
     weak var delegate: EXPCellDelegate?
     
-    var uiviewSub: UIView!
-    var uiviewBottom: UIView!
-    var lblPlaceName: FaeLabel!
-    var lblPlaceAddr: FaeLabel!
+    private var uiviewSub: UIView!
+    private var uiviewBottom: UIView!
+    private var lblPlaceName: FaeLabel!
+    private var lblPlaceAddr: FaeLabel!
     
-    var clctViewImages: UICollectionView!
+    private var clctViewImages: UICollectionView!
     
-    var uiviewPageCtrlSub: UIView!
-    var arrPageDot = [UIButton]()
+    private var uiviewPageCtrlSub: UIView!
+    private var arrPageDot = [UIButton]()
     
-    var intCurtPage = 0
+    private var intCurtPage = 0
     
-    var placeInfo: PlacePin!
+    private var placeInfo: PlacePin!
     
-    var arrImgURL = [String]() {
+    private var arrImgURL = [String]() {
         didSet {
             
         }
@@ -258,7 +260,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         delegate?.jumpToPlaceDetail(placeInfo)
     }
     
-    func loadPageCtrl() {
+    private func loadPageCtrl() {
         
         for uiview in arrPageDot {
             uiview.removeFromSuperview()
@@ -282,7 +284,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         }
     }
     
-    func loadCollectionView() {
+    private func loadCollectionView() {
         uiviewSub = UIView()
         addSubview(uiviewSub)
         uiviewSub.layer.borderWidth = 2
@@ -310,7 +312,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
     }
     
-    func loadCellItems() {
+    private func loadCellItems() {
         uiviewBottom = UIView()
         uiviewBottom.backgroundColor = UIColor(r: 50, g: 50, b: 50, alpha: 80)
         uiviewSub.addSubview(uiviewBottom)
@@ -333,7 +335,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
 
 class EXPClctImgCell: UICollectionViewCell {
     
-    var img: UIImageView!
+    private var img: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -345,7 +347,7 @@ class EXPClctImgCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadCellItems() {
+    private func loadCellItems() {
         img = UIImageView()
         img.contentMode = .scaleAspectFill
 //        img.image = #imageLiteral(resourceName: "exp_pic_demo")

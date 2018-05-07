@@ -156,7 +156,7 @@ func generator(_ center: CLLocationCoordinate2D, _ number: Int, _ offset: Int) -
     let start = offset + 1
     let end = number + offset + 1
     
-    for i in start...end {
+    for i in start..<end {
         let place = PlacePin()
         place.id = i
         place.name = "test_\(i)"

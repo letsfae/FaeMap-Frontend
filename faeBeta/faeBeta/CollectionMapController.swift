@@ -10,6 +10,8 @@ import UIKit
 
 class CollectionMapController: BasicMapController, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
     
+    // MARK: - Vars
+    
     var arrExpPlace = [PlacePin]()
     var strCategory: String = ""
     private var clctViewMap: UICollectionView!
@@ -18,6 +20,8 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     private var selectedPlaceView: PlacePinAnnotationView?
     private var selectedPlace: FaePinAnnotation?
     private var placeAnnos = [FaePinAnnotation]()
+    
+    // MARK: - Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +36,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     
     // MARK: - Setup UI
     
-    func loadClctView() {
+    private func loadClctView() {
         let layout = CenterCellCollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
@@ -86,7 +90,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         highlightPlace(intCurtPage)
     }
 
-    func highlightPlace(_ idx: Int) {
+    private func highlightPlace(_ idx: Int) {
         guard idx < arrExpPlace.count else { return }
         deselectAllAnnotations()
         let pinId = arrExpPlace[idx].id
@@ -111,7 +115,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         scrollTo(firstAnn.id)
     }
     
-    func loadAnnotations(places: [PlacePin]) {
+    private func loadAnnotations(places: [PlacePin]) {
         placeAnnos = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.addAnnotations(placeAnnos, withCompletionHandler: {
             self.highlightPlace(0)
@@ -128,7 +132,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     
     // MARK: - 辅助函数
     
-    func deselectAllAnnotations(full: Bool = true) {
+    private func deselectAllAnnotations(full: Bool = true) {
         
         if let idx = selectedPlace?.class_2_icon_id {
             if full {
@@ -150,7 +154,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         }
     }
     
-    func scrollTo(_ id: Int) {
+    private func scrollTo(_ id: Int) {
         guard arrExpPlace.count > 0 else { return }
         for i in 0..<arrExpPlace.count {
             guard arrExpPlace[i].id == id else { continue }
@@ -160,7 +164,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         }
     }
     
-    func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
+    private func zoomToFitAllAnnotations(annotations: [MKPointAnnotation]) {
         guard let firstAnn = annotations.first else { return }
         let point = MKMapPointForCoordinate(firstAnn.coordinate)
         var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
@@ -174,7 +178,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         faeMapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
     }
     
-    func setTitle(type: String) {
+    private func setTitle(type: String) {
         let title_0 = type
         let title_1 = " Around Me"
         let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!]
