@@ -64,6 +64,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     private var strLocation: String = ""
     private var lblNoResults: FaeLabel!
     
+    private var USE_TEST_PLACE = true
+    
     // MARK: - Life Cycle -
     
     override func viewDidLoad() {
@@ -741,6 +743,23 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            
+            guard !self.USE_TEST_PLACE else {
+                self.arrRandom = generator(center, 20, 0)
+                if Key.shared.selectedTypeIdx.row == 0 {
+                    self.categoryState["Random"] = .selected
+                } else {
+                    self.categoryState["Random"] = .unread
+                }
+                self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
+                if indexPath == Key.shared.selectedTypeIdx {
+                    self.clctViewPics.reloadData()
+                    self.hideWaves()
+                    self.buttonEnable(on: true)
+                }
+                return
+            }
+            
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
                 guard status / 100 == 2 else {
                     //.fail
