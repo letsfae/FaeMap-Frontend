@@ -9,6 +9,8 @@
 import UIKit
 //import CCHMapClusterController
 
+// MARK: - Place Bar & Table
+
 extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     
     // FMPlaceTableDelegate
