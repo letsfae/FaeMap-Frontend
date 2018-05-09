@@ -11,7 +11,7 @@ import SwiftyJSON
 import RealmSwift
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
-    
+    // MARK: - Properties
     var enterMode: CollectionTableMode!
     var uiviewNavBar: UIView!
     var btnCancel: UIButton!
@@ -47,6 +47,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     var numLinesDesp = 1
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -173,6 +174,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         uiviewPrivacy.addSubview(lblPrivacy)
     }
     
+    // MARK: - Button actions
     @objc func actionCancel(_ sender: UIButton) {
         textviewListName.resignFirstResponder()
         textviewDesp.resignFirstResponder()
@@ -239,6 +241,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - UITextView Delegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         if (textView == textviewListName && txtListName == "") || (textView == textviewDesp && txtListDesp == "") {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -320,6 +323,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - Keyboard show & hide
     @objc func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue

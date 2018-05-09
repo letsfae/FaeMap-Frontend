@@ -24,7 +24,7 @@ enum PlaceTableMode: Int {
 }
 
 class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
-    
+    // MARK: - Properties
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
     var boolIsLoaded: Bool = false
@@ -108,6 +108,22 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     var testArrOutdoors = [PlacePin]()
     var arrAllPlaces = [PlacePin]()
     
+    var tableMode: MapBoardTableMode = .places
+    var placeTableMode: PlaceTableMode = .recommend
+    var talkTableMode: TalkTableMode = .feed
+    var talkPostTableMode: TalkPostTableMode = .talk
+    
+    var chosenLoc: CLLocationCoordinate2D? // user-chosen location
+    
+    // Loading Waves
+    var uiviewAvatarWaveSub: UIView!
+    var imgAvatar: FaeAvatarView!
+    var filterCircle_1: UIImageView!
+    var filterCircle_2: UIImageView!
+    var filterCircle_3: UIImageView!
+    var filterCircle_4: UIImageView!
+    
+    // MARK: - Temporarily not used properties (social part)
     // data for social table
     let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
     let imgIconArr: [UIImage] = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
@@ -153,21 +169,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         case comment = 1
     }
     
-    var tableMode: MapBoardTableMode = .places
-    var placeTableMode: PlaceTableMode = .recommend
-    var talkTableMode: TalkTableMode = .feed
-    var talkPostTableMode: TalkPostTableMode = .talk
-    
-    var chosenLoc: CLLocationCoordinate2D? // user-chosen location
-    
-    // Loading Waves
-    var uiviewAvatarWaveSub: UIView!
-    var imgAvatar: FaeAvatarView!
-    var filterCircle_1: UIImageView!
-    var filterCircle_2: UIImageView!
-    var filterCircle_3: UIImageView!
-    var filterCircle_4: UIImageView!
-    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -229,11 +231,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         boolIsLoaded = false
     }
     
-    // UIGestureRecognizerDelegate
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
-    }
-    
     fileprivate func loadNavBar() {
         loadDropDownMenu()
         
@@ -257,14 +254,6 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         
         loadPlaceSearchHeader()
-    }
-    
-    @objc func actionLeftWindowShow(_ sender: UIButton) {
-        let leftMenuVC = LeftSlidingMenuViewController()
-        leftMenuVC.delegate = self
-        leftMenuVC.displayName = Key.shared.nickname
-        leftMenuVC.modalPresentationStyle = .overCurrentContext
-        present(leftMenuVC, animated: false, completion: nil)
     }
     
     fileprivate func btnNavBarSetTitle() {
@@ -430,6 +419,20 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         loadPlaceHeader()
     }
     
+    // MARK: - UIGestureRecognizerDelegate
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    // MARK: - Button & gesture actions
+    @objc func actionLeftWindowShow(_ sender: UIButton) {
+        let leftMenuVC = LeftSlidingMenuViewController()
+        leftMenuVC.delegate = self
+        leftMenuVC.displayName = Key.shared.nickname
+        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        present(leftMenuVC, animated: false, completion: nil)
+    }
+    
     // function for drop down menu button, to show / hide the drop down menu
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
@@ -516,10 +519,12 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
     }
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }
     
+    // MARK: - LeftSlidingMenuDelegate
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         navigationController?.pushViewController(moodAvatarVC, animated: true)
