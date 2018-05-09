@@ -64,9 +64,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     private var strLocation: String = ""
     private var lblNoResults: FaeLabel!
     
-    private var USE_TEST_PLACE = true
+    private var USE_TEST_PLACE = false
     
-    // MARK: - Life Cycle -
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -452,10 +452,14 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         showWaves()
         buttonEnable(on: false)
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+        resetVisitedIndex()
     }
     
+    private func resetVisitedIndex() {
+        intCurtPage = 0
+    }
     
-    // MARK: - Other Functions -
+    // MARK: - Other Functions
     
     private func buttonEnable(on: Bool) {
         btnGoLeft.isEnabled = on
@@ -952,4 +956,5 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.coordinate = address.coordinate
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
+    
 }

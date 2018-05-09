@@ -43,6 +43,10 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     var placePin: PlacePin?
     var userPin: UserPin?
     
+    // Place Pin Control
+    var selectedPlaceView: PlacePinAnnotationView?
+    var selectedPlace: FaePinAnnotation?
+    
     // MARK: - Life Cycles
     
     override func viewDidLoad() {
@@ -286,8 +290,8 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
-//        selectedPlace = firstAnn
-//        selectedPlaceView = anView
+        selectedPlace = firstAnn
+        selectedPlaceView = anView
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()

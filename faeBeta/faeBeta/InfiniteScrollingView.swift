@@ -9,6 +9,7 @@
 import UIKit
 
 class InfiniteScrollingView: UIView {
+    
     var placePhotos = [UIImage]()
 //    var placePhotos = [#imageLiteral(resourceName: "food_1"), #imageLiteral(resourceName: "food_2"), #imageLiteral(resourceName: "food_3"), #imageLiteral(resourceName: "food_4"), #imageLiteral(resourceName: "food_5"), #imageLiteral(resourceName: "food_6")]
     var imgPic_0: UIImageView!

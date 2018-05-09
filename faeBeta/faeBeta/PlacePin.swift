@@ -21,6 +21,7 @@ class PlacePin: NSObject {
     var address2: String = ""
     var icon: UIImage?
     var imageURL = ""
+    var imageURLs = [String]()
     var class_1: String = ""
     var url = ""
     var price = ""
@@ -52,7 +53,12 @@ class PlacePin: NSObject {
         }
         icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         class_1 = json["categories"]["class1"].stringValue
-        imageURL = json["img"].stringValue
+        if let arrImgURLs = json["img"].array {
+            for imgURL in arrImgURLs {
+                imageURLs.append(imgURL.stringValue)
+            }
+        }
+        if imageURLs.count > 0 { imageURL = imageURLs[0] }
         url = json["url"].stringValue
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
