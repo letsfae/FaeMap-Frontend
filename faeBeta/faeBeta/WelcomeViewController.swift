@@ -159,7 +159,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
                 let nextRegister = RegisterEmailViewController()
                 nextRegister.faeUser = faeUser
                 nextRegister.boolSavedSignup = true
-                navigationController?.pushViewController(nextRegister, animated: true)
+                navigationController?.pushViewController(nextRegister, animated: false)
             } else {
                 FaeCoreData.shared.removeByKey("signup")
                 FaeCoreData.shared.removeByKey("signup_first_name")
@@ -170,11 +170,11 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
                 FaeCoreData.shared.removeByKey("signup_dateofbirth")
                 FaeCoreData.shared.removeByKey("signup_email")
                 let boardRegister = RegisterNameViewController()
-                navigationController?.pushViewController(boardRegister, animated: true)
+                navigationController?.pushViewController(boardRegister, animated: false)
             }
         } else {
             let boardRegister = RegisterNameViewController()
-            navigationController?.pushViewController(boardRegister, animated: true)
+            navigationController?.pushViewController(boardRegister, animated: false)
         }
     }
     

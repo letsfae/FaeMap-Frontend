@@ -68,17 +68,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
         }
-
-        if Key.shared.is_Login, let _ = FaeCoreData.shared.readByKey("signup") {
-            FaeUser().logOut({(_, _) in })
-            Key.shared.is_Login = false
-        }
         
         if Key.shared.isFirstUse() {
             configureNavCtrler()
         } else {
             sync { (success) in
                 Key.shared.is_Login = success
+                if Key.shared.is_Login, let _ = FaeCoreData.shared.readByKey("signup") {
+                    for key in ["signup", "signup_first_name", "signup_last_name", "signup_username", "signup_password", "signup_gender", "signup_dateofbirth", "signup_email"] {
+                        FaeCoreData.shared.removeByKey(key)
+                    }
+                }
                 DispatchQueue.main.async {
                     configureNavCtrler()
                     self.configureNotifications()
