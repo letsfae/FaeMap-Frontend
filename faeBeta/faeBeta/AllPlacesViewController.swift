@@ -21,7 +21,7 @@ protocol AllPlacesDelegate: class {
 }
 
 class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, MapBoardPlaceTabDelegate, BoardsSearchDelegate {
-    
+    // MARK: - Properties
     weak var delegate: AllPlacesDelegate?
     
     var uiviewNavBar: FaeNavBar!
@@ -41,6 +41,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     var imgPeopleLocDetail: UIImageView!
     var searchedLoc: CLLocation!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -139,6 +140,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(uiviewFooterTab)
     }
     
+    // MARK: - Button actions
     @objc func actionGoBack(_ sender: UIButton) {
         let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
         if mbIsOn {
@@ -193,7 +195,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.pushViewController(searchVC, animated: true)
     }
     
-    // MapBoardPlaceTabDelegate
+    // MARK: - MapBoardPlaceTabDelegate
     func jumpToRecommendedPlaces() {
         placeTableMode = .recommend
         uiviewNavBar.lblTitle.isHidden = false
@@ -215,7 +217,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     // MapBoardPlaceTabDelegate End
 
-    // BoardsSearchDelegate
+    // MARK: - BoardsSearchDelegate
     func jumpToPlaceSearchResult(searchText: String, places: [PlacePin]) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = searchText
@@ -230,6 +232,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     // BoardsSearchDelegate End
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
     }
@@ -262,6 +265,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
+    // MARK: - Get place info from backend
     func getPlaceInfo() {
         let placesList = FaeMap()
         placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")

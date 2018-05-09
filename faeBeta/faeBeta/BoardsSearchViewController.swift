@@ -27,6 +27,7 @@ enum EnterMode: String {
 }
 
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
+    // MARK: - Properties
     var enterMode: CollectionTableMode!
     weak var delegate: BoardsSearchDelegate?
     var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
@@ -77,6 +78,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // Switch between two google city search or address search
     var isCitySearch = false
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         // navigationController?.isNavigationBarHidden = true
@@ -116,21 +118,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }, completion: nil)
             delay += 0.1
         }
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        searchResults = completer.results
-        filteredLocations = searchResults.map({ $0.title + ", " + $0.subtitle })
-        self.tblLocationRes.reloadData()
-        if self.searchResults.count > 0 {
-            showOrHideViews(searchText: completer.queryFragment)
-        }
-    }
-    
-    // MKLocalSearchCompleterDelegate
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        // handle error
     }
     
     // shows "no results"
@@ -273,7 +260,28 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         tblLocationRes.register(LocationListCell.self, forCellReuseIdentifier: "SearchLocation")
     }
     
-    // FaeSearchBarTestDelegate
+    func addShadow(_ uiview: UIView) {
+        uiview.layer.shadowColor = UIColor._898989().cgColor
+        uiview.layer.shadowRadius = 2.2
+        uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
+        uiview.layer.shadowOpacity = 0.6
+    }
+    
+    // MARK: - MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        filteredLocations = searchResults.map({ $0.title + ", " + $0.subtitle })
+        self.tblLocationRes.reloadData()
+        if self.searchResults.count > 0 {
+            showOrHideViews(searchText: completer.queryFragment)
+        }
+    }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
+    }
+    
+    // MARK: - FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         switch enterMode {
         case .place:
@@ -337,41 +345,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     // End of FaeSearchBarTestDelegate
     
-    func getPlaceInfo(content: String = "", source: String = "name") {
-        guard content != "" else {
-            showOrHideViews(searchText: content)
-            return
-        }
-        FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: source)
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "99999999")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-        FaeSearch.shared.search { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
-                self.showOrHideViews(searchText: content)
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfoJsonArray = placeInfoJSON.array else {
-                self.showOrHideViews(searchText: content)
-                return
-            }
-            self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
-            
-            if source == "name" {
-                self.showOrHideViews(searchText: content)
-            } else {
-                self.delegate?.jumpToPlaceSearchResult?(searchText: content, places: self.filteredPlaces)
-                self.navigationController?.popViewController(animated: false)
-            }
-        }
-    }
-    
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
         // search places
@@ -429,6 +402,43 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         tblPlacesRes.reloadData()
     }
     
+    // MARK: - Search place data from backend
+    func getPlaceInfo(content: String = "", source: String = "name") {
+        guard content != "" else {
+            showOrHideViews(searchText: content)
+            return
+        }
+        FaeSearch.shared.whereKey("content", value: content)
+        FaeSearch.shared.whereKey("source", value: source)
+        FaeSearch.shared.whereKey("type", value: "place")
+        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("offset", value: "0")
+        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
+                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
+        FaeSearch.shared.search { (status: Int, message: Any?) in
+            if status / 100 != 2 || message == nil {
+                self.showOrHideViews(searchText: content)
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                self.showOrHideViews(searchText: content)
+                return
+            }
+            self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            
+            if source == "name" {
+                self.showOrHideViews(searchText: content)
+            } else {
+                self.delegate?.jumpToPlaceSearchResult?(searchText: content, places: self.filteredPlaces)
+                self.navigationController?.popViewController(animated: false)
+            }
+        }
+    }
+    
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // search location
         if enterMode == .location {
@@ -584,13 +594,12 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         }
     }
     
-    func addShadow(_ uiview: UIView) {
-        uiview.layer.shadowColor = UIColor._898989().cgColor
-        uiview.layer.shadowRadius = 2.2
-        uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
-        uiview.layer.shadowOpacity = 0.6
+    // MARK: - UIScrollViewDelegate
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        schBar.txtSchField.resignFirstResponder()
     }
     
+    // MARK: - Button actions
     @objc func backToBoards(_ sender: UIButton) {
         //        if enterMode == .place {
         //            delegate?.backToPlaceSearchView()
@@ -598,10 +607,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         //            delegate?.backToLocationSearchView()
         //        }
         navigationController?.popViewController(animated: false)
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        schBar.txtSchField.resignFirstResponder()
     }
     
     @objc func searchByCategories(_ sender: UIButton) {

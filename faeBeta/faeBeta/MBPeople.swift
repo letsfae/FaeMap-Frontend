@@ -59,6 +59,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }
     }
     
+    // MARK: - Load people part of boards
     func loadCannotFindPeople() {
         uiviewBubbleHint = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
         uiviewBubbleHint.backgroundColor = .white
@@ -90,85 +91,6 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             uiviewBubbleHint.alpha = 0
             btnSearchLoc.isUserInteractionEnabled = true
         }
-    }
-    
-    // LeftSlidingMenuDelegate
-    func userInvisible(isOn: Bool) {
-        vickyprint("isOn \(isOn)")
-        if (isOn) {
-            boolUsrVisibleIsOn = false
-        } else {
-            boolUsrVisibleIsOn = true
-        }
-        getPeoplePage()
-    }
-    
-    // function for button on upper right of People table mode
-    @objc func chooseNearbyPeopleInfo(_ sender: UIButton) {
-        // in people page
-        if sender.tag == 1 {
-            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
-            sender.tag = 0
-            uiviewLineBelowLoc.frame.origin.x = 14
-            uiviewLineBelowLoc.frame.size.width = screenWidth - 28
-            uiviewPeopleLocDetail.isHidden = false
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                self.uiviewPeopleLocDetail.frame.origin.y = 113 + device_offset_top
-            }, completion: nil)
-            self.tblMapBoard.delaysContentTouches = false
-            sliderDisFilter.setValue(Float(disVal)!, animated: false)
-        } else { // in both place & people
-            /* 老板要求改为直接地图上选取
-            let vc = BoardsSearchViewController()
-            vc.strSearchedLocation = lblAllCom.text
-            vc.enterMode = .location
-            vc.isCitySearch = true
-            vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
-            */
-            let vc = SelectLocationViewController()
-            vc.delegate = self
-            vc.mode = .part
-            vc.boolFromExplore = true
-            navigationController?.pushViewController(vc, animated: false)
-        }
-    }
-    
-    @objc func rollUpPeopleLocPage(_ sender: AnyObject) {
-        rollUpFilter()
-    }
-    
-    func rollUpFilter() {
-        if uiviewPeopleLocDetail != nil && !uiviewPeopleLocDetail.isHidden {
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                self.uiviewPeopleLocDetail.frame.origin.y = -203
-            }, completion: { _ in
-                self.uiviewPeopleLocDetail.isHidden = true
-            })
-            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
-            btnSearchLoc.tag = 1
-            uiviewLineBelowLoc.frame.origin.x = 0
-            uiviewLineBelowLoc.frame.size.width = screenWidth
-            updateNearbyPeople()
-        }
-    }
-    
-    func updateNearbyPeople() {
-        // when user is invisible
-        if !boolUsrVisibleIsOn || curtTitle != "People" {
-            return
-        }
-        showWaves()
-        getMBPeopleInfo ({ (count: Int) in
-            //            print(self.mbPeople)
-            if count == 0 {   // self.mbPeople.count == 0
-                self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
-                self.lblBubbleHint.text = self.strBubbleHint
-            } else {
-                self.tblMapBoard.reloadData()
-            }
-            self.hideWaves(count: count)
-        })
     }
     
     func loadChooseNearbyPeopleView() {
@@ -314,6 +236,86 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         btnUpArrow.addTarget(self, action: #selector(self.rollUpPeopleLocPage(_:)), for: .touchUpInside)
     }
     
+    // MARK: - LeftSlidingMenuDelegate
+    func userInvisible(isOn: Bool) {
+        vickyprint("isOn \(isOn)")
+        if (isOn) {
+            boolUsrVisibleIsOn = false
+        } else {
+            boolUsrVisibleIsOn = true
+        }
+        getPeoplePage()
+    }
+    
+    // MARK: - Button & gesture actions
+    // function for button on upper right of People table mode
+    @objc func chooseNearbyPeopleInfo(_ sender: UIButton) {
+        // in people page
+        if sender.tag == 1 {
+            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
+            sender.tag = 0
+            uiviewLineBelowLoc.frame.origin.x = 14
+            uiviewLineBelowLoc.frame.size.width = screenWidth - 28
+            uiviewPeopleLocDetail.isHidden = false
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                self.uiviewPeopleLocDetail.frame.origin.y = 113 + device_offset_top
+            }, completion: nil)
+            self.tblMapBoard.delaysContentTouches = false
+            sliderDisFilter.setValue(Float(disVal)!, animated: false)
+        } else { // in both place & people
+            /* 老板要求改为直接地图上选取
+            let vc = BoardsSearchViewController()
+            vc.strSearchedLocation = lblAllCom.text
+            vc.enterMode = .location
+            vc.isCitySearch = true
+            vc.delegate = self
+            navigationController?.pushViewController(vc, animated: true)
+            */
+            let vc = SelectLocationViewController()
+            vc.delegate = self
+            vc.mode = .part
+            vc.boolFromExplore = true
+            navigationController?.pushViewController(vc, animated: false)
+        }
+    }
+    
+    @objc func rollUpPeopleLocPage(_ sender: AnyObject) {
+        rollUpFilter()
+    }
+    
+    func rollUpFilter() {
+        if uiviewPeopleLocDetail != nil && !uiviewPeopleLocDetail.isHidden {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+                self.uiviewPeopleLocDetail.frame.origin.y = -203
+            }, completion: { _ in
+                self.uiviewPeopleLocDetail.isHidden = true
+            })
+            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
+            btnSearchLoc.tag = 1
+            uiviewLineBelowLoc.frame.origin.x = 0
+            uiviewLineBelowLoc.frame.size.width = screenWidth
+            updateNearbyPeople()
+        }
+    }
+    
+    func updateNearbyPeople() {
+        // when user is invisible
+        if !boolUsrVisibleIsOn || curtTitle != "People" {
+            return
+        }
+        showWaves()
+        getMBPeopleInfo ({ (count: Int) in
+            //            print(self.mbPeople)
+            if count == 0 {   // self.mbPeople.count == 0
+                self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
+                self.lblBubbleHint.text = self.strBubbleHint
+            } else {
+                self.tblMapBoard.reloadData()
+            }
+            self.hideWaves(count: count)
+        })
+    }
+    
     @objc func selectGender(_ sender: UIButton) {
         if sender.tag == 0 {
             selectedGender = "Both"
@@ -359,7 +361,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }
     }
     
-    func searchLoc(_ sender: UIButton) {
+    @objc func searchLoc(_ sender: UIButton) {
         let vc = BoardsSearchViewController()
         vc.strSearchedLocation = lblAllCom.text
         vc.enterMode = .location

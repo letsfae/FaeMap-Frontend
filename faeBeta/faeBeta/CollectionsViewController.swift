@@ -16,6 +16,7 @@ enum CollectionTableMode: String {
 }
 
 class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
+    // MARK: - Properties
     var btnNavBarMenu: UIButton!
     var imgTick: UIImageView!
     var uiviewDropDownMenu: UIView!
@@ -34,6 +35,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     var realmColPlaces: Results<RealmCollection>!
     var realmColLocations: Results<RealmCollection>!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -200,6 +202,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         navBarMenuBtnClicked = false
     }
     
+    // MARK: - Button actions
     @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -243,6 +246,13 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         observeOnCollectionChange()
     }
     
+    @objc func createNewList() {
+        let vc = CreateColListViewController()
+        vc.enterMode = tableMode
+        present(vc, animated: true)
+    }
+    
+    // MARK: - UITableViewDataSource & UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
@@ -315,16 +325,12 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    @objc func createNewList() {
-        let vc = CreateColListViewController()
-        vc.enterMode = tableMode
-        present(vc, animated: true)
-    }
-    
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }
     
+    // MARK: - observation of data scource of tableview change
     private func observeOnCollectionChange() {
         let datasource = tableMode == .place ? realmColPlaces : realmColLocations
         notificationToken?.invalidate()

@@ -14,6 +14,7 @@ protocol EditMemoDelegate: class {
 }
 
 class EditMemoViewController: UIViewController, UITextViewDelegate {
+    // MARK: - Properties
     var uiviewMemo: UIView!
     var uiviewEditMemo: UIView!
     var btnCancelMemo: UIButton!
@@ -29,6 +30,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
     var enterMode: CollectionTableMode!
     var pinId: Int = -1
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(r: 115, g: 115, b: 115, alpha: 30)
@@ -75,7 +77,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         view.addConstraintsWithFormat("V:[v0(22)]-9-|", options: [], views: lblRemainTxt)
     }
     
-    
+    // MARK: - Button actions
     @objc func actionCancel(_ sender: Any) {
         hideMemoView()
     }
@@ -126,6 +128,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         dismiss(animated: false)
     }
     
+    // MARK: - UITextView Delegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         if txtMemo == "" {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -165,6 +168,7 @@ class EditMemoViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - Keyboard show
     @objc func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
