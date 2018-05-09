@@ -24,39 +24,39 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var groupLastSelected = [Int: PlacePin]()
     
     // Table
-    var allPlaces = [[PlacePin]]()
-    var uiviewTblBckg: UIView!
+    private var allPlaces = [[PlacePin]]()
+    private var uiviewTblBckg: UIView!
     var tblResults: UITableView!
-    var lblNumResults: UILabel!
-    var grayLine: UIView!
-    var btnPrevPage: UIButton!
-    var btnNextPage: UIButton!
+    private var lblNumResults: UILabel!
+    private var grayLine: UIView!
+    private var btnPrevPage: UIButton!
+    private var btnNextPage: UIButton!
     
-    var dictOffset = [Int: CGPoint]()
+    private var dictOffset = [Int: CGPoint]()
     
     // Bar
-    var imgBack_0 = PlaceView()
-    var imgBack_1 = PlaceView()
-    var imgBack_2 = PlaceView()
+    private var imgBack_0 = PlaceView()
+    private var imgBack_1 = PlaceView()
+    private var imgBack_2 = PlaceView()
     
-    var currentIdx: Int = 0
+    private var currentIdx: Int = 0
     var goingToNextGroup: Bool = false
     var goingToPrevGroup: Bool = false
     
-    var boolLeft = true
-    var boolRight = true
+    private var boolLeft = true
+    private var boolRight = true
     
     var annotations = [CCHMapClusterAnnotation]()
     
     var places = [PlacePin]()
     
-    var prevAnnotation: CCHMapClusterAnnotation!
-    var nextAnnotation: CCHMapClusterAnnotation!
+    private var prevAnnotation: CCHMapClusterAnnotation!
+    private var nextAnnotation: CCHMapClusterAnnotation!
     
-    var prevPlacePin: PlacePin!
-    var nextPlacePin: PlacePin!
+    private var prevPlacePin: PlacePin!
+    private var nextPlacePin: PlacePin!
     
-    var boolDisableSwipe = false {
+    private var boolDisableSwipe = false {
         didSet {
             self.boolLeft = !boolDisableSwipe
             self.boolRight = !boolDisableSwipe
@@ -70,7 +70,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    internal var tblVConstraint = [NSLayoutConstraint]() {
+    private var tblVConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 uiviewTblBckg.removeConstraints(oldValue)
@@ -81,7 +81,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    internal var lineVConstraint = [NSLayoutConstraint]() {
+    private var lineVConstraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 uiviewTblBckg.removeConstraints(oldValue)
@@ -92,7 +92,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    var fullyLoaded = false
+    private var fullyLoaded = false
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 90))
@@ -115,7 +115,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Load Bar
     
-    fileprivate func loadBar() {
+    private func loadBar() {
         addSubview(imgBack_0)
         uiviewTblBckg.addSubview(imgBack_1)
         imgBack_1.frame.origin.x = 0
@@ -247,7 +247,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func panToPrev(_ time: Double = 0.3) {
+    private func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.imgBack_0.frame.origin.x = 7
             self.uiviewTblBckg.frame.origin.x += screenWidth + 7
@@ -264,7 +264,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         })
     }
     
-    func panToNext(_ time: Double = 0.3) {
+    private func panToNext(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.uiviewTblBckg.frame.origin.x = -screenWidth + 7
             self.imgBack_2.frame.origin.x = 7
@@ -281,15 +281,15 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         })
     }
     
-    func panBack(_ time: Double = 0.3) {
+    private func panBack(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.resetSubviews()
         }, completion: nil)
     }
     
-    var end: CGFloat = 0
+    private var end: CGFloat = 0
     
-    @objc func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+    @objc private func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             end = pan.location(in: self).x
@@ -333,7 +333,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func configureIndexForPanGes() {
+    private func configureIndexForPanGes() {
         imgBack_0.isHidden = currentIdx == 0 && tblResults.tag == 0
         
         if tblResults.tag == allPlaces.count - 1 {
@@ -345,7 +345,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Load Table
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         uiviewTblBckg = UIView(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
         uiviewTblBckg.backgroundColor = .white
         addSubview(uiviewTblBckg)
@@ -435,7 +435,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Table Actions
     
-    @objc func actionSwitchPage(_ sender: UIButton) {
+    @objc private func actionSwitchPage(_ sender: UIButton) {
         let prevTag = tblResults.tag
         if sender == btnPrevPage {
             tblResults.tag -= 1

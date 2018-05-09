@@ -33,7 +33,6 @@
 		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
 		50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */; };
 		5028597F209A1F3400F98B00 /* CollectionMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028597E209A1F3400F98B00 /* CollectionMapController.swift */; };
-		5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */; };
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503BF9D6208517AA00635E65 /* RoutingMapController.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
@@ -387,7 +386,6 @@
 		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		5028597E209A1F3400F98B00 /* CollectionMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMapController.swift; sourceTree = "<group>"; };
-		5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMLocationPin.swift; sourceTree = "<group>"; };
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		503BF9D6208517AA00635E65 /* RoutingMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingMapController.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
@@ -995,7 +993,6 @@
 			children = (
 				B0714D371D5E435200356705 /* FMMapPinCtrl(deprectated).swift */,
 				5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */,
-				5028E5ED1F76D10500EA61BC /* FMLocationPin.swift */,
 				509543621FC8D272002EAD2E /* FMAllPlacesFromBoard.swift */,
 			);
 			name = MapViewExtensions;
@@ -1130,6 +1127,7 @@
 				50500F8B1F967244009C51FB /* PinDetail */,
 				B8849E991EEB0F9200D4588D /* Board */,
 				504CE4D01F67BF3400070284 /* Explore */,
+				B37E5D921F830F0E008A6B4B /* Settings */,
 				B0F688F21CEA403D00D91CF9 /* Map */,
 				DCEB8CA01DEFBE5A00B516E9 /* Support */,
 				B0CFC9981CED2CE700EC356A /* Model */,
@@ -1262,12 +1260,11 @@
 			children = (
 				5057A4DD205FFA0200C6B99B /* PlacesDownloader */,
 				50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */,
-				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				503BF9D6208517AA00635E65 /* RoutingMapController.swift */,
 				5028597E209A1F3400F98B00 /* CollectionMapController.swift */,
-				B37E5D921F830F0E008A6B4B /* Settings */,
-				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
+				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				50111C241F476063004EA00E /* FMComponents */,
+				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
 				50188F211FC36C250038CAFF /* ClusterManager */,
 				B33F89F51F3CDBEE0033610D /* AddFriend */,
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
@@ -1990,7 +1987,6 @@
 				9FC6AAFE1FA167BA0024B9B8 /* SetWebViewController.swift in Sources */,
 				B3273E691F8C28FE00CFEC8E /* PinCollection.swift in Sources */,
 				500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */,
-				5028E5EE1F76D10500EA61BC /* FMLocationPin.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,
 				B3170EA01F454DEA0072F9CD /* AddPinToCollectionView.swift in Sources */,
 				B0714D731D5E435200356705 /* FMMapPinCtrl(deprectated).swift in Sources */,

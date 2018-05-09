@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - All Places
+
 extension FaeMapViewController: AllPlacesDelegate {
     
     // MARK: - AllPlacesDelegate

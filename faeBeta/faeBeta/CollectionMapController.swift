@@ -17,8 +17,6 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     private var clctViewMap: UICollectionView!
     private var intCurtPage = 0
     private var visibleClusterPins = [CCHMapClusterAnnotation]()
-    private var selectedPlaceView: PlacePinAnnotationView?
-    private var selectedPlace: FaePinAnnotation?
     private var placeAnnos = [FaePinAnnotation]()
     
     // MARK: - Life Cycles
@@ -84,16 +82,42 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         }
     }
     
+    // MARK: - ScrollView Delegates
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth: CGFloat = 233
         intCurtPage = Int((clctViewMap.contentOffset.x + 63) / pageWidth)
         highlightPlace(intCurtPage)
+        print("scrollViewDidEndDecelerating")
     }
 
     private func highlightPlace(_ idx: Int) {
         guard idx < arrExpPlace.count else { return }
+        
+        let place = arrExpPlace[idx]
+        
+        func findAnnotation() {
+            var desiredAnno: CCHMapClusterAnnotation!
+            for anno in faeMapView.annotations {
+                guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
+                guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
+                if placeInfo == place {
+                    desiredAnno = cluster
+                    break
+                }
+            }
+            faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: place.coordinate)
+            if desiredAnno != nil {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    self.faeMapView.selectAnnotation(desiredAnno, animated: false)
+                }
+            }
+        }
+        
         deselectAllAnnotations()
-        let pinId = arrExpPlace[idx].id
+        
+        findAnnotation()
+        /*
         for place in self.visibleClusterPins {
             guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
             guard firstAnn.id == pinId else { continue }
@@ -104,6 +128,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
             selectedPlace = firstAnn
             selectedPlaceView = anView
         }
+         */
     }
     
     // MARK: - Pin Control
@@ -189,5 +214,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         
         lblTopBarCenter.attributedText = title_0_attr
     }
+    
+    // MARK: Find Map Annotation
     
 }

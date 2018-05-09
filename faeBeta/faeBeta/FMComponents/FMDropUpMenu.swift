@@ -14,47 +14,47 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
 
     weak var delegate: MapFilterMenuDelegate?
     
-    var imgBackground_sm: UIImageView!
-    var imgBackground_lg: UIImageView!
+    private var imgBackground_sm: UIImageView!
+    private var imgBackground_lg: UIImageView!
     
-    var lblMenuTitle: UILabel!
+    private var lblMenuTitle: UILabel!
     
-    var btnCollection: UIButton!
-    var btnOptions: UIButton!
+    private var btnCollection: UIButton!
+    private var btnOptions: UIButton!
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var old_origin_y: CGFloat = 0 // Pan gesture var
     
-    var uiviewOptionsContainer: UIView!
-    var uiviewCollectionsContainer: UIView!
+    private var uiviewOptionsContainer: UIView!
+    private var uiviewCollectionsContainer: UIView!
     
-    var btnPlaceLoc: UIButton!
-    var curtTitle: String = "Places"
-    var uiviewBubbleHint: UIView!
+    private var btnPlaceLoc: UIButton!
+    private var curtTitle: String = "Places"
+    private var uiviewBubbleHint: UIView!
     var tblPlaceLoc: UITableView!
     var selectedIndexPath: IndexPath?
     
-    var tblOptions: UITableView!
+    private var tblOptions: UITableView!
     
-    var imgTick: UIImageView!
-    var uiviewDropDownMenu: UIView!
-    var btnPlaces: UIButton!
-    var btnLocations: UIButton!
-    var lblPlaces: UILabel!
-    var lblLocations: UILabel!
-    var countPlaces: Int = 0
-    var countLocations: Int = 0
-    var navBarMenuBtnClicked: Bool = false
+    private var imgTick: UIImageView!
+    private var uiviewDropDownMenu: UIView!
+    private var btnPlaces: UIButton!
+    private var btnLocations: UIButton!
+    private var lblPlaces: UILabel!
+    private var lblLocations: UILabel!
+    private var countPlaces: Int = 0
+    private var countLocations: Int = 0
+    private var navBarMenuBtnClicked: Bool = false
     //    var arrPlaces = [PinCollection]()
     //    var arrLocations = [PinCollection]()
-    var realmColPlaces: Results<RealmCollection>!
-    var realmColLocations: Results<RealmCollection>!
-    let realm = try! Realm()
-    var notificationToken: NotificationToken? = nil
-    let faeCollection = FaeCollection()
-    var tableMode: CollectionTableMode = .place
-    var arrListThatSavedThisPin = [Int]() {
+    private var realmColPlaces: Results<RealmCollection>!
+    private var realmColLocations: Results<RealmCollection>!
+    private let realm = try! Realm()
+    private var notificationToken: NotificationToken? = nil
+    private let faeCollection = FaeCollection()
+    private var tableMode: CollectionTableMode = .place
+    private var arrListThatSavedThisPin = [Int]() {
         didSet {
             guard fullLoaded else { return }
             guard arrListThatSavedThisPin.count > 0 else { return }
@@ -62,7 +62,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     
-    var mode: FaeMode = .off {
+    private var mode: FaeMode = .off {
         didSet {
             guard fullLoaded else { return }
             lblMenuTitle.isHidden = mode == .off
@@ -71,7 +71,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     
-    var fullLoaded = false
+    private var fullLoaded = false
     
     var swipeGes: UISwipeGestureRecognizer!
     
