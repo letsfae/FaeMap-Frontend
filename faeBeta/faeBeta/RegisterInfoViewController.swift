@@ -194,7 +194,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     private func jumpToRegisterNext() {
         let nextRegister = RegisterEmailViewController()
         nextRegister.faeUser = faeUser
-        navigationController?.pushViewController(nextRegister, animated: true)
+        navigationController?.pushViewController(nextRegister, animated: false)
     }
     
     @objc private func maleButtonTapped() {

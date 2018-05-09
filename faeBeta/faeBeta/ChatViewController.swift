@@ -312,13 +312,22 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     @objc private func showLibrary() {
-        toolbarContentView.setup(FaeChatToolBarContentView.PHOTO)
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status != .authorized {
-            print("not authorized!")
-            showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
-            return
+        if PHPhotoLibrary.authorizationStatus() != .authorized {
+            PHPhotoLibrary.requestAuthorization { [weak self] status in
+                if status != .authorized {
+                    print("not authorized!")
+                    self?.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+                } else {
+                    self?.showLibraryHelper()
+                }
+            }
+        } else {
+            showLibraryHelper()
         }
+    }
+    
+    private func showLibraryHelper() {
+        toolbarContentView.setup(FaeChatToolBarContentView.PHOTO)
         resetToolbarButtonIcon()
         btnImagePicker.setImage(UIImage(named: "imagePickerChosen"), for: UIControlState())
         let animated = !toolbarContentView.boolMediaShow && !toolbarContentView.boolKeyboardShow

@@ -97,10 +97,14 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     
     override func continueButtonPressed() {
         if let savedUsername = FaeCoreData.shared.readByKey("signup_username") {
-            if (savedUsername as? String) != username! && Key.shared.is_Login {
-                faeUser.logOut({ (_, _) in
-                    self.checkForUniqueUsername()
-                })
+            if (savedUsername as? String) != username! {
+                if Key.shared.is_Login {
+                    faeUser.logOut({ (_, _) in
+                        self.checkForUniqueUsername()
+                    })
+                } else {
+                    checkForUniqueUsername()
+                }
             } else {
                 jumpToRegisterNext()
             }
