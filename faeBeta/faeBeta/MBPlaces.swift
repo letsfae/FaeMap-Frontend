@@ -11,6 +11,7 @@ import SwiftyJSON
 
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
+    // MARK: - Load place part of boards
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
         btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
@@ -117,14 +118,12 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         view.addSubview(uiviewPlaceTab)
     }
     
-    @objc func changePage(_ sender: Any?) {
-        scrollViewPlaceHeader.contentOffset.x = screenWidth * CGFloat(pageCtrlPlace.currentPage)
-    }
-    
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         pageCtrlPlace.currentPage = scrollViewPlaceHeader.contentOffset.x == 0 ? 0 : 1
     }
     
+    // MARK: - Get place data from backend
     func getPlaceInfo(content: String = "", source: String = "categories") {
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
@@ -150,6 +149,11 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
             self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
             self.jumpToSearchPlaces()
         }
+    }
+    
+    // MARK: - PageControl & Button actions
+    @objc func changePage(_ sender: Any?) {
+        scrollViewPlaceHeader.contentOffset.x = screenWidth * CGFloat(pageCtrlPlace.currentPage)
     }
     
     @objc func searchByCategories(_ sender: UIButton) {
@@ -207,7 +211,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         tblMapBoard.reloadData()
     }
     
-    // SeeAllPlacesDelegate
+    // MARK: - SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
@@ -224,7 +228,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     
     // SeeAllPlacesDelegate End
     
-    // MapBoardPlaceTabDelegate
+    // MARK: - MapBoardPlaceTabDelegate
     func jumpToRecommendedPlaces() {
         placeTableMode = .recommend
         btnNavBarMenu.isHidden = false
@@ -246,7 +250,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     // MapBoardPlaceTabDelegate End
 
-    // BoardsSearchDelegate
+    // MARK: - BoardsSearchDelegate
     func jumpToPlaceSearchResult(searchText: String, places: [PlacePin]) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = searchText

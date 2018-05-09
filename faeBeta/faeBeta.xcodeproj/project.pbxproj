@@ -1478,8 +1478,8 @@
 			children = (
 				B8849EA41EEB143800D4588D /* MapBoardTableView.swift */,
 				B36D0D321F46513000DE3107 /* MBPlaces.swift */,
-				B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */,
 				B8849EA31EEB143800D4588D /* MBPeople.swift */,
+				B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
 				B33F89FF1F3EB4E20033610D /* MBPlaceTabView.swift */,
 				B8849EAF1EEB147A00D4588D /* MBPeopleCell.swift */,

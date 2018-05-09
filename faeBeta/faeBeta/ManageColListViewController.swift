@@ -14,6 +14,7 @@ protocol ManageColListDelegate: class {
 }
 
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
+    // MARK: - Properties
     var uiviewNavBar: UIView!
     var btnDone: UIButton!
     var tblManageList: UITableView!
@@ -34,6 +35,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     let realm = try! Realm()
     var realmPins = List<CollectedPin>()
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -123,19 +125,10 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         uiviewTabBar.addSubview(btnRemove)
     }
     
+    // MARK: - Button actions
     @objc func actionDone(_ sender: UIButton) {
         delegate?.returnValBack()
         dismiss(animated: true)
-    }
-    
-    var desiredCount = 0
-    var deleteCount = 0 {
-        didSet {
-            guard desiredCount != 0 && deleteCount != 0 else { return }
-            if deleteCount == desiredCount {
-                reloadAfterDelete()
-            }
-        }
     }
     
     @objc func actionOperateList(_ sender: UIButton) {
@@ -228,6 +221,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    // MARK: - UITableView Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return realmPins.count
     }
@@ -281,6 +275,16 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         selectedIdx.sort{$0.row > $1.row}
     }
     
+    var desiredCount = 0
+    var deleteCount = 0 {
+        didSet {
+            guard desiredCount != 0 && deleteCount != 0 else { return }
+            if deleteCount == desiredCount {
+                reloadAfterDelete()
+            }
+        }
+    }
+    
     func reloadAfterDelete() {
         tblManageList.performUpdate({
             self.tblManageList.deleteRows(at: selectedIdx, with: UITableViewRowAnimation.right)
@@ -291,7 +295,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    // EditMemoDelegate
+    // MARK: - EditMemoDelegate
     func saveMemo(memo: String) {
         tblManageList.reloadData()
     }

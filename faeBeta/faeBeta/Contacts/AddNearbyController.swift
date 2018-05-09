@@ -10,6 +10,8 @@ import UIKit
 import SwiftyJSON
 
 class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
+    
+    // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var lblScanTitle: UILabel!
     var lblScanSubtitle: UILabel!
@@ -22,6 +24,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     var filterCircle_4: UIImageView!
     var arrNearby = [UserNameCard]()
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         view.backgroundColor = .white
         loadNavBar()
@@ -42,6 +45,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    // MARK: - load tableView data source
     func loadNearbyPeople(_ completion: ((Int) -> ())?) {
         let faeMap = FaeMap()
         faeMap.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
@@ -230,7 +234,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         return 74
     }
     
-    // FaeAddUsernameDelegate
+    // MARK: - FaeAddUsernameDelegate
     func addFriend(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
@@ -282,7 +286,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     // FaeAddUsernameDelegate End
     
-    // FriendOperationFromContactsDelegate
+    // MARK: - FriendOperationFromContactsDelegate
     func passFriendStatusBack(indexPath: IndexPath) {
         tblUsernames.reloadRows(at: [indexPath], with: .none)
     }

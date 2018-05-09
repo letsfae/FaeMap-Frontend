@@ -10,53 +10,54 @@ import UIKit
 import SwiftyJSON
 
 extension MapBoardViewController {
-    
-//    func getMBSocialInfo(socialType: String) {
-//        let mbSocialList = FaeMap()
-//        mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
-//        mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
-//        mbSocialList.whereKey("radius", value: "9999999")
-//        mbSocialList.whereKey("type", value: "\(socialType)")
-//        mbSocialList.whereKey("in_duration", value: "false")
-//        mbSocialList.whereKey("max_count", value: "100")
-//        mbSocialList.getMapInformation { (status: Int, message: Any?) in
-//            
-//            if status / 100 != 2 || message == nil {
-//                print("[loadMBSocialInfo] status/100 != 2")
-//                
-//                return
-//            }
-//            let socialInfoJSON = JSON(message!)
-//            guard let socialInfoJsonArray = socialInfoJSON.array else {
-//                print("[loadMBSocialInfo] fail to parse mapboard social info")
-//                
-//                return
-//            }
-//            if socialInfoJsonArray.count <= 0 {
-//                
-//                print("[loadMBSocialInfo] array is nil")
-//                return
-//            }
-//            
-//            self.processMBInfo(results: socialInfoJsonArray, socialType: socialType)
-    
-//            self.mbComments.sort { $0.pinId > $1.pinId }
-//            self.mbStories.sort { $0.pinId > $1.pinId }
+    /*
+    func getMBSocialInfo(socialType: String) {
+        let mbSocialList = FaeMap()
+        mbSocialList.whereKey("geo_latitude", value: "\(currentLatitude)")
+        mbSocialList.whereKey("geo_longitude", value: "\(currentLongitude)")
+        mbSocialList.whereKey("radius", value: "9999999")
+        mbSocialList.whereKey("type", value: "\(socialType)")
+        mbSocialList.whereKey("in_duration", value: "false")
+        mbSocialList.whereKey("max_count", value: "100")
+        mbSocialList.getMapInformation { (status: Int, message: Any?) in
             
-            // if mbComments > 0  =>  恒成立？
-//            for i in 0..<self.mbComments.count {
-//                let pos = self.mbComments[i].position
-//                self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
-//            }
-//            
-//            for i in 0..<self.mbStories.count {
-//                let pos = self.mbStories[i].position
-//                self.getSocialPinAddress(position: pos, socialType: "media", index: i)
-//            }
+            if status / 100 != 2 || message == nil {
+                print("[loadMBSocialInfo] status/100 != 2")
+                
+                return
+            }
+            let socialInfoJSON = JSON(message!)
+            guard let socialInfoJsonArray = socialInfoJSON.array else {
+                print("[loadMBSocialInfo] fail to parse mapboard social info")
+                
+                return
+            }
+            if socialInfoJsonArray.count <= 0 {
+                
+                print("[loadMBSocialInfo] array is nil")
+                return
+            }
             
-            //            self.tableMapBoard.reloadData()
-//        }
-//    }
+            self.processMBInfo(results: socialInfoJsonArray, socialType: socialType)
+    
+            self.mbComments.sort { $0.pinId > $1.pinId }
+            self.mbStories.sort { $0.pinId > $1.pinId }
+            
+             if mbComments > 0  =>  恒成立？
+            for i in 0..<self.mbComments.count {
+                let pos = self.mbComments[i].position
+                self.getSocialPinAddress(position: pos, socialType: "comment", index: i)
+            }
+            
+            for i in 0..<self.mbStories.count {
+                let pos = self.mbStories[i].position
+                self.getSocialPinAddress(position: pos, socialType: "media", index: i)
+            }
+            
+                        self.tableMapBoard.reloadData()
+        }
+    }
+    */
     
     fileprivate func processMBInfo(results: [JSON], socialType: String) {
         for result in results {
