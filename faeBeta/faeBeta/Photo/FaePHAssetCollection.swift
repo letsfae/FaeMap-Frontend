@@ -47,6 +47,26 @@ struct FaePHAsset {
         }
     }
     
+    var localURL: URL? = nil
+    
+    var thumbnailImage: UIImage? {
+        get {
+            guard let phAsset = self.phAsset else { return nil }
+            let options = PHImageRequestOptions()
+            options.isSynchronous = false
+            options.deliveryMode = .opportunistic
+            options.isNetworkAccessAllowed = true
+            let targetSize = CGSize(width: 244, height: 94)
+            var img: UIImage? = nil
+            _ = PHImageManager().requestImage(for: phAsset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (image, info) in
+                if let image = image {
+                    img = image
+                }
+            }
+            return img
+        }
+    }
+    
     var fullResolutionImageData: Data? {
         get {
             guard let phAsset = self.phAsset else { return nil }
@@ -81,8 +101,8 @@ struct FaePHAsset {
         options.deliveryMode = .highQualityFormat
         options.version = .original
         options.resizeMode = .none
-        options.progressHandler = { (progressHandler, error, stop, info) in
-            progress(progressHandler)
+        options.progressHandler = { (progressValue, error, stop, info) in
+            progress(progressValue)
         }
         
         var requestId: PHImageRequestID?
@@ -122,9 +142,9 @@ struct FaePHAsset {
         guard let localURL = writeURL else { return nil }
         let options = PHVideoRequestOptions()
         options.isNetworkAccessAllowed = true
-        options.progressHandler = { (progressHandler, error, stop, info) in
+        options.progressHandler = { (progressValue, error, stop, info) in
             DispatchQueue.main.async {
-                progress?(progressHandler)
+                progress?(progressValue)
             }
         }
         return PHImageManager.default().requestExportSession(forVideo: phAsset, options: options, exportPreset: AVAssetExportPresetMediumQuality, resultHandler: { (session, info) in
