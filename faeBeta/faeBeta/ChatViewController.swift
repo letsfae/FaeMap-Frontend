@@ -42,7 +42,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var arrUserIDs: [String] = []
     var arrRealmUsers: [RealmUser] = []
     var arrRealmMessages: [RealmMessage] = []
-    var arrJSQMessages: [JSQMessage] = [] // data source of collectionView
+    var arrJSQMessages: [FaeMessage] = [] // data source of collectionView
     var resultRealmMessages: Results<RealmMessage>!
     var notificationToken: NotificationToken?
     let intNumberOfMessagesOneTime = 15
@@ -216,7 +216,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         contentView?.addSubview(btnSend)
         btnSend.isEnabled = false
-        btnSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), for: .touchUpInside)
+        btnSend.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
         
         btnSet.append(btnKeyBoard)
         btnSet.append(btnSticker)
@@ -689,35 +689,10 @@ extension ChatViewController: FaeChatToolBarContentViewDelegate {
             switch faePHAsset.assetType {
             case .photo, .livePhoto:
                 var messageType = ""
-                if faePHAsset.fileFormat() == .gif {
-                    messageType = "[Gif]"
-                } else {
-                    messageType = "[Picture]"
-                }
-                if let data = faePHAsset.fullResolutionImageData {
-                    storeChatMessageToRealm(type: messageType, text: messageType, media: data)
-                } else {
-                    var asset = faePHAsset
-                    asset.state = .ready
-                    _ = asset.cloudImageDownload(progress: { (_) in
-                        if asset.state == .ready {
-                            asset.state = .progress
-                        }
-                    }, completion: { [weak self] (data) in
-                        guard let `self` = self else { return }
-                        asset.state = .complete
-                        DispatchQueue.main.async {
-                            self.storeChatMessageToRealm(type: messageType, text: messageType, media: data)
-                        }
-                    })
-                }
+                messageType = faePHAsset.fileFormat() == .gif ? "[Gif]" : "[Picture]"
+                storeChatMessageToRealm(type: messageType, text: messageType, faePHAsset: faePHAsset)
             case .video:
-                _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
-                    if let data = try? Data(contentsOf: url) {
-                        self.storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", media: data)
-                    }
-                })
-                break
+                storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", faePHAsset: faePHAsset)
             }
         }
     }

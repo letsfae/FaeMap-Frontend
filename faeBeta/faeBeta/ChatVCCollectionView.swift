@@ -69,8 +69,7 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == arrRealmMessages.count - 1 {
-            let message = arrRealmMessages[indexPath.row]
+        if indexPath.row == arrJSQMessages.count - 1, let message = resultRealmMessages.last {
             if message.sender?.id != "\(Key.shared.user_id)" || message.type != "[Heart]" {
                 boolJustSentHeart = false
             }
@@ -150,7 +149,8 @@ extension ChatViewController {
             closeToolbarContentView()
         }
         floatContentOffsetY = collectionView.contentOffset.y
-        let message = arrRealmMessages[indexPath.row]
+        let index = resultRealmMessages.count - (arrJSQMessages.count - indexPath.row)
+        let message = resultRealmMessages[index]
         switch message.type {
         case "[Picture]", "[Gif]":
             /*let messageJSQ = arrJSQMessages[indexPath.row]
@@ -162,15 +162,15 @@ extension ChatViewController {
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
             }*/
-            let realmMessage = arrRealmMessages[indexPath.row]
+            //let realmMessage = arrRealmMessages[indexPath.row]
             var images = [SKPhoto]()
             let realm = try! Realm()
             let allMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@ AND type IN {'[Picture]', '[Gif]'}", "\(Key.shared.user_id)", intIsGroup, strChatId).sorted(byKeyPath: "index")
-            for message in allMessage {
-                let photo = SKPhoto.photoWithRealmMessage(message)
+            for msg in allMessage {
+                let photo = SKPhoto.photoWithRealmMessage(msg)
                 images.append(photo)
             }
-            let index = allMessage.index(where: { $0.index == realmMessage.index })
+            let index = allMessage.index(where: { $0.index == message.index })
             let browser = SKPhotoBrowser(photos: images)
             browser.initializePageIndex(index ?? 0)
             present(browser, animated: true, completion: nil)
@@ -248,7 +248,8 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        let message = arrRealmMessages[indexPath.row]
+        let index = resultRealmMessages.count - (arrJSQMessages.count - indexPath.row)
+        let message = resultRealmMessages[index]
         if ["[Picture]", "[Sticker]", "text"].contains(message.type) {
             selectedIndexPathForMenu = indexPath
             return true
