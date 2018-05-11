@@ -677,7 +677,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc func syncMessagesFromServer() {
         //faeChat.getMessageFromServer()
-        faePush.getSync { (status, message) in
+        self.faeChat.getMessageFromServer()
+        /*faePush.getSync { (status, message) in
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
                 if let friend_request_count = messageJSON["friend_request"].int {
@@ -695,7 +696,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 
             }
-        }
+        }*/
     }
     
 }

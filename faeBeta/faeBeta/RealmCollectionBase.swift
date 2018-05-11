@@ -38,7 +38,7 @@ class RealmCollection: Object {
         self.last_updated_at = last_updated_at
     }*/
 
-    static func filterCollectedTypes(type: String) -> Results<RealmCollection> {
+    /*static func filterCollectedTypes(type: String) -> Results<RealmCollection> {
         let realm = try! Realm()
         return realm.objects(RealmCollection.self).filter("type == %@", type).sorted(byKeyPath: "collection_id")
     }
@@ -46,7 +46,8 @@ class RealmCollection: Object {
     static func filterCollectedPin(collection_id: Int) -> RealmCollection? {
         let realm  = try! Realm()
         return realm.object(ofType: RealmCollection.self, forPrimaryKey: collection_id)
-    }
+    }*/
+    
     static func savePin(collection_id: Int, type: String, pin_id: Int) {
         let curtDate = Date()
         let dateformatter = DateFormatter()
@@ -56,7 +57,7 @@ class RealmCollection: Object {
         let pin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin_id)", Key.shared.user_id, pin_id, added_at])
         
         let realm  = try! Realm()
-        guard let col = filterCollectedPin(collection_id: collection_id) else {
+        guard let col = realm.filterCollection(id: collection_id) else {
             return
         }
 
@@ -69,7 +70,7 @@ class RealmCollection: Object {
     
     static func unsavePin(collection_id: Int, type: String, pin_id: Int) {
         let realm  = try! Realm()
-        guard let col = filterCollectedPin(collection_id: collection_id) else {
+        guard let col = realm.filterCollection(id: collection_id) else {
             return
         }
         
