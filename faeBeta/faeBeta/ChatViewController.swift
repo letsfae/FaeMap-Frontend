@@ -41,8 +41,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var intIsGroup: Int = 0
     var arrUserIDs: [String] = []
     var arrRealmUsers: [RealmUser] = []
-    var arrRealmMessages: [RealmMessage] = []
-    var arrJSQMessages: [FaeMessage] = [] // data source of collectionView
+    var arrFaeMessages: [FaeMessage] = [] // data source of collectionView
     var resultRealmMessages: Results<RealmMessage>!
     var notificationToken: NotificationToken?
     let intNumberOfMessagesOneTime = 15
@@ -92,7 +91,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addObservers()
+        //addObservers()
         
         if boolGoToFullContent {
             scrollToBottom(false)
@@ -104,9 +103,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addObservers()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playingAudio?.finishPlaying()
+        removeObservers()
+        floatContentOffsetY = collectionView.contentOffset.y
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -130,7 +136,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
         if collectionView != nil {
-            collectionView.reloadData()
+            //collectionView.reloadData()
         }
     }
     
@@ -285,6 +291,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     private func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         inputToolbar.contentView.textView.removeObserver(self, forKeyPath: "text", context: nil)
     }
     
@@ -645,7 +656,6 @@ extension ChatViewController {
                 }
             }
             if scrollViewCurrentOffset < 1 && !boolLoadingPreviousMessages {
-                //loadPreviousMessages()
                 loadPrevMessagesFromRealm()
             }
         }
