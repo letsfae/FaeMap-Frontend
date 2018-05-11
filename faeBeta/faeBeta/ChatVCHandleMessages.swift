@@ -24,19 +24,18 @@ extension ChatViewController {
                 if messageRealm.index < 0 {
                     continue
                 }
-                let messageJSQ = JSQMessageMaker.create(from: messageRealm) { [weak self] in
+                let messageFae = FaeMessageMaker.create(from: messageRealm) { [weak self] in
                     guard let `self` = self else { return }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         if messageRealm.type == "[Video]" {
-                            let faeMessage = self.arrJSQMessages.filter({ $0.messageId == messageRealm.primary_key })
-                            if let index = self.arrJSQMessages.index(of: faeMessage[0]) {
+                            let faeMessage = self.arrFaeMessages.filter({ $0.messageId == messageRealm.primary_key })
+                            if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
                                 self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                             }
                         }
                     }
                 }
-                arrJSQMessages.append(messageJSQ)
-                arrRealmMessages.append(messageRealm)
+                arrFaeMessages.append(messageFae)
                 realm.beginWrite()
                 resultRealmMessages[i].unread_count = 0
                 try! realm.commitWrite()
@@ -61,19 +60,18 @@ extension ChatViewController {
                     if let user = insertMessage.sender, user.id == "\(Key.shared.user_id)" {
                         break
                     }
-                    let messageJSQ = JSQMessageMaker.create(from: insertMessage) { [weak self] in
+                    let messageFae = FaeMessageMaker.create(from: insertMessage) { [weak self] in
                         guard let `self` = self else { return }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             if insertMessage.type == "[Video]" {
-                                let faeMessage = self.arrJSQMessages.filter({ $0.messageId == insertMessage.primary_key })
-                                if let index = self.arrJSQMessages.index(of: faeMessage[0]) {
-                                    self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+                                let faeMessage = self.arrFaeMessages.filter({ $0.messageId == insertMessage.primary_key })
+                                if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
+                                    collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                                 }
                             }
                         }
                     }
-                    self.arrJSQMessages.append(messageJSQ)
-                    self.arrRealmMessages.append(insertMessage)
+                    self.arrFaeMessages.append(messageFae)
                     self.finishReceivingMessage(animated: false)
                     if let user = insertMessage.sender, user.id != "\(Key.shared.user_id)" {
                         realm.beginWrite()
@@ -83,7 +81,11 @@ extension ChatViewController {
                 }
                 if modifications.count > 0 {
                     for item in modifications {
-                        collectionView.reloadItems(at: [IndexPath(item: item, section: 0)])
+                        let message = self.resultRealmMessages[item]
+                        let faeMessage = self.arrFaeMessages.filter({ $0.messageId == message.primary_key })
+                        if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
+                            self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
+                        }
                     }
                 }
             case .error:
@@ -95,8 +97,8 @@ extension ChatViewController {
     func loadPrevMessagesFromRealm() {
         boolLoadingPreviousMessages = true
         let countAll = resultRealmMessages.count
-        if countAll > arrRealmMessages.count {
-            let intEndIndex = countAll - arrRealmMessages.count
+        if countAll > arrFaeMessages.count {
+            let intEndIndex = countAll - arrFaeMessages.count
             let intStartIndex = intEndIndex - intNumberOfMessagesOneTime
             for i in (intStartIndex..<intEndIndex).reversed() {
                 if i < 0 {
@@ -106,19 +108,18 @@ extension ChatViewController {
                     if messageRealm.index < 0 {
                         continue
                     }
-                    let messageJSQ = JSQMessageMaker.create(from: messageRealm) { [weak self] in
+                    let messageFae = FaeMessageMaker.create(from: messageRealm) { [weak self] in
                         guard let `self` = self else { return }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             if messageRealm.type == "[Video]" {
-                                let faeMessage = self.arrJSQMessages.filter({ $0.messageId == messageRealm.primary_key })
-                                if let index = self.arrJSQMessages.index(of: faeMessage[0]) {
+                                let faeMessage = self.arrFaeMessages.filter({ $0.messageId == messageRealm.primary_key })
+                                if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
                                     self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                                 }
                             }
                         }
                     }
-                    arrJSQMessages.insert(messageJSQ, at: 0)
-                    arrRealmMessages.insert(messageRealm, at: 0)
+                    arrFaeMessages.insert(messageFae, at: 0)
                 }
             }
             let oldOffset = collectionView.contentSize.height - collectionView.contentOffset.y
@@ -155,12 +156,12 @@ extension ChatViewController {
         if media != nil {
             newMessage.media = media! as NSData
             completeStoring(newMessage)
-            showSentMessageInView(newMessage, faePHAsset: faePHAsset)
+            showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
         } else if faePHAsset == nil {
             completeStoring(newMessage)
-            showSentMessageInView(newMessage, faePHAsset: faePHAsset)
+            showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
         } else {
-            showSentMessageInView(newMessage, faePHAsset: faePHAsset)
+            showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
             guard let phAsset = faePHAsset else { return }
             fetchOriginData(phAsset) { [weak self] (data, url) in
                 guard let `self` = self else { return }
@@ -212,19 +213,18 @@ extension ChatViewController {
         }
     }
     
-    private func showSentMessageInView(_ message: RealmMessage, faePHAsset: FaePHAsset? = nil) {
-        let messageJSQ = JSQMessageMaker.create(from: message, faePHAsset: faePHAsset)
-        arrJSQMessages.append(messageJSQ)
+    private func showOutgoingMessageInView(_ message: RealmMessage, faePHAsset: FaePHAsset? = nil) {
+        let faeMessage = FaeMessageMaker.create(from: message, faePHAsset: faePHAsset)
+        arrFaeMessages.append(faeMessage)
         if message.type == "text" {
             finishSendingMessage()
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)
         }
-        //arrRealmMessages.append(message)
     }
     
     private func updateFaeMessageMedia(_ message: RealmMessage, media: Data?, url: URL? = nil) {
-        let faeMessage = arrJSQMessages.filter({ $0.messageId == message.primary_key })
+        let faeMessage = arrFaeMessages.filter({ $0.messageId == message.primary_key })
         guard let data = media, faeMessage.count == 1 else { return }
         switch message.type {
         case "[Picture]", "[Gif]":
@@ -242,7 +242,7 @@ extension ChatViewController {
             }
         default: break
         }
-        if let index = arrJSQMessages.index(of: faeMessage[0]) {
+        if let index = arrFaeMessages.index(of: faeMessage[0]) {
             collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
         }
     }

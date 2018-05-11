@@ -90,8 +90,16 @@
         UIImage *playIcon = [UIImage imageNamed:@"videoPlayButtonIcon"];
         
         UIImageView *imageView ;
-        if(self.snapImage != nil){
-            //UIGraphicsBeginImageContext(size);
+        imageView = [[UIImageView alloc] initWithImage:playIcon];
+        if (self.snapImage != nil) {
+            UIImageView *snapImageView = [[UIImageView alloc] initWithImage:self.snapImage];
+            snapImageView.frame = CGRectMake(0.0f, 0.0f, size.width, size.height);
+            snapImageView.contentMode = UIViewContentModeCenter;
+            snapImageView.clipsToBounds = YES;
+            [JSQMessagesMediaViewBubbleImageMaskerCustom applyBubbleImageMaskToMediaView:snapImageView isOutgoing:self.appliesMediaViewMaskAsOutgoing];
+            [imageView addSubview:snapImageView];
+            
+            /*//UIGraphicsBeginImageContext(size);
             UIGraphicsBeginImageContextWithOptions(size, false, 20);
             [self.snapImage drawInRect:CGRectMake(0,0,size.width, size.height)];
             [playIcon drawInRect:CGRectMake(size.width / 2 - playIcon.size.width / 2, size.height / 2 - playIcon.size.height / 2 - 5,playIcon.size.width,playIcon.size.height)];
@@ -100,10 +108,10 @@
             
             UIGraphicsEndImageContext();
             imageView = [[UIImageView alloc] initWithImage:finalImage];
-            imageView.contentMode = UIViewContentModeScaleAspectFill;
+            imageView.contentMode = UIViewContentModeScaleAspectFill;*/
         }
-        else{
-            imageView = [[UIImageView alloc] initWithImage:playIcon];
+        else {
+            //imageView = [[UIImageView alloc] initWithImage:playIcon];
             imageView.backgroundColor = [UIColor blackColor];
         }
 

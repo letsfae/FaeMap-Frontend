@@ -12,14 +12,17 @@ import RealmSwift
 
 class FaeMessage: JSQMessage {
     var messageId: String
+    var messageType: String
     
-    init(senderId: String, senderDisplayName: String, date: Date, messageId: String, text: String) {
+    init(senderId: String, senderDisplayName: String, date: Date, messageId: String, messageType: String, text: String) {
         self.messageId = messageId
+        self.messageType = messageType
         super.init(senderId: senderId, senderDisplayName: senderDisplayName, date: date, text: text)
     }
     
-    init(senderId: String, senderDisplayName: String, date: Date, messageId: String, media: JSQMessageMediaData?) {
+    init(senderId: String, senderDisplayName: String, date: Date, messageId: String, messageType: String, media: JSQMessageMediaData?) {
         self.messageId = messageId
+        self.messageType = messageType
         super.init(senderId: senderId, senderDisplayName: senderDisplayName, date: date, media: media)
     }
     
@@ -29,12 +32,13 @@ class FaeMessage: JSQMessage {
     
 }
 
-class JSQMessageMaker {
+class FaeMessageMaker {
     // MARK: - properties
     private static var senderName: String = ""
     private static var senderId: String = ""
     private static var createdAt: Date = Date()
     private static var messageId: String = ""
+    private static var messageType: String = ""
     
     // MARK: - Create FaeMessage
     static func create(from realmMessage: RealmMessage, faePHAsset: FaePHAsset? = nil, complete: (() -> Void)? = nil) -> FaeMessage {
@@ -43,6 +47,7 @@ class JSQMessageMaker {
         senderId = (realmMessage.sender?.id)!
         createdAt = RealmChat.dateConverter(str: realmMessage.created_at)
         messageId = realmMessage.primary_key
+        messageType = realmMessage.type
         switch realmMessage.type {
         case "text":
             message = textJSQMessage(realmMessage)
@@ -72,7 +77,7 @@ class JSQMessageMaker {
     
     // MARK: - Helper methods for different types
     private static func textJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, text: realmMessage.text)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, text: realmMessage.text)
     }
     
     private static func pictureJSQMessage(_ realmMessage: RealmMessage, faePHAsset: FaePHAsset? = nil) -> FaeMessage {
@@ -90,7 +95,7 @@ class JSQMessageMaker {
         
         mediaItem?.appliesMediaViewMaskAsOutgoing = isOutgoingMessage(senderId)
         
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func videoJSQMessage(_ realmMessage: RealmMessage, faePHAsset: FaePHAsset? = nil, complete: (() -> Void)? = nil) -> FaeMessage {
@@ -102,8 +107,8 @@ class JSQMessageMaker {
         let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(string: ""), snapImage: snapImage, duration: Int32(Double(duration)!), isReadyToPlay: false)
         mediaItem?.appliesMediaViewMaskAsOutgoing = isOutgoingMessage(senderId)
         if faePHAsset != nil {
-            mediaItem?.snapImage = faePHAsset?.thumbnailImage?.crop(to: CGSize(width: 244, height: 94)) ?? UIImage()
-            return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+            mediaItem?.snapImage = faePHAsset?.thumbnailImage ?? UIImage()
+            return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
         }
         var writeURL: URL? = nil
         if #available(iOS 10.0, *) {
@@ -113,31 +118,40 @@ class JSQMessageMaker {
         }
         
         func writeDataToDisk(complete: @escaping (() -> Void)) {
-            do {
-                try realmMessage.media?.write(to: writeURL!, options: [.atomic])
-            } catch {
-                // fail to write to document folder
-                // local disk is full
+            let msgKey = realmMessage.primary_key
+            DispatchQueue.global(qos: .background).async {
+                do {
+                    let realm = try! Realm()
+                    if let message = realm.filterMessage(msgKey) {
+                        try message.media?.write(to: writeURL!, options: [.atomic])
+                    }
+                } catch {
+                    // fail to write to document folder
+                    // local disk is full
+                }
+                complete()
             }
-            complete()
         }
         
         func captureSnapImage(complete: @escaping (() -> Void)) {
-            let asset = AVURLAsset(url: writeURL!)
-            do {
-                let imgRef = try AVAssetImageGenerator(asset: asset).copyCGImage(at: CMTime(seconds: 0.0, preferredTimescale: 1), actualTime: nil)
-                snapImage = UIImage(cgImage: imgRef)
-            } catch {
-                // fail to get snap image
+            let generator = AVAssetImageGenerator(asset: AVURLAsset(url: writeURL!))
+            var times = [NSValue]()
+            times.append(NSValue(time: CMTime(seconds: 0.0, preferredTimescale: 1)))
+            generator.generateCGImagesAsynchronously(forTimes: times) { (requestedTime, cgImage, actualTime, result, error) in
+                if result == .succeeded, let img = cgImage {
+                    snapImage = UIImage(cgImage: img)
+                    complete()
+                } else {
+                    // TODO: handle error
+                }
             }
-            complete()
         }
         
         if !FileManager.default.fileExists(atPath: writeURL!.absoluteString) {
             writeDataToDisk {
                 mediaItem?.fileURL = writeURL!
                 captureSnapImage() {
-                    mediaItem?.snapImage = snapImage.crop(to: CGSize(width: 244, height: 94))
+                    mediaItem?.snapImage = snapImage
                     mediaItem?.isReadyToPlay = true
                     complete?()
                 }
@@ -145,13 +159,13 @@ class JSQMessageMaker {
         } else {
             mediaItem?.fileURL = writeURL!
             captureSnapImage() {
-                mediaItem?.snapImage = snapImage.crop(to: CGSize(width: 244, height: 94))
+                mediaItem?.snapImage = snapImage
                 mediaItem?.isReadyToPlay = true
                 complete?()
             }
         }
         
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func audioJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
@@ -173,7 +187,7 @@ class JSQMessageMaker {
         
         //mediaItem.audioData = realmMessage.media! as Data
         let mediaItem = JSQAudioMediaItemCustom(data: realmMessage.media! as Data, audioViewAttributes: attribute)
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func stickerJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
@@ -186,7 +200,7 @@ class JSQMessageMaker {
             mediaItem?.sizeCustomize = CGSize(width: 61, height: 50)
         }
         mediaItem?.appliesMediaViewMaskAsOutgoing = isOutgoingMessage(senderId)
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func locationJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
@@ -210,7 +224,7 @@ class JSQMessageMaker {
         mediaItem.address2 = jsonLoc["address2"].stringValue.trimmingCharacters(in: .whitespaces)
         mediaItem.address3 = jsonLoc["address3"].stringValue.trimmingCharacters(in: .whitespaces)
         mediaItem.appliesMediaViewMaskAsOutgoing = isOutgoingMessage(senderId)
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func placeJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
@@ -224,7 +238,7 @@ class JSQMessageMaker {
         let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonPlace["id"].intValue, type: "place", snapImage: snapImage, text: jsonPlace["comment"].stringValue)
         mediaItem?.title = jsonPlace["name"].stringValue
         mediaItem?.subtitle = jsonPlace["address"].stringValue
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func collectionJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
@@ -235,7 +249,7 @@ class JSQMessageMaker {
         let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonCollection["id"].intValue, type: "collection", snapImage: snapImage, text: jsonCollection["comment"].stringValue)
         mediaItem?.title = jsonCollection["name"].stringValue
         mediaItem?.subtitle = jsonCollection["count"].stringValue + " items"
-        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, media: mediaItem)
+        return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
     }
     
     private static func isOutgoingMessage(_ senderId : String) -> Bool {
