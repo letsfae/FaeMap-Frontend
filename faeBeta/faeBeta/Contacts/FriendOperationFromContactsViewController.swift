@@ -222,8 +222,6 @@ class FriendOperationFromContactsViewController: UIViewController {
             faeContact.acceptFriendRequest(friendId: String(userId)) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
-                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -232,6 +230,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "accept friend request")
+                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -267,7 +266,6 @@ class FriendOperationFromContactsViewController: UIViewController {
             faeContact.ignoreFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
-                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -276,6 +274,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "ignore friend request")
+                    self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -323,7 +322,6 @@ class FriendOperationFromContactsViewController: UIViewController {
                 faeContact.withdrawFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
-                        self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                         let realm = try! Realm()
                         if let user = realm.filterUser(id: self.userId) {
                             try! realm.write {
@@ -332,6 +330,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                             }
                         }
                         FaeChat.sendContactMessage(to: self.userId, with: "withdraw friend request")
+                        self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
@@ -377,7 +376,6 @@ class FriendOperationFromContactsViewController: UIViewController {
                 faeContact.blockPerson(userId: String(userId)) {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "The user has been \nblocked successfully!"
-                        self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                         let realm = try! Realm()
                         if let user = realm.filterUser(id: self.userId) {
                             try! realm.write {
@@ -390,6 +388,7 @@ class FriendOperationFromContactsViewController: UIViewController {
                             }
                         }
                         FaeChat.sendContactMessage(to: self.userId, with: "block")
+                        self.delegate?.passFriendStatusBack(indexPath: self.indexPath)
                     } else if status == 500 {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
