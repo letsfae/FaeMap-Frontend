@@ -53,10 +53,11 @@ struct FaePHAsset {
         get {
             guard let phAsset = self.phAsset else { return nil }
             let options = PHImageRequestOptions()
-            options.isSynchronous = false
+            options.isSynchronous = true
             options.deliveryMode = .opportunistic
             options.isNetworkAccessAllowed = true
-            let targetSize = CGSize(width: 244, height: 94)
+            let scale = min(UIScreen.main.scale, 2)
+            let targetSize = CGSize(width: 244, height: 244)
             var img: UIImage? = nil
             _ = PHImageManager().requestImage(for: phAsset, targetSize: targetSize, contentMode: .aspectFill, options: options) { (image, info) in
                 if let image = image {

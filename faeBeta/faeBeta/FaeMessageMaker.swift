@@ -83,7 +83,7 @@ class FaeMessageMaker {
     private static func pictureJSQMessage(_ realmMessage: RealmMessage, faePHAsset: FaePHAsset? = nil) -> FaeMessage {
         var imgMedia: UIImage!
         if faePHAsset != nil {
-            imgMedia = faePHAsset?.thumbnailImage
+            imgMedia = faePHAsset?.thumbnailImage 
         } else {
             if realmMessage.type == "[Gif]" {
                 imgMedia = UIImage.gif(data: realmMessage.media! as Data)
