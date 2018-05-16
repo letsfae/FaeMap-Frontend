@@ -26,7 +26,7 @@ protocol LocDetailDelegate: class {
 }
 
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
-    
+    // MARK: - Properties
     weak var delegate: MapSearchDelegate?
     weak var featureDelegate: PlaceDetailDelegate?
     weak var locationDelegate: LocDetailDelegate?
@@ -79,6 +79,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     var enterMode: EnterPlaceLocDetailMode!
     var boolCreated: Bool = false
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -123,7 +124,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
                 self.uiviewAfterAdded.hide()
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.3) {
-                self.uiviewAfterAdded.lblSaved.text = "Collocted to List!"
+                self.uiviewAfterAdded.lblSaved.text = "Collected to List!"
                 self.uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 150, height: 25)
                 self.uiviewAfterAdded.btnUndo.isHidden = false
                 self.uiviewAfterAdded.btnSeeList.isHidden = false
@@ -204,7 +205,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         return nil
     }
     
-    func loadMap() {
+    // MARK: - Loading parts
+    fileprivate func loadMap() {
         mapView = MKMapView()
         if screenHeight == 812 {
             mapView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 352 + 60 + device_offset_top * 2)
@@ -232,55 +234,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    @objc func handleMapTap() {
-        hideAddCollectionView()
-        
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        locationDelegate = Key.shared.FMVCtrler
-        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
-    }
-    
-    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
-        faeMap.whereKey("geo_latitude", value: "\(lat)")
-        faeMap.whereKey("geo_longitude", value: "\(long)")
-        faeMap.whereKey("radius", value: "\(radius)")
-        faeMap.whereKey("type", value: "place")
-        faeMap.whereKey("max_count", value: "1000")
-        faeMap.getMapInformation { (status: Int, message: Any?) in
-            var arrPlaces = [PlacePin]()
-            arrPlaces.removeAll()
-            if status / 100 == 2 {
-                let json = JSON(message!)
-                guard let placeJson = json.array else {
-                    return
-                }
-                for pl in placeJson {
-                    let placePin = PlacePin(json: pl)
-                    arrPlaces.append(placePin)
-                }
-            } else {
-                //print("Get Related Places Fail \(status) \(message!)")
-            }
-            completion(arrPlaces)
-        }
-    }
-    
-    func loadHeader() {
+    fileprivate func loadHeader() {
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
     
-    func loadFooter() {
+    fileprivate func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
@@ -320,27 +280,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         loadAddtoCollection()
     }
     
-    @objc func showSavedNoti(_ sender: Notification) {
-        if let id = sender.object as? Int {
-            self.locationId = id
-        }
-        savedNotiAnimation()
-    }
-    
-    func savedNotiAnimation() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
-            self.imgSaved.alpha = 1
-        }, completion: nil)
-    }
-    
-    func hideSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
-            self.imgSaved.alpha = 0
-        }, completion: nil)
-    }
-    
     fileprivate func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
@@ -352,6 +291,31 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         view.addSubview(uiviewAfterAdded)
         
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
+    }
+    
+    // MARK: - Button, Gesture, NotificationCenter actions
+    @objc func handleMapTap() {
+        hideAddCollectionView()
+        
+        var arrCtrlers = navigationController?.viewControllers
+        if let ctrler = Key.shared.FMVCtrler {
+            ctrler.arrCtrlers = arrCtrlers!
+            ctrler.boolFromMap = false
+        }
+        while !(arrCtrlers?.last is InitialPageController) {
+            arrCtrlers?.removeLast()
+        }
+        locationDelegate = Key.shared.FMVCtrler
+        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
+        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+    }
+    
+    @objc func showSavedNoti(_ sender: Notification) {
+        if let id = sender.object as? Int {
+            self.locationId = id
+        }
+        savedNotiAnimation()
     }
     
     @objc func backToMapBoard(_ sender: UIButton) {
@@ -412,7 +376,22 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.hide()
     }
     
-    // SeeAllPlacesDelegate
+    // MARK: - Animations
+    func savedNotiAnimation() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+    
+    // MARK: - SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
@@ -426,15 +405,14 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // AddPinToCollectionDelegate
+    // MARK: - AddPinToCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .location
         present(vc, animated: true)
     }
-    // AddPlintoCollectionDelegate End
     
-    // AfterAddedToListDelegate
+    // MARK: - AfterAddedToListDelegate
     func seeList() {
         // TODO VICKY
         uiviewAfterAdded.hide()
@@ -446,7 +424,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcList, animated: true)
     }
     
-    // AfterAddedToListDelegate
     func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()

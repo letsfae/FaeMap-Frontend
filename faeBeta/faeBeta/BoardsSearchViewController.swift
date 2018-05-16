@@ -411,7 +411,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("size", value: "20")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])

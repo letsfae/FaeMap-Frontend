@@ -9,9 +9,7 @@
 import UIKit
 
 class PlaceViewMapController: BasicMapController {
-    
-    
-    
+  
     override func viewDidLoad() {
         super.viewDidLoad()
         fullyLoaded = false

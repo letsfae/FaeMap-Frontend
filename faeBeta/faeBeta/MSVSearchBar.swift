@@ -79,7 +79,7 @@ extension MapSearchViewController {
         }
     }
     
-    // FaeSearchBarTestDelegate
+    // MARK: - FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         if searchBar == schPlaceBar {   // search places
             schLocationBar.btnClose.isHidden = true
@@ -119,7 +119,6 @@ extension MapSearchViewController {
         }
     }
     
-    // FaeSearchBarTestDelegate
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
         if searchBar == schLocationBar {
             cellStatus = 1
@@ -135,7 +134,6 @@ extension MapSearchViewController {
         }
     }
     
-    // FaeSearchBarTestDelegate
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
         if searchBar == schPlaceBar {
             searchBar.txtSchField.resignFirstResponder()
@@ -157,7 +155,6 @@ extension MapSearchViewController {
         }
     }
     
-    // FaeSearchBarTestDelegate
     func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
         searchBar.txtSchField.becomeFirstResponder()
     }
