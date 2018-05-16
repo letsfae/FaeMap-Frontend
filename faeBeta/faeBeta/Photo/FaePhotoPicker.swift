@@ -348,6 +348,9 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                     cell.boolIsSelected = true
                     cell.intSelectedOrder = asset.selectedOrder
                 }
+                if !boolFullPicker {
+                    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                }
             }
             selectHandler?(selectedAssets.count)
         }
