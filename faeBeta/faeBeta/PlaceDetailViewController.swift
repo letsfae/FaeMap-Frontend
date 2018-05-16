@@ -20,7 +20,7 @@ enum EnterPlaceLocDetailMode {
 }
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
-    
+    // MARK: - Properties
     weak var delegate: MapSearchDelegate?
     weak var featureDelegate: PlaceDetailDelegate?
     
@@ -59,6 +59,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var boolShared: Bool = false
     var enterMode: EnterPlaceLocDetailMode!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -107,7 +108,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 self.uiviewAfterAdded.hide()
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.3) {
-                self.uiviewAfterAdded.lblSaved.text = "Collocted to List!"
+                self.uiviewAfterAdded.lblSaved.text = "Collected to List!"
                 self.uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 150, height: 25)
                 self.uiviewAfterAdded.btnUndo.isHidden = false
                 self.uiviewAfterAdded.btnSeeList.isHidden = false
@@ -130,7 +131,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         UIApplication.shared.statusBarStyle = .default
     }
     
-    func initPlaceRelatedData() {
+    fileprivate func initPlaceRelatedData() {
         uiviewSubHeader.setValue(place: place)
         uiviewFixedHeader.setValue(place: place)
         tblPlaceDetail.reloadData()
@@ -143,7 +144,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func setCellCount() {
+    fileprivate func setCellCount() {
         guard place != nil else { return }
         intHaveHour = place.hours.count > 0 ? 1 : 0
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
@@ -230,7 +231,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func loadHeader() {
+    // MARK: - Loading parts
+    fileprivate func loadHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top - 27 + txtHeight))
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101 - 27 + txtHeight))
@@ -241,7 +243,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSubHeader.setValue(place: place)
     }
     
-    func loadFixedHeader() {
+    fileprivate func loadFixedHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
         uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101-27+txtHeight))
         if screenHeight == 812 { uiviewFixedHeader.frame.origin.y = 30 }
@@ -258,7 +260,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewWhite.alpha = 0
     }
     
-    func loadMidTable() {
+    fileprivate func loadMidTable() {
         tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49 - device_offset_bot), style: .plain)
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
@@ -292,7 +294,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewScrollingPhotos.loadImages(place: place)
     }
     
-    func loadFooter() {
+    fileprivate func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
@@ -332,20 +334,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         loadAddtoCollection()
     }
     
-    @objc func showSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
-            self.imgSaved.alpha = 1
-        }, completion: nil)
-    }
-    
-    @objc func hideSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
-            self.imgSaved.alpha = 0
-        }, completion: nil)
-    }
-    
     fileprivate func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
@@ -361,6 +349,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     var boolAnimateTo_1 = true
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if uiviewScrollingPhotos != nil {
             var frame = uiviewScrollingPhotos.frame
@@ -402,6 +391,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        hideAddCollectionView()
+    }
+    
+    // MARK: - Button & NotificationCenter actions
     @objc func backToMapBoard(_ sender: UIButton) {
         let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
         if mbIsOn {
@@ -458,6 +452,20 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         navigationController?.pushViewController(vcShareCollection, animated: true)
     }
     
+    @objc func showSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    @objc func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+    
     func showAddCollectionView() {
         uiviewSavedList.show()
     }
@@ -466,11 +474,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.hide()
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        hideAddCollectionView()
-    }
-    
-    // SeeAllPlacesDelegate
+    // MARK: - SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
@@ -484,14 +488,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // AddPintoCollectionDelegate
+    // MARK: - AddPintoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
         present(vc, animated: true)
     }
     
-    // AfterAddedToListDelegate
+    // MARK: - AfterAddedToListDelegate
     func seeList() {
         // TODO VICKY
         uiviewAfterAdded.hide()
@@ -503,7 +507,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         navigationController?.pushViewController(vcList, animated: true)
     }
     
-    // AfterAddedToListDelegate
     func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()

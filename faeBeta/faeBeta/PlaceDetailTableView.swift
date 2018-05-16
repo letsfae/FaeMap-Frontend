@@ -9,12 +9,7 @@
 import UIKit
 
 extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate, PlaceDetailMapCellDelegate {
-    
-    // MARK: - UIScrollViewDelegate
-    
-    
     // MARK: - UITableViewDelegate & Datasource
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return intCellCount
     }

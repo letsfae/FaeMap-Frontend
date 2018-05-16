@@ -39,7 +39,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         })
     }
     
-    // MKLocalSearchCompleterDelegate
+    // Mark: - MKLocalSearchCompleterDelegate
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         searchResults = completer.results
         filteredLocations = searchResults.map({ $0.title })
@@ -47,7 +47,6 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         showOrHideViews(searchText: completer.queryFragment)
     }
     
-    // MKLocalSearchCompleterDelegate
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // handle error
     }

@@ -6,8 +6,6 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 import SwiftyJSON
-import MapKit
-
 import GooglePlaces
 
 @objc protocol MapSearchDelegate: class {
@@ -18,7 +16,7 @@ import GooglePlaces
 }
 
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
-    
+    // MARK: - Properties
     var categories: [String: Int] = ["Concert Hall": 25, "Arcade": 26, "Museum": 27, "Art Museum": 34, "Science Museum": 86, "Performing Arts Venue": 28, "Indie Theater": 28, "Theater": 28, "Music Venue": 68, "Art Gallery": 34, "Baseball Stadium": 60, "Rock Club": 80, "Bars": 14, "Wine Bar": 2, "Sake Bar": 79, "Dive Bar": 14, "Sports Bar": 14, "Beer Bar": 14, "Gastropub": 14, "Irish Pub": 14, "Hookah Bar": 85, "Whisky Bar": 14, "Cocktail Bar": 14, "Hotel Bar": 14, "Beer Garden": 20, "Speakeasy": 14, "Restaurant": 5, "Italian Restaurant": 3, "French Restaurant": 5, "Korean Restaurant": 5, "Seafood Restaurant": 24, "Middle Eastern Restaurant": 5, "Japanese Restaurant": 10, "Sushi Restaurant": 10, "Southern / Soul Food Restaurant": 5, "Filipino Restaurant": 5, "Kosher Restaurant": 5, "South American Restaurant": 5, "Vegetarian / Vegan Restaurant": 78, "Halal Restaurant": 5, "Caribbean Restaurant": 5, "New American Restaurant": 5, "Peruvian Restaurant": 5, "Cajun / Creole Restaurant": 5, "Asian Restaurant": 5, "Chinese Restaurant": 48, "Falafel Restaurant": 5, "Ethiopian Restaurant": 5, "Latin American Restaurant": 5, "Mexican Restaurant": 5, "Thai Restaurant": 5, "Fast Food": 69, "Mediterranean Restaurant": 5, "Indonesian Restaurant": 5, "Vietnamese Restaurant": 5, "Ramen": 45, "American Restaurant": 5, "Hawaiian Restaurant": 5, "Brewery": 77, "Sandwich Place": 55, "Food Court": 5, "Snack Place": 5, "Burrito Place": 71, "Steakhouse": 36, "Buffet": 5, "Bagel Shop": 12, "Hot Dog Joint": 17, "Ice Cream Shop": 16, "Bakery": 13, "Salad Place": 74, "Coffee Shop": 19, "Donut Shop": 12, "Street Food Gathering": 39, "Food Truck": 39, "Burger Joint": 40, "Fried Chicken Joint": 89, "Frozen Yogurt Shop": 43, "Noodle House": 45, "Breakfast": 51, "Dessert Shop": 53, "Deli / Bodega": 55, "Dinner": 5, "Pizza Place": 57, "Taco Place": 83, "Juice Bar": 67, "BBQ Joint": 64, "Athletics & Sports": 1, "Gyms / Fitness Center": 6, "Gyms": 6, "Climbing Gym": 6, "Cycle Studio": 31, "Pilates Studio": 88, "Gymnastics Gym": 6, "Pool": 11, "Martial Arts Dojo": 72, "Soccer Field": 61, "Playground": 73, "Skate Park": 8, "Theme Park": 18, "Parks": 30, "Scenic Lookout": 32, "Plaza": 76, "Canal": 37, "Trail": 42, "Lake": 84, "Beach": 54, "Garden": 56, "Outdoor Sculpture": 87, "Shopping": 4, "Shoppint Mall": 4, "Bookstore": 9, "Jewelry Store": 15, "Flower Shop": 52, "Women's Store": 91, "Leather Goods Store": 4, "Accessories Store": 4, "Clothing Store": 75, "Gourmet Shop": 5, "Music Store": 68, "Organic Grocery": 7, "Spa": 23, "Beer Store": 20, "Grocery Store": 21, "Pharmacy": 29, "Cosmetics Shop": 46, "Convenience Store": 33, "Candy Store": 35, "Moving Target": 39, "Farmers Market": 7, "Liquor Store": 82, "Pet Store": 38, "Wine Shop": 2, "Furniture / Home Store": 70, "Sporting Goods Shop": 47, "Smoke Shop": 49, "Business Service": 44, "Supermarket": 21, "Massage Studio": 23, "Antique Shop": 33, "Market": 33, "Construction & Landscaping": 65, "Paper / Office Supplies Store": 81, "Arts & Crafts Store": 59, "Photography Studio": 66, "Gift Shop": 63, "Health & Beauty Service": 50, "Hotels": 41, "Metro Station": 90, "Light Rail Station": 90, "Airport": 58, "Rental Car Location": 62, "College Classroom": 22, "College Bookstore": 9, "Building": 65, "Library": 9]
     var filteredCategory = [(key: String, value: Int)]()
     
@@ -68,6 +66,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     var boolFromChat: Bool = false
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         //navigationController?.isNavigationBarHidden = true
@@ -110,7 +109,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     // shows "no results"
-    func loadNoResultsView() {
+    fileprivate func loadNoResultsView() {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         uiviewNoResults.layer.cornerRadius = 2
@@ -132,7 +131,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         addShadow(uiviewNoResults)
     }
     
-    func loadSearchBar() {
+    fileprivate func loadSearchBar() {
         uiviewSearch = UIView()
         view.addSubview(uiviewSearch)
         uiviewSearch.backgroundColor = .white
@@ -173,52 +172,13 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     // load six buttons
-    func loadPlaceBtns() {
+    fileprivate func loadPlaceBtns() {
         uiviewPics = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 214))
         uiviewPics.backgroundColor = .white
         view.addSubview(uiviewPics)
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
-        
-        
-        /**
-        for _ in 0..<6 {
-            btnPlaces.append(UIButton(frame: CGRect(x: 52 + 29, y: 20 + 29, width: 0, height: 0)))
-            lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
-        }
-        
-        for i in 0..<6 {
-            self.btnPlaces[i].alpha = 0
-            if i >= 3 {
-                btnPlaces[i].frame.origin.y = 117 + 29
-            }
-            if i == 1 || i == 4 {
-                btnPlaces[i].frame.origin.x = (screenWidth - 16 - 58) / 2 + 29
-            } else if i == 2 || i == 5 {
-                btnPlaces[i].frame.origin.x = screenWidth - 126 + 29
-            }
-            
-            lblPlaces[i].center = CGPoint(x: btnPlaces[i].center.x, y: btnPlaces[i].center.y)
-            lblPlaces[i].alpha = 0
-            
-            uiviewPics.addSubview(btnPlaces[i])
-            uiviewPics.addSubview(lblPlaces[i])
-            
-            btnPlaces[i].layer.borderColor = UIColor._225225225().cgColor
-            btnPlaces[i].layer.borderWidth = 2
-            btnPlaces[i].layer.cornerRadius = 8.0
-            btnPlaces[i].contentMode = .scaleAspectFit
-            btnPlaces[i].layer.masksToBounds = true
-            btnPlaces[i].setImage(imgPlaces[i], for: .normal)
-            btnPlaces[i].tag = i
-            btnPlaces[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
-            
-            lblPlaces[i].text = arrPlaceNames[i]
-            lblPlaces[i].textAlignment = .center
-            lblPlaces[i].textColor = UIColor._138138138()
-            lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
-        }
-         */
+
         for _ in 0..<6 {
             btnPlaces.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
             lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
@@ -255,7 +215,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         }
     }
     
-    func loadTable() {
+    fileprivate func loadTable() {
         // background view with shadow of table tblPlacesRes
         uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
@@ -290,16 +250,48 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         tblLocationRes.register(LocationListCell.self, forCellReuseIdentifier: "SearchLocation")
     }
     
-    func addShadow(_ uiview: UIView) {
+    fileprivate func addShadow(_ uiview: UIView) {
         uiview.layer.shadowColor = UIColor._898989().cgColor
         uiview.layer.shadowRadius = 2.2
         uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
         uiview.layer.shadowOpacity = 0.6
     }
     
+    // MARK: - Button actions
     @objc func backToMap(_ sender: UIButton) {
 //        delegate?.backToMainMapFromMapSearch()
         navigationController?.popViewController(animated: false)
+    }
+    
+    @objc func searchByCategories(_ sender: UIButton) {
+        // tag = 0 - Restaurant - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
+        // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
+        // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
+        var content = ""
+        switch sender.tag {
+        case 0:
+            content = "Restaurants"
+        case 1:
+            content = "Bars"
+        case 2:
+            content = "Shopping"
+        case 3:
+            content = "Coffee"
+        case 4:
+            content = "Parks"
+        case 5:
+            content = "Hotels"
+        default: break
+        }
+        getPlaceInfo(content: content, source: "categories")
+        
+        if catDict[content] == nil {
+            catDict[content] = 0
+        } else {
+            catDict[content] = catDict[content]! + 1;
+        }
+        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+        //        print(FavCategoryCache.object(forKey: Key.shared.user_id as AnyObject))
     }
     
     func getPlaceInfo(content: String = "", source: String = "name") {
@@ -310,7 +302,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("size", value: "20")
         FaeSearch.shared.whereKey("radius", value: "99999999")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
@@ -339,36 +331,5 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
                 self.navigationController?.popViewController(animated: false)
             }
         }
-    }
-    
-    @objc func searchByCategories(_ sender: UIButton) {
-        // tag = 0 - Restaurant - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
-        // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
-        // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
-        var content = ""
-        switch sender.tag {
-        case 0:
-            content = "Restaurants"
-        case 1:
-            content = "Bars"
-        case 2:
-            content = "Shopping"
-        case 3:
-            content = "Coffee"
-        case 4:
-            content = "Parks"
-        case 5:
-            content = "Hotels"
-        default: break
-        }
-        getPlaceInfo(content: content, source: "categories")
-
-        if catDict[content] == nil {
-            catDict[content] = 0
-        } else {
-            catDict[content] = catDict[content]! + 1;
-        }
-        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
-//        print(FavCategoryCache.object(forKey: Key.shared.user_id as AnyObject))
     }
 }

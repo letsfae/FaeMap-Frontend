@@ -11,7 +11,6 @@ import UIKit
 class InfiniteScrollingView: UIView {
     
     var placePhotos = [UIImage]()
-//    var placePhotos = [#imageLiteral(resourceName: "food_1"), #imageLiteral(resourceName: "food_2"), #imageLiteral(resourceName: "food_3"), #imageLiteral(resourceName: "food_4"), #imageLiteral(resourceName: "food_5"), #imageLiteral(resourceName: "food_6")]
     var imgPic_0: UIImageView!
     var imgPic_1: UIImageView!
     var imgPic_2: UIImageView!
@@ -26,12 +25,12 @@ class InfiniteScrollingView: UIView {
         super.init(frame: frame)
         loadContent()
         
-        if placePhotos.count > 1 {
-            panGesture = UIPanGestureRecognizer()
-            panGesture.maximumNumberOfTouches = 1
-            panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
-            addGestureRecognizer(panGesture)
-        }
+//        if placePhotos.count > 1 {
+//            panGesture = UIPanGestureRecognizer()
+//            panGesture.maximumNumberOfTouches = 1
+//            panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
+//            addGestureRecognizer(panGesture)
+//        }
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToShowImage))
         if panGesture != nil {
@@ -45,13 +44,58 @@ class InfiniteScrollingView: UIView {
     }
     
     func loadImages(place: PlacePin) {
-        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_1)
-        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_0)
-        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_2)
+//        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_1)
+//        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_0)
+//        downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic_2)
+        
+        downloadImageForView(place: place, urls: place.imageURLs) {
+            if self.placePhotos.count != 0 {
+                self.imgPic_0.image = self.placePhotos[self.placePhotos.count - 1]
+                self.imgPic_1.image = self.placePhotos[0]
+                self.imgPic_2.image = self.placePhotos[1 % self.placePhotos.count]
+            }
+            self.boolLeft = self.placePhotos.count > 1
+            self.boolRight = self.placePhotos.count > 1
+        }
     }
     
-    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
-        General.shared.downloadImageForView(place: place, url: url, imgPic: imgPic)
+//    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
+//        General.shared.downloadImageForView(place: place, url: url, imgPic: imgPic)
+//    }
+    
+    
+    func downloadImageForView(place: PlacePin, urls: [String], _ completion: (() -> ())? = nil) {
+        
+        if urls.count != 0 {
+            if urls.count > 1 {
+                panGesture = UIPanGestureRecognizer()
+                panGesture.maximumNumberOfTouches = 1
+                panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
+                addGestureRecognizer(panGesture)
+            }
+            
+//            imgPic.contentMode = .scaleAspectFill
+//            if let placeImgFromCache = placeInfoBarImageCache.object(forKey: url as AnyObject) as? UIImage {
+//                imgPic.image = placeImgFromCache
+//                imgPic.backgroundColor = UIColor._2499090()
+//                completion?()
+//            } else {
+                for url in urls {
+                    downloadImage(URL: url) { (rawData) in
+                        guard let data = rawData else { return }
+                        DispatchQueue.global(qos: .userInitiated).async {
+                            guard let placeImg = UIImage(data: data) else { return }
+                            DispatchQueue.main.async {
+                                self.placePhotos.append(placeImg)
+//                                placeInfoBarImageCache.setObject(placeImg, forKey: url as AnyObject)
+                                completion?()
+                            }
+                        }
+                    }
+                }
+            
+//            }
+        }
     }
     
     func loadContent() {
@@ -65,22 +109,27 @@ class InfiniteScrollingView: UIView {
         imgPic_1.clipsToBounds = true
         imgPic_2.clipsToBounds = true
         imgPic_1.image = #imageLiteral(resourceName: "default_place")
+        imgPic_1.contentMode = .scaleAspectFill
+        imgPic_0.contentMode = .scaleAspectFill
+        imgPic_2.contentMode = .scaleAspectFill
         resetSubviews()
         
         addSubview(imgPic_0)
         addSubview(imgPic_1)
         addSubview(imgPic_2)
-        if placePhotos.count == 0 {
-//            imgPic_0.image = #imageLiteral(resourceName: "food_1")
-//            imgPic_1.image = #imageLiteral(resourceName: "food_1")
-//            imgPic_2.image = #imageLiteral(resourceName: "food_1")
-        } else {
+        
+        
+//        if placePhotos.count == 0 {
+////            imgPic_0.image = #imageLiteral(resourceName: "food_1")
+////            imgPic_1.image = #imageLiteral(resourceName: "food_1")
+////            imgPic_2.image = #imageLiteral(resourceName: "food_1")
+//        } else {
 //            imgPic_0.image = placePhotos[placePhotos.count - 1]
 //            imgPic_1.image = placePhotos[0]
 //            imgPic_2.image = placePhotos[1 % placePhotos.count]
-        }
-        boolLeft = placePhotos.count > 1
-        boolRight = placePhotos.count > 1
+//        }
+//        boolLeft = placePhotos.count > 1
+//        boolRight = placePhotos.count > 1
     }
     
     @objc func tapToShowImage() {
@@ -98,11 +147,13 @@ class InfiniteScrollingView: UIView {
             self.imgPic_0.frame.origin.x = 0
             self.imgPic_1.frame.origin.x += screenWidth
         }, completion: {_ in
-            let image = self.imgPic_2.image
+//            let image = self.imgPic_2.image
             self.imgPic_2.image = self.imgPic_1.image
             self.imgPic_1.image = self.imgPic_0.image
-//            var idx = self.placePhotos.index(of: self.imgPic_0.image!)!
-//            idx = (idx + self.placePhotos.count - 1) % self.placePhotos.count
+            var idx = self.placePhotos.index(of: self.imgPic_0.image!)!
+            idx = (idx + self.placePhotos.count - 1) % self.placePhotos.count
+            
+            let image = self.placePhotos[idx]
             self.imgPic_0.image = image
             self.resetSubviews()
         })
@@ -113,11 +164,13 @@ class InfiniteScrollingView: UIView {
             self.imgPic_1.frame.origin.x = -screenWidth
             self.imgPic_2.frame.origin.x = 0
         }, completion: { _ in
-            let image = self.imgPic_0.image
+//            let image = self.imgPic_0.image
             self.imgPic_0.image = self.imgPic_1.image
             self.imgPic_1.image = self.imgPic_2.image
-//            var idx = self.placePhotos.index(of: self.imgPic_2.image!)!
-//            idx = (idx + self.placePhotos.count + 1) % self.placePhotos.count
+            var idx = self.placePhotos.index(of: self.imgPic_2.image!)!
+            idx = (idx + self.placePhotos.count + 1) % self.placePhotos.count
+            
+            let image = self.placePhotos[idx]
             self.imgPic_2.image = image
             self.resetSubviews()
         })
