@@ -95,7 +95,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Filter Hexagon and Menu
     var btnFilterIcon: FMRefreshIcon! // Filter Button
     var uiviewDropUpMenu: FMDropUpMenu! // 
-    var sizeFrom: CGFloat = 0 // Pan gesture var
+    private var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
     var end: CGFloat = 0 // Pan gesture var
     var percent: Double = 0 // Pan gesture var
