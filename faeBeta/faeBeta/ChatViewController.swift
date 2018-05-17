@@ -41,8 +41,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var intIsGroup: Int = 0
     var arrUserIDs: [String] = []
     var arrRealmUsers: [RealmUser] = []
-    var arrRealmMessages: [RealmMessage] = []
-    var arrJSQMessages: [JSQMessage] = [] // data source of collectionView
+    var arrFaeMessages: [FaeMessage] = [] // data source of collectionView
     var resultRealmMessages: Results<RealmMessage>!
     var notificationToken: NotificationToken?
     let intNumberOfMessagesOneTime = 15
@@ -92,7 +91,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        addObservers()
+        //addObservers()
         
         if boolGoToFullContent {
             scrollToBottom(false)
@@ -104,9 +103,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addObservers()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playingAudio?.finishPlaying()
+        removeObservers()
+        floatContentOffsetY = collectionView.contentOffset.y
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -130,7 +136,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
         collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
         if collectionView != nil {
-            collectionView.reloadData()
+            //collectionView.reloadData()
         }
     }
     
@@ -216,7 +222,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         contentView?.addSubview(btnSend)
         btnSend.isEnabled = false
-        btnSend.addTarget(self, action: #selector(ChatViewController.sendMessageButtonTapped), for: .touchUpInside)
+        btnSend.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
         
         btnSet.append(btnKeyBoard)
         btnSet.append(btnSticker)
@@ -285,6 +291,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     private func removeObservers() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         inputToolbar.contentView.textView.removeObserver(self, forKeyPath: "text", context: nil)
     }
     
@@ -645,7 +656,6 @@ extension ChatViewController {
                 }
             }
             if scrollViewCurrentOffset < 1 && !boolLoadingPreviousMessages {
-                //loadPreviousMessages()
                 loadPrevMessagesFromRealm()
             }
         }
@@ -689,35 +699,10 @@ extension ChatViewController: FaeChatToolBarContentViewDelegate {
             switch faePHAsset.assetType {
             case .photo, .livePhoto:
                 var messageType = ""
-                if faePHAsset.fileFormat() == .gif {
-                    messageType = "[Gif]"
-                } else {
-                    messageType = "[Picture]"
-                }
-                if let data = faePHAsset.fullResolutionImageData {
-                    storeChatMessageToRealm(type: messageType, text: messageType, media: data)
-                } else {
-                    var asset = faePHAsset
-                    asset.state = .ready
-                    _ = asset.cloudImageDownload(progress: { (_) in
-                        if asset.state == .ready {
-                            asset.state = .progress
-                        }
-                    }, completion: { [weak self] (data) in
-                        guard let `self` = self else { return }
-                        asset.state = .complete
-                        DispatchQueue.main.async {
-                            self.storeChatMessageToRealm(type: messageType, text: messageType, media: data)
-                        }
-                    })
-                }
+                messageType = faePHAsset.fileFormat() == .gif ? "[Gif]" : "[Picture]"
+                storeChatMessageToRealm(type: messageType, text: messageType, faePHAsset: faePHAsset)
             case .video:
-                _ = faePHAsset.tempCopyMediaFile(complete: { (url) in
-                    if let data = try? Data(contentsOf: url) {
-                        self.storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", media: data)
-                    }
-                })
-                break
+                storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", faePHAsset: faePHAsset)
             }
         }
     }

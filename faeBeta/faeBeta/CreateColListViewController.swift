@@ -222,8 +222,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
                 if status / 100 == 2 {
                     // store to realm
-                    let realmCol = RealmCollection.filterCollectedPin(collection_id: self.colId)
                     let realm = try! Realm()
+                    let realmCol = realm.filterCollection(id: self.colId)
                     try! realm.write {
                         realmCol?.name = self.txtListName
                         realmCol?.descrip = self.txtListDesp
