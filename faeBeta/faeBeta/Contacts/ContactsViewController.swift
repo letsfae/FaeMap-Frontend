@@ -154,7 +154,9 @@ class ContactsViewController: UIViewController {
                 let realm = try! Realm()
                 for userId in setDeletedSent {
                     if let user = realm.filterUser(id: userId) {
-                        user.relation = NO_RELATION
+                        try! realm.write {
+                            user.relation = NO_RELATION
+                        }
                     }
                 }
             } else if status == 500 {

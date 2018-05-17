@@ -112,6 +112,8 @@ class FaeChatToolBarContentView: UIView {
             faePhotoPicker = FaePhotoPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height), with: configure)
             addSubview(faePhotoPicker)
             
+            faePhotoPicker.selectHandler = observeOnSelectedCount
+            
             btnMoreImage = UIButton(frame: CGRect(x: 10, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
             btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
@@ -120,8 +122,9 @@ class FaeChatToolBarContentView: UIView {
             btnQuickSendImage = UIButton(frame: CGRect(x: frame.width - 52, y: frame.height - 52 - device_offset_bot, width: 42, height: 42))
             btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
             btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
-            btnQuickSendImage.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
+            //btnQuickSendImage.setImage(UIImage(named: "imageQuickSend_disabled"), for: .disabled)
             faePhotoPicker.addSubview(btnQuickSendImage)
+            btnQuickSendImage.isHidden = true
             boolPhotoInitialized = true
         }
         
@@ -283,6 +286,9 @@ extension FaeChatToolBarContentView {
         
         if faePhotoPicker != nil {
             faePhotoPicker.isHidden = true
+            faePhotoPicker.selectedAssets.removeAll()
+            faePhotoPicker.updateSelectedOrder()
+            btnQuickSendImage.isHidden = true
         }
         boolImageQuickPickerShow = false
         
@@ -329,6 +335,11 @@ extension FaeChatToolBarContentView {
         delegate.sendMediaMessage(with: faePhotoPicker.selectedAssets)
         faePhotoPicker.selectedAssets.removeAll()
         faePhotoPicker.updateSelectedOrder()
+        btnQuickSendImage.isHidden = true
+    }
+    
+    private func observeOnSelectedCount(_ count: Int) {
+        btnQuickSendImage.isHidden = (count == 0)
     }
 }
 

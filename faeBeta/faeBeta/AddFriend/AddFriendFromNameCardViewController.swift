@@ -302,8 +302,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     self.statusMode = .accepted
-                    self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -312,6 +310,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "accept friend request")
+                    self.contactsDelegate?.changeContactsTable(action: self.ACCEPT_ACT, userId: self.userId)
                     //print("[FMUserInfo Accept Request Successfully]")
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
@@ -331,8 +330,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     self.statusMode = .defaultMode
-                    self.contactsDelegate?.changeContactsTable(action: self.IGNORE_ACT, userId: self.userId)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -341,6 +338,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "ignore friend request")
+                    self.contactsDelegate?.changeContactsTable(action: self.IGNORE_ACT, userId: self.userId)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -396,8 +394,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Remove Friend \nSuccessfully!"
                     self.statusMode = .defaultMode
-                    self.contactsDelegate?.changeContactsTable(action: self.REMOVE_FRIEND_ACT, userId: self.userId)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -405,6 +401,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "remove friend")
+                    self.contactsDelegate?.changeContactsTable(action: self.REMOVE_FRIEND_ACT, userId: self.userId)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -425,8 +422,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "The user has been \nblocked successfully!"
                     self.statusMode = .blocked
-                    self.contactsDelegate?.changeContactsTable(action: self.BLOCK_ACT, userId: self.userId)
-                    
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -439,6 +434,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "block")
+                    self.contactsDelegate?.changeContactsTable(action: self.BLOCK_ACT, userId: self.userId)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
@@ -459,7 +455,6 @@ class AddFriendFromNameCardViewController: UIViewController {
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                     self.statusMode = .defaultMode
-                    self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
                     let realm = try! Realm()
                     if let user = realm.filterUser(id: self.userId) {
                         try! realm.write {
@@ -468,6 +463,7 @@ class AddFriendFromNameCardViewController: UIViewController {
                         }
                     }
                     FaeChat.sendContactMessage(to: self.userId, with: "withdraw friend request")
+                    self.contactsDelegate?.changeContactsTable(action: self.WITHDRAW_ACT, userId: self.userId)
                 } else if status == 500 {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {

@@ -63,7 +63,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        guard RealmCollection.filterCollectedPin(collection_id: colId) != nil else {
+        guard realm.filterCollection(id: colId) != nil else {
             return
         }
         loadColItems()

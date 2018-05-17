@@ -19,8 +19,8 @@ extension ChatViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCellCustom
-        let JSQMessage = arrJSQMessages[indexPath.row]        
-        if JSQMessage.senderId == "\(Key.shared.user_id)" {
+        let faeMessage = arrFaeMessages[indexPath.row]        
+        if faeMessage.senderId == "\(Key.shared.user_id)" {
             cell.textView?.textColor = UIColor.white
         } else {
             cell.textView?.textColor = UIColor._107105105()
@@ -29,9 +29,7 @@ extension ChatViewController {
         cell.avatarImageView.layer.cornerRadius = 19.5
         cell.avatarImageView.contentMode = .scaleAspectFill
         cell.avatarImageView.layer.masksToBounds = true
-        let index = resultRealmMessages.count - (arrJSQMessages.count - indexPath.row)
-        let realmMessage = resultRealmMessages[index]
-        switch realmMessage.type {
+        switch faeMessage.messageType {
             case "text":
                 cell.contentType = Text
             case "[Picture]":
@@ -46,19 +44,16 @@ extension ChatViewController {
                 cell.contentType = Collection
             case "[Audio]":
                 cell.contentType = Audio
-                let JSQMessage = arrJSQMessages[indexPath.row]
-                if let message = JSQMessage.media as? JSQAudioMediaItemCustom {
+                if let message = faeMessage.media as? JSQAudioMediaItemCustom {
                     message.delegate = self
                 }
             case "[Video]":
                 cell.contentType = Video
-                let JSQMessage = arrJSQMessages[indexPath.row]
-                if let message = JSQMessage.media as? JSQVideoMediaItemCustom {
-                    if let sender = realmMessage.sender, sender.id == "\(Key.shared.user_id)" {
-                        if realmMessage.upload_to_server {
-                            message.stopAnimating()
-                        } else {
-                            message.startAnimating()
+                if let message = faeMessage.media as? JSQVideoMediaItemCustom {
+                    if faeMessage.messageId == "\(Key.shared.user_id)" {
+                        let realm = try! Realm()
+                        if let realmMessage = realm.filterMessage(faeMessage.messageId) {
+                            realmMessage.upload_to_server ? message.stopAnimating() : message.startAnimating()
                         }
                     }
                 }
@@ -69,26 +64,25 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == arrRealmMessages.count - 1 {
-            let message = arrRealmMessages[indexPath.row]
-            if message.sender?.id != "\(Key.shared.user_id)" || message.type != "[Heart]" {
+        if indexPath.row == arrFaeMessages.count - 1, let faeMessage = arrFaeMessages.last {
+            if faeMessage.senderId != "\(Key.shared.user_id)" || faeMessage.messageType != "[Heart]" {
                 boolJustSentHeart = false
             }
         }
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageDataForItemAt indexPath: IndexPath!) -> JSQMessageData! {
-        return arrJSQMessages[indexPath.row]
+        return arrFaeMessages[indexPath.row]
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrJSQMessages.count
+        return arrFaeMessages.count
     }
     
     // this delegate is used to tell which bubble image should be used on current message
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImage(with: UIColor._2499090())
-        let message = arrJSQMessages[indexPath.row]
+        let message = arrFaeMessages[indexPath.row]
         if message.senderId == "\(Key.shared.user_id)" {
             if message.isMediaMessage {
                 outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "avatarPlaceholder"), capInsets: UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)).outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleRed())
@@ -102,13 +96,13 @@ extension ChatViewController {
     
     // this is used to edit top label of every cell
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
-        let message = arrJSQMessages[indexPath.row]
+        let faeMessage = arrFaeMessages[indexPath.row]
         if indexPath.row == 0 {
-            return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
+            return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: faeMessage.date)
         } else {
-            let prevMessage = arrJSQMessages[indexPath.row - 1]
-            if message.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
-                return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: message.date)
+            let prevMessage = arrFaeMessages[indexPath.row - 1]
+            if faeMessage.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
+                return JSQMessagesTimestampFormatter.shared().attributedTimestamp(for: faeMessage.date)
             }
         }
         return nil
@@ -116,12 +110,12 @@ extension ChatViewController {
     
     //this is to modify the label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
-        let message = arrJSQMessages[indexPath.row]
+        let faeMessage = arrFaeMessages[indexPath.row]
         if indexPath.row == 0 {
             return kJSQMessagesCollectionViewCellLabelHeightDefault
         } else {
-            let prevMessage = arrJSQMessages[indexPath.row - 1]
-            if message.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
+            let prevMessage = arrFaeMessages[indexPath.row - 1]
+            if faeMessage.date.timeIntervalSince(prevMessage.date) / 60 > 3 {
                 return kJSQMessagesCollectionViewCellLabelHeightDefault
             }
         }
@@ -139,8 +133,8 @@ extension ChatViewController {
     
     // bind avatar image
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
-        let message = arrJSQMessages[indexPath.row]
-        let avatar = avatarDictionary.object(forKey: message.senderId) as! JSQMessageAvatarImageDataSource
+        let faeMessage = arrFaeMessages[indexPath.row]
+        let avatar = avatarDictionary.object(forKey: faeMessage.senderId) as! JSQMessageAvatarImageDataSource
         return avatar 
     }
     
@@ -150,8 +144,13 @@ extension ChatViewController {
             closeToolbarContentView()
         }
         floatContentOffsetY = collectionView.contentOffset.y
-        let message = arrRealmMessages[indexPath.row]
-        switch message.type {
+        let faeMessage = arrFaeMessages[indexPath.row]
+        let realm = try! Realm()
+        guard let realmMessage = realm.filterMessage(faeMessage.messageId) else {
+            // TODO: alert
+            return
+        }
+        switch faeMessage.messageType {
         case "[Picture]", "[Gif]":
             /*let messageJSQ = arrJSQMessages[indexPath.row]
               if let mediaItem = messageJSQ.media as? JSQPhotoMediaItemCustom {
@@ -162,12 +161,11 @@ extension ChatViewController {
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
             }*/
-            let realmMessage = arrRealmMessages[indexPath.row]
             var images = [SKPhoto]()
             let realm = try! Realm()
             let allMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@ AND type IN {'[Picture]', '[Gif]'}", "\(Key.shared.user_id)", intIsGroup, strChatId).sorted(byKeyPath: "index")
-            for message in allMessage {
-                let photo = SKPhoto.photoWithRealmMessage(message)
+            for msg in allMessage {
+                let photo = SKPhoto.photoWithRealmMessage(msg)
                 images.append(photo)
             }
             let index = allMessage.index(where: { $0.index == realmMessage.index })
@@ -175,8 +173,7 @@ extension ChatViewController {
             browser.initializePageIndex(index ?? 0)
             present(browser, animated: true, completion: nil)
         case "[Video]":
-            let messageJSQ = arrJSQMessages[indexPath.row]
-            if let mediaItem = messageJSQ.media as? JSQVideoMediaItemCustom {
+            if let mediaItem = faeMessage.media as? JSQVideoMediaItemCustom {
                 if let videoURL = mediaItem.fileURL {
                     let player = AVPlayer(url: videoURL)
                     let playerController = AVPlayerViewController()
@@ -196,7 +193,7 @@ extension ChatViewController {
             while !(arrControllers?.last is InitialPageController) {
                 arrControllers?.removeLast()
             }
-            let strLocDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
             let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
             //let vcLocDetail = LocDetailViewController()
             let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
@@ -208,7 +205,7 @@ extension ChatViewController {
              self.vcLocDetail.strLocAddr = jsonLocDetail["address2"].stringValue + ", " + jsonLocDetail["address3"].stringValue
              navigationController?.pushViewController(self.vcLocDetail, animated: true)*/
         case "[Place]":
-            let strPlaceDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
             let dataPlace = strPlaceDetail.data(using: .utf8)
             let jsonPlace = JSON(data: dataPlace!)
             FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { (status: Int, message: Any?) in
@@ -221,7 +218,7 @@ extension ChatViewController {
                 }
             }
         case "[Collection]":
-            let strCollectionDetail = message.text.replacingOccurrences(of: "\\", with: "")
+            let strCollectionDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
             let dataCollection = strCollectionDetail.data(using: .utf8)
             let jsonCollection = JSON(data: dataCollection!)
             let vcCollection = CollectionsListDetailViewController()
@@ -248,8 +245,8 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        let message = arrRealmMessages[indexPath.row]
-        if ["[Picture]", "[Sticker]", "text"].contains(message.type) {
+        let JSQMessage = arrFaeMessages[indexPath.item]
+        if ["[Picture]", "[Sticker]", "text"].contains(JSQMessage.messageType) {
             selectedIndexPathForMenu = indexPath
             return true
         }
@@ -259,8 +256,8 @@ extension ChatViewController {
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         view.endEditing(true)
         resetToolbarButtonIcon()
-        let messageJSQ = arrJSQMessages[indexPath.row]
-        uiviewNameCard.userId = Int(messageJSQ.senderId)!
+        let faeMessage = arrFaeMessages[indexPath.row]
+        uiviewNameCard.userId = Int(faeMessage.senderId)!
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.imgBackShadow.frame = CGRect.zero
         uiviewNameCard.show { }

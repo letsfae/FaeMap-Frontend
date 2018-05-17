@@ -44,7 +44,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     fileprivate func loadPinsData() {
-        guard let col = RealmCollection.filterCollectedPin(collection_id: colId) else {
+        guard let col = realm.filterCollection(id: colId) else {
             return
         }
         realmPins = col.pins

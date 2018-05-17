@@ -48,6 +48,7 @@ class FaePhotoPicker: UIView {
     var leftBtnHandler: (() -> Void)? = nil
     var rightBtnHandler: (([FaePHAsset], Bool) -> Void)? = nil
     var alertHandler: ((String) -> Void)? = nil
+    var selectHandler: ((Int) -> Void)? = nil
     
     // MARK: Configuration
     private var configuration = FaePhotoPickerConfigure()
@@ -347,7 +348,11 @@ extension FaePhotoPicker: UICollectionViewDelegate {
                     cell.boolIsSelected = true
                     cell.intSelectedOrder = asset.selectedOrder
                 }
+                if !boolFullPicker {
+                    collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+                }
             }
+            selectHandler?(selectedAssets.count)
         }
     }
     

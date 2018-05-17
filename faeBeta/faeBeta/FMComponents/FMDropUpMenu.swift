@@ -165,8 +165,8 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func loadCollectionData() {
-        realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
-        realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
+        realmColPlaces = realm.filterCollectedTypes(type: "place")
+        realmColLocations = realm.filterCollectedTypes(type: "location")
     }
     
     fileprivate func loadCollection() {

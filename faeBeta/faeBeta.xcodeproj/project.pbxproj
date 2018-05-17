@@ -125,7 +125,7 @@
 		B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05DAFE51D1320F700082A71 /* FaeMap.swift */; };
 		B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBA1DCE357700D6745A /* FaePush.swift */; };
 		B05E2DBF1DD24FEE00D6745A /* Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05E2DBE1DD24FEE00D6745A /* Key.swift */; };
-		B064EEAA1D6E0CA100C078F5 /* JSQMessageMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA41D6E0CA100C078F5 /* JSQMessageMaker.swift */; };
+		B064EEAA1D6E0CA100C078F5 /* FaeMessageMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEA41D6E0CA100C078F5 /* FaeMessageMaker.swift */; };
 		B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */; };
 		B064EEE41D6E0D1000C078F5 /* JSQStickerMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEDE1D6E0D1000C078F5 /* JSQStickerMediaItem.swift */; };
 		B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B064EEE01D6E0D1000C078F5 /* StickerDictionary.swift */; };
@@ -488,7 +488,7 @@
 		B05DAFE51D1320F700082A71 /* FaeMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMap.swift; sourceTree = "<group>"; };
 		B05E2DBA1DCE357700D6745A /* FaePush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePush.swift; sourceTree = "<group>"; };
 		B05E2DBE1DD24FEE00D6745A /* Key.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Key.swift; sourceTree = "<group>"; };
-		B064EEA41D6E0CA100C078F5 /* JSQMessageMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSQMessageMaker.swift; sourceTree = "<group>"; };
+		B064EEA41D6E0CA100C078F5 /* FaeMessageMaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeMessageMaker.swift; sourceTree = "<group>"; };
 		B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		B064EEDE1D6E0D1000C078F5 /* JSQStickerMediaItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSQStickerMediaItem.swift; sourceTree = "<group>"; };
 		B064EEE01D6E0D1000C078F5 /* StickerDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StickerDictionary.swift; sourceTree = "<group>"; };
@@ -1041,7 +1041,7 @@
 				DCF1EBD11DA31D240066B3ED /* ChatVCCollectionView.swift */,
 				DCF1EBD31DA31E8C0066B3ED /* ChatVCHandleMessages.swift */,
 				DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */,
-				B064EEA41D6E0CA100C078F5 /* JSQMessageMaker.swift */,
+				B064EEA41D6E0CA100C078F5 /* FaeMessageMaker.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -2079,7 +2079,7 @@
 				B393E2ED1F4F8080009FD949 /* CollectionsListDetailViewController.swift in Sources */,
 				B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */,
 				9F1D68C81F4E907D0067EFF9 /* JSQPlaceCollectionMediaItemCustom.m in Sources */,
-				B064EEAA1D6E0CA100C078F5 /* JSQMessageMaker.swift in Sources */,
+				B064EEAA1D6E0CA100C078F5 /* FaeMessageMaker.swift in Sources */,
 				503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */,
 				B37E5DC61F831040008A6B4B /* SetDeactiveViewController.swift in Sources */,
 				CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */,
