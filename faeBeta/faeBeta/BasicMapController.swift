@@ -131,7 +131,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         uiviewTopBar.backgroundColor = .white
         uiviewTopBar.layer.cornerRadius = 2
         view.addSubview(uiviewTopBar)
-        view.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: uiviewTopBar)
+        view.addConstraintsWithFormat("H:|-7-[v0]-7-|", options: [], views: uiviewTopBar)
         view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(48)]", options: [], views: uiviewTopBar)
         addShadow(view: uiviewTopBar, opa: 0.5, offset: CGSize.zero, radius: 3)
         
@@ -139,7 +139,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
         uiviewTopBar.addSubview(btnBack)
-        uiviewTopBar.addConstraintsWithFormat("H:|-0-[v0(38.5)]", options: [], views: btnBack)
+        uiviewTopBar.addConstraintsWithFormat("H:|-1-[v0(38.5)]", options: [], views: btnBack)
         uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnBack)
     }
     

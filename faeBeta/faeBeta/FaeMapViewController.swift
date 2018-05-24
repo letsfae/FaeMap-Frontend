@@ -62,7 +62,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var btnBackToExp: UIButton!
     
     // Search Bar
-    var imgSchbarShadow: UIImageView!
+    var uiviewSchbarShadow: UIView!
     var imgSearchIcon: UIImageView!
     var imgAddressIcon: UIImageView!
     var btnLeftWindow: UIButton!
@@ -75,7 +75,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Explore Button
     var clctViewMap: UICollectionView!
-    var imgExpbarShadow: UIImageView!
+    var uiviewExpbarShadow: UIView!
     var lblExpContent: UILabel!
     var arrExpPlace = [PlacePin]()
     var intCurtPage = 0
@@ -284,8 +284,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
-            imgExpbarShadow.isHidden = modeLocation == .off
-            imgSchbarShadow.isHidden = modeLocation != .off
+            uiviewExpbarShadow.isHidden = modeLocation == .off
+            uiviewSchbarShadow.isHidden = modeLocation != .off
             if modeLocation != .off {
                 Key.shared.onlineStatus = 5
                 lblExpContent.attributedText = nil
@@ -322,7 +322,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             btnLeftWindow.isHidden = modeExplore == .on
             placeClusterManager.maxZoomLevelForClustering = modeExplore == .on ? 0 : Double.greatestFiniteMagnitude
-            imgSchbarShadow.isHidden = modeExplore == .on
+            uiviewSchbarShadow.isHidden = modeExplore == .on
             btnZoom.alpha = modeExplore == .on ? 0 : 1
             btnLocateSelf.alpha = modeExplore == .on ? 0 : 1
             btnOpenChat.isHidden = modeExplore == .on
@@ -331,7 +331,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             faeMapView.isRotateEnabled = modeExplore == .off
             clctViewMap.isHidden = modeExplore == .off
-            imgExpbarShadow.isHidden = modeExplore == .off
+            uiviewExpbarShadow.isHidden = modeExplore == .off
         }
     }
     
@@ -339,7 +339,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             btnLeftWindow.isHidden = modeAllPlaces == .on
-            imgExpbarShadow.isHidden = modeAllPlaces == .off
+            uiviewExpbarShadow.isHidden = modeAllPlaces == .off
         }
     }
     
@@ -347,8 +347,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             guard fullyLoaded else { return }
             btnLeftWindow.isHidden = modePinDetail == .on
-            imgSchbarShadow.isHidden = modePinDetail == .on
-            imgExpbarShadow.isHidden = modePinDetail == .off
+            uiviewSchbarShadow.isHidden = modePinDetail == .on
+            uiviewExpbarShadow.isHidden = modePinDetail == .off
             
             tblPlaceResult.isHidden = modePinDetail == .on
             btnTapToShowResultTbl.isHidden = modePinDetail == .on
@@ -373,8 +373,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             btnLeftWindow.isHidden = mapMode == .selecting
             lblSearchContent.textColor = mapMode == .selecting ? UIColor._898989() : UIColor._182182182()
             
-            imgExpbarShadow.isHidden = mapMode != .collection
-            imgSchbarShadow.isHidden = mapMode == .collection
+            uiviewExpbarShadow.isHidden = mapMode != .collection
+            uiviewSchbarShadow.isHidden = mapMode == .collection
             
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
             Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
@@ -386,7 +386,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             if mapMode == .allPlaces {
                 btnLeftWindow.isHidden = true
-                imgExpbarShadow.isHidden = false
+                uiviewExpbarShadow.isHidden = false
                 return
             }
         }
@@ -768,40 +768,44 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map Main Screen Buttons
     func loadButton() {
-        imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
-        imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
-        view.addSubview(imgSchbarShadow)
-        imgSchbarShadow.layer.zPosition = 500
-        imgSchbarShadow.isUserInteractionEnabled = true
+        uiviewSchbarShadow = UIView(frame: CGRect(x: 7, y: 23 + device_offset_top, width: screenWidth - 14, height: 48))
+        uiviewSchbarShadow.layer.zPosition = 500
+        view.addSubview(uiviewSchbarShadow)
+        addShadow(view: uiviewSchbarShadow, opa: 0.5, offset: CGSize.zero, radius: 3)
+        
+        let uiviewSchbarSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 14, height: 48))
+        uiviewSchbarSub.layer.cornerRadius = 2
+        uiviewSchbarSub.backgroundColor = .white
+        uiviewSchbarSub.clipsToBounds = true
+        uiviewSchbarShadow.addSubview(uiviewSchbarSub)
         
         // Left window on main map to open account system
         btnLeftWindow = UIButton()
         btnLeftWindow.setImage(#imageLiteral(resourceName: "mapLeftMenu"), for: .normal)
-        imgSchbarShadow.addSubview(btnLeftWindow)
+        uiviewSchbarShadow.addSubview(btnLeftWindow)
         btnLeftWindow.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(48)]", options: [], views: btnLeftWindow)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnLeftWindow)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-1-[v0(48)]", options: [], views: btnLeftWindow)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0(48)]", options: [], views: btnLeftWindow)
         
         btnCancelSelect = UIButton()
         btnCancelSelect.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
-        imgSchbarShadow.addSubview(btnCancelSelect)
+        uiviewSchbarShadow.addSubview(btnCancelSelect)
         btnCancelSelect.addTarget(self, action: #selector(self.actionCancelSelecting), for: .touchUpInside)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnCancelSelect)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnCancelSelect)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-1-[v0(40.5)]", options: [], views: btnCancelSelect)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0(48)]", options: [], views: btnCancelSelect)
         btnCancelSelect.isHidden = true
         
         imgSearchIcon = UIImageView()
         imgSearchIcon.image = #imageLiteral(resourceName: "Search")
-        imgSchbarShadow.addSubview(imgSearchIcon)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
+        uiviewSchbarShadow.addSubview(imgSearchIcon)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-49-[v0(15)]", options: [], views: imgSearchIcon)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-17-[v0(15)]", options: [], views: imgSearchIcon)
         
         imgAddressIcon = UIImageView()
         imgAddressIcon.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        imgSchbarShadow.addSubview(imgAddressIcon)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgAddressIcon)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgAddressIcon)
+        uiviewSchbarShadow.addSubview(imgAddressIcon)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-49-[v0(15)]", options: [], views: imgAddressIcon)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-17-[v0(15)]", options: [], views: imgAddressIcon)
         imgAddressIcon.isHidden = true
         
         lblSearchContent = UILabel()
@@ -810,15 +814,15 @@ extension FaeMapViewController {
         lblSearchContent.lineBreakMode = .byTruncatingTail
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSearchContent.textColor = UIColor._182182182()
-        imgSchbarShadow.addSubview(lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-108-|", options: [], views: lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: lblSearchContent)
+        uiviewSchbarShadow.addSubview(lblSearchContent)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-73-[v0]-103-|", options: [], views: lblSearchContent)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-13-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
         btnMainMapSearch = UIButton()
-        imgSchbarShadow.addSubview(btnMainMapSearch)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnMainMapSearch)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnMainMapSearch)
+        uiviewSchbarShadow.addSubview(btnMainMapSearch)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-73-[v0]-55-|", options: [], views: btnMainMapSearch)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
         
         // Click to clear search results
@@ -826,24 +830,24 @@ extension FaeMapViewController {
         btnClearSearchRes.setImage(#imageLiteral(resourceName: "main_clear_search_bar"), for: .normal)
         btnClearSearchRes.isHidden = true
         btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
-        imgSchbarShadow.addSubview(btnClearSearchRes)
-        imgSchbarShadow.addConstraintsWithFormat("H:[v0(48)]-41-|", options: [], views: btnClearSearchRes)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
+        uiviewSchbarShadow.addSubview(btnClearSearchRes)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:[v0(48)]-36-|", options: [], views: btnClearSearchRes)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnClearSearchRes)
         
         // Show drop up menu
         btnDropUpMenu = UIButton()
         btnDropUpMenu.setImage(#imageLiteral(resourceName: "main_drop_up_menu_gray"), for: .normal)
         btnDropUpMenu.setImage(#imageLiteral(resourceName: "main_drop_up_menu_red"), for: .selected)
         btnDropUpMenu.addTarget(self, action: #selector(self.actionShowMapActionsMenu(_:)), for: .touchUpInside)
-        imgSchbarShadow.addSubview(btnDropUpMenu)
-        imgSchbarShadow.addConstraintsWithFormat("H:[v0(46)]-7-|", options: [], views: btnDropUpMenu)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnDropUpMenu)
+        uiviewSchbarShadow.addSubview(btnDropUpMenu)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:[v0(46)]-2-|", options: [], views: btnDropUpMenu)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnDropUpMenu)
         
         // Click to take an action for place pin
         uiviewPinActionDisplay = FMPinActionDisplay()
-        imgSchbarShadow.addSubview(uiviewPinActionDisplay)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-5-[v0]-5-|", options: [], views: uiviewPinActionDisplay)
+        uiviewSchbarShadow.addSubview(uiviewPinActionDisplay)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewPinActionDisplay)
+        uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewPinActionDisplay)
         
         // Click to back to zoom
         btnZoom = FMZoomButton()
@@ -885,21 +889,25 @@ extension FaeMapViewController {
     }
     
     func loadExploreBar() {
-        imgExpbarShadow = UIImageView()
-        imgExpbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
-        imgExpbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
-        view.addSubview(imgExpbarShadow)
-        imgExpbarShadow.layer.zPosition = 500
-        imgExpbarShadow.isUserInteractionEnabled = true
-        imgExpbarShadow.isHidden = true
+        uiviewExpbarShadow = UIView(frame: CGRect(x: 7, y: 23 + device_offset_top, width: screenWidth - 14, height: 48))
+        uiviewExpbarShadow.layer.zPosition = 500
+        uiviewExpbarShadow.isHidden = true
+        view.addSubview(uiviewExpbarShadow)
+        addShadow(view: uiviewExpbarShadow, opa: 0.5, offset: CGSize.zero, radius: 3)
+        
+        let uiviewExpbarSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 14, height: 48))
+        uiviewExpbarSub.layer.cornerRadius = 2
+        uiviewExpbarSub.backgroundColor = .white
+        uiviewExpbarSub.clipsToBounds = true
+        uiviewExpbarShadow.addSubview(uiviewExpbarSub)
         
         // Left window on main map to open account system
         btnBackToExp = UIButton()
         btnBackToExp.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
-        imgExpbarShadow.addSubview(btnBackToExp)
+        uiviewExpbarShadow.addSubview(btnBackToExp)
         btnBackToExp.addTarget(self, action: #selector(self.actionBackTo(_:)), for: .touchUpInside)
-        imgExpbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnBackToExp)
-        imgExpbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnBackToExp)
+        uiviewExpbarShadow.addConstraintsWithFormat("H:|-1-[v0(40.5)]", options: [], views: btnBackToExp)
+        uiviewExpbarShadow.addConstraintsWithFormat("V:|-0-[v0(48)]", options: [], views: btnBackToExp)
         btnBackToExp.adjustsImageWhenDisabled = false
         
         lblExpContent = UILabel()
@@ -907,9 +915,9 @@ extension FaeMapViewController {
         lblExpContent.numberOfLines = 1
         lblExpContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblExpContent.textColor = UIColor._898989()
-        imgExpbarShadow.addSubview(lblExpContent)
-        imgExpbarShadow.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblExpContent)
-        imgExpbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblExpContent)
+        uiviewExpbarShadow.addSubview(lblExpContent)
+        uiviewExpbarShadow.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblExpContent)
+        uiviewExpbarShadow.addConstraintsWithFormat("V:|-12.5-[v0(25)]", options: [], views: lblExpContent)
     }
     
     func loadActivityIndicator() {

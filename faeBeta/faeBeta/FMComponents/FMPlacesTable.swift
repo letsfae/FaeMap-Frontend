@@ -347,7 +347,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     private func loadContent() {
         uiviewTblBckg = UIView(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
-        uiviewTblBckg.backgroundColor = .white
+        uiviewTblBckg.backgroundColor = .clear
         addSubview(uiviewTblBckg)
         addShadow(view: uiviewTblBckg, opa: 0.5, offset: CGSize.zero, radius: 3)
         
@@ -359,6 +359,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         tblResults.layer.cornerRadius = 2
         tblResults.alwaysBounceVertical = false
         tblResults.bounces = false
+        tblResults.clipsToBounds = true
+        tblResults.layer.cornerRadius = 2
         uiviewTblBckg.addSubview(tblResults)
         uiviewTblBckg.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: tblResults)
         tblVConstraint = returnConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: tblResults)
@@ -545,25 +547,21 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: - ScrollViwe Delegate
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("[scrollViewDidEndDecelerating]")
         dictOffset[tblResults.tag] = scrollView.contentOffset
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        print("[scrollViewDidEndDragging]")
         dictOffset[tblResults.tag] = scrollView.contentOffset
     }
     
     // MARK: - Table View Delegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let placeData = arrPlaces[indexPath.row]
         let placeData = allPlaces[tableView.tag][indexPath.row]
         tblDelegate?.selectPlaceFromTable(placeData)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return arrPlaces.count
         guard allPlaces.count > 0 else { return 0 }
         return allPlaces[tableView.tag].count
     }
