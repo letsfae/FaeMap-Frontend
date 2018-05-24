@@ -16,7 +16,6 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     var strCategory: String = ""
     private var clctViewMap: UICollectionView!
     private var intCurtPage = 0
-    private var visibleClusterPins = [CCHMapClusterAnnotation]()
     private var placeAnnos = [FaePinAnnotation]()
     
     // MARK: - Life Cycles
@@ -164,17 +163,17 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
                 selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
                 selectedPlace?.isSelected = false
                 guard let img = selectedPlace?.icon else { return }
-                selectedPlaceView?.assignImage(img)
-                selectedPlaceView?.hideButtons()
-                selectedPlaceView?.superview?.sendSubview(toBack: selectedPlaceView!)
-                selectedPlaceView?.zPos = 7
-                selectedPlaceView?.optionsReady = false
-                selectedPlaceView?.optionsOpened = false
-                selectedPlaceView = nil
+                selectedPlaceAnno?.assignImage(img)
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
+                selectedPlaceAnno?.zPos = 7
+                selectedPlaceAnno?.optionsReady = false
+                selectedPlaceAnno?.optionsOpened = false
+                selectedPlaceAnno = nil
                 selectedPlace = nil
             } else {
-                selectedPlaceView?.hideButtons()
-                selectedPlaceView?.optionsOpened = false
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.optionsOpened = false
             }
         }
     }

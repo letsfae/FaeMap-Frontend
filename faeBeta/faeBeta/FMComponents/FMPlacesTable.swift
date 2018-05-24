@@ -422,7 +422,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 groupPlaces.removeAll(keepingCapacity: true)
             }
         }
-        allPlaces.append(groupPlaces)
+        if groupPlaces.count != 0 {
+            allPlaces.append(groupPlaces)
+        }
         tblResults.tag = 0
         btnPrevPage.isSelected = false
         btnNextPage.isSelected = allPlaces.count > 1
@@ -459,7 +461,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             btnPrevPage.isSelected = true
         }
         self.places = self.allPlaces[tblResults.tag]
-        self.loading(current: getGroupLastSelected())
+        self.loading(current: getGroupLastSelectedPlace())
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             if let offset = self.dictOffset[self.tblResults.tag] {
@@ -473,7 +475,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         CATransaction.commit()
     }
     
-    func getGroupLastSelected() -> PlacePin {
+    func getGroupLastSelectedPlace() -> PlacePin {
         let tag = tblResults.tag
         if let place = groupLastSelected[tag] {
             return place

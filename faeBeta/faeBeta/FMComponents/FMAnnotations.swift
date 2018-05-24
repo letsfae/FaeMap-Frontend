@@ -350,11 +350,11 @@ protocol PlacePinAnnotationDelegate: class {
     func placePinAction(action: PlacePinAction, mode: CollectionTableMode)
 }
 
-enum PlacePinAction {
-    case detail
-    case collect
-    case route(placeInfo: PlacePin?)
-    case share
+enum PlacePinAction: Int {
+    case detail = 1
+    case collect = 2
+    case route = 3
+    case share = 4
 }
 
 class PlacePinAnnotationView: MKAnnotationView {
@@ -605,7 +605,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         } else if btnCollect.isSelected || sender == btnCollect {
             delegate?.placePinAction(action: .collect, mode: .place)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route(placeInfo: nil), mode: .place)
+            delegate?.placePinAction(action: .route, mode: .place)
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share, mode: .place)
         }
@@ -880,7 +880,7 @@ class LocPinAnnotationView: MKAnnotationView {
         } else if btnCollect.isSelected || sender == btnCollect {
             delegate?.placePinAction(action: .collect, mode: .location)
         } else if btnRoute.isSelected || sender == btnRoute {
-            delegate?.placePinAction(action: .route(placeInfo: nil), mode: .location)
+            delegate?.placePinAction(action: .route, mode: .location)
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share, mode: .location)
         }

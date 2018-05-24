@@ -44,7 +44,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     var userPin: UserPin?
     
     // Place Pin Control
-    var selectedPlaceView: PlacePinAnnotationView?
+    var selectedPlaceAnno: PlacePinAnnotationView?
     var selectedPlace: FaePinAnnotation?
     
     // MARK: - Life Cycles
@@ -291,7 +291,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
-        selectedPlaceView = anView
+        selectedPlaceAnno = anView
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
@@ -339,4 +339,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
             completion?()
         }
     }
+    
+    // MARK: - 辅助函数
 }
