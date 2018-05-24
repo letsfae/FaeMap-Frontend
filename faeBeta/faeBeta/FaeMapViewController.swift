@@ -102,7 +102,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     let floatFilterHeight = 471 * screenHeightFactor + device_offset_bot // Map Filter height
     
     // Selected Place Control
-    var selectedPlaceView: PlacePinAnnotationView?
+    var selectedPlaceAnno: PlacePinAnnotationView?
     var selectedPlace: FaePinAnnotation?
     var swipingState: PlaceInfoBarState = .map {
         didSet {
@@ -150,7 +150,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: FMLocationInfoBar!
-    var locAnnoView: LocPinAnnotationView?
+    var selectedLocAnno: LocPinAnnotationView?
     var activityIndicatorLocPin: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
     
@@ -730,6 +730,7 @@ extension FaeMapViewController {
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
         faeMapView.faeMapCtrler = self
+        faeMapView.mapDelegate = self
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
@@ -1008,7 +1009,7 @@ extension FaeMapViewController {
         tblPlaceResult.alpha = 0
         
         mapGesture(isOn: true)
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(pinsFromSearch) {
             self.pinsFromSearch.removeAll(keepingCapacity: true)
@@ -1144,7 +1145,7 @@ extension FaeMapViewController {
         if modePinDetail == .on {
             if let ann = selectedPlace {
                 guard let placePin = ann.pinInfo as? PlacePin else { return }
-                selectedPlaceView?.hideButtons()
+                selectedPlaceAnno?.hideButtons()
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placePin
                 vcPlaceDetail.delegate = self
@@ -1298,9 +1299,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 anView.assignImage(firstAnn.icon)
             }
         }
-        if selectedPlaceView != nil {
-            selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
-            selectedPlaceView?.layer.zPosition = 199
+        if selectedPlaceAnno != nil {
+            selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
+            selectedPlaceAnno?.layer.zPosition = 199
         }
     }
     
@@ -1402,7 +1403,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         faeMapView.setVisibleMapRect(rect, animated: animated)
     }
     
-    func deselectAllAnnotations(full: Bool = true) {
+    func deselectAllPlaceAnnos(full: Bool = true) {
         
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
@@ -1412,17 +1413,17 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
                 selectedPlace?.isSelected = false
                 guard let img = selectedPlace?.icon else { return }
-                selectedPlaceView?.assignImage(img)
-                selectedPlaceView?.hideButtons()
-                selectedPlaceView?.superview?.sendSubview(toBack: selectedPlaceView!)
-                selectedPlaceView?.zPos = 7
-                selectedPlaceView?.optionsReady = false
-                selectedPlaceView?.optionsOpened = false
-                selectedPlaceView = nil
+                selectedPlaceAnno?.assignImage(img)
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
+                selectedPlaceAnno?.zPos = 7
+                selectedPlaceAnno?.optionsReady = false
+                selectedPlaceAnno?.optionsOpened = false
+                selectedPlaceAnno = nil
                 selectedPlace = nil
             } else {
-                selectedPlaceView?.hideButtons()
-                selectedPlaceView?.optionsOpened = false
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.optionsOpened = false
             }
         }
     }
@@ -1435,12 +1436,12 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewAfterAdded.pinIdInAction = -1
         boolCanOpenPin = true
         
-        locAnnoView?.hideButtons()
-        locAnnoView?.zPos = 8.0
-        locAnnoView?.optionsReady = false
-        locAnnoView?.optionsOpened = false
-        locAnnoView?.removeFromSuperview()
-        locAnnoView = nil
+        selectedLocAnno?.hideButtons()
+        selectedLocAnno?.zPos = 8.0
+        selectedLocAnno?.optionsReady = false
+        selectedLocAnno?.optionsOpened = false
+        selectedLocAnno?.removeFromSuperview()
+        selectedLocAnno = nil
         selectedLocation = nil
     }
     
@@ -1937,7 +1938,7 @@ extension FaeMapViewController: MapSearchDelegate {
          }, nil)
          */
         updateUI(searchText: searchText)
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         cancelAllPinLoading()
         btnTapToShowResultTbl.isHidden = places.count <= 1
         if let _ = places.first {
@@ -2026,7 +2027,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         camera.altitude = tblPlaceResult.altitude
         faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
-            self.goTo(annotation: nil, place: self.tblPlaceResult.getGroupLastSelected(), animated: true)
+            self.goTo(annotation: nil, place: self.tblPlaceResult.getGroupLastSelectedPlace(), animated: true)
             self.PLACE_INSTANT_SHOWUP = false
         }
     }
@@ -2080,7 +2081,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
             }
         }
         
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         if let anno = annotation {
             swipingState = .map
             boolPreventUserPinOpen = true
@@ -2277,7 +2278,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     // PlaceDetailDelegate
     func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?) {
-        placePinAction(action: .route(placeInfo: placeInfo), mode: mode)
+//        placePinAction(action: .route(placeInfo: placeInfo), mode: mode)
     }
     
     // AddPlacetoCollectionDelegate
@@ -2377,8 +2378,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     func routingLocation() {
         guard let pin = self.selectedLocation else { return }
         uiviewLocationBar.hide()
-        locAnnoView?.hideButtons()
-        locAnnoView?.optionsToNormal()
+        selectedLocAnno?.hideButtons()
+        selectedLocAnno?.optionsToNormal()
         HIDE_AVATARS = true
         PLACE_ENABLE = false
         // remove place pins but don't delete them
@@ -2406,7 +2407,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         switch action {
         case .detail:
             if modeLocCreating == .on {
-                guard let anView = locAnnoView else { return }
+                guard let anView = selectedLocAnno else { return }
                 anView.optionsToNormal()
                 let vcLocDetail = LocDetailViewController()
                 vcLocDetail.locationId = anView.locationId
@@ -2429,7 +2430,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
         case .collect:
             uiviewSavedList.show()
-            locAnnoView?.optionsToNormal()
+            selectedLocAnno?.optionsToNormal()
             uiviewSavedList.tableMode = mode
             uiviewSavedList.tblAddCollection.reloadData()
             switch mode {
@@ -2440,21 +2441,17 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 guard let locPin = selectedLocation else { return }
                 uiviewSavedList.pinToSave = locPin
             }
-        case .route(let placeInfo):
+        case .route:
             if selectedLocation != nil {
                 routingLocation()
             }
-            if let place = placeInfo {
+            if let place = selectedPlace?.pinInfo as? PlacePin {
                 routingPlace(place)
-            } else {
-                if let place = selectedPlace?.pinInfo as? PlacePin {
-                    routingPlace(place)
-                }
             }
         case .share:
             if modeLocCreating == .on {
-                locAnnoView?.optionsToNormal()
-                locAnnoView?.hideButtons()
+                selectedLocAnno?.optionsToNormal()
+                selectedLocAnno?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
                 let coordinate = selectedLocation?.coordinate
                 AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
@@ -2464,7 +2461,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 }
             } else {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
-                selectedPlaceView?.hideButtons()
+                selectedPlaceAnno?.hideButtons()
                 let vcSharePlace = NewChatShareController(friendListMode: .place)
                 vcSharePlace.placeDetail = placeData
                 navigationController?.pushViewController(vcSharePlace, animated: true)
@@ -2553,9 +2550,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         firstAnn.isSelected = true
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
-        selectedPlaceView = anView
-        selectedPlaceView?.superview?.bringSubview(toFront: selectedPlaceView!)
-        selectedPlaceView?.zPos = 199
+        selectedPlaceAnno = anView
+        faeMapView.selectedPlaceAnno = anView
+        selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
+        selectedPlaceAnno?.zPos = 199
         guard firstAnn.type == "place" else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
@@ -2916,7 +2914,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.show()
         
         animateMainItems(show: true)
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         
         faeMapView.singleTap.isEnabled = false
         faeMapView.doubleTap.isEnabled = false
@@ -2955,7 +2953,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         btnZoom.tapToSmallMode()
         animateMainItems(show: false)
         
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         
         faeMapView.singleTap.isEnabled = true
         faeMapView.doubleTap.isEnabled = true
@@ -3197,9 +3195,9 @@ extension FaeMapViewController: LocDetailDelegate {
             createLocationPin(point: CGPoint.zero, position: coordinate)
             modeLocation = .on_create
         } else {
-            locAnnoView?.hideButtons(animated: false)
+            selectedLocAnno?.hideButtons(animated: false)
             selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
-            locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+            selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
             modeLocation = .on
         }
         removePlaceUserPins()
@@ -3213,7 +3211,7 @@ extension FaeMapViewController: LocDetailDelegate {
         reAddUserPins()
         reAddPlacePins()
         selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
-        locAnnoView?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
+        selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         if modeLocation == .on_create {
             modeLocCreating = .off
         }
@@ -3227,8 +3225,9 @@ extension FaeMapViewController: LocDetailDelegate {
         guard let anView = view as? LocPinAnnotationView else { return }
         anView.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
         selectedLocation = firstAnn
-        locAnnoView = anView
-        locAnnoView?.zPos = 299
+        selectedLocAnno = anView
+        faeMapView.selectedLocAnno = anView
+        selectedLocAnno?.zPos = 299
         guard firstAnn.type == "location" else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
         let pinData = locationData
@@ -3272,7 +3271,7 @@ extension FaeMapViewController: LocDetailDelegate {
         } else {
             anView = LocPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-        locAnnoView = anView
+        selectedLocAnno = anView
         anView.assignImage(first.icon)
         anView.delegate = self
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
@@ -3308,13 +3307,13 @@ extension FaeMapViewController: LocDetailDelegate {
         
         func createLoc() {
             self.tblPlaceResult.hide()
-            self.locAnnoView?.hideButtons()
-            self.locAnnoView?.optionsReady = false
-            self.locAnnoView?.optionsOpened = false
-            self.locAnnoView?.optionsOpeing = false
-            self.locAnnoView?.removeFromSuperview()
-            self.locAnnoView = nil
-            self.deselectAllAnnotations()
+            self.selectedLocAnno?.hideButtons()
+            self.selectedLocAnno?.optionsReady = false
+            self.selectedLocAnno?.optionsOpened = false
+            self.selectedLocAnno?.optionsOpeing = false
+            self.selectedLocAnno?.removeFromSuperview()
+            self.selectedLocAnno = nil
+            self.deselectAllPlaceAnnos()
             let pinData = LocationPin(position: coordinate)
             pinData.optionsReady = true
             self.selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
@@ -3398,5 +3397,61 @@ extension FaeMapViewController: LocDetailDelegate {
                 self.destinationAddr = RouteAddress(name: address_1, coordinate: location.coordinate)
             }
         }
+    }
+}
+
+// MARK: - MapAction Protocol
+extension FaeMapViewController: MapAction {
+    func changeIconStyle(action: Int, isPlace: Bool) {
+        if isPlace {
+            guard let anView = selectedPlaceAnno else { return }
+            switch action {
+            case 1:
+                anView.action(anView.btnDetail, animated: true)
+            case 2:
+                anView.action(anView.btnCollect, animated: true)
+            case 3:
+                anView.action(anView.btnRoute, animated: true)
+            case 4:
+                anView.action(anView.btnShare, animated: true)
+            default:
+                anView.optionsToNormal()
+                break
+            }
+        } else {
+            guard let anView = selectedLocAnno else { return }
+            switch action {
+            case 1:
+                anView.action(anView.btnDetail, animated: true)
+            case 2:
+                anView.action(anView.btnCollect, animated: true)
+            case 3:
+                anView.action(anView.btnRoute, animated: true)
+            case 4:
+                anView.action(anView.btnShare, animated: true)
+            default:
+                anView.optionsToNormal()
+                break
+            }
+        }
+        if action == 0 {
+            uiviewPinActionDisplay.hide()
+        } else {
+            uiviewPinActionDisplay.changeStyle(action: PlacePinAction(rawValue: action)!, isPlace)
+        }
+    }
+    
+    func hideNameCard() {
+        uiviewNameCard.hide() {
+            self.mapGesture(isOn: true)
+        }
+    }
+    
+    func placePinTap(view: MKAnnotationView) {
+        tapPlacePin(didSelect: view)
+    }
+    
+    func deselectAllPlaces(_ full: Bool) {
+        deselectAllPlaceAnnos(full: full)
     }
 }

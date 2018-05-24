@@ -148,18 +148,26 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func jumpToMapPlaces(_ sender: UIButton) {
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        self.delegate = Key.shared.FMVCtrler
-        delegate?.jumpToAllPlaces(places: placeTableMode == .recommend ? recommendedPlaces : searchedPlaces)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+        
+        let vc = AllPlacesMapController()
+        vc.strTitle = strTitle
+        vc.arrPlaces = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
+        navigationController?.pushViewController(vc, animated: false)
+        
+        return
+        
+//        var arrCtrlers = navigationController?.viewControllers
+//        if let ctrler = Key.shared.FMVCtrler {
+//            ctrler.arrCtrlers = arrCtrlers!
+//            ctrler.boolFromMap = false
+//        }
+//        while !(arrCtrlers?.last is InitialPageController) {
+//            arrCtrlers?.removeLast()
+//        }
+//        self.delegate = Key.shared.FMVCtrler
+//        delegate?.jumpToAllPlaces(places: placeTableMode == .recommend ? recommendedPlaces : searchedPlaces)
+//        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+//        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     // TODO: Yue
