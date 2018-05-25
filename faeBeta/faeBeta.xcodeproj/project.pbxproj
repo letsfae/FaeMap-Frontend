@@ -1265,6 +1265,7 @@
 				503BF9D6208517AA00635E65 /* RoutingMapController.swift */,
 				5028597E209A1F3400F98B00 /* CollectionMapController.swift */,
 				50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */,
+				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				50111C241F476063004EA00E /* FMComponents */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
@@ -1273,7 +1274,6 @@
 				B8E3FBB61E56DA3D00351BB4 /* FirstTimeLogin */,
 				B855E0D01DBC2B6F0085E926 /* Search */,
 				B8E819541DB3248C00D418D1 /* ReportPin */,
-				B81563931DDBF74300BF85A1 /* SelectPinLocation */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -1431,14 +1431,6 @@
 				B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */,
 			);
 			path = SetAccount;
-			sourceTree = "<group>";
-		};
-		B81563931DDBF74300BF85A1 /* SelectPinLocation */ = {
-			isa = PBXGroup;
-			children = (
-				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
-			);
-			name = SelectPinLocation;
 			sourceTree = "<group>";
 		};
 		B85474EE1EFB8C1000D40E2E /* PullDownToRefresh */ = {

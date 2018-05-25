@@ -730,7 +730,8 @@ extension FaeMapViewController {
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
         faeMapView.faeMapCtrler = self
-        faeMapView.mapDelegate = self
+        faeMapView.mapAction = self
+        faeMapView.isSingleTapOnLocPinEnabled = true
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
@@ -3410,7 +3411,7 @@ extension FaeMapViewController: LocDetailDelegate {
 
 // MARK: - MapAction Protocol
 extension FaeMapViewController: MapAction {
-    func changeIconStyle(action: Int, isPlace: Bool) {
+    func iconStyleChange(action: Int, isPlace: Bool) {
         if isPlace {
             guard let anView = selectedPlaceAnno else { return }
             switch action {
@@ -3449,7 +3450,7 @@ extension FaeMapViewController: MapAction {
         }
     }
     
-    func hideNameCard() {
+    func nameCardHide() {
         uiviewNameCard.hide() {
             self.mapGesture(isOn: true)
         }
@@ -3459,7 +3460,42 @@ extension FaeMapViewController: MapAction {
         tapPlacePin(didSelect: view)
     }
     
-    func deselectAllPlaces(_ full: Bool) {
+    func userPinTap(view: MKAnnotationView) {
+        tblPlaceResult.hide()
+        tapUserPin(didSelect: view)
+    }
+    
+    func locPinTap(view: MKAnnotationView) {
+        tapLocationPin(didSelect: view)
+    }
+    
+    func allPlacesDeselect(_ full: Bool) {
         deselectAllPlaceAnnos(full: full)
+    }
+    
+    func elsewhereTap() {
+        uiviewSavedList.hide()
+        btnZoom.tapToSmallMode()
+    }
+    
+    func locPinCreating(point: CGPoint) {
+        createLocationPin(point: point)
+    }
+    
+    func locPinCreatingCancel() {
+        if modeLocCreating == .on {
+            if modeLocation == .off {
+                modeLocCreating = .off
+            }
+        } else if modeLocCreating == .off {
+            selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+            deselectAllLocations()
+        }
+    }
+    
+    func singleTapAllTimeControl() {
+        guard uiviewDropUpMenu != nil && mapMode == .normal else { return }
+        uiviewDropUpMenu.hide()
+        btnDropUpMenu.isSelected = false
     }
 }

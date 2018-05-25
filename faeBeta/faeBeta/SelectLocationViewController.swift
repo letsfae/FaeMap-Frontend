@@ -95,10 +95,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadPlaceInfoBar()
         loadPinIcon()
         fullyLoaded = true
-//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35 - 13, width: screenWidth, height: 1))
-//        line.layer.borderColor = UIColor.black.cgColor
-//        line.layer.borderWidth = 1
-//        view.addSubview(line)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -127,6 +123,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         faeMapView.singleTap.isEnabled = !boolFromExplore
         faeMapView.doubleTap.isEnabled = !boolFromExplore
         faeMapView.longPress.isEnabled = !boolFromExplore
+        faeMapView.mapAction = self
         view.addSubview(faeMapView)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
@@ -692,6 +689,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             selectedPlaceView?.optionsReady = false
             selectedPlaceView?.optionsOpened = false
             selectedPlaceView = nil
+            selectedPlace = nil
         }
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
@@ -783,4 +781,25 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
     }
 
+}
+
+extension SelectLocationViewController: MapAction {
+    
+    func allPlacesDeselect(_ full: Bool) {
+        deselectAllAnnotations()
+    }
+    
+    func placePinTap(view: MKAnnotationView) {
+        tapPlacePin(didSelect: view)
+    }
+    
+    func locPinCreating(point: CGPoint) {
+        createLocationPin(point: point)
+    }
+    
+    func locPinCreatingCancel() {
+        if createLocation == .on {
+            createLocation = .off
+        }
+    }
 }

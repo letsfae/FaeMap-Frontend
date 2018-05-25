@@ -591,14 +591,14 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class FMPlaceResultBarCell: UITableViewCell {
     
-    var class_2_icon_id = 0
-    var imgSavedItem: UIImageView!
-    var lblItemName: UILabel!
-    var lblItemAddr: UILabel!
-    var lblHours: UILabel!
-    var lblPrice: UILabel!
-    var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    var arrHour = [String]()
+    private var class_2_icon_id = 0
+    private var imgSavedItem: UIImageView!
+    private var lblItemName: UILabel!
+    private var lblItemAddr: UILabel!
+    private var lblHours: UILabel!
+    private var lblPrice: UILabel!
+    private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
+    private var arrHour = [String]()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -609,11 +609,16 @@ class FMPlaceResultBarCell: UITableViewCell {
         loadContent()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imgSavedItem.image = nil
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setValueForPlace(_ placeInfo: PlacePin) {
+    public func setValueForPlace(_ placeInfo: PlacePin) {
         lblItemName.text = placeInfo.name
         lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         imgSavedItem.backgroundColor = .white
@@ -650,7 +655,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         imgSavedItem = UIImageView()
         imgSavedItem.layer.cornerRadius = 5
         imgSavedItem.clipsToBounds = true

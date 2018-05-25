@@ -10,11 +10,10 @@ import UIKit
 
 class PlacesListCell: UITableViewCell {
     
-    var imgPic: UIImageView!
-    var lblPlaceName: UILabel!
-    var lblAddress: UILabel!
+    private var imgPic: UIImageView!
+    private var lblPlaceName: UILabel!
+    private var lblAddress: UILabel!
     var bottomLine: UIView!
-    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,18 +23,23 @@ class PlacesListCell: UITableViewCell {
         loadRecommendedCellContent()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imgPic.image = nil
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setValueForPlace(_ placeInfo: PlacePin) {
+    public func setValueForPlace(_ placeInfo: PlacePin) {
         lblPlaceName.text = placeInfo.name
         lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
         imgPic.backgroundColor = .white
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgPic)
     }
     
-    fileprivate func loadRecommendedCellContent() {
+    private func loadRecommendedCellContent() {
         imgPic = UIImageView()
         imgPic.frame = CGRect(x: 12 * screenWidthFactor, y: 12, width: 48, height: 48)
         imgPic.contentMode = .scaleAspectFill
@@ -69,8 +73,8 @@ class PlacesListCell: UITableViewCell {
 
 class CategoryListCell: UITableViewCell {
     
-    var imgPic: UIImageView!
-    var lblCatName: UILabel!
+    private var imgPic: UIImageView!
+    private var lblCatName: UILabel!
     var bottomLine: UIView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -85,12 +89,12 @@ class CategoryListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setValueForCategory(_ cat: (key: String, value: Int)) {
+    public func setValueForCategory(_ cat: (key: String, value: Int)) {
         imgPic.image = UIImage(named: "place_result_\(cat.value)")
         lblCatName.text = cat.key
     }
     
-    func loadCellContent() {
+    private  func loadCellContent() {
         imgPic = UIImageView()
         imgPic.frame = CGRect(x: 7 * screenWidthFactor, y: 7, width: 58, height: 58)
         imgPic.contentMode = .scaleAspectFill
