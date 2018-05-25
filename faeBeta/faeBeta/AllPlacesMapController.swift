@@ -23,7 +23,7 @@ class AllPlacesMapController: BasicMapController {
         faeMapView.singleTap.isEnabled = true
         faeMapView.doubleTap.isEnabled = true
         faeMapView.longPress.isEnabled = true
-        faeMapView.mapDelegate = self
+        faeMapView.mapAction = self
         btnZoom.isHidden = false
         btnLocat.isHidden = false
     }
@@ -105,7 +105,7 @@ class AllPlacesMapController: BasicMapController {
 
 extension AllPlacesMapController: MapAction {
     
-    func changeIconStyle(action: Int, isPlace: Bool) {
+    func iconStyleChange(action: Int, isPlace: Bool) {
         if isPlace {
             guard let anView = selectedPlaceAnno else { return }
             switch action {
@@ -135,7 +135,7 @@ extension AllPlacesMapController: MapAction {
         tapPlacePin(didSelect: view)
     }
     
-    func deselectAllPlaces(_ full: Bool) {
+    func allPlacesDeselect(_ full: Bool) {
         deselectAllPlaceAnnos(full: full)
     }
 }

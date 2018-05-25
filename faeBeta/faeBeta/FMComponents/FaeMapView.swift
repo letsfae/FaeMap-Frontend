@@ -9,15 +9,21 @@
 import UIKit
 
 @objc protocol MapAction: class {
-    @objc optional func changeIconStyle(action: Int, isPlace: Bool)
-    @objc optional func hideNameCard()
+    @objc optional func iconStyleChange(action: Int, isPlace: Bool)
+    @objc optional func nameCardHide()
     @objc optional func placePinTap(view: MKAnnotationView)
-    @objc optional func deselectAllPlaces(_ full: Bool)
+    @objc optional func userPinTap(view: MKAnnotationView)
+    @objc optional func locPinTap(view: MKAnnotationView)
+    @objc optional func allPlacesDeselect(_ full: Bool)
+    @objc optional func elsewhereTap()
+    @objc optional func locPinCreatingCancel()
+    @objc optional func locPinCreating(point: CGPoint)
+    @objc optional func singleTapAllTimeControl()
 }
 
 class FaeMapView: MKMapView {
 
-    var mapDelegate: MapAction?
+    var mapAction: MapAction?
     private var isPlaceAnno = true
     private var block = false
     var faeMapCtrler: FaeMapViewController?
@@ -32,8 +38,11 @@ class FaeMapView: MKMapView {
     var selectedPlaceAnno: PlacePinAnnotationView?
     var selectedLocAnno: LocPinAnnotationView?
     
+    public var isSingleTapOnLocPinEnabled: Bool = false
+    
     override func layoutSubviews() {
         super.layoutSubviews()
+        // customize the compass view in the way our app's ui
         if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
             compassView.frame = CGRect(x: 21, y: screenHeight - cgfloatCompassOffset - device_offset_bot_main, width: 60, height: 60)
             if let imgView = compassView.subviews.first as? UIImageView {
@@ -64,20 +73,6 @@ class FaeMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cancelCreatingLocationPin() {
-        if faeMapCtrler?.modeLocCreating == .on {
-            if faeMapCtrler?.modeLocation == .off {
-                faeMapCtrler?.modeLocCreating = .off
-            }
-        } else if faeMapCtrler?.modeLocCreating == .off {
-            faeMapCtrler?.selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
-            faeMapCtrler?.deselectAllLocations()
-        }
-        if slcMapCtrler?.createLocation == .on {
-            slcMapCtrler?.createLocation = .off
-        }
-    }
-    
     @objc func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
         
         let tapPoint = tapGesture.location(in: self)
@@ -87,71 +82,66 @@ class FaeMapView: MKMapView {
         block = true
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView && blockTap == false {
+            // Place Pin Tap
             if let anView = v as? PlacePinAnnotationView {
-                mapDelegate?.hideNameCard?()
-                cancelCreatingLocationPin()
-                if anView.optionsReady == false {   // first tap place pin
-                    mapDelegate?.deselectAllPlaces?(true)
-                    mapDelegate?.placePinTap?(view: anView)
-                    slcMapCtrler?.deselectAllAnnotations()
-                    slcMapCtrler?.tapPlacePin(didSelect: anView)
-                    anView.optionsReady = slcMapCtrler == nil
-                } else if anView.optionsReady && !anView.optionsOpened {   // second tap place pin
+                mapAction?.nameCardHide?()
+                mapAction?.locPinCreatingCancel?()
+                if anView.optionsReady == false {  // first tap place pin
+                    mapAction?.allPlacesDeselect?(true)
+                    mapAction?.placePinTap?(view: anView)
+                    anView.optionsReady = slcMapCtrler == nil // come back later
+                } else if anView.optionsReady && !anView.optionsOpened {  // second tap place pin
                     anView.showButtons()
                     anView.optionsOpened = true
-                    mapDelegate?.placePinTap?(view: anView)
+                    mapAction?.placePinTap?(view: anView)
                 } else if anView.optionsReady && anView.optionsOpened {
                     anView.hideButtons()
                     anView.optionsOpened = false
                 }
-            } else if let anView = v as? UserPinAnnotationView {
-                cancelCreatingLocationPin()
-                mapDelegate?.deselectAllPlaces?(true)
-                faeMapCtrler?.tblPlaceResult.hide()
-                faeMapCtrler?.tapUserPin(didSelect: anView)
-            } else if let anView = v as? LocPinAnnotationView {
-                mapDelegate?.hideNameCard?()
-                if slcMapCtrler == nil {
-                    if anView.optionsReady == false {
-                        faeMapCtrler?.deselectAllLocations()
-                        faeMapCtrler?.tapLocationPin(didSelect: anView)
-                        anView.optionsReady = true
-                    } else if anView.optionsReady && !anView.optionsOpened {
-                        anView.showButtons()
-                        anView.optionsOpened = true
-                        faeMapCtrler?.tapLocationPin(didSelect: anView)
-                    } else if anView.optionsReady && anView.optionsOpened {
-                        anView.hideButtons()
-                        anView.optionsOpened = false
-                    }
+            } else
+            // User Pin Tap
+            if let anView = v as? UserPinAnnotationView {
+                mapAction?.locPinCreatingCancel?()
+                mapAction?.allPlacesDeselect?(true)
+                mapAction?.userPinTap?(view: anView)
+            } else
+            // Location Pin Tap
+            if let anView = v as? LocPinAnnotationView {
+                mapAction?.nameCardHide?()
+                guard isSingleTapOnLocPinEnabled else { return }
+                if anView.optionsReady == false {
+                    mapAction?.allPlacesDeselect?(true)
+                    mapAction?.locPinTap?(view: anView)
+                    anView.optionsReady = true
+                } else if anView.optionsReady && !anView.optionsOpened {
+                    anView.showButtons()
+                    anView.optionsOpened = true
+                    mapAction?.locPinTap?(view: anView)
+                } else if anView.optionsReady && anView.optionsOpened {
+                    anView.hideButtons()
+                    anView.optionsOpened = false
                 }
             }
         } else {
-            mapDelegate?.hideNameCard?()
-            faeMapCtrler?.uiviewSavedList.hide()
-            faeMapCtrler?.btnZoom.tapToSmallMode()
-            if v is FMLocationInfoBar {
-                
-            } else {
-                cancelCreatingLocationPin()
+            mapAction?.elsewhereTap?()
+            mapAction?.nameCardHide?()
+            if !(v is FMLocationInfoBar) {
+                mapAction?.locPinCreatingCancel?()
                 faeMapCtrler?.mapGesture(isOn: true)
                 if (faeMapCtrler?.mapMode != .pinDetail || faeMapCtrler?.modePinDetail == .off) && faeMapCtrler?.swipingState != .multipleSearch {
                     faeMapCtrler?.tblPlaceResult.hide()
                 }
                 slcMapCtrler?.uiviewPlaceBar.hide()
                 if faeMapCtrler == nil {
-                    mapDelegate?.deselectAllPlaces?(true)
+                    mapAction?.allPlacesDeselect?(true)
                 } else {
-                    mapDelegate?.deselectAllPlaces?(faeMapCtrler?.swipingState == .map)
+                    mapAction?.allPlacesDeselect?(faeMapCtrler?.swipingState == .map)
                 }
-                slcMapCtrler?.deselectAllAnnotations()
-                slcMapCtrler?.selectedPlace = nil
+                mapAction?.allPlacesDeselect?(true)
             }
         }
         block = false
-        guard faeMapCtrler?.uiviewDropUpMenu != nil && faeMapCtrler?.mapMode == .normal else { return }
-        faeMapCtrler?.uiviewDropUpMenu.hide()
-        faeMapCtrler?.btnDropUpMenu.isSelected = false
+        mapAction?.singleTapAllTimeControl?()
     }
     
     @objc func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
@@ -161,24 +151,21 @@ class FaeMapView: MKMapView {
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
         guard !block else { return }
         block = true
-        mapDelegate?.hideNameCard?()
+        mapAction?.nameCardHide?()
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView && blockTap == false {
             if faeMapCtrler?.mapMode != .routing {
                 if let anView = v as? PlacePinAnnotationView {
                     if !anView.optionsOpened {
-//                        faeMapCtrler?.deselectAllPlaceAnnos()
-                        mapDelegate?.deselectAllPlaces?(true)
+                        mapAction?.allPlacesDeselect?(true)
                         anView.optionsReady = true
                         anView.optionsOpened = true
-                        mapDelegate?.placePinTap?(view: anView)
+                        mapAction?.placePinTap?(view: anView)
                         anView.showButtons()
                     }
                 } else if let anView = v as? UserPinAnnotationView {
-//                    faeMapCtrler?.deselectAllPlaceAnnos()
-                    mapDelegate?.deselectAllPlaces?(true)
-                    faeMapCtrler?.tblPlaceResult.hide()
-                    faeMapCtrler?.tapUserPin(didSelect: anView)
+                    mapAction?.allPlacesDeselect?(true)
+                    mapAction?.userPinTap?(view: anView)
                 }
             }
         } else {
@@ -202,27 +189,24 @@ class FaeMapView: MKMapView {
             if let anView = v as? PlacePinAnnotationView {
                 block = true
                 isPlaceAnno = true
-                cancelCreatingLocationPin()
+                mapAction?.locPinCreatingCancel?()
                 if anView.arrBtns.count == 0 {
-//                    faeMapCtrler?.deselectAllPlaceAnnos()
-                    mapDelegate?.deselectAllPlaces?(true)
+                    mapAction?.allPlacesDeselect?(true)
                     anView.optionsOpened = true
-                    mapDelegate?.placePinTap?(view: anView)
+                    mapAction?.placePinTap?(view: anView)
                     anView.showButtons()
                 }
             } else if let _ = v as? UserPinAnnotationView {
                 block = true
-                cancelCreatingLocationPin()
+                mapAction?.locPinCreatingCancel?()
             } else if let anView = v as? LocPinAnnotationView {
                 if anView.arrBtns.count == 0 {
-//                    faeMapCtrler?.deselectAllPlaceAnnos()
-                    mapDelegate?.deselectAllPlaces?(true)
+                    mapAction?.allPlacesDeselect?(true)
                     anView.showButtons()
                 }
             } else {
                 if !(v is UIButton) {
-                    faeMapCtrler?.createLocationPin(point: tapPoint)
-                    slcMapCtrler?.createLocationPin(point: tapPoint)
+                    mapAction?.locPinCreating?(point: tapPoint)
                 }
             }
             guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
@@ -263,36 +247,36 @@ class FaeMapView: MKMapView {
                 guard anView.arrBtns.count == 4 else { return }
                 let point = sender.location(in: anView)
                 if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
-                    mapDelegate?.changeIconStyle?(action: 1, isPlace: true)
+                    mapAction?.iconStyleChange?(action: 1, isPlace: true)
                 }
                 else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
-                    mapDelegate?.changeIconStyle?(action: 2, isPlace: true)
+                    mapAction?.iconStyleChange?(action: 2, isPlace: true)
                 }
                 else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
-                    mapDelegate?.changeIconStyle?(action: 3, isPlace: true)
+                    mapAction?.iconStyleChange?(action: 3, isPlace: true)
                 }
                 else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
-                    mapDelegate?.changeIconStyle?(action: 4, isPlace: true)
+                    mapAction?.iconStyleChange?(action: 4, isPlace: true)
                 } else {
-                    mapDelegate?.changeIconStyle?(action: 0, isPlace: true)
+                    mapAction?.iconStyleChange?(action: 0, isPlace: true)
                 }
             } else {
                 guard let anView = selectedLocAnno else { return }
                 guard anView.arrBtns.count == 4 else { return }
                 let point = sender.location(in: anView)
                 if point.x >= 0 && point.x <= 65 && point.y >= 43 && point.y <= 90 {
-                    mapDelegate?.changeIconStyle?(action: 1, isPlace: false)
+                    mapAction?.iconStyleChange?(action: 1, isPlace: false)
                 }
                 else if point.x >= 35 && point.x <= 87 && point.y >= 0 && point.y <= 60 {
-                    mapDelegate?.changeIconStyle?(action: 2, isPlace: false)
+                    mapAction?.iconStyleChange?(action: 2, isPlace: false)
                 }
                 else if point.x > 87 && point.x <= 139 && point.y >= 0 && point.y <= 60 {
-                    mapDelegate?.changeIconStyle?(action: 3, isPlace: false)
+                    mapAction?.iconStyleChange?(action: 3, isPlace: false)
                 }
                 else if point.x >= 109 && point.x <= 174 && point.y >= 43 && point.y <= 90 {
-                    mapDelegate?.changeIconStyle?(action: 4, isPlace: false)
+                    mapAction?.iconStyleChange?(action: 4, isPlace: false)
                 } else {
-                    mapDelegate?.changeIconStyle?(action: 0, isPlace: false)
+                    mapAction?.iconStyleChange?(action: 0, isPlace: false)
                 }
             }
             
