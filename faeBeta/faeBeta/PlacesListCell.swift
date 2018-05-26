@@ -41,9 +41,10 @@ class PlacesListCell: UITableViewCell {
     
     private func loadRecommendedCellContent() {
         imgPic = UIImageView()
-        imgPic.frame = CGRect(x: 12 * screenWidthFactor, y: 12, width: 48, height: 48)
+        imgPic.frame = CGRect(x: 12, y: 12, width: 48, height: 48)
         imgPic.contentMode = .scaleAspectFill
         imgPic.clipsToBounds = true
+        imgPic.layer.cornerRadius = 3
         addSubview(imgPic)
         
         lblPlaceName = UILabel()
@@ -52,7 +53,7 @@ class PlacesListCell: UITableViewCell {
         lblPlaceName.textColor = UIColor._898989()
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblPlaceName)
-        addConstraintsWithFormat("H:|-\(73*screenWidthFactor)-[v0]-\(20*screenWidthFactor)-|", options: [], views: lblPlaceName)
+        addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblPlaceName)
         
         lblAddress = UILabel()
         lblAddress.textAlignment = .left
@@ -60,13 +61,13 @@ class PlacesListCell: UITableViewCell {
         lblAddress.textColor = UIColor._107107107()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblAddress)
-        addConstraintsWithFormat("H:|-\(73*screenWidthFactor)-[v0]-\(20*screenWidthFactor)-|", options: [], views: lblAddress)
+        addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblAddress)
         addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblPlaceName, lblAddress)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
-        addConstraintsWithFormat("H:|-\(69*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
+        addConstraintsWithFormat("H:|-69.5-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
 }
@@ -96,7 +97,7 @@ class CategoryListCell: UITableViewCell {
     
     private  func loadCellContent() {
         imgPic = UIImageView()
-        imgPic.frame = CGRect(x: 7 * screenWidthFactor, y: 7, width: 58, height: 58)
+        imgPic.frame = CGRect(x: 7, y: 7, width: 58, height: 58)
         imgPic.contentMode = .scaleAspectFill
         imgPic.clipsToBounds = true
         addSubview(imgPic)
@@ -107,13 +108,13 @@ class CategoryListCell: UITableViewCell {
         lblCatName.textColor = UIColor._898989()
         lblCatName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblCatName)
-        addConstraintsWithFormat("H:|-\(73*screenWidthFactor)-[v0]-\(20*screenWidthFactor)-|", options: [], views: lblCatName)
+        addConstraintsWithFormat("H:|-72-[v0]-0-|", options: [], views: lblCatName)
         addConstraintsWithFormat("V:|-24-[v0]", options: [], views: lblCatName)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
         addSubview(bottomLine)
-        addConstraintsWithFormat("H:|-\(69*screenWidthFactor)-[v0]-0-|", options: [], views: bottomLine)
+        addConstraintsWithFormat("H:|-69.5-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
 }

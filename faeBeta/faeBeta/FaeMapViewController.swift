@@ -221,9 +221,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         initUserDataFromServer()
         
+        loadMapView()
         loadNameCard()
         loadMapFilter()
-        loadMapView()
         loadButton()
         view.bringSubview(toFront: uiviewDropUpMenu)
         loadExploreBar()
@@ -389,6 +389,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 uiviewExpbarShadow.isHidden = false
                 return
             }
+            
+            faeMapView.isDoubleTapOnMKAnnoViewEnabled = mapMode != .routing
         }
     }
     
@@ -729,7 +731,6 @@ extension FaeMapViewController {
         faeMapView.showsCompass = true
         faeMapView.delegate = self
         faeMapView.showsUserLocation = true
-        faeMapView.faeMapCtrler = self
         faeMapView.mapAction = self
         faeMapView.isSingleTapOnLocPinEnabled = true
         
@@ -849,6 +850,7 @@ extension FaeMapViewController {
         uiviewSchbarShadow.addSubview(uiviewPinActionDisplay)
         uiviewSchbarShadow.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewPinActionDisplay)
         uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewPinActionDisplay)
+        faeMapView.uiviewPinActionDisplay = uiviewPinActionDisplay
         
         // Click to back to zoom
         btnZoom = FMZoomButton()
@@ -1438,7 +1440,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func deselectAllLocations() {
-        
         uiviewLocationBar.hide()
         uiviewPinActionDisplay.hide()
         uiviewSavedList.arrListSavedThisPin.removeAll()
@@ -1844,6 +1845,7 @@ extension FaeMapViewController: NameCardDelegate {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
         view.addSubview(uiviewNameCard)
+        faeMapView.uiviewNameCard = uiviewNameCard
     }
     
     // MARK: NameCardDelegate
@@ -3343,6 +3345,7 @@ extension FaeMapViewController: LocDetailDelegate {
     
     func updateLocationInfo(location: CLLocation) {
         uiviewLocationBar.show()
+        uiviewLocationBar.updateLocationBar(name: "", address: "")
         view.bringSubview(toFront: activityIndicatorLocPin)
         activityIndicatorLocPin.startAnimating()
         General.shared.getAddress(location: location, original: true) { (original) in
@@ -3450,12 +3453,6 @@ extension FaeMapViewController: MapAction {
         }
     }
     
-    func nameCardHide() {
-        uiviewNameCard.hide() {
-            self.mapGesture(isOn: true)
-        }
-    }
-    
     func placePinTap(view: MKAnnotationView) {
         tapPlacePin(didSelect: view)
     }
@@ -3473,9 +3470,17 @@ extension FaeMapViewController: MapAction {
         deselectAllPlaceAnnos(full: full)
     }
     
-    func elsewhereTap() {
+    func singleElsewhereTap() {
         uiviewSavedList.hide()
         btnZoom.tapToSmallMode()
+    }
+    
+    func singleElsewhereTapExceptInfobar() {
+        mapGesture(isOn: true)
+        if (mapMode != .pinDetail || modePinDetail == .off) && swipingState != .multipleSearch {
+            tblPlaceResult.hide()
+        }
+        deselectAllPlaceAnnos(full: swipingState == .map)
     }
     
     func locPinCreating(point: CGPoint) {
@@ -3495,6 +3500,22 @@ extension FaeMapViewController: MapAction {
     
     func singleTapAllTimeControl() {
         guard uiviewDropUpMenu != nil && mapMode == .normal else { return }
+        uiviewDropUpMenu.hide()
+        btnDropUpMenu.isSelected = false
+    }
+    
+    func doubleElsewhereTap() {
+        mapGesture(isOn: true)
+    }
+    
+    func doubleTapAllTimeControl() {
+        guard uiviewDropUpMenu != nil else { return }
+        uiviewDropUpMenu.hide()
+        btnDropUpMenu.isSelected = false
+    }
+    
+    func longPressAllTimeCtrlWhenBegan() {
+        guard uiviewDropUpMenu != nil else { return }
         uiviewDropUpMenu.hide()
         btnDropUpMenu.isSelected = false
     }

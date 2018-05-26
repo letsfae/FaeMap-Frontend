@@ -18,6 +18,7 @@ class AllPlacesMapController: BasicMapController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadTopBar()
+        loadPlaceInfoBar()
         loadAnnotations(places: arrPlaces)
         setTitle(title: strTitle)
         faeMapView.singleTap.isEnabled = true
@@ -26,6 +27,12 @@ class AllPlacesMapController: BasicMapController {
         faeMapView.mapAction = self
         btnZoom.isHidden = false
         btnLocat.isHidden = false
+        PLACE_INSTANT_SHOWUP = true
+    }
+    
+    override func loadPlaceInfoBar() {
+        super.loadPlaceInfoBar()
+        uiviewPlaceBar.delegate = self
     }
     
     override func loadTopBar() {
@@ -99,6 +106,46 @@ class AllPlacesMapController: BasicMapController {
                 selectedPlaceAnno?.hideButtons()
                 selectedPlaceAnno?.optionsOpened = false
             }
+        }
+    }
+}
+
+extension AllPlacesMapController: PlaceViewDelegate {
+    func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool) {
+        func findAnnotation() {
+            if let placeData = place {
+                var desiredAnno: CCHMapClusterAnnotation!
+                for anno in faeMapView.annotations {
+                    guard let cluster = anno as? CCHMapClusterAnnotation else { continue }
+                    guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { continue }
+                    guard let placeInfo = firstAnn.pinInfo as? PlacePin else { continue }
+                    if placeInfo == placeData {
+                        desiredAnno = cluster
+                        break
+                    }
+                }
+                if animated {
+                    faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
+                }
+                if desiredAnno != nil {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        self.faeMapView.selectAnnotation(desiredAnno, animated: false)
+                    }
+                }
+            }
+        }
+        
+        deselectAllPlaceAnnos()
+        if let anno = annotation {
+            faeMapView.selectAnnotation(anno, animated: false)
+            if animated {
+                faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
+            }
+        }
+        
+        findAnnotation()
+        if let placePin = place { // 必须放在最末尾
+            uiviewPlaceBar.loading(current: placePin)
         }
     }
 }
