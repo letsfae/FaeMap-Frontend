@@ -21,6 +21,7 @@ class SignInEmailViewController: UIViewController {
     private var txtEmail: FAETextField!
     private var lblInfo: UILabel!
     private var btnSendCode: UIButton!
+    var strEmail: String?
     
     private enum pageStateType {
         case enteringUserName, enteringCode
@@ -47,6 +48,10 @@ class SignInEmailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if let email = strEmail, isValidEmail(email) {
+            btnSendCode.isEnabled = true
+            btnSendCode.backgroundColor = UIColor._2499090()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -93,6 +98,9 @@ class SignInEmailViewController: UIViewController {
         txtEmail.adjustsFontSizeToFitWidth = true
         txtEmail.keyboardType = .emailAddress
         view.addSubview(txtEmail)
+        if let email = strEmail, email != "" {
+            txtEmail.text = email
+        }
         
         lblInfo = UILabel(frame: CGRect(x: 87, y: screenHeight - 50 * screenHeightFactor - 90  - device_offset_bot, width: screenWidth - 175, height: 36))
         lblInfo.attributedText = NSAttributedString(string: "Oops… This Email has not\nbeen linked to an Account.", attributes: [NSAttributedStringKey.foregroundColor: UIColor._2499090(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!])
@@ -214,7 +222,7 @@ class SignInEmailViewController: UIViewController {
         vc.enterFrom = enterFrom
         vc.enterEmailMode = .signInSupport
         vc.enterPhoneMode = .signInSupport
-        vc.strEmail = txtEmail.text!
+        vc.strVerified = txtEmail.text!
         navigationController?.pushViewController(vc, animated: true)
     }
     

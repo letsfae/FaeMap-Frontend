@@ -41,7 +41,7 @@ class LogInViewController: UIViewController {
     private var btnSupport: UIButton!
     private var btnLogin: UIButton!
     private var lblLoginResult: UILabel!
-    private var txtUsername: FAETextField!
+    fileprivate var txtUsername: FAETextField!
     private var txtPassword: FAETextField!
     private var indicatorActivity: UIActivityIndicatorView!
     private var btnClear: UIButton!
@@ -53,6 +53,8 @@ class LogInViewController: UIViewController {
     fileprivate var btnEmail: UIButton!
     fileprivate var btnCancel: UIButton!
     
+    fileprivate var uiviewInput: UIView!
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,6 +63,7 @@ class LogInViewController: UIViewController {
         setupInterface()
         createActivityIndicator()
         loadResetPassword()
+        loadInputText()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -241,7 +244,11 @@ class LogInViewController: UIViewController {
     
     @objc private func supportButtonTapped() {
         view.endEditing(true)
-        animationShowSelf()
+        if txtUsername.text != "" {
+            animationShowSelf()
+        } else {
+            animationShowInput()
+        }
 //        let vc = SignInSupportViewController()
 //        vc.modalPresentationStyle = .overCurrentContext
 //        present(vc, animated: false)
@@ -403,30 +410,83 @@ extension LogInViewController {
         view.addConstraintsWithFormat("V:[v0(25)]-\(15 * screenHeightFactor)-|", options: [], views: btnCancel)
     }
     
+    fileprivate func loadInputText() {
+        uiviewInput = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+        uiviewInput.backgroundColor = UIColor._107105105_a50()
+        view.addSubview(uiviewInput)
+        
+        let uiviewBox = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 139))
+        uiviewBox.center.x = screenWidth / 2
+        uiviewBox.backgroundColor = .white
+        uiviewBox.layer.cornerRadius = 20
+        uiviewInput.addSubview(uiviewBox)
+        
+        let lblTitle = UILabel(frame: CGRect(x: 0, y: 20, w: 290, h: 50))
+        lblTitle.textAlignment = .center
+        lblTitle.numberOfLines = 0
+        lblTitle.text = "Please input your Username\nor Email"
+        lblTitle.textColor = UIColor._898989()
+        lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        uiviewBox.addSubview(lblTitle)
+        
+        let btnCancel = UIButton(frame: CGRect(x: 80, y: 80, w: 130, h: 39))
+        btnCancel.setTitle("Cancel", for: .normal)
+        btnCancel.setTitleColor(UIColor.white, for: .normal)
+        btnCancel.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18 * screenHeightFactor)
+        btnCancel.backgroundColor = UIColor._2499090()
+        btnCancel.layer.borderWidth = 2
+        btnCancel.layer.borderColor = UIColor._2499090().cgColor
+        btnCancel.layer.cornerRadius = 19 * screenWidthFactor
+        btnCancel.addTarget(self, action: #selector(actionCancel(_:)), for: .touchUpInside)
+        uiviewBox.addSubview(btnCancel)
+        
+        uiviewInput.isHidden = true
+    }
+    
     @objc private func actionCancel(_ sender: Any?) {
         animationHideSelf()
+        animationHideInput()
     }
     
     @objc private func actionChooseMethod(_ sender: UIButton) {
         if sender.tag == 0 {  // use phone
-            /*let vc = SignInPhoneViewController()
+            let vc = SignInPhoneViewController()
             vc.enterMode = .signInSupport
             vc.enterFrom = .login
-            navigationController?.pushViewController(vc, animated: true)*/
-            let vc = SignInPhoneUsernameViewController()
+            vc.strVerified = txtUsername.text!
+            navigationController?.pushViewController(vc, animated: true)
+            /*let vc = SignInPhoneUsernameViewController()
             if !txtUsername.text!.contains("@") {
                 vc.strUsername = txtUsername.text!
             }
-            navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: true)*/
         } else {  // use email
             let vc = SignInEmailViewController()
             vc.enterMode = .signInSupport
             vc.enterFrom = .login
+            if let email = txtUsername.text, email.contains("@") {
+                vc.strEmail = email
+            }
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     
     // MARK: Animations
+    fileprivate func animationShowInput() {
+        uiviewInput.isHidden = false
+        uiviewInput.alpha = 0
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewInput.alpha = 1
+        }, completion: nil)
+    }
+    
+    private func animationHideInput() {
+        uiviewInput.alpha = 1
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewInput.alpha = 0
+        }, completion: nil)
+    }
+    
     fileprivate func animationShowSelf() {
         uiviewGrayBg.isHidden = false
         uiviewGrayBg.alpha = 0
