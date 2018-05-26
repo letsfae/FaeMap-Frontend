@@ -9,26 +9,32 @@
 import UIKit
 
 @objc protocol MapAction: class {
+    
     @objc optional func iconStyleChange(action: Int, isPlace: Bool)
-    @objc optional func nameCardHide()
+    
+    @objc optional func allPlacesDeselect(_ full: Bool)
+    
     @objc optional func placePinTap(view: MKAnnotationView)
     @objc optional func userPinTap(view: MKAnnotationView)
     @objc optional func locPinTap(view: MKAnnotationView)
-    @objc optional func allPlacesDeselect(_ full: Bool)
-    @objc optional func elsewhereTap()
     @objc optional func locPinCreatingCancel()
     @objc optional func locPinCreating(point: CGPoint)
+    
+    @objc optional func singleElsewhereTap()
+    @objc optional func singleElsewhereTapExceptInfobar()
     @objc optional func singleTapAllTimeControl()
+    
+    @objc optional func doubleElsewhereTap()
+    @objc optional func doubleTapAllTimeControl()
+    
+    @objc optional func longPressAllTimeCtrlWhenBegan()
 }
 
 class FaeMapView: MKMapView {
 
-    var mapAction: MapAction?
+    weak var mapAction: MapAction?
     private var isPlaceAnno = true
     private var block = false
-    var faeMapCtrler: FaeMapViewController?
-    var slcMapCtrler: SelectLocationViewController?
-    var bscMapCtrler: BasicMapController?
     var blockTap = false
     var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
     var singleTap: UITapGestureRecognizer!
@@ -38,7 +44,11 @@ class FaeMapView: MKMapView {
     var selectedPlaceAnno: PlacePinAnnotationView?
     var selectedLocAnno: LocPinAnnotationView?
     
+    var uiviewNameCard: FMNameCardView?
+    var uiviewPinActionDisplay: FMPinActionDisplay?
+    
     public var isSingleTapOnLocPinEnabled: Bool = false
+    public var isDoubleTapOnMKAnnoViewEnabled: Bool = true
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -84,12 +94,12 @@ class FaeMapView: MKMapView {
         if v is MKAnnotationView && blockTap == false {
             // Place Pin Tap
             if let anView = v as? PlacePinAnnotationView {
-                mapAction?.nameCardHide?()
+                nameCardHide(gestureEnabled: true)
                 mapAction?.locPinCreatingCancel?()
                 if anView.optionsReady == false {  // first tap place pin
                     mapAction?.allPlacesDeselect?(true)
                     mapAction?.placePinTap?(view: anView)
-                    anView.optionsReady = slcMapCtrler == nil // come back later
+                    anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {  // second tap place pin
                     anView.showButtons()
                     anView.optionsOpened = true
@@ -107,7 +117,7 @@ class FaeMapView: MKMapView {
             } else
             // Location Pin Tap
             if let anView = v as? LocPinAnnotationView {
-                mapAction?.nameCardHide?()
+                nameCardHide(gestureEnabled: true)
                 guard isSingleTapOnLocPinEnabled else { return }
                 if anView.optionsReady == false {
                     mapAction?.allPlacesDeselect?(true)
@@ -123,21 +133,11 @@ class FaeMapView: MKMapView {
                 }
             }
         } else {
-            mapAction?.elsewhereTap?()
-            mapAction?.nameCardHide?()
+            mapAction?.singleElsewhereTap?()
+            nameCardHide(gestureEnabled: true)
             if !(v is FMLocationInfoBar) {
+                mapAction?.singleElsewhereTapExceptInfobar?()
                 mapAction?.locPinCreatingCancel?()
-                faeMapCtrler?.mapGesture(isOn: true)
-                if (faeMapCtrler?.mapMode != .pinDetail || faeMapCtrler?.modePinDetail == .off) && faeMapCtrler?.swipingState != .multipleSearch {
-                    faeMapCtrler?.tblPlaceResult.hide()
-                }
-                slcMapCtrler?.uiviewPlaceBar.hide()
-                if faeMapCtrler == nil {
-                    mapAction?.allPlacesDeselect?(true)
-                } else {
-                    mapAction?.allPlacesDeselect?(faeMapCtrler?.swipingState == .map)
-                }
-                mapAction?.allPlacesDeselect?(true)
             }
         }
         block = false
@@ -151,30 +151,27 @@ class FaeMapView: MKMapView {
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
         guard !block else { return }
         block = true
-        mapAction?.nameCardHide?()
+        nameCardHide(gestureEnabled: true)
         let v: Any? = hitTest(tapPoint, with: nil)
         if v is MKAnnotationView && blockTap == false {
-            if faeMapCtrler?.mapMode != .routing {
-                if let anView = v as? PlacePinAnnotationView {
-                    if !anView.optionsOpened {
-                        mapAction?.allPlacesDeselect?(true)
-                        anView.optionsReady = true
-                        anView.optionsOpened = true
-                        mapAction?.placePinTap?(view: anView)
-                        anView.showButtons()
-                    }
-                } else if let anView = v as? UserPinAnnotationView {
+            guard isDoubleTapOnMKAnnoViewEnabled else { return }
+            if let anView = v as? PlacePinAnnotationView {
+                if !anView.optionsOpened {
                     mapAction?.allPlacesDeselect?(true)
-                    mapAction?.userPinTap?(view: anView)
+                    anView.optionsReady = true
+                    anView.optionsOpened = true
+                    mapAction?.placePinTap?(view: anView)
+                    anView.showButtons()
                 }
+            } else if let anView = v as? UserPinAnnotationView {
+                mapAction?.allPlacesDeselect?(true)
+                mapAction?.userPinTap?(view: anView)
             }
         } else {
-            faeMapCtrler?.mapGesture(isOn: true)
+            mapAction?.doubleElsewhereTap?()
         }
         block = false
-        guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
-        faeMapCtrler?.uiviewDropUpMenu.hide()
-        faeMapCtrler?.btnDropUpMenu.isSelected = false
+        mapAction?.doubleTapAllTimeControl?()
     }
 
     @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
@@ -209,9 +206,7 @@ class FaeMapView: MKMapView {
                     mapAction?.locPinCreating?(point: tapPoint)
                 }
             }
-            guard faeMapCtrler?.uiviewDropUpMenu != nil else { return }
-            faeMapCtrler?.uiviewDropUpMenu.hide()
-            faeMapCtrler?.btnDropUpMenu.isSelected = false
+            mapAction?.longPressAllTimeCtrlWhenBegan?()
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
             if let anView = v as? PlacePinAnnotationView {
@@ -225,16 +220,14 @@ class FaeMapView: MKMapView {
                 }
                 anView.optionsReady = true
             } else {
-                faeMapCtrler?.selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.hideButtons()
             }
-            if let anView = faeMapCtrler?.selectedPlaceAnno {
+            if let anView = selectedPlaceAnno {
                 anView.chooseAction()
-                faeMapCtrler?.uiviewPinActionDisplay.hide()
-            } else if faeMapCtrler?.modeLocCreating == .on {
-                guard let anView = faeMapCtrler?.selectedLocAnno else { return }
-                guard anView.arrBtns.count == 4 else { return }
+                uiviewPinActionDisplay?.hide()
+            } else if let anView = selectedLocAnno {
                 anView.chooseAction()
-                faeMapCtrler?.uiviewPinActionDisplay.hide()
+                uiviewPinActionDisplay?.hide()
             }
             let delayInSeconds: Double = 0.1
             let popTime = DispatchTime.now() + delayInSeconds
@@ -281,5 +274,19 @@ class FaeMapView: MKMapView {
             }
             
         }
+    }
+    
+    // MARK: - 辅助函数
+    func nameCardHide(gestureEnabled: Bool) {
+        uiviewNameCard?.hide {
+            self.mapGesture(isOn: gestureEnabled)
+        }
+    }
+    
+    func mapGesture(isOn: Bool) {
+        isZoomEnabled = isOn
+        isPitchEnabled = isOn
+        isRotateEnabled = isOn
+        isScrollEnabled = isOn
     }
 }

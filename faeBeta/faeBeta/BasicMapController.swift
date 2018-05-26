@@ -145,10 +145,15 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     func loadPlaceInfoBar() {
         view.addSubview(uiviewPlaceBar)
-        uiviewPlaceBar.boolDisableSwipe = true
     }
     
     // MARK: - MKMapDelegate
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view is PlacePinAnnotationView {
+            tapPlacePin(didSelect: view)
+        }
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
@@ -188,7 +193,9 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
         Key.shared.lastChosenLoc = mapView.centerCoordinate
-        if uiviewPlaceBar.tag > 0 { uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView) }
+        if uiviewPlaceBar.tag > 0 {
+            uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView)
+        }
         
     }
     
@@ -292,6 +299,8 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceAnno = anView
+        selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
+        selectedPlaceAnno?.zPos = 199
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()

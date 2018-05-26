@@ -264,7 +264,6 @@ class PlaceView: UIView {
     }
     
     private func loadContent() {
-        self.clipsToBounds = true
         
         let uiviewBkgd = UIView()
         uiviewBkgd.layer.cornerRadius = 2
