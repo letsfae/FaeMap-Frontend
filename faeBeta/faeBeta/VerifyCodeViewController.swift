@@ -42,7 +42,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     var strCountry = ""
     var strCountryCode = ""
     var strPhoneNumber = ""
-    var strEmail = ""
+    var strVerified = ""
     var boolUpdateEmail = false
     weak var delegate: VerifyCodeDelegate?
     var faeUser = FaeUser()
@@ -255,9 +255,9 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     @objc private func actionVerifyCode(_ sender: UIButton) {
         indicatorView.startAnimating()
         if enterMode == .email {
-            faeUser.whereKey("email", value: strEmail)
+            faeUser.whereKey("email", value: strVerified)
             faeUser.whereKey("code", value: verificationCodeView.displayValue)
-            print("email: \(strEmail) code: \(verificationCodeView.displayValue)")
+            print("email: \(strVerified) code: \(verificationCodeView.displayValue)")
             // reset_login veify
             switch enterEmailMode {
             case .signInSupport:
@@ -266,7 +266,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                         let controller = SignInSupportNewPassViewController()
                         controller.enterMode = self.enterMode
                         controller.enterFrom = self.enterFrom
-                        controller.email = self.strEmail
+                        controller.email = self.strVerified
                         controller.code = self.verificationCodeView.displayValue
                         self.navigationController?.pushViewController(controller, animated: true)
                     } else if statusCode == 500 {
@@ -289,7 +289,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                             if self.boolUpdateEmail {
                                 let vc = UpdateUsrnameEmailViewController()
                                 vc.enterMode = .email
-                                vc.strEmail = self.strEmail
+                                vc.strEmail = self.strVerified
                                 var arrViewControllers = self.navigationController?.viewControllers
                                 arrViewControllers?.removeLast()
                                 arrViewControllers?.removeLast()
@@ -325,6 +325,9 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
             faeUser.whereKey("code", value: verificationCodeView.displayValue)
             switch enterPhoneMode {
             case .signInSupport, .signup:
+                if enterPhoneMode == .signInSupport {
+                    strVerified.contains("@") ? faeUser.whereKey("email", value: strVerified) : faeUser.whereKey("user_name", value: strVerified)
+                }
                 faeUser.validateCode {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         if self.enterPhoneMode == .signInSupport {
@@ -332,6 +335,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                             controller.enterMode = self.enterMode
                             controller.phone = "(" + self.strCountryCode + ")" + self.strPhoneNumber
                             controller.code = self.verificationCodeView.displayValue
+                            controller.strVerified = self.strVerified
                             self.navigationController?.pushViewController(controller, animated: true)
                         } else {
                             let nextRegister = RegisterConfirmViewController()
@@ -434,7 +438,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     
     @objc private func resendVerificationCode() {
         if enterMode == .email { // TODO: error code undecided
-            postToURL("reset_login/code", parameter: ["email": strEmail], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["email": strVerified], authentication: nil, completion: {(statusCode, result) in })
         } else {
             actionSendCode()
         }
