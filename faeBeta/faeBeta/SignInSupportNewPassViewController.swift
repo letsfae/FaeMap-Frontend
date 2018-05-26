@@ -44,6 +44,7 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
     var email: String?
     var phone: String?
     var code: String?
+    var strVerified: String?
     var enterMode: EnterVerifyCodeMode!
     var enterFrom: EnterFromMode!
     

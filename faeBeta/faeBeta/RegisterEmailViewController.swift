@@ -168,7 +168,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                     let vc = VerifyCodeViewController()
                     vc.enterMode = .email
                     vc.enterEmailMode = .signup
-                    vc.strEmail = self.email!
+                    vc.strVerified = self.email!
                     vc.faeUser = self.faeUser
                     self.navigationController?.pushViewController(vc, animated: false)
                 })
@@ -176,7 +176,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                 let vc = VerifyCodeViewController()
                 vc.enterMode = .email
                 vc.enterEmailMode = .signup
-                vc.strEmail = email!
+                vc.strVerified = email!
                 vc.faeUser = faeUser
                 navigationController?.pushViewController(vc, animated: false)
             }
@@ -200,7 +200,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
                                 let vc = VerifyCodeViewController()
                                 vc.enterMode = .email
                                 vc.enterEmailMode = .signup
-                                vc.strEmail = self.email!
+                                vc.strVerified = self.email!
                                 vc.faeUser = self.faeUser
                                 self.navigationController?.pushViewController(vc, animated: false)
                             } else {

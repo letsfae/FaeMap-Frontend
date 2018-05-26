@@ -336,7 +336,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
                                 vc.enterMode = .email
                                 vc.enterEmailMode = .settings
                                 vc.boolUpdateEmail = true
-                                vc.strEmail = self.textNewEmail.text!
+                                vc.strVerified = self.textNewEmail.text!
                                 self.navigationController?.pushViewController(vc, animated: true)
                             } else { // TODO: error code undecided
                                 print("[Update Email Fail] \(status) \(message!)")

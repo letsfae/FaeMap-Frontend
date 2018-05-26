@@ -269,7 +269,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         vc.delegate = self
         vc.enterMode = .email
         vc.enterEmailMode = .settings
-        vc.strEmail = strEmail!
+        vc.strVerified = strEmail!
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
         faeUser.updateEmail{ (statusCode, result) in
