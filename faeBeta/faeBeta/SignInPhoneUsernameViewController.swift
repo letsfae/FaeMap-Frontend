@@ -142,7 +142,7 @@ class SignInPhoneUsernameViewController: UIViewController {
                         let vc = SignInPhoneViewController()
                         vc.enterMode = .signInSupport
                         vc.enterFrom = .login
-                        vc.strUsername = self.txtUsername.text!
+                        vc.strVerified = self.txtUsername.text!
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 }

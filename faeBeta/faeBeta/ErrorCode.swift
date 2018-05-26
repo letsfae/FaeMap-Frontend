@@ -36,7 +36,7 @@ func handleErrorCode(_ type: ErrorType, _ code: String, _ completion: ((String) 
         /*case "404-3": // verify reset code - user not exists
             break*/
         case "403-4": // verify reset code - timeout
-            break
+            completion?("Code Time Out!")
         case "403-5": // verify reset code - wrong code
             completion?("That's an Incorrect Code!\n Please Try Again!")
         case "404-14": // verify reset code - verfication not exists
