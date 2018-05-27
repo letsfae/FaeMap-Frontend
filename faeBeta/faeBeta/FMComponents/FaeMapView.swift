@@ -33,10 +33,13 @@ import UIKit
 class FaeMapView: MKMapView {
 
     weak var mapAction: MapAction?
+    
     private var isPlaceAnno = true
     private var block = false
-    var blockTap = false
-    var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
+    public var blockTap = false
+    
+    public var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
+    
     var singleTap: UITapGestureRecognizer!
     var doubleTap: UITapGestureRecognizer!
     var longPress: UILongPressGestureRecognizer!
@@ -44,8 +47,8 @@ class FaeMapView: MKMapView {
     var selectedPlaceAnno: PlacePinAnnotationView?
     var selectedLocAnno: LocPinAnnotationView?
     
-    var uiviewNameCard: FMNameCardView?
-    var uiviewPinActionDisplay: FMPinActionDisplay?
+    public var uiviewNameCard: FMNameCardView?
+    public var uiviewPinActionDisplay: FMPinActionDisplay?
     
     public var isSingleTapOnLocPinEnabled: Bool = false
     public var isDoubleTapOnMKAnnoViewEnabled: Bool = true
@@ -83,7 +86,7 @@ class FaeMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
+    @objc private func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
         
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
@@ -144,7 +147,7 @@ class FaeMapView: MKMapView {
         mapAction?.singleTapAllTimeControl?()
     }
     
-    @objc func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
+    @objc private func handleDoubleTap(_ tapGesture: UITapGestureRecognizer) {
         
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
@@ -174,7 +177,7 @@ class FaeMapView: MKMapView {
         mapAction?.doubleTapAllTimeControl?()
     }
 
-    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard blockTap == false else { return }
         let tapPoint = sender.location(in: self)
@@ -272,7 +275,6 @@ class FaeMapView: MKMapView {
                     mapAction?.iconStyleChange?(action: 0, isPlace: false)
                 }
             }
-            
         }
     }
     
