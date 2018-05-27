@@ -129,6 +129,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var btnDistIndicator: FMDistIndicator!
     private var uiviewChooseLocs: FMChooseLocs!
     private var routeAddress: RouteAddress!
+    private var imgSelectLocIcon: UIImageView!
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation?
@@ -329,6 +330,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             }
             
             faeMapView.isDoubleTapOnMKAnnoViewEnabled = mapMode != .routing
+            imgSelectLocIcon.isHidden = mapMode != .selecting
         }
     }
     
@@ -2563,6 +2565,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
 }
 
+// MARK: - Routing
 extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     private func loadDistanceComponents() {
@@ -2579,6 +2582,18 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleDestinationTap(_:)))
         uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapGes_0)
         uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
+        
+        loadSelectLocIcon()
+    }
+    
+    private func loadSelectLocIcon() {
+        imgSelectLocIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
+        imgSelectLocIcon.image = #imageLiteral(resourceName: "icon_destination")
+        imgSelectLocIcon.center.x = screenWidth / 2
+        imgSelectLocIcon.center.y = screenHeight / 2 - 26
+        imgSelectLocIcon.layer.zPosition = uiviewChooseLocs.layer.zPosition
+        imgSelectLocIcon.isHidden = true
+        view.addSubview(imgSelectLocIcon)
     }
     
     @objc private func handleStartPointTap(_ tap: UITapGestureRecognizer) {
