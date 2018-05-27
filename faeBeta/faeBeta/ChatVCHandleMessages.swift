@@ -216,11 +216,12 @@ extension ChatViewController {
     private func showOutgoingMessageInView(_ message: RealmMessage, faePHAsset: FaePHAsset? = nil) {
         let faeMessage = FaeMessageMaker.create(from: message, faePHAsset: faePHAsset)
         arrFaeMessages.append(faeMessage)
-        if message.type == "text" {
+        if !["[Picture]", "[Video]", "[Sticker]", "[Gif]", "[Heart]"].contains(message.type) {
             finishSendingMessage()
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)
         }
+        scrollToBottom(animated: false)
     }
     
     private func updateFaeMessageMedia(_ message: RealmMessage, media: Data?, url: URL? = nil) {

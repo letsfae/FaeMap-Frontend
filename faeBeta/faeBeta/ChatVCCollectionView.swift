@@ -32,9 +32,9 @@ extension ChatViewController {
         switch faeMessage.messageType {
             case "text":
                 cell.contentType = Text
-            case "[Picture]":
+            case "[Picture]", "[Gif]":
                 cell.contentType = Picture
-            case "[Sticker]":
+            case "[Sticker]", "[Heart]":
                 cell.contentType = Sticker
             case "[Location]":
                 cell.contentType = Location
