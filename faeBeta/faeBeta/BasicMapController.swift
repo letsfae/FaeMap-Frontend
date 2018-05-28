@@ -43,6 +43,10 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     var placePin: PlacePin?
     var userPin: UserPin?
     
+    // Place Pin Control
+    var selectedPlaceAnno: PlacePinAnnotationView?
+    var selectedPlace: FaePinAnnotation?
+    
     // MARK: - Life Cycles
     
     override func viewDidLoad() {
@@ -127,7 +131,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         uiviewTopBar.backgroundColor = .white
         uiviewTopBar.layer.cornerRadius = 2
         view.addSubview(uiviewTopBar)
-        view.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: uiviewTopBar)
+        view.addConstraintsWithFormat("H:|-7-[v0]-7-|", options: [], views: uiviewTopBar)
         view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(48)]", options: [], views: uiviewTopBar)
         addShadow(view: uiviewTopBar, opa: 0.5, offset: CGSize.zero, radius: 3)
         
@@ -135,16 +139,21 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
         btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
         uiviewTopBar.addSubview(btnBack)
-        uiviewTopBar.addConstraintsWithFormat("H:|-0-[v0(38.5)]", options: [], views: btnBack)
+        uiviewTopBar.addConstraintsWithFormat("H:|-1-[v0(38.5)]", options: [], views: btnBack)
         uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnBack)
     }
     
     func loadPlaceInfoBar() {
         view.addSubview(uiviewPlaceBar)
-        uiviewPlaceBar.boolDisableSwipe = true
     }
     
     // MARK: - MKMapDelegate
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view is PlacePinAnnotationView {
+            tapPlacePin(didSelect: view)
+        }
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
@@ -184,7 +193,9 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
         Key.shared.lastChosenLoc = mapView.centerCoordinate
-        if uiviewPlaceBar.tag > 0 { uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView) }
+        if uiviewPlaceBar.tag > 0 {
+            uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView)
+        }
         
     }
     
@@ -286,8 +297,10 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         let idx = firstAnn.class_2_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
-//        selectedPlace = firstAnn
-//        selectedPlaceView = anView
+        selectedPlace = firstAnn
+        selectedPlaceAnno = anView
+        selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
+        selectedPlaceAnno?.zPos = 199
         guard firstAnn.type == "place" else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
@@ -335,4 +348,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
             completion?()
         }
     }
+    
+    // MARK: - 辅助函数
 }

@@ -204,6 +204,14 @@ extension FaeMapViewController {
         imgExpbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblExpContent)
     }
     
+    func loadActivityIndicator() {
+        activityIndicator = createActivityIndicator(large: true)
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
+        activityIndicator.layer.zPosition = 1999
+    }
+    
     func setTitle(type: String) {
         let title_0 = type
         let title_1 = " Around Me"

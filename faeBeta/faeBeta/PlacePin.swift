@@ -12,15 +12,16 @@ import CoreLocation
 
 class PlacePin: NSObject {
     
-    let id: Int
-    var name: String
-    let coordinate: CLLocationCoordinate2D
+    var id: Int = 0
+    var name: String = ""
+    var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
     var class_2: String = ""
     var class_2_icon_id: Int = 48
-    let address1: String
-    let address2: String
+    var address1: String = ""
+    var address2: String = ""
     var icon: UIImage?
     var imageURL = ""
+    var imageURLs = [String]()
     var class_1: String = ""
     var url = ""
     var price = ""
@@ -52,7 +53,12 @@ class PlacePin: NSObject {
         }
         icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         class_1 = json["categories"]["class1"].stringValue
-        imageURL = json["img"].stringValue
+        if let arrImgURLs = json["img"].array {
+            for imgURL in arrImgURLs {
+                imageURLs.append(imgURL.stringValue)
+            }
+        }
+        if imageURLs.count > 0 { imageURL = imageURLs[0] }
         url = json["url"].stringValue
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
@@ -64,16 +70,8 @@ class PlacePin: NSObject {
         memo = json["user_pin_operations"]["memo"].stringValue
     }
     
-    init(string: String) {
-        let data = string.data(using: String.Encoding.utf8)
-        let placeJSON = JSON(data: data!)
-        id = placeJSON["place_id"].intValue
-        name = placeJSON["name"].stringValue
-        coordinate = CLLocationCoordinate2D(latitude: placeJSON["geolocation"]["latitude"].doubleValue, longitude: placeJSON["geolocation"]["longitude"].doubleValue)
-        class_1 = placeJSON["categories"]["class1"].stringValue
-        class_2_icon_id = placeJSON["categories"]["class1_icon_id"].intValue
-        address1 = placeJSON["location"]["address1"].stringValue
-        address2 = placeJSON["location"]["address2"].stringValue
+    override init() {
+        super.init()
     }
 }
 
@@ -154,4 +152,33 @@ func getDays(_ day_0: String, _ day_1: String) -> [String] {
         days.append(fixDays[i])
     }
     return days
+}
+
+// MARK: - Test PlacePin Data Generator
+
+func generator(_ center: CLLocationCoordinate2D, _ number: Int, _ offset: Int) -> [PlacePin] {
+    
+    var places = [PlacePin]()
+    let start = offset + 1
+    let end = number + offset + 1
+    
+    for i in start..<end {
+        let place = PlacePin()
+        place.id = i
+        place.name = "test_\(i)"
+        let x_offset = Double.random(min: -0.321778, max: 0.321778)
+        let y_offset = Double.random(min: -0.321778, max: 0.321778)
+        place.coordinate = CLLocationCoordinate2D(latitude: center.latitude + y_offset, longitude: center.longitude + x_offset)
+        place.class_2_icon_id = Int(arc4random_uniform(91) + 1)
+        place.address1 = "address1"
+        place.address2 = "address2"
+        place.icon = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
+        place.price = "$$"
+        place.phone = "+1 (213)309-2068"
+        
+        places.append(place)
+    }
+    
+    return places
+    
 }

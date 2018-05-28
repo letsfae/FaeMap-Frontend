@@ -60,24 +60,30 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // Location Pin Control
     var selectedLocation: FaePinAnnotation?
     var uiviewLocationBar: FMLocationInfoBar!
-    var locAnnoView: LocPinAnnotationView?
-    var activityIndicator: UIActivityIndicatorView!
+    var selectedLocAnno: LocPinAnnotationView?
+    var activityIndicatorLocPin: UIActivityIndicatorView!
     var locationPinClusterManager: CCHMapClusterController!
-    var createLocation: FaeMode = .off {
+    
+    var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
-            if createLocation == .off {
+            if modeLocation != .off {
+
+            } else {
+                
+            }
+        }
+    }
+    
+    var modeLocCreating: FaeMode = .off {
+        didSet {
+            guard fullyLoaded else { return }
+            if modeLocCreating == .off {
                 uiviewLocationBar.hide()
-                activityIndicator.stopAnimating()
+                activityIndicatorLocPin.stopAnimating()
                 if selectedLocation != nil {
                     locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
-                        if self.locAnnoView != nil {
-                            self.locAnnoView?.hideButtons()
-                            self.locAnnoView?.optionsReady = false
-                            self.locAnnoView?.optionsOpened = false
-                            self.locAnnoView?.optionsOpeing = false
-                        }
-                        self.selectedLocation = nil
+                        self.deselectAllLocations()
                     })
                 }
             }
@@ -95,10 +101,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadPlaceInfoBar()
         loadPinIcon()
         fullyLoaded = true
-//        let line = UIView(frame: CGRect(x: 0, y: screenHeight - 35 - 13, width: screenWidth, height: 1))
-//        line.layer.borderColor = UIColor.black.cgColor
-//        line.layer.borderWidth = 1
-//        view.addSubview(line)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -109,6 +111,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - Loading Parts
     
     func loadPinIcon() {
+        guard !boolFromChat else { return }
         let imgIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
         imgIcon.image = #imageLiteral(resourceName: "icon_destination")
         imgIcon.center.x = screenWidth / 2
@@ -123,10 +126,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = true
         faeMapView.tintColor = UIColor._2499090()
-        faeMapView.slcMapCtrler = self
         faeMapView.singleTap.isEnabled = !boolFromExplore
         faeMapView.doubleTap.isEnabled = !boolFromExplore
         faeMapView.longPress.isEnabled = !boolFromExplore
+        faeMapView.mapAction = self
         view.addSubview(faeMapView)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
@@ -138,8 +141,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
         locationPinClusterManager.delegate = self
-        locationPinClusterManager.cellSize = 200
+        locationPinClusterManager.cellSize = 60
         locationPinClusterManager.animator = self
+        locationPinClusterManager.clusterer = self
         
         let camera = faeMapView.camera
         if let loc = Key.shared.lastChosenLoc {
@@ -214,21 +218,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.isUserInteractionEnabled = true
         view.addSubview(btnSelect)
         
-        /*
-        let uiviewBg = UIView(frame: CGRect(x: 0, y: screenHeight - 65 - device_offset_bot, width: screenWidth, height: 65 + device_offset_bot))
-        uiviewBg.backgroundColor = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.85)
-        view.addSubview(uiviewBg)
-        uiviewBg.isHidden = !boolFromExplore
-        
-        let btnSetLoc = UIButton(frame: CGRect(x: 0, y: 18, width: 150, height: 30))
-        btnSetLoc.center.x = screenWidth / 2
-        btnSetLoc.setTitle("Set Location", for: .normal)
-        btnSetLoc.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 22)
-        btnSetLoc.setTitleColor(UIColor._2499090(), for: .normal)
-        uiviewBg.addSubview(btnSetLoc)
-        btnSetLoc.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
-        */
-        
         btnZoom = FMZoomButton()
         btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
         btnZoom.mapView = faeMapView
@@ -258,12 +247,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func loadActivityIndicator() {
-        activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .gray
-        activityIndicator.center = CGPoint(x: screenWidth / 2, y: 110)
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor._2499090()
-        view.addSubview(activityIndicator)
+        activityIndicatorLocPin = UIActivityIndicatorView()
+        activityIndicatorLocPin.activityIndicatorViewStyle = .gray
+        activityIndicatorLocPin.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
+        activityIndicatorLocPin.hidesWhenStopped = true
+        activityIndicatorLocPin.color = UIColor._2499090()
+        activityIndicatorLocPin.layer.zPosition = 2000
+        view.addSubview(activityIndicatorLocPin)
     }
     
     func loadPlaceInfoBar() {
@@ -357,7 +347,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
-        
         UIView.animate(withDuration: 0.4, animations: {
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
@@ -513,7 +502,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         } else {
             anView = LocPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-        locAnnoView = anView
+        selectedLocAnno = anView
         anView.assignImage(first.icon)
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
@@ -522,34 +511,51 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func createLocationPin(point: CGPoint) {
-        createLocation = .on
+        guard modeLocation == .off else { return }
+        modeLocCreating = .on
+        
         let coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        func createLoc() {
+            self.uiviewPlaceBar.hide()
+            self.selectedLocAnno?.hideButtons()
+            self.selectedLocAnno?.optionsReady = false
+            self.selectedLocAnno?.optionsOpened = false
+            self.selectedLocAnno?.optionsOpeing = false
+            self.selectedLocAnno?.removeFromSuperview()
+            self.selectedLocAnno = nil
+            self.deselectAllPlaceAnnos()
+            let pinData = LocationPin(position: coordinate)
+            pinData.optionsReady = true
+            self.selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
+            self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
+            self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
+            self.updateLocationInfo(location: cllocation)
+        }
+        
         if selectedLocation != nil {
             locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
                 self.selectedLocation = nil
+                createLoc()
             })
+        } else {
+            createLoc()
         }
-        uiviewPlaceBar.hide()
-        locAnnoView?.hideButtons()
-        locAnnoView?.optionsReady = false
-        locAnnoView?.optionsOpened = false
-        locAnnoView?.optionsOpeing = false
-        deselectAllAnnotations()
-        let pinData = LocationPin(position: coordinate)
-        pinData.optionsReady = true
-        selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
-        locationPinClusterManager.addAnnotations([selectedLocation!], withCompletionHandler: nil)
+    }
+    
+    func updateLocationInfo(location: CLLocation) {
         uiviewLocationBar.show()
-        view.bringSubview(toFront: activityIndicator)
-        activityIndicator.startAnimating()
-        General.shared.getAddress(location: cllocation, full: false) { address in
+        uiviewLocationBar.updateLocationBar(name: "", address: "")
+        view.bringSubview(toFront: activityIndicatorLocPin)
+        activityIndicatorLocPin.startAnimating()
+        General.shared.getAddress(location: location, full: false) { address in
             guard let addr = address as? String else { return }
             DispatchQueue.main.async {
-                self.routeAddress = RouteAddress(name: addr, coordinate: cllocation.coordinate)
+                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
             }
         }
-        General.shared.getAddress(location: cllocation, original: true) { original in
+        General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             
             var name = ""
@@ -605,7 +611,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             self.selectedLocation?.address_2 = address_2
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.activityIndicator.stopAnimating()
+                self.activityIndicatorLocPin.stopAnimating()
                 self.btnSelect.lblDistance.textColor = UIColor._2499090()
                 self.btnSelect.isUserInteractionEnabled = true
             }
@@ -659,7 +665,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - PlaceViewDelegate
     
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool) {
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         if let anno = annotation {
             faeMapView.selectAnnotation(anno, animated: false)
         }
@@ -682,7 +688,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Auxiliary Map Functions
     
-    func deselectAllAnnotations() {
+    func deselectAllPlaceAnnos() {
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
@@ -692,9 +698,22 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             selectedPlaceView?.optionsReady = false
             selectedPlaceView?.optionsOpened = false
             selectedPlaceView = nil
+            selectedPlace = nil
         }
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
+    }
+    
+    func deselectAllLocations() {
+        uiviewLocationBar.hide()
+        
+        selectedLocAnno?.hideButtons()
+        selectedLocAnno?.zPos = 8.0
+        selectedLocAnno?.optionsReady = false
+        selectedLocAnno?.optionsOpened = false
+        selectedLocAnno?.removeFromSuperview()
+        selectedLocAnno = nil
+        selectedLocation = nil
     }
     
     func visiblePlaces() -> [CCHMapClusterAnnotation] {
@@ -776,11 +795,42 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnClearSearchRes.isHidden = true
         uiviewPlaceBar.alpha = 0
         uiviewPlaceBar.state = .map
-        deselectAllAnnotations()
+        deselectAllPlaceAnnos()
         placeClusterManager.removeAnnotations(placesFromSearch) {
             self.placesFromSearch.removeAll(keepingCapacity: true)
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
     }
 
+}
+
+extension SelectLocationViewController: MapAction {
+    
+    func allPlacesDeselect(_ full: Bool) {
+        deselectAllPlaceAnnos()
+    }
+    
+    func placePinTap(view: MKAnnotationView) {
+        tapPlacePin(didSelect: view)
+    }
+    
+    func locPinCreating(point: CGPoint) {
+        createLocationPin(point: point)
+    }
+    
+    func locPinCreatingCancel() {
+        if modeLocCreating == .on {
+            if modeLocation == .off {
+                modeLocCreating = .off
+            }
+        } else if modeLocCreating == .off {
+            selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
+            deselectAllLocations()
+        }
+
+    }
+    
+    func singleElsewhereTapExceptInfobar() {
+        uiviewPlaceBar.hide()
+    }
 }

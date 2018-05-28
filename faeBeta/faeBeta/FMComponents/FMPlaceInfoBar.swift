@@ -24,22 +24,21 @@ class FMPlaceInfoBar: UIView {
     
     weak var delegate: PlaceViewDelegate?
     
-    var imgBack_0 = PlaceView()
-    var imgBack_1 = PlaceView()
-    var imgBack_2 = PlaceView()
+    private var imgBack_0 = PlaceView()
+    private var imgBack_1 = PlaceView()
+    private var imgBack_2 = PlaceView()
     
-    var boolLeft = false
-    var boolRight = false
-    
-    var annotations = [CCHMapClusterAnnotation]()
+    private var boolLeft = false
+    private var boolRight = false
     
     var places = [PlacePin]()
+    var annotations = [CCHMapClusterAnnotation]()
     
-    var prevAnnotation: CCHMapClusterAnnotation!
-    var nextAnnotation: CCHMapClusterAnnotation!
+    private var prevAnnotation: CCHMapClusterAnnotation!
+    private var nextAnnotation: CCHMapClusterAnnotation!
     
-    var prevPlacePin: PlacePin!
-    var nextPlacePin: PlacePin!
+    private var prevPlacePin: PlacePin!
+    private var nextPlacePin: PlacePin!
     
     var boolDisableSwipe = false
     
@@ -66,6 +65,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     private func loadContent() {
+        backgroundColor = .clear
         layer.zPosition = 605
         addSubview(imgBack_0)
         addSubview(imgBack_1)
@@ -175,7 +175,7 @@ class FMPlaceInfoBar: UIView {
         }
     }
     
-    func panToPrev(_ time: Double = 0.3) {
+    private func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.imgBack_0.frame.origin.x = 7
             self.imgBack_1.frame.origin.x += screenWidth + 7
@@ -189,7 +189,7 @@ class FMPlaceInfoBar: UIView {
         })
     }
     
-    func panToNext(_ time: Double = 0.3) {
+    private func panToNext(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.imgBack_1.frame.origin.x = -screenWidth + 7
             self.imgBack_2.frame.origin.x = 7
@@ -203,15 +203,14 @@ class FMPlaceInfoBar: UIView {
         })
     }
     
-    func panBack(_ time: Double = 0.3) {
+    private func panBack(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.resetSubviews()
         }, completion: nil)
     }
     
-    var end: CGFloat = 0
-    
-    @objc func handlePanGesture(_ pan: UIPanGestureRecognizer) {
+    private var end: CGFloat = 0
+    @objc private func handlePanGesture(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             end = pan.location(in: self).x
@@ -249,15 +248,15 @@ class FMPlaceInfoBar: UIView {
 
 class PlaceView: UIView {
     
-    var class_2_icon_id = 0
-    var imgType: UIImageView!
-    var lblName: UILabel!
-    var lblAddr: UILabel!
-    var lblHours: UILabel!
-    var lblPrice: UILabel!
-    var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    var arrHour = [String]()
-    var indicator: UIActivityIndicatorView!
+    private var class_2_icon_id = 0
+    private var imgType: UIImageView!
+    private var lblName: UILabel!
+    private var lblAddr: UILabel!
+    private var lblHours: UILabel!
+    private var lblPrice: UILabel!
+    private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
+    private var arrHour = [String]()
+    private var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
@@ -265,9 +264,11 @@ class PlaceView: UIView {
     }
     
     private func loadContent() {
+        
         let uiviewBkgd = UIView()
         uiviewBkgd.layer.cornerRadius = 2
         uiviewBkgd.backgroundColor = .white
+        uiviewBkgd.clipsToBounds = true
         addSubview(uiviewBkgd)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
         addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
@@ -363,7 +364,7 @@ class PlaceView: UIView {
 //        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
     
-    func loadPlaceImage(placeInfo: PlacePin) {
+    private func loadPlaceImage(placeInfo: PlacePin) {
         imgType.alpha = 0
         indicator.startAnimating()
         General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType) {
@@ -376,7 +377,7 @@ class PlaceView: UIView {
 
 class FMLocationInfoBar: UIView {
     
-    var imgType: UIImageView!
+    private var imgType: UIImageView!
     var lblName: UILabel!
     var lblAddr: UILabel!
     

@@ -178,7 +178,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         request.requestsAlternateRoutes = false
         request.transportType = .automobile
         
-        btnDistIndicator.lblDistance.text = ""
+        btnDistIndicator.lblDistance.isHidden = true
         activityIndicator.startAnimating()
         
         routingQueue.cancelAllOperations()

@@ -20,6 +20,39 @@ func createActivityIndicator(large: Bool) -> UIActivityIndicatorView {
 }
 
 // MARK: - Map View
+func zoomToFitAllAnnotations(mapView: MKMapView, annotations: [MKPointAnnotation], edgePadding: UIEdgeInsets) {
+    guard let firstAnn = annotations.first else { return }
+    let point = MKMapPointForCoordinate(firstAnn.coordinate)
+    var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
+    for annotation in annotations {
+        let annotationPoint = MKMapPointForCoordinate(annotation.coordinate)
+        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
+        zoomRect = MKMapRectUnion(zoomRect, pointRect)
+    }
+    let edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
+    mapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
+}
+
+func zoomToFitAllPlaces(mapView: MKMapView, places: [PlacePin], edgePadding: UIEdgeInsets) {
+    guard let first = places.first else { return }
+    let point = MKMapPointForCoordinate(first.coordinate)
+    var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
+    for place in places {
+        let annotationPoint = MKMapPointForCoordinate(place.coordinate)
+        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
+        zoomRect = MKMapRectUnion(zoomRect, pointRect)
+    }
+    let edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
+    mapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
+}
+
+func coordinateEqual(_ a: CLLocationCoordinate2D, _ b: CLLocationCoordinate2D) -> Bool {
+    return doubleEqual(a.latitude, b.latitude) && doubleEqual(a.longitude, b.longitude)
+}
+
+func doubleEqual(_ a: Double, _ b: Double) -> Bool {
+    return fabs(a - b) < Double.ulpOfOne
+}
 
 func animateToCoordinate(mapView: MKMapView, coordinate: CLLocationCoordinate2D, animated: Bool = true) {
     let point = MKMapPointForCoordinate(coordinate)
