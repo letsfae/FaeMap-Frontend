@@ -30,6 +30,7 @@ class StickerKeyboardViewFlowLayout: UICollectionViewFlowLayout {
     // MARK: - Override
     override func prepare() {
         super.prepare()
+        dictPositions.removeAll()
         calculatePrePosition()
         for (section, item) in datasource.enumerated() {
             let prePos = item.isEmoji ? dictEmojiPrePos : dictCollectionPrePos
