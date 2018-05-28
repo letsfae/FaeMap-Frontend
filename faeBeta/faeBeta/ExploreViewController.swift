@@ -3,6 +3,7 @@
 //  faeBeta
 //
 //  Created by Yue Shen on 9/12/17.
+//  Modified by Yue Shen on 5/7/18.
 //  Copyright © 2017 fae. All rights reserved.
 //
 
@@ -16,49 +17,54 @@ protocol ExploreDelegate: class {
 
 class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, EXPCellDelegate {
     
+    // MARK: - Variables
+    
+    // MARK: Main Items
     weak var delegate: ExploreDelegate?
     
-    var uiviewNavBar: FaeNavBar!
-    var clctViewTypes: UICollectionView!
-    var clctViewPics: UICollectionView!
-    var lblBottomLocation: UILabel!
-    var btnGoLeft: UIButton!
-    var btnGoRight: UIButton!
-    var btnSave: UIButton!
-    var btnRefresh: UIButton!
-    var btnMap: UIButton!
-    var imgSaved: UIImageView!
+    private var uiviewNavBar: FaeNavBar!
+    private var clctViewTypes: UICollectionView!
+    private var clctViewPics: UICollectionView!
+    private var lblBottomLocation: UILabel!
+    private var btnGoLeft: UIButton!
+    private var btnGoRight: UIButton!
+    private var btnSave: UIButton!
+    private var btnRefresh: UIButton!
+    private var btnMap: UIButton!
+    private var imgSaved: UIImageView!
     
-    var intCurtPage = 0
+    private var intCurtPage = 0
     
-    var categories: [String] = ["Random", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
-    var categoryState: [String: CategoryState] = ["Random": .initial, "Food": .initial, "Drinks": .initial, "Shopping": .initial, "Outdoors": .initial, "Recreation": .initial]
+    private var categories: [String] = ["Random", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
+    private var categoryState: [String: CategoryState] = ["Random": .initial, "Food": .initial, "Drinks": .initial, "Shopping": .initial, "Outdoors": .initial, "Recreation": .initial]
     
-    // Six Types Categories
-    var arrRandom = [PlacePin]()
-    var arrFood = [PlacePin]()
-    var arrDrinks = [PlacePin]()
-    var arrShopping = [PlacePin]()
-    var arrOutdoors = [PlacePin]()
-    var arrRecreation = [PlacePin]()
+    // MARK: Six Types Categories
+    private var arrRandom = [PlacePin]()
+    private var arrFood = [PlacePin]()
+    private var arrDrinks = [PlacePin]()
+    private var arrShopping = [PlacePin]()
+    private var arrOutdoors = [PlacePin]()
+    private var arrRecreation = [PlacePin]()
     
-    // Loading Waves
-    var uiviewAvatarWaveSub: UIView!
-    var imgAvatar: FaeAvatarView!
-    var filterCircle_1: UIImageView!
-    var filterCircle_2: UIImageView!
-    var filterCircle_3: UIImageView!
-    var filterCircle_4: UIImageView!
+    // MARK: Loading Waves
+    private var uiviewAvatarWaveSub: UIView!
+    private var imgAvatar: FaeAvatarView!
+    private var filterCircle_1: UIImageView!
+    private var filterCircle_2: UIImageView!
+    private var filterCircle_3: UIImageView!
+    private var filterCircle_4: UIImageView!
     
-    // Collecting Pin Control
-    var uiviewSavedList: AddPinToCollectionView!
-    var uiviewAfterAdded: AfterAddedToListView!
-    var arrListSavedThisPin = [Int]()
+    // MARK: Collecting Pin Control
+    private var uiviewSavedList: AddPinToCollectionView!
+    private var uiviewAfterAdded: AfterAddedToListView!
+    private var arrListSavedThisPin = [Int]()
     
-    var fullyLoaded = false
-    var coordinate: CLLocationCoordinate2D!
-    var strLocation: String = ""
-    var lblNoResults: FaeLabel!
+    private var fullyLoaded = false
+    private var coordinate: CLLocationCoordinate2D!
+    private var strLocation: String = ""
+    private var lblNoResults: FaeLabel!
+    
+    private var USE_TEST_PLACE = false
     
     // MARK: - Life Cycle
     
@@ -107,7 +113,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Loading Content
     
-    func loadContent() {
+    private func loadContent() {
         loadTopTypesCollection()
         loadPicCollections()
         loadButtons()
@@ -116,7 +122,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadNoResultLabel()
     }
     
-    func loadPlaceListView() {
+    private func loadPlaceListView() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
 //        uiviewSavedList.loadCollectionData()
@@ -129,7 +135,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    func loadNoResultLabel() {
+    private func loadNoResultLabel() {
         var y_offset: CGFloat = 550
         switch screenHeight {
         case 736, 667:
@@ -147,7 +153,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblNoResults.alpha = 0
     }
     
-    func loadAvatar() {
+    private func loadAvatar() {
         let xAxis: CGFloat = screenWidth / 2
         var yAxis: CGFloat = 324.5 * screenHeightFactor
         yAxis += screenHeight == 812 ? 80 : 0
@@ -173,7 +179,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         imgAvatar.loadAvatar(id: Key.shared.user_id)
     }
     
-    func loadWaves() {
+    private func loadWaves() {
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = screenWidth / 2
             let imgView = UIImageView(frame: CGRect.zero)
@@ -208,7 +214,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         waveAnimation(circle: filterCircle_4, delay: 2.5)
     }
     
-    func waveAnimation(circle: UIImageView, delay: Double) {
+    private func waveAnimation(circle: UIImageView, delay: Double) {
         let animateTime: Double = 3
         let radius: CGFloat = screenWidth
         let newFrame = CGRect(x: 0, y: 0, width: radius, height: radius)
@@ -228,7 +234,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func loadTopTypesCollection() {
+    private func loadTopTypesCollection() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
@@ -248,7 +254,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addConstraintsWithFormat("V:|-\(73+device_offset_top)-[v0(36)]", options: [], views: clctViewTypes)
     }
     
-    func loadPicCollections() {
+    private func loadPicCollections() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: screenWidth, height: screenHeight - 116 - 156)
         layout.scrollDirection = .horizontal
@@ -268,7 +274,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addConstraintsWithFormat("V:|-\(116+device_offset_top)-[v0]-\(156+device_offset_bot)-|", options: [], views: clctViewPics)
     }
     
-    func loadButtons() {
+    private func loadButtons() {
         let uiviewBtnSub = UIView(frame: CGRect(x: (screenWidth - 370) / 2, y: screenHeight - 138 - device_offset_bot, width: 370, height: 78))
         view.addSubview(uiviewBtnSub)
         
@@ -312,7 +318,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         uiviewBtnSub.addConstraintsWithFormat("V:|-0-[v0(78)]", options: [], views: btnGoRight)
     }
     
-    func loadBottomLocation() {
+    private func loadBottomLocation() {
         lblBottomLocation = UILabel()
         lblBottomLocation.numberOfLines = 1
         lblBottomLocation.textAlignment = .center
@@ -325,7 +331,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         lblBottomLocation.addGestureRecognizer(tapGesture)
     }
     
-    func loadNavBar() {
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar()
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
@@ -345,7 +351,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Button Actions
     
-    @objc func actionExpMap() {
+    @objc private func actionExpMap() {
         var arrPlaceData = [PlacePin]()
         let lastSelectedRow = Key.shared.selectedTypeIdx.row
         let cat = categories[lastSelectedRow]
@@ -365,24 +371,28 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         default:
             break
         }
-        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+        let vc = CollectionMapController()
+        vc.arrExpPlace = arrPlaceData
+        vc.strCategory = cat
+        navigationController?.pushViewController(vc, animated: false)
+//        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
+//        var arrCtrlers = navigationController?.viewControllers
+//        if let ctrler = Key.shared.FMVCtrler {
+//            ctrler.arrCtrlers = arrCtrlers!
+//        }
+//        while !(arrCtrlers?.last is InitialPageController) {
+//            arrCtrlers?.removeLast()
+//        }
+//        Key.shared.initialCtrler?.goToFaeMap(animated: false)
+//        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
-    @objc func actionSave(_ sender: UIButton) {
+    @objc private func actionSave(_ sender: UIButton) {
         uiviewSavedList.show()
 //        uiviewSavedList.loadCollectionData()
     }
     
-    @objc func actionSwitchPage(_ sender: UIButton) {
+    @objc private func actionSwitchPage(_ sender: UIButton) {
         var arrCount = 0
         let lastSelectedRow = Key.shared.selectedTypeIdx.row
         let cat = categories[lastSelectedRow]
@@ -433,21 +443,25 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    @objc private func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func actionRefresh() {
+    @objc private func actionRefresh() {
         guard coordinate != nil else { return }
         showWaves()
         buttonEnable(on: false)
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+        resetVisitedIndex()
     }
     
+    private func resetVisitedIndex() {
+        intCurtPage = 0
+    }
     
     // MARK: - Other Functions
     
-    func buttonEnable(on: Bool) {
+    private func buttonEnable(on: Bool) {
         btnGoLeft.isEnabled = on
         btnSave.isEnabled = on
         btnRefresh.isEnabled = on
@@ -457,21 +471,24 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         clctViewTypes.isUserInteractionEnabled = on
     }
     
-    @objc func showSavedNoti() {
+    // MARK: Save Noti
+    
+    @objc private func showSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 41, y: 7, width: 18, height: 18)
             self.imgSaved.alpha = 1
         }, completion: nil)
     }
     
-    @objc func hideSavedNoti() {
+    @objc private func hideSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 50, y: 16, width: 0, height: 0)
             self.imgSaved.alpha = 0
         }, completion: nil)
     }
     
-    func reloadBottomText(_ city: String, _ state: String) {
+    // MARK: Location Text
+    private func reloadBottomText(_ city: String, _ state: String) {
         strLocation = "\(city), \(state)"
         let fullAttrStr = NSMutableAttributedString()
         let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
@@ -511,7 +528,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Pin Info
     
-    func checkSavedStatus(idx: Int) {
+    private func checkSavedStatus(idx: Int) {
         var arrPlaceData = [PlacePin]()
         let lastSelectedRow = Key.shared.selectedTypeIdx.row
         let cat = categories[lastSelectedRow]
@@ -544,7 +561,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
+    private func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
         FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
@@ -566,7 +583,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Gesture Recognizers
     
-    @objc func tapToChooseLoc(_ tap: UITapGestureRecognizer) {
+    @objc private func tapToChooseLoc(_ tap: UITapGestureRecognizer) {
         /*
         let vc = BoardsSearchViewController()
         vc.enterMode = .location
@@ -721,15 +738,32 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - Category Search
     
-    func searchAllCategories() {
+    private func searchAllCategories() {
         buttonEnable(on: false)
         for i in 0..<categories.count {
             search(category: categories[i], indexPath: IndexPath(row: i, section: 0))
         }
     }
     
-    func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
+    private func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            
+            guard !self.USE_TEST_PLACE else {
+                self.arrRandom = generator(center, 20, 0)
+                if Key.shared.selectedTypeIdx.row == 0 {
+                    self.categoryState["Random"] = .selected
+                } else {
+                    self.categoryState["Random"] = .unread
+                }
+                self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
+                if indexPath == Key.shared.selectedTypeIdx {
+                    self.clctViewPics.reloadData()
+                    self.hideWaves()
+                    self.buttonEnable(on: true)
+                }
+                return
+            }
+            
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
                 guard status / 100 == 2 else {
                     //.fail
@@ -770,7 +804,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func showWaves() {
+    private func showWaves() {
         UIView.animate(withDuration: 0.3, animations: {
             if self.clctViewPics != nil {
                 self.clctViewPics.alpha = 0
@@ -779,14 +813,14 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         })
     }
     
-    func hideWaves() {
+    private func hideWaves() {
         UIView.animate(withDuration: 0.3, animations: {
             self.clctViewPics.alpha = 1
             self.uiviewAvatarWaveSub.alpha = 0
         })
     }
     
-    func search(category: String, indexPath: IndexPath, flag: Bool = true) {
+    private func search(category: String, indexPath: IndexPath, flag: Bool = true) {
         
         if category == "Random" {
             loadPlaces(center: coordinate, indexPath: indexPath)
@@ -853,7 +887,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
+    private func getRandomIndex(_ arrRaw: [PlacePin]) -> [PlacePin] {
         var tempRaw = arrRaw
         var arrResult = [PlacePin]()
         let count = arrRaw.count < 20 ? arrRaw.count : 20
@@ -922,4 +956,5 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.coordinate = address.coordinate
         search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
     }
+    
 }

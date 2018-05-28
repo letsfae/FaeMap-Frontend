@@ -76,7 +76,7 @@ extension FaeMapViewController: LocDetailDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLocInfoBarTap))
         uiviewLocationBar.addGestureRecognizer(tapGesture)
         
-        loadActivityIndicator()
+        loadActivityIndicatorLocPin()
     }
     
     @objc func handleLocInfoBarTap() {
@@ -103,14 +103,14 @@ extension FaeMapViewController: LocDetailDelegate {
         return anView
     }
     
-    func loadActivityIndicator() {
-        activityIndicator = UIActivityIndicatorView()
-        activityIndicator.activityIndicatorViewStyle = .gray
-        activityIndicator.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
-        activityIndicator.hidesWhenStopped = true
-        activityIndicator.color = UIColor._2499090()
-        activityIndicator.layer.zPosition = 2000
-        view.addSubview(activityIndicator)
+    func loadActivityIndicatorLocPin() {
+        activityIndicatorLocPin = UIActivityIndicatorView()
+        activityIndicatorLocPin.activityIndicatorViewStyle = .gray
+        activityIndicatorLocPin.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
+        activityIndicatorLocPin.hidesWhenStopped = true
+        activityIndicatorLocPin.color = UIColor._2499090()
+        activityIndicatorLocPin.layer.zPosition = 2000
+        view.addSubview(activityIndicatorLocPin)
     }
     
     func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
@@ -155,8 +155,8 @@ extension FaeMapViewController: LocDetailDelegate {
     
     func updateLocationInfo(location: CLLocation) {
         uiviewLocationBar.show()
-        view.bringSubview(toFront: activityIndicator)
-        activityIndicator.startAnimating()
+        view.bringSubview(toFront: activityIndicatorLocPin)
+        activityIndicatorLocPin.startAnimating()
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             
@@ -213,7 +213,7 @@ extension FaeMapViewController: LocDetailDelegate {
             self.selectedLocation?.address_2 = address_2
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.activityIndicator.stopAnimating()
+                self.activityIndicatorLocPin.stopAnimating()
                 self.uiviewChooseLocs.updateDestination(name: address_1)
                 self.destinationAddr = RouteAddress(name: address_1, coordinate: location.coordinate)
             }

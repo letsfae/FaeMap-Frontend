@@ -20,8 +20,20 @@
 	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>fae.ios.faeMap</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb220605118707564</string>
+				<string>faemaps</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.0.8.8</string>
+	<string>1.0.0.9.0</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>

@@ -10,8 +10,6 @@ import UIKit
 
 class PlaceViewMapController: BasicMapController {
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         fullyLoaded = false
@@ -39,6 +37,7 @@ class PlaceViewMapController: BasicMapController {
         let anno = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: pin as AnyObject)
         placeClusterManager.addAnnotations([anno], withCompletionHandler: nil)
         
+        // single pin loading, so disable its user interaction
         uiviewPlaceBar.places = [pin]
         uiviewPlaceBar.load(for: pin)
         uiviewPlaceBar.isUserInteractionEnabled = false

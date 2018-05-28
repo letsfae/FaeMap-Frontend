@@ -235,8 +235,6 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     }
     
     func jumpToMainMapWithPlace() {
-//        delegate?.jumpToOnePlace?(searchText: "fromPlaceDetail", place: self.place)
-//        navigationController?.popViewController(animated: false)
         let vcMap = PlaceViewMapController()
         vcMap.placePin = self.place
         vcMap.mapCenter = .placeCoordinate

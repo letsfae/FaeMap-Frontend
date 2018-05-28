@@ -98,7 +98,7 @@ class FaeImageView: UIImageView {
             } else {
                 // Otherwise use the large avatar stored in realm
                 print("[FaeAvatarView] large image exists")
-                guard let image = UIImage(data: avatarRealm.userLargeAvatar as Data!) else { return }
+                guard let image = UIImage(data: (avatarRealm.userLargeAvatar as Data?)!) else { return }
                 var images = [SKPhoto]()
                 let photo = SKPhoto.photoWithImage(image)
                 images.append(photo)

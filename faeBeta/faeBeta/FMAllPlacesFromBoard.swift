@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - All Places
+
 extension FaeMapViewController: AllPlacesDelegate {
     
     // MARK: - AllPlacesDelegate
@@ -21,7 +23,6 @@ extension FaeMapViewController: AllPlacesDelegate {
                 self.visibleClusterPins = self.visiblePlaces(full: true)
                 self.arrExpPlace = places
                 self.clctViewMap.reloadData()
-                self.highlightPlace(0)
             })
             self.zoomToFitAllAnnotations(annotations: self.pinsFromSearch)
         }, nil)

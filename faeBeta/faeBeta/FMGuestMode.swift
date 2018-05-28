@@ -8,7 +8,10 @@
 
 import UIKit
 
+// MARK: - Guest Mode
+
 extension FaeMapViewController {
+    
     func guestMode() {
         let uiViewGuestMode = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
         uiViewGuestMode.backgroundColor = UIColor.white
