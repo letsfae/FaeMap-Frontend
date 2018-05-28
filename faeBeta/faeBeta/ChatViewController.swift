@@ -387,6 +387,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if uiviewLocationExtend.isHidden {
             storeChatMessageToRealm(type: "text", text: inputToolbar.contentView.textView.text)
         } else {
+            closeLocExtendView()
             switch uiviewLocationExtend.strType {
             case "Location":
                 let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
@@ -398,11 +399,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 }
             default: break
             }
+            //closeLocExtendView()
         }
-        if uiviewLocationExtend.isHidden == false {
+        /*if uiviewLocationExtend.isHidden == false {
             uiviewLocationExtend.isHidden = true
             closeLocExtendView()
-        }
+        }*/
         btnSend.isEnabled = false
     }
 
@@ -413,7 +415,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 
     // MARK: - Helper methods
     // scroll to the bottom of all messages
-    private func scrollToBottom(_ animated: Bool) {
+    func scrollToBottom(_ animated: Bool) {
         let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
         let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
@@ -462,6 +464,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 
     
     func respondToSwipeGesture(_ gesture: UIGestureRecognizer) { }
+
 }
 
 // MARK: - Input text field delegate
