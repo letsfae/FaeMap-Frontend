@@ -201,7 +201,7 @@ JSQMessagesKeyboardControllerDelegate>
     self.incomingMediaCellIdentifier = [JSQMessagesCollectionViewCellIncomingCustom mediaCellReuseIdentifier];
 
     // NOTE: let this behavior be opt-in for now
-    // [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
+    [JSQMessagesCollectionViewCellCustom registerMenuAction:@selector(delete:)];
 
     self.showTypingIndicator = NO;
 
@@ -219,10 +219,11 @@ JSQMessagesKeyboardControllerDelegate>
                                                                                  delegate:self];*/
     }
     
-    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Custom 1" action:@selector(customAction1:)];
+    UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Favorite" action:@selector(favoriteSticker:)];
     
     [[UIMenuController sharedMenuController] setMenuItems: @[miCustom1]];
     [[UIMenuController sharedMenuController] update];
+    [JSQMessagesCollectionViewCellCustom registerMenuAction:@selector(favoriteSticker:)];
 }
 
 - (void)dealloc
@@ -706,7 +707,7 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(customAction1:)) {
+    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(favoriteSticker:)) {
         return YES;
     }
 
@@ -1189,9 +1190,10 @@ JSQMessagesKeyboardControllerDelegate>
     }
 }
 
-- (void)customAction1: (id)sender{
+/*- (void)favoriteSticker: (id)sender{
     printf("custom");
-}
+}*/
+
 
 
 @end

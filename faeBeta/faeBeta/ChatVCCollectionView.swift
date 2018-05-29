@@ -65,7 +65,7 @@ extension ChatViewController {
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == arrFaeMessages.count - 1, let faeMessage = arrFaeMessages.last {
-            if faeMessage.senderId != "\(Key.shared.user_id)" || faeMessage.messageType != "[Heart]" {
+            if faeMessage.senderId != "\(Key.shared.user_id)" || faeMessage.messageType != "[Heart]" || Date().timeIntervalSince(faeMessage.date) > 180 {
                 boolJustSentHeart = false
             }
         }
@@ -245,12 +245,50 @@ extension ChatViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        let JSQMessage = arrFaeMessages[indexPath.item]
+        /*let JSQMessage = arrFaeMessages[indexPath.item]
         if ["[Picture]", "[Sticker]", "text"].contains(JSQMessage.messageType) {
             selectedIndexPathForMenu = indexPath
             return true
+        }*/
+        selectedIndexPathForMenu = indexPath
+        return true
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        let faeMessage = arrFaeMessages[indexPath.item]
+        if action == #selector(copy(_:)) {
+            felixprint("copy")
+            UIPasteboard.general.string = faeMessage.text
         }
-        return false
+        if action == #selector(delete(_:)) {
+            felixprint("delete")
+            let realm = try! Realm()
+            if let messageRealm = realm.filterMessage(faeMessage.messageId) {
+                try! realm.write {
+                    realm.delete(messageRealm)
+                }
+            }
+            arrFaeMessages = arrFaeMessages.filter { $0.messageId != faeMessage.messageId }
+            collectionView.deleteItems(at: [indexPath])
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        if action.description == "favoriteSticker:" {
+            felixprint("favorite")
+            let realm = try! Realm()
+            if let messageRealm = realm.filterMessage(faeMessage.messageId) {
+                let favoriteName = messageRealm.text
+                var stickerLike: [String] = []
+                if let current = FaeCoreData.shared.readByKey("stickerLike_\(Key.shared.user_id)") as? [String]{
+                    stickerLike = current
+                }
+                if let existIndex = stickerLike.index(of: favoriteName) {
+                    stickerLike.remove(at: existIndex)
+                }
+                stickerLike.insert(favoriteName, at: 0)
+                FaeCoreData.shared.save("stickerLike_\(Key.shared.user_id)", value: stickerLike)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "favoriteSticker"), object: nil)
+            }
+        }
     }
 
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {

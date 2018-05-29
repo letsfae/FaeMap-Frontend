@@ -397,14 +397,21 @@ static NSMutableSet *jsqMessagesCollectionViewCellActions = nil;
 }
 
 -(BOOL) canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(copy:) ||( (self.contentType == Picture || self.contentType == Sticker) && action == @selector(customAction1:))) {
+    if (action == @selector(delete:)) {
+        return YES;
+    }
+    if (self.contentType == Text && action == @selector(copy:)) {
+        return YES;
+    }
+    if (self.contentType == Sticker && action == @selector(favoriteSticker:)) {
         return YES;
     }
     return NO;
 }
 
-- (void)customAction1: (id)sender{
-    printf("custom");
+- (void)favoriteSticker: (id)sender{
+    //printf("custom in cell");
+    [self.delegate messagesCollectionViewCell:self didPerformAction:@selector(favoriteSticker:) withSender:sender];
 }
 
 @end

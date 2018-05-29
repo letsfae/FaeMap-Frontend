@@ -66,7 +66,7 @@ class LocationExtendView : UIView {
     }
     
     // MARK: - Helper methods
-    func setAvator(image : UIImage) {
+    func setThumbnail(image : UIImage) {
         imageView.image = image
     }
     

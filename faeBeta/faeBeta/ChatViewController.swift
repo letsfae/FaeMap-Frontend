@@ -387,22 +387,24 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if uiviewLocationExtend.isHidden {
             storeChatMessageToRealm(type: "text", text: inputToolbar.contentView.textView.text)
         } else {
+            closeLocExtendView()
             switch uiviewLocationExtend.strType {
             case "Location":
                 let locDetail = "{\"latitude\":\"\(uiviewLocationExtend.location.coordinate.latitude)\", \"longitude\":\"\(uiviewLocationExtend.location.coordinate.longitude)\", \"address1\":\"\(uiviewLocationExtend.LabelLine1.text!)\", \"address2\":\"\(uiviewLocationExtend.LabelLine2.text!)\", \"address3\":\"\(uiviewLocationExtend.LabelLine3.text!)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
                 storeChatMessageToRealm(type: "[Location]", text: locDetail, media: uiviewLocationExtend.getImageData())
             case "Place":
                 if let place = uiviewLocationExtend.placeData {
-                    let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\"}"
+                    let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
                     storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: uiviewLocationExtend.getImageData())
                 }
             default: break
             }
+            //closeLocExtendView()
         }
-        if uiviewLocationExtend.isHidden == false {
+        /*if uiviewLocationExtend.isHidden == false {
             uiviewLocationExtend.isHidden = true
             closeLocExtendView()
-        }
+        }*/
         btnSend.isEnabled = false
     }
 
@@ -413,7 +415,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 
     // MARK: - Helper methods
     // scroll to the bottom of all messages
-    private func scrollToBottom(_ animated: Bool) {
+    func scrollToBottom(_ animated: Bool) {
         let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
         let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
         let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
@@ -462,6 +464,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
 
     
     func respondToSwipeGesture(_ gesture: UIGestureRecognizer) { }
+
 }
 
 // MARK: - Input text field delegate
@@ -787,6 +790,7 @@ extension ChatViewController: UIImagePickerControllerDelegate {
 extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, BoardsSearchDelegate {
     // Action of close buttion in location extend view
     @objc func closeLocExtendView() {
+        if uiviewLocationExtend.isHidden { return }
         uiviewLocationExtend.isHidden = true
         let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.contentInset.bottom - floatLocExtendHeight, 0.0)
         self.collectionView.contentInset = insets
@@ -812,7 +816,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
             UIGraphicsBeginImageContext(mapview.frame.size)
             mapview.layer.render(in: UIGraphicsGetCurrentContext()!)
             if let screenShotImage = UIGraphicsGetImageFromCurrentImageContext() {
-                uiviewLocationExtend.setAvator(image: screenShotImage)
+                uiviewLocationExtend.setThumbnail(image: screenShotImage)
                 let location = CLLocation(latitude: mapview.camera.centerCoordinate.latitude, longitude: mapview.camera.centerCoordinate.longitude)
                 CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
                     (placemarks, error) -> Void in
@@ -823,32 +827,21 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
         }
     }
     
-    func addResponseToLocationExtend(response: CLPlacemark, withMini: Bool) {
+    private func addResponseToLocationExtend(response: CLPlacemark, withMini: Bool) {
         uiviewLocationExtend.setToLocation()
         if let lines = response.addressDictionary?["FormattedAddressLines"] as? [String] {
             uiviewLocationExtend.setLabel(texts: lines)
         }
-        /*texts.append((response.subThoroughfare)! + " " + (response.thoroughfare)!)
-         var cityText = response.locality
-         if response.administrativeArea != nil {
-         cityText = cityText! + ", " + (response.administrativeArea)!
-         }
-         if response.postalCode != nil {
-         cityText = cityText! + " " + (response.postalCode)!
-         }
-         texts.append(cityText!)
-         texts.append((response.country)!)*/
-        
-        //uiviewLocationExtend.setLabel(texts: texts)
-        uiviewLocationExtend.location = CLLocation(latitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.latitude, longitude: toolbarContentView.viewMiniLoc.mapView.camera.centerCoordinate.longitude)
+        if let location = response.location {
+            uiviewLocationExtend.location = location
+        }
         
         uiviewLocationExtend.isHidden = false
-        let extendHeight = uiviewLocationExtend.isHidden ? 0 : floatLocExtendHeight
-        var distance = floatInputBarHeight + extendHeight
+        var distance = floatInputBarHeight + floatLocExtendHeight
         if withMini {
             distance += floatToolBarContentHeight
         }
-        let insets = UIEdgeInsetsMake(0.0, 0.0, distance, 0.0)
+        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + device_offset_bot, 0.0)
         self.collectionView.contentInset = insets
         self.collectionView.scrollIndicatorInsets = insets
         scrollToBottom(false)
@@ -860,7 +853,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
         let location = CLLocation(latitude: lat, longitude: lon)
         General.shared.getAddress(location: location, original: true) { (placeMark) in
             guard let response = placeMark as? CLPlacemark else { return }
-            self.uiviewLocationExtend.setAvator(image: screenShot)
+            self.uiviewLocationExtend.setThumbnail(image: screenShot)
             self.addResponseToLocationExtend(response: response, withMini: false)
         }
     }
@@ -874,7 +867,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
             self.addResponseToLocationExtend(response: response, withMini: false)
         })
         AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
-            self.uiviewLocationExtend.setAvator(image: snapShotImage)
+            self.uiviewLocationExtend.setThumbnail(image: snapShotImage)
         }
         
         /*CLGeocoder().reverseGeocodeLocation(CLLocation(latitude:  address.coordinate.latitude, longitude: address.coordinate.longitude), completionHandler: { (placemarks, error) -> Void in
@@ -887,21 +880,19 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
     }
     
     func sendPlaceBack(placeData: PlacePin) {
+        uiviewLocationExtend.placeData = placeData
+        uiviewLocationExtend.setToPlace()
+        uiviewLocationExtend.isHidden = false
+        let distance = floatInputBarHeight + floatLocExtendHeight
+        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, distance + device_offset_bot, 0.0)
+        collectionView.contentInset = insets
+        collectionView.scrollIndicatorInsets = insets
+        scrollToBottom(false)
+        btnSend.isEnabled = true
+        //inputToolbar.contentView.textView.becomeFirstResponder()
         downloadImage(URL: placeData.imageURL) { (rawData) in
             guard let data = rawData else { return }
-            self.uiviewLocationExtend.placeData = placeData
-            self.uiviewLocationExtend.setAvator(image: UIImage(data: data)!)
-            self.uiviewLocationExtend.setToPlace()
-            self.uiviewLocationExtend.isHidden = false
-            let extendHeight = self.uiviewLocationExtend.isHidden ? 0 : self.floatLocExtendHeight
-            var distance = self.floatInputBarHeight + extendHeight
-            distance += self.floatToolBarContentHeight
-            let insets = UIEdgeInsetsMake(0.0, 0.0, distance, 0.0)
-            self.collectionView.contentInset = insets
-            self.collectionView.scrollIndicatorInsets = insets
-            self.scrollToBottom(false)
-            self.btnSend.isEnabled = true
-            self.inputToolbar.contentView.textView.becomeFirstResponder()
+            self.uiviewLocationExtend.setThumbnail(image: UIImage(data: data)!)
         }
     }
 }
