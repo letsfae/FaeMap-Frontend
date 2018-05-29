@@ -65,7 +65,7 @@ extension ChatViewController {
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == arrFaeMessages.count - 1, let faeMessage = arrFaeMessages.last {
-            if faeMessage.senderId != "\(Key.shared.user_id)" || faeMessage.messageType != "[Heart]" {
+            if faeMessage.senderId != "\(Key.shared.user_id)" || faeMessage.messageType != "[Heart]" || Date().timeIntervalSince(faeMessage.date) > 180 {
                 boolJustSentHeart = false
             }
         }
