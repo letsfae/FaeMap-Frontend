@@ -1876,8 +1876,6 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     func selectPlaceFromTable(_ placeData: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = placeData
-        vcPlaceDetail.featureDelegate = self
-        vcPlaceDetail.delegate = self
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
@@ -2136,12 +2134,7 @@ extension FaeMapViewController {
 
 // MARK: - Place Pin
 
-extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, PlaceDetailDelegate {
-    
-    // PlaceDetailDelegate
-    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?) {
-//        placePinAction(action: .route(placeInfo: placeInfo), mode: mode)
-    }
+extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
     // AddPlacetoCollectionDelegate
     func createColList() {
@@ -2275,7 +2268,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 vcLocDetail.locationId = anView.locationId
                 vcLocDetail.coordinate = selectedLocation?.coordinate
                 vcLocDetail.delegate = self
-                vcLocDetail.featureDelegate = self
                 vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
                 vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
                 vcLocDetail.boolCreated = true
@@ -2286,8 +2278,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 }
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placeData
-                vcPlaceDetail.featureDelegate = self
-                vcPlaceDetail.delegate = self
                 navigationController?.pushViewController(vcPlaceDetail, animated: true)
             }
         case .collect:

@@ -69,9 +69,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = true
         faeMapView.tintColor = UIColor._2499090()
-//        faeMapView.singleTap.isEnabled = !boolFromExplore
-//        faeMapView.doubleTap.isEnabled = !boolFromExplore
-//        faeMapView.longPress.isEnabled = !boolFromExplore
         view.addSubview(faeMapView)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
@@ -316,7 +313,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         } else {
             anView = LocPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-//        locAnnoView = anView
         anView.assignImage(first.icon)
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1

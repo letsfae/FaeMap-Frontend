@@ -709,8 +709,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             let vcPlaceDetail = PlaceDetailViewController()
             vcPlaceDetail.place = placePin
-            vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
-            vcPlaceDetail.delegate = Key.shared.FMVCtrler
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
         } else {
             let lastSelected = Key.shared.selectedTypeIdx
@@ -731,8 +729,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func jumpToPlaceDetail(_ placeInfo: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = placeInfo
-        vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
-        vcPlaceDetail.delegate = Key.shared.FMVCtrler
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
