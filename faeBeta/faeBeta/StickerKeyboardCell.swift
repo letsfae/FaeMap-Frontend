@@ -29,6 +29,25 @@ class StickerCell: UICollectionViewCell {
         super.prepareForReuse()
         imgSticker.image = nil
     }
+    
+    /*override func responds(to aSelector: Selector!) -> Bool {
+        return true
+    }*/
+    
+    override var canBecomeFirstResponder: Bool { return true }
+
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action.description == "deleteFavorite" { return true }
+        //if action == #selector(delete(_:)) { return true }
+        return false
+    }
+    
+    @objc func deleteFavorite() {
+        //felixprint("cell delete")
+        let collectionView = self.superview as! UICollectionView
+        let delegate = collectionView.delegate
+        delegate?.collectionView!(collectionView, performAction: NSSelectorFromString("deleteFavorite"), forItemAt: collectionView.indexPath(for: self)!, withSender: self)
+    }
 }
 
 // MARK: - StickerTabCell

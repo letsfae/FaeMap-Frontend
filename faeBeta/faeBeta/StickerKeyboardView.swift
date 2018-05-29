@@ -89,6 +89,16 @@ class StickerKeyboardView: UIView {
         cllcSticker.setNeedsLayout()
         cllcSticker.layoutIfNeeded()
         intCurrentSection = 2
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateStickerInFavorite), name: Notification.Name(rawValue: "favoriteSticker"), object: nil)
+        
+        let menuItem = UIMenuItem(title: "Delete", action: NSSelectorFromString("deleteFavorite"))
+        UIMenuController.shared.menuItems?.append(menuItem)
+    }
+    
+    @objc private func updateStickerInFavorite() {
+        setupCollections()
+        cllcSticker.reloadSections([1])
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -96,6 +106,13 @@ class StickerKeyboardView: UIView {
     }
     
     func setupCollections() {
+        for identifier in ["stickerHistory", "stickerLike"] {
+            if let stickerHistory = FaeCoreData.shared.readByKey("\(identifier)_\(Key.shared.user_id)") as? [String] {
+                StickerInfoStrcut.stickerDictionary[identifier]?.removeAll()
+                StickerInfoStrcut.stickerDictionary[identifier]?.append(contentsOf: stickerHistory)
+            }
+        }
+        arrStickerCollection.removeAll()
         for identifier in arrCollectionIndetifiers {
             let stickerList = StickerInfoStrcut.stickerDictionary[identifier]
             let stickerCollection = StickerCollection(name: identifier, count: stickerList!.count, isEmoji: identifier == "faeEmoji")
@@ -110,6 +127,7 @@ class StickerKeyboardView: UIView {
             arrPageNumIndex.append(page)
         }
     }
+
 }
 
 // MARK: - UICollectionViewDataSource
@@ -167,6 +185,9 @@ extension StickerKeyboardView: UICollectionViewDelegate {
                 }
             } else {
                 delegate?.sendStickerWithImageName(name)
+                updateStickerInHistory(name)
+                setupCollections()
+                collectionView.reloadSections([0])
             }
         } else {
             let targetPage = indexPath.row == 0 ? 0 : arrPageNumIndex[indexPath.row - 1]
@@ -176,6 +197,47 @@ extension StickerKeyboardView: UICollectionViewDelegate {
             cllcSticker.setContentOffset(CGPoint(x: offset, y: 0), animated: false)
             collectionView.reloadData()
         }
+    }
+    
+    private func updateStickerInHistory(_ latestName: String) {
+        var stickerHistory: [String] = []
+        if let current = FaeCoreData.shared.readByKey("stickerHistory_\(Key.shared.user_id)") as? [String]{
+            stickerHistory = current
+        }
+        if let existIndex = stickerHistory.index(of: latestName) {
+            stickerHistory.remove(at: existIndex)
+        }
+        stickerHistory.insert(latestName, at: 0)
+        if stickerHistory.count > 16 {
+            stickerHistory.removeLast()
+        }
+        FaeCoreData.shared.save("stickerHistory_\(Key.shared.user_id)", value:stickerHistory)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 { return true }
+        return false
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+        if action.description == "deleteFavorite:" { return true }
+        return false
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
+        //felixprint("sticker menu")
+        let deletedName = arrStickerCollection[indexPath.section].list[indexPath.item]
+        var stickerLike: [String] = []
+        if let current = FaeCoreData.shared.readByKey("stickerLike_\(Key.shared.user_id)") as? [String]{
+            stickerLike = current
+        }
+        if let existIndex = stickerLike.index(of: deletedName) {
+            stickerLike.remove(at: existIndex)
+        }
+        FaeCoreData.shared.save("stickerLike_\(Key.shared.user_id)", value: stickerLike)
+        setupCollections()
+        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.reloadSections([1])
     }
 }
 

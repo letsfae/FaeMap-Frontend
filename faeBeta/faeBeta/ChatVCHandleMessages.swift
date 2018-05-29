@@ -221,7 +221,7 @@ extension ChatViewController {
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)
         }
-        scrollToBottom(animated: false)
+        //scrollToBottom(animated: false)
     }
     
     private func updateFaeMessageMedia(_ message: RealmMessage, media: Data?, url: URL? = nil) {
