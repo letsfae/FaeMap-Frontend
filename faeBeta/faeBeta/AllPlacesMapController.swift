@@ -15,17 +15,22 @@ class AllPlacesMapController: BasicMapController {
     private var placeAnnos = [FaePinAnnotation]()
     private var uiviewPinActionDisplay: FMPinActionDisplay!
     
+    // Collecting Pin Control
+    private var uiviewSavedList: AddPinToCollectionView!
+    private var uiviewAfterAdded: AfterAddedToListView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadTopBar()
         loadPlaceInfoBar()
         loadAnnotations(places: arrPlaces)
+        loadPlaceListView()
         setTitle(title: strTitle)
         faeMapView.singleTap.isEnabled = true
         faeMapView.doubleTap.isEnabled = true
         faeMapView.longPress.isEnabled = true
         faeMapView.mapAction = self
-        btnZoom.isHidden = false
+        btnZoom.isHidden = true
         btnLocat.isHidden = false
         PLACE_INSTANT_SHOWUP = true
     }
@@ -33,6 +38,8 @@ class AllPlacesMapController: BasicMapController {
     override func loadPlaceInfoBar() {
         super.loadPlaceInfoBar()
         uiviewPlaceBar.delegate = self
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionPlaceBarTap))
+        uiviewPlaceBar.addGestureRecognizer(tapGes)
     }
     
     override func loadTopBar() {
@@ -54,10 +61,29 @@ class AllPlacesMapController: BasicMapController {
         faeMapView.selectedPlaceAnno = anView
     }
     
+    override func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        Key.shared.lastChosenLoc = mapView.centerCoordinate
+    }
+    
+    override func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "place"
+        var anView: PlacePinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        anView.delegate = self
+        return anView
+    }
+    
     private func loadAnnotations(places: [PlacePin]) {
         placeAnnos = places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.addAnnotations(placeAnnos, withCompletionHandler: {
-            
+            self.goTo(annotation: nil, place: self.arrPlaces.first, animated: true)
+            self.uiviewPlaceBar.annotations = visiblePlaces(mapView: self.faeMapView, returnAll: true)
         })
         zoomToFitAllAnnotations(annotations: placeAnnos)
     }
@@ -83,6 +109,10 @@ class AllPlacesMapController: BasicMapController {
         let title_1_attr = NSMutableAttributedString(string: title_1, attributes: attrs_1)
         
         lblTopBarCenter.attributedText = title_1_attr
+    }
+    
+    @objc private func actionPlaceBarTap() {
+        placePinAction(action: .detail, mode: .place)
     }
     
     private func deselectAllPlaceAnnos(full: Bool = true) {
@@ -150,6 +180,102 @@ extension AllPlacesMapController: PlaceViewDelegate {
     }
 }
 
+extension AllPlacesMapController: PlacePinAnnotationDelegate {
+    
+    func placePinAction(action: PlacePinAction, mode: CollectionTableMode) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.hide()
+        switch action {
+        case .detail:
+            guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
+                return
+            }
+            let vcPlaceDetail = PlaceDetailViewController()
+            vcPlaceDetail.place = placeData
+            navigationController?.pushViewController(vcPlaceDetail, animated: true)
+        case .collect:
+            uiviewSavedList.show()
+            uiviewSavedList.tableMode = mode
+            uiviewSavedList.tblAddCollection.reloadData()
+            guard let placePin = selectedPlace else { return }
+            uiviewSavedList.pinToSave = placePin
+        case .route:
+            if let place = selectedPlace?.pinInfo as? PlacePin {
+                routingPlace(place)
+            }
+        case .share:
+            guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
+            selectedPlaceAnno?.hideButtons()
+            let vcSharePlace = NewChatShareController(friendListMode: .place)
+            vcSharePlace.placeDetail = placeData
+            navigationController?.pushViewController(vcSharePlace, animated: true)
+        }
+    }
+    
+    private func routingPlace(_ place: PlacePin) {
+        let vc = RoutingMapController()
+        vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
+        vc.destinationAddr = RouteAddress(name: place.name, coordinate: place.coordinate)
+        vc.destPlaceInfo = place
+        vc.mode = .place
+        navigationController?.pushViewController(vc, animated: false)
+    }
+}
+
+extension AllPlacesMapController: AddPinToCollectionDelegate, AfterAddedToListDelegate {
+    
+    private func loadPlaceListView() {
+        uiviewSavedList = AddPinToCollectionView()
+        //        uiviewSavedList.loadCollectionData()
+        uiviewSavedList.delegate = self
+        uiviewSavedList.tableMode = .place
+        view.addSubview(uiviewSavedList)
+        
+        uiviewAfterAdded = AfterAddedToListView()
+        uiviewAfterAdded.delegate = self
+        view.addSubview(uiviewAfterAdded)
+        
+        uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
+    }
+    
+    // AddPlacetoCollectionDelegate
+    func createColList() {
+        let vc = CreateColListViewController()
+        vc.enterMode = uiviewSavedList.tableMode
+        present(vc, animated: true)
+    }
+    
+    // AfterAddedToListDelegate
+    func undoCollect(colId: Int, mode: UndoMode) {
+        uiviewAfterAdded.hide()
+        uiviewSavedList.show()
+        switch mode {
+        case .save:
+            uiviewSavedList.arrListSavedThisPin.append(colId)
+        case .unsave:
+            if uiviewSavedList.arrListSavedThisPin.contains(colId) {
+                let arrListIds = uiviewSavedList.arrListSavedThisPin
+                uiviewSavedList.arrListSavedThisPin = arrListIds.filter { $0 != colId }
+            }
+        }
+        if uiviewSavedList.arrListSavedThisPin.count <= 0 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+        } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
+        }
+    }
+    
+    // AfterAddedToListDelegate
+    func seeList() {
+        // TODO VICKY
+        uiviewAfterAdded.hide()
+        let vcList = CollectionsListDetailViewController()
+        vcList.enterMode = uiviewSavedList.tableMode
+        vcList.colId = uiviewAfterAdded.selectedCollection.collection_id
+        navigationController?.pushViewController(vcList, animated: true)
+    }
+}
+
 extension AllPlacesMapController: MapAction {
     
     func iconStyleChange(action: Int, isPlace: Bool) {
@@ -184,5 +310,15 @@ extension AllPlacesMapController: MapAction {
     
     func allPlacesDeselect(_ full: Bool) {
         deselectAllPlaceAnnos(full: full)
+    }
+    
+    func singleElsewhereTap() {
+        uiviewSavedList.hide()
+    }
+    
+    func singleElsewhereTapExceptInfobar() {
+        faeMapView.mapGesture(isOn: true)
+        uiviewPlaceBar.hide()
+        deselectAllPlaceAnnos(full: true)
     }
 }

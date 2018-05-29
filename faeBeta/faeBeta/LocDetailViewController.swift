@@ -28,7 +28,6 @@ protocol LocDetailDelegate: class {
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
-    weak var featureDelegate: PlaceDetailDelegate?
     weak var locationDelegate: LocDetailDelegate?
     
     public var coordinate: CLLocationCoordinate2D!
@@ -390,8 +389,6 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
         vc.destinationAddr = RouteAddress(name: strLocName, coordinate: coordinate)
         navigationController?.pushViewController(vc, animated: false)
-//        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
-//        navigationController?.popViewController(animated: false)
     }
     
     @objc func shareThisPin() {

@@ -9,10 +9,6 @@
 import UIKit
 import SwiftyJSON
 
-protocol PlaceDetailDelegate: class {
-    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?)
-}
-
 enum EnterPlaceLocDetailMode {
     case collection
     case boards
@@ -21,10 +17,7 @@ enum EnterPlaceLocDetailMode {
 
 class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
-    weak var delegate: MapSearchDelegate?
-    weak var featureDelegate: PlaceDetailDelegate?
-    
-    var place: PlacePin!
+    public var place: PlacePin!
     private var uiviewHeader: UIView!
     private var uiview_bottomLine: UIView!
     private var uiviewSubHeader: FixedHeader!
@@ -56,7 +49,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var intNearby = 0
     
     var boolShared: Bool = false
-    var enterMode: EnterPlaceLocDetailMode!
+    public var enterMode: EnterPlaceLocDetailMode!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -432,22 +425,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         vc.destPlaceInfo = self.place
         vc.mode = .place
         navigationController?.pushViewController(vc, animated: false)
-        
-        /*
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-            ctrler.routingMode = .fromPinDetail
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        featureDelegate = Key.shared.FMVCtrler
-        featureDelegate?.getRouteToPin(mode: .place, placeInfo: place)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
-        */
     }
     
     @objc private func shareThisPin() {

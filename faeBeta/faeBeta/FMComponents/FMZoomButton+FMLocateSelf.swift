@@ -51,15 +51,16 @@ class FMZoomButton: UIButton {
             if Key.shared.autoCycle {
                 Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
                 Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
+                
+                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
             }
-            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
-            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
-            
-            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
-            
-            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
-            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
@@ -77,13 +78,28 @@ class FMZoomButton: UIButton {
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
-            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
-            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            // previous version before 05/29/18
+//            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+//            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+//            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+//            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            if Key.shared.autoCycle {
+                Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+                Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
+                
+                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
+            }
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
+            multiplier = m
             zoom(multiplier: m * 0.05)
         }
     }
