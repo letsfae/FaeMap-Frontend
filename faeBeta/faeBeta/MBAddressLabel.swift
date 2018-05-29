@@ -24,7 +24,7 @@ class MBAddressLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
+    public func loadAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
         
         self.text = nil
 
@@ -36,7 +36,7 @@ class MBAddressLabel: UILabel {
         self.getSocialPinAddress(position: position, id: id, type: type)
     }
     
-    func getSocialPinAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
+    public func getSocialPinAddress(position: CLLocationCoordinate2D, id: Int, type: String) {
         
         let location = CLLocation(latitude: position.latitude, longitude: position.longitude)
         General.shared.getAddress(location: location) { (address) in

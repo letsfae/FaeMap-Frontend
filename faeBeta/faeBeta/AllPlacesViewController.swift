@@ -140,7 +140,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
-        let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
+        let mbIsOn = SideMenuViewController.boolMapBoardIsOn
         if mbIsOn {
             Key.shared.initialCtrler?.goToMapBoard(animated: false)
         }

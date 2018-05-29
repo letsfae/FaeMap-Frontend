@@ -992,7 +992,7 @@ extension FaeMapViewController {
         uiviewNameCard.hide() {
             self.faeMapView.mapGesture(isOn: true)
         }
-        let leftMenuVC = LeftSlidingMenuViewController()
+        let leftMenuVC = SideMenuViewController()
         leftMenuVC.delegate = self
         leftMenuVC.displayName = Key.shared.nickname
         leftMenuVC.modalPresentationStyle = .overCurrentContext
@@ -1427,9 +1427,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
 
 // MARK: -
 
-extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDelegate {
+extension FaeMapViewController: SideMenuDelegate, ButtonFinishClickedDelegate {
     
-    // LeftSlidingMenuDelegate
+    // sideMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
             renewSelfLocation()
@@ -1457,7 +1457,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
         self.navigationController?.pushViewController(vcContacts, animated: true)
     }
     
-    // LeftSlidingMenuDelegate
+    // sideMenuDelegate
     func jumpToSettings() {
         let vcSettings = SettingsViewController()
         navigationController?.pushViewController(vcSettings, animated: true)
@@ -1477,7 +1477,7 @@ extension FaeMapViewController: LeftSlidingMenuDelegate, ButtonFinishClickedDele
         guard vc is InitialPageController else { return }
         guard let vcRoot = vc as? InitialPageController else { return }
         vcRoot.goToMapBoard()
-        LeftSlidingMenuViewController.boolMapBoardIsOn = true
+        SideMenuViewController.boolMapBoardIsOn = true
     }
     
     func resetCompassRotation() {

@@ -14,12 +14,12 @@ class FaeGenderView: UIView {
     
     static let shared = FaeGenderView()
     
-    var userId = -1
-    var boolAlignLeft = true
-    var imgCardGender: UIImageView!
-    var lblCardAge: UILabel!
-    var realWidth: CGFloat = 0
-    var realHeight: CGFloat = 18
+    private var userId = -1
+    private var boolAlignLeft = true
+    private var imgCardGender: UIImageView!
+    private var lblCardAge: UILabel!
+    private var realWidth: CGFloat = 0
+    private var realHeight: CGFloat = 18
     
     static var imageMale = #imageLiteral(resourceName: "userGenderMale")
     static var imageFemale = #imageLiteral(resourceName: "userGenderFemale")
@@ -38,7 +38,7 @@ class FaeGenderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         imgCardGender = UIImageView(frame: CGRect(x: 9, y: 3, w: 10, h: 12))
         imgCardGender.contentMode = .scaleAspectFit
         addSubview(imgCardGender)
@@ -49,7 +49,7 @@ class FaeGenderView: UIView {
         addSubview(lblCardAge)
     }
     
-    func loadGenderAge(id: Int, _ completion: @escaping (String, String, String) -> Void ) {
+    public func loadGenderAge(id: Int, _ completion: @escaping (String, String, String) -> Void ) {
         guard id > 0 else { return }
         let userNameCard = FaeUser()
         userNameCard.getUserCard("\(id)") { (status: Int, message: Any?) in
@@ -83,7 +83,7 @@ class FaeGenderView: UIView {
         
     }
     
-    fileprivate func showGenderAge(otherShowGender: Bool, gender: String, otherShowAge: Bool, age: String) {
+    private func showGenderAge(otherShowGender: Bool, gender: String, otherShowAge: Bool, age: String) {
         
         var marginDiff: CGFloat = 0
         let selfShowGender = !Key.shared.disableGender

@@ -15,7 +15,7 @@ class General: NSObject {
     
     static let shared = General()
     
-    func avatarCached(userid: Int, completion:@escaping (UIImage) -> Void) {
+    public func avatarCached(userid: Int, completion:@escaping (UIImage) -> Void) {
         let realm = try! Realm()
         if let user = realm.filterUser(id: "\(userid)") {
             if let avatar = user.avatar?.userSmallAvatar {
@@ -29,7 +29,7 @@ class General: NSObject {
         }
     }
     
-    func avatar(userid: Int, completion:@escaping (UIImage) -> Void) {
+    public func avatar(userid: Int, completion:@escaping (UIImage) -> Void) {
         
         if userid == 1 {
             guard let faeAvatar = Key.shared.faeAvatar else { return }
@@ -57,7 +57,7 @@ class General: NSObject {
         }
     }
     
-    func coverPhotoCached(userid: Int, completion:@escaping (UIImage) -> Void) {
+    public func coverPhotoCached(userid: Int, completion:@escaping (UIImage) -> Void) {
         let realm = try! Realm()
         if let user = realm.filterUser(id: "\(userid)") {
             if let coverPhoto = user.avatar?.userCoverPhoto {
@@ -71,7 +71,7 @@ class General: NSObject {
         }
     }
     
-    func coverPhoto(userid: Int, completion:@escaping (UIImage) -> Void) {
+    public func coverPhoto(userid: Int, completion:@escaping (UIImage) -> Void) {
         
         if userid <= 1 {
             guard let defaultCover = Key.shared.defaultCover else { return }
@@ -98,7 +98,7 @@ class General: NSObject {
         }
     }
     
-    func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (AnyObject) -> Void) {
+    public func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (AnyObject) -> Void) {
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             
@@ -182,7 +182,7 @@ class General: NSObject {
         })
     }
     
-    func getLocation(address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
+    public func getLocation(address: String, completion: @escaping (CLLocationCoordinate2D?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             CLGeocoder().geocodeAddressString(address, in: nil) { (placemarks, error) in
                 guard error == nil else { joshprint("[CLGeocoder] error != nil"); return }
@@ -194,7 +194,7 @@ class General: NSObject {
         }
     }
     
-    func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
+    public func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
         let getPlaces = FaeMap()
         getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
         getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
@@ -219,7 +219,7 @@ class General: NSObject {
         }
     }
     
-    func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
+    public func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
         
         func whenComplete() {
             DispatchQueue.main.async {
@@ -256,7 +256,7 @@ class General: NSObject {
     }
     
     // GMSLookUpPlaceForCoordinate
-    func lookUpForCoordinate(_ completion: @escaping (GMSPlace) -> ()) {
+    public func lookUpForCoordinate(_ completion: @escaping (GMSPlace) -> ()) {
         if let placeId = Key.shared.selectedPrediction?.placeID {
             GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
                 if let error = error {

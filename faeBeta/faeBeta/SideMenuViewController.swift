@@ -1,5 +1,5 @@
 //
-//  LeftSlidingMenuViewController.swift
+//  SideMenuViewController.swift
 //  faeBeta
 //
 //  Created by Jacky on 12/19/16.
@@ -8,9 +8,10 @@
 
 import UIKit
 import SwiftyJSON
+import Photos
 import RealmSwift
 
-protocol LeftSlidingMenuDelegate: class {
+protocol SideMenuDelegate: class {
     func userInvisible(isOn: Bool)
     func jumpToMoodAvatar()
     func jumpToSettings()
@@ -21,47 +22,46 @@ protocol LeftSlidingMenuDelegate: class {
     func switchMapMode()
 }
 
-class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
-    weak var delegate: LeftSlidingMenuDelegate?
-    
-    var uiviewLeftWindow: UIView!
-    var btnBackground: UIButton!
-    var imgLeftSlideUp: UIImageView!
-    var imgLeftSlideMiddle: UIImageView!
-    var imgAvatar: UIImageView!
-    var lblNickName: UILabel!
-    var tblLeftSlide: UITableView!
-    var uiviewBackTop: UIView!
-    var uiviewBackBottom: UIView!
-    
-    // For pan gesture var
-    var sizeFrom: CGFloat = 0
-    var sizeTo: CGFloat = 0
-    var space: CGFloat = 0
-    var end: CGFloat = 0
-    var percent: Double = 0
-    var displayName = ""
-    // End of pan gesture var
-    
-    var activityIndicator: UIActivityIndicatorView!
-    
-    var fullLoaded = false
+enum TableSelctions {
+    case none
+    case mapBoard
+    case goInvisible
+    case contacts
+    case moodAvatar
+    case collections
+    case myActivities
+    case settings
+    case myFaeMainPage
+}
+
+class SideMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     static var boolMapBoardIsOn = false
     
-    enum TableSelctions {
-        case none
-        case mapBoard
-        case goInvisible
-        case contacts
-        case moodAvatar
-        case collections
-        case myActivities
-        case settings
-        case myFaeMainPage
-    }
-    var tableSelections: TableSelctions = .none
+    weak var delegate: SideMenuDelegate?
+    
+    private var uiviewLeftWindow: UIView!
+    private var btnBackground: UIButton!
+    private var imgLeftSlideUp: UIImageView!
+    private var imgLeftSlideMiddle: UIImageView!
+    private var lblNickName: UILabel!
+    private var tblLeftSlide: UITableView!
+    private var uiviewBackTop: UIView!
+    private var uiviewBackBottom: UIView!
+    var imgAvatar: UIImageView!
+    
+    // For pan gesture var
+    private var sizeFrom: CGFloat = 0
+    private var sizeTo: CGFloat = 0
+    private var space: CGFloat = 0
+    private var end: CGFloat = 0
+    private var percent: Double = 0
+    public var displayName = ""
+    // End of pan gesture var
+    
+    var activityIndicator: UIActivityIndicatorView!
+    private var tableSelections: TableSelctions = .none
+    private var fullLoaded = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,7 +87,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func loadActivityIndicator() {
+    private func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -97,7 +97,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         view.bringSubview(toFront: activityIndicator)
     }
     
-    func loadLeftWindow() {
+    private func loadLeftWindow() {
         btnBackground = UIButton(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         btnBackground.backgroundColor = UIColor._107105105()
         btnBackground.addTarget(self, action: #selector(actionCloseMenu(_:)), for: .touchUpInside)
@@ -149,7 +149,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         tblLeftSlide = UITableView(frame: CGRect(x: 0, y: device_offset_top, width: 290, height: screenHeight))
         tblLeftSlide.delegate = self
         tblLeftSlide.dataSource = self
-        tblLeftSlide.register(LeftSlideWindowCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
+        tblLeftSlide.register(SideMenuCell.self, forCellReuseIdentifier: "cellLeftSlideWindow")
         tblLeftSlide.separatorStyle = .none
         tblLeftSlide.tableHeaderView = uiviewLeftWindow
         view.addSubview(tblLeftSlide)
@@ -165,8 +165,9 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
+    // MARK: - UITableView Delegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tblLeftSlide.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! LeftSlideWindowCell
+        let cell = tblLeftSlide.dequeueReusableCell(withIdentifier: "cellLeftSlideWindow", for: indexPath) as! SideMenuCell
         // "Log Out" will be replaced by "Setting"
         let array = ["Boards", "Go Invisible", "Contacts", "Collections", "Map Avatars", "Settings"]
         //  "Activities",
@@ -180,7 +181,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
         if indexPath.row == 0 {
             cell.switchRight.addTarget(self, action: #selector(self.mapBoardSwitch(_:)), for: .valueChanged)
-            cell.switchRight.setOn(LeftSlidingMenuViewController.boolMapBoardIsOn, animated: false)
+            cell.switchRight.setOn(SideMenuViewController.boolMapBoardIsOn, animated: false)
         } else if indexPath.row == 1 {
             cell.switchRight.setOn(Key.shared.onlineStatus == 5, animated: false)
             cell.switchRight.addTarget(self, action: #selector(self.invisibleSwitch(_:)), for: .valueChanged)
@@ -191,7 +192,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         return 6 // 7
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tblLeftSlide.cellForRow(at: indexPath) as! LeftSlideWindowCell
+        let cell = tblLeftSlide.cellForRow(at: indexPath) as! SideMenuCell
         // Go Invisible
         if indexPath.row == 0 {
             tableSelections = .mapBoard
@@ -219,7 +220,8 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         return 81 // 67
     }
     
-    @objc func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {
+    // MARK: - Actions
+    @objc private func panActionCommentPinDetailDrag(_ pan: UIPanGestureRecognizer) {
         var resumeTime: Double = 0.5
         if pan.state == .began {
             let location = pan.location(in: view)
@@ -268,26 +270,7 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func loadUserInfo() {
-        General.shared.avatarCached(userid: Key.shared.user_id, completion:  { (avatarImage) in
-            self.imgAvatar.image = avatarImage
-        })
-        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
-            self.imgAvatar.image = avatarImage
-        })
-        DispatchQueue.global(qos: .utility).async {
-            let updateNickName = FaeUser()
-            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
-                guard status / 100 == 2 else { return }
-                let nickNameInfo = JSON(message!)
-                DispatchQueue.main.async {
-                    self.lblNickName.text = nickNameInfo["nick_name"].stringValue
-                }
-            }
-        }
-    }
-    
-    @objc func actionCloseMenu(_ sender: UIButton) {
+    @objc private func actionCloseMenu(_ sender: UIButton) {
         UIView.animate(withDuration: 0.3, animations: {
             self.btnBackground.alpha = 0
             self.tblLeftSlide.center.x -= 290
@@ -329,10 +312,10 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
     }
     
     @objc func actionJumpToMainPage() {
-//        tableSelections = .myFaeMainPage
-//        actionCloseMenu(btnBackground)
+        //        tableSelections = .myFaeMainPage
+        //        actionCloseMenu(btnBackground)
         //addProfileAvatar()
-        SetAvatar.addUserImage(vc: self, type: "leftSlidingMenu")
+        SetAvatar.addUserImage(vc: self, type: "sideMenu")
     }
     
     @objc func mapBoardSwitch(_ sender: UISwitch) {
@@ -371,7 +354,26 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    func updateRedDot() {
+    private func loadUserInfo() {
+        General.shared.avatarCached(userid: Key.shared.user_id, completion:  { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
+        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
+            self.imgAvatar.image = avatarImage
+        })
+        DispatchQueue.global(qos: .utility).async {
+            let updateNickName = FaeUser()
+            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
+                guard status / 100 == 2 else { return }
+                let nickNameInfo = JSON(message!)
+                DispatchQueue.main.async {
+                    self.lblNickName.text = nickNameInfo["nick_name"].stringValue
+                }
+            }
+        }
+    }
+
+    private func updateRedDot() {
         /*FaeContact().getFriendRequests() {(status: Int, message: Any?) in
             let json = JSON(message!)
             if json.count > 0 {
@@ -381,11 +383,36 @@ class LeftSlidingMenuViewController: UIViewController, UITableViewDataSource, UI
         }*/
         let realm = try! Realm()
         let requests = realm.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", FRIEND_REQUESTED_BY).count
-        let contactCell = tblLeftSlide.cellForRow(at: IndexPath(row: 2, section: 0)) as! LeftSlideWindowCell
+        let contactCell = tblLeftSlide.cellForRow(at: IndexPath(row: 2, section: 0)) as! SideMenuCell
         contactCell.uiviewRedDot.isHidden = requests == 0
         if !Key.shared.userEmailVerified && !Key.shared.userPhoneVerified {
-            let cell = tblLeftSlide.cellForRow(at: IndexPath(row: 5, section: 0)) as! LeftSlideWindowCell
+            let cell = tblLeftSlide.cellForRow(at: IndexPath(row: 5, section: 0)) as! SideMenuCell
             cell.uiviewRedDot.isHidden = false
+        }
+    }
+}
+
+// MARK: - Image Picker
+extension SideMenuViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, ChooseAvatarDelegate {
+    
+    // MARK: - ChooseAvatarDelegate
+    func finishChoosingAvatar(with imageData: Data) {
+        guard let image = UIImage(data: imageData) else { return } // TODO: failure
+        SetAvatar.uploadUserImage(image: image, vc: self, type: "sideMenu") {
+            self.imgAvatar.image = image
+        }
+    }
+    
+    // MARK: - UIImagePickerControllerDelegate
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            picker.dismiss(animated: true, completion: nil)
+            SetAvatar.showAlert(title: "Taking Photo Failed", message: "please try again", vc: self)
+            return
+        }
+        picker.dismiss(animated: true, completion: nil)
+        SetAvatar.uploadUserImage(image: image, vc: self, type: "sideMenu") {
+            self.imgAvatar.image = image
         }
     }
 }

@@ -10,8 +10,8 @@ import UIKit
 
 class FaeNavBar: UIView {
 
-    var leftBtnWidth = 10.5
-    var leftBtnPadding = 30.0
+    public var leftBtnWidth = 10.5
+    public var leftBtnPadding = 30.0
     var leftBtn = UIButton()
     var rightBtn = UIButton()
     var lblTitle = UILabel()
@@ -47,20 +47,20 @@ class FaeNavBar: UIView {
         addConstraintsWithFormat("V:|-(\(28+device_offset_top))-[v0(27)]", options: [], views: lblTitle)
     }
     
-    func loadBtnConstraints() {
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func loadBtnConstraints() {
         addConstraintsWithFormat("H:|-0-[v0(\(leftBtnPadding+leftBtnWidth))]", options: [], views: leftBtn)
         addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: leftBtn)
         addConstraintsWithFormat("H:[v0(101)]-(-22)-|", options: [], views: rightBtn)
         addConstraintsWithFormat("V:|-(\(22+device_offset_top))-[v0(38)]", options: [], views: rightBtn)
     }
     
-    func setBtnTitle() {
+    public func setBtnTitle() {
         leftBtn.setTitle("Cancel", for: .normal)
         leftBtn.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 18)
         leftBtn.setTitleColor(UIColor._155155155(), for: .normal)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

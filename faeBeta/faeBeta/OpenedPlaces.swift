@@ -15,6 +15,7 @@ extension OpenedPlace: Equatable {
 }
 
 struct OpenedPlace {
+    
     var title: String
     var category: String
     var street: String
@@ -34,6 +35,7 @@ struct OpenedPlace {
         self.pinTime = "\(street), \(city)"
         self.pinId = "\(title)\(street)"
     }
+    
 }
 
 class OpenedPlaces {
