@@ -64,7 +64,6 @@
 		50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */; };
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
-		50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
 		50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E50C151F9EF861008645C8 /* LocationPin.swift */; };
 		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
@@ -192,7 +191,6 @@
 		B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */; };
 		B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */; };
 		B323A0F01F436986005C24D1 /* PlaceDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */; };
-		B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */; };
 		B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3273E661F8C220700CFEC8E /* FaeCollection.swift */; };
 		B3273E691F8C28FE00CFEC8E /* PinCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3273E681F8C28FE00CFEC8E /* PinCollection.swift */; };
 		B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */; };
@@ -414,7 +412,6 @@
 		50ACED7A1FEC9E74007A1CA4 /* FMDropUpMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMDropUpMenu.swift; sourceTree = "<group>"; };
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
-		50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailClctView.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
 		50E50C151F9EF861008645C8 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
 		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
@@ -565,7 +562,6 @@
 		B3170EA21F45613B0072F9CD /* CreateColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateColListViewController.swift; sourceTree = "<group>"; };
 		B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
 		B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailCell.swift; sourceTree = "<group>"; };
-		B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceDetailTableView.swift; sourceTree = "<group>"; };
 		B3273E661F8C220700CFEC8E /* FaeCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeCollection.swift; sourceTree = "<group>"; };
 		B3273E681F8C28FE00CFEC8E /* PinCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinCollection.swift; sourceTree = "<group>"; };
 		B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendFromNameCardViewController.swift; sourceTree = "<group>"; };
@@ -874,7 +870,6 @@
 			isa = PBXGroup;
 			children = (
 				50E940831F79B39500269945 /* LocDetailViewController.swift */,
-				50DCCC0A1F79B9AA00616C10 /* LocDetailClctView.swift */,
 			);
 			name = LocationDetail;
 			sourceTree = "<group>";
@@ -1318,7 +1313,6 @@
 			isa = PBXGroup;
 			children = (
 				B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */,
-				B323A0F11F436A21005C24D1 /* PlaceDetailTableView.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
 				50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */,
@@ -1956,7 +1950,6 @@
 				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
-				50DCCC0B1F79B9AA00616C10 /* LocDetailClctView.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
 				B808B4A11F1EC074008CB624 /* PrintFunctions.swift in Sources */,
 				B8E0EC5B1EA0B0DF009EF812 /* OpenedPlaces.swift in Sources */,
@@ -2129,7 +2122,6 @@
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
-				B323A0F21F436A21005C24D1 /* PlaceDetailTableView.swift in Sources */,
 				B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */,
 				B85FFE991EA84CEB0079D1A7 /* PlaceAndLocationTableViewCell.swift in Sources */,
 				B05E2DBB1DCE357700D6745A /* FaePush.swift in Sources */,

@@ -777,8 +777,8 @@ extension CollectionsListDetailViewController {
         case 1: // settings
             animationHideOptions()
             let vc = CreateColListViewController()
-            vc.txtListName = realmColDetails.name
-            vc.txtListDesp = realmColDetails.descrip
+            vc.strListName = realmColDetails.name
+            vc.strListDesp = realmColDetails.descrip
             vc.enterMode = enterMode
             vc.colId = colId
             present(vc, animated: true)

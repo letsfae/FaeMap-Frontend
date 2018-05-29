@@ -47,7 +47,7 @@ class FMDistIndicator: UIImageView {
         addConstraintsWithFormat("V:|-17-[v0(30)]", options: [], views: lblDistance)
     }
     
-    func updateDistance(distance: CLLocationDistance) {
+    public func updateDistance(distance: CLLocationDistance) {
         lblDistance.isHidden = false
         var unit = " km"
         if Key.shared.measurementUnits == "imperial" {
@@ -58,7 +58,7 @@ class FMDistIndicator: UIImageView {
         show()
     }
     
-    func hide(animated: Bool = true) {
+    public func hide(animated: Bool = true) {
         if animated {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
                 self.frame.origin.y = screenHeight + 10
@@ -117,11 +117,11 @@ class FMPinActionDisplay: UIButton {
         }
     }
     
-    func hide() {
+    public func hide() {
         alpha = 0
     }
     
-    func show() {
+    public func show() {
         alpha = 1
     }
 }

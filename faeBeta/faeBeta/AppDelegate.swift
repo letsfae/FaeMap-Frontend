@@ -46,14 +46,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FaeCoreData.shared.readLogInfo()
         
         let vc = LaunchLoadingController()
-//        let vc = RoutingMapController()
         self.navMain.viewControllers = [vc]
         self.navMain.navigationBar.isHidden = true
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window?.rootViewController = self.navMain
         self.window?.makeKeyAndVisible()
-        
-//        return
         
         func configureNavCtrler() {
             let vcRoot = !Key.shared.is_Login ? WelcomeViewController() : InitialPageController()
@@ -85,8 +82,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-
-        
     }
     
     fileprivate func configureNotifications() {

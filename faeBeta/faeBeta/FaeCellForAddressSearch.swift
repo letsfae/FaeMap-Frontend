@@ -24,13 +24,11 @@ class FaeCellForAddressSearch: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     func loadCellLabel() {
         lblName = UILabel()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblName.textAlignment = .left
         lblName.textColor = UIColor._898989()
-        self.addSubview(lblName)
+        addSubview(lblName)
     }
 }

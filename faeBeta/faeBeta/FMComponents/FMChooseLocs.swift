@@ -30,7 +30,6 @@ class FMChooseLocs: UIView {
     }
     
     private func loadContent() {
-        
         backgroundColor = .white
         
         let leftBtn = UIButton()
@@ -79,11 +78,11 @@ class FMChooseLocs: UIView {
         addConstraintsWithFormat("V:|-\(69+device_offset_top)-[v0(43)]", options: [], views: lblDestination)
     }
     
-    func updateStartPoint(name: String) {
+    public func updateStartPoint(name: String) {
         lblStartPoint.text = name
     }
     
-    func updateDestination(name: String) {
+    public func updateDestination(name: String) {
         lblDestination.text = name
     }
     
@@ -91,7 +90,7 @@ class FMChooseLocs: UIView {
         delegate?.hideRouteCalculatorComponents()
     }
     
-    func hide(animated: Bool = true) {
+    public func hide(animated: Bool = true) {
         if !animated {
             self.frame.origin.y = -self.frame.size.height
             return
@@ -102,7 +101,7 @@ class FMChooseLocs: UIView {
         }
     }
     
-    func show(animated: Bool = true) {
+    public func show(animated: Bool = true) {
         if animated {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
                 self.frame.origin.y = 0
