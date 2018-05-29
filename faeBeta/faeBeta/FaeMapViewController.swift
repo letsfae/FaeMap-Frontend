@@ -1203,13 +1203,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
         
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == "location" {
+        if firstAnn.type == .location {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
-                anView.assignImage(firstAnn.icon)
-            }
-        }
-        else {
-            if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
         }
@@ -1261,9 +1256,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
-            if firstAnn.type == "place" {
+            if firstAnn.type == .place {
                 return viewForPlace(annotation: annotation, first: firstAnn)
-            } else if firstAnn.type == "user" {
+            } else if firstAnn.type == .user {
                 return viewForUser(annotation: annotation, first: firstAnn)
             } else {
                 return viewForLocation(annotation: annotation, first: firstAnn)
@@ -1278,13 +1273,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
+            anView.assignImage(addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination"))
             return anView
         } else if annotation is FaePinAnnotation {
             guard let firstAnn = annotation as? FaePinAnnotation else { return nil }
-            if firstAnn.type == "place" {
+            if firstAnn.type == .place {
                 return viewForSelectedPlace(annotation: annotation, first: firstAnn)
-            } else if firstAnn.type == "location" {
+            } else if firstAnn.type == .location {
                 return viewForLocation(annotation: annotation, first: firstAnn)
             } else {
                 return nil
@@ -1623,12 +1618,12 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
                         self.placesFromSearch.append(pinData)
-                        let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
+                        let pin = FaePinAnnotation(type: FaePinType(rawValue: type)!, cluster: self.placeClusterManager, data: pinData as AnyObject)
                         self.pinsFromSearch.append(pin)
                     } else if type == "location" {
                         let pinData = LocationPin(json: resultJson)
                         self.locationsFromSearch.append(pinData)
-                        let pin = FaePinAnnotation(type: type, cluster: self.placeClusterManager, data: pinData as AnyObject)
+                        let pin = FaePinAnnotation(type: FaePinType(rawValue: type)!, cluster: self.locationPinClusterManager, data: pinData as AnyObject)
                         self.pinsFromSearch.append(pin)
                     }
                     self.completionCount += 1
@@ -1796,7 +1791,7 @@ extension FaeMapViewController: MapSearchDelegate {
     // MapSearchDelegate
     func jumpToOnePlace(searchText: String, place: PlacePin) {
         PLACE_ENABLE = false
-        let pin = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: place)
+        let pin = FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: place)
         pinsFromSearch.append(pin)
         updateUI(searchText: searchText)
         let camera = faeMapView.camera
@@ -1842,7 +1837,7 @@ extension FaeMapViewController: MapSearchDelegate {
             swipingState = .multipleSearch
             tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places)
             tblPlaceResult.loading(current: places[0])
-            pinsFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+            pinsFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
             removePlaceUserPins({
                 self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
@@ -2051,7 +2046,7 @@ extension FaeMapViewController {
         guard let clusterAnn = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return }
         guard firstAnn.id != -1 else { return }
-        guard firstAnn.type == "user" else { return }
+        guard firstAnn.type == .user else { return }
         boolCanUpdateUsers = false
         boolCanOpenPin = false
         faeMapView.mapGesture(isOn: false)
@@ -2109,7 +2104,7 @@ extension FaeMapViewController {
                         continue
                     }
                     let userPin = UserPin(json: userJson)
-                    var user: FaePinAnnotation? = FaePinAnnotation(type: "user", cluster: self.userClusterManager, data: userPin)
+                    var user: FaePinAnnotation? = FaePinAnnotation(type: .user, cluster: self.userClusterManager, data: userPin)
                     guard user != nil else { continue }
                     if self.faeUserPins.contains(user!) {
                         // joshprint("[updateUserPins] yes contains")
@@ -2218,7 +2213,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     private func routingPlace(_ placeInfo: PlacePin) {
-        let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: placeInfo)
+        let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: placeInfo)
         pin.animatable = false
         tempFaePins.append(pin)
         HIDE_AVATARS = true
@@ -2344,13 +2339,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-        anView.idx = first.class_2_icon_id
+        anView.iconIndex = first.class_2_icon_id
         if swipingState == .multipleSearch {
             if let placePin = first.pinInfo as? PlacePin {
                 let tag = tblPlaceResult.tblResults.tag
                 if let lastSelected = tblPlaceResult.groupLastSelected[tag] {
                     if placePin == lastSelected {
-                        let icon = UIImage(named: "place_map_\(anView.idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                        let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
                         anView.assignImage(icon)
                         tapPlacePin(didSelect: anView)
                     } else {
@@ -2398,7 +2393,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 guard let place = anno as? CCHMapClusterAnnotation else { continue }
                 guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
                 guard faeMapView.view(for: place) is PlacePinAnnotationView else { continue }
-                guard firstAnn.type == "place" else { continue }
+                guard firstAnn.type == .place else { continue }
                 places.append(place)
             } else {
                 continue
@@ -2420,7 +2415,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         faeMapView.selectedPlaceAnno = anView
         selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
         selectedPlaceAnno?.zPos = 199
-        guard firstAnn.type == "place" else { return }
+        guard firstAnn.type == .place else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
             uiviewSavedList.arrListSavedThisPin.removeAll()
@@ -2502,7 +2497,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         
         guard !USE_TEST_PLACES else {
             let places = generator(mapCenterCoordinate, 100, faePlacePins.count)
-            let placePins = places.map( { FaePinAnnotation(type: "place", cluster: placeClusterManager, data: $0 as AnyObject) } )
+            let placePins = places.map( { FaePinAnnotation(type: .place, cluster: placeClusterManager, data: $0 as AnyObject) } )
             placeClusterManager.addAnnotations(placePins, withCompletionHandler: {
                 self.faePlacePins += placePins
             })
@@ -2515,7 +2510,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
-        FaeMap.shared.whereKey("max_count", value: "500")
+        FaeMap.shared.whereKey("max_count", value: "200")
         FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
@@ -2556,7 +2551,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     private func reloadPlacePinsOnMap(places: [PlacePin], completion: @escaping () -> Void) {
         placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(pinsFromSearch) {
-            self.pinsFromSearch = places.map({ FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0 as AnyObject) })
+            self.pinsFromSearch = places.map({ FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0 as AnyObject) })
             self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
                 self.placeClusterManager.isForcedRefresh = false
                 completion()
@@ -2713,7 +2708,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         locationPinClusterManager.removeAnnotations(tempFaePins) {
             self.reAddUserPins()
             self.reAddPlacePins()
-            self.deselectAllLocations()
+            // self.deselectAllLocations()
         }
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
@@ -2999,7 +2994,7 @@ extension FaeMapViewController: LocDetailDelegate {
         selectedLocAnno = anView
         faeMapView.selectedLocAnno = anView
         selectedLocAnno?.zPos = 299
-        guard firstAnn.type == "location" else { return }
+        guard firstAnn.type == .location else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
         let pinData = locationData
         if pinData.id == -1 {
@@ -3087,7 +3082,7 @@ extension FaeMapViewController: LocDetailDelegate {
             self.deselectAllPlaceAnnos()
             let pinData = LocationPin(position: coordinate)
             pinData.optionsReady = true
-            self.selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
+            self.selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
             self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
             self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
             self.updateLocationInfo(location: cllocation)

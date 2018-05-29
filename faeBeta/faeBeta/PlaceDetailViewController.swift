@@ -414,7 +414,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         func showCollections() {
             uiviewSavedList.tableMode = .place
             //uiviewSavedList.loadCollectionData()
-            uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: .place, cluster: nil, data: place)
             uiviewSavedList.show()
         }
         if boolSavedListLoaded {

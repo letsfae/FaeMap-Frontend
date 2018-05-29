@@ -549,7 +549,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             break
         }
         guard idx < arrPlaceData.count else { return }
-        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: arrPlaceData[idx] as AnyObject)
+        uiviewSavedList.pinToSave = FaePinAnnotation(type: .place, cluster: nil, data: arrPlaceData[idx] as AnyObject)
         getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids

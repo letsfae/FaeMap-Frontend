@@ -73,7 +73,7 @@ func visiblePlaces(mapView: MKMapView) -> [CCHMapClusterAnnotation] {
             guard let place = anno as? CCHMapClusterAnnotation else { continue }
             guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
             guard mapView.view(for: place) is PlacePinAnnotationView else { continue }
-            guard firstAnn.type == "place" else { continue }
+            guard firstAnn.type == .place else { continue }
             places.append(place)
         } else {
             continue

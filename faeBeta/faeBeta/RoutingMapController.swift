@@ -11,28 +11,29 @@ import IVBezierPathRenderer
 
 class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCalculateDelegate {
     
-    var btnDistIndicator: FMDistIndicator!
-    var uiviewChooseLocs: FMChooseLocs!
-    var activityIndicator: UIActivityIndicatorView!
-    var mode = CollectionTableMode.place
+    private var btnDistIndicator: FMDistIndicator!
+    private var uiviewChooseLocs: FMChooseLocs!
+    private var activityIndicator: UIActivityIndicatorView!
+    public var mode = CollectionTableMode.place
     
     // Routes Calculator
-    var arrRoutes = [MKOverlay]()
-    var tempFaePins = [FaePinAnnotation]()
-    var startPointAddr: RouteAddress!
-    var destinationAddr: RouteAddress!
-    var addressAnnotations = [AddressAnnotation]()
-    var routeAddress: RouteAddress!
-    var destPlaceInfo: PlacePin!
-    var destLocationInfo: LocationPin!
+    private var arrRoutes = [MKOverlay]()
+    private var tempFaePins = [FaePinAnnotation]()
+    private var addressAnnotations = [AddressAnnotation]()
+    private var routeAddress: RouteAddress!
+    
+    public var startPointAddr: RouteAddress!
+    public var destinationAddr: RouteAddress!
+    public var destPlaceInfo: PlacePin!
+    public var destLocationInfo: LocationPin!
     
     // Top Bar
-    var imgAddressIcon: UIImageView!
-    var lblSearchContent: UILabel!
+    private var imgAddressIcon: UIImageView!
+    private var lblSearchContent: UILabel!
     
     // Selecting Mode
-    var imgSelectPin: UIImageView!
-    var modeSelecting = FaeMode.off {
+    private var imgSelectPin: UIImageView!
+    private var modeSelecting = FaeMode.off {
         didSet {
             guard fullyLoaded else { return }
             if modeSelecting == .on {
@@ -46,7 +47,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     // Routing GCD Control
-    var routingQueue: OperationQueue = {
+    private var routingQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "routing queue"
         queue.maxConcurrentOperationCount = 1
@@ -85,7 +86,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     // MARK: - Loading Part
-    func setupRoutingPart() {
+    private func setupRoutingPart() {
         uiviewChooseLocs = FMChooseLocs()
         uiviewChooseLocs.show(animated: false)
         uiviewChooseLocs.delegate = self
@@ -113,9 +114,9 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         imgSelectPin.isHidden = true
     }
     
-    func updateRoutingInfo() {
+    private func updateRoutingInfo() {
         if mode == .place {
-            let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: destPlaceInfo as AnyObject)
+            let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: destPlaceInfo as AnyObject)
             tempFaePins.append(pin)
             PLACE_INSTANT_SHOWUP = true
             placeClusterManager.addAnnotations(tempFaePins, withCompletionHandler: {
@@ -134,24 +135,24 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     // MARK: - Actions
-    @objc func handleSelectLocationTap(_ tap: UITapGestureRecognizer) {
+    @objc private func handleSelectLocationTap(_ tap: UITapGestureRecognizer) {
         guard routeAddress != nil else { return }
         sendLocationBack(address: routeAddress)
         uiviewChooseLocs.show()
         modeSelecting = .off
     }
     
-    @objc func handleStartPointTap(_ tap: UITapGestureRecognizer) {
+    @objc private func handleStartPointTap(_ tap: UITapGestureRecognizer) {
         BoardsSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
-    @objc func handleDestinationTap(_ tap: UITapGestureRecognizer) {
+    @objc private func handleDestinationTap(_ tap: UITapGestureRecognizer) {
         BoardsSearchViewController.boolToDestination = true
         routingHandleTap()
     }
     
-    func routingHandleTap() {
+    private func routingHandleTap() {
         let chooseLocsVC = BoardsSearchViewController()
         chooseLocsVC.enterMode = .location
         chooseLocsVC.delegate = self
@@ -162,13 +163,13 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         uiviewChooseLocs.show(animated: false)
     }
     
-    @objc func actionCancelSelection() {
+    @objc private func actionCancelSelection() {
         routingHandleTap()
         modeSelecting = .off
     }
     
     // MARK: - Routing Tools
-    func routeCalculator(startPoint: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate, destination: CLLocationCoordinate2D) {
+    private func routeCalculator(startPoint: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate, destination: CLLocationCoordinate2D) {
         
         removeAllRoutes()
         
@@ -189,7 +190,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         routingQueue.addOperation(routingOp)
     }
     
-    func doRouting(_ operation: RoutingOperation, _ request: MKDirectionsRequest) {
+    private func doRouting(_ operation: RoutingOperation, _ request: MKDirectionsRequest) {
         let directions = MKDirections(request: request)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             directions.calculate { [unowned self] response, error in
@@ -234,12 +235,12 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         }
     }
     
-    func showRouteCalculatorComponents(distance: CLLocationDistance) {
+    private func showRouteCalculatorComponents(distance: CLLocationDistance) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
         btnDistIndicator.updateDistance(distance: distance)
     }
     
-    func removeAllRoutes() {
+    private func removeAllRoutes() {
         for route in arrRoutes {
             faeMapView.remove(route)
         }

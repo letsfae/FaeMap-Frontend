@@ -16,9 +16,10 @@ let mapAvatarWidth: CGFloat = 35
 class AddressAnnotation: MKPointAnnotation {
     var isStartPoint = false
 }
+
 class AddressAnnotationView: MKAnnotationView {
     
-    var icon = UIImageView()
+    private var icon = UIImageView()
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -32,6 +33,17 @@ class AddressAnnotationView: MKAnnotationView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    public func assignImage(_ image: UIImage) {
+        icon.image = image
+    }
+}
+
+enum FaePinType: String {
+    case none
+    case user
+    case place
+    case location
 }
 
 @objc class FaePinAnnotation: MKPointAnnotation {
@@ -46,11 +58,11 @@ class AddressAnnotationView: MKAnnotationView {
     }
     
     // general
-    var type: String!
+    var type: FaePinType = .none
     var id: Int = -1
-    var mapViewCluster: CCHMapClusterController?
-    var animatable = true
-    var isSelected = false
+    private var mapViewCluster: CCHMapClusterController?
+    public var animatable = true
+    public var isSelected = false
     
     // location pin
     var address_1 = ""
@@ -60,13 +72,13 @@ class AddressAnnotationView: MKAnnotationView {
     var icon = UIImage()
     var class_2_icon_id: Int = 48
     var pinInfo: AnyObject!
-    var selected = false
+    private var selected = false
     
     // user pin only
     var avatar = UIImage()
-    var miniAvatar: Int!
+    private var miniAvatar: Int!
     var positions = [CLLocationCoordinate2D]()
-    var count = 0
+    private var count = 0
     var isValid = false {
         didSet {
             if isValid {
@@ -80,23 +92,18 @@ class AddressAnnotationView: MKAnnotationView {
             }
         }
     }
-    var timer: Timer?
+    private var timer: Timer?
     
     /// - parameter type: pin type, only 'place' and 'user' are available for now
     ///             cluster: the cluster manager passed from FaeMapViewController, default is nil
     ///             data: the data need to manage with, only PlacePin and UserPin are available for now
-    init(type: String, cluster: CCHMapClusterController? = nil, data: AnyObject) {
+    init(type: FaePinType, cluster: CCHMapClusterController? = nil, data: AnyObject) {
         super.init()
         mapViewCluster = cluster
         self.type = type
         self.pinInfo = data
-        if type == "place" {
-            guard let placePin = data as? PlacePin else { return }
-            id = placePin.id
-            class_2_icon_id = placePin.class_2_icon_id
-            icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
-            coordinate = placePin.coordinate
-        } else if type == "user" {
+        switch type {
+        case .user:
             guard let userPin = data as? UserPin else { return }
             id = userPin.id
             miniAvatar = userPin.miniAvatar
@@ -110,10 +117,18 @@ class AddressAnnotationView: MKAnnotationView {
             avatar = Mood.avatars[miniAvatar] ?? UIImage()
             changePosition()
             timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
-        } else if type == "location" {
+        case .place:
+            guard let placePin = data as? PlacePin else { return }
+            id = placePin.id
+            class_2_icon_id = placePin.class_2_icon_id
+            icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
+            coordinate = placePin.coordinate
+        case .location:
             guard let pin = data as? LocationPin else { return }
             coordinate = pin.coordinate
             icon = #imageLiteral(resourceName: "icon_destination")
+        default:
+            break
         }
     }
     
@@ -121,12 +136,12 @@ class AddressAnnotationView: MKAnnotationView {
         self.isValid = false
     }
     
-    func getRandomTime() -> Double {
+    private func getRandomTime() -> Double {
         return Double.random(min: 15, max: 30)
     }
     
     // change the position of user pin given the five fake coordinates from Fae-API
-    @objc func changePosition() {
+    @objc private func changePosition() {
         guard isValid else { return }
         if count >= 5 {
             count = 0
@@ -153,19 +168,19 @@ class AddressAnnotationView: MKAnnotationView {
 
 class SelfAnnotationView: MKAnnotationView {
     
-    let anchorPoint = CGPoint(x: mapAvatarWidth / 2, y: mapAvatarWidth / 2)
-    var selfIcon = UIImageView()
-    var img: UIImageView!
-    var inner: UIImageView!
-    var red: UIImageView!
+    private let anchorPoint = CGPoint(x: mapAvatarWidth / 2, y: mapAvatarWidth / 2)
+    private var selfIcon = UIImageView()
+    private var img: UIImageView!
+    private var inner: UIImageView!
+    private var red: UIImageView!
     
-    var mapAvatar: Int = 1 {
+    private var mapAvatar: Int = 1 {
         didSet {
             selfIcon.image = UIImage(named: "miniAvatar_\(mapAvatar)")
         }
     }
     
-    var timer: Timer?
+    private var timer: Timer?
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -205,7 +220,7 @@ class SelfAnnotationView: MKAnnotationView {
         }
     }
     
-    func loadBasic() {
+    private func loadBasic() {
         let offSet_0: CGFloat = CGFloat(mapAvatarWidth / 2)
         
         img = UIImageView(frame: CGRect(x: offSet_0, y: offSet_0, width: 0, height: 0))
@@ -247,7 +262,7 @@ class SelfAnnotationView: MKAnnotationView {
         img.isHidden = false
     }
     
-    @objc func invisibleOff() {
+    @objc private func invisibleOff() {
         guard Key.shared.onlineStatus != 5 else { return }
         LocManager.shared.locManager.stopUpdatingHeading()
         timer?.invalidate()
@@ -258,7 +273,7 @@ class SelfAnnotationView: MKAnnotationView {
         img.isHidden = false
     }
     
-    @objc func updateHeading() {
+    @objc private func updateHeading() {
         UIView.animate(withDuration: 0.5, animations: {
             self.inner.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * LocManager.shared.curtHeading) / 180.0)
         }, completion: nil)
@@ -269,7 +284,7 @@ class SelfAnnotationView: MKAnnotationView {
         mapAvatar = Key.shared.userMiniAvatar
     }
     
-    @objc func getSelfAccountInfo() {
+    @objc private func getSelfAccountInfo() {
         let getSelfInfo = FaeUser()
         getSelfInfo.getAccountBasicInfo({ (status, message) in
             guard status / 100 == 2 else {
@@ -283,7 +298,7 @@ class SelfAnnotationView: MKAnnotationView {
         })
     }
     
-    func animations() {
+    private func animations() {
         let circleWidth: CGFloat = 120
         let offSet: CGFloat = CGFloat(-(circleWidth - mapAvatarWidth) / 2)
         let offSet_0: CGFloat = CGFloat(mapAvatarWidth / 2)
@@ -315,7 +330,7 @@ class SelfAnnotationView: MKAnnotationView {
 
 class UserPinAnnotationView: MKAnnotationView {
     
-    var imageView: UIImageView!
+    private var imageView: UIImageView!
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
@@ -341,7 +356,7 @@ class UserPinAnnotationView: MKAnnotationView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func assignImage(_ image: UIImage) {
+    public func assignImage(_ image: UIImage) {
         imageView.image = image
     }
 }
@@ -369,13 +384,13 @@ class PlacePinAnnotationView: MKAnnotationView {
     var btnShare: UIButton!
     var arrBtns = [UIButton]()
     
-    var optionsReady = false
-    var optionsOpened = false
-    var optionsOpeing = false
+    public var optionsReady = false
+    public var optionsOpened = false
+    public var optionsOpeing = false
     
-    var imgSaved: UIImageView!
+    private var imgSaved: UIImageView!
     
-    var boolShowSavedNoti = false {
+    public var boolShowSavedNoti = false {
         didSet {
             guard optionsOpened else { return }
             guard imgSaved != nil else { return }
@@ -384,9 +399,9 @@ class PlacePinAnnotationView: MKAnnotationView {
         }
     }
     
-    var idx = -1
+    var iconIndex = -1
     
-    var zPos: CGFloat = 7.0 {
+    public var zPos: CGFloat = 7.0 {
         didSet {
             self.layer.zPosition = zPos
         }
@@ -419,7 +434,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_place"), object: nil)
     }
     
-    @objc func showSavedNoti() {
+    @objc private func showSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
@@ -428,7 +443,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    @objc func hideSavedNoti() {
+    @objc private func hideSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
@@ -443,15 +458,15 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if object is CALayer {
-            self.layer.zPosition = zPos + CGFloat(idx) / 10000.0
+            self.layer.zPosition = zPos + CGFloat(iconIndex) / 10000.0
         }
     }
     
-    @objc func assignImage(_ image: UIImage) {
+    @objc public func assignImage(_ image: UIImage) {
         imgIcon.image = image
     }
     
-    func loadButtons() {
+    private func loadButtons() {
         btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 46, height: 46))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail_s"), for: .selected)
@@ -493,7 +508,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         arrBtns.append(btnShare)
     }
     
-    func showButtons() {
+    public func showButtons() {
         guard arrBtns.count == 0 else { return }
         optionsReady = true
         optionsOpeing = true
@@ -520,7 +535,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         }
     }
     
-    func hideButtons() {
+    public func hideButtons() {
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, animations: {
             for btn in self.arrBtns {
@@ -535,7 +550,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         })
     }
     
-    fileprivate func removeButtons() {
+    private func removeButtons() {
         for btn in arrBtns {
             btn.removeTarget(nil, action: nil, for: .touchUpInside)
             btn.removeFromSuperview()
@@ -543,7 +558,7 @@ class PlacePinAnnotationView: MKAnnotationView {
         arrBtns.removeAll()
     }
     
-    func optionsToNormal() {
+    public func optionsToNormal() {
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.btnDetail.frame.origin = CGPoint(x: 0, y: 43)
@@ -628,7 +643,7 @@ class LocPinAnnotationView: MKAnnotationView {
     var optionsOpened = false
     var optionsOpeing = false
     
-    var imgSaved: UIImageView!
+    private var imgSaved: UIImageView!
     
     var locationId: Int = -1
     
@@ -685,12 +700,12 @@ class LocPinAnnotationView: MKAnnotationView {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "hideSavedNoti_loc"), object: nil)
     }
     
-    func assignImage(_ image: UIImage, red: Bool = false) {
+    public func assignImage(_ image: UIImage, red: Bool = false) {
         imgIcon.image = image
         isRed = red
     }
     
-    fileprivate func loadButtons() {
+    private func loadButtons() {
         btnDetail = UIButton(frame: CGRect(x: 0, y: 43, width: 46, height: 46))
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail"), for: .normal)
         btnDetail.setImage(#imageLiteral(resourceName: "place_new_detail_s"), for: .selected)
@@ -732,7 +747,7 @@ class LocPinAnnotationView: MKAnnotationView {
         arrBtns.append(btnShare)
     }
     
-    func showButtons() {
+    public func showButtons() {
         guard arrBtns.count == 0 else { return }
         optionsReady = true
         optionsOpeing = true
@@ -759,7 +774,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }
     }
     
-    func hideButtons(animated: Bool = true) {
+    public func hideButtons(animated: Bool = true) {
         guard arrBtns.count == 4 else { return }
         if animated {
             UIView.animate(withDuration: 0.2, animations: {
@@ -785,7 +800,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }
     }
     
-    fileprivate func removeButtons() {
+    private func removeButtons() {
         for btn in arrBtns {
             btn.removeTarget(nil, action: nil, for: .touchUpInside)
             btn.removeFromSuperview()
@@ -793,7 +808,7 @@ class LocPinAnnotationView: MKAnnotationView {
         arrBtns.removeAll()
     }
     
-    func optionsToNormal() {
+    public func optionsToNormal() {
         guard arrBtns.count == 4 else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.btnDetail.frame.origin = CGPoint(x: 0, y: 43)
@@ -807,14 +822,14 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    @objc func showSavedNoti(_ sender: Notification) {
+    @objc private func showSavedNoti(_ sender: Notification) {
         if let id = sender.object as? Int {
             self.locationId = id
         }
         savedNotiAnimation()
     }
     
-    func savedNotiAnimation() {
+    private func savedNotiAnimation() {
         if imgSaved == nil {
             showButtons()
         }
@@ -824,7 +839,7 @@ class LocPinAnnotationView: MKAnnotationView {
         }, completion: nil)
     }
     
-    @objc func hideSavedNoti() {
+    @objc private func hideSavedNoti() {
         guard imgSaved != nil else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
@@ -884,29 +899,5 @@ class LocPinAnnotationView: MKAnnotationView {
         } else if btnShare.isSelected || sender == btnShare {
             delegate?.placePinAction(action: .share, mode: .location)
         }
-    }
-}
-
-class SocialPinAnnotationView: MKAnnotationView {
-    
-    var imageView: UIImageView!
-    
-    override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
-        super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        frame = CGRect(x: 0, y: 0, width: 60, height: 61)
-        imageView = UIImageView(frame: CGRect(x: 30, y: 61, width: 0, height: 0))
-        addSubview(imageView)
-        imageView.contentMode = .scaleAspectFit
-        layer.anchorPoint = CGPoint(x: 0.5, y: 1.0)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func assignImage(_ image: UIImage) {
-        // when an image is set for the annotation view,
-        // it actually adds the image to the image view
-        imageView.image = image
     }
 }
