@@ -245,7 +245,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     @objc private func laterContinue() {
         let nextRegister = RegisterConfirmViewController()
         nextRegister.faeUser = self.faeUser
-        navigationController?.pushViewController(nextRegister, animated: false)
+        navigationController?.pushViewController(nextRegister, animated: true)
     }
     
     @objc private func laterDismiss() {
@@ -305,7 +305,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                             Key.shared.userEmailVerified = true
                             let nextRegister = RegisterConfirmViewController()
                             nextRegister.faeUser = self.faeUser
-                            self.navigationController?.pushViewController(nextRegister, animated: false)
+                            self.navigationController?.pushViewController(nextRegister, animated: true)
                         }
                     } else if status == 500 {
                         self.setVerifyResult("Internal Service Error!", resetCodeView: false)
@@ -340,7 +340,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                         } else {
                             let nextRegister = RegisterConfirmViewController()
                             nextRegister.faeUser = self.faeUser
-                            self.navigationController?.pushViewController(nextRegister, animated: false)
+                            self.navigationController?.pushViewController(nextRegister, animated: true)
                         }
                     } else if status == 500 {
                         self.setVerifyResult("Internal Service Error!", resetCodeView: false)

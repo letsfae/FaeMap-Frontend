@@ -804,7 +804,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
         vc.boolSearchEnabled = true
         vc.delegate = self
         Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func sendLocationMessageFromMini() {

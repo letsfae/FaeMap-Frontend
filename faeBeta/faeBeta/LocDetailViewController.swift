@@ -198,7 +198,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.icon.image = #imageLiteral(resourceName: "icon_destination")
+            anView.assignImage(#imageLiteral(resourceName: "icon_destination"))
             return anView
         }
         return nil
@@ -365,7 +365,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
 //            uiviewSavedList.loadCollectionData()
             guard let position = coordinate else { return }
             let pinData = LocationPin(position: position)
-            uiviewSavedList.pinToSave = FaePinAnnotation(type: "location", cluster: nil, data: pinData as AnyObject)
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: .location, cluster: nil, data: pinData as AnyObject)
             uiviewSavedList.show()
             uiviewSavedList.fromLocDetail = true
             uiviewSavedList.locId = locationId

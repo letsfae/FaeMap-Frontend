@@ -15,6 +15,7 @@ protocol FMRouteCalculateDelegate: class {
 class FMChooseLocs: UIView {
     
     weak var delegate: FMRouteCalculateDelegate?
+    
     var lblStartPoint: UILabel!
     var lblDestination: UILabel!
     
@@ -86,7 +87,7 @@ class FMChooseLocs: UIView {
         lblDestination.text = name
     }
     
-    @objc func actionBackBtn() {
+    @objc private func actionBackBtn() {
         delegate?.hideRouteCalculatorComponents()
     }
     

@@ -25,9 +25,9 @@ class PendingOperations {
 
 class PlacesAdder: Operation {
     //1
-    let cluster: CCHMapClusterController
-    let arrPlaceJSON: [JSON]
-    let idSet: Set<Int>
+    private let cluster: CCHMapClusterController
+    private let arrPlaceJSON: [JSON]
+    private let idSet: Set<Int>
     var placePins = [FaePinAnnotation]()
     var ids = [Int]()
     
@@ -49,7 +49,7 @@ class PlacesAdder: Operation {
         
         for placeJson in arrPlaceJSON {
             let placeData = PlacePin(json: placeJson)
-            let place = FaePinAnnotation(type: "place", cluster: self.cluster, data: placeData)
+            let place = FaePinAnnotation(type: .place, cluster: self.cluster, data: placeData)
             if !idSet.contains(placeJson["place_id"].intValue) {
                 placePins.append(place)
                 ids.append(placeJson["place_id"].intValue)

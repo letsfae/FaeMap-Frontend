@@ -10,6 +10,13 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
+@objc protocol MapFilterMenuDelegate: class {
+    @objc optional func autoReresh(isOn: Bool)
+    @objc optional func autoCyclePins(isOn: Bool)
+    @objc optional func hideAvatars(isOn: Bool)
+    func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String)
+}
+
 class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
 
     weak var delegate: MapFilterMenuDelegate?
@@ -94,7 +101,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     // MARK: - Loading Parts
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         loadBackground()
         loadOptions()
         loadCollection()
@@ -110,7 +117,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         swipeGes.isEnabled = false
     }
     
-    fileprivate func loadBackground() {
+    private func loadBackground() {
         imgBackground_lg = UIImageView(frame: CGRect(x: 5 + screenWidth, y: 1, width: screenWidth - 10, height: 420))
         imgBackground_lg.contentMode = .scaleAspectFit
         imgBackground_lg.image = #imageLiteral(resourceName: "main_drop_up_backg_lg")
@@ -150,7 +157,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         imgBackground_lg.addSubview(lblMenuTitle)
     }
     
-    fileprivate func loadOptions() {
+    private func loadOptions() {
         
         uiviewOptionsContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 10, height: 420))
         imgBackground_lg.addSubview(uiviewOptionsContainer)
@@ -169,7 +176,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         realmColLocations = realm.filterCollectedTypes(type: "location")
     }
     
-    fileprivate func loadCollection() {
+    private func loadCollection() {
         uiviewCollectionsContainer = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 20, height: 420))
         imgBackground_lg.addSubview(uiviewCollectionsContainer)
         
@@ -234,7 +241,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         updateCount()
     }
     
-    fileprivate func loadDropDownMenu() {
+    private func loadDropDownMenu() {
         uiviewDropDownMenu = UIView(frame: CGRect(x: 5, y: 65, width: screenWidth - 20, height: 0))
         uiviewDropDownMenu.backgroundColor = .white
         uiviewCollectionsContainer.addSubview(uiviewDropDownMenu)
@@ -281,7 +288,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         uiviewDropMenuFirstLine.backgroundColor = UIColor._206203203()
     }
     
-    fileprivate func updateCount() {
+    private func updateCount() {
         countPlaces = realmColPlaces != nil ? realmColPlaces.count : 0
         let attributedStr1 = NSMutableAttributedString()
         let strPlaces = NSAttributedString(string: "Places ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
@@ -312,7 +319,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         btnPlaceLoc.setAttributedTitle(curtTitlePlusImg, for: .normal)
     }
     
-    fileprivate func hideDropDownMenu(animated: Bool = true) {
+    private func hideDropDownMenu(animated: Bool = true) {
         setCollectionTitle()
         if animated {
             UIView.animate(withDuration: 0.2, animations: {
@@ -327,7 +334,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         navBarMenuBtnClicked = false
     }
     
-    @objc func navBarMenuAct(_ sender: UIButton) {
+    @objc private func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             btnPlaceLoc.setAttributedTitle(nil, for: .normal)
             btnPlaceLoc.setTitle("Choose a Collection...", for: .normal)
@@ -343,7 +350,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     // function for buttons in drop down menu
-    @objc func dropDownMenuAct(_ sender: UIButton) {
+    @objc private func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = "Places"
@@ -436,23 +443,13 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         
         vibrate(type: 4)
         getSavedItems(colInfo: colInfo)
-        
-        //        self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
-        
-        //        FaeCollection.shared.getOneCollection(String(colInfo.collection_id)) { (status, message) in
-        //            guard status / 100 == 2 else { return }
-        //            guard message != nil else { return }
-        //            let resultJson = JSON(message!)
-        //            let arrLocPinId = resultJson["pins"].arrayValue
-        //        }
-        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }
     
-    func getSavedItems(colInfo: RealmCollection) {
+    private func getSavedItems(colInfo: RealmCollection) {
         var arrSavedPinIds = [Int]()
         if colInfo.count == colInfo.pins.count {
             for pin in colInfo.pins {
@@ -532,7 +529,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         showLargeBackground()
     }
     
-    func showLargeBackground() {
+    private func showLargeBackground() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.imgBackground_lg.frame.origin.x = 5
             self.imgBackground_sm.frame.origin.x = -screenWidth
@@ -541,7 +538,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
     
-    func hideLargeBackground() {
+    private func hideLargeBackground() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
             self.imgBackground_lg.frame.origin.x = 5 + screenWidth
             self.imgBackground_sm.frame.origin.x = 0
@@ -582,47 +579,6 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         swipeGes.isEnabled = false
     }
     
-    var end: CGFloat = 0
-    
-    /*
-    @objc func horizontalPan(_ pan: UIPanGestureRecognizer) {
-        var resumeTime: Double = 0.5
-        if pan.state == .began {
-            end = pan.location(in: self).x
-        } else if pan.state == .ended || pan.state == .failed || pan.state == .cancelled {
-            let velocity = pan.velocity(in: self)
-            let location = pan.location(in: self)
-            let distanceMoved = end - location.x
-            let percent = distanceMoved / screenWidth
-            print("[horizontalPan]", percent)
-            resumeTime = abs(Double(CGFloat(distanceMoved) / velocity.x))
-            if resumeTime > 0.5 {
-                resumeTime = 0.5
-            } else if resumeTime < 0.3 {
-                resumeTime = 0.3
-            }
-            let absPercent: CGFloat = 0.1
-            if percent < -absPercent {
-                UIView.animate(withDuration: resumeTime, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                    
-                }, completion: { _ in
-                    
-                })
-            } else if percent > absPercent {
-//                panToNext(resumeTime)
-            } else {
-                UIView.animate(withDuration: resumeTime, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-                    
-                }, completion: nil)
-            }
-        } else if pan.state == .changed {
-            let translation = pan.translation(in: self)
-            imgBackground_sm.center.x = imgBackground_sm.center.x + translation.x
-            imgBackground_lg.center.x = imgBackground_lg.center.x + translation.x
-            pan.setTranslation(CGPoint.zero, in: self)
-        }
-    }
-    */
 }
 
 class DropUpMenuOptionsCell: UITableViewCell {
@@ -641,7 +597,7 @@ class DropUpMenuOptionsCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         lblTitle = FaeLabel(CGRect(x: 20, y: 21, width: 150, height: 22), .left, .medium, 18, UIColor._107105105())
         lblTitle.text = "Auto Refresh Map"
         addSubview(lblTitle)

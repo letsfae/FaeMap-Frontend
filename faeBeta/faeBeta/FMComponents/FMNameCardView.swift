@@ -25,7 +25,6 @@ protocol PassStatusFromViewToButtonDelegate: class {
 class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     
     weak var delegate: NameCardDelegate?
-    let faeContact = FaeContact()
     var statusMode: FriendStatus = .defaultMode
     
     var userId: Int = 0 {

@@ -169,9 +169,9 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
-            if firstAnn.type == "place" {
+            if firstAnn.type == .place {
                 return viewForPlace(annotation: annotation, first: firstAnn)
-            } else if firstAnn.type == "location" {
+            } else if firstAnn.type == .location {
                 return viewForLocation(annotation: annotation, first: firstAnn)
             }
         } else if annotation is AddressAnnotation {
@@ -184,7 +184,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
+            anView.assignImage(addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination"))
             return anView
         }
         return nil
@@ -253,16 +253,12 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == "place" {
+        if firstAnn.type == .place {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
-        } else if firstAnn.type == "location" {
+        } else if firstAnn.type == .location {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
-                anView.assignImage(firstAnn.icon)
-            }
-        } else {
-            if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
         }
@@ -301,7 +297,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         selectedPlaceAnno = anView
         selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
         selectedPlaceAnno?.zPos = 199
-        guard firstAnn.type == "place" else { return }
+        guard firstAnn.type == .place else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
         uiviewPlaceBar.tag = 1

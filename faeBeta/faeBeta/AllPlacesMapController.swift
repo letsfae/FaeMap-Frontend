@@ -55,7 +55,7 @@ class AllPlacesMapController: BasicMapController {
     }
     
     private func loadAnnotations(places: [PlacePin]) {
-        placeAnnos = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+        placeAnnos = places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.addAnnotations(placeAnnos, withCompletionHandler: {
             
         })
