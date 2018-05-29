@@ -15,34 +15,36 @@ protocol AddPinToCollectionDelegate: class {
 }
 
 class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
+    
     weak var delegate: AddPinToCollectionDelegate?
     
-    var uiviewHeader: UIView!
-    var btnNew: UIButton!
-    var btnCancel: UIButton!
+    private var uiviewHeader: UIView!
+    private var btnNew: UIButton!
+    private var btnCancel: UIButton!
     var tblAddCollection: UITableView!
-    var uiviewAfterAdded: AfterAddedToListView!
-    var realmColPlaces: Results<RealmCollection>!
-    var realmColLocations: Results<RealmCollection>!
-    let realm = try! Realm()
-    var tableMode: CollectionTableMode = .place {
+    
+    public var uiviewAfterAdded: AfterAddedToListView!
+    private var realmColPlaces: Results<RealmCollection>!
+    private var realmColLocations: Results<RealmCollection>!
+    private let realm = try! Realm()
+    public var tableMode: CollectionTableMode = .place {
         didSet {
             guard fullLoaded else { return }
             tblAddCollection.reloadData()
         }
     }
-    var pinToSave: FaePinAnnotation!
-    var timer: Timer?
+    public var pinToSave: FaePinAnnotation!
+    private var timer: Timer?
     var arrListSavedThisPin = [Int]() {
         didSet {
             guard fullLoaded else { return }
             tblAddCollection.reloadData()
         }
     }
-    var fullLoaded = false
-    var notificationToken: NotificationToken? = nil
-    var fromLocDetail = false
-    var locId = -1
+    private var fullLoaded = false
+    private var notificationToken: NotificationToken? = nil
+    public var fromLocDetail = false
+    public var locId = -1
     private var showed: Bool = false
     
     override init(frame: CGRect = .zero) {
@@ -62,7 +64,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadCollectionData() {
+    private func loadCollectionData() {
         /*realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
         realmColLocations = RealmCollection.filterCollectedTypes(type: "location")*/
         realmColPlaces = realm.filterCollectedTypes(type: "place")
@@ -85,7 +87,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }, completion: nil)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         layer.zPosition = 1001
         
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 58))
@@ -123,7 +125,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         loadTable()
     }
     
-    fileprivate func loadTable() {
+    private func loadTable() {
         tblAddCollection = UITableView(frame: CGRect(x: 0, y: 58, width: screenWidth, height: 434 * screenHeightFactor - 58))
         tblAddCollection.delegate = self
         tblAddCollection.dataSource = self
@@ -173,7 +175,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func savePlaceTo(collection: RealmCollection) {
+    private func savePlaceTo(collection: RealmCollection) {
         guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
         FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
@@ -191,7 +193,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         })
     }
     
-    func unsavePlaceFrom(collection: RealmCollection) {
+    private func unsavePlaceFrom(collection: RealmCollection) {
         guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
         FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
             guard code / 100 == 2 else { return }
@@ -212,7 +214,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         })
     }
     
-    func saveLocationTo(collection: RealmCollection) {
+    private func saveLocationTo(collection: RealmCollection) {
         guard self.uiviewAfterAdded.pinIdInAction == -1 else {
             let locationId = self.uiviewAfterAdded.pinIdInAction
             saveLocationToWithId(collection, locationId)
@@ -268,7 +270,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
+    private func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
         FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
             Key.shared.FMVCtrler?.useActivityIndicator(on: false)
             guard code / 100 == 2 else {
@@ -289,7 +291,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         })
     }
     
-    func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
+    private func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
         let loc_id = fromLocDetail ? locId : locationId
         print("unsave \(collection) \(locId)")
         FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { (code, result) in
@@ -370,15 +372,15 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }
     }
     
-    @objc func timerFunc() {
+    @objc private func timerFunc() {
         uiviewAfterAdded.hide()
     }
     
-    @objc func actionCancel(_ sender: UIButton) {
+    @objc private func actionCancel(_ sender: UIButton) {
         self.hide()
     }
     
-    @objc func actionNew(_ sender: UIButton) {
+    @objc private func actionNew(_ sender: UIButton) {
         delegate?.createColList()
     }
 }

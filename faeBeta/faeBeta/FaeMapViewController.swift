@@ -349,7 +349,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             let updateNickName = FaeUser()
             updateNickName.getSelfNamecard { (status: Int, message: Any?) in
                 guard status / 100 == 2 else {
-                    self.jumpToWelcomeView(animated: false)
+                    DispatchQueue.main.async {
+                        self.jumpToWelcomeView(animated: false)
+                    }
                     return
                 }
                 let nickNameInfo = JSON(message!)
@@ -898,10 +900,9 @@ extension FaeMapViewController {
             case .notDetermined, .restricted, .denied:
                 break
             case .authorizedAlways, .authorizedWhenInUse:
-                let selfLocation = FaeMap()
-                selfLocation.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
-                selfLocation.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
-                selfLocation.renewCoordinate {(status: Int, message: Any?) in
+                FaeMap.shared.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+                FaeMap.shared.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
+                FaeMap.shared.renewCoordinate {(status: Int, message: Any?) in
                     if status / 100 == 2 {
                         // print("Successfully renew self position")
                     } else {

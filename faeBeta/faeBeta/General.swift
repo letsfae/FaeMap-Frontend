@@ -222,10 +222,12 @@ class General: NSObject {
     func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
         
         func whenComplete() {
-            imgPic.image = #imageLiteral(resourceName: "default_place")
-            imgPic.backgroundColor = .white
-            imgPic.contentMode = .scaleAspectFill
-            completion?()
+            DispatchQueue.main.async {
+                imgPic.image = #imageLiteral(resourceName: "default_place")
+                imgPic.backgroundColor = .white
+                imgPic.contentMode = .scaleAspectFill
+                completion?()
+            }
         }
         
         if url == "" {

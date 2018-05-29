@@ -12,28 +12,28 @@ import RealmSwift
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
     
-    var enterMode: CollectionTableMode!
-    var uiviewNavBar: UIView!
-    var btnCancel: UIButton!
-    var btnCreate: UIButton!
-    var lblNameRemainChars: UILabel!
-    var lblDespRemainChars: UILabel!
-    var lblDescription: UILabel!
-    var nameRemainChars: Int!
-    var despRemainChars: Int!
-    var textviewListName: UITextView!
-    var textviewDesp: UITextView!
-    let placeholder = ["List Name", "Describe your List"]
-    var keyboardHeight: CGFloat = 0
-    var txtListName: String = ""
-    var txtListDesp: String = ""
-    var colId: Int = -1
-    let faeCollection = FaeCollection()
-    var uiviewPrivacy: UIView!
-    var fromPlaceLocDetail = false
-    let realm = try! Realm()
+    public var enterMode: CollectionTableMode!
+    private var uiviewNavBar: UIView!
+    private var btnCancel: UIButton!
+    private var btnCreate: UIButton!
+    private var lblNameRemainChars: UILabel!
+    private var lblDespRemainChars: UILabel!
+    private var lblDescription: UILabel!
+    private var nameRemainChars: Int!
+    private var despRemainChars: Int!
+    private var textviewListName: UITextView!
+    private var textviewDesp: UITextView!
+    private let placeholder = ["List Name", "Describe your List"]
+    private var keyboardHeight: CGFloat = 0
+    public var strListName: String = ""
+    public var strListDesp: String = ""
+    public var colId: Int = -1
+    private let faeCollection = FaeCollection()
+    private var uiviewPrivacy: UIView!
+    private var fromPlaceLocDetail = false
+    private let realm = try! Realm()
     
-    var numLinesName = 1 {
+    private var numLinesName = 1 {
         didSet {
             guard textviewDesp != nil else { return }
             var numLines = 4 - numLinesName
@@ -45,7 +45,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
             textviewDesp.frame.size.height = CGFloat(numLines * 30)
         }
     }
-    var numLinesDesp = 1
+    private var numLinesDesp = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +57,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         uiviewNavBar = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 65 + device_offset_top))
         view.addSubview(uiviewNavBar)
         
@@ -84,7 +84,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblTitle.textAlignment = .center
         lblTitle.textColor = UIColor._898989()
         lblTitle.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        if txtListName == "" {
+        if strListName == "" {
             lblTitle.text =  "Create New List"
             btnCreate.setTitle("Create", for: .normal)
             btnCreate.tag = 0
@@ -97,7 +97,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    func loadContent() {
+    private func loadContent() {
         let uiviewContent = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top))
         view.addSubview(uiviewContent)
         
@@ -116,7 +116,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblNameRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 20, width: 30, height: 22))
         lblNameRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblNameRemainChars.textColor = UIColor._155155155()
-        nameRemainChars = 60 - txtListName.count
+        nameRemainChars = 60 - strListName.count
         lblNameRemainChars.text = String(nameRemainChars)
         lblNameRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblNameRemainChars)
@@ -124,7 +124,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         lblDespRemainChars = UILabel(frame: CGRect(x: screenWidth - 50, y: 122, width: 30, height: 22))
         lblDespRemainChars.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblDespRemainChars.textColor = UIColor._155155155()
-        despRemainChars = 300 - txtListDesp.count
+        despRemainChars = 300 - strListDesp.count
         lblDespRemainChars.text = String(despRemainChars)
         lblDespRemainChars.textAlignment = .right
         uiviewContent.addSubview(lblDespRemainChars)
@@ -132,25 +132,25 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         textviewListName = UITextView(frame: CGRect(x: 20, y: 57, width: screenWidth - 40, height: 40))
         textviewListName.delegate = self
         textviewListName.font = UIFont(name: "AvenirNext-Regular", size: 22)
-        textviewListName.textColor = txtListName == "" ? UIColor._155155155() : UIColor._898989()
+        textviewListName.textColor = strListName == "" ? UIColor._155155155() : UIColor._898989()
         textviewListName.tintColor = UIColor._2499090()
-        textviewListName.text = txtListName == "" ? placeholder[0] : txtListName
+        textviewListName.text = strListName == "" ? placeholder[0] : strListName
         textviewListName.returnKeyType = .next
         uiviewContent.addSubview(textviewListName)
         
         textviewDesp = UITextView(frame: CGRect(x: 20, y: 159, width: screenWidth - 40, height: screenHeight - 159 - 65))
         textviewDesp.delegate = self
         textviewDesp.font = UIFont(name: "AvenirNext-Regular", size: 22)
-        textviewDesp.textColor = txtListDesp == "" ? UIColor._155155155() : UIColor._898989()
+        textviewDesp.textColor = strListDesp == "" ? UIColor._155155155() : UIColor._898989()
         textviewDesp.tintColor = UIColor._2499090()
-        textviewDesp.text = txtListDesp == "" ? placeholder[1] : txtListDesp
+        textviewDesp.text = strListDesp == "" ? placeholder[1] : strListDesp
         textviewDesp.returnKeyType = .next
         uiviewContent.addSubview(textviewDesp)
         
         textviewListName.becomeFirstResponder()
     }
     
-    fileprivate func loadPrivacyView() {
+    private func loadPrivacyView() {
         uiviewPrivacy = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 50))
         uiviewPrivacy.backgroundColor = .white
         view.addSubview(uiviewPrivacy)
@@ -173,15 +173,15 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         uiviewPrivacy.addSubview(lblPrivacy)
     }
     
-    @objc func actionCancel(_ sender: UIButton) {
+    @objc private func actionCancel(_ sender: UIButton) {
         textviewListName.resignFirstResponder()
         textviewDesp.resignFirstResponder()
         dismiss(animated: true)
     }
     
-    @objc func actionCreateList(_ sender: UIButton) {
-        txtListName = self.textviewListName.textColor == UIColor._155155155() ? "" : self.textviewListName.text
-        txtListDesp = self.textviewDesp.textColor == UIColor._155155155() ? "" : self.textviewDesp.text
+    @objc private func actionCreateList(_ sender: UIButton) {
+        strListName = self.textviewListName.textColor == UIColor._155155155() ? "" : self.textviewListName.text
+        strListDesp = self.textviewDesp.textColor == UIColor._155155155() ? "" : self.textviewDesp.text
         let curtDate = Date()
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
@@ -189,9 +189,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         
         if sender.tag == 0 {  // create
             faeCollection.whereKey("type", value: enterMode.rawValue)
-            faeCollection.whereKey("name", value: txtListName)
-            if txtListDesp != "" {
-                faeCollection.whereKey("description", value: txtListDesp)
+            faeCollection.whereKey("name", value: strListName)
+            if strListDesp != "" {
+                faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.createCollection {(status: Int, message: Any?) in
@@ -204,7 +204,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     print("[Create Collection] Create Successfully \(status) \(message!)")
                     
                     // store to realm
-                    let realmCol = RealmCollection(value: [colId, self.txtListName, Key.shared.user_id, self.txtListDesp, self.enterMode.rawValue, false, time, 0, time])
+                    let realmCol = RealmCollection(value: [colId, self.strListName, Key.shared.user_id, self.strListDesp, self.enterMode.rawValue, false, time, 0, time])
                     let realm = try! Realm()
                     try! realm.write {
                         realm.add(realmCol, update: false)
@@ -214,9 +214,9 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 }
             }
         } else {  // save
-            faeCollection.whereKey("name", value: txtListName)
-            if txtListDesp != "" {
-                faeCollection.whereKey("description", value: txtListDesp)
+            faeCollection.whereKey("name", value: strListName)
+            if strListDesp != "" {
+                faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
             faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
@@ -225,8 +225,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     let realm = try! Realm()
                     let realmCol = realm.filterCollection(id: self.colId)
                     try! realm.write {
-                        realmCol?.name = self.txtListName
-                        realmCol?.descrip = self.txtListDesp
+                        realmCol?.name = self.strListName
+                        realmCol?.descrip = self.strListDesp
                         realmCol?.last_updated_at = time
                     }
                     self.textviewListName.resignFirstResponder()
@@ -240,7 +240,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if (textView == textviewListName && txtListName == "") || (textView == textviewDesp && txtListDesp == "") {
+        if (textView == textviewListName && strListName == "") || (textView == textviewDesp && strListDesp == "") {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
         }
     }
@@ -320,7 +320,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc private func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue
         let keyboardRectangle = keyboardFrame.cgRectValue
@@ -329,7 +329,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         uiviewPrivacy.frame.origin.y = screenHeight - keyboardHeight - 50
     }
     
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_ notification: Notification) {
         if ((notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue) != nil {
             uiviewPrivacy.frame.origin.y = screenHeight - 50
         }

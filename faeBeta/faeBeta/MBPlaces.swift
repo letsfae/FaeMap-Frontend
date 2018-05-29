@@ -218,7 +218,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     func jumpToPlaceDetail(place: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = place
-        vcPlaceDetail.allPlaces = mbPlaces
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
