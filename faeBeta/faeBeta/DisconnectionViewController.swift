@@ -12,14 +12,14 @@ class DisconnectionViewController: UIViewController {
     
     static let shared = DisconnectionViewController()
     
-    var uiviewNavBar: UIView!
-    var btnNavBar: UIButton!
-    var lblFailMessage: UILabel!
-    var btnReconnect: UIButton!
+    private var uiviewNavBar: UIView!
+    private var btnNavBar: UIButton!
+    private var lblFailMessage: UILabel!
+    private var btnReconnect: UIButton!
     private var reachability: Reachability!
     
-    var uiviewNavBarMenu: UIView!
-    var preStatusBarStyle = UIStatusBarStyle.default
+    private var uiviewNavBarMenu: UIView!
+    private var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +50,7 @@ class DisconnectionViewController: UIViewController {
         UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
-    @objc func actionReconnect(_ sender: UIButton) {
+    @objc private func actionReconnect(_ sender: UIButton) {
         if reachability.isReachable {
             print("[reachabilityChanged] Network reachable")
             dismiss(animated: true, completion: nil)

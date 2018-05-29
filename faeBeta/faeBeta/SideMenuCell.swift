@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LeftSlideWindowCell: UITableViewCell {
+class SideMenuCell: UITableViewCell {
     
     var uiviewRedDot: UIView!
     var imgLeft: UIImageView!
@@ -25,8 +25,7 @@ class LeftSlideWindowCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    fileprivate func loadItem() {
-        
+    private func loadItem() {
         uiviewRedDot = UIView()
         uiviewRedDot.backgroundColor = UIColor._2499090()
         uiviewRedDot.layer.cornerRadius = 4

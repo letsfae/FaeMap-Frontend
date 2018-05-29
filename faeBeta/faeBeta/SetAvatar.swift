@@ -17,8 +17,8 @@ class SetAvatar {
         var activityIndicator = UIActivityIndicatorView()
         var imgView = UIImageView()
         switch type {
-        case "leftSlidingMenu":
-            let currentVC = vc as! LeftSlidingMenuViewController
+        case "sideMenu":
+            let currentVC = vc as! SideMenuViewController
             activityIndicator = currentVC.activityIndicator
             imgView = currentVC.imgAvatar
         case "firstTimeLogin":
@@ -82,8 +82,8 @@ class SetAvatar {
         var imageDelegate: ChooseAvatarDelegate!
         var imagePickerDelegate: (UIImagePickerControllerDelegate & UINavigationControllerDelegate)!
         switch type {
-        case "leftSlidingMenu":
-            let currentVC = vc as! LeftSlidingMenuViewController
+        case "sideMenu":
+            let currentVC = vc as! SideMenuViewController
             imageDelegate = currentVC
             imagePickerDelegate = currentVC
         case "firstTimeLogin":
@@ -181,7 +181,7 @@ class ChooseAvatarViewController: UIViewController {
     var activityIndicator: UIActivityIndicatorView!
     
     enum ComeFromType: String {
-        case leftSlidingMenu
+        case sideMenu
         case firstTimeLogin
         case setInfoNamecard
     }
@@ -221,8 +221,8 @@ class ChooseAvatarViewController: UIViewController {
             let imagePicker = UIImagePickerController()
             imagePicker.sourceType = .camera
             switch vcComeFromType {
-            case .leftSlidingMenu:
-                imagePicker.delegate = vcComeFrom as! LeftSlidingMenuViewController
+            case .sideMenu:
+                imagePicker.delegate = vcComeFrom as! SideMenuViewController
             case .firstTimeLogin:
                 imagePicker.delegate = vcComeFrom as! FirstTimeLoginViewController
             case .setInfoNamecard:

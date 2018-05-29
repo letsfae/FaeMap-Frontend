@@ -402,7 +402,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc private func backToMapBoard(_ sender: UIButton) {
-        let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
+        let mbIsOn = SideMenuViewController.boolMapBoardIsOn
         if mbIsOn {
             Key.shared.initialCtrler?.goToMapBoard(animated: false)
         }

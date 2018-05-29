@@ -27,7 +27,7 @@ class FaeAvatarView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadAvatar(id: Int) {
+    public func loadAvatar(id: Int) {
         
         self.image = nil
         
@@ -49,7 +49,7 @@ class FaeAvatarView: UIImageView {
         }
     }
 
-    @objc func openThisMedia(_ sender: UIGestureRecognizer) {
+    @objc private func openThisMedia(_ sender: UIGestureRecognizer) {
         getAvatar(userID: self.userID, type: 0) { (status, etag, imageRawData) in
             guard imageRawData != nil else { return }
             guard status / 100 == 2 || status / 100 == 3 else { return }
