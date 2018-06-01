@@ -172,7 +172,7 @@ class PlacesCollectionCell: UICollectionViewCell {
         lblAddress.text = place.address1 + ", " + place.address2
         imgPic.backgroundColor = .white
         indicatorView.startAnimating()
-        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic) {
+        General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPic) {
             self.indicatorView.stopAnimating()
         }
     }

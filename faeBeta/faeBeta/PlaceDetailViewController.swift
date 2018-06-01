@@ -22,7 +22,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var uiview_bottomLine: UIView!
     private var uiviewSubHeader: FixedHeader!
     private var uiviewFixedHeader: FixedHeader!
+    
     private var uiviewScrollingPhotos: InfiniteScrollingView!
+    private var uiviewPlaceImages: PlacePinImagesView!
+    
     private var uiviewFooter: UIView!
     private var btnBack: UIButton!
     private var btnSave: UIButton!
@@ -273,15 +276,27 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
-        uiviewScrollingPhotos.viewCtrler = self
-        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
+//        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
+//        uiviewScrollingPhotos.viewCtrler = self
+//        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
+//        let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
+//        bottomLine.backgroundColor = UIColor._241241241()
+//        uiviewScrollingPhotos.addSubview(bottomLine)
+//        uiviewScrollingPhotos.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
+//        uiviewScrollingPhotos.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
+//        uiviewScrollingPhotos.loadImages(place: place)
+        
+        uiviewPlaceImages = PlacePinImagesView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 208 * screenHeightFactor + device_offset_top))
+        tblPlaceDetail.addSubview(uiviewPlaceImages)
+        uiviewPlaceImages.numPages = place.imageURLs.count
+        uiviewPlaceImages.arrURLs = place.imageURLs
+        uiviewPlaceImages.loadContent()
+        uiviewPlaceImages.setup()
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
-        uiviewScrollingPhotos.addSubview(bottomLine)
-        uiviewScrollingPhotos.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
-        uiviewScrollingPhotos.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-        uiviewScrollingPhotos.loadImages(place: place)
+        uiviewPlaceImages.addSubview(bottomLine)
+        uiviewPlaceImages.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
+        uiviewPlaceImages.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
     private func loadFooter() {
@@ -353,18 +368,35 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     private var boolAnimateTo_1 = true
     
+    
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if uiviewScrollingPhotos != nil {
-            var frame = uiviewScrollingPhotos.frame
+//        if uiviewScrollingPhotos != nil {
+//            var frame = uiviewScrollingPhotos.frame
+//            if tblPlaceDetail.contentOffset.y < 0 {
+//                frame.origin.y = tblPlaceDetail.contentOffset.y
+//                uiviewScrollingPhotos.frame = frame
+//                let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
+//                uiviewScrollingPhotos.frame.size.height = height
+//                uiviewScrollingPhotos.imgPic_1.frame.size.height = height
+//            } else {
+//                frame.origin.y = 0
+//                uiviewScrollingPhotos.frame.origin.y = 0
+//            }
+//        }
+        guard scrollView == tblPlaceDetail else { return }
+        if uiviewPlaceImages != nil {
+            var frame = uiviewPlaceImages.frame
             if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
-                uiviewScrollingPhotos.frame = frame
+                uiviewPlaceImages.frame = frame
                 let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
-                uiviewScrollingPhotos.frame.size.height = height
-                uiviewScrollingPhotos.imgPic_1.frame.size.height = height
+                uiviewPlaceImages.frame.size.height = height
+                uiviewPlaceImages.contentSize.height = height
+                uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].frame.size.height = height
             } else {
                 frame.origin.y = 0
-                uiviewScrollingPhotos.frame.origin.y = 0
+                uiviewPlaceImages.frame.origin.y = 0
             }
         }
         var offset_y: CGFloat = 186 * screenHeightFactor
@@ -375,7 +407,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if boolAnimateTo_1 {
                 boolAnimateTo_1 = false
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.uiviewScrollingPhotos.alpha = 0
+                    self.uiviewPlaceImages.alpha = 0
                     self.uiviewSubHeader.alpha = 0
                     self.uiviewWhite.alpha = 1
                 })
@@ -388,7 +420,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if boolAnimateTo_1 == false {
                 boolAnimateTo_1 = true
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.uiviewScrollingPhotos.alpha = 1
+                    self.uiviewPlaceImages.alpha = 1
                 })
             }
         }

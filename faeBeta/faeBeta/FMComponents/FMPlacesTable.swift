@@ -652,7 +652,7 @@ class FMPlaceResultBarCell: UITableViewCell {
         } else {
             lblHours.text = nil
         }
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     
     private func loadContent() {

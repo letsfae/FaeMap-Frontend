@@ -33,6 +33,7 @@
 		50234AF91F2865FD00055748 /* PlacePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50234AF81F2865FD00055748 /* PlacePin.swift */; };
 		50256A21200D34FE00EF4E19 /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */; };
 		5028597F209A1F3400F98B00 /* CollectionMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028597E209A1F3400F98B00 /* CollectionMapController.swift */; };
+		502E422A20C094A800995881 /* PlacePinImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E422920C094A800995881 /* PlacePinImagesView.swift */; };
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503BF9D6208517AA00635E65 /* RoutingMapController.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
@@ -380,6 +381,7 @@
 		50234AF81F2865FD00055748 /* PlacePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePin.swift; sourceTree = "<group>"; };
 		50256A20200D34FE00EF4E19 /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
 		5028597E209A1F3400F98B00 /* CollectionMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionMapController.swift; sourceTree = "<group>"; };
+		502E422920C094A800995881 /* PlacePinImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePinImagesView.swift; sourceTree = "<group>"; };
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		503BF9D6208517AA00635E65 /* RoutingMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingMapController.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
@@ -1313,6 +1315,7 @@
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
 				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
 				50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */,
+				502E422920C094A800995881 /* PlacePinImagesView.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -1958,6 +1961,7 @@
 				B0BF356C1D8DC8D700B0540B /* JSQLocationMediaItemCustom.m in Sources */,
 				50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */,
 				9FC6AAFE1FA167BA0024B9B8 /* SetWebViewController.swift in Sources */,
+				502E422A20C094A800995881 /* PlacePinImagesView.swift in Sources */,
 				B3273E691F8C28FE00CFEC8E /* PinCollection.swift in Sources */,
 				500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */,
 				DC9F453F1E08F51A00128444 /* NSMutableAttributedString+bullet.swift in Sources */,

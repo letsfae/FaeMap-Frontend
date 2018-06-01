@@ -219,7 +219,7 @@ class General: NSObject {
         }
     }
     
-    public func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
+    public func downloadImageForView(url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {
         
         func whenComplete() {
             DispatchQueue.main.async {

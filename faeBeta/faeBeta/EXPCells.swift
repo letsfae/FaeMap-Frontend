@@ -357,7 +357,7 @@ class EXPClctImgCell: UICollectionViewCell {
     }
     
     func updateImages(placeInfo: PlacePin, imgURL: String) {
-        General.shared.downloadImageForView(place: placeInfo, url: imgURL, imgPic: img)
+        General.shared.downloadImageForView(url: imgURL, imgPic: img)
     }
 }
 
