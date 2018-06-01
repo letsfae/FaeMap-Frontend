@@ -367,7 +367,7 @@ class PlaceView: UIView {
     private func loadPlaceImage(placeInfo: PlacePin) {
         imgType.alpha = 0
         indicator.startAnimating()
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType) {
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgType) {
             self.imgType.alpha = 1
             self.indicator.stopAnimating()
         }

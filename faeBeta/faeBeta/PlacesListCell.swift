@@ -36,7 +36,7 @@ class PlacesListCell: UITableViewCell {
         lblPlaceName.text = placeInfo.name
         lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
         imgPic.backgroundColor = .white
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgPic)
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgPic)
     }
     
     private func loadRecommendedCellContent() {

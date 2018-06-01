@@ -66,6 +66,6 @@ class AllPlacesCell: UITableViewCell {
         lblOpeninghour.text = place.class_1
         lblPrice.text = place.price
         imgPlaceIcon.backgroundColor = .white
-        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPlaceIcon)
+        General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPlaceIcon)
     }
 }
