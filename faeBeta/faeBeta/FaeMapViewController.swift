@@ -539,13 +539,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    private func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-        alertController.addAction(okAction)
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     private func storeRealmCollectionFromServer() {
         let realm = try! Realm()
         var setDeletedCollection = Set(realm.filterMyCollections().map { $0.collection_id })
@@ -621,8 +614,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     @objc private func syncMessagesFromServer() {
         //faeChat.getMessageFromServer()
-        self.faeChat.getMessageFromServer()
-        /*faePush.getSync { (status, message) in
+        //self.faeChat.getMessageFromServer()
+        faePush.getSync { (status, message) in
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
                 if let friend_request_count = messageJSON["friend_request"].int {
@@ -638,9 +631,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             } else if status == 500 { // TODO: error code undecided
                 
             } else {
-                
+                self.invalidateAllTimer()
+                // clean up user info
+                showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: self, handler: { _ in
+                    FaeCoreData.shared.save("userTokenEncode", value: "session_lost")
+                    let vcRoot = WelcomeViewController()
+                    Key.shared.navOpenMode = .welcomeFirst
+                    self.navigationController?.setViewControllers([vcRoot], animated: true)
+                })
             }
-        }*/
+        }
     }
     
     func useActivityIndicator(on: Bool) {
@@ -1594,7 +1594,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String) {
         guard savedPinIds.count > 0 else {
             // 判断:
-            showAlert(title: "There is no pin in this collection!", message: "")
+            showAlert(title: "There is no pin in this collection!", message: "", viewCtrler: self)
             return
         }
         if isCollections {
@@ -2778,7 +2778,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         
         directions.calculate { [unowned self] response, error in
             guard let unwrappedResponse = response else {
-                self.showAlert(title: "Sorry! This route is too long to draw.", message: "please try again")
+                showAlert(title: "Sorry! This route is too long to draw.", message: "please try again", viewCtrler: self)
                 return
             }
             var totalDistance: CLLocationDistance = 0
@@ -2791,7 +2791,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
                 totalDistance *= 0.621371
             }
             if totalDistance > 3000 {
-                self.showAlert(title: "Sorry! This route is too long to draw.", message: "please try again")
+                showAlert(title: "Sorry! This route is too long to draw.", message: "please try again", viewCtrler: self)
                 return
             }
             self.showRouteCalculatorComponents(distance: totalDistance)
