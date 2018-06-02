@@ -182,9 +182,10 @@ func vibrate(type: Int) {
     
 }
 
-func showAlert(title: String, message: String, viewCtrler: UIViewController) {
+func showAlert(title: String, message: String, viewCtrler: UIViewController, handler: ((UIAlertAction) -> Void)? = nil) {
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    let okAction = UIAlertAction(title: "OK", style: .destructive)
+//    let okAction = UIAlertAction(title: "OK", style: .destructive)
+    let okAction = UIAlertAction(title: "OK", style: .destructive, handler: handler)
     alertController.addAction(okAction)
     viewCtrler.present(alertController, animated: true, completion: nil)
 }
