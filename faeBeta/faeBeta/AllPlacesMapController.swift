@@ -190,9 +190,21 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
             guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                 return
             }
+            
+            guard var arrCtrlers = navigationController?.viewControllers else {
+                showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
+                return
+            }
+            
+            while !(arrCtrlers.last is PlaceDetailViewController) {
+                arrCtrlers.removeLast()
+            }
             let vcPlaceDetail = PlaceDetailViewController()
             vcPlaceDetail.place = placeData
-            navigationController?.pushViewController(vcPlaceDetail, animated: true)
+            arrCtrlers.removeLast()
+            arrCtrlers.append(vcPlaceDetail)
+            
+            navigationController?.setViewControllers(arrCtrlers, animated: true)
         case .collect:
             uiviewSavedList.show()
             uiviewSavedList.tableMode = mode

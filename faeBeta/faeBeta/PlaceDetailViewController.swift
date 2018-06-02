@@ -487,9 +487,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
+        guard var arrCtrlers = navigationController?.viewControllers else {
+            showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
+            return
+        }
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = place
-        navigationController?.pushViewController(vcPlaceDetail, animated: true)
+        arrCtrlers.removeLast()
+        arrCtrlers.append(vcPlaceDetail)
+        
+        navigationController?.setViewControllers(arrCtrlers, animated: true)
     }
     
     // AddPintoCollectionDelegate
