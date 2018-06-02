@@ -10,6 +10,191 @@ import UIKit
 import MapKit
 //import CCHMapClusterController
 
+class NewFMPlaceInfoBar: UIScrollView, UIScrollViewDelegate {
+    
+    weak var action: PlaceViewDelegate?
+    
+    var viewObjects = [PlaceView]()
+    var numPages: Int = 3
+    var currentPage = 0
+    var dataIndex = 0
+    
+    private var imgBack_0 = PlaceView()
+    private var imgBack_1 = PlaceView()
+    private var imgBack_2 = PlaceView()
+    
+    var places = [PlacePin]()
+    var annotations = [CCHMapClusterAnnotation]()
+    
+    private var prevAnnotation: CCHMapClusterAnnotation!
+    private var nextAnnotation: CCHMapClusterAnnotation!
+    
+    private var prevPlacePin: PlacePin!
+    private var nextPlacePin: PlacePin!
+    
+    override init(frame: CGRect = CGRect.zero) {
+        super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 102))
+
+        isPagingEnabled = true
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        delegate = self
+        
+        tag = 0
+        alpha = 0
+        
+        backgroundColor = .clear
+        layer.zPosition = 605
+        addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_1, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func setup() {
+        
+        guard places.count > 0 else {
+            numPages = 1
+            viewObjects.append(imgBack_1)
+            loadScrollViewWithPage(0)
+            return
+        }
+        
+        contentSize = CGSize(width: (frame.size.width * (CGFloat(numPages) + 2)), height: frame.size.height)
+        
+        viewObjects.append(imgBack_0)
+        viewObjects.append(imgBack_1)
+        viewObjects.append(imgBack_2)
+        
+        loadScrollViewWithPage(0)
+        loadScrollViewWithPage(1)
+        loadScrollViewWithPage(2)
+        
+        var newFrame = frame
+        newFrame.origin.x = newFrame.size.width
+        newFrame.origin.y = 0
+        scrollRectToVisible(newFrame, animated: false)
+        
+        layoutIfNeeded()
+    }
+    
+    private func loadScrollViewWithPage(_ page: Int) {
+        if page < 0 { return }
+        if page >= numPages + 2 { return }
+        
+        var index = 0
+//        var dataIdx = 0
+        
+        if page == 0 {
+            index = numPages - 1 // the last view
+        } else if page == numPages + 1 {
+            index = 0 // the first view
+        } else {
+            index = page - 1
+        }
+        
+        let view = viewObjects[index]
+        
+        
+        
+        var newFrame = frame
+        newFrame.origin.x = frame.size.width * CGFloat(page)
+        newFrame.origin.y = 0
+        view.frame = newFrame
+        
+        if view.superview == nil {
+            addSubview(view)
+        }
+        
+        layoutIfNeeded()
+    }
+    
+    func loadingData(current: CCHMapClusterAnnotation) {
+        if let place = current.annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_1.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        guard annotations.count > 0 else { return }
+        var prev_idx = annotations.count - 1
+        var next_idx = 0
+        for i in 0..<annotations.count {
+            if annotations[i] == current {
+                prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
+                next_idx = (i + 1) >= annotations.count ? 0 : i + 1
+                break
+            } else {
+                continue
+            }
+        }
+        prevAnnotation = annotations[prev_idx]
+        nextAnnotation = annotations[next_idx]
+        if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_0.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_2.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+    }
+    
+    // MARK: - UIScrollView Delegate
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageWidth = frame.size.width
+        let page = floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1
+        currentPage = Int(page - 1)
+        loadScrollViewWithPage(Int(page - 1))
+        loadScrollViewWithPage(Int(page))
+        loadScrollViewWithPage(Int(page + 1))
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = frame.size.width
+        let page : Int = Int(floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1)
+        
+        if page == 0 {
+            contentOffset = CGPoint(x: pageWidth*(CGFloat(numPages)), y: 0)
+        } else if page == numPages + 1 {
+            contentOffset = CGPoint(x: pageWidth, y: 0)
+        }
+    }
+    
+    private func panToPrev(_ time: Double = 0.3) {
+        self.action?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
+    }
+    
+    private func panToNext(_ time: Double = 0.3) {
+        self.action?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
+    }
+    
+    func show() {
+        self.isHidden = false
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+            self.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hide(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                self.alpha = 0
+            }, completion: { _ in
+                self.isHidden = true
+            })
+        } else {
+            self.alpha = 0
+            self.isHidden = true
+        }
+    }
+}
+
 protocol PlaceViewDelegate: class {
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool)
 }
