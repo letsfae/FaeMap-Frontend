@@ -236,7 +236,7 @@ class General: NSObject {
             imgPic.contentMode = .scaleAspectFill
             if let placeImgFromCache = placeInfoBarImageCache.object(forKey: url as AnyObject) as? UIImage {
                 imgPic.image = placeImgFromCache
-                imgPic.backgroundColor = UIColor._2499090()
+                imgPic.backgroundColor = UIColor.white
                 completion?()
             } else {
                 downloadImage(URL: url) { (rawData) in
@@ -245,7 +245,7 @@ class General: NSObject {
                         guard let placeImg = UIImage(data: data) else { whenComplete(); return }
                         DispatchQueue.main.async {
                             imgPic.image = placeImg
-                            imgPic.backgroundColor = UIColor._2499090()
+                            imgPic.backgroundColor = UIColor.white
                             placeInfoBarImageCache.setObject(placeImg, forKey: url as AnyObject)
                             completion?()
                         }

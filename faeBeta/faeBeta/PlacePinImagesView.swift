@@ -53,7 +53,7 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     
     public func setup() {
         guard let parent = superview else { return }
-        guard arrURLs.count > 0 else {
+        guard arrURLs.count > 1 else {
             numPages = 1
             loadScrollViewWithPage(0)
             return
@@ -64,7 +64,7 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         pageControl = UIPageControl(frame: CGRect(x: 0, y: frame.size.height-25, width: frame.size.width, height: 25))
         pageControl?.numberOfPages = numPages
         pageControl?.currentPage = 0
-//        pageControl?.addTarget(self, action: Selector(("changePage:")), for: .touchDown)
+        //        pageControl?.addTarget(self, action: Selector(("changePage:")), for: .touchDown)
         pageControl?.isUserInteractionEnabled = false
         parent.addSubview(pageControl!)
         
@@ -79,7 +79,7 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         
         layoutIfNeeded()
     }
-
+    
     private func loadScrollViewWithPage(_ page: Int) {
         if page < 0 { return }
         if page >= numPages + 2 { return }
