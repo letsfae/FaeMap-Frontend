@@ -1,20 +1,14 @@
 //
-//  EXPCells.swift
+//  EXPPicCell.swift
 //  faeBeta
 //
-//  Created by Yue Shen on 9/12/17.
-//  Copyright © 2017 fae. All rights reserved.
+//  Created by Yue Shen on 6/2/18.
+//  Copyright © 2018 fae. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-protocol EXPCellDelegate: class {
-    func jumpToPlaceDetail(_ placeInfo: PlacePin)
-}
-
-class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
-    
-    // MARK: - Vars
+class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
     weak var delegate: EXPCellDelegate?
     
@@ -30,8 +24,6 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     
     private var intCurtPage = 0
     
-    private var boolInMap = true
-    
     private var placeInfo: PlacePin!
     
     private var arrImgURL = [String]()
@@ -39,9 +31,8 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCollectionView()
-        loadCellBottom()
-//        loadPageCtrl()
-        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
+        loadCellItems()
+        //        loadPageCtrl()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -76,13 +67,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if arrImgURL.count == 0 {
-            return 1
-        } else if arrImgURL.count > 4 {
-            return 4
-        } else {
-            return arrImgURL.count
-        }
+        return arrImgURL.count == 0 ? 1 : arrImgURL.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -111,11 +96,11 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         }
         arrPageDot.removeAll()
         
-        uiviewPageCtrlSub = UIView(frame: CGRect(x: 249 - 17 - 18, y: 310 - 17 - 17 - 32, width: 5, height: 32))
+        uiviewPageCtrlSub = UIView(frame: CGRect(x: screenWidth - 26 - 30.5, y: screenHeight - 116 - 156 - 28.5 - 53, width: 8, height: 53))
         addSubview(uiviewPageCtrlSub)
         
         for i in 0...3 {
-            let imgDot = UIButton(frame: CGRect(x: 0, y: 9 * i, width: 5, height: 5))
+            let imgDot = UIButton(frame: CGRect(x: 0, y: 15 * i, width: 8, height: 8))
             imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_hollow"), for: .normal)
             imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_full"), for: .selected)
             imgDot.adjustsImageWhenHighlighted = false
@@ -129,27 +114,20 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     }
     
     private func loadCollectionView() {
-        
-//        let imgBack = UIImageView()
-//        imgBack.contentMode = .scaleAspectFit
-//        imgBack.image = #imageLiteral(resourceName: "exp_map_clct_shadow")
-//        addSubview(imgBack)
-//        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: imgBack)
-//        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: imgBack)
-        
         uiviewSub = UIView()
         addSubview(uiviewSub)
-        uiviewSub.layer.cornerRadius = 5
+        //        uiviewSub.layer.borderWidth = 2
+        //        uiviewSub.layer.borderColor = UIColor._200199204().cgColor
+        uiviewSub.layer.cornerRadius = 8
         uiviewSub.clipsToBounds = true
-        uiviewSub.backgroundColor = .clear
-        addConstraintsWithFormat("H:|-17-[v0]-17-|", options: [], views: uiviewSub)
-        addConstraintsWithFormat("V:|-17-[v0]-17-|", options: [], views: uiviewSub)
+        addConstraintsWithFormat("H:|-26-[v0]-26-|", options: [], views: uiviewSub)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewSub)
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
-        layout.itemSize = CGSize(width: 218, height: 276)
+        layout.itemSize = CGSize(width: screenWidth - 52, height: screenHeight - 116 - 156 - device_offset_bot - device_offset_top)
         
         clctViewImages = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         clctViewImages.register(EXPClctImgCell.self, forCellWithReuseIdentifier: "exp_img")
@@ -158,83 +136,28 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         clctViewImages.isPagingEnabled = true
         clctViewImages.backgroundColor = UIColor.clear
         clctViewImages.showsVerticalScrollIndicator = false
-        clctViewImages.backgroundColor = .clear
-        clctViewImages.alwaysBounceVertical = false
         uiviewSub.addSubview(clctViewImages)
         uiviewSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewImages)
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
     }
     
-    private func loadCellBottom() {
+    private func loadCellItems() {
         uiviewBottom = UIView()
         uiviewBottom.backgroundColor = UIColor(r: 50, g: 50, b: 50, alpha: 80)
         uiviewSub.addSubview(uiviewBottom)
         uiviewSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewBottom)
-        uiviewSub.addConstraintsWithFormat("V:[v0(66)]-0-|", options: [], views: uiviewBottom)
+        uiviewSub.addConstraintsWithFormat("V:[v0(110)]-0-|", options: [], views: uiviewBottom)
         
-        lblPlaceName = FaeLabel(CGRect.zero, .left, .demiBold, 12, .white)
+        lblPlaceName = FaeLabel(CGRect.zero, .left, .demiBold, 20, .white)
         uiviewBottom.addSubview(lblPlaceName)
-        uiviewBottom.addConstraintsWithFormat("H:|-12-[v0]-30-|", options: [], views: lblPlaceName)
-        uiviewBottom.addConstraintsWithFormat("V:|-17-[v0(16)]", options: [], views: lblPlaceName)
+        uiviewBottom.addConstraintsWithFormat("H:|-22-[v0]-53-|", options: [], views: lblPlaceName)
+        uiviewBottom.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: lblPlaceName)
 //        lblPlaceName.text = "Wing Stop"
         
-        lblPlaceAddr = FaeLabel(CGRect.zero, .left, .demiBold, 9.6, .white)
+        lblPlaceAddr = FaeLabel(CGRect.zero, .left, .demiBold, 16, .white)
         uiviewBottom.addSubview(lblPlaceAddr)
-        uiviewBottom.addConstraintsWithFormat("H:|-12-[v0]-30-|", options: [], views: lblPlaceAddr)
-        uiviewBottom.addConstraintsWithFormat("V:|-36-[v0(14)]", options: [], views: lblPlaceAddr)
+        uiviewBottom.addConstraintsWithFormat("H:|-22-[v0]-53-|", options: [], views: lblPlaceAddr)
+        uiviewBottom.addConstraintsWithFormat("V:|-60-[v0(22)]", options: [], views: lblPlaceAddr)
 //        lblPlaceAddr.text = "3260 Wilshire Blvd, Los Angeles"
     }
 }
-
-class EXPClctImgCell: UICollectionViewCell {
-    
-    private var img: UIImageView!
-    private var activityIndicator: UIActivityIndicatorView!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-        loadCellItems()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        img.image = nil
-    }
-    
-    private func loadCellItems() {
-        img = UIImageView()
-        img.contentMode = .scaleAspectFill
-        img.clipsToBounds = true
-        //        img.image = #imageLiteral(resourceName: "exp_pic_demo")
-        addSubview(img)
-        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: img)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: img)
-        
-        activityIndicator = createActivityIndicator(large: true)
-        addSubview(activityIndicator)
-        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: activityIndicator)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: activityIndicator)
-    }
-    
-    func updateImages(imgURL: String) {
-        guard imgURL != "" else {
-            img.image = #imageLiteral(resourceName: "default_place")
-            return
-        }
-        activityIndicator.startAnimating()
-        General.shared.downloadImageForView(url: imgURL, imgPic: img) {
-            self.activityIndicator.stopAnimating()
-        }
-    }
-}
-
-//protocol ExploreCategorySearch: class {
-    //func search(category: String, indexPath: IndexPath)
-//}
-
-

@@ -86,7 +86,6 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         let pageWidth: CGFloat = 233
         intCurtPage = Int((clctViewMap.contentOffset.x + 63) / pageWidth)
         highlightPlace(intCurtPage)
-        print("scrollViewDidEndDecelerating")
     }
 
     private func highlightPlace(_ idx: Int) {
