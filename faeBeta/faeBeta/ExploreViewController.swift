@@ -371,7 +371,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         default:
             break
         }
-        let vc = CollectionMapController()
+        let vc = ExploreMapController()
         vc.arrExpPlace = arrPlaceData
         vc.strCategory = cat
         navigationController?.pushViewController(vc, animated: false)

@@ -52,6 +52,7 @@ class FaeMapView: MKMapView {
     
     public var isSingleTapOnLocPinEnabled: Bool = false
     public var isDoubleTapOnMKAnnoViewEnabled: Bool = true
+    public var isSingleTapToShowFourIconsEnabled: Bool = true
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -104,6 +105,7 @@ class FaeMapView: MKMapView {
                     mapAction?.placePinTap?(view: anView)
                     anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {  // second tap place pin
+                    guard isSingleTapToShowFourIconsEnabled else { return }
                     anView.showButtons()
                     anView.optionsOpened = true
                     mapAction?.placePinTap?(view: anView)

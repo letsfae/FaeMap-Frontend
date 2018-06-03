@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionMapController: BasicMapController, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
+class ExploreMapController: BasicMapController, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
     
     // MARK: - Vars
     
@@ -27,6 +27,10 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         loadAnnotations(places: arrExpPlace)
         setTitle(type: strCategory)
         faeMapView.singleTap.isEnabled = true
+        faeMapView.doubleTap.isEnabled = false
+        faeMapView.longPress.isEnabled = false
+        faeMapView.isSingleTapToShowFourIconsEnabled = false
+        faeMapView.mapAction = self
         btnZoom.isHidden = true
         btnLocat.isHidden = true
     }
@@ -215,4 +219,20 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     
     // MARK: Find Map Annotation
     
+}
+
+extension ExploreMapController: MapAction {
+    
+    func placePinTap(view: MKAnnotationView) {
+        tapPlacePin(didSelect: view)
+    }
+    
+    func allPlacesDeselect(_ full: Bool) {
+        deselectAllAnnotations(full: full)
+    }
+    
+    func singleElsewhereTapExceptInfobar() {
+        faeMapView.mapGesture(isOn: true)
+        deselectAllAnnotations(full: true)
+    }
 }
