@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CHIPageControl
 
 protocol EXPCellDelegate: class {
     func jumpToPlaceDetail(_ placeInfo: PlacePin)
@@ -22,30 +23,29 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     private var uiviewBottom: UIView!
     private var lblPlaceName: FaeLabel!
     private var lblPlaceAddr: FaeLabel!
+    private var pageCtrl: CHIPageControlChimayo!
     
     private var clctViewImages: UICollectionView!
-    
-    private var uiviewPageCtrlSub: UIView!
-    private var arrPageDot = [UIButton]()
-    
     private var intCurtPage = 0
-    
     private var boolInMap = true
-    
     private var placeInfo: PlacePin!
-    
     private var arrImgURL = [String]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCollectionView()
         loadCellBottom()
-//        loadPageCtrl()
         addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pageCtrl.set(progress: 0, animated: false)
+        clctViewImages.setContentOffset(.zero, animated: false)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func updateCell(placeData: PlacePin) {
@@ -60,19 +60,15 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         lblPlaceName.text = placeData.name
         lblPlaceAddr.text = placeData.address1 + ", " + cityName
         arrImgURL.removeAll(keepingCapacity: true)
-        arrImgURL = placeData.imageURLs
+        arrImgURL = Array(placeData.imageURLs.prefix(4))
         clctViewImages.reloadData()
+        pageCtrl.numberOfPages = arrImgURL.count
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageHeight = clctViewImages.frame.size.height
         intCurtPage = Int(clctViewImages.contentOffset.y / pageHeight)
-        
-        guard arrPageDot.count > 0 else { return }
-        
-        for i in 0..<arrPageDot.count {
-            arrPageDot[i].isSelected = intCurtPage == i
-        }
+        pageCtrl.set(progress: intCurtPage, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -104,39 +100,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         delegate?.jumpToPlaceDetail(placeInfo)
     }
     
-    private func loadPageCtrl() {
-        
-        for uiview in arrPageDot {
-            uiview.removeFromSuperview()
-        }
-        arrPageDot.removeAll()
-        
-        uiviewPageCtrlSub = UIView(frame: CGRect(x: 249 - 17 - 18, y: 310 - 17 - 17 - 32, width: 5, height: 32))
-        addSubview(uiviewPageCtrlSub)
-        
-        for i in 0...3 {
-            let imgDot = UIButton(frame: CGRect(x: 0, y: 9 * i, width: 5, height: 5))
-            imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_hollow"), for: .normal)
-            imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_full"), for: .selected)
-            imgDot.adjustsImageWhenHighlighted = false
-            imgDot.isUserInteractionEnabled = false
-            uiviewPageCtrlSub.addSubview(imgDot)
-            arrPageDot.append(imgDot)
-            if i == intCurtPage {
-                imgDot.isSelected = true
-            }
-        }
-    }
-    
     private func loadCollectionView() {
-        
-//        let imgBack = UIImageView()
-//        imgBack.contentMode = .scaleAspectFit
-//        imgBack.image = #imageLiteral(resourceName: "exp_map_clct_shadow")
-//        addSubview(imgBack)
-//        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: imgBack)
-//        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: imgBack)
-        
         uiviewSub = UIView()
         addSubview(uiviewSub)
         uiviewSub.layer.cornerRadius = 5
@@ -176,13 +140,23 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
         uiviewBottom.addSubview(lblPlaceName)
         uiviewBottom.addConstraintsWithFormat("H:|-12-[v0]-30-|", options: [], views: lblPlaceName)
         uiviewBottom.addConstraintsWithFormat("V:|-17-[v0(16)]", options: [], views: lblPlaceName)
-//        lblPlaceName.text = "Wing Stop"
         
         lblPlaceAddr = FaeLabel(CGRect.zero, .left, .demiBold, 9.6, .white)
         uiviewBottom.addSubview(lblPlaceAddr)
         uiviewBottom.addConstraintsWithFormat("H:|-12-[v0]-30-|", options: [], views: lblPlaceAddr)
         uiviewBottom.addConstraintsWithFormat("V:|-36-[v0(14)]", options: [], views: lblPlaceAddr)
-//        lblPlaceAddr.text = "3260 Wilshire Blvd, Los Angeles"
+        
+        pageCtrl = CHIPageControlChimayo(frame: CGRect(x: 200, y: 30, width: 0, height: 25))
+        pageCtrl.center.y = 33
+        pageCtrl.radius = 2.4
+        pageCtrl.tintColor = .white
+        pageCtrl.currentPageTintColor = .white
+        pageCtrl.padding = 3
+        pageCtrl.hidesForSinglePage = true
+        pageCtrl.isUserInteractionEnabled = false
+        uiviewBottom.addSubview(pageCtrl)
+        let angle = CGFloat(Double.pi/2)
+        pageCtrl.transform = CGAffineTransform(rotationAngle: angle)
     }
 }
 
@@ -198,7 +172,7 @@ class EXPClctImgCell: UICollectionViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func prepareForReuse() {
@@ -209,6 +183,7 @@ class EXPClctImgCell: UICollectionViewCell {
     private func loadCellItems() {
         img = UIImageView()
         img.contentMode = .scaleAspectFill
+        img.layer.cornerRadius = 5
         img.clipsToBounds = true
         //        img.image = #imageLiteral(resourceName: "exp_pic_demo")
         addSubview(img)
@@ -232,9 +207,3 @@ class EXPClctImgCell: UICollectionViewCell {
         }
     }
 }
-
-//protocol ExploreCategorySearch: class {
-    //func search(category: String, indexPath: IndexPath)
-//}
-
-

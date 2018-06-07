@@ -31,7 +31,7 @@ class AddressAnnotationView: MKAnnotationView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func assignImage(_ image: UIImage) {
@@ -174,7 +174,7 @@ class SelfAnnotationView: MKAnnotationView {
     private var inner: UIImageView!
     private var red: UIImageView!
     
-    private var mapAvatar: Int = 1 {
+    var mapAvatar: Int = 1 {
         didSet {
             selfIcon.image = UIImage(named: "miniAvatar_\(mapAvatar)")
         }
@@ -211,7 +211,7 @@ class SelfAnnotationView: MKAnnotationView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -353,7 +353,7 @@ class UserPinAnnotationView: MKAnnotationView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func assignImage(_ image: UIImage) {
@@ -453,7 +453,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -686,7 +686,7 @@ class LocPinAnnotationView: MKAnnotationView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func prepareForReuse() {

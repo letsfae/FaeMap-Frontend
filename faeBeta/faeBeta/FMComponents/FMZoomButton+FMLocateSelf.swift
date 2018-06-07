@@ -34,7 +34,7 @@ class FMZoomButton: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
@@ -231,7 +231,7 @@ class FMLocateSelf: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {

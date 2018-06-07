@@ -7,14 +7,21 @@
 //
 
 import UIKit
+import CHIPageControl
 
 class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     
     var viewObjects = [UIView]()
     var numPages: Int = 0
-    var pageControl: UIPageControl?
+    var pageControl: CHIPageControlAleppo?
     var currentPage = 0
-    public var arrURLs = [String]()
+    var prevPage = 0
+    public var arrURLs = [String]() {
+        didSet {
+            numPages = arrURLs.count
+        }
+    }
+    var arrSKPhoto = [SKPhoto]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,10 +50,12 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         for index in 0..<arrURLs.count {
             let subView = UIImageView(frame: frame)
             subView.contentMode = .scaleAspectFill
+            subView.image = #imageLiteral(resourceName: "default_place")
             subView.clipsToBounds = true
             viewObjects.append(subView)
+            let photo = SKPhoto(url: arrURLs[index])
+            arrSKPhoto.append(photo)
             General.shared.downloadImageForView(url: arrURLs[index], imgPic: subView) {
-                
             }
         }
     }
@@ -61,12 +70,16 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         
         contentSize = CGSize(width: (frame.size.width * (CGFloat(numPages) + 2)), height: frame.size.height)
         
-        pageControl = UIPageControl(frame: CGRect(x: 0, y: frame.size.height-25, width: frame.size.width, height: 25))
-        pageControl?.numberOfPages = numPages
-        pageControl?.currentPage = 0
-        //        pageControl?.addTarget(self, action: Selector(("changePage:")), for: .touchDown)
+        pageControl = CHIPageControlAleppo(frame: CGRect(x: 0, y: frame.size.height-25, width: frame.size.width, height: 25))
+        pageControl?.radius = 4
+        pageControl?.tintColor = .white
+        pageControl?.currentPageTintColor = .white
+        pageControl?.padding = 6
+        pageControl?.hidesForSinglePage = true
         pageControl?.isUserInteractionEnabled = false
         parent.addSubview(pageControl!)
+        pageControl?.numberOfPages = numPages
+        prevPage = numPages
         
         loadScrollViewWithPage(0)
         loadScrollViewWithPage(1)
@@ -113,8 +126,6 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pageWidth = frame.size.width
         let page = floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1
-        pageControl?.currentPage = Int(page - 1)
-        currentPage = Int(page - 1)
         loadScrollViewWithPage(Int(page - 1))
         loadScrollViewWithPage(Int(page))
         loadScrollViewWithPage(Int(page + 1))
@@ -122,8 +133,20 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth = frame.size.width
-        let page : Int = Int(floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1)
-        
+        let page: Int = Int(floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1)
+        currentPage = Int(page - 1)
+        if prevPage == -1 && currentPage == numPages {
+            pageControl?.set(progress: 0, animated: false)
+        } else if prevPage == numPages - 1 && currentPage == numPages {
+            pageControl?.set(progress: 0, animated: false)
+        } else if prevPage == 0 && currentPage == -1 {
+            pageControl?.set(progress: numPages - 1, animated: false)
+        } else if prevPage == numPages && currentPage == -1 {
+            pageControl?.set(progress: numPages - 1, animated: false)
+        } else {
+            pageControl?.set(progress: Int(page - 1), animated: true)
+        }
+        prevPage = currentPage
         if page == 0 {
             contentOffset = CGPoint(x: pageWidth*(CGFloat(numPages)), y: 0)
         } else if page == numPages+1 {

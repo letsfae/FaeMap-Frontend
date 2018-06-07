@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CHIPageControl
 
 class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate {
     
@@ -19,24 +20,26 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     
     private var clctViewImages: UICollectionView!
     
-    private var uiviewPageCtrlSub: UIView!
-    private var arrPageDot = [UIButton]()
-    
     private var intCurtPage = 0
     
     private var placeInfo: PlacePin!
-    
     private var arrImgURL = [String]()
+    private var pageCtrl: CHIPageControlChimayo!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCollectionView()
-        loadCellItems()
-        //        loadPageCtrl()
+        loadCellBottom()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pageCtrl.set(progress: 0, animated: false)
+        clctViewImages.setContentOffset(.zero, animated: false)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func updateCell(placeData: PlacePin) {
@@ -51,19 +54,15 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         lblPlaceName.text = placeData.name
         lblPlaceAddr.text = placeData.address1 + ", " + cityName
         arrImgURL.removeAll(keepingCapacity: true)
-        arrImgURL = placeData.imageURLs
+        arrImgURL = Array(placeData.imageURLs.prefix(4))
         clctViewImages.reloadData()
+        pageCtrl.numberOfPages = arrImgURL.count
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageHeight = clctViewImages.frame.size.height
         intCurtPage = Int(clctViewImages.contentOffset.y / pageHeight)
-        
-        guard arrPageDot.count > 0 else { return }
-        
-        for i in 0..<arrPageDot.count {
-            arrPageDot[i].isSelected = intCurtPage == i
-        }
+        pageCtrl.set(progress: intCurtPage, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,35 +88,9 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         delegate?.jumpToPlaceDetail(placeInfo)
     }
     
-    private func loadPageCtrl() {
-        
-        for uiview in arrPageDot {
-            uiview.removeFromSuperview()
-        }
-        arrPageDot.removeAll()
-        
-        uiviewPageCtrlSub = UIView(frame: CGRect(x: screenWidth - 26 - 30.5, y: screenHeight - 116 - 156 - 28.5 - 53, width: 8, height: 53))
-        addSubview(uiviewPageCtrlSub)
-        
-        for i in 0...3 {
-            let imgDot = UIButton(frame: CGRect(x: 0, y: 15 * i, width: 8, height: 8))
-            imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_hollow"), for: .normal)
-            imgDot.setImage(#imageLiteral(resourceName: "exp_page_ctrl_full"), for: .selected)
-            imgDot.adjustsImageWhenHighlighted = false
-            imgDot.isUserInteractionEnabled = false
-            uiviewPageCtrlSub.addSubview(imgDot)
-            arrPageDot.append(imgDot)
-            if i == intCurtPage {
-                imgDot.isSelected = true
-            }
-        }
-    }
-    
     private func loadCollectionView() {
         uiviewSub = UIView()
         addSubview(uiviewSub)
-        //        uiviewSub.layer.borderWidth = 2
-        //        uiviewSub.layer.borderColor = UIColor._200199204().cgColor
         uiviewSub.layer.cornerRadius = 8
         uiviewSub.clipsToBounds = true
         addConstraintsWithFormat("H:|-26-[v0]-26-|", options: [], views: uiviewSub)
@@ -141,7 +114,7 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: clctViewImages)
     }
     
-    private func loadCellItems() {
+    private func loadCellBottom() {
         uiviewBottom = UIView()
         uiviewBottom.backgroundColor = UIColor(r: 50, g: 50, b: 50, alpha: 80)
         uiviewSub.addSubview(uiviewBottom)
@@ -152,12 +125,22 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         uiviewBottom.addSubview(lblPlaceName)
         uiviewBottom.addConstraintsWithFormat("H:|-22-[v0]-53-|", options: [], views: lblPlaceName)
         uiviewBottom.addConstraintsWithFormat("V:|-28-[v0(27)]", options: [], views: lblPlaceName)
-//        lblPlaceName.text = "Wing Stop"
         
         lblPlaceAddr = FaeLabel(CGRect.zero, .left, .demiBold, 16, .white)
         uiviewBottom.addSubview(lblPlaceAddr)
         uiviewBottom.addConstraintsWithFormat("H:|-22-[v0]-53-|", options: [], views: lblPlaceAddr)
         uiviewBottom.addConstraintsWithFormat("V:|-60-[v0(22)]", options: [], views: lblPlaceAddr)
-//        lblPlaceAddr.text = "3260 Wilshire Blvd, Los Angeles"
+        
+        pageCtrl = CHIPageControlChimayo(frame: CGRect(x: 300, y: 45, width: 0, height: 25))
+        pageCtrl.center.y = 55
+        pageCtrl.radius = 4
+        pageCtrl.tintColor = .white
+        pageCtrl.currentPageTintColor = .white
+        pageCtrl.padding = 6
+        pageCtrl.hidesForSinglePage = true
+        pageCtrl.isUserInteractionEnabled = false
+        uiviewBottom.addSubview(pageCtrl)
+        let angle = CGFloat(Double.pi/2)
+        pageCtrl.transform = CGAffineTransform(rotationAngle: angle)
     }
 }

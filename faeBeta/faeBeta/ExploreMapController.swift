@@ -16,6 +16,7 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
     var strCategory: String = ""
     private var clctViewMap: UICollectionView!
     private var intCurtPage = 0
+    private var intPrevPage = 0
     private var placeAnnos = [FaePinAnnotation]()
     
     // MARK: - Life Cycles
@@ -89,7 +90,9 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth: CGFloat = 233
         intCurtPage = Int((clctViewMap.contentOffset.x + 63) / pageWidth)
+        guard intPrevPage != intCurtPage else { return }
         highlightPlace(intCurtPage)
+        intPrevPage = intCurtPage
     }
 
     private func highlightPlace(_ idx: Int) {

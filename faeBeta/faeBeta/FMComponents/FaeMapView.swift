@@ -84,7 +84,7 @@ class FaeMapView: MKMapView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     @objc private func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
@@ -179,6 +179,7 @@ class FaeMapView: MKMapView {
         mapAction?.doubleTapAllTimeControl?()
     }
 
+    
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard blockTap == false else { return }
@@ -186,6 +187,7 @@ class FaeMapView: MKMapView {
         let numberOfTouches = sender.numberOfTouches
         guard numberOfTouches == 1 else { return }
         if sender.state == .began {
+            vibrate(type: 4)
             let v: Any? = hitTest(tapPoint, with: nil)
             isPlaceAnno = false
             if let anView = v as? PlacePinAnnotationView {

@@ -112,6 +112,7 @@ class Key: NSObject { //  singleton class
     // MARK: - Location Seaerch
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
+    var selectedSearchedCity: String?
     
     // MARK: - Temporary Variables
     var initialCtrler: InitialPageController?

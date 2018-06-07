@@ -31,6 +31,13 @@ let device_offset_top: CGFloat = {
         return 0
     }
 }()
+let device_offset_top_full_place: CGFloat = {
+    if UIScreen.main.bounds.height == 812 {
+        return 54
+    } else {
+        return 0
+    }
+}()
 let device_offset_bot: CGFloat = {
     if UIScreen.main.bounds.height == 812 {
         return 30

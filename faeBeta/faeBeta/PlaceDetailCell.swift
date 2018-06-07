@@ -47,7 +47,7 @@ class PlaceDetailCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadCellContent() {
@@ -114,7 +114,7 @@ class PlaceDetailMapCell: PlaceDetailCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func setValueForCell(place: PlacePin) {
@@ -169,7 +169,7 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func setValueForCell(place: PlacePin) {
@@ -324,7 +324,7 @@ class PlaceDetailSection3Cell: PlaceDetailCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     override func setValueForCell(place: PlacePin) {
@@ -344,7 +344,7 @@ class PlaceOpeningHourCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadContent() {

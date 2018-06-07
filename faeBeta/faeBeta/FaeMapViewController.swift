@@ -135,7 +135,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var selectedLocation: FaePinAnnotation?
     private var uiviewLocationBar: FMLocationInfoBar!
     private var selectedLocAnno: LocPinAnnotationView?
-    private var activityIndicatorLocPin: UIActivityIndicatorView!
     private var locationPinClusterManager: CCHMapClusterController!
     
     // Chat
@@ -192,7 +191,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Auxiliary
     private var activityIndicator: UIActivityIndicatorView!
     
-    // System Functions
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -215,7 +214,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadPlaceDetail()
         loadPlaceListView()
         loadDistanceComponents()
-        loadLocationView()
+        loadLocInfoBar()
         loadActivityIndicator()
         
         timerSetup()
@@ -287,7 +286,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             if modeLocCreating == .off {
                 uiviewLocationBar.hide()
-                activityIndicatorLocPin.stopAnimating()
+                uiviewLocationBar.activityIndicator.stopAnimating()
                 if uiviewAfterAdded.frame.origin.y != screenHeight {
                     uiviewAfterAdded.hide()
                 }
@@ -630,7 +629,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 }
             } else if status == 500 { // TODO: error code undecided
                 
-            } else {
+            } else if status == 401 { // Unauthorized
                 self.invalidateAllTimer()
                 // clean up user info
                 showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: self, handler: { _ in
@@ -1082,9 +1081,9 @@ extension FaeMapViewController {
     }
 }
 
-// MARK: - MapView Delegates
-
 extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer {
+    
+    // MARK: - Cluster Delegates
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> IsSelectedCoordinate {
         for annotation in annotations {
@@ -1215,6 +1214,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    // MARK: - MapView Delegates
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         
         guard boolCanOpenPin else { return }
@@ -1233,6 +1234,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             }
             uiviewNameCard.boolSmallSize = false
             uiviewNameCard.btnProfile.isHidden = true
+            guard let anView = view as? SelfAnnotationView else { return }
+            anView.mapAvatar = Key.shared.userMiniAvatar
         }
     }
     
@@ -1287,6 +1290,35 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             }
         } else {
             return nil
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
+        Key.shared.lastChosenLoc = mapView.centerCoordinate
+        
+        if AUTO_REFRESH {
+            calculateDistanceOffset()
+        }
+        
+        if swipingState == .multipleSearch && tblPlaceResult.altitude == 0 {
+            tblPlaceResult.altitude = mapView.camera.altitude
+            joshprint("[regionDidChangeAnimated] altitude changed")
+        }
+        
+        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
+        
+        if mapMode == .selecting {
+            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
+            let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
+            let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
+            General.shared.getAddress(location: location) { (address) in
+                guard let addr = address as? String else { return }
+                DispatchQueue.main.async {
+                    self.lblSearchContent.text = addr
+                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                }
+            }
         }
     }
     
@@ -1392,35 +1424,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         let point_b = MKMapPointForCoordinate(coor_b)
         let distance = MKMetersBetweenMapPoints(point_a, point_b)
         return distance * 0.6
-    }
-    
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
-        Key.shared.lastChosenLoc = mapView.centerCoordinate
-        
-        if AUTO_REFRESH {
-            calculateDistanceOffset()
-        }
-        
-        if swipingState == .multipleSearch && tblPlaceResult.altitude == 0 {
-            tblPlaceResult.altitude = mapView.camera.altitude
-            joshprint("[regionDidChangeAnimated] altitude changed")
-        }
-        
-        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
-        
-        if mapMode == .selecting {
-            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-            let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
-            let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-            General.shared.getAddress(location: location) { (address) in
-                guard let addr = address as? String else { return }
-                DispatchQueue.main.async {
-                    self.lblSearchContent.text = addr
-                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
-                }
-            }
-        }
     }
     
     public func mapGesture(isOn: Bool) {
@@ -3003,11 +3006,11 @@ extension FaeMapViewController: LocDetailDelegate {
         selectedLocAnno?.zPos = 299
         guard firstAnn.type == .location else { return }
         guard let locationData = firstAnn.pinInfo as? LocationPin else { return }
-        let pinData = locationData
-        if pinData.id == -1 {
-            pinData.id = anView.locationId
-        }
         if anView.optionsOpened {
+            let pinData = locationData
+            if pinData.id == -1 {
+                pinData.id = anView.locationId
+            }
             uiviewSavedList.arrListSavedThisPin.removeAll()
             getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
                 pinData.arrListSavedThisPin = ids
@@ -3016,19 +3019,19 @@ extension FaeMapViewController: LocDetailDelegate {
                 anView.boolShowSavedNoti = true
             }
         }
-        let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
-        updateLocationInfo(location: cllocation)
+        if !anView.optionsReady {
+            let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
+            updateLocationInfo(location: cllocation)
+        }
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
-    private func loadLocationView() {
+    private func loadLocInfoBar() {
         uiviewLocationBar = FMLocationInfoBar()
         view.addSubview(uiviewLocationBar)
         uiviewLocationBar.alpha = 0
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLocInfoBarTap))
         uiviewLocationBar.addGestureRecognizer(tapGesture)
-        
-        loadActivityIndicatorLocPin()
     }
     
     @objc private func handleLocInfoBarTap() {
@@ -3053,16 +3056,6 @@ extension FaeMapViewController: LocDetailDelegate {
             anView.optionsReady = locationData.optionsReady
         }
         return anView
-    }
-    
-    private func loadActivityIndicatorLocPin() {
-        activityIndicatorLocPin = UIActivityIndicatorView()
-        activityIndicatorLocPin.activityIndicatorViewStyle = .gray
-        activityIndicatorLocPin.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
-        activityIndicatorLocPin.hidesWhenStopped = true
-        activityIndicatorLocPin.color = UIColor._2499090()
-        activityIndicatorLocPin.layer.zPosition = 2000
-        view.addSubview(activityIndicatorLocPin)
     }
     
     private func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
@@ -3108,8 +3101,7 @@ extension FaeMapViewController: LocDetailDelegate {
     private func updateLocationInfo(location: CLLocation) {
         uiviewLocationBar.show()
         uiviewLocationBar.updateLocationBar(name: "", address: "")
-        view.bringSubview(toFront: activityIndicatorLocPin)
-        activityIndicatorLocPin.startAnimating()
+        uiviewLocationBar.activityIndicator.startAnimating()
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else { return }
             
@@ -3166,7 +3158,7 @@ extension FaeMapViewController: LocDetailDelegate {
             self.selectedLocation?.address_2 = address_2
             DispatchQueue.main.async {
                 self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.activityIndicatorLocPin.stopAnimating()
+                self.uiviewLocationBar.activityIndicator.stopAnimating()
                 self.uiviewChooseLocs.updateDestination(name: address_1)
                 self.destinationAddr = RouteAddress(name: address_1, coordinate: location.coordinate)
             }
