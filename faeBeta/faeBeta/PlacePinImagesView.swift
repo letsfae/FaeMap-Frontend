@@ -11,7 +11,7 @@ import CHIPageControl
 
 class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     
-    var viewObjects = [UIView]()
+    var viewObjects = [UIImageView]()
     var numPages: Int = 0
     var pageControl: CHIPageControlAleppo?
     var currentPage = 0

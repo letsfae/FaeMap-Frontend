@@ -468,8 +468,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         guard uiviewPlaceImages.arrSKPhoto.count > 0 else {
             return
         }
-        let browser = SKPhotoBrowser(photos: uiviewPlaceImages.arrSKPhoto, initialPageIndex: uiviewPlaceImages.currentPage)
-        present(browser, animated: false, completion: nil)
+        let brow = SKPhotoBrowser(originImage: uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].image ?? UIImage(), photos: uiviewPlaceImages.arrSKPhoto, animatedFromView: uiviewPlaceImages)
+        brow.initializePageIndex(uiviewPlaceImages.currentPage)
+        present(brow, animated: true, completion: nil)
     }
     
     // MARK: - SeeAllPlacesDelegate
