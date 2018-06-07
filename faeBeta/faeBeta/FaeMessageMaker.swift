@@ -207,7 +207,12 @@ class FaeMessageMaker {
         let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
         var mediaItem: JSQLocationMediaItemCustom
         let data = strLocDetail.data(using: .utf8)
-        let jsonLoc = JSON(data: data!)
+        var jsonLoc: JSON!
+        do {
+            jsonLoc = try JSON(data: data!)
+        } catch {
+            print("JSON Error: \(error)")
+        }
         let clLoc = CLLocation(latitude: Double(jsonLoc["latitude"].stringValue)!, longitude: Double(jsonLoc["longitude"].stringValue)!)
         var snapImage: UIImage!
         if let nsdata = realmMessage.media {
@@ -230,7 +235,12 @@ class FaeMessageMaker {
     private static func placeJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
         let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
         let dataPlace = strPlaceDetail.data(using: .utf8)
-        let jsonPlace = JSON(data: dataPlace!)
+        var jsonPlace: JSON!
+        do {
+            jsonPlace = try JSON(data: dataPlace!)
+        } catch {
+            print("JSON Error: \(error)")
+        }
         var snapImage = UIImage(named: "place_result_48")
         if let media = realmMessage.media {
             snapImage = UIImage(data: media as Data)
@@ -244,7 +254,12 @@ class FaeMessageMaker {
     private static func collectionJSQMessage(_ realmMessage: RealmMessage) -> FaeMessage {
         let strCollectionDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
         let dataCollection = strCollectionDetail.data(using: .utf8)
-        let jsonCollection = JSON(data: dataCollection!)
+        var jsonCollection: JSON!
+        do {
+            jsonCollection = try JSON(data: dataCollection!)
+        } catch {
+            print("JSON Error: \(error)")
+        }
         let snapImage = UIImage(named: "defaultPlaceIcon")
         let mediaItem = JSQPlaceCollectionMediaItemCustom(itemID: jsonCollection["id"].intValue, type: "collection", snapImage: snapImage, text: jsonCollection["comment"].stringValue)
         mediaItem?.title = jsonCollection["name"].stringValue

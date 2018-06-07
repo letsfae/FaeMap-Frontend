@@ -629,6 +629,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 }
             } else if status == 500 { // TODO: error code undecided
                 
+<<<<<<< HEAD
             } else if status == 401 { // Unauthorized
                 self.invalidateAllTimer()
                 // clean up user info
@@ -638,6 +639,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                     Key.shared.navOpenMode = .welcomeFirst
                     self.navigationController?.setViewControllers([vcRoot], animated: true)
                 })
+=======
+            } else {
+                // log out
+>>>>>>> jichao_0328
             }
         }
     }
