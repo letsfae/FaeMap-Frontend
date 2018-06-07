@@ -54,16 +54,12 @@ class PlacePin: NSObject {
         icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         class_1 = json["categories"]["class1"].stringValue
         
-        var count = 0
         if let arrImgURLs = json["img"].array {
             for imgURL in arrImgURLs {
                 imageURLs.append(imgURL.stringValue)
-                count += 1
-                if count == 2 {
-                    break
-                }
             }
         }
+        if imageURLs.count == 2 { imageURLs.removeLast() }
         if imageURLs.count > 0 { imageURL = imageURLs[0] }
         url = json["url"].stringValue
         price = json["priceRange"].stringValue

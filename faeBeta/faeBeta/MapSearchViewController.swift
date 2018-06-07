@@ -7,7 +7,6 @@
 //
 import SwiftyJSON
 import MapKit
-
 import GooglePlaces
 
 @objc protocol MapSearchDelegate: class {
@@ -65,6 +64,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     // Google address autocompletion
     var googleFilter = GMSAutocompleteFilter()
     var googlePredictions = [GMSAutocompletePrediction]()
+    var geobytesCityData = [String]()
     
     var boolFromChat: Bool = false
     
@@ -158,8 +158,14 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        if Key.shared.selectedPrediction != nil {
-            schLocationBar.txtSchField.attributedText = Key.shared.selectedPrediction?.faeSearchBarAttributedText()
+        // 以下为Google Place API 使用的代码
+//        if Key.shared.selectedPrediction != nil {
+//            schLocationBar.txtSchField.attributedText = Key.shared.selectedPrediction?.faeSearchBarAttributedText()
+//        } else {
+//            schLocationBar.txtSchField.text = "Current Location"
+//        }
+        if Key.shared.selectedSearchedCity != nil {
+            schLocationBar.txtSchField.attributedText = Key.shared.selectedSearchedCity?.faeSearchBarAttributedText()
         } else {
             schLocationBar.txtSchField.text = "Current Location"
         }

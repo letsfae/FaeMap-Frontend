@@ -110,7 +110,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     // MARK: - Load Bar
@@ -615,7 +615,7 @@ class FMPlaceResultBarCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForPlace(_ placeInfo: PlacePin) {

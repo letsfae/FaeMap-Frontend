@@ -23,7 +23,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var uiviewSubHeader: FixedHeader!
     private var uiviewFixedHeader: FixedHeader!
     
-    private var uiviewScrollingPhotos: InfiniteScrollingView!
     private var uiviewPlaceImages: PlacePinImagesView!
     
     private var uiviewFooter: UIView!
@@ -50,9 +49,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var intCellCount = 0
     private var intSimilar = 0
     private var intNearby = 0
+    private var isScrollViewDidScrollEnabled: Bool = true
     
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
+    
+    // MARK: - Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,6 +126,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         super.viewDidDisappear(animated)
         UIApplication.shared.statusBarStyle = .default
     }
+    
+    // MARK: -
     
     private func initPlaceRelatedData() {
         uiviewSubHeader.setValue(place: place)
@@ -225,10 +229,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
+    // MARK: - UI Setups
+    
     private func loadHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top - 27 + txtHeight))
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101 - 27 + txtHeight))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: (309 - 27 + txtHeight) * screenHeightFactor + device_offset_top))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 * screenHeightFactor + device_offset_top, width: screenWidth, height: (101 - 27 + txtHeight) * screenHeightFactor))
         uiviewSubHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewSubHeader.lblCategory.frame.origin.y - 27 + txtHeight
         uiviewSubHeader.lblCategory.frame.origin.y = origin_y
@@ -238,7 +244,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     private func loadFixedHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
-        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101-27+txtHeight))
+        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22 * screenHeightFactor, width: screenWidth, height: (101-27+txtHeight) * screenHeightFactor))
         if screenHeight == 812 { uiviewFixedHeader.frame.origin.y = 30 }
         uiviewFixedHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewFixedHeader.lblCategory.frame.origin.y - 27 + txtHeight
@@ -276,19 +282,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
         
-//        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
-//        uiviewScrollingPhotos.viewCtrler = self
-//        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
-//        let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
-//        bottomLine.backgroundColor = UIColor._241241241()
-//        uiviewScrollingPhotos.addSubview(bottomLine)
-//        uiviewScrollingPhotos.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
-//        uiviewScrollingPhotos.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-//        uiviewScrollingPhotos.loadImages(place: place)
-        
         uiviewPlaceImages = PlacePinImagesView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 208 * screenHeightFactor + device_offset_top))
         tblPlaceDetail.addSubview(uiviewPlaceImages)
-        uiviewPlaceImages.numPages = place.imageURLs.count
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionTapImages))
+        uiviewPlaceImages.addGestureRecognizer(tapGes)
         uiviewPlaceImages.arrURLs = place.imageURLs
         uiviewPlaceImages.loadContent()
         uiviewPlaceImages.setup()
@@ -339,20 +336,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         loadAddtoCollection()
     }
     
-    @objc private func showSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
-            self.imgSaved.alpha = 1
-        }, completion: nil)
-    }
-    
-    @objc private func hideSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
-            self.imgSaved.alpha = 0
-        }, completion: nil)
-    }
-    
     private func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
@@ -366,31 +349,32 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
+    @objc private func showSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
+    
+    @objc private func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+
+    // MARK: - UIScrollViewDelegate
+    
     private var boolAnimateTo_1 = true
-    
-    
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if uiviewScrollingPhotos != nil {
-//            var frame = uiviewScrollingPhotos.frame
-//            if tblPlaceDetail.contentOffset.y < 0 {
-//                frame.origin.y = tblPlaceDetail.contentOffset.y
-//                uiviewScrollingPhotos.frame = frame
-//                let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
-//                uiviewScrollingPhotos.frame.size.height = height
-//                uiviewScrollingPhotos.imgPic_1.frame.size.height = height
-//            } else {
-//                frame.origin.y = 0
-//                uiviewScrollingPhotos.frame.origin.y = 0
-//            }
-//        }
         guard scrollView == tblPlaceDetail else { return }
         if uiviewPlaceImages != nil {
             var frame = uiviewPlaceImages.frame
             if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewPlaceImages.frame = frame
-                let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
+                let height = 208 * screenHeightFactor + device_offset_top - tblPlaceDetail.contentOffset.y
                 uiviewPlaceImages.frame.size.height = height
                 uiviewPlaceImages.contentSize.height = height
                 uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].frame.size.height = height
@@ -400,7 +384,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             }
         }
         var offset_y: CGFloat = 186 * screenHeightFactor
-        if screenHeight == 812 { offset_y = 180 }
+        if screenHeight == 812 { offset_y = 182 }
         if tblPlaceDetail.contentOffset.y >= offset_y {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
@@ -425,6 +409,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             }
         }
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        hideAddCollectionView()
+    }
+    
+    // MARK: - Actions
     
     @objc private func backToMapBoard(_ sender: UIButton) {
         let mbIsOn = SideMenuViewController.boolMapBoardIsOn
@@ -474,11 +464,15 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.hide()
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        hideAddCollectionView()
+    @objc private func actionTapImages() {
+        guard uiviewPlaceImages.arrSKPhoto.count > 0 else {
+            return
+        }
+        let browser = SKPhotoBrowser(photos: uiviewPlaceImages.arrSKPhoto, initialPageIndex: uiviewPlaceImages.currentPage)
+        present(browser, animated: false, completion: nil)
     }
     
-    // SeeAllPlacesDelegate
+    // MARK: - SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
@@ -499,14 +493,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         navigationController?.setViewControllers(arrCtrlers, animated: true)
     }
     
-    // AddPintoCollectionDelegate
+    // MARK: - AddPintoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
         present(vc, animated: true)
     }
     
-    // AfterAddedToListDelegate
+    // MARK: - AfterAddedToListDelegate
     func seeList() {
         // TODO VICKY
         uiviewAfterAdded.hide()
@@ -539,6 +533,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
 }
 
+// MARK: - FixedHeader
+
 class FixedHeader: UIView {
     
     var lblName: UILabel!
@@ -551,7 +547,7 @@ class FixedHeader: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func setupUI() {
@@ -580,7 +576,7 @@ class FixedHeader: UIView {
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewLine)
-        addConstraintsWithFormat("V:[v0(\(5 * screenHeightFactor))]-\(5 * screenHeightFactor)-|", options: [], views: uiviewLine)
+        addConstraintsWithFormat("V:[v0(\(5 * screenHeightFactor))]-0-|", options: [], views: uiviewLine)
     }
     
     public func setValue(place: PlacePin) {
@@ -591,9 +587,6 @@ class FixedHeader: UIView {
 }
 
 extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate, PlaceDetailMapCellDelegate {
-    
-    // MARK: - UIScrollViewDelegate
-    
     
     // MARK: - UITableViewDelegate & Datasource
     
@@ -734,7 +727,11 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         func tapMapOrHour() {
             let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
             PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
-            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.fade)
+            UIView.setAnimationsEnabled(false)
+            tableView.beginUpdates()
+            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            tableView.endUpdates()
+            UIView.setAnimationsEnabled(true)
         }
         func tapWebOrPhone() {
             var strURL = ""

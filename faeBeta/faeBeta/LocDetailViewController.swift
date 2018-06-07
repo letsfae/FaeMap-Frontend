@@ -203,7 +203,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         return nil
     }
     
-    func loadMap() {
+    private func loadMap() {
         mapView = MKMapView()
         if screenHeight == 812 {
             mapView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 352 + 60 + device_offset_top * 2)
@@ -231,7 +231,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    @objc func handleMapTap() {
+    @objc private func handleMapTap() {
         hideAddCollectionView()
         
         var arrCtrlers = navigationController?.viewControllers
@@ -248,7 +248,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
-    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
+    private func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
         faeMap.whereKey("geo_latitude", value: "\(lat)")
         faeMap.whereKey("geo_longitude", value: "\(long)")
         faeMap.whereKey("radius", value: "\(radius)")
@@ -273,13 +273,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func loadHeader() {
+    private func loadHeader() {
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
     
-    func loadFooter() {
+    private func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
@@ -319,28 +319,28 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         loadAddtoCollection()
     }
     
-    @objc func showSavedNoti(_ sender: Notification) {
+    @objc private func showSavedNoti(_ sender: Notification) {
         if let id = sender.object as? Int {
             self.locationId = id
         }
         savedNotiAnimation()
     }
     
-    func savedNotiAnimation() {
+    private func savedNotiAnimation() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
             self.imgSaved.alpha = 1
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    private func hideSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
             self.imgSaved.alpha = 0
         }, completion: nil)
     }
     
-    fileprivate func loadAddtoCollection() {
+    private func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
         uiviewSavedList.tableMode = .place
@@ -353,11 +353,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    @objc func backToMapBoard(_ sender: UIButton) {
+    @objc private func backToMapBoard(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func saveThisPin() {
+    @objc private func saveThisPin() {
         print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
@@ -379,7 +379,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    @objc func routeToThisPin() {
+    @objc private func routeToThisPin() {
         guard coordinate != nil else {
             showAlert(title: "Unexpected Error Occured!", message: "Please try again later", viewCtrler: self)
             return
@@ -391,7 +391,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vc, animated: false)
     }
     
-    @objc func shareThisPin() {
+    @objc private func shareThisPin() {
         let vcShareLoc = NewChatShareController(friendListMode: .location)
         AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
             vcShareLoc.locationDetail = "\(self.coordinate?.latitude ?? 0.0),\(self.coordinate?.longitude ?? 0.0),\(self.strLocName),\(self.strLocAddr)"
@@ -401,11 +401,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func showAddCollectionView() {
+    private func showAddCollectionView() {
         uiviewSavedList.show()
     }
     
-    @objc func hideAddCollectionView() {
+    @objc private func hideAddCollectionView() {
         uiviewSavedList.hide()
     }
     
@@ -466,7 +466,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
 
 extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    func loadCollectionView() {
+    private func loadCollectionView() {
         uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - device_offset_bot, width: screenWidth, height: 234))
         uiviewClctView.isHidden = true
         view.addSubview(uiviewClctView)
@@ -512,7 +512,7 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
         jumpToPlaceDetail(place: arrNearbyPlaces[indexPath.row])
     }
     
-    @objc func btnSeeAllTapped(_ sender: UIButton) {
+    @objc private func btnSeeAllTapped(_ sender: UIButton) {
         delegateSeeAll?.jumpToAllPlaces(places: arrNearbyPlaces, title: "Near this Location")
     }
 }

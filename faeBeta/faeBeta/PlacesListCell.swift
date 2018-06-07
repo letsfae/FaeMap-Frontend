@@ -29,7 +29,7 @@ class PlacesListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
@@ -87,7 +87,7 @@ class CategoryListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForCategory(_ cat: (key: String, value: Int)) {

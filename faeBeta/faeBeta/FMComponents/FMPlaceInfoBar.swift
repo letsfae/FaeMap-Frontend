@@ -51,7 +51,7 @@ class NewFMPlaceInfoBar: UIScrollView, UIScrollViewDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setup() {
@@ -246,7 +246,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -510,7 +510,7 @@ class PlaceView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func setValueForPlace(placeInfo: PlacePin) {
@@ -563,16 +563,18 @@ class PlaceView: UIView {
 class FMLocationInfoBar: UIView {
     
     private var imgType: UIImageView!
+    var activityIndicator: UIActivityIndicatorView!
     var lblName: UILabel!
     var lblAddr: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: 414 * screenWidthFactor, height: 80))
         loadContent()
+        loadActivityIndicator()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -607,6 +609,16 @@ class FMLocationInfoBar: UIView {
         lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblAddr)
         addConstraintsWithFormat("V:|-43-[v0(16)]", options: [], views: lblAddr)
+    }
+    
+    private func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        addSubview(activityIndicator)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: activityIndicator)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: activityIndicator)
     }
     
     func updateLocationBar(name: String, address: String) {

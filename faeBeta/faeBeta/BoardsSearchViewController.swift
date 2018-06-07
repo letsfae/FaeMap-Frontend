@@ -284,11 +284,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
         case .location:
             showOrHideViews(searchText: searchBar.txtSchField.text!)
-            //            if searchBar.txtSchField.text == "Current Location" {
-            //                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
-            //                searchBar.txtSchField.text = ""
-            //                searchBar.btnClose.isHidden = true
-            //            }
         default: break
         }
     }
@@ -297,12 +292,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         switch enterMode {
         case .place:
             getPlaceInfo(content: searchBar.txtSchField.text!)
-//            filteredPlaces.removeAll()
-//            for searchedPlace in searchedPlaces {
-//                if searchedPlace.name.lowercased().range(of: searchText.lowercased()) != nil {
-//                    filteredPlaces.append(searchedPlace)
-//                }
-//            }
         case .location:
             if searchText == "" {
                 showOrHideViews(searchText: searchText)

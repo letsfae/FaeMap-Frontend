@@ -20,6 +20,37 @@ extension String {
         return String(self.filter { okayChars.contains($0) })
     }
     
+    func faeSearchBarAttributedText() -> NSAttributedString {
+        
+        let fullText: NSMutableAttributedString = NSMutableAttributedString()
+        
+        let attr_0 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 18)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
+        let attr_1 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
+        
+        let components = self.split(separator: ",")
+        if components.count == 3 {
+            let city = String(components[0])
+            let state = String(components[1])
+            let country = String(components[2])
+            let primaryText = NSAttributedString(string: city + " ", attributes: attr_0)
+            let secondaryText = NSAttributedString(string: state + ", " + country, attributes: attr_1)
+            fullText.append(primaryText)
+            fullText.append(secondaryText)
+        } else if components.count == 2 {
+            let area_0 = String(components[0])
+            let area_1 = String(components[1])
+            let primaryText = NSAttributedString(string: area_0 + " ", attributes: attr_0)
+            let secondaryText = NSAttributedString(string: area_1, attributes: attr_1)
+            fullText.append(primaryText)
+            fullText.append(secondaryText)
+        } else {
+            let primaryText = NSAttributedString(string: self, attributes: attr_0)
+            fullText.append(primaryText)
+        }
+        
+        return fullText
+    }
+    
     // Trim newline in the beginning and ending of string
     func trim() -> String {
         return self.trimmingCharacters(in: CharacterSet.newlines)

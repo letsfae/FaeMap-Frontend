@@ -3,7 +3,7 @@ platform :ios, ‘9.0’
 use_frameworks!
 
 target 'faeBeta' do
-    pod 'Alamofire’, '~> 4.1’
+    pod 'Alamofire’
     pod 'SwiftyJSON’, '~> 3.1.4’
     pod 'JSQMessagesViewController'
     pod 'RealmSwift'
@@ -11,6 +11,8 @@ target 'faeBeta' do
     pod 'Gifu'
     pod 'IVBezierPathRenderer'
     pod 'GooglePlaces'
+    pod 'CHIPageControl/Aleppo'
+    pod 'CHIPageControl/Chimayo'
 end
 
 post_install do |installer|

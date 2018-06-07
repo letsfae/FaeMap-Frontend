@@ -15,7 +15,7 @@
 		500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */; };
 		50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50111C251F476B4B004EA00E /* FMChooseLocs.swift */; };
 		50178B7F2045A17D0068012C /* MBLoadingWaves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50178B7E2045A17D0068012C /* MBLoadingWaves.swift */; };
-		50181F0B1F688579004798B5 /* EXPCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPCells.swift */; };
+		50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPPicMapCells.swift */; };
 		5018565E1F33E39100ADD0F3 /* FMPlaceOptRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */; };
 		50188F3B1FC36C390038CAFF /* CCHCenterOfMassMapClusterer.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F221FC36C370038CAFF /* CCHCenterOfMassMapClusterer.m */; };
 		50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */ = {isa = PBXBuildFile; fileRef = 50188F251FC36C370038CAFF /* CCHMapClusterController.m */; };
@@ -54,6 +54,7 @@
 		50816DBC1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */; };
 		5087686A1F47AC6A009922BA /* UserPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508768691F47AC6A009922BA /* UserPin.swift */; };
 		508E651720C352E4003935CC /* EXPPicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E651620C352E4003935CC /* EXPPicCell.swift */; };
+		508E651920C45044003935CC /* CitySearcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E651820C45044003935CC /* CitySearcher.swift */; };
 		50902F551F2BB531002553F1 /* MapSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F541F2BB530002553F1 /* MapSearchViewController.swift */; };
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
@@ -68,6 +69,7 @@
 		50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */; };
 		50D10AE31FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */; };
 		50DD94231F21FE6D00F5C0F0 /* FMUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */; };
+		50DF3A6120C622D2003B93C2 /* LocViewMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF3A6020C622D2003B93C2 /* LocViewMapController.swift */; };
 		50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E50C151F9EF861008645C8 /* LocationPin.swift */; };
 		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
 		50F1D500204CF3F300AC57AC /* BasicMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */; };
@@ -350,7 +352,7 @@
 		500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterCellCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		50111C251F476B4B004EA00E /* FMChooseLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMChooseLocs.swift; sourceTree = "<group>"; };
 		50178B7E2045A17D0068012C /* MBLoadingWaves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBLoadingWaves.swift; sourceTree = "<group>"; };
-		50181F0A1F688579004798B5 /* EXPCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPCells.swift; sourceTree = "<group>"; };
+		50181F0A1F688579004798B5 /* EXPPicMapCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPPicMapCells.swift; sourceTree = "<group>"; };
 		5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceOptRoute.swift; sourceTree = "<group>"; };
 		50188F221FC36C370038CAFF /* CCHCenterOfMassMapClusterer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CCHCenterOfMassMapClusterer.m; path = ClusterManager/CCHCenterOfMassMapClusterer.m; sourceTree = "<group>"; };
 		50188F231FC36C370038CAFF /* CCHMapClusterControllerUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CCHMapClusterControllerUtils.h; path = ClusterManager/CCHMapClusterControllerUtils.h; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 		50816DBB1F318BF00021EC74 /* FMZoomButton+FMLocateSelf.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMZoomButton+FMLocateSelf.swift"; sourceTree = "<group>"; };
 		508768691F47AC6A009922BA /* UserPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPin.swift; sourceTree = "<group>"; };
 		508E651620C352E4003935CC /* EXPPicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPPicCell.swift; sourceTree = "<group>"; };
+		508E651820C45044003935CC /* CitySearcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearcher.swift; sourceTree = "<group>"; };
 		50902F541F2BB530002553F1 /* MapSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearchViewController.swift; sourceTree = "<group>"; };
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
@@ -417,6 +420,7 @@
 		50CB40811F3E738C00A20C6E /* FMPlacesTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlacesTable.swift; sourceTree = "<group>"; };
 		50D10AE21FCCEE1B00804B53 /* LeftMarginToEnableNavGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftMarginToEnableNavGestureView.swift; sourceTree = "<group>"; };
 		50DD94221F21FE6D00F5C0F0 /* FMUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMUserInfo.swift; sourceTree = "<group>"; };
+		50DF3A6020C622D2003B93C2 /* LocViewMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocViewMapController.swift; sourceTree = "<group>"; };
 		50E50C151F9EF861008645C8 /* LocationPin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPin.swift; sourceTree = "<group>"; };
 		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
 		50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMapController.swift; sourceTree = "<group>"; };
@@ -820,8 +824,9 @@
 			children = (
 				504CE4D11F67BF4500070284 /* ExploreViewController.swift */,
 				50721802202A8276000EF2EB /* EXPClctTypeCell.swift */,
-				50181F0A1F688579004798B5 /* EXPCells.swift */,
 				508E651620C352E4003935CC /* EXPPicCell.swift */,
+				5028597E209A1F3400F98B00 /* ExploreMapController.swift */,
+				50181F0A1F688579004798B5 /* EXPPicMapCells.swift */,
 			);
 			name = Explore;
 			sourceTree = "<group>";
@@ -873,6 +878,7 @@
 			isa = PBXGroup;
 			children = (
 				50E940831F79B39500269945 /* LocDetailViewController.swift */,
+				50DF3A6020C622D2003B93C2 /* LocViewMapController.swift */,
 			);
 			name = LocationDetail;
 			sourceTree = "<group>";
@@ -1200,6 +1206,7 @@
 		B0CFC9981CED2CE700EC356A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				508E651820C45044003935CC /* CitySearcher.swift */,
 				B82767531DF5DD2E00CFB912 /* Database.swift */,
 				B05E2DBE1DD24FEE00D6745A /* Key.swift */,
 				B0CFC9A51CED344200EC356A /* HTTPClient.swift */,
@@ -1213,7 +1220,6 @@
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				1873C4C71F214261007669DD /* FaeContact.swift */,
 				B3273E661F8C220700CFEC8E /* FaeCollection.swift */,
-				CE97A9B81E391EC9005BBF6C /* Yelp */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1249,7 +1255,6 @@
 				5057A4DD205FFA0200C6B99B /* PlacesDownloader */,
 				50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */,
 				503BF9D6208517AA00635E65 /* RoutingMapController.swift */,
-				5028597E209A1F3400F98B00 /* ExploreMapController.swift */,
 				50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */,
 				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
@@ -1316,9 +1321,9 @@
 			children = (
 				B323A0ED1F425D6E005C24D1 /* PlaceDetailViewController.swift */,
 				B323A0EF1F436986005C24D1 /* PlaceDetailCell.swift */,
-				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
 				50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */,
 				502E422920C094A800995881 /* PlacePinImagesView.swift */,
+				B3170E9D1F454D080072F9CD /* InfiniteScrollingView.swift */,
 			);
 			name = PlaceDetail;
 			sourceTree = "<group>";
@@ -1560,13 +1565,6 @@
 			name = Realm;
 			sourceTree = "<group>";
 		};
-		CE97A9B81E391EC9005BBF6C /* Yelp */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Yelp;
-			sourceTree = "<group>";
-		};
 		DC9F45351E078BA100128444 /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
@@ -1788,6 +1786,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/CHIPageControl/CHIPageControl.framework",
 				"${BUILT_PRODUCTS_DIR}/Gifu/Gifu.framework",
 				"${BUILT_PRODUCTS_DIR}/IVBezierPathRenderer/IVBezierPathRenderer.framework",
 				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController/JSQMessagesViewController.framework",
@@ -1800,6 +1799,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CHIPageControl.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Gifu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IVBezierPathRenderer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
@@ -1933,6 +1933,7 @@
 				B0714D461D5E435200356705 /* FaeSearchBar.swift in Sources */,
 				B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */,
 				5028597F209A1F3400F98B00 /* ExploreMapController.swift in Sources */,
+				50DF3A6120C622D2003B93C2 /* LocViewMapController.swift in Sources */,
 				9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */,
 				DC9F453D1E079B2D00128444 /* PrivacyPolicyViewController.swift in Sources */,
 				B3170E9E1F454D080072F9CD /* InfiniteScrollingView.swift in Sources */,
@@ -1977,6 +1978,7 @@
 				B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */,
 				50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */,
 				DCF1EBD21DA31D240066B3ED /* ChatVCCollectionView.swift in Sources */,
+				508E651920C45044003935CC /* CitySearcher.swift in Sources */,
 				5018565E1F33E39100ADD0F3 /* FMPlaceOptRoute.swift in Sources */,
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B30B878C1F80212000B52027 /* EditMemoViewController.swift in Sources */,
@@ -2122,7 +2124,7 @@
 				5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
-				50181F0B1F688579004798B5 /* EXPCells.swift in Sources */,
+				50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
 				9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,

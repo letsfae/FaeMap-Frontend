@@ -41,18 +41,37 @@ extension MapSearchViewController {
             }
             tblPlacesRes.isScrollEnabled = true
         } else {  // search location
+            // 以下为Google Place API 使用的代码
+//            uiviewPics.isHidden = true
+//            uiviewNoResults.isHidden = true
+//            uiviewSchResBg.isHidden = false
+//            uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
+//            tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
+//
+//            if searchText == "" || googlePredictions.count == 0 {
+//                uiviewSchResBg.frame.origin.y = 124 + device_offset_top
+//                uiviewSchLocResBg.isHidden = true
+//            } else {
+//                uiviewSchLocResBg.isHidden = false
+//                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * googlePredictions.count))
+//                tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
+//                uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
+//            }
+//            tblPlacesRes.isScrollEnabled = false
+//            tblLocationRes.reloadData()
+            
             uiviewPics.isHidden = true
             uiviewNoResults.isHidden = true
             uiviewSchResBg.isHidden = false
             uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
-            if searchText == "" || googlePredictions.count == 0 {
+            if searchText == "" || geobytesCityData.count == 0 {
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * googlePredictions.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * geobytesCityData.count))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
             }
@@ -147,10 +166,18 @@ extension MapSearchViewController {
                 navigationController?.popViewController(animated: false)
             }
         } else {
-            if googlePredictions.count > 0 {
-                schLocationBar.txtSchField.attributedText = googlePredictions[0].faeSearchBarAttributedText()
-                Key.shared.selectedPrediction = googlePredictions[0]
-                googlePredictions.removeAll()
+            // 以下为Google Place API 使用的代码
+//            if googlePredictions.count > 0 {
+//                schLocationBar.txtSchField.attributedText = googlePredictions[0].faeSearchBarAttributedText()
+//                Key.shared.selectedPrediction = googlePredictions[0]
+//                googlePredictions.removeAll()
+//                showOrHideViews(searchText: "")
+//                schPlaceBar.txtSchField.becomeFirstResponder()
+//            }
+            if geobytesCityData.count > 0 {
+                schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
+                Key.shared.selectedSearchedCity = geobytesCityData[0]
+                geobytesCityData.removeAll()
                 showOrHideViews(searchText: "")
                 schPlaceBar.txtSchField.becomeFirstResponder()
             }

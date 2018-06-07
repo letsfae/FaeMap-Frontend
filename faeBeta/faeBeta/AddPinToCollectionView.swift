@@ -61,7 +61,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadCollectionData() {
@@ -414,7 +414,7 @@ class AfterAddedToListView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadContent() {
