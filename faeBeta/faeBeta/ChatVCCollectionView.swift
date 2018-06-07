@@ -140,10 +140,10 @@ extension ChatViewController {
     
     // delegate when user tap the bubble, like image, location
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
-        if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
+        /*if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
             closeToolbarContentView()
         }
-        floatContentOffsetY = collectionView.contentOffset.y
+        floatContentOffsetY = collectionView.contentOffset.y*/
         let faeMessage = arrFaeMessages[indexPath.row]
         let realm = try! Realm()
         guard let realmMessage = realm.filterMessage(faeMessage.messageId) else {
@@ -193,8 +193,13 @@ extension ChatViewController {
             while !(arrControllers?.last is InitialPageController) {
                 arrControllers?.removeLast()
             }
-            let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
-            let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
+            guard let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "").data(using: .utf8) else { return }
+            var jsonLocDetail: JSON!
+            do {
+                jsonLocDetail = try JSON(data: strLocDetail)
+            } catch {
+                print("JSON Error: \(error)")
+            }
             //let vcLocDetail = LocDetailViewController()
             let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
             mapDelegate?.jumpToViewLocation(coordinate: coordinate, created: false)
@@ -206,8 +211,13 @@ extension ChatViewController {
              navigationController?.pushViewController(self.vcLocDetail, animated: true)*/
         case "[Place]":
             let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
-            let dataPlace = strPlaceDetail.data(using: .utf8)
-            let jsonPlace = JSON(data: dataPlace!)
+            guard let dataPlace = strPlaceDetail.data(using: .utf8) else { return }
+            var jsonPlace: JSON!
+            do {
+                jsonPlace = try JSON(data: dataPlace)
+            } catch {
+                print("JSON Error: \(error)")
+            }
             FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     guard let placeInfo = message else { return }
@@ -219,8 +229,13 @@ extension ChatViewController {
             }
         case "[Collection]":
             let strCollectionDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
-            let dataCollection = strCollectionDetail.data(using: .utf8)
-            let jsonCollection = JSON(data: dataCollection!)
+            guard let dataCollection = strCollectionDetail.data(using: .utf8) else { return }
+            var jsonCollection: JSON!
+            do {
+                jsonCollection = try JSON(data: dataCollection)
+            } catch {
+                print("JSON Error: \(error)")
+            }
             let vcCollection = CollectionsListDetailViewController()
             vcCollection.enterMode = .place
             vcCollection.boolFromChat = true
@@ -293,7 +308,7 @@ extension ChatViewController {
 
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         view.endEditing(true)
-        resetToolbarButtonIcon()
+        //resetToolbarButtonIcon()
         let faeMessage = arrFaeMessages[indexPath.row]
         uiviewNameCard.userId = Int(faeMessage.senderId)!
         uiviewNameCard.boolSmallSize = true

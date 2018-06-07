@@ -82,12 +82,20 @@
 		9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4736CC1FB811440058770C /* SetAvatar.swift */; };
 		9F64B3F520019BD40007848B /* FaeScrollBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F64B3F420019BD40007848B /* FaeScrollBar.swift */; };
 		9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */; };
+		9F96BC3C20C309000080DCED /* ChatInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC3B20C309000080DCED /* ChatInputTextView.swift */; };
+		9F96BC3E20C309840080DCED /* NSLayoutConstraintSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC3D20C309840080DCED /* NSLayoutConstraintSet.swift */; };
+		9F96BC4020C30ABC0080DCED /* ChatInputBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC3F20C30ABC0080DCED /* ChatInputBarButton.swift */; };
+		9F96BC4220C30CAC0080DCED /* ChatInputBarViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC4120C30CAC0080DCED /* ChatInputBarViews.swift */; };
+		9F96BC4420C327200080DCED /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC4320C327200080DCED /* UIView+Extension.swift */; };
+		9F96BC4620C327980080DCED /* FaeInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC4520C327980080DCED /* FaeInputBar.swift */; };
+		9F96BC4820C327F20080DCED /* FaeInputBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F96BC4720C327F20080DCED /* FaeInputBarDelegate.swift */; };
 		9F9813A31F64DDFE006A3143 /* ChatSendLocationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */; };
 		9F99F0E12025746A007CE6FE /* FaePhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */; };
 		9F99F0E3202574EB007CE6FE /* FaePHAssetCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E2202574EB007CE6FE /* FaePHAssetCollection.swift */; };
 		9F99F0E52025751D007CE6FE /* FaePhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */; };
 		9F99F0E720257584007CE6FE /* FaePhotoPickerCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */; };
 		9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */; };
+		9FA6FC0F20BF80E700D0F0A8 /* ChatVCInputbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */; };
 		9FAAA4AD2091418E008BB358 /* UIApplication+UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */; };
 		9FAAA4AE2091418E008BB358 /* SKMesurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4962091418A008BB358 /* SKMesurement.swift */; };
 		9FAAA4B02091418E008BB358 /* SKPaginationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4982091418B008BB358 /* SKPaginationView.swift */; };
@@ -316,7 +324,7 @@
 		B8FAD7E51EFDBE7200600042 /* InitialPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */; };
 		C1D843F91EBA849A00499BEA /* SavedPinsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FFE911EA84CEB0079D1A7 /* SavedPinsTableViewCell.swift */; };
 		C1DE0DEB1E9FF54F003188BE /* RealmChatBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */; };
-		CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* LocationExtendView.swift */; };
+		CE1EA5771E5CC21100205857 /* InputBarTopPinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1EA5761E5CC21100205857 /* InputBarTopPinView.swift */; };
 		CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */; };
 		CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7D2C571E451AF1003C0577 /* Welcomer.swift */; };
 		DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */ = {isa = PBXBuildFile; fileRef = DC084A8E1DDC4E84007DCC88 /* EmojiService.m */; };
@@ -443,12 +451,20 @@
 		9F64B3F420019BD40007848B /* FaeScrollBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeScrollBar.swift; sourceTree = "<group>"; };
 		9F64FF371FBBCF0000388C10 /* RegisterPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPhoneViewController.swift; sourceTree = "<group>"; };
 		9F7A80B520976F7200ECAE1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F96BC3B20C309000080DCED /* ChatInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputTextView.swift; sourceTree = "<group>"; };
+		9F96BC3D20C309840080DCED /* NSLayoutConstraintSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintSet.swift; sourceTree = "<group>"; };
+		9F96BC3F20C30ABC0080DCED /* ChatInputBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputBarButton.swift; sourceTree = "<group>"; };
+		9F96BC4120C30CAC0080DCED /* ChatInputBarViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputBarViews.swift; sourceTree = "<group>"; };
+		9F96BC4320C327200080DCED /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		9F96BC4520C327980080DCED /* FaeInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeInputBar.swift; sourceTree = "<group>"; };
+		9F96BC4720C327F20080DCED /* FaeInputBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeInputBarDelegate.swift; sourceTree = "<group>"; };
 		9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatSendLocationController.swift; sourceTree = "<group>"; };
 		9F99F0E02025746A007CE6FE /* FaePhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPicker.swift; sourceTree = "<group>"; };
 		9F99F0E2202574EB007CE6FE /* FaePHAssetCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePHAssetCollection.swift; sourceTree = "<group>"; };
 		9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoLibrary.swift; sourceTree = "<group>"; };
 		9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPickerCells.swift; sourceTree = "<group>"; };
 		9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAlbumViewController.swift; sourceTree = "<group>"; };
+		9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVCInputbar.swift; sourceTree = "<group>"; };
 		9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+UIWindow.swift"; sourceTree = "<group>"; };
 		9FAAA4962091418A008BB358 /* SKMesurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKMesurement.swift; sourceTree = "<group>"; };
 		9FAAA4982091418B008BB358 /* SKPaginationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPaginationView.swift; sourceTree = "<group>"; };
@@ -690,7 +706,7 @@
 		B8F6336A1DCA64EB00C9A079 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		B8FAD7E41EFDBE7200600042 /* InitialPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialPageController.swift; sourceTree = "<group>"; };
 		C1DE0DEA1E9FF54F003188BE /* RealmChatBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChatBase.swift; sourceTree = "<group>"; };
-		CE1EA5761E5CC21100205857 /* LocationExtendView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationExtendView.swift; sourceTree = "<group>"; };
+		CE1EA5761E5CC21100205857 /* InputBarTopPinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputBarTopPinView.swift; sourceTree = "<group>"; };
 		CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPickerMini.swift; sourceTree = "<group>"; };
 		CE7D2C571E451AF1003C0577 /* Welcomer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Welcomer.swift; sourceTree = "<group>"; };
 		D1C7940300202F2022AF7263 /* Pods-faeBeta.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.debug.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.debug.xcconfig"; sourceTree = "<group>"; };
@@ -940,6 +956,20 @@
 			name = extensions;
 			sourceTree = "<group>";
 		};
+		9F96BC3A20C308660080DCED /* InputBar */ = {
+			isa = PBXGroup;
+			children = (
+				9F96BC4520C327980080DCED /* FaeInputBar.swift */,
+				9F96BC4720C327F20080DCED /* FaeInputBarDelegate.swift */,
+				9F96BC3B20C309000080DCED /* ChatInputTextView.swift */,
+				9F96BC3F20C30ABC0080DCED /* ChatInputBarButton.swift */,
+				9F96BC4120C30CAC0080DCED /* ChatInputBarViews.swift */,
+				9F96BC3D20C309840080DCED /* NSLayoutConstraintSet.swift */,
+				9F96BC4320C327200080DCED /* UIView+Extension.swift */,
+			);
+			name = InputBar;
+			sourceTree = "<group>";
+		};
 		9F979601208C519B00DF60D6 /* Recents */ = {
 			isa = PBXGroup;
 			children = (
@@ -1031,7 +1061,9 @@
 		B0714DBD1D5E46EF00356705 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				9F96BC3A20C308660080DCED /* InputBar */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
+				9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatVCCollectionView.swift */,
 				DCF1EBD31DA31E8C0066B3ED /* ChatVCHandleMessages.swift */,
 				DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */,
@@ -1056,7 +1088,7 @@
 		B0714DC71D5E474600356705 /* Location */ = {
 			isa = PBXGroup;
 			children = (
-				CE1EA5761E5CC21100205857 /* LocationExtendView.swift */,
+				CE1EA5761E5CC21100205857 /* InputBarTopPinView.swift */,
 				9F9813A21F64DDFE006A3143 /* ChatSendLocationController.swift */,
 				CE59B7EA1E53D5B9007FA078 /* LocationPickerMini.swift */,
 			);
@@ -1894,7 +1926,7 @@
 				B8849EC21EEB147A00D4588D /* MBTalkCommentsCell.swift in Sources */,
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				9FAAA4C12091418E008BB358 /* SKDetectingImageView.swift in Sources */,
-				CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */,
+				CE1EA5771E5CC21100205857 /* InputBarTopPinView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
 				50188F3B1FC36C390038CAFF /* CCHCenterOfMassMapClusterer.m in Sources */,
@@ -1987,8 +2019,11 @@
 				B0714E001D62525A00356705 /* RegisterUsernameViewController.swift in Sources */,
 				B30B878C1F80212000B52027 /* EditMemoViewController.swift in Sources */,
 				B85FFE9A1EA84CEB0079D1A7 /* PlacesAndLocationsViewController.swift in Sources */,
+				9F96BC3E20C309840080DCED /* NSLayoutConstraintSet.swift in Sources */,
+				9F96BC3C20C309000080DCED /* ChatInputTextView.swift in Sources */,
 				503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */,
 				B064EF2C1D74ECDF00C078F5 /* FAENumberKeyboard.swift in Sources */,
+				9F96BC4020C30ABC0080DCED /* ChatInputBarButton.swift in Sources */,
 				9FAAA4C32091418E008BB358 /* SKZoomingScrollView.swift in Sources */,
 				50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
@@ -2051,7 +2086,9 @@
 				50188F431FC36C390038CAFF /* CCHNearCenterMapClusterer.m in Sources */,
 				B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */,
 				506C4B801F948C440078F5C5 /* LSMProfilePic.swift in Sources */,
+				9F96BC4620C327980080DCED /* FaeInputBar.swift in Sources */,
 				9FAAA4B42091418E008BB358 /* SKCacheable.swift in Sources */,
+				9F96BC4220C30CAC0080DCED /* ChatInputBarViews.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				9FC92ACB2015547700DD3250 /* StickerCollection.swift in Sources */,
 				B0714D821D5E465900356705 /* Camera.swift in Sources */,
@@ -2070,6 +2107,7 @@
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
+				9F96BC4820C327F20080DCED /* FaeInputBarDelegate.swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,
 				9FAAA4B32091418E008BB358 /* SKPagingScrollView.swift in Sources */,
@@ -2089,6 +2127,7 @@
 				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
 				B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */,
 				50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */,
+				9FA6FC0F20BF80E700D0F0A8 /* ChatVCInputbar.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
@@ -2116,6 +2155,7 @@
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B37E5DBB1F831040008A6B4B /* SetMapsViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */,
+				9F96BC4420C327200080DCED /* UIView+Extension.swift in Sources */,
 				B30B87861F7F0F3400B52027 /* ManageColListCell.swift in Sources */,
 				B8849EBD1EEB147A00D4588D /* MBPeopleCell.swift in Sources */,
 				B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */,
