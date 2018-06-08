@@ -75,8 +75,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         loadChooseOption()
         observeOnCollectionChange()
         ColListDetailHeader.boolExpandMore = false
-        
-//        print(realm.objects(CollectedPin.self))
     }
     
     deinit {

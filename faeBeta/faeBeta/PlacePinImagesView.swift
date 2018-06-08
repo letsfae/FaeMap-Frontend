@@ -121,6 +121,13 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         layoutIfNeeded()
     }
     
+    public func updateContent(_ index: Int) {
+        let pageWidth = frame.size.width
+        contentOffset = CGPoint(x: pageWidth*(CGFloat(index+1)), y: 0)
+        currentPage = index
+        pageControl?.set(progress: index, animated: false)
+    }
+    
     // MARK: - UIScrollView Delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
