@@ -62,8 +62,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         case other
     }
     
-    var enterMode: SettingEnterMode!
-    var pswdEnterMode: PasswordEnterMode!
+    var enterMode: SettingEnterMode = .birth
+    var pswdEnterMode: PasswordEnterMode = .other
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -115,7 +115,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         case .newEmail:
             lblTitle.text = "\nYour New Email"
             loadChangeEmailPage()
-        default: break
         }
         
         if enterMode == .name || enterMode == .password || enterMode == .newEmail {
@@ -349,7 +348,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
                     print("[Check Email Existence Fail] \(status) \(message!)")
                 }
             }
-        default: break
         }
     }
     

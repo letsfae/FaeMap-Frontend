@@ -38,7 +38,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         case phone
     }
     
-    var enterMode: SettingEnterMode!
+    var enterMode: SettingEnterMode = .email
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -78,7 +78,6 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             loadUserName()
         case .phone:
             loadPhone()
-        default: break
         }
     }
     
@@ -252,7 +251,6 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             let vc = SignInPhoneViewController()
             vc.enterMode = .settingsUpdate
             navigationController?.pushViewController(vc, animated: true)
-        default: break
         }
     }
     

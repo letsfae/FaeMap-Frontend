@@ -15,7 +15,7 @@ enum EnterPlaceLocDetailMode {
     case map
 }
 
-class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
+class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, SKPhotoBrowserDelegate {
     
     public var place: PlacePin!
     private var uiviewHeader: UIView!
@@ -468,9 +468,20 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         guard uiviewPlaceImages.arrSKPhoto.count > 0 else {
             return
         }
-        let brow = SKPhotoBrowser(originImage: uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].image ?? UIImage(), photos: uiviewPlaceImages.arrSKPhoto, animatedFromView: uiviewPlaceImages)
-        brow.initializePageIndex(uiviewPlaceImages.currentPage)
-        present(brow, animated: true, completion: nil)
+        let browser = SKPhotoBrowser(originImage: uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].image ?? UIImage(), photos: uiviewPlaceImages.arrSKPhoto, animatedFromView: uiviewPlaceImages)
+        browser.initializePageIndex(uiviewPlaceImages.currentPage)
+        browser.delegate = self
+        present(browser, animated: true, completion: nil)
+    }
+    
+    // MARK: - SKPhotoBrowserDelegate
+    func didScrollToIndex(_ browser: SKPhotoBrowser, index: Int) {
+        print("didScrollToIndex")
+        uiviewPlaceImages.updateContent(index)
+    }
+    
+    func viewForPhoto(_ browser: SKPhotoBrowser, index: Int) -> UIView? {
+        return uiviewPlaceImages
     }
     
     // MARK: - SeeAllPlacesDelegate

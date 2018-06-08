@@ -27,7 +27,8 @@ enum EnterMode: String {
 }
 
 class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
-    var enterMode: CollectionTableMode!
+    
+    var enterMode: CollectionTableMode = .place
     weak var delegate: BoardsSearchDelegate?
     var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
     
@@ -284,7 +285,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             }
         case .location:
             showOrHideViews(searchText: searchBar.txtSchField.text!)
-        default: break
         }
     }
     
@@ -303,7 +303,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 searchCompleter.queryFragment = searchText
                 showOrHideViews(searchText: searchText)
             }
-        default: break
         }
     }
     
@@ -315,8 +314,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             delegate?.jumpToPlaceSearchResult?(searchText: searchBar.txtSchField.text!, places: filteredPlaces)
             navigationController?.popViewController(animated: false)
         case .location:
-            break
-        default:
             break
         }
     }
