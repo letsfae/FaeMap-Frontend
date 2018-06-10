@@ -1389,7 +1389,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewLocationBar.hide()
         uiviewPinActionDisplay.hide()
         uiviewSavedList.arrListSavedThisPin.removeAll()
-        uiviewAfterAdded.pinIdInAction = -1
+        uiviewAfterAdded.reset()
         boolCanOpenPin = true
         
         selectedLocAnno?.hideButtons()
@@ -3050,7 +3050,7 @@ extension FaeMapViewController: LocDetailDelegate {
     private func createLocationPin(point: CGPoint, position: CLLocationCoordinate2D? = nil) {
         guard modeLocation == .off else { return }
         modeLocCreating = .on
-        
+        uiviewAfterAdded.reset()
         var coordinate: CLLocationCoordinate2D!
         if position == nil {
             coordinate = faeMapView.convert(point, toCoordinateFrom: faeMapView)
