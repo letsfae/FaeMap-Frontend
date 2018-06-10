@@ -394,7 +394,7 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
                 switch encodingResult {
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
-                        print(response.response.debugDescription)
+                        //print(response.response.debugDescription)
                         if response.response != nil {
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode, resMess)

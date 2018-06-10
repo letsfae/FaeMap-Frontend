@@ -12,9 +12,11 @@ import SwiftyJSON
 class AllPlacesMapController: BasicMapController {
     
     public var isFromCollection = false
-    public var enterMode = CollectionTableMode.place
-    var strTitle = ""
-    var arrIds = [Int]() {
+    public var enterMode = CollectionTableMode.place // or .location
+    public var strTitle = ""
+    
+    // Use ids to load pins
+    public var arrIds = [Int]() {
         didSet {
             desiredCount = arrIds.count
         }
@@ -23,16 +25,19 @@ class AllPlacesMapController: BasicMapController {
     private var annos = [FaePinAnnotation]()
     private var uiviewPinActionDisplay: FMPinActionDisplay!
     
-    // Collecting Pin Control
+    // Pin Saving Ctrl
     private var uiviewSavedList: AddPinToCollectionView!
     private var uiviewAfterAdded: AfterAddedToListView!
     
+    // Location Pin Ctrl
     private var selectedLocation: FaePinAnnotation?
     private var selectedLocAnno: LocPinAnnotationView?
     
+    // Loc Pin Info Bar
     private var uiviewLocationBar: FMLocationInfoBar!
     private var destinationAddr: RouteAddress!
     
+    // For loading pin by ids
     private var desiredCount = 0
     private var completionCount = 0 {
         didSet {
@@ -42,6 +47,8 @@ class AllPlacesMapController: BasicMapController {
             loadAnnos()
         }
     }
+    
+    // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,12 +67,7 @@ class AllPlacesMapController: BasicMapController {
         PIN_INSTANT_SHOWUP = true
     }
     
-    override func loadPlaceInfoBar() {
-        super.loadPlaceInfoBar()
-        uiviewPlaceBar.delegate = self
-        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionPlaceBarTap))
-        uiviewPlaceBar.addGestureRecognizer(tapGes)
-    }
+    // MARK: - UI Setups
     
     override func loadTopBar() {
         super.loadTopBar()
@@ -80,13 +82,6 @@ class AllPlacesMapController: BasicMapController {
         uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewPinActionDisplay)
     }
     
-    override func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        super.mapView(mapView, didSelect: view)
-        if view is LocPinAnnotationView {
-            tapLocationPin(didSelect: view)
-        }
-    }
-    
     private func loadInfoBar() {
         if enterMode == .place {
             loadPlaceInfoBar()
@@ -95,19 +90,28 @@ class AllPlacesMapController: BasicMapController {
         }
     }
     
+    override func loadPlaceInfoBar() {
+        super.loadPlaceInfoBar()
+        uiviewPlaceBar.delegate = self
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionPlaceBarTap))
+        uiviewPlaceBar.addGestureRecognizer(tapGes)
+    }
+    
+    private func loadLocInfoBar() {
+        uiviewLocationBar = FMLocationInfoBar()
+        view.addSubview(uiviewLocationBar)
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionLocBarTap))
+        uiviewLocationBar.addGestureRecognizer(tapGes)
+    }
+    
+    // MARK: - Load Annotations
+    
     private func loadAnnotations() {
         if isFromCollection {
             loadAnnotations(ids: arrIds, type: enterMode)
         } else {
             loadAnnotations(pins: arrPins)
         }
-    }
-    
-    private func loadLocInfoBar() {
-        uiviewLocationBar = FMLocationInfoBar()
-        view.addSubview(uiviewLocationBar)
-//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleLocInfoBarTap))
-//        uiviewLocationBar.addGestureRecognizer(tapGesture)
     }
     
     private func loadAnnotations(pins: [FaePin]) {
@@ -121,6 +125,7 @@ class AllPlacesMapController: BasicMapController {
     }
     
     private func loadAnnotations(ids: [Int], type: CollectionTableMode) {
+        guard isFromCollection else { return }
         completionCount = 0
         func getPin(id: Int, type: CollectionTableMode) {
             FaeMap.shared.getPin(type: type.rawValue, pinId: String(id)) { (status, message) in
@@ -142,6 +147,7 @@ class AllPlacesMapController: BasicMapController {
                 self.completionCount += 1
             }
         }
+        // For every id, try to get its info from cache, otherwise from server
         for id in ids {
             switch type {
             case .place:
@@ -184,6 +190,8 @@ class AllPlacesMapController: BasicMapController {
         zoomToFitAllAnnotations(annotations: annos)
     }
     
+    // MARK: - Place Pin Ctrl
+    
     override func tapPlacePin(didSelect view: MKAnnotationView) {
         super.tapPlacePin(didSelect: view)
         guard let anView = view as? PlacePinAnnotationView else { return }
@@ -203,6 +211,45 @@ class AllPlacesMapController: BasicMapController {
             }
         }
     }
+    
+    override func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+        let identifier = "place"
+        var anView: PlacePinAnnotationView
+        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
+            dequeuedView.annotation = annotation
+            anView = dequeuedView
+        } else {
+            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        anView.assignImage(first.icon)
+        anView.delegate = self
+        return anView
+    }
+    
+    private func deselectAllPlaceAnnos(full: Bool = true) {
+        
+        uiviewPinActionDisplay.hide()
+        
+        //        if let idx = selectedPlace?.class_2_icon_id {}
+        if full {
+            selectedPlace?.icon = #imageLiteral(resourceName: "place_map_48")
+            selectedPlace?.isSelected = false
+            guard let img = selectedPlace?.icon else { return }
+            selectedPlaceAnno?.assignImage(img)
+            selectedPlaceAnno?.hideButtons()
+            selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
+            selectedPlaceAnno?.zPos = 7
+            selectedPlaceAnno?.optionsReady = false
+            selectedPlaceAnno?.optionsOpened = false
+            selectedPlaceAnno = nil
+            selectedPlace = nil
+        } else {
+            selectedPlaceAnno?.hideButtons()
+            selectedPlaceAnno?.optionsOpened = false
+        }
+    }
+    
+    // MARK: - Loc Pin Ctrl
     
     private func tapLocationPin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
@@ -241,24 +288,6 @@ class AllPlacesMapController: BasicMapController {
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
-    override func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        Key.shared.lastChosenLoc = mapView.centerCoordinate
-    }
-    
-    override func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
-        let identifier = "place"
-        var anView: PlacePinAnnotationView
-        if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
-            dequeuedView.annotation = annotation
-            anView = dequeuedView
-        } else {
-            anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-        }
-        anView.assignImage(first.icon)
-        anView.delegate = self
-        return anView
-    }
-    
     override func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "location"
         var anView: LocPinAnnotationView
@@ -272,6 +301,35 @@ class AllPlacesMapController: BasicMapController {
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1
         return anView
+    }
+    
+    private func deselectAllLocAnnos() {
+        uiviewLocationBar.hide()
+        uiviewPinActionDisplay.hide()
+        uiviewSavedList.arrListSavedThisPin.removeAll()
+        uiviewAfterAdded.reset()
+        
+        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
+        selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
+        selectedLocAnno?.hideButtons()
+        selectedLocAnno?.zPos = 8.0
+        selectedLocAnno?.optionsReady = false
+        selectedLocAnno?.optionsOpened = false
+        selectedLocAnno = nil
+        selectedLocation = nil
+    }
+    
+    // MARK: - Map View Ctrl
+    
+    override func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        Key.shared.lastChosenLoc = mapView.centerCoordinate
+    }
+    
+    override func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        super.mapView(mapView, didSelect: view)
+        if view is LocPinAnnotationView {
+            tapLocationPin(didSelect: view)
+        }
     }
     
     // MARK: - 辅助函数
@@ -296,66 +354,17 @@ class AllPlacesMapController: BasicMapController {
         lblTopBarCenter.attributedText = title_1_attr
     }
     
+    // MARK: - Info Bar Tapping
     @objc private func actionPlaceBarTap() {
         placePinAction(action: .detail, mode: .place)
     }
     
-    private func deselectAllPlaceAnnos(full: Bool = true) {
+    @objc private func actionLocBarTap() {
         
-        uiviewPinActionDisplay.hide()
-        
-//        if let idx = selectedPlace?.class_2_icon_id {
-//            if full {
-//                selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
-//                selectedPlace?.isSelected = false
-//                guard let img = selectedPlace?.icon else { return }
-//                selectedPlaceAnno?.assignImage(img)
-//                selectedPlaceAnno?.hideButtons()
-//                selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
-//                selectedPlaceAnno?.zPos = 7
-//                selectedPlaceAnno?.optionsReady = false
-//                selectedPlaceAnno?.optionsOpened = false
-//                selectedPlaceAnno = nil
-//                selectedPlace = nil
-//            } else {
-//                selectedPlaceAnno?.hideButtons()
-//                selectedPlaceAnno?.optionsOpened = false
-//            }
-//        }
-        if full {
-            selectedPlace?.icon = #imageLiteral(resourceName: "place_map_48")
-            selectedPlace?.isSelected = false
-            guard let img = selectedPlace?.icon else { return }
-            selectedPlaceAnno?.assignImage(img)
-            selectedPlaceAnno?.hideButtons()
-            selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
-            selectedPlaceAnno?.zPos = 7
-            selectedPlaceAnno?.optionsReady = false
-            selectedPlaceAnno?.optionsOpened = false
-            selectedPlaceAnno = nil
-            selectedPlace = nil
-        } else {
-            selectedPlaceAnno?.hideButtons()
-            selectedPlaceAnno?.optionsOpened = false
-        }
-    }
-    
-    private func deselectAllLocAnnos() {
-        uiviewLocationBar.hide()
-        uiviewPinActionDisplay.hide()
-        uiviewSavedList.arrListSavedThisPin.removeAll()
-        uiviewAfterAdded.pinIdInAction = -1
-        
-        selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
-        selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_startpoint"))
-        selectedLocAnno?.hideButtons()
-        selectedLocAnno?.zPos = 8.0
-        selectedLocAnno?.optionsReady = false
-        selectedLocAnno?.optionsOpened = false
-        selectedLocAnno = nil
-        selectedLocation = nil
     }
 }
+
+// MARK: -
 
 extension AllPlacesMapController: PlaceViewDelegate {
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool) {
@@ -396,6 +405,8 @@ extension AllPlacesMapController: PlaceViewDelegate {
         }
     }
 }
+
+// MARK: -
 
 extension AllPlacesMapController: PlacePinAnnotationDelegate {
     
@@ -463,6 +474,8 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
     }
 }
 
+// MARK: - Pin Saving Ctrl
+
 extension AllPlacesMapController: AddPinToCollectionDelegate, AfterAddedToListDelegate {
     
     private func loadPlaceListView() {
@@ -516,6 +529,8 @@ extension AllPlacesMapController: AddPinToCollectionDelegate, AfterAddedToListDe
         navigationController?.pushViewController(vcList, animated: true)
     }
 }
+
+// MARK: - Map View Interactions
 
 extension AllPlacesMapController: MapAction {
     
