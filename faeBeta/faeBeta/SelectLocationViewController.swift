@@ -518,7 +518,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             self.selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
             self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
-            self.updateLocationInfo(location: cllocation)
+            self.uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+                self.selectedLocation?.address_1 = address_1
+                self.selectedLocation?.address_2 = address_2
+                self.btnSelect.lblDistance.textColor = UIColor._2499090()
+                self.btnSelect.isUserInteractionEnabled = true
+            }
         }
         
         if selectedLocation != nil {
@@ -528,80 +533,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             })
         } else {
             createLoc()
-        }
-    }
-    
-    private func updateLocationInfo(location: CLLocation) {
-        uiviewLocationBar.show()
-        uiviewLocationBar.updateLocationBar(name: "", address: "")
-        view.bringSubview(toFront: activityIndicatorLocPin)
-        activityIndicatorLocPin.startAnimating()
-        General.shared.getAddress(location: location, full: false) { address in
-            guard let addr = address as? String else { return }
-            DispatchQueue.main.async {
-                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
-            }
-        }
-        General.shared.getAddress(location: location, original: true) { (original) in
-            guard let first = original as? CLPlacemark else { return }
-            
-            var name = ""
-            var subThoroughfare = ""
-            var thoroughfare = ""
-            
-            var address_1 = ""
-            var address_2 = ""
-            
-            if let n = first.name {
-                name = n
-                address_1 += n
-            }
-            if let s = first.subThoroughfare {
-                subThoroughfare = s
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += s
-            }
-            if let t = first.thoroughfare {
-                thoroughfare = t
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += t
-            }
-            
-            if name == subThoroughfare + " " + thoroughfare {
-                address_1 = name
-            }
-            
-            if let l = first.locality {
-                address_2 += l
-            }
-            if let a = first.administrativeArea {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += a
-            }
-            if let p = first.postalCode {
-                address_2 += " " + p
-            }
-            if let c = first.country {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += c
-            }
-            
-            self.selectedLocation?.address_1 = address_1
-            self.selectedLocation?.address_2 = address_2
-            DispatchQueue.main.async {
-                self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.activityIndicatorLocPin.stopAnimating()
-                self.btnSelect.lblDistance.textColor = UIColor._2499090()
-                self.btnSelect.isUserInteractionEnabled = true
-            }
         }
     }
     
@@ -768,7 +699,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
     }
-
 }
 
 extension SelectLocationViewController: MapAction {

@@ -280,7 +280,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.collection_id)
-//            self.tblAddCollection.reloadData()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
             self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)

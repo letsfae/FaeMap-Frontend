@@ -340,11 +340,15 @@ class FMPlaceInfoBar: UIView {
         }
     }
     
-    func show() {
+    func show(animated: Bool = true) {
         self.isHidden = false
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
-            self.alpha = 1
-        }, completion: nil)
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                self.alpha = 1
+            }, completion: nil)
+        } else {
+            alpha = 1
+        }
     }
     
     func hide(animated: Bool = true) {
@@ -639,5 +643,72 @@ class FMLocationInfoBar: UIView {
         }, completion: { _ in
             self.imgType.alpha = 0
         })
+    }
+    
+    public func updateLocationInfo(location: CLLocation, _ completion: @escaping (String, String) -> Void) {
+        show()
+        updateLocationBar(name: "", address: "")
+        activityIndicator.startAnimating()
+        General.shared.getAddress(location: location, original: true) { (original) in
+            guard let first = original as? CLPlacemark else {
+                completion("Invalid Address", "")
+                return
+            }
+            
+            var name = ""
+            var subThoroughfare = ""
+            var thoroughfare = ""
+            
+            var address_1 = ""
+            var address_2 = ""
+            
+            if let n = first.name {
+                name = n
+                address_1 += n
+            }
+            if let s = first.subThoroughfare {
+                subThoroughfare = s
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += s
+            }
+            if let t = first.thoroughfare {
+                thoroughfare = t
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += t
+            }
+            
+            if name == subThoroughfare + " " + thoroughfare {
+                address_1 = name
+            }
+            
+            if let l = first.locality {
+                address_2 += l
+            }
+            if let a = first.administrativeArea {
+                if address_2 != "" {
+                    address_2 += ", "
+                }
+                address_2 += a
+            }
+            if let p = first.postalCode {
+                address_2 += " " + p
+            }
+            if let c = first.country {
+                if address_2 != "" {
+                    address_2 += ", "
+                }
+                address_2 += c
+            }
+            
+            DispatchQueue.main.async {
+                self.updateLocationBar(name: address_1, address: address_2)
+                self.activityIndicator.stopAnimating()
+                completion(address_1, address_2)
+            }
+        }
     }
 }

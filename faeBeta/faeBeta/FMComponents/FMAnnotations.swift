@@ -125,8 +125,9 @@ enum FaePinType: String {
             coordinate = placePin.coordinate
         case .location:
             guard let pin = data as? LocationPin else { return }
+            id = pin.id
             coordinate = pin.coordinate
-            icon = #imageLiteral(resourceName: "icon_destination")
+            icon = #imageLiteral(resourceName: "icon_startpoint")
         default:
             break
         }

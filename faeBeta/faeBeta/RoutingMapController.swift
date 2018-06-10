@@ -118,9 +118,9 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         if mode == .place {
             let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: destPlaceInfo as AnyObject)
             tempFaePins.append(pin)
-            PLACE_INSTANT_SHOWUP = true
+            PIN_INSTANT_SHOWUP = true
             placeClusterManager.addAnnotations(tempFaePins, withCompletionHandler: {
-                self.PLACE_INSTANT_SHOWUP = false
+                self.PIN_INSTANT_SHOWUP = false
             })
         } else {
             let end = AddressAnnotation()
@@ -193,8 +193,8 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     private func doRouting(_ operation: RoutingOperation, _ request: MKDirectionsRequest) {
         let directions = MKDirections(request: request)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            directions.calculate { [unowned self] response, error in
-                self.activityIndicator.stopAnimating()
+            directions.calculate { [weak self] response, error in
+                self?.activityIndicator.stopAnimating()
                 if operation.isCancelled {
                     return
                 }
@@ -204,7 +204,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
                 }
                 var totalDistance: CLLocationDistance = 0
                 for route in unwrappedResponse.routes {
-                    self.arrRoutes.append(route.polyline)
+                    self?.arrRoutes.append(route.polyline)
                     totalDistance += route.distance
                 }
                 totalDistance /= 1000
@@ -216,20 +216,21 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
                     return
                 }
                 if operation.isCancelled {
-                    self.activityIndicator.stopAnimating()
+                    self?.activityIndicator.stopAnimating()
                     return
                 }
-                self.showRouteCalculatorComponents(distance: totalDistance)
+                self?.showRouteCalculatorComponents(distance: totalDistance)
                 // fit all route overlays
-                if let first = self.arrRoutes.first {
-                    let rect = self.arrRoutes.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)})
-                    self.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
+                if let first = self?.arrRoutes.first {
+                    guard let rect = self?.arrRoutes.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)}) else { return }
+                    self?.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                     if operation.isCancelled {
                         return
                     }
-                    self.faeMapView.addOverlays(self.arrRoutes, level: MKOverlayLevel.aboveRoads)
+                    guard let routes = self?.arrRoutes else { return }
+                    self?.faeMapView.addOverlays(routes, level: MKOverlayLevel.aboveRoads)
                 })
             }
         }

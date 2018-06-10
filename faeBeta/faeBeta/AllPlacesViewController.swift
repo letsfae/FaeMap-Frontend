@@ -151,7 +151,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let vc = AllPlacesMapController()
         vc.strTitle = strTitle
-        vc.arrPlaces = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
+        vc.arrPins = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
         navigationController?.pushViewController(vc, animated: false)
         
         return
