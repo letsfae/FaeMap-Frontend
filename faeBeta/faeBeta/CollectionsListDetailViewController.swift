@@ -229,21 +229,27 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     @objc func tabButtonPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0: // map view
-            var arrCtrlers = navigationController?.viewControllers
-            if let ctrler = Key.shared.FMVCtrler {
-                ctrler.arrCtrlers = arrCtrlers!
-                ctrler.boolFromMap = false
-            }
-            while !(arrCtrlers?.last is InitialPageController) {
-                arrCtrlers?.removeLast()
-            }
+//            var arrCtrlers = navigationController?.viewControllers
+//            if let ctrler = Key.shared.FMVCtrler {
+//                ctrler.arrCtrlers = arrCtrlers!
+//                ctrler.boolFromMap = false
+//            }
+//            while !(arrCtrlers?.last is InitialPageController) {
+//                arrCtrlers?.removeLast()
+//            }
             var arrSavedPinIds = [Int]()
             for pin in realmColDetails.pins {
                 arrSavedPinIds.append(pin.pin_id)
             }
-            featureDelegate = Key.shared.FMVCtrler
-            featureDelegate?.showSavedPins(type: enterMode.rawValue, savedPinIds: arrSavedPinIds, isCollections: true, colName: realmColDetails.name)
-            navigationController?.setViewControllers(arrCtrlers!, animated: false)
+//            featureDelegate = Key.shared.FMVCtrler
+//            featureDelegate?.showSavedPins(type: enterMode.rawValue, savedPinIds: arrSavedPinIds, isCollections: true, colName: realmColDetails.name)
+//            navigationController?.setViewControllers(arrCtrlers!, animated: false)
+            let vc = AllPlacesMapController()
+            vc.isFromCollection = true
+            vc.enterMode = enterMode
+            vc.strTitle = realmColDetails.name
+            vc.arrIds = arrSavedPinIds
+            navigationController?.pushViewController(vc, animated: false)
         case 1: // share
             // TODO JICHAO
             let vcShareCollection = NewChatShareController(friendListMode: .collection)

@@ -37,7 +37,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     // Boolean values
     var fullyLoaded = false // if all ui components are fully loaded
-    var PLACE_INSTANT_SHOWUP = false
+    var PIN_INSTANT_SHOWUP = false
     
     var mapCenter: MapCenter = .currentUser
     var placePin: PlacePin?
@@ -191,7 +191,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         
         Key.shared.lastChosenLoc = mapView.centerCoordinate
         if uiviewPlaceBar.tag > 0 {
-            uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView)
+            uiviewPlaceBar.annotations = visiblePins(mapView: faeMapView, type: .place)
         }
         
     }
@@ -201,7 +201,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
-                if PLACE_INSTANT_SHOWUP { // immediatelly show up
+                if PIN_INSTANT_SHOWUP { // immediatelly show up
                     anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
                     anView.alpha = 1
                 } else {
@@ -216,11 +216,15 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
                     }
                 }
             } else if let anView = annotationView as? LocPinAnnotationView {
-                anView.alpha = 0
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        anView.alpha = 1
-                    })
+                if PIN_INSTANT_SHOWUP {
+                    anView.alpha = 1
+                } else {
+                    anView.alpha = 0
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.2, animations: {
+                            anView.alpha = 1
+                        })
+                    }
                 }
             } else if let anView = annotationView as? MKAnnotationView {
                 anView.alpha = 0

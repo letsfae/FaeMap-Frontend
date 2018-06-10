@@ -13,6 +13,7 @@ import UIKit
     @objc optional func iconStyleChange(action: Int, isPlace: Bool)
     
     @objc optional func allPlacesDeselect(_ full: Bool)
+    @objc optional func allLocationsDeselect()
     
     @objc optional func placePinTap(view: MKAnnotationView)
     @objc optional func userPinTap(view: MKAnnotationView)
@@ -126,6 +127,7 @@ class FaeMapView: MKMapView {
                 guard isSingleTapOnLocPinEnabled else { return }
                 if anView.optionsReady == false {
                     mapAction?.allPlacesDeselect?(true)
+                    mapAction?.allLocationsDeselect?()
                     mapAction?.locPinTap?(view: anView)
                     anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {

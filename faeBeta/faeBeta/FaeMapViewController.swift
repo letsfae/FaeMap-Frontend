@@ -133,8 +133,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation?
-    private var uiviewLocationBar: FMLocationInfoBar!
     private var selectedLocAnno: LocPinAnnotationView?
+    private var uiviewLocationBar: FMLocationInfoBar!
     private var locationPinClusterManager: CCHMapClusterController!
     
     // Chat
@@ -292,7 +292,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 }
                 if selectedLocation != nil {
                     locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
-                        self.deselectAllLocations()
+                        self.deselectAllLocAnnos()
                     })
                 }
             }
@@ -1119,8 +1119,9 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             } else if let anView = annotationView as? UserPinAnnotationView {
                 anView.superview?.bringSubview(toFront: anView)
                 anView.alpha = 0
+                let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
                 DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.4, animations: {
+                    UIView.animate(withDuration: 0.4, delay: delay, animations: {
                         anView.alpha = 1
                     })
                 }
@@ -1384,7 +1385,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
-    private func deselectAllLocations() {
+    private func deselectAllLocAnnos() {
         uiviewLocationBar.hide()
         uiviewPinActionDisplay.hide()
         uiviewSavedList.arrListSavedThisPin.removeAll()
@@ -2199,7 +2200,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         uiviewAfterAdded.hide()
         if let pin = selectedLocation {
             locationPinClusterManager.removeAnnotations([pin], withCompletionHandler: {
-                self.deselectAllLocations()
+                self.deselectAllLocAnnos()
             })
         }
         let vcList = CollectionsListDetailViewController()
@@ -2429,12 +2430,12 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
                 let placeData = placePin
                 placeData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = placeData as AnyObject
                 self.uiviewSavedList.arrListSavedThisPin = ids
-                anView.boolShowSavedNoti = true
+                anView.boolShowSavedNoti = ids.count > 0
             }
         }
         tblPlaceResult.show()
@@ -2445,23 +2446,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             tblPlaceResult.loadingData(current: cluster)
         } else if swipingState == .multipleSearch {
             tblPlaceResult.loading(current: placePin)
-        }
-    }
-    
-    private func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
-        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
-            guard status / 100 == 2 else { return }
-            guard message != nil else { return }
-            let resultJson = JSON(message!)
-            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else { return }
-            guard is_saved != "false" else { return }
-            var ids = [Int]()
-            for colIdRaw in is_saved.split(separator: ",") {
-                let strColId = String(colIdRaw)
-                guard let colId = Int(strColId) else { continue }
-                ids.append(colId)
-            }
-            completion(ids)
         }
     }
     
@@ -3012,16 +2996,21 @@ extension FaeMapViewController: LocDetailDelegate {
                 pinData.id = anView.locationId
             }
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
                 pinData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = pinData as AnyObject
                 self.uiviewSavedList.arrListSavedThisPin = ids
-                anView.boolShowSavedNoti = true
+                anView.boolShowSavedNoti = ids.count > 0
             }
         }
         if !anView.optionsReady {
             let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
-            updateLocationInfo(location: cllocation)
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+                self.selectedLocation?.address_1 = address_1
+                self.selectedLocation?.address_2 = address_2
+                self.uiviewChooseLocs.updateDestination(name: address_1)
+                self.destinationAddr = RouteAddress(name: address_1, coordinate: cllocation.coordinate)
+            }
         }
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
@@ -3072,20 +3061,25 @@ extension FaeMapViewController: LocDetailDelegate {
         let cllocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         
         func createLoc() {
-            self.tblPlaceResult.hide()
-            self.selectedLocAnno?.hideButtons()
-            self.selectedLocAnno?.optionsReady = false
-            self.selectedLocAnno?.optionsOpened = false
-            self.selectedLocAnno?.optionsOpeing = false
-            self.selectedLocAnno?.removeFromSuperview()
-            self.selectedLocAnno = nil
-            self.deselectAllPlaceAnnos()
+            tblPlaceResult.hide()
+            selectedLocAnno?.hideButtons()
+            selectedLocAnno?.optionsReady = false
+            selectedLocAnno?.optionsOpened = false
+            selectedLocAnno?.optionsOpeing = false
+            selectedLocAnno?.removeFromSuperview()
+            selectedLocAnno = nil
+            deselectAllPlaceAnnos()
             let pinData = LocationPin(position: coordinate)
             pinData.optionsReady = true
-            self.selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
-            self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
-            self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
-            self.updateLocationInfo(location: cllocation)
+            selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
+            selectedLocation?.icon = #imageLiteral(resourceName: "icon_startpoint")
+            locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+                self.selectedLocation?.address_1 = address_1
+                self.selectedLocation?.address_2 = address_2
+                self.uiviewChooseLocs.updateDestination(name: address_1)
+                self.destinationAddr = RouteAddress(name: address_1, coordinate: cllocation.coordinate)
+            }
         }
         
         if selectedLocation != nil {
@@ -3095,73 +3089,6 @@ extension FaeMapViewController: LocDetailDelegate {
             })
         } else {
             createLoc()
-        }
-    }
-    
-    private func updateLocationInfo(location: CLLocation) {
-        uiviewLocationBar.show()
-        uiviewLocationBar.updateLocationBar(name: "", address: "")
-        uiviewLocationBar.activityIndicator.startAnimating()
-        General.shared.getAddress(location: location, original: true) { (original) in
-            guard let first = original as? CLPlacemark else { return }
-            
-            var name = ""
-            var subThoroughfare = ""
-            var thoroughfare = ""
-            
-            var address_1 = ""
-            var address_2 = ""
-            
-            if let n = first.name {
-                name = n
-                address_1 += n
-            }
-            if let s = first.subThoroughfare {
-                subThoroughfare = s
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += s
-            }
-            if let t = first.thoroughfare {
-                thoroughfare = t
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += t
-            }
-            
-            if name == subThoroughfare + " " + thoroughfare {
-                address_1 = name
-            }
-            
-            if let l = first.locality {
-                address_2 += l
-            }
-            if let a = first.administrativeArea {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += a
-            }
-            if let p = first.postalCode {
-                address_2 += " " + p
-            }
-            if let c = first.country {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += c
-            }
-            
-            self.selectedLocation?.address_1 = address_1
-            self.selectedLocation?.address_2 = address_2
-            DispatchQueue.main.async {
-                self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.uiviewLocationBar.activityIndicator.stopAnimating()
-                self.uiviewChooseLocs.updateDestination(name: address_1)
-                self.destinationAddr = RouteAddress(name: address_1, coordinate: location.coordinate)
-            }
         }
     }
 }
@@ -3248,7 +3175,7 @@ extension FaeMapViewController: MapAction {
             }
         } else if modeLocCreating == .off {
             selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
-            deselectAllLocations()
+            deselectAllLocAnnos()
         }
     }
     

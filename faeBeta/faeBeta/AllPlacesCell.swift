@@ -27,12 +27,16 @@ class AllPlacesCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imgPlaceIcon.image = nil
+    }
 
     fileprivate func loadCellContent() {
         imgPlaceIcon = UIImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
         imgPlaceIcon.layer.cornerRadius = 5
         imgPlaceIcon.clipsToBounds = true
-//        imgPlaceIcon.backgroundColor = .red
         addSubview(imgPlaceIcon)
         
         lblPlaceName = UILabel(frame: CGRect(x: 93, y: 17, width: screenWidth - 93 - 50, height: 20))
@@ -60,7 +64,6 @@ class AllPlacesCell: UITableViewCell {
     }
     
     func setValueForCell(place: PlacePin) {
-        imgPlaceIcon.image = place.icon
         lblPlaceName.text = place.name
         lblPlaceAddr.text = place.address1 + ", " + place.address2
         lblOpeninghour.text = place.class_1

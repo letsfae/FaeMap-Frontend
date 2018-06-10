@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 import CoreLocation
 
-class PlacePin: NSObject {
+class PlacePin: NSObject, FaePin {
     
     var id: Int = 0
     var name: String = ""
@@ -76,8 +76,6 @@ class PlacePin: NSObject {
         super.init()
     }
 }
-
-
 
 // Make dictionary type 'plusable' or 'addable'
 func +<Key, Value> (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {

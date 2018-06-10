@@ -10,12 +10,12 @@ import Foundation
 import SwiftyJSON
 import CoreLocation
 
-class LocationPin: NSObject {
+class LocationPin: NSObject, FaePin {
     
     var id: Int = -1
     var content: String?
     var location = CLLocation()
-    let coordinate: CLLocationCoordinate2D
+    var coordinate: CLLocationCoordinate2D
     let address1: String = ""
     let address2: String = ""
     var icon: UIImage?
@@ -38,5 +38,17 @@ class LocationPin: NSObject {
     init(position: CLLocationCoordinate2D) {
         coordinate = position
     }
+    
+    override var description: String {
+        return "id: \(id)\nfileid: \(fileId)\ncoordinate: \(coordinate)\nmemo: \(memo)"
+    }
 }
 
+protocol FaePin {
+    
+    var id: Int { get set }
+    var coordinate: CLLocationCoordinate2D { get set }
+    var icon: UIImage?  { get set }
+    var memo: String { get set }
+    
+}
