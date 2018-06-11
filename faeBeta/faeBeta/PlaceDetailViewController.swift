@@ -286,6 +286,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addSubview(uiviewPlaceImages)
         let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionTapImages))
         uiviewPlaceImages.addGestureRecognizer(tapGes)
+        tapGes.cancelsTouchesInView = true
+
         uiviewPlaceImages.arrURLs = place.imageURLs
         uiviewPlaceImages.loadContent()
         uiviewPlaceImages.setup()

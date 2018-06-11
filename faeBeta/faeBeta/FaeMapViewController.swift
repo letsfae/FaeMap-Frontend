@@ -501,6 +501,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         })
     }
     
+    private func reAddLocPins(_ completion: (() -> ())? = nil) {
+        guard let pin = selectedLocation else { return }
+        locationPinClusterManager.addAnnotations([pin], withCompletionHandler: {
+            completion?()
+        })
+    }
+    
     private func removePlaceUserPins(_ placeComp: (() -> ())? = nil, _ userComp: (() -> ())? = nil) {
         removePlacePins({
             placeComp?()
@@ -965,25 +972,6 @@ extension FaeMapViewController {
             })
         }
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
-    }
-    
-    private func cancelSearch() {
-        
-    }
-    
-    private func actionPlacePinAction(_ sender: UIButton) {
-        switch sender.tag {
-        case 1:
-            break
-        case 2:
-            break
-        case 3:
-            break
-        case 4:
-            break
-        default:
-            break
-        }
     }
     
     @objc private func actionLeftWindowShow(_ sender: UIButton) {
@@ -1931,7 +1919,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     }
     
     @objc private func handleTapPlaceBar() {
-        placePinAction(action: .detail, mode: .location)
+        placePinAction(action: .detail, mode: .place)
     }
     
     // PlaceViewDelegate
@@ -2234,6 +2222,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         PLACE_ENABLE = false
         // remove place pins but don't delete them
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: {
+            self.placeClusterManager.isForcedRefresh = true
+            self.placeClusterManager.manuallyCallRegionDidChange()
+            self.placeClusterManager.isForcedRefresh = false
             self.locationPinClusterManager.addAnnotations([pin], withCompletionHandler: nil)
             self.routeCalculator(destination: pin.coordinate)
         })
@@ -2242,7 +2233,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             user.isValid = false
         }
         // remove user pins but don't delete them
-        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: {
+            self.userClusterManager.isForcedRefresh = true
+            self.userClusterManager.manuallyCallRegionDidChange()
+            self.userClusterManager.isForcedRefresh = false
+        })
         startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
         if let placeInfo = selectedPlace?.pinInfo as? PlacePin {
             uiviewChooseLocs.updateDestination(name: placeInfo.name)
@@ -2250,7 +2245,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
     }
     
-    private func routingLocation() {
+    private func routingLocation(pin: FaePinAnnotation) {
         guard let pin = self.selectedLocation else { return }
         uiviewLocationBar.hide()
         selectedLocAnno?.hideButtons()
@@ -2260,6 +2255,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         // remove place pins but don't delete them
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
         placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
+            self.placeClusterManager.isForcedRefresh = true
+            self.placeClusterManager.manuallyCallRegionDidChange()
+            self.placeClusterManager.isForcedRefresh = false
             self.tempFaePins.removeAll()
             self.tempFaePins.append(pin)
             self.locationPinClusterManager.addAnnotations(self.tempFaePins, withCompletionHandler: nil)
@@ -2270,7 +2268,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             user.isValid = false
         }
         // remove user pins but don't delete them
-        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: nil)
+        userClusterManager.removeAnnotations(faeUserPins, withCompletionHandler: {
+            self.userClusterManager.isForcedRefresh = true
+            self.userClusterManager.manuallyCallRegionDidChange()
+            self.userClusterManager.isForcedRefresh = false
+        })
         startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
         // destinationAddr has been set in FMLocationPin.swift when create a temporary location pin on map
     }
@@ -2281,24 +2283,25 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         uiviewSavedList.hide()
         switch action {
         case .detail:
-            if modeLocCreating == .on {
-                guard let anView = selectedLocAnno else { return }
-                anView.optionsToNormal()
-                let vcLocDetail = LocDetailViewController()
-                vcLocDetail.locationId = anView.locationId
-                vcLocDetail.coordinate = selectedLocation?.coordinate
-                vcLocDetail.delegate = self
-                vcLocDetail.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
-                vcLocDetail.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
-                vcLocDetail.boolCreated = true
-                navigationController?.pushViewController(vcLocDetail, animated: true)
-            } else {
+            switch mode {
+            case .place:
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                     return
                 }
-                let vcPlaceDetail = PlaceDetailViewController()
-                vcPlaceDetail.place = placeData
-                navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                let vc = PlaceDetailViewController()
+                vc.place = placeData
+                navigationController?.pushViewController(vc, animated: true)
+            case .location:
+                guard let anView = selectedLocAnno else { return }
+                anView.optionsToNormal()
+                let vc = LocDetailViewController()
+                vc.locationId = anView.locationId
+                vc.coordinate = selectedLocation?.coordinate
+                vc.delegate = self
+                vc.strLocName = uiviewLocationBar.lblName.text ?? "Invalid Name"
+                vc.strLocAddr = uiviewLocationBar.lblAddr.text ?? "Invalid Address"
+                vc.boolCreated = modeLocCreating == .on
+                navigationController?.pushViewController(vc, animated: true)
             }
         case .collect:
             uiviewSavedList.show()
@@ -2315,7 +2318,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
         case .route:
             if selectedLocation != nil {
-                routingLocation()
+                routingLocation(pin: selectedLocation!)
             }
             if let place = selectedPlace?.pinInfo as? PlacePin {
                 routingPlace(place)
@@ -2567,10 +2570,10 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         uiviewChooseLocs.delegate = self
         view.addSubview(uiviewChooseLocs)
         
-        let tapGes_0 = UITapGestureRecognizer(target: self, action: #selector(handleStartPointTap(_:)))
-        let tapGes_1 = UITapGestureRecognizer(target: self, action: #selector(handleDestinationTap(_:)))
-        uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapGes_0)
-        uiviewChooseLocs.lblDestination.addGestureRecognizer(tapGes_1)
+        let tapStart = UITapGestureRecognizer(target: self, action: #selector(handleStartPointTap(_:)))
+        let tapDestination = UITapGestureRecognizer(target: self, action: #selector(handleDestinationTap(_:)))
+        uiviewChooseLocs.lblStartPoint.addGestureRecognizer(tapStart)
+        uiviewChooseLocs.lblDestination.addGestureRecognizer(tapDestination)
         
         loadSelectLocIcon()
     }
@@ -2700,9 +2703,12 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         PLACE_ENABLE = true
         faeMapView.removeAnnotations(addressAnnotations)
         locationPinClusterManager.removeAnnotations(tempFaePins) {
+            self.locationPinClusterManager.isForcedRefresh = true
+            self.locationPinClusterManager.manuallyCallRegionDidChange()
+            self.locationPinClusterManager.isForcedRefresh = false
             self.reAddUserPins()
             self.reAddPlacePins()
-            // self.deselectAllLocations()
+            self.reAddLocPins()
         }
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
