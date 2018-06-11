@@ -50,6 +50,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var intSimilar = 0
     private var intNearby = 0
     private var isScrollViewDidScrollEnabled: Bool = true
+    private var boolFold: Bool = true
     
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
@@ -84,6 +85,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             catDict[content] = catDict[content]! + 1;
         }
         favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+        
+        print("placeId \(place.id)")
     }
     
     deinit {

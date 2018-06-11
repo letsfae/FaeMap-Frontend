@@ -64,7 +64,7 @@ class PlaceDetailCell: UITableViewCell {
         lblContent = UILabel()
         lblContent.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblContent.textColor = UIColor._898989()
-        lblContent.numberOfLines = 0
+        lblContent.numberOfLines = 1
         addSubview(lblContent)
         addConstraintsWithFormat("H:|-68-[v0]-68-|", options: [], views: lblContent)
         
@@ -81,7 +81,7 @@ class PlaceDetailCell: UITableViewCell {
     func setCellContraints() {
         if PlaceDetailCell.boolFold {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_down")
-            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0(22)]-17-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
+            cellConstraint = returnConstraintsWithFormat("V:|-18-[v0]-17-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
         } else {
             imgDownArrow.image = #imageLiteral(resourceName: "arrow_up")
             cellConstraint = returnConstraintsWithFormat("V:|-18-[v0]-9-[v1]-1-|", options: [], views: lblContent, uiviewHiddenCell)
@@ -120,7 +120,9 @@ class PlaceDetailMapCell: PlaceDetailCell {
     override func setValueForCell(place: PlacePin) {
         placeData = place
         imgIcon.image = #imageLiteral(resourceName: "place_location")
-        lblContent.text = place.address1 + ", " + place.address2
+        var addr = place.address1 == "" ? "" : place.address1 + ", "
+        addr += place.address2
+        lblContent.text = addr
         imgPlaceIcon.image = UIImage(named: "place_map_\(placeData.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         AddPinToCollectionView().mapScreenShot(coordinate: placeData.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 200), icon: false) { (snapShotImage) in
             self.imgViewMap.image = snapShotImage
@@ -149,8 +151,10 @@ class PlaceDetailMapCell: PlaceDetailCell {
     override func setCellContraints() {
         super.setCellContraints()
         if PlaceDetailCell.boolFold {
+            lblContent.numberOfLines = 1
             hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(0)]-0-|", options: [], views: imgViewMap)
         } else {
+            lblContent.numberOfLines = 0
             hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(150)]-8-|", options: [], views: imgViewMap)
         }
     }
@@ -162,7 +166,9 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
     
     var arrDay_LG = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    var arrHour = [String]()
+    var arrHour = [[String]]()
+    var dayIdx = 0
+    var boolCellFold: Bool = true
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -173,10 +179,12 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
     }
     
     override func setValueForCell(place: PlacePin) {
+        lblContent.numberOfLines = 0
+        
         imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
         for day in arrDay {
             if place.hours.index(forKey: day) == nil {
-                arrHour.append("N/A")
+                arrHour.append(["N/A"])
             } else {
                 arrHour.append(place.hours[day]!)
             }
@@ -186,18 +194,29 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday], from: date)
         
+        // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
         if let weekday = components.weekday {
+            dayIdx = weekday
+            let openStatus = closeOrOpen(arrHour[dayIdx])
             
             if weekday == 7 {
-                //lblContent.text = arrDay_LG[0] + " / " + arrHour[0]
-                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[0]), hour: " / " + arrHour[0])
+                dayIdx = 0
             } else if weekday == 8 {
-                //lblContent.text = arrDay_LG[1] + " / " + arrHour[1]
-                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[1]), hour: " / " + arrHour[1])
-            } else {
-                //lblContent.text = arrDay_LG[weekday] + " / " + arrHour[weekday]
-                lblContent.attributedText = attributedHourText(openStatus: closeOrOpen(arrHour[weekday]), hour: " / " + arrHour[weekday])
+                dayIdx = 1
             }
+            
+            var hour = " / " + arrHour[dayIdx][0]
+            if arrHour[0].count > 1 {
+                for hourIdx in 1..<arrHour[dayIdx].count {
+                    if openStatus == "Open" {
+                        hour += "\n\t\t" + arrHour[dayIdx][hourIdx]
+                    } else if openStatus == "Closed" {
+                        hour += "\n\t\t   " + arrHour[dayIdx][hourIdx]
+                    }
+                }
+            }
+            
+            lblContent.attributedText = attributedHourText(openStatus: openStatus, hour: hour)
         }
 
         tblOpeningHours.reloadData()
@@ -221,45 +240,47 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         return title_0_attr
     }
     
-    func closeOrOpen(_ todayHour: String) -> String {
+    func closeOrOpen(_ todayHour: [String]) -> String {
         
         // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
         
-        if todayHour == "N/A" || todayHour == "24 Hours" || todayHour == "None" {
-            return todayHour
-        }
-        
-        var startHour: String = String(todayHour.split(separator: "–")[0])
-        var endHour: String = String(todayHour.split(separator: "–")[1])
-        if startHour == "Noon" {
-            startHour = "12:00 PM"
-        }
-        if endHour == "Noon" {
-            endHour = "12:00 PM"
-        } else if endHour == "Midnight" {
-            endHour = "00:00 AM"
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "h:mm a"
-        let dateStart = dateFormatter.date(from: startHour)
-        let dateEnd = dateFormatter.date(from: endHour)
-        dateFormatter.dateFormat = "HH:mm"
-        
-        let date24Start = dateFormatter.string(from: dateStart!)
-        let date24End = dateFormatter.string(from: dateEnd!)
-        
-        let hourStart = Int(date24Start.split(separator: ":")[0])!
-        var hourEnd = Int(date24End.split(separator: ":")[0])!
-        if endHour.contains("AM") {
-            hourEnd = hourEnd + 24
-        }
-        
-        let hourCurrent = Calendar.current.component(.hour, from: Date())
-        
-        if hourCurrent >= hourStart && hourCurrent < hourEnd {
-            return "Open"
+        for hour in todayHour {
+            if hour == "N/A" || hour == "24 Hours" || hour == "None" {
+                return hour
+            }
+            
+            var startHour: String = String(hour.split(separator: "–")[0])
+            var endHour: String = String(hour.split(separator: "–")[1])
+            if startHour == "Noon" {
+                startHour = "12:00 PM"
+            }
+            if endHour == "Noon" {
+                endHour = "12:00 PM"
+            } else if endHour == "Midnight" {
+                endHour = "00:00 AM"
+            }
+            
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.dateFormat = "h:mm a"
+            let dateStart = dateFormatter.date(from: startHour)
+            let dateEnd = dateFormatter.date(from: endHour)
+            dateFormatter.dateFormat = "HH:mm"
+            
+            let date24Start = dateFormatter.string(from: dateStart!)
+            let date24End = dateFormatter.string(from: dateEnd!)
+            
+            let hourStart = Int(date24Start.split(separator: ":")[0])!
+            var hourEnd = Int(date24End.split(separator: ":")[0])!
+            if endHour.contains("AM") {
+                hourEnd = hourEnd + 24
+            }
+            
+            let hourCurrent = Calendar.current.component(.hour, from: Date())
+            
+            if hourCurrent >= hourStart && hourCurrent < hourEnd {
+                return "Open"
+            }
         }
         return "Closed"
     }
@@ -275,7 +296,8 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         tblOpeningHours.separatorStyle = .none
         tblOpeningHours.isUserInteractionEnabled = true
         tblOpeningHours.isScrollEnabled = false
-        tblOpeningHours.rowHeight = 28
+        tblOpeningHours.cellLayoutMarginsFollowReadableWidth = true
+//        tblOpeningHours.rowHeight = 28
         
 //        let foldCell = UITapGestureRecognizer(target: self, action: #selector(actionFoldCell(_:)))
 //        tblOpeningHours.addGestureRecognizer(foldCell)
@@ -293,7 +315,7 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         if PlaceDetailCell.boolFold {
             hiddenViewConstraint = returnConstraintsWithFormat("V:|-0-[v0(0)]-0-[v1(0)]-0-|", options: [], views: tblOpeningHours, lblHint)
         } else {
-            hiddenViewConstraint = returnConstraintsWithFormat("V:|-2-[v0(\(28 * 7))]-11-[v1(20)]-16-|", options: [], views: tblOpeningHours, lblHint)
+            hiddenViewConstraint = returnConstraintsWithFormat("V:|-2-[v0(\(28*7))]-11-[v1(20)]-16-|", options: [], views: tblOpeningHours, lblHint)
         }
     }
     
@@ -306,11 +328,25 @@ class PlaceDetailHoursCell: PlaceDetailCell, UITableViewDelegate, UITableViewDat
         return arrDay.count
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        tblOpeningHours.rowHeight = UITableViewAutomaticDimension
+        tblOpeningHours.estimatedRowHeight = 28
+        
+        return tblOpeningHours.rowHeight
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
-        let day = arrDay_LG[indexPath.row]
-        let hour = arrHour[indexPath.row]
-        cell.setValueForCell(day: day, hour: hour)
+        let row = (indexPath.row + dayIdx) % arrDay.count
+        let day = arrDay_LG[row]
+        let hour = arrHour[row]
+        cell.setValueForOpeningHourCell(day: day, hour: hour)
+        
+        if indexPath.row == 0 {
+            cell.lblDay.font = UIFont(name: "AvenirNext-Bold", size: 15)
+            cell.lblHour.font = UIFont(name: "AvenirNext-Bold", size: 15)
+        }
+        
         return cell
     }
 }
@@ -357,14 +393,24 @@ class PlaceOpeningHourCell: UITableViewCell {
         lblHour.textColor = UIColor._107105105()
         lblHour.font = UIFont(name: "AvenirNext-Medium", size: 15)
         lblHour.textAlignment = .right
+        lblHour.lineBreakMode = .byWordWrapping
+        lblHour.numberOfLines = 0
         addSubview(lblHour)
         
-        addConstraintsWithFormat("H:[v0(150)]-0-|", options: [], views: lblHour)
-        addConstraintsWithFormat("V:|-4-[v0(20)]", options: [], views: lblHour)
+        addConstraintsWithFormat("H:[v0(200)]-0-|", options: [], views: lblHour)
+        addConstraintsWithFormat("V:|-4-[v0]-4-|", options: [], views: lblHour)
     }
     
-    func setValueForCell(day: String, hour: String) {
+    func setValueForOpeningHourCell(day: String, hour: [String]) {
         lblDay.text = day
-        lblHour.text = hour
+        var openingHour = hour[0]
+        if hour.count > 1 {
+            for idx in 1..<hour.count {
+                openingHour += "\n" + hour[idx]
+            }
+        }
+        
+        print("openingHour \(openingHour)")
+        lblHour.text = openingHour
     }
 }
