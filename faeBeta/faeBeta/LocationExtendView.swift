@@ -92,7 +92,9 @@ class LocationExtendView : UIView {
         LabelLine2.frame = CGRect(x: 94, y: 47, width: 267 * screenWidthFactor, height: 16)
         if let place = placeData {
             LabelLine1.text = place.name
-            LabelLine2.text = "\(place.address1), \(place.address2)"
+            var addr = place.address1 == "" ? "" : place.address1 + ", "
+            addr += place.address2
+            LabelLine2.text = addr
         }
         LabelLine3.isHidden = true
         strType = "Place"

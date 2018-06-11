@@ -34,7 +34,9 @@ class PlacesListCell: UITableViewCell {
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
         lblPlaceName.text = placeInfo.name
-        lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblAddress.text = addr
         imgPic.backgroundColor = .white
         General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgPic)
     }
