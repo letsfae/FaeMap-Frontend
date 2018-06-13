@@ -488,8 +488,8 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     private func observeOnCollectionChange() {
         let datasource = tableMode == .place ? realmColPlaces : realmColLocations
         notificationToken?.invalidate()
-        notificationToken = datasource?.observe { (changes: RealmCollectionChange) in
-            guard let tableview = self.tblPlaceLoc else { return }
+        notificationToken = datasource?.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableview = self?.tblPlaceLoc else { return }
             switch changes {
             case .initial:
                 tableview.reloadData()

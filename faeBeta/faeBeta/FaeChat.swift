@@ -17,7 +17,8 @@ class FaeChat {
     // MARK: - Handle sending messages
     func observeMessageChange() {
         DispatchQueue.global(qos: .background).async {
-            autoreleasepool {
+            autoreleasepool { [weak self] in
+                guard let `self` = self else { return }
                 self.notificationRunLoop = CFRunLoopGetCurrent()
                 CFRunLoopPerformBlock(self.notificationRunLoop, CFRunLoopMode.defaultMode.rawValue) {
                     let realm = try! Realm()

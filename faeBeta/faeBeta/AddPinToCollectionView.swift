@@ -279,8 +279,8 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     private func observeOnCollectionChange() {
         let datasource = tableMode == .place ? realmColPlaces : realmColLocations
         notificationToken?.invalidate()
-        notificationToken = datasource?.observe { (changes: RealmCollectionChange) in
-            guard let tableview = self.tblAddCollection else { return }
+        notificationToken = datasource?.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableview = self?.tblAddCollection else { return }
             switch changes {
             case .initial:
                 tableview.reloadData()
