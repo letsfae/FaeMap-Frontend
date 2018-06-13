@@ -13,7 +13,6 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     
     private var btnDistIndicator: FMDistIndicator!
     private var uiviewChooseLocs: FMChooseLocs!
-    private var activityIndicator: UIActivityIndicatorView!
     public var mode = CollectionTableMode.place
     
     // Routes Calculator
@@ -47,12 +46,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     // Routing GCD Control
-    private var routingQueue: OperationQueue = {
-        var queue = OperationQueue()
-        queue.name = "routing queue"
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
+    private var isRoutingCancelled = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,9 +96,6 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         btnDistIndicator.show(animated: false)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleSelectLocationTap(_:)))
         btnDistIndicator.addGestureRecognizer(tapGesture)
-        activityIndicator = createActivityIndicator(large: true)
-        btnDistIndicator.addSubview(activityIndicator)
-        activityIndicator.center = CGPoint(x: btnDistIndicator.frame.width / 2, y: btnDistIndicator.frame.height / 2)
         
         imgSelectPin = UIImageView(frame: CGRect(x: 0, y: 0, w: 48, h: 52))
         imgSelectPin.center = CGPoint(x: screenWidth / 2, y: screenHeight / 2 - 26)
@@ -180,24 +171,26 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         request.transportType = .automobile
         
         btnDistIndicator.lblDistance.isHidden = true
-        activityIndicator.startAnimating()
+        btnDistIndicator.activityIndicator.startAnimating()
         
-        routingQueue.cancelAllOperations()
-        let routingOp = RoutingOperation()
-        routingOp.completionBlock = {
-            self.doRouting(routingOp, request)
-        }
-        routingQueue.addOperation(routingOp)
+        isRoutingCancelled = false
+        doRouting(request)
     }
     
-    private func doRouting(_ operation: RoutingOperation, _ request: MKDirectionsRequest) {
-        let directions = MKDirections(request: request)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            directions.calculate { [weak self] response, error in
-                self?.activityIndicator.stopAnimating()
-                if operation.isCancelled {
-                    return
-                }
+    private func doRouting(_ request: MKDirectionsRequest) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let cancelRouting = self?.isRoutingCancelled else {
+                self?.btnDistIndicator.activityIndicator.stopAnimating()
+                return
+            }
+            guard !cancelRouting else {
+                self?.btnDistIndicator.activityIndicator.stopAnimating()
+                return
+            }
+            MKDirections(request: request).calculate { [weak self] response, error in
+                self?.btnDistIndicator.activityIndicator.stopAnimating()
+                guard let cancelRouting = self?.isRoutingCancelled else { return }
+                guard !cancelRouting else { return }
                 guard let unwrappedResponse = response else {
                     showAlert(title: "Sorry! This route is too long to draw.", message: "please try again", viewCtrler: self)
                     return
@@ -215,20 +208,15 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
                     showAlert(title: "Sorry! This route is too long to draw.", message: "please try again", viewCtrler: self)
                     return
                 }
-                if operation.isCancelled {
-                    self?.activityIndicator.stopAnimating()
-                    return
-                }
                 self?.showRouteCalculatorComponents(distance: totalDistance)
                 // fit all route overlays
                 if let first = self?.arrRoutes.first {
                     guard let rect = self?.arrRoutes.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)}) else { return }
                     self?.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150, left: 50, bottom: 90, right: 50), animated: true)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
-                    if operation.isCancelled {
-                        return
-                    }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [weak self] in
+                    guard let cancelRouting = self?.isRoutingCancelled else { return }
+                    guard !cancelRouting else { return }
                     guard let routes = self?.arrRoutes else { return }
                     self?.faeMapView.addOverlays(routes, level: MKOverlayLevel.aboveRoads)
                 })
@@ -347,9 +335,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
 class RoutingOperation: Operation {
     
     override func main() {
-        if self.isCancelled {
-            return
-        }
+
     }
     
 }
