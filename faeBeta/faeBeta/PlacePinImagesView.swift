@@ -61,7 +61,6 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     }
     
     public func setup() {
-        guard let parent = superview else { return }
         guard arrURLs.count > 1 else {
             numPages = 1
             loadScrollViewWithPage(0)
@@ -70,16 +69,7 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         
         contentSize = CGSize(width: (frame.size.width * (CGFloat(numPages) + 2)), height: frame.size.height)
         
-        pageControl = CHIPageControlAleppo(frame: CGRect(x: 0, y: frame.size.height-25, width: frame.size.width, height: 25))
-        pageControl?.radius = 4
-        pageControl?.tintColor = .white
-        pageControl?.currentPageTintColor = .white
-        pageControl?.padding = 6
-        pageControl?.hidesForSinglePage = true
-        pageControl?.isUserInteractionEnabled = false
-        parent.addSubview(pageControl!)
-        pageControl?.numberOfPages = numPages
-        prevPage = numPages
+        loadPageCtrl()
         
         loadScrollViewWithPage(0)
         loadScrollViewWithPage(1)
@@ -91,6 +81,21 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         scrollRectToVisible(newFrame, animated: false)
         
         layoutIfNeeded()
+    }
+    
+    func loadPageCtrl() {
+        guard let parent = superview else { return }
+        pageControl = CHIPageControlAleppo(frame: CGRect(x: 0, y: frame.size.height-25, width: frame.size.width, height: 25))
+        pageControl?.radius = 4
+        pageControl?.tintColor = .white
+        pageControl?.currentPageTintColor = .white
+        pageControl?.padding = 6
+        pageControl?.hidesForSinglePage = true
+        pageControl?.isUserInteractionEnabled = false
+        parent.addSubview(pageControl!)
+        pageControl?.numberOfPages = numPages
+        prevPage = numPages
+        pageControl?.set(progress: currentPage, animated: false)
     }
     
     private func loadScrollViewWithPage(_ page: Int) {

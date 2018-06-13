@@ -746,6 +746,9 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
             tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             tableView.endUpdates()
             UIView.setAnimationsEnabled(true)
+            uiviewPlaceImages.removeFromSuperview()
+            uiviewHeader.addSubview(uiviewPlaceImages)
+            uiviewPlaceImages.loadPageCtrl()
         }
         func tapWebOrPhone() {
             var strURL = ""
