@@ -2011,12 +2011,12 @@ extension FaeMapViewController {
     private func updateUnreadChatIndicator() {
         let realm = try! Realm()
         let resultRealmRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", String(Key.shared.user_id))
-        unreadNotiToken = resultRealmRecents.observe { (changes: RealmCollectionChange) in
+        unreadNotiToken = resultRealmRecents.observe { [weak self] (changes: RealmCollectionChange) in
             switch changes {
             case .initial:
-                self.setupUnreadNum(resultRealmRecents)
+                self?.setupUnreadNum(resultRealmRecents)
             case .update:
-                self.setupUnreadNum(resultRealmRecents)
+                self?.setupUnreadNum(resultRealmRecents)
             case .error:
                 break
             }
