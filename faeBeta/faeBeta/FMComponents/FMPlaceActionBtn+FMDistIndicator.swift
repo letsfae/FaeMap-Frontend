@@ -12,6 +12,7 @@ class FMDistIndicator: UIImageView {
     
     var lblDistance: UILabel!
     var strDistance = ""
+    var activityIndicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
@@ -45,6 +46,10 @@ class FMDistIndicator: UIImageView {
         addSubview(lblDistance)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-17-[v0(30)]", options: [], views: lblDistance)
+        
+        activityIndicator = createActivityIndicator(large: true)
+        addSubview(activityIndicator)
+        activityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }
     
     public func updateDistance(distance: CLLocationDistance) {
