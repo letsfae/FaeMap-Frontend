@@ -75,6 +75,7 @@
 		50E940841F79B39500269945 /* LocDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E940831F79B39500269945 /* LocDetailViewController.swift */; };
 		50F1D500204CF3F300AC57AC /* BasicMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */; };
 		50F1D502204EC98F00AC57AC /* PlaceViewMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */; };
+		50F8EE7420D1D674002FD3DE /* CitySearcherViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F8EE7320D1D674002FD3DE /* CitySearcherViewViewModel.swift */; };
 		50FCE42C1FA0EAC80071D472 /* FaeSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */; };
 		690452881F032A9900B58982 /* FaeGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690452871F032A9900B58982 /* FaeGenderView.swift */; };
 		8537A8881E08A2F00009C39B /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8537A8871E08A2F00009C39B /* SideMenuViewController.swift */; };
@@ -427,6 +428,7 @@
 		50E940831F79B39500269945 /* LocDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocDetailViewController.swift; sourceTree = "<group>"; };
 		50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicMapController.swift; sourceTree = "<group>"; };
 		50F1D501204EC98F00AC57AC /* PlaceViewMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceViewMapController.swift; sourceTree = "<group>"; };
+		50F8EE7320D1D674002FD3DE /* CitySearcherViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitySearcherViewViewModel.swift; sourceTree = "<group>"; };
 		50FCE42B1FA0EAC80071D472 /* FaeSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearch.swift; sourceTree = "<group>"; };
 		6094B2C1653F57D075827725 /* Pods-faeBeta.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-faeBeta.release.xcconfig"; path = "Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta.release.xcconfig"; sourceTree = "<group>"; };
 		690452871F032A9900B58982 /* FaeGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaeGenderView.swift; sourceTree = "<group>"; };
@@ -1458,6 +1460,7 @@
 				50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */,
 				50902F581F2BB72B002553F1 /* LocationListCell.swift */,
 				50902F5A1F2BB736002553F1 /* PlacesListCell.swift */,
+				50F8EE7320D1D674002FD3DE /* CitySearcherViewViewModel.swift */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -1804,6 +1807,8 @@
 				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer/JSQSystemSoundPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TTRangeSlider/TTRangeSlider.framework",
 			);
@@ -1817,6 +1822,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TTRangeSlider.framework",
 			);
@@ -1899,6 +1906,7 @@
 				B8849EC21EEB147A00D4588D /* MBTalkCommentsCell.swift in Sources */,
 				B83F8AEF1E0367FA00F31CEF /* FirstTimeLoginViewController.swift in Sources */,
 				9FAAA4C12091418E008BB358 /* SKDetectingImageView.swift in Sources */,
+				50F8EE7420D1D674002FD3DE /* CitySearcherViewViewModel.swift in Sources */,
 				CE1EA5771E5CC21100205857 /* LocationExtendView.swift in Sources */,
 				B0714E081D62529C00356705 /* RegisterInfoViewController.swift in Sources */,
 				B82767541DF5DD2F00CFB912 /* Database.swift in Sources */,
