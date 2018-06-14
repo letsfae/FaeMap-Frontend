@@ -120,6 +120,7 @@ class FaeCoreData: NSObject {
     func readLogInfo() {
         _ = readUsername()
         Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
+        // print("model:", Key.shared.headerUserAgent)
         if Key.shared.is_Login {
             return
         }

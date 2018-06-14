@@ -12,14 +12,14 @@ class DisconnectionViewController: UIViewController {
     
     static let shared = DisconnectionViewController()
     
-    var uiviewNavBar: UIView!
-    var btnNavBar: UIButton!
+    private var uiviewNavBar: UIView!
+    private var btnNavBar: UIButton!
     var lblFailMessage: UILabel!
-    var btnReconnect: UIButton!
+    private var btnReconnect: UIButton!
     private var reachability: Reachability!
     
-    var uiviewNavBarMenu: UIView!
-    var preStatusBarStyle = UIStatusBarStyle.default
+    private var uiviewNavBarMenu: UIView!
+    private var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +37,15 @@ class DisconnectionViewController: UIViewController {
         btnReconnect.setImage(#imageLiteral(resourceName: "btnReconnect"), for: .normal)
         view.addSubview(btnReconnect)
         btnReconnect.addTarget(self, action: #selector(actionReconnect(_:)), for: .touchUpInside)
+        
+        lblFailMessage = UILabel(frame: CGRect(x: 70 * screenWidthFactor, y: 72 * screenHeightFactor, width: 275 * screenWidthFactor, height: 60 * screenHeightFactor))
+        lblFailMessage.text = "Sorry… Reconnection failed…\nPlease try again!"
+        lblFailMessage.numberOfLines = 2
+        lblFailMessage.textAlignment = .center
+        lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenWidthFactor)
+        lblFailMessage.textColor = UIColor._898989()
+        view.addSubview(lblFailMessage)
+        lblFailMessage.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,22 +59,15 @@ class DisconnectionViewController: UIViewController {
         UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
-    @objc func actionReconnect(_ sender: UIButton) {
+    @objc private func actionReconnect(_ sender: UIButton) {
         if reachability.isReachable {
             print("[reachabilityChanged] Network reachable")
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: {
+                self.lblFailMessage.isHidden = true
+            })
         } else {
             print("[reachabilityChanged] Network not reachable")
-            if lblFailMessage != nil {
-                lblFailMessage.removeFromSuperview()
-            }
-            lblFailMessage = UILabel(frame: CGRect(x: 70 * screenWidthFactor, y: 72 * screenHeightFactor, width: 275 * screenWidthFactor, height: 60 * screenHeightFactor))
-            lblFailMessage.text = "Sorry… Reconnection failed…\nPlease try again!"
-            lblFailMessage.numberOfLines = 2
-            lblFailMessage.textAlignment = .center
-            lblFailMessage.font = UIFont(name: "AvenirNext-Medium", size: 20 * screenWidthFactor)
-            lblFailMessage.textColor = UIColor._898989()
-            view.addSubview(lblFailMessage)
+            lblFailMessage.isHidden = false
         }
     }
 }

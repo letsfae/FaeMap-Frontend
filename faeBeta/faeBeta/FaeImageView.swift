@@ -14,8 +14,8 @@ let faeChatRoomImageCache = NSCache<AnyObject, AnyObject>()
 
 class FaeImageView: UIImageView {
     
-    var fileID = -1
-    fileprivate var isChatRoom = false
+    public var fileID = -1
+    private var isChatRoom = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,10 +25,10 @@ class FaeImageView: UIImageView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
-    func loadImage(id: Int, isChatRoom: Bool = false) {
+    public func loadImage(id: Int, isChatRoom: Bool = false) {
         
         self.isChatRoom = isChatRoom
         
@@ -64,7 +64,7 @@ class FaeImageView: UIImageView {
         }
     }
     
-    @objc func openThisMedia(_ sender: UIGestureRecognizer) {
+    @objc private func openThisMedia(_ sender: UIGestureRecognizer) {
         let realm = try! Realm()
         // If previous avatar does exist in realm
         if let avatarRealm = realm.objects(UserImage.self).filter("user_id == @%", "\(fileID)").first {
@@ -116,7 +116,7 @@ class FaeImageView: UIImageView {
         }
     }
     
-    fileprivate func presentPhotoBrowser(photos: [SKPhotoProtocol]) {
+    private func presentPhotoBrowser(photos: [SKPhotoProtocol]) {
         let browser = SKPhotoBrowser(photos: photos)
         browser.initializePageIndex(0)
         /*guard let browser = IDMPhotoBrowser(photos: photos) else {

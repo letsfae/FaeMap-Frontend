@@ -110,7 +110,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     // MARK: - Load Bar
@@ -598,7 +598,7 @@ class FMPlaceResultBarCell: UITableViewCell {
     private var lblHours: UILabel!
     private var lblPrice: UILabel!
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    private var arrHour = [String]()
+    private var arrHour = [[String]]()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -615,12 +615,14 @@ class FMPlaceResultBarCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
         lblItemName.text = placeInfo.name
-        lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblItemAddr.text = addr
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update
@@ -629,8 +631,9 @@ class FMPlaceResultBarCell: UITableViewCell {
             arrHour.removeAll()
             for day in arrDay {
                 if placeInfo.hours.index(forKey: day) == nil {
-                    arrHour.append("N/A")
+                    arrHour.append(["N/A"])
                 } else {
+                    // TODO: Vicky
                     arrHour.append(placeInfo.hours[day]!)
                 }
             }
@@ -638,21 +641,30 @@ class FMPlaceResultBarCell: UITableViewCell {
             let calendar = Calendar.current
             let components = calendar.dateComponents([.weekday], from: date)
             
+            // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
             if let weekday = components.weekday {
+                var dayIdx = weekday
+                
                 if weekday == 7 {
-                    lblHours.text = arrDay[0] + ": " + arrHour[0]
+                    dayIdx = 0
                 } else if weekday == 8 {
-                    lblHours.text = arrDay[1] + ": " + arrHour[1]
-                } else {
-                    lblHours.text = arrDay[weekday] + ": " + arrHour[weekday]
+                    dayIdx = 1
                 }
+                
+                var hour = arrHour[dayIdx][0]
+                if arrHour[0].count > 1 {
+                    for hourIdx in 1..<arrHour[dayIdx].count {
+                        hour += ", " + arrHour[dayIdx][hourIdx]
+                    }
+                }
+                lblHours.text = arrDay[dayIdx] + ": " + hour
             } else {
                 lblHours.text = nil
             }
         } else {
             lblHours.text = nil
         }
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgSavedItem)
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     
     private func loadContent() {

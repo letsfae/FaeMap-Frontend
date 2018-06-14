@@ -20,14 +20,18 @@ class MoodAvatarTableViewCell: UITableViewCell {
     var imgFemale: UIImageView!
     var maleRedBtn: UIImageView!
     var femaleRedBtn: UIImageView!
+    var lblAvatarDes: UILabel!
     var btnLeft: UIButton!
     var btnRight: UIButton!
-    var lblAvatarDes: UILabel!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsetsMake(0, 500, 0, 0)
         loadAvatarItems()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     private func loadAvatarItems() {
@@ -79,11 +83,7 @@ class MoodAvatarTableViewCell: UITableViewCell {
         btnRight.addTarget(self, action: #selector(changeAvatar(_:)), for: .touchUpInside)
     }
     
-    @objc func changeAvatar(_ sender: UIButton) {
+    @objc private func changeAvatar(_ sender: UIButton) {
         delegate?.changeAvatar(tag: sender.tag)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

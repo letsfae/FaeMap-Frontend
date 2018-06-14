@@ -23,7 +23,7 @@ enum PlaceTableMode: Int {
     case search = 1
 }
 
-class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
+class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
     
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
@@ -260,7 +260,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
     }
     
     @objc func actionLeftWindowShow(_ sender: UIButton) {
-        let leftMenuVC = LeftSlidingMenuViewController()
+        let leftMenuVC = SideMenuViewController()
         leftMenuVC.delegate = self
         leftMenuVC.displayName = Key.shared.nickname
         leftMenuVC.modalPresentationStyle = .overCurrentContext
@@ -549,7 +549,7 @@ class MapBoardViewController: UIViewController, LeftSlidingMenuDelegate, UIGestu
         guard vc is InitialPageController else { return }
         if let vcRoot = vc as? InitialPageController {
             vcRoot.goToFaeMap()
-            LeftSlidingMenuViewController.boolMapBoardIsOn = false
+            SideMenuViewController.boolMapBoardIsOn = false
         }
     }
 }

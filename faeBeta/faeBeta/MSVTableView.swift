@@ -21,8 +21,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         if cellStatus == 1 {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-                //                cell.lblLocationName.text = filteredLocations[indexPath.row]
-                cell.setValueForLocationPrediction(googlePredictions[indexPath.row])
+                cell.lblLocationName.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
                 cell.bottomLine.isHidden = false
                 if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
                     cell.bottomLine.isHidden = true
@@ -77,7 +76,8 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         if cellStatus == 0 {
             return section == 1 ? filteredPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
         } else {
-            return tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count
+//            return tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count
+            return tableView == tblLocationRes ? geobytesCityData.count : arrCurtLocList.count
         }
     }
     
@@ -89,27 +89,42 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         // search location
         if cellStatus == 1 {
             if tableView == tblLocationRes {
-                schLocationBar.txtSchField.attributedText = googlePredictions[indexPath.row].faeSearchBarAttributedText()
-                Key.shared.selectedPrediction = googlePredictions[indexPath.row]
+                schLocationBar.txtSchField.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
+                Key.shared.selectedSearchedCity = geobytesCityData[indexPath.row]
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
-                
                 // TODO VICKY
-                General.shared.lookUpForCoordinate({ (place) in
-                    LocManager.shared.searchedLoc = CLLocation(latitude: place.coordinate.latitude,
-                                                               longitude: place.coordinate.longitude)
+                CitySearcher.shared.cityDetail(geobytesCityData[indexPath.row]) { (status, location) in
+                    guard status / 100 == 2 else {
+                        return
+                    }
+                    guard let location = location as? CLLocation else {
+                        return
+                    }
+                    LocManager.shared.searchedLoc = location
                     if self.schPlaceBar == nil || self.schPlaceBar.txtSchField.text == "Search Fae Map"
                         || self.schPlaceBar.txtSchField.text == "Search Place or Address" {
                         return
                     }
                     self.getPlaceInfo(content: self.schPlaceBar.txtSchField.text!, source: "name")
-                })
+                }
+                // 以下为Google Place API
+//                General.shared.lookUpForCoordinate({ (place) in
+//                    LocManager.shared.searchedLoc = CLLocation(latitude: place.coordinate.latitude,
+//                                                               longitude: place.coordinate.longitude)
+//                    if self.schPlaceBar == nil || self.schPlaceBar.txtSchField.text == "Search Fae Map"
+//                        || self.schPlaceBar.txtSchField.text == "Search Place or Address" {
+//                        return
+//                    }
+//                    self.getPlaceInfo(content: self.schPlaceBar.txtSchField.text!, source: "name")
+//                })
                 
             } else {  // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                Key.shared.selectedPrediction = nil
+//                Key.shared.selectedPrediction = nil
+                Key.shared.selectedSearchedCity = nil
                 schLocationBar.txtSchField.resignFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 

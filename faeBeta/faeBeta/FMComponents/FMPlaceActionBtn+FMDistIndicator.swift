@@ -12,6 +12,7 @@ class FMDistIndicator: UIImageView {
     
     var lblDistance: UILabel!
     var strDistance = ""
+    var activityIndicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
@@ -21,7 +22,7 @@ class FMDistIndicator: UIImageView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -45,9 +46,13 @@ class FMDistIndicator: UIImageView {
         addSubview(lblDistance)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-17-[v0(30)]", options: [], views: lblDistance)
+        
+        activityIndicator = createActivityIndicator(large: true)
+        addSubview(activityIndicator)
+        activityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }
     
-    func updateDistance(distance: CLLocationDistance) {
+    public func updateDistance(distance: CLLocationDistance) {
         lblDistance.isHidden = false
         var unit = " km"
         if Key.shared.measurementUnits == "imperial" {
@@ -58,7 +63,7 @@ class FMDistIndicator: UIImageView {
         show()
     }
     
-    func hide(animated: Bool = true) {
+    public func hide(animated: Bool = true) {
         if animated {
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
                 self.frame.origin.y = screenHeight + 10
@@ -87,7 +92,7 @@ class FMPinActionDisplay: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -117,11 +122,11 @@ class FMPinActionDisplay: UIButton {
         }
     }
     
-    func hide() {
+    public func hide() {
         alpha = 0
     }
     
-    func show() {
+    public func show() {
         alpha = 1
     }
 }

@@ -14,418 +14,7 @@ import CoreMedia
 import AVFoundation
 import RealmSwift
 
-class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate {
-    // MARK: - Properties
-    
-    /// Views
-    var faeInputBar = FaeInputBar()
-    private var uiviewNavBar: FaeNavBar!
-    var uiviewNameCard: FMNameCardView!
-    
-    /// Chat info & data source
-    var strChatId: String = ""
-    var intIsGroup: Int = 0
-    var arrUserIDs: [String] = []
-    var arrRealmUsers: [RealmUser] = []
-    var arrFaeMessages: [FaeMessage] = [] /// data source of collectionView
-    var resultRealmMessages: Results<RealmMessage>!
-    var notificationToken: NotificationToken?
-    let intNumberOfMessagesOneTime = 15
-    
-    var boolLoadingPreviousMessages = false
-    var boolJustSentHeart = false // avoid sending heart continuously
-    var avatarDictionary: NSMutableDictionary = [:]
-    private var playingAudio: JSQAudioMediaItemCustom?
-    weak var mapDelegate: LocDetailDelegate?
-    
-    override var inputAccessoryView: UIView? {
-        return faeInputBar
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-    
-    var isFirstLayout: Bool = true
-    var collectionViewBottomInset: CGFloat = 0 {
-        didSet {
-            collectionView.contentInset.bottom = collectionViewBottomInset + device_offset_bot
-            collectionView.scrollIndicatorInsets.bottom = collectionViewBottomInset + device_offset_bot
-        }
-    }
-    
-    var boolIsDisappearing: Bool = false
-    
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupCollectionView()
-        setUserInfo()
-        loadLatestMessagesFromRealm()
-        navigationBarSet()
-        collectionView.becomeFirstResponder()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        //view.layoutIfNeeded()
-        //collectionView.collectionViewLayout.invalidateLayout()
-        if !isFirstLayout {
-            scrollToBottom(animated: false)
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        boolIsDisappearing = false
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        collectionViewBottomInset = 86 // TODO: bug topStackView
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        boolIsDisappearing = true
-    }
-    
-    override func viewDidLayoutSubviews() {
-        if isFirstLayout {
-            defer { isFirstLayout = false }
-            addKeyboardObservers()
-            collectionViewBottomInset = 86
-            let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
-            collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: collectionViewContentHeight), animated: false)
-        }
-    }
-    
-    deinit {
-        removeKeyboardObservers()
-    }
-    
-    // MARK: - Setup
-    private func setupCollectionView() {
-        collectionView.backgroundColor = UIColor._241241241()
-        collectionView.keyboardDismissMode = .interactive
-        if #available(iOS 11.0, *) {
-            collectionView.contentInsetAdjustmentBehavior = .never
-        } else {
-            automaticallyAdjustsScrollViewInsets = false
-        }
-        collectionView.contentInset.top = device_offset_top
-        faeInputBar.delegate = self
-    }
-    
-    private func setUserInfo() {
-        senderId = "\(Key.shared.user_id)"
-        let realm = try! Realm()
-        for user_id in arrUserIDs {
-            if let user = realm.filterUser(id: "\(user_id)") {
-                arrRealmUsers.append(user)
-            }
-        }
-        senderDisplayName = arrRealmUsers[1].display_name
-        createAvatars()
-        collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 39, height: 39)
-        collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 39, height: 39)
-    }
-    
-    private func createAvatars() {
-        for user in arrRealmUsers {
-            var avatarJSQ: JSQMessagesAvatarImage
-            if let avatarData = user.avatar?.userSmallAvatar {
-                let avatarImg = UIImage(data: avatarData as Data)
-                avatarJSQ = JSQMessagesAvatarImage(avatarImage: avatarImg, highlightedImage: avatarImg, placeholderImage: avatarImg)
-            } else {
-                avatarJSQ = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
-            }
-            avatarDictionary.addEntries(from: [user.id : avatarJSQ])
-        }
-    }
-    
-    private func navigationBarSet() {
-        uiviewNavBar = FaeNavBar(frame: CGRect.zero)
-        view.addSubview(uiviewNavBar)
-        uiviewNavBar.loadBtnConstraints()
-        uiviewNavBar.rightBtn.setImage(nil, for: .normal)
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(navigationLeftItemTapped), for: .touchUpInside)
-        uiviewNavBar.lblTitle.text = arrRealmUsers[1].display_name
-    }
-    
-    private func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDidChangeState(_:)), name: .UIKeyboardWillChangeFrame, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleTextViewDidBeginEditing(_:)), name: .UITextViewTextDidBeginEditing, object: nil)
-    }
-    
-    private func removeKeyboardObservers() {
-        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillChangeFrame, object: nil)
-        NotificationCenter.default.removeObserver(self, name: .UITextViewTextDidBeginEditing, object: nil)
-    }
-    
-    // MARK: - Button actions & notification
-    @objc private func navigationLeftItemTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @objc
-    private func handleKeyboardDidChangeState(_ notification: Notification) {
-        if boolIsDisappearing { return }
-        guard let userInfo = notification.userInfo else { return }
-        guard let keyboardEndFrame = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let duration:TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-        let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
-        let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
-        
-        if (keyboardEndFrame.origin.y + keyboardEndFrame.size.height) > UIScreen.main.bounds.height {
-            collectionViewBottomInset = view.frame.size.height - keyboardEndFrame.origin.y - iPhoneXBottomInset
-        } else {
-            let afterBottomInset = keyboardEndFrame.height > keyboardOffsetFrame.height ? (keyboardEndFrame.height - iPhoneXBottomInset) : keyboardOffsetFrame.height
-            let differenceOfBottomInset = afterBottomInset - collectionViewBottomInset
-            if differenceOfBottomInset != 0 {
-                let contentOffset = CGPoint(x: collectionView.contentOffset.x, y: collectionView.contentOffset.y + differenceOfBottomInset)
-                UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
-                    self.collectionView.setContentOffset(contentOffset, animated: false)
-                }, completion: nil)
-            }
-            UIView.animate(withDuration: duration, delay: 0, options: animationCurve, animations: {
-                self.collectionViewBottomInset = afterBottomInset
-                self.collectionView.layoutIfNeeded()
-            }, completion: nil)
-        }
-    }
-    
-    @objc
-    private func handleTextViewDidBeginEditing(_ notification: Notification) {
-        guard let inputTextView = notification.object as? ChatInputTextView, inputTextView == faeInputBar.inputTextView else { return }
-        //scrollDialogToBottom()
-        scrollToBottom(animated: false)
-    }
-    
-    // MARK: - Layout helper
-    func scrollDialogToBottom(animated: Bool = false) {
-        let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
-        collectionView.performBatchUpdates(nil) { _ in
-            self.collectionView.scrollRectToVisible(CGRect(x: 0.0, y: collectionViewContentHeight - 1.0, width: 1.0, height: 1.0), animated: animated)
-        }
-    }
-    
-    var keyboardOffsetFrame: CGRect {
-        guard let inputFrame = inputAccessoryView?.frame else { return .zero }
-        return CGRect(origin: inputFrame.origin, size: CGSize(width: inputFrame.width, height: inputFrame.height - iPhoneXBottomInset))
-    }
-    
-    private var iPhoneXBottomInset: CGFloat {
-        if #available(iOS 11.0, *) {
-            guard UIScreen.main.nativeBounds.height == 2436 else { return 0 }
-            return view.safeAreaInsets.bottom
-        }
-        return 0
-    }
-    
-    func showAlertView(withWarning text: String) {
-        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        alert.modalPresentationStyle = .currentContext
-        let rootViewController: UIViewController =
-            UIApplication.shared.windows.last!.rootViewController!
-        rootViewController.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension ChatViewController {
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == collectionView {
-            let currentOffset = scrollView.contentOffset.y
-            if currentOffset < 1 && !boolLoadingPreviousMessages && !isFirstLayout {
-                loadPrevMessagesFromRealm()
-            }
-        }
-    }
-}
-
-// MARK: - FaeInputBarDelegate & InputView related delegates
-extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, BoardsSearchDelegate {
-    // MARK: FaeInputBarDelegate
-    func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?) {
-        if let pinView = pinView {
-            if let location = pinView.location {
-                let locDetail = "{\"latitude\":\"\(location.coordinate.latitude)\", \"longitude\":\"\(location.coordinate.longitude)\", \"address1\":\"\(pinView.lblLine1.text!)\", \"address2\":\"\(pinView.lblLine2.text!)\", \"address3\":\"\(pinView.lblLine3.text!)\", \"comment\":\"\(text)\"}"
-                storeChatMessageToRealm(type: "[Location]", text: locDetail, media: pinView.getImageData())
-            } else if let place = pinView.placeData {
-                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
-                storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
-            }
-        } else {
-             storeChatMessageToRealm(type: "text", text: text)
-        }
-        inputBar.inputTextView.text = String()
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, didChangeIntrinsicContentTo size: CGSize) {
-        
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, textViewTextDidChangeTo text: String) {
-        
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, didSendStickerWith name: String, isFaeHeart faeHeart: Bool) {
-        if faeHeart && !boolJustSentHeart {
-            storeChatMessageToRealm(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
-            boolJustSentHeart = true
-        } else {
-            storeChatMessageToRealm(type: "[Sticker]", text: name)
-        }
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, didPressQuickSendImages images: [FaePHAsset]) {
-        sendMediaMessage(images)
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, needToSendAudioData data: Data) {
-        storeChatMessageToRealm(type: "[Audio]", text: "[Audio]", media: data)
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any?) {
-        switch type {
-        case "photo":
-            let vcFullAlbum = FullAlbumViewController()
-            vcFullAlbum.prePhotoPicker = object as? FaePhotoPicker
-            vcFullAlbum.delegate = self
-            navigationController?.pushViewController(vcFullAlbum, animated: true)
-        case "camera":
-            let camera = Camera(delegate_: self)
-            camera.presentPhotoCamera(self, canEdit: false)
-        case "map":
-            let vc = SelectLocationViewController()
-            vc.boolFromChat = true
-            vc.boolSearchEnabled = true
-            vc.delegate = self
-            Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
-            navigationController?.pushViewController(vc, animated: true)
-        default: break
-        }
-    }
-    
-    // MARK: FullAlbumSelectionDelegate
-    func finishChoosing(with faePHAssets: [FaePHAsset]) {
-        sendMediaMessage(faePHAssets)
-    }
-    
-    private func sendMediaMessage(_ faePHAssets: [FaePHAsset]) {
-        for faePHAsset in faePHAssets {
-            switch faePHAsset.assetType {
-            case .photo, .livePhoto:
-                var messageType = ""
-                messageType = faePHAsset.fileFormat() == .gif ? "[Gif]" : "[Picture]"
-                storeChatMessageToRealm(type: messageType, text: messageType, faePHAsset: faePHAsset)
-            case .video:
-                storeChatMessageToRealm(type: "[Video]", text: "\(faePHAsset.phAsset?.duration ?? 0.0)", faePHAsset: faePHAsset)
-            }
-        }
-    }
-    
-    // MARK: BoardsSearchDelegate
-    func sendLocationBack(address: RouteAddress) {
-        let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
-            (placemarks, error) -> Void in
-            guard let response = placemarks?[0] else { return }
-            AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
-                self.faeInputBar.setupTopStackView(placemark: response, thumbnail: snapShotImage)
-            }
-        })
-    }
-    
-    func sendPlaceBack(placeData: PlacePin) {
-        faeInputBar.setupTopStackView(place: placeData)
-        collectionViewBottomInset = faeInputBar.intrinsicContentSize.height
-        scrollToBottom(animated: false)
-        /*let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
-        collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: collectionViewContentHeight), animated: false)*/
-    }
-}
-
-// MARK: - UIImagePickerControllerDelegate
-extension ChatViewController: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
-        let type = info[UIImagePickerControllerMediaType] as! String
-        switch type {
-        case (kUTTypeImage as String as String):
-            let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
-            storeChatMessageToRealm(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(picture))
-            //sendMessage(picture: picture, date: Date())
-            if PHPhotoLibrary.authorizationStatus() == .authorized {
-                UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
-            }
-        case (kUTTypeMovie as String as String):
-            let movieURL = info[UIImagePickerControllerMediaURL] as! URL
-            
-            //get duration of the video
-            let asset = AVURLAsset(url: movieURL)
-            let duration = CMTimeGetSeconds(asset.duration)
-            let seconds = Int(ceil(duration))
-            
-            /*let imageGenerator = AVAssetImageGenerator(asset: asset)
-             var time = asset.duration
-             time.value = 0
-             
-             //get snapImage
-             var snapImage = UIImage()
-             do {
-             let imageRef = try imageGenerator.copyCGImage(at: time, actualTime: nil)
-             snapImage = UIImage(cgImage: imageRef)
-             } catch {
-             //Handle failure
-             }
-             
-             var imageData = UIImageJPEGRepresentation(snapImage, 1)
-             let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
-             imageData = UIImageJPEGRepresentation(snapImage, factor)*/
-            
-            let path = movieURL.path
-            let data = FileManager.default.contents(atPath: path)
-            //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            storeChatMessageToRealm(type: "[Video]", text: "\(seconds)", media: data)
-        default: break
-        }
-        
-        picker.dismiss(animated: true, completion: nil)
-        
-    }
-    
-    /*func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        faeInputBar.setNeedsLayout()
-        faeInputBar.layoutIfNeeded()
-        picker.dismiss(animated: true, completion: nil)
-    }*/
-    
-    @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
-        //appWillEnterForeground()
-    }
-}
-
-// MARK: - JSQAudioMediaItemDelegateCustom
-extension ChatViewController: JSQAudioMediaItemDelegateCustom {
-    func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
-    }
-    
-    func audioMediaItemDidStartPlayingAudio(_ audioMediaItem: JSQAudioMediaItemCustom, audioButton sender: UIButton) {
-        if let current = playingAudio {
-            if current != audioMediaItem {
-                current.finishPlaying()
-            }
-        }
-        playingAudio = audioMediaItem
-    }
-}
-/*
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
-    
-    var faeInputBar = FaeInputBar()
     
     // MARK: - Properties
     private var uiviewNavBar: FaeNavBar!
@@ -433,16 +22,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var toolbarContentView: FaeChatToolBarContentView!
     var uiviewNameCard: FMNameCardView!
     // custom toolBar the bottom toolbar button
-    var btnSet = [UIButton]()
-    var btnSend: UIButton!
-    var btnKeyBoard: UIButton!
-    var btnSticker: UIButton!
-    var btnImagePicker: UIButton!
-    var btnVoiceRecorder: UIButton!
-    var btnLocation: UIButton!
+    private var btnSet = [UIButton]()
+    private var btnSend: UIButton!
+    private var btnKeyBoard: UIButton!
+    private var btnSticker: UIButton!
+    private var btnImagePicker: UIButton!
+    private var btnVoiceRecorder: UIButton!
+    private var btnLocation: UIButton!
     // heart animation related
-    var imgHeart: UIImageView!
-    var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
+    private var imgHeart: UIImageView!
+    private var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
     private var animatingHeartTimer: Timer!
     // the proxy of the keyboard
     private var uiviewKeyboard: UIView!
@@ -458,26 +47,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     let intNumberOfMessagesOneTime = 15
 
     // Control of UI position
-    var boolGoToFullContent = false // go to full album, full map, taking photo from chatting
+    var boolGoToFullContent = true // go to full album, full map, taking photo from chatting
     private var boolClosingToolbarContentView = false
     private var floatScrollViewOriginOffset: CGFloat = 0.0 // origin offset when starting dragging
-    //private let floatLocExtendHeight: CGFloat = 76
+    private let floatLocExtendHeight: CGFloat = 76
     var floatInputBarHeight: CGFloat { return self.toolbarHeightConstraint.constant }
     private let floatToolBarContentHeight: CGFloat = 271 + device_offset_bot
     var floatContentOffsetY: CGFloat = 0.0
-    private var floatDistanceInputBarToBottom: CGFloat = 20
-    /*private var floatDistanceInputBarToBottom: CGFloat {
+    private var floatDistanceInputBarToBottom: CGFloat {
         get {
             return self.toolbarBottomLayoutGuide.constant
         }
         set {
             self.toolbarBottomLayoutGuide.constant = newValue
-        }
-    }*/
-    
-    private var floatLocExtendHeight: CGFloat {
-        get {
-            return uiviewLocationExtend.isHidden ? 0.0 : 76.0
         }
     }
     
@@ -487,14 +69,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     private var playingAudio: JSQAudioMediaItemCustom?
     weak var mapDelegate: LocDetailDelegate?
     
-    override var inputAccessoryView: UIView? {
-        return faeInputBar
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -502,19 +76,17 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if #available(iOS 11.0, *) {
             collectionView.contentInsetAdjustmentBehavior = .never
         }
-        collectionView.keyboardDismissMode = .interactive
+        
         setUserInfo()
         loadLatestMessagesFromRealm()
         navigationBarSet()
-        //loadInputBarComponent()
-        //setupToolbarContentView()
-        //setupLoctionExtendView()
-        setToolBarDistanceToBottom(device_offset_bot)
-        //DispatchQueue.main.async { self.moveDownInputBar() }
+        loadInputBarComponent()
+        setupToolbarContentView()
+        setupLoctionExtendView()
+        DispatchQueue.main.async { self.moveDownInputBar() }
         setupNameCard()
-        //inputToolbar.contentView.textView.becomeFirstResponder()
-        //inputToolbar.contentView.textView.resignFirstResponder()
-        scrollToBottom(false)
+        inputToolbar.contentView.textView.becomeFirstResponder()
+        inputToolbar.contentView.textView.resignFirstResponder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -533,7 +105,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //addObservers()
+        addObservers()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -599,13 +171,84 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         view.addSubview(uiviewLocationExtend)
     }
     
-
+    private func loadInputBarComponent() {
+        let contentView = inputToolbar.contentView
+        contentView?.backgroundColor = UIColor.white
+        contentView?.textView.placeHolder = "Type Something..."
+        contentView?.textView.contentInset = UIEdgeInsetsMake(3.0, 0.0, 1.0, 0.0)
+        contentView?.textView.delegate = self
+        
+        let contentOffset = (screenWidth - 42 - 29 * 7) / 6 + 29
+        btnKeyBoard = UIButton(frame: CGRect(x: 21, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: UIControlState())
+        btnKeyBoard.setImage(UIImage(named: "keyboardEnd"), for: .highlighted)
+        btnKeyBoard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
+        contentView?.addSubview(btnKeyBoard)
+        
+        btnSticker = UIButton(frame: CGRect(x: 21 + contentOffset * 1, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnSticker.setImage(UIImage(named: "sticker"), for: UIControlState())
+        btnSticker.setImage(UIImage(named: "sticker"), for: .highlighted)
+        btnSticker.addTarget(self, action: #selector(showStikcer), for: .touchUpInside)
+        contentView?.addSubview(btnSticker)
+        
+        btnImagePicker = UIButton(frame: CGRect(x: 21 + contentOffset * 2, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: UIControlState())
+        btnImagePicker.setImage(UIImage(named: "imagePicker"), for: .highlighted)
+        contentView?.addSubview(btnImagePicker)
+        btnImagePicker.addTarget(self, action: #selector(showLibrary), for: .touchUpInside)
+        
+        let buttonCamera = UIButton(frame: CGRect(x: 21 + contentOffset * 3, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        buttonCamera.setImage(UIImage(named: "camera"), for: UIControlState())
+        buttonCamera.setImage(UIImage(named: "camera"), for: .highlighted)
+        contentView?.addSubview(buttonCamera)
+        buttonCamera.addTarget(self, action: #selector(showCamera), for: .touchUpInside)
+        
+        btnVoiceRecorder = UIButton(frame: CGRect(x: 21 + contentOffset * 4, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: UIControlState())
+        btnVoiceRecorder.setImage(UIImage(named: "voiceMessage"), for: .highlighted)
+        btnVoiceRecorder.addTarget(self, action: #selector(showRecord), for: .touchUpInside)
+        contentView?.addSubview(btnVoiceRecorder)
+        
+        btnLocation = UIButton(frame: CGRect(x: 21 + contentOffset * 5, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnLocation.setImage(UIImage(named: "shareLocation"), for: UIControlState())
+        btnLocation.showsTouchWhenHighlighted = false
+        btnLocation.addTarget(self, action: #selector(showMiniMap), for: .touchUpInside)
+        contentView?.addSubview(btnLocation)
+        
+        btnSend = UIButton(frame: CGRect(x: 21 + contentOffset * 6, y: inputToolbar.frame.height - 36, width: 29, height: 29))
+        btnSend.setImage(UIImage(named: "cannotSendMessage"), for: .disabled)
+        btnSend.setImage(UIImage(named: "cannotSendMessage"), for: .highlighted)
+        btnSend.setImage(UIImage(named: "canSendMessage"), for: .normal)
+        
+        contentView?.addSubview(btnSend)
+        btnSend.isEnabled = false
+        btnSend.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
+        
+        btnSet.append(btnKeyBoard)
+        btnSet.append(btnSticker)
+        btnSet.append(btnImagePicker)
+        btnSet.append(buttonCamera)
+        btnSet.append(btnLocation)
+        btnSet.append(btnVoiceRecorder)
+        btnSet.append(btnSend)
+        
+        for button in btnSet {
+            button.autoresizingMask = [.flexibleTopMargin]
+        }
+        
+        contentView?.heartButtonHidden = false
+        contentView?.heartButton.addTarget(self, action: #selector(heartButtonTapped), for: .touchUpInside)
+        contentView?.heartButton.addTarget(self, action: #selector(actionHoldingLikeButton(_:)), for: .touchDown)
+        contentView?.heartButton.addTarget(self, action: #selector(actionLeaveLikeButton(_:)), for: .touchDragOutside)
+        
+        automaticallyAdjustsScrollViewInsets = false
+    }
     
     private func setupToolbarContentView() {
         toolbarContentView = FaeChatToolBarContentView(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: floatToolBarContentHeight))
         toolbarContentView.delegate = self
         toolbarContentView.inputToolbar = inputToolbar
-        //view.addSubview(toolbarContentView)
+        view.addSubview(toolbarContentView)
     }
     
     private func setupNameCard() {
@@ -629,75 +272,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame), name: NSNotification.Name.UIKeyboardDidChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
-        //inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
+        inputToolbar.contentView.textView.addObserver(self, forKeyPath: "text", options: [.new], context: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeInputMode), name: NSNotification.Name.UITextInputCurrentInputModeDidChange, object: nil)
-        
-        let tapGesture = UIPanGestureRecognizer(target: self, action: #selector(tapAction(_:)))
-        tapGesture.delegate = self
-        //collectionView.addGestureRecognizer(tapGesture)
-    }
-    
-    var floatBeginOffset: CGFloat = -1.0
-    @objc func tapAction(_ recognizer: UIPanGestureRecognizer) {
-        //felixprint("panning")
-        switch recognizer.state {
-        case .began:
-            if collectionView.isBouncingBottom {
-                moveUpInputBarContentView(true)
-            }
-            break
-        case .changed:
-            let point = recognizer.location(in: inputToolbar)
-            //felixprint(point)
-            if point.y >= 0 && point.y <= 1 {
-                felixprint(point)
-                floatBeginOffset = recognizer.location(in: view).y
-            }
-            if point.y > 1 {
-                let difference = recognizer.location(in: view).y - floatBeginOffset
-                let distance = floatToolBarContentHeight - difference
-                if distance <= device_offset_bot {
-                    
-                    break
-                } else {
-                    setContraintsWhenInputBarMove(inputBarToBottom: distance, keyboard: false, isScrolling: false)
-                }
-            }
-            break
-        case .ended, .cancelled:
-            //felixprint(recognizer.velocity(in: view))
-            if floatBeginOffset < 0 {
-                if collectionView.isBouncingBottom {
-                    moveUpInputBarContentView(true)
-                }
-                break
-            }
-            let stopVelocityInY = recognizer.velocity(in: view).y
-            if abs(stopVelocityInY) <= 10 {
-                let difference = recognizer.location(in: view).y - floatBeginOffset
-                if difference < (floatToolBarContentHeight / 2) {
-                    //setContraintsWhenInputBarMove(inputBarToBottom: floatToolBarContentHeight, keyboard: false, isScrolling: false)
-                    moveUpInputBarContentView(true)
-                } else {
-                    setContraintsWhenInputBarMove(inputBarToBottom: device_offset_bot, keyboard: false, isScrolling: false)
-                }
-            } else {
-                if stopVelocityInY > 0 { // down
-                    setContraintsWhenInputBarMove(inputBarToBottom: device_offset_bot, keyboard: false, isScrolling: false)
-                } else { // up
-                    //setContraintsWhenInputBarMove(inputBarToBottom: floatToolBarContentHeight, keyboard: false, isScrolling: false)
-                    moveUpInputBarContentView(true)
-                }
-            }
-            floatBeginOffset = -1.0
-            break
-        default:
-            break
-        }
-    }
-    
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -728,14 +304,14 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     // MARK: - Input bar button actions
-    @objc func showKeyboard() {
+    @objc private func showKeyboard() {
         resetToolbarButtonIcon()
         btnKeyBoard.setImage(UIImage(named: "keyboard"), for: UIControlState())
         inputToolbar.contentView.textView.becomeFirstResponder()
         toolbarContentView.showKeyboard()
     }
     
-    @objc func showStikcer() {
+    @objc private func showStikcer() {
         toolbarContentView.setup(FaeChatToolBarContentView.STICKER)
         resetToolbarButtonIcon()
         btnSticker.setImage(UIImage(named: "stickerChosen"), for: UIControlState())
@@ -746,7 +322,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showLibrary() {
+    @objc private func showLibrary() {
         if PHPhotoLibrary.authorizationStatus() != .authorized {
             PHPhotoLibrary.requestAuthorization { [weak self] status in
                 if status != .authorized {
@@ -773,7 +349,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showCamera() {
+    @objc private func showCamera() {
         view.endEditing(true)
         uiviewLocationExtend.isHidden = true
         boolGoToFullContent = true
@@ -784,7 +360,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         camera.presentPhotoCamera(self, canEdit: false)
     }
     
-    @objc func showRecord() {
+    @objc private func showRecord() {
         toolbarContentView.setup(FaeChatToolBarContentView.AUDIO)
         resetToolbarButtonIcon()
         btnVoiceRecorder.setImage(UIImage(named: "voiceMessage_red"), for: UIControlState())
@@ -795,7 +371,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func showMiniMap() {
+    @objc private func showMiniMap() {
         toolbarContentView.setup(FaeChatToolBarContentView.MINIMAP)
         toolbarContentView.viewMiniLoc.delegate = self
         resetToolbarButtonIcon()
@@ -807,7 +383,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(false)
     }
     
-    @objc func sendMessageButtonTapped() {
+    @objc private func sendMessageButtonTapped() {
         if uiviewLocationExtend.isHidden {
             storeChatMessageToRealm(type: "text", text: inputToolbar.contentView.textView.text)
         } else {
@@ -836,21 +412,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
         appWillEnterForeground()
     }
- 
+
     // MARK: - Helper methods
     // scroll to the bottom of all messages
     func scrollToBottom(_ animated: Bool) {
         let currentHeight = collectionView!.collectionViewLayout.collectionViewContentSize.height
-        /*let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
+        let extendHeight = uiviewLocationExtend.isHidden ? 0.0 : floatLocExtendHeight
         let currentVisibleHeight = inputToolbar.frame.origin.y - 65 - device_offset_top - extendHeight
         if currentHeight > currentVisibleHeight {
             collectionView?.setContentOffset(CGPoint(x: 0, y: currentHeight - currentVisibleHeight), animated: animated)
         }
         collectionView.setNeedsLayout()
-        collectionView.layoutIfNeeded()*/
-        collectionView.performBatchUpdates(nil) { _ in
-            self.collectionView.scrollRectToVisible(CGRect(x: 0.0, y: currentHeight - 1.0, width: 1.0, height: 1.0), animated: animated)
-        }
+        collectionView.layoutIfNeeded()
  
     }
     
@@ -914,7 +487,7 @@ extension ChatViewController {
         if animated {
             toolbarContentView.frame.origin.y = screenHeight
             floatDistanceInputBarToBottom = 0.0
-            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.setContraintsWhenInputBarMove(inputBarToBottom: self.floatToolBarContentHeight, keyboard: false)
             }, completion: { (_) -> Void in
                 self.collectionView.isScrollEnabled = true
@@ -945,20 +518,6 @@ extension ChatViewController {
             self.collectionView.contentInset = insets
             self.collectionView.scrollIndicatorInsets = insets
         }
-    }
-    
-    private func setToolBarDistanceToBottom(_ distance: CGFloat) {
-        floatDistanceInputBarToBottom = distance
-        view.setNeedsUpdateConstraints()
-        view.layoutIfNeeded()
-        updateCollectionViewInsets()
-    }
-    
-    private func updateCollectionViewInsets() {
-        //let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.frame.maxY - inputToolbar.frame.minY - floatLocExtendHeight, 0.0)
-        let insets = UIEdgeInsetsMake(device_offset_top, 0.0, collectionView.frame.maxY - floatLocExtendHeight, 0.0)
-        collectionView.contentInset = insets
-        collectionView.scrollIndicatorInsets = insets
     }
 }
 
@@ -1031,15 +590,13 @@ extension ChatViewController {
                 distance = endFrame?.size.height ?? device_offset_bot
             }
             UIView.animate(withDuration: duration, delay: TimeInterval(0), options: animationCurve, animations: {
-                //self.setContraintsWhenInputBarMove(inputBarToBottom: distance, keyboard: true)
-                self.setToolBarDistanceToBottom(distance)
+                self.setContraintsWhenInputBarMove(inputBarToBottom: distance, keyboard: true)
                 if endFrame?.origin.y != screenHeight {
-                    //self.scrollToBottom(false)
+                    self.scrollToBottom(false)
                 }
             }, completion:{ (_) -> Void in
                             //TODO debug keyboard
             })
-            self.scrollToBottom(false)
         }
     }
     
@@ -1066,15 +623,15 @@ extension ChatViewController {
 // MARK: - Scroll view delegate
 extension ChatViewController {
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        /*if inputToolbar.contentView.textView.sizeChanged && toolbarContentView.boolKeyboardShow {
+        if inputToolbar.contentView.textView.sizeChanged && toolbarContentView.boolKeyboardShow {
             setContraintsWhenInputBarMove(inputBarToBottom: uiviewKeyboard.frame.height)
             return
-        }*/
+        }
         if scrollView == collectionView {
             let scrollViewCurrentOffset = scrollView.contentOffset.y
             var dragDistanceY = scrollViewCurrentOffset - floatScrollViewOriginOffset
             //print("current offset: \(scrollViewCurrentOffset)")
-            /*if dragDistanceY < 0
+            if dragDistanceY < 0
                 && (toolbarContentView.boolMediaShow || toolbarContentView.boolKeyboardShow)
                 && !boolClosingToolbarContentView && scrollView.isScrollEnabled == true {
                 if toolbarContentView.boolKeyboardShow {
@@ -1100,7 +657,7 @@ extension ChatViewController {
                     }
                     setContraintsWhenInputBarMove(inputBarToBottom: floatToolBarContentHeight + dragDistanceY + 0.0, keyboard: false, isScrolling: true)
                 }
-            }*/
+            }
             if scrollViewCurrentOffset < 1 && !boolLoadingPreviousMessages {
                 loadPrevMessagesFromRealm()
             }
@@ -1115,7 +672,7 @@ extension ChatViewController {
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         if scrollView == collectionView {
-            /*let scrollViewCurrentOffset = scrollView.contentOffset.y
+            let scrollViewCurrentOffset = scrollView.contentOffset.y
             if scrollViewCurrentOffset - floatScrollViewOriginOffset < -5 {
                 UIView.setAnimationsEnabled(false)
                 self.inputToolbar.contentView.textView.resignFirstResponder()
@@ -1133,7 +690,7 @@ extension ChatViewController {
                     //self.toolbarContentView.cleanUpSelectedPhotos()
                     self.boolClosingToolbarContentView = false
                 })
-            }*/
+            }
         }
     }
 }
@@ -1251,7 +808,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
         vc.boolSearchEnabled = true
         vc.delegate = self
         Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     func sendLocationMessageFromMini() {
@@ -1343,7 +900,7 @@ extension ChatViewController: LocationPickerMiniDelegate, LocationSendDelegate, 
 // MARK: - Heart related functionalites
 extension ChatViewController: CAAnimationDelegate {
     // Heart button & gesture actions
-    @objc func heartButtonTapped() {
+    @objc private func heartButtonTapped() {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
@@ -1355,13 +912,13 @@ extension ChatViewController: CAAnimationDelegate {
         }
     }
     
-    @objc func actionHoldingLikeButton(_ sender: UIButton) {
+    @objc private func actionHoldingLikeButton(_ sender: UIButton) {
         if animatingHeartTimer == nil {
             animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(animateHeart), userInfo: nil, repeats: true)
         }
     }
     
-    @objc func actionLeaveLikeButton(_ sender: UIButton) {
+    @objc private func actionLeaveLikeButton(_ sender: UIButton) {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
@@ -1439,10 +996,3 @@ extension ChatViewController: JSQAudioMediaItemDelegateCustom {
         playingAudio = audioMediaItem
     }
 }
-
-extension UIScrollView {
-    var isBouncingBottom: Bool {
-        let contentFillsScrollEdges = contentSize.height + contentInset.top + contentInset.bottom >= bounds.height
-        return contentFillsScrollEdges && contentOffset.y > contentSize.height - bounds.height + contentInset.bottom
-    }
-}*/

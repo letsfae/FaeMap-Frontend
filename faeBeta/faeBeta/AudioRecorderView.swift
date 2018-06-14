@@ -93,7 +93,7 @@ class AudioRecorderView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     // MARK: - Button actions

@@ -191,13 +191,8 @@ extension ChatViewController {
             while !(arrControllers?.last is InitialPageController) {
                 arrControllers?.removeLast()
             }
-            guard let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "").data(using: .utf8) else { return }
-            var jsonLocDetail: JSON!
-            do {
-                jsonLocDetail = try JSON(data: strLocDetail)
-            } catch {
-                print("JSON Error: \(error)")
-            }
+            let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
+            let jsonLocDetail = JSON(data: strLocDetail.data(using: .utf8)!)
             //let vcLocDetail = LocDetailViewController()
             let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
             mapDelegate?.jumpToViewLocation(coordinate: coordinate, created: false)
@@ -209,13 +204,8 @@ extension ChatViewController {
              navigationController?.pushViewController(self.vcLocDetail, animated: true)*/
         case "[Place]":
             let strPlaceDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
-            guard let dataPlace = strPlaceDetail.data(using: .utf8) else { return }
-            var jsonPlace: JSON!
-            do {
-                jsonPlace = try JSON(data: dataPlace)
-            } catch {
-                print("JSON Error: \(error)")
-            }
+            let dataPlace = strPlaceDetail.data(using: .utf8)
+            let jsonPlace = JSON(data: dataPlace!)
             FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     guard let placeInfo = message else { return }
@@ -227,13 +217,8 @@ extension ChatViewController {
             }
         case "[Collection]":
             let strCollectionDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "")
-            guard let dataCollection = strCollectionDetail.data(using: .utf8) else { return }
-            var jsonCollection: JSON!
-            do {
-                jsonCollection = try JSON(data: dataCollection)
-            } catch {
-                print("JSON Error: \(error)")
-            }
+            let dataCollection = strCollectionDetail.data(using: .utf8)
+            let jsonCollection = JSON(data: dataCollection!)
             let vcCollection = CollectionsListDetailViewController()
             vcCollection.enterMode = .place
             vcCollection.boolFromChat = true
@@ -308,7 +293,7 @@ extension ChatViewController {
     /// Called when avatar tapped
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         view.endEditing(true)
-        //resetToolbarButtonIcon()
+        resetToolbarButtonIcon()
         let faeMessage = arrFaeMessages[indexPath.row]
         uiviewNameCard.userId = Int(faeMessage.senderId)!
         uiviewNameCard.boolSmallSize = true

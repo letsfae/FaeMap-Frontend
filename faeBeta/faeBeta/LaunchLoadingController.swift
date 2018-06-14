@@ -10,7 +10,7 @@ import UIKit
 
 class LaunchLoadingController: UIViewController {
 
-    var activityIndicator: UIActivityIndicatorView!
+    private var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class LaunchLoadingController: UIViewController {
         activityIndicator.stopAnimating()
     }
 
-    fileprivate func loadContent() {
+    private func loadContent() {
         
         view.backgroundColor = .white
         

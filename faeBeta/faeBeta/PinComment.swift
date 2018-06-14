@@ -34,4 +34,5 @@ struct PinComment {
         self.content = json["content"].stringValue
         self.attributedText = json["content"].stringValue.formatPinCommentsContent()
     }
+    
 }

@@ -92,7 +92,7 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         }
     }
     
-    // LeftSlidingMenuDelegate
+    // sideMenuDelegate
     func userInvisible(isOn: Bool) {
         vickyprint("isOn \(isOn)")
         if (isOn) {

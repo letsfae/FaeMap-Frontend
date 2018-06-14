@@ -62,24 +62,60 @@ func animateToCoordinate(mapView: MKMapView, coordinate: CLLocationCoordinate2D,
     mapView.setVisibleMapRect(rect, animated: animated)
 }
 
-func visiblePlaces(mapView: MKMapView) -> [CCHMapClusterAnnotation] {
-    var mapRect = mapView.visibleMapRect
-    mapRect.origin.y += mapRect.size.height * 0.3
-    mapRect.size.height = mapRect.size.height * 0.7
-    let visibleAnnos = mapView.annotations(in: mapRect)
-    var places = [CCHMapClusterAnnotation]()
-    for anno in visibleAnnos {
-        if anno is CCHMapClusterAnnotation {
-            guard let place = anno as? CCHMapClusterAnnotation else { continue }
-            guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
-            guard mapView.view(for: place) is PlacePinAnnotationView else { continue }
-            guard firstAnn.type == "place" else { continue }
-            places.append(place)
-        } else {
-            continue
+func visiblePins(mapView: MKMapView, type: FaePinType, returnAll: Bool = false) -> [CCHMapClusterAnnotation] {
+    
+    var annos = [CCHMapClusterAnnotation]()
+    
+    if returnAll == false {
+        var mapRect = mapView.visibleMapRect
+        mapRect.origin.y += mapRect.size.height * 0.3
+        mapRect.size.height = mapRect.size.height * 0.7
+        let visibleAnnos = mapView.annotations(in: mapRect)
+        for anno in visibleAnnos {
+            if anno is CCHMapClusterAnnotation {
+                guard let annoPin = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = annoPin.annotations.first as? FaePinAnnotation else { continue }
+                switch type {
+                case .place:
+                    guard mapView.view(for: annoPin) is PlacePinAnnotationView else { continue }
+                    guard firstAnn.type == type else { continue }
+                    annos.append(annoPin)
+                case .location:
+                    guard mapView.view(for: annoPin) is LocPinAnnotationView else { continue }
+                    guard firstAnn.type == type else { continue }
+                    annos.append(annoPin)
+                default:
+                    break
+                }
+            } else {
+                continue
+            }
+        }
+    } else {
+        let visibleAnnos = mapView.annotations
+        for anno in visibleAnnos {
+            if anno is CCHMapClusterAnnotation {
+                guard let annoPin = anno as? CCHMapClusterAnnotation else { continue }
+                guard let firstAnn = annoPin.annotations.first as? FaePinAnnotation else { continue }
+                switch type {
+                case .place:
+                    guard mapView.view(for: annoPin) is PlacePinAnnotationView else { continue }
+                    guard firstAnn.type == type else { continue }
+                    annos.append(annoPin)
+                case .location:
+                    guard mapView.view(for: annoPin) is LocPinAnnotationView else { continue }
+                    guard firstAnn.type == type else { continue }
+                    annos.append(annoPin)
+                default:
+                    break
+                }
+            } else {
+                continue
+            }
         }
     }
-    return places
+    
+    return annos
 }
 
 func cameraDiagonalDistance(mapView: MKMapView?) -> Int {
@@ -164,9 +200,11 @@ func vibrate(type: Int) {
     
 }
 
-func showAlert(title: String, message: String, viewCtrler: UIViewController) {
+func showAlert(title: String, message: String, viewCtrler: UIViewController?, handler: ((UIAlertAction) -> Void)? = nil) {
+    guard let viewCtrler = viewCtrler else { return }
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-    let okAction = UIAlertAction(title: "OK", style: .destructive)
+//    let okAction = UIAlertAction(title: "OK", style: .destructive)
+    let okAction = UIAlertAction(title: "OK", style: .destructive, handler: handler)
     alertController.addAction(okAction)
     viewCtrler.present(alertController, animated: true, completion: nil)
 }

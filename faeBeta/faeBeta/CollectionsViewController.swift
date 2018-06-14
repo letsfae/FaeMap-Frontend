@@ -16,23 +16,24 @@ enum CollectionTableMode: String {
 }
 
 class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
-    var btnNavBarMenu: UIButton!
-    var imgTick: UIImageView!
-    var uiviewDropDownMenu: UIView!
-    var tblCollections: UITableView!
-    var btnPlaces: UIButton!
-    var btnLocations: UIButton!
-    var lblPlaces: UILabel!
-    var lblLocations: UILabel!
-    var countPlaces: Int = 0
-    var countLocations: Int = 0
-    var tableMode: CollectionTableMode = .place
-    var curtTitle: String = "Places"
-    var navBarMenuBtnClicked: Bool = false
-    let realm = try! Realm()
-    var notificationToken: NotificationToken? = nil
-    var realmColPlaces: Results<RealmCollection>!
-    var realmColLocations: Results<RealmCollection>!
+    
+    private var btnNavBarMenu: UIButton!
+    private var imgTick: UIImageView!
+    private var uiviewDropDownMenu: UIView!
+    private var tblCollections: UITableView!
+    private var btnPlaces: UIButton!
+    private var btnLocations: UIButton!
+    private var lblPlaces: UILabel!
+    private var lblLocations: UILabel!
+    private var countPlaces: Int = 0
+    private var countLocations: Int = 0
+    private var tableMode: CollectionTableMode = .place
+    private var curtTitle: String = "Places"
+    private var navBarMenuBtnClicked: Bool = false
+    private let realm = try! Realm()
+    private var notificationToken: NotificationToken? = nil
+    private var realmColPlaces: Results<RealmCollection>!
+    private var realmColLocations: Results<RealmCollection>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,7 +49,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         notificationToken?.invalidate()
     }
     
-    fileprivate func loadCollectionData() {
+    private func loadCollectionData() {
         /*if realm.objects(RealmCollection.self).count != 0 {
             realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
             realmColLocations = RealmCollection.filterCollectedTypes(type: "location")
@@ -57,7 +58,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         realmColLocations = realm.filterCollectedTypes(type: "location")
     }
     
-    fileprivate func loadNavBar() {
+    private func loadNavBar() {
         let uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.loadBtnConstraints()
@@ -75,7 +76,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         btnNavBarSetTitle()
     }
     
-    fileprivate func btnNavBarSetTitle() {
+    private func btnNavBarSetTitle() {
         let curtTitleAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 20)!, NSAttributedStringKey.foregroundColor: UIColor._898989()]
         let curtTitleStr = NSMutableAttributedString(string: curtTitle + " ", attributes: curtTitleAttr)
         
@@ -88,7 +89,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         btnNavBarMenu.setAttributedTitle(curtTitlePlusImg, for: .normal)
     }
     
-    fileprivate func loadDropDownMenu() {
+    private func loadDropDownMenu() {
         uiviewDropDownMenu = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 101))
         uiviewDropDownMenu.backgroundColor = .white
         view.addSubview(uiviewDropDownMenu)
@@ -137,7 +138,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         updateCount()
     }
     
-    fileprivate func updateCount() {
+    private func updateCount() {
         countPlaces = realmColPlaces != nil ? realmColPlaces.count : 0
         let attributedStr1 = NSMutableAttributedString()
         let strPlaces = NSAttributedString(string: "Places ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])
@@ -155,7 +156,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         lblLocations.attributedText = attributedStr2
     }
     
-    fileprivate func loadMyListView() {
+    private func loadMyListView() {
         let uiviewMyList = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 25))
         uiviewMyList.backgroundColor = UIColor._248248248()
         view.addSubview(uiviewMyList)
@@ -173,7 +174,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         uiviewMyList.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: line)
     }
     
-    fileprivate func loadTable() {
+    private func loadTable() {
         tblCollections = UITableView(frame: CGRect(x: 0, y: 90 + device_offset_top, width: screenWidth, height: screenHeight - 90 - device_offset_top), style: UITableViewStyle.plain)
         view.addSubview(tblCollections)
         tblCollections.backgroundColor = .white
@@ -189,7 +190,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         tapGesture.cancelsTouchesInView = false
     }
     
-    fileprivate func hideDropDownMenu() {
+    private func hideDropDownMenu() {
         btnNavBarSetTitle()
         UIView.animate(withDuration: 0.2, animations: {
             self.uiviewDropDownMenu.frame.origin.y = -36 + device_offset_top
@@ -200,11 +201,11 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         navBarMenuBtnClicked = false
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    @objc private func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func navBarMenuAct(_ sender: UIButton) {
+    @objc private func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             btnNavBarMenu.setAttributedTitle(nil, for: .normal)
             btnNavBarMenu.setTitle("Choose a Collection...", for: .normal)
@@ -220,12 +221,12 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     // function for hide the drop down menu when tap on table
-    @objc func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
+    @objc private func rollUpDropDownMenu(_ tap: UITapGestureRecognizer) {
         hideDropDownMenu()
     }
     
     // function for buttons in drop down menu
-    @objc func dropDownMenuAct(_ sender: UIButton) {
+    @objc private func dropDownMenuAct(_ sender: UIButton) {
         switch sender.tag {
         case 0:
             curtTitle = "Places"
@@ -315,12 +316,13 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    @objc func createNewList() {
+    @objc private func createNewList() {
         let vc = CreateColListViewController()
         vc.enterMode = tableMode
         present(vc, animated: true)
     }
     
+    // MARK: - UIScrollView Delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }

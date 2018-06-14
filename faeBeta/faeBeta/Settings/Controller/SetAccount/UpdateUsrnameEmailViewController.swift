@@ -251,7 +251,6 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             let vc = SignInPhoneViewController()
             vc.enterMode = .settingsUpdate
             navigationController?.pushViewController(vc, animated: true)
-        default: break
         }
     }
     

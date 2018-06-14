@@ -371,7 +371,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         default:
             break
         }
-        let vc = CollectionMapController()
+        let vc = ExploreMapController()
         vc.arrExpPlace = arrPlaceData
         vc.strCategory = cat
         navigationController?.pushViewController(vc, animated: false)
@@ -549,7 +549,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             break
         }
         guard idx < arrPlaceData.count else { return }
-        uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: arrPlaceData[idx] as AnyObject)
+        uiviewSavedList.pinToSave = FaePinAnnotation(type: .place, cluster: nil, data: arrPlaceData[idx] as AnyObject)
         getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids
@@ -709,8 +709,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             let vcPlaceDetail = PlaceDetailViewController()
             vcPlaceDetail.place = placePin
-            vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
-            vcPlaceDetail.delegate = Key.shared.FMVCtrler
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
         } else {
             let lastSelected = Key.shared.selectedTypeIdx
@@ -731,8 +729,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func jumpToPlaceDetail(_ placeInfo: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = placeInfo
-        vcPlaceDetail.featureDelegate = Key.shared.FMVCtrler
-        vcPlaceDetail.delegate = Key.shared.FMVCtrler
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     

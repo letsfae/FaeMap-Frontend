@@ -19,12 +19,12 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     
     // MARK: - Properties
     weak var delegate: ButtonFinishClickedDelegate?
-    var uiviewSetPicture: UIView!
-    var lblTitle: UILabel!
-    var btnAvatar: UIButton!
-    var textFieldDisplayName: UITextField!
-    var btnFinish: UIButton!
-    var uiviewBackground: UIView!
+    private var uiviewSetPicture: UIView!
+    private var lblTitle: UILabel!
+    private var btnAvatar: UIButton!
+    private var textFieldDisplayName: UITextField!
+    private var btnFinish: UIButton!
+    private var uiviewBackground: UIView!
     var imgAvatar: UIImageView!
     var activityIndicator: UIActivityIndicatorView!
     
@@ -42,7 +42,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }, completion: nil)
     }
     
-    func showGenderAge() {
+    private func showGenderAge() {
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
@@ -55,7 +55,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
-    func setupUI() {
+    private func setupUI() {
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewBackground.backgroundColor = UIColor(red: 107 / 255, green: 105 / 255, blue: 105 / 255, alpha: 0.5)
         uiviewBackground.alpha = 0
@@ -111,11 +111,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         btnFinish.addTarget(self, action: #selector(buttonFinishClicked(_:)), for: .touchUpInside)
     }
     
-    func updateDefaultProfilePic() {
+    private func updateDefaultProfilePic() {
         if Key.shared.gender == "female" {
-            self.imgAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
+            imgAvatar.image = #imageLiteral(resourceName: "PeopleWomen")
         } else {
-            self.imgAvatar.image = #imageLiteral(resourceName: "PeopleMen")
+            imgAvatar.image = #imageLiteral(resourceName: "PeopleMen")
         }
         let getSelfInfo = FaeUser()
         getSelfInfo.getAccountBasicInfo({ (status: Int, message: Any?) in
@@ -135,11 +135,11 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     // MARK: - Button & text field actions
-    @objc func addProfileAvatar(_ sender: UIButton) {
+    @objc private func addProfileAvatar(_ sender: UIButton) {
         SetAvatar.addUserImage(vc: self, type: "firstTimeLogin")
     }
     
-    @objc func displayNameValueChanged(_ sender: UITextField) {
+    @objc private func displayNameValueChanged(_ sender: UITextField) {
         if sender.text != "" {
             btnFinish.backgroundColor = UIColor._2499090()
             btnFinish.isEnabled = true
@@ -149,7 +149,7 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
-    @objc func buttonFinishClicked(_ sender: UIButton) {
+    @objc private func buttonFinishClicked(_ sender: UIButton) {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge
         activityIndicator.center = view.center
@@ -166,12 +166,12 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
     }
     
     // MARK: - Helper functions
-    func modifyDisplayName() {
+    private func modifyDisplayName() {
         let user = FaeUser()
         if let displayName = textFieldDisplayName.text {
             if displayName == "" {
                 activityIndicator.stopAnimating()
-                showAlert(title: "Please Enter Display Name", message: "try again")
+                faeBeta.showAlert(title: "Please Enter Display Name", message: "try again", viewCtrler: self)
                 return
             }
             user.whereKey("nick_name", value: displayName)
@@ -187,16 +187,16 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
                     }
                 } else if status != 422 {
                     self.activityIndicator.stopAnimating()
-                    self.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again")
+                    faeBeta.showAlert(title: "Tried to Change Display Name but Failed", message: "please try again", viewCtrler: self)
                 } else {
                     self.activityIndicator.stopAnimating()
-                    self.showAlert(title: "Please follow the rules to create a display name:", message: "1. Up to 50 characters\n2. No limits on uppercase or lowercase letters\n3. No limits on this symbols: !@#$%^&*)(+=._-, and space, but can't be all of them")
+                    faeBeta.showAlert(title: "Please follow the rules to create a display name:", message: "1. Up to 50 characters\n2. No limits on uppercase or lowercase letters\n3. No limits on this symbols: !@#$%^&*)(+=._-, and space, but can't be all of them", viewCtrler: self)
                 }
             }
         }
     }
     
-    func updateUserRealm() {
+    private func updateUserRealm() {
         let realm = try! Realm()
         let userRealm = FaeUserRealm()
         userRealm.userId = Int(Key.shared.user_id)
@@ -204,13 +204,6 @@ class FirstTimeLoginViewController: UIViewController, UIImagePickerControllerDel
         try! realm.write {
             realm.add(userRealm, update: true)
         }
-    }
-    
-    func showAlert(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.destructive)
-        alertController.addAction(okAction)
-        present(alertController, animated: true, completion: nil)
     }
     
     // MARK: - UIImagePickerControllerDelegate

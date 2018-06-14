@@ -34,7 +34,7 @@ class InitialPageController: UIPageViewController {
         //loadRecents()
     }
     
-    func goToFaeMap(animated: Bool = true, _ completion: (() -> ())? = nil) {
+    public func goToFaeMap(animated: Bool = true, _ completion: (() -> ())? = nil) {
         if let faeMap = arrViewCtrl.first {
             self.setViewControllers([faeMap], direction: .reverse, animated: animated, completion: { _ in
                 completion?()
@@ -42,7 +42,7 @@ class InitialPageController: UIPageViewController {
         }
     }
     
-    func goToMapBoard(animated: Bool = true, _ completion: (() -> ())? = nil) {
+    public func goToMapBoard(animated: Bool = true, _ completion: (() -> ())? = nil) {
         if let mapBoard = arrViewCtrl.last {
             self.setViewControllers([mapBoard], direction: .forward, animated: animated, completion: { _ in
                 completion?()

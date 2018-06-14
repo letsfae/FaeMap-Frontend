@@ -213,13 +213,7 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
     func openContacts() {
         let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
         let jsonData = NSData(contentsOfFile: path!)
-        var phoneJson: JSON!
-        do {
-            phoneJson = try JSON(data: jsonData! as Data)["data"]
-        } catch {
-            print("JSON Error: \(error)")
-        }
-        //let phoneJson = JSON(data: jsonData! as Data)["data"]
+        let phoneJson = JSON(data: jsonData! as Data)["data"]
         
         for each in phoneJson.array! {
             let country = CountryCodeStruct(json: each)

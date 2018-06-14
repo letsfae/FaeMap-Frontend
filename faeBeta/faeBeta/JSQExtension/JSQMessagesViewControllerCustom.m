@@ -123,10 +123,10 @@ static void * kJSQMessagesKeyValueObservingContext = &kJSQMessagesKeyValueObserv
 JSQMessagesKeyboardControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet JSQMessagesCollectionViewCustom *collectionView;
-//@property (weak, nonatomic) IBOutlet JSQMessagesInputToolbarCustom *inputToolbar;
+@property (weak, nonatomic) IBOutlet JSQMessagesInputToolbarCustom *inputToolbar;
 
-//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarHeightConstraint;
-//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarBottomLayoutGuide;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarBottomLayoutGuide;
 
 @property (weak, nonatomic) UIView *snapshotView;
 
@@ -179,18 +179,18 @@ JSQMessagesKeyboardControllerDelegate>
 
     self.jsq_isObserving = NO;
 
-    //self.toolbarHeightConstraint.constant = self.inputToolbar.preferredDefaultHeight;
+    self.toolbarHeightConstraint.constant = self.inputToolbar.preferredDefaultHeight;
 
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self; // Notice: It works here, but it's definately not the best practice
 
-    //self.inputToolbar.delegate = self;
-    //self.inputToolbar.maximumHeight = 158;
-    //self.inputToolbar.contentView.textView.placeHolder = [NSBundle jsq_localizedStringForKey:@"new_message"];
+    self.inputToolbar.delegate = self;
+    self.inputToolbar.maximumHeight = 158;
+    self.inputToolbar.contentView.textView.placeHolder = [NSBundle jsq_localizedStringForKey:@"new_message"];
 
-    //self.inputToolbar.contentView.textView.accessibilityLabel = [NSBundle jsq_localizedStringForKey:@"new_message"];
+    self.inputToolbar.contentView.textView.accessibilityLabel = [NSBundle jsq_localizedStringForKey:@"new_message"];
 
-    //self.inputToolbar.contentView.textView.delegate = self;
+    self.inputToolbar.contentView.textView.delegate = self;
 
     self.automaticallyScrollsToMostRecentMessage = YES;
 
@@ -212,12 +212,12 @@ JSQMessagesKeyboardControllerDelegate>
     [self jsq_updateCollectionViewInsets];
 
     // Don't set keyboardController if client creates custom content view via -loadToolbarContentView
-    //if (self.inputToolbar.contentView.textView != nil) {
+    if (self.inputToolbar.contentView.textView != nil) {
         /*self.keyboardController = [[JSQMessagesKeyboardController alloc] initWithTextView:self.inputToolbar.contentView.textView
                                                                               contextView:self.view
                                                                      panGestureRecognizer:self.collectionView.panGestureRecognizer
                                                                                  delegate:self];*/
-    //}
+    }
     
     UIMenuItem* miCustom1 = [[UIMenuItem alloc] initWithTitle: @"Favorite" action:@selector(favoriteSticker:)];
     
@@ -234,8 +234,8 @@ JSQMessagesKeyboardControllerDelegate>
     _collectionView.dataSource = nil;
     _collectionView.delegate = nil;
 
-    //_inputToolbar.contentView.textView.delegate = nil;
-    //_inputToolbar.delegate = nil;
+    _inputToolbar.contentView.textView.delegate = nil;
+    _inputToolbar.delegate = nil;
 
     [_keyboardController endListeningForKeyboard];
     _keyboardController = nil;
@@ -290,8 +290,8 @@ JSQMessagesKeyboardControllerDelegate>
     NSParameterAssert(self.senderDisplayName != nil);
 
     [super viewWillAppear:animated];
-    //self.toolbarHeightConstraint.constant = self.inputToolbar.preferredDefaultHeight;
-    /*[self.view layoutIfNeeded];
+    self.toolbarHeightConstraint.constant = self.inputToolbar.preferredDefaultHeight;
+    [self.view layoutIfNeeded];
     [self.collectionView.collectionViewLayout invalidateLayout];
 
     if (self.automaticallyScrollsToMostRecentMessage) {
@@ -301,7 +301,7 @@ JSQMessagesKeyboardControllerDelegate>
         });
     }
 
-    [self jsq_updateKeyboardTriggerPoint];*/
+    [self jsq_updateKeyboardTriggerPoint];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -402,21 +402,21 @@ JSQMessagesKeyboardControllerDelegate>
 
 - (void)finishSendingMessageAnimated:(BOOL)animated cleanTextView: (BOOL)cleanTextView {
 
-    /*UITextView *textView = self.inputToolbar.contentView.textView;
+    UITextView *textView = self.inputToolbar.contentView.textView;
     if(cleanTextView){
         textView.text = nil;
         [self.inputToolbar toggleSendButtonEnabled];
     }
     [textView.undoManager removeAllActions];
 
-    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:textView];*/
+    [[NSNotificationCenter defaultCenter] postNotificationName:UITextViewTextDidChangeNotification object:textView];
 
     [self.collectionView.collectionViewLayout invalidateLayoutWithContext:[JSQMessagesCollectionViewFlowLayoutInvalidationContext context]];
     [self.collectionView reloadData];
 
-    /*if (self.automaticallyScrollsToMostRecentMessage) {
+    if (self.automaticallyScrollsToMostRecentMessage) {
         [self scrollToBottomAnimated:animated];
-    }*/
+    }
 }
 
 - (void)finishReceivingMessage

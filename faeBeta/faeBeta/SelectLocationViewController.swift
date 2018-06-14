@@ -24,47 +24,53 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     weak var delegate: BoardsSearchDelegate?
     
     // Screen Buttons
-    var faeMapView: FaeMapView!
-    var btnLocat: FMLocateSelf!
-    var btnZoom: FMZoomButton!
-    var btnSelect: FMDistIndicator!
+    private var faeMapView: FaeMapView!
+    private var btnLocat: FMLocateSelf!
+    private var btnZoom: FMZoomButton!
+    private var btnSelect: FMDistIndicator!
     
     // Address parsing & display
-    var imgSchbarShadow: UIImageView!
-    var lblSearchContent: UILabel!
-    var btnSearch: UIButton!
-    var btnClearSearchRes: UIButton!
-    var routeAddress: RouteAddress!
-    var mode: SelectLoctionMode = .full
+    private var imgSchbarShadow: UIImageView!
+    private var lblSearchContent: UILabel!
+    private var btnSearch: UIButton!
+    private var btnClearSearchRes: UIButton!
+    private var routeAddress: RouteAddress!
+    public var mode: SelectLoctionMode = .full
     
     // Place pins data management
-    var placeClusterManager: CCHMapClusterController!
-    var faePlacePins = [FaePinAnnotation]()
-    var setPlacePins = Set<Int>()
-    var arrPlaceData = [PlacePin]()
-    var selectedPlaceView: PlacePinAnnotationView?
-    var selectedPlace: FaePinAnnotation?
-    var uiviewPlaceBar = FMPlaceInfoBar()
+    private var placeClusterManager: CCHMapClusterController!
+    private var faePlacePins = [FaePinAnnotation]()
+    private var setPlacePins = Set<Int>()
+    private var arrPlaceData = [PlacePin]()
+    private var selectedPlaceView: PlacePinAnnotationView?
+    private var selectedPlace: FaePinAnnotation?
+    private var uiviewPlaceBar = FMPlaceInfoBar()
+    private var placeAdderQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "adder queue"
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
     
     // Boolean values
-    var fullyLoaded = false // if all ui components are fully loaded
+    private var fullyLoaded = false // if all ui components are fully loaded
     var boolFromBoard = false // if called from BoardSearchViewController
     var boolSearchEnabled = false
     var boolFromExplore = false
     var boolFromChat = false
     
-    var placesFromSearch = [FaePinAnnotation]()
+    private var placesFromSearch = [FaePinAnnotation]()
     
-    var strShownLoc: String = ""
+    public var strShownLoc: String = ""
     
     // Location Pin Control
-    var selectedLocation: FaePinAnnotation?
-    var uiviewLocationBar: FMLocationInfoBar!
-    var selectedLocAnno: LocPinAnnotationView?
-    var activityIndicatorLocPin: UIActivityIndicatorView!
-    var locationPinClusterManager: CCHMapClusterController!
+    private var selectedLocation: FaePinAnnotation?
+    private var uiviewLocationBar: FMLocationInfoBar!
+    private var selectedLocAnno: LocPinAnnotationView?
+    private var activityIndicatorLocPin: UIActivityIndicatorView!
+    private var locationPinClusterManager: CCHMapClusterController!
     
-    var modeLocation: FaeMode = .off {
+    private var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
             if modeLocation != .off {
@@ -75,7 +81,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    var modeLocCreating: FaeMode = .off {
+    private var modeLocCreating: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
             if modeLocCreating == .off {
@@ -110,7 +116,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Loading Parts
     
-    func loadPinIcon() {
+    private func loadPinIcon() {
         guard !boolFromChat else { return }
         let imgIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
         imgIcon.image = #imageLiteral(resourceName: "icon_destination")
@@ -119,7 +125,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         view.addSubview(imgIcon)
     }
     
-    func loadMapView() {
+    private func loadMapView() {
         faeMapView = FaeMapView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         faeMapView.showsUserLocation = true
         faeMapView.delegate = self
@@ -158,7 +164,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         faeMapView.setRegion(coordinateRegion, animated: false)
     }
     
-    func loadSearchBar() {
+    private func loadSearchBar() {
         imgSchbarShadow = UIImageView()
         imgSchbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
         imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
@@ -199,7 +205,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSearch.isEnabled = boolSearchEnabled
     }
     
-    func loadButtons() {
+    private func loadButtons() {
         btnLocat = FMLocateSelf()
         btnLocat.removeTarget(nil, action: nil, for: .touchUpInside)
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
@@ -239,14 +245,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
     }
     
-    func loadLocationView() {
+    private func loadLocationView() {
         uiviewLocationBar = FMLocationInfoBar()
         view.addSubview(uiviewLocationBar)
         uiviewLocationBar.alpha = 0
         loadActivityIndicator()
     }
     
-    func loadActivityIndicator() {
+    private func loadActivityIndicator() {
         activityIndicatorLocPin = UIActivityIndicatorView()
         activityIndicatorLocPin.activityIndicatorViewStyle = .gray
         activityIndicatorLocPin.center = CGPoint(x: screenWidth / 2, y: 110 + device_offset_top)
@@ -256,7 +262,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         view.addSubview(activityIndicatorLocPin)
     }
     
-    func loadPlaceInfoBar() {
+    private func loadPlaceInfoBar() {
         view.addSubview(uiviewPlaceBar)
         uiviewPlaceBar.delegate = self
         uiviewPlaceBar.boolDisableSwipe = true
@@ -278,9 +284,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
-            if firstAnn.type == "place" {
+            if firstAnn.type == .place {
                 return viewForPlace(annotation: annotation, first: firstAnn)
-            } else if firstAnn.type == "location" {
+            } else if firstAnn.type == .location {
                 return viewForLocation(annotation: annotation, first: firstAnn)
             }
         }
@@ -362,16 +368,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == "place" {
+        if firstAnn.type == .place {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
-        } else if firstAnn.type == "location" {
+        } else if firstAnn.type == .location {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
-                anView.assignImage(firstAnn.icon)
-            }
-        } else {
-            if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
         }
@@ -386,7 +388,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Place & Location Managements
     
-    func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+    private func viewForPlace(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "place"
         var anView: PlacePinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? PlacePinAnnotationView {
@@ -399,7 +401,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         return anView
     }
     
-    func tapPlacePin(didSelect view: MKAnnotationView) {
+    private func tapPlacePin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
@@ -408,7 +410,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
         selectedPlaceView = anView
-        guard firstAnn.type == "place" else { return }
+        guard firstAnn.type == .place else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
         uiviewPlaceBar.tag = 1
@@ -421,12 +423,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    func updatePlacePins() {
-        let coorDistance = cameraDiagonalDistance()
+    private func updatePlacePins() {
+        let coorDistance = faeBeta.cameraDiagonalDistance(mapView: faeMapView)
         refreshPlacePins(radius: coorDistance)
     }
     
-    func refreshPlacePins(radius: Int) {
+    private func refreshPlacePins(radius: Int) {
         if boolFromBoard || boolFromExplore { return }
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
@@ -443,13 +445,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
-        let getPlaceInfo = FaeMap()
-        getPlaceInfo.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
-        getPlaceInfo.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        getPlaceInfo.whereKey("radius", value: "500000")
-        getPlaceInfo.whereKey("type", value: "place")
-        getPlaceInfo.whereKey("max_count", value: "100")
-        getPlaceInfo.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+        FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+        FaeMap.shared.whereKey("radius", value: "\(radius)")
+        FaeMap.shared.whereKey("type", value: "place")
+        FaeMap.shared.whereKey("max_count", value: "200")
+        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 return
             }
@@ -460,40 +461,26 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             guard mapPlaceJsonArray.count > 0 else {
                 return
             }
-            var placePins = [FaePinAnnotation]()
-            var serialQueue = DispatchQueue(label: "appendPlaces")
-            if #available(iOS 10.0, *) {
-                serialQueue = DispatchQueue(label: "appendPlaces", qos: .userInteractive, attributes: [], autoreleaseFrequency: .workItem, target: nil)
-            } else {
-                // Fallback on earlier versions
-            }
-            serialQueue.async {
-                var i = 0
-                for placeJson in mapPlaceJsonArray {
-                    let placeData = PlacePin(json: placeJson)
-                    let place = FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: placeData)
-                    if self.setPlacePins.contains(placeJson["place_id"].intValue) {
-                        //                        joshprint(i, "inserted fail")
-                    } else {
-                        self.setPlacePins.insert(placeJson["place_id"].intValue)
-                        placePins.append(place)
-                        self.faePlacePins.append(place)
-                    }
-                    i += 1
-                }
-                //                joshprint(" ")
-                guard placePins.count > 0 else { return }
-                //                joshprint(self.faePlacePins.count)
+            self.placeAdderQueue.cancelAllOperations()
+            let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            adder.completionBlock = {
                 DispatchQueue.main.async {
-                    self.placeClusterManager.addAnnotations(placePins, withCompletionHandler: nil)
+                    if adder.isCancelled {
+                        return
+                    }
+                    self.placeClusterManager.addAnnotations(adder.placePins, withCompletionHandler: {
+                        self.setPlacePins = self.setPlacePins.union(Set(adder.ids))
+                        self.faePlacePins += adder.placePins
+                    })
                 }
             }
+            self.placeAdderQueue.addOperation(adder)
         }
     }
     
     // MARK: - Location Pin Managements
     
-    func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
+    private func viewForLocation(annotation: MKAnnotation, first: FaePinAnnotation) -> MKAnnotationView {
         let identifier = "location"
         var anView: LocPinAnnotationView
         if let dequeuedView = faeMapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? LocPinAnnotationView {
@@ -510,7 +497,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         return anView
     }
     
-    func createLocationPin(point: CGPoint) {
+    private func createLocationPin(point: CGPoint) {
         guard modeLocation == .off else { return }
         modeLocCreating = .on
         
@@ -528,10 +515,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             self.deselectAllPlaceAnnos()
             let pinData = LocationPin(position: coordinate)
             pinData.optionsReady = true
-            self.selectedLocation = FaePinAnnotation(type: "location", data: pinData as AnyObject)
+            self.selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
             self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
-            self.updateLocationInfo(location: cllocation)
+            self.uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+                self.selectedLocation?.address_1 = address_1
+                self.selectedLocation?.address_2 = address_2
+                self.btnSelect.lblDistance.textColor = UIColor._2499090()
+                self.btnSelect.isUserInteractionEnabled = true
+            }
         }
         
         if selectedLocation != nil {
@@ -544,83 +536,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    func updateLocationInfo(location: CLLocation) {
-        uiviewLocationBar.show()
-        uiviewLocationBar.updateLocationBar(name: "", address: "")
-        view.bringSubview(toFront: activityIndicatorLocPin)
-        activityIndicatorLocPin.startAnimating()
-        General.shared.getAddress(location: location, full: false) { address in
-            guard let addr = address as? String else { return }
-            DispatchQueue.main.async {
-                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
-            }
-        }
-        General.shared.getAddress(location: location, original: true) { (original) in
-            guard let first = original as? CLPlacemark else { return }
-            
-            var name = ""
-            var subThoroughfare = ""
-            var thoroughfare = ""
-            
-            var address_1 = ""
-            var address_2 = ""
-            
-            if let n = first.name {
-                name = n
-                address_1 += n
-            }
-            if let s = first.subThoroughfare {
-                subThoroughfare = s
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += s
-            }
-            if let t = first.thoroughfare {
-                thoroughfare = t
-                if address_1 != "" {
-                    address_1 += ", "
-                }
-                address_1 += t
-            }
-            
-            if name == subThoroughfare + " " + thoroughfare {
-                address_1 = name
-            }
-            
-            if let l = first.locality {
-                address_2 += l
-            }
-            if let a = first.administrativeArea {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += a
-            }
-            if let p = first.postalCode {
-                address_2 += " " + p
-            }
-            if let c = first.country {
-                if address_2 != "" {
-                    address_2 += ", "
-                }
-                address_2 += c
-            }
-            
-            self.selectedLocation?.address_1 = address_1
-            self.selectedLocation?.address_2 = address_2
-            DispatchQueue.main.async {
-                self.uiviewLocationBar.updateLocationBar(name: address_1, address: address_2)
-                self.activityIndicatorLocPin.stopAnimating()
-                self.btnSelect.lblDistance.textColor = UIColor._2499090()
-                self.btnSelect.isUserInteractionEnabled = true
-            }
-        }
-    }
-    
     // MARK: - Actions in Controller
     
-    @objc func handleTap(_ tap: UITapGestureRecognizer) {
+    @objc private func handleTap(_ tap: UITapGestureRecognizer) {
         /* guard routeAddress != nil else { return }
          navigationController?.popViewController(animated: false)
          delegate?.sendLocationBack?(address: routeAddress) */
@@ -652,11 +570,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    @objc func actionBack(_ sender: UIButton) {
+    @objc private func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
     
-    @objc func actionSelfPosition(_ sender: UIButton!) {
+    @objc private func actionSelfPosition(_ sender: UIButton!) {
         let camera = faeMapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         faeMapView.setCamera(camera, animated: false)
@@ -688,7 +606,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Auxiliary Map Functions
     
-    func deselectAllPlaceAnnos() {
+    private func deselectAllPlaceAnnos() {
         if let idx = selectedPlace?.class_2_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
@@ -704,7 +622,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.isUserInteractionEnabled = false
     }
     
-    func deselectAllLocations() {
+    private func deselectAllLocations() {
         uiviewLocationBar.hide()
         
         selectedLocAnno?.hideButtons()
@@ -716,7 +634,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         selectedLocation = nil
     }
     
-    func visiblePlaces() -> [CCHMapClusterAnnotation] {
+    private func visiblePlaces() -> [CCHMapClusterAnnotation] {
         var mapRect = faeMapView.visibleMapRect
         mapRect.origin.y += mapRect.size.height * 0.3
         mapRect.size.height = mapRect.size.height * 0.7
@@ -727,7 +645,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 guard let place = anno as? CCHMapClusterAnnotation else { continue }
                 guard let firstAnn = place.annotations.first as? FaePinAnnotation else { continue }
                 guard faeMapView.view(for: place) is PlacePinAnnotationView else { continue }
-                guard firstAnn.type == "place" else { continue }
+                guard firstAnn.type == .place else { continue }
                 places.append(place)
             } else {
                 continue
@@ -736,27 +654,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         return places
     }
     
-    func cameraDiagonalDistance() -> Int {
-        guard faeMapView != nil else { return 8000 }
-        let centerCoor: CLLocationCoordinate2D = getCenterCoordinate()
-        // init center location from center coordinate
-        let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
-        let topCenterCoor: CLLocationCoordinate2D = getTopCenterCoordinate()
-        let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
-        let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation)
-        return Int(radius * 4)
-    }
-    
-    func getCenterCoordinate() -> CLLocationCoordinate2D {
-        return faeMapView.centerCoordinate
-    }
-    
-    func getTopCenterCoordinate() -> CLLocationCoordinate2D {
-        // to get coordinate from CGPoint of your map
-        return faeMapView.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
-    }
-    
-    @objc func actionSearch(_ sender: UIButton) {
+    @objc private func actionSearch(_ sender: UIButton) {
         let searchVC = MapSearchViewController()
         searchVC.faeMapView = faeMapView
         searchVC.delegate = self
@@ -765,7 +663,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     @objc func jumpToOnePlace(searchText: String, place: PlacePin) { // TODO
-        let pin = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: place)
+        let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: place)
         lblSearchContent.text = searchText
         lblSearchContent.textColor = UIColor._898989()
         btnClearSearchRes.isHidden = false
@@ -782,14 +680,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.isUserInteractionEnabled = true
     }
     
-    func removePlacePins(_ completion: (() -> ())? = nil) {
+    private func removePlacePins(_ completion: (() -> ())? = nil) {
         //let placesNeedToRemove = faePlacePins.filter({ $0 != selectedPlace })
         placeClusterManager.removeAnnotations(faePlacePins) {
             completion?()
         }
     }
     
-    @objc func actionClearSearchResults(_ sender: UIButton) {
+    @objc private func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "Search Place or Address"
         lblSearchContent.textColor = UIColor._182182182()
         btnClearSearchRes.isHidden = true
@@ -801,7 +699,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
     }
-
 }
 
 extension SelectLocationViewController: MapAction {

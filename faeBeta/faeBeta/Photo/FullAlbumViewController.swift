@@ -17,7 +17,7 @@ class FullAlbumViewController: UIViewController {
     var selectedAssets = [FaePHAsset]()
     private var faePhotoPicker: FaePhotoPicker!
     var prePhotoPicker: FaePhotoPicker?
-    weak var delegate: FullAlbumSelectionDelegate?
+    weak var delegate: FaeChatToolBarContentViewDelegate?
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -45,7 +45,7 @@ class FullAlbumViewController: UIViewController {
     private func handleDone(_ results: [FaePHAsset], _ camera: Bool) {
         dismiss(animated: true, completion: nil)
         navigationController?.popViewController(animated: true)
-        delegate?.finishChoosing(with: results)
+        delegate?.sendMediaMessage(with: results)
     }
     
     private func cancel() {

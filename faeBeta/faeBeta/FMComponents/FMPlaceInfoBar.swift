@@ -10,6 +10,191 @@ import UIKit
 import MapKit
 //import CCHMapClusterController
 
+class NewFMPlaceInfoBar: UIScrollView, UIScrollViewDelegate {
+    
+    weak var action: PlaceViewDelegate?
+    
+    var viewObjects = [PlaceView]()
+    var numPages: Int = 3
+    var currentPage = 0
+    var dataIndex = 0
+    
+    private var imgBack_0 = PlaceView()
+    private var imgBack_1 = PlaceView()
+    private var imgBack_2 = PlaceView()
+    
+    var places = [PlacePin]()
+    var annotations = [CCHMapClusterAnnotation]()
+    
+    private var prevAnnotation: CCHMapClusterAnnotation!
+    private var nextAnnotation: CCHMapClusterAnnotation!
+    
+    private var prevPlacePin: PlacePin!
+    private var nextPlacePin: PlacePin!
+    
+    override init(frame: CGRect = CGRect.zero) {
+        super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 102))
+
+        isPagingEnabled = true
+        showsVerticalScrollIndicator = false
+        showsHorizontalScrollIndicator = false
+        delegate = self
+        
+        tag = 0
+        alpha = 0
+        
+        backgroundColor = .clear
+        layer.zPosition = 605
+        addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_1, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    public func setup() {
+        
+        guard places.count > 0 else {
+            numPages = 1
+            viewObjects.append(imgBack_1)
+            loadScrollViewWithPage(0)
+            return
+        }
+        
+        contentSize = CGSize(width: (frame.size.width * (CGFloat(numPages) + 2)), height: frame.size.height)
+        
+        viewObjects.append(imgBack_0)
+        viewObjects.append(imgBack_1)
+        viewObjects.append(imgBack_2)
+        
+        loadScrollViewWithPage(0)
+        loadScrollViewWithPage(1)
+        loadScrollViewWithPage(2)
+        
+        var newFrame = frame
+        newFrame.origin.x = newFrame.size.width
+        newFrame.origin.y = 0
+        scrollRectToVisible(newFrame, animated: false)
+        
+        layoutIfNeeded()
+    }
+    
+    private func loadScrollViewWithPage(_ page: Int) {
+        if page < 0 { return }
+        if page >= numPages + 2 { return }
+        
+        var index = 0
+//        var dataIdx = 0
+        
+        if page == 0 {
+            index = numPages - 1 // the last view
+        } else if page == numPages + 1 {
+            index = 0 // the first view
+        } else {
+            index = page - 1
+        }
+        
+        let view = viewObjects[index]
+        
+        
+        
+        var newFrame = frame
+        newFrame.origin.x = frame.size.width * CGFloat(page)
+        newFrame.origin.y = 0
+        view.frame = newFrame
+        
+        if view.superview == nil {
+            addSubview(view)
+        }
+        
+        layoutIfNeeded()
+    }
+    
+    func loadingData(current: CCHMapClusterAnnotation) {
+        if let place = current.annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_1.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        guard annotations.count > 0 else { return }
+        var prev_idx = annotations.count - 1
+        var next_idx = 0
+        for i in 0..<annotations.count {
+            if annotations[i] == current {
+                prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
+                next_idx = (i + 1) >= annotations.count ? 0 : i + 1
+                break
+            } else {
+                continue
+            }
+        }
+        prevAnnotation = annotations[prev_idx]
+        nextAnnotation = annotations[next_idx]
+        if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_0.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_2.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+    }
+    
+    // MARK: - UIScrollView Delegate
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let pageWidth = frame.size.width
+        let page = floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1
+        currentPage = Int(page - 1)
+        loadScrollViewWithPage(Int(page - 1))
+        loadScrollViewWithPage(Int(page))
+        loadScrollViewWithPage(Int(page + 1))
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let pageWidth = frame.size.width
+        let page : Int = Int(floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1)
+        
+        if page == 0 {
+            contentOffset = CGPoint(x: pageWidth*(CGFloat(numPages)), y: 0)
+        } else if page == numPages + 1 {
+            contentOffset = CGPoint(x: pageWidth, y: 0)
+        }
+    }
+    
+    private func panToPrev(_ time: Double = 0.3) {
+        self.action?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
+    }
+    
+    private func panToNext(_ time: Double = 0.3) {
+        self.action?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
+    }
+    
+    func show() {
+        self.isHidden = false
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+            self.alpha = 1
+        }, completion: nil)
+    }
+    
+    func hide(animated: Bool = true) {
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                self.alpha = 0
+            }, completion: { _ in
+                self.isHidden = true
+            })
+        } else {
+            self.alpha = 0
+            self.isHidden = true
+        }
+    }
+}
+
 protocol PlaceViewDelegate: class {
     func goTo(annotation: CCHMapClusterAnnotation?, place: PlacePin?, animated: Bool)
 }
@@ -61,7 +246,7 @@ class FMPlaceInfoBar: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -155,11 +340,15 @@ class FMPlaceInfoBar: UIView {
         }
     }
     
-    func show() {
+    func show(animated: Bool = true) {
         self.isHidden = false
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
-            self.alpha = 1
-        }, completion: nil)
+        if animated {
+            UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
+                self.alpha = 1
+            }, completion: nil)
+        } else {
+            alpha = 1
+        }
     }
     
     func hide(animated: Bool = true) {
@@ -255,7 +444,7 @@ class PlaceView: UIView {
     private var lblHours: UILabel!
     private var lblPrice: UILabel!
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    private var arrHour = [String]()
+    private var arrHour = [[String]]()
     private var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
@@ -306,6 +495,8 @@ class PlaceView: UIView {
         addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblHours)
         addConstraintsWithFormat("V:|-57-[v0(16)]", options: [], views: lblHours)
         lblHours.text = ""
+        // TODO: Vicky
+        lblHours.lineBreakMode = .byTruncatingTail
         
         lblPrice = UILabel()
         addSubview(lblPrice)
@@ -325,20 +516,23 @@ class PlaceView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func setValueForPlace(placeInfo: PlacePin) {
         lblName.text = placeInfo.name
-        lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblAddr.text = addr
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .clear
         if placeInfo.hours.count > 0 {
             arrHour.removeAll()
             for day in arrDay {
                 if placeInfo.hours.index(forKey: day) == nil {
-                    arrHour.append("N/A")
+                    arrHour.append(["N/A"])
                 } else {
+                    // TODO: Vicky
                     arrHour.append(placeInfo.hours[day]!)
                 }
             }
@@ -346,14 +540,24 @@ class PlaceView: UIView {
             let calendar = Calendar.current
             let components = calendar.dateComponents([.weekday], from: date)
             
+            // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
             if let weekday = components.weekday {
+                var dayIdx = weekday
+                
                 if weekday == 7 {
-                    lblHours.text = arrDay[0] + ": " + arrHour[0]
+                    dayIdx = 0
                 } else if weekday == 8 {
-                    lblHours.text = arrDay[1] + ": " + arrHour[1]
-                } else {
-                    lblHours.text = arrDay[weekday] + ": " + arrHour[weekday]
+                    dayIdx = 1
                 }
+                
+                var hour = arrHour[dayIdx][0]
+                if arrHour[0].count > 1 {
+                    for hourIdx in 1..<arrHour[dayIdx].count {
+                        hour += ", " + arrHour[dayIdx][hourIdx]
+                    }
+                }
+                
+                lblHours.text = arrDay[dayIdx] + ": " + hour
             } else {
                 lblHours.text = nil
             }
@@ -367,7 +571,7 @@ class PlaceView: UIView {
     private func loadPlaceImage(placeInfo: PlacePin) {
         imgType.alpha = 0
         indicator.startAnimating()
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType) {
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgType) {
             self.imgType.alpha = 1
             self.indicator.stopAnimating()
         }
@@ -378,16 +582,18 @@ class PlaceView: UIView {
 class FMLocationInfoBar: UIView {
     
     private var imgType: UIImageView!
+    var activityIndicator: UIActivityIndicatorView!
     var lblName: UILabel!
     var lblAddr: UILabel!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: 414 * screenWidthFactor, height: 80))
         loadContent()
+        loadActivityIndicator()
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -424,6 +630,16 @@ class FMLocationInfoBar: UIView {
         addConstraintsWithFormat("V:|-43-[v0(16)]", options: [], views: lblAddr)
     }
     
+    private func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .gray
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        addSubview(activityIndicator)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: activityIndicator)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: activityIndicator)
+    }
+    
     func updateLocationBar(name: String, address: String) {
         lblName.text = name
         lblAddr.text = address
@@ -442,5 +658,72 @@ class FMLocationInfoBar: UIView {
         }, completion: { _ in
             self.imgType.alpha = 0
         })
+    }
+    
+    public func updateLocationInfo(location: CLLocation, _ completion: @escaping (String, String) -> Void) {
+        show()
+        updateLocationBar(name: "", address: "")
+        activityIndicator.startAnimating()
+        General.shared.getAddress(location: location, original: true) { (original) in
+            guard let first = original as? CLPlacemark else {
+                completion("Invalid Address", "")
+                return
+            }
+            
+            var name = ""
+            var subThoroughfare = ""
+            var thoroughfare = ""
+            
+            var address_1 = ""
+            var address_2 = ""
+            
+            if let n = first.name {
+                name = n
+                address_1 += n
+            }
+            if let s = first.subThoroughfare {
+                subThoroughfare = s
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += s
+            }
+            if let t = first.thoroughfare {
+                thoroughfare = t
+                if address_1 != "" {
+                    address_1 += ", "
+                }
+                address_1 += t
+            }
+            
+            if name == subThoroughfare + " " + thoroughfare {
+                address_1 = name
+            }
+            
+            if let l = first.locality {
+                address_2 += l
+            }
+            if let a = first.administrativeArea {
+                if address_2 != "" {
+                    address_2 += ", "
+                }
+                address_2 += a
+            }
+            if let p = first.postalCode {
+                address_2 += " " + p
+            }
+            if let c = first.country {
+                if address_2 != "" {
+                    address_2 += ", "
+                }
+                address_2 += c
+            }
+            
+            DispatchQueue.main.async {
+                self.updateLocationBar(name: address_1, address: address_2)
+                self.activityIndicator.stopAnimating()
+                completion(address_1, address_2)
+            }
+        }
     }
 }

@@ -11,16 +11,16 @@ import UIKit
 
 class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MoodAvatarCellDelegate {
     
-    var tblView: UITableView!
-    var intCurtAvatar = -999
-    var uiviewHeader: UIView!
-    var imgCurtAvatar: UIImageView!
-    var lblCurtAvatar: UILabel!
-    var btnSave: UIButton!
+    private var tblView: UITableView!
+    private var intCurtAvatar = -999
+    private var uiviewHeader: UIView!
+    private var imgCurtAvatar: UIImageView!
+    private var lblCurtAvatar: UILabel!
+    private var btnSave: UIButton!
     
-    let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous", "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Shiba Inu"]
+    private let titles = ["Happy", "LOL!", "Dreaming", "ARGHH >:(", "Touched", "So Fabulous", "Lots of Love <3", "Bored", "Hit Me Up!", "Super Shy", "Emotionnal", "Shh..Meditating", "Don't Disturb", "Delicious", "Curious", "Scout", "Tourist", "Shiba Inu"]
     
-    var shadowGray = UIColor._200199204()
+    private var shadowGray = UIColor._200199204()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,7 +95,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewHeader.addSubview(uiviewGrayBlock)
     }
     
-    //table view delegate function
+    //MARK: - TableView Delegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 65
     }
@@ -131,11 +131,11 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    @objc func actionCancel(_ sender: UIButton) {
+    @objc private func actionCancel(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func actionSave(_ sender: UIButton) {
+    @objc private func actionSave(_ sender: UIButton) {
         let updateMiniAvatar = FaeUser()
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
         FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
@@ -151,6 +151,7 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         })
     }
     
+    // MARK: - MoodAvatarCellDelegate
     func changeAvatar(tag: Int) {
         btnSave.isEnabled = true
         Key.shared.userMiniAvatar = tag

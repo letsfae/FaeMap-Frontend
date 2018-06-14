@@ -29,7 +29,7 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadCellContent() {
@@ -139,7 +139,7 @@ class PlacesCollectionCell: UICollectionViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadCellContent() {
@@ -169,10 +169,12 @@ class PlacesCollectionCell: UICollectionViewCell {
     func setValueForColCell(place: PlacePin) {
         imgPic.image = nil
         lblName.text = place.name
-        lblAddress.text = place.address1 + ", " + place.address2
+        var addr = place.address1 == "" ? "" : place.address1 + ", "
+        addr += place.address2
+        lblAddress.text = addr
         imgPic.backgroundColor = .white
         indicatorView.startAnimating()
-        General.shared.downloadImageForView(place: place, url: place.imageURL, imgPic: imgPic) {
+        General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPic) {
             self.indicatorView.stopAnimating()
         }
     }

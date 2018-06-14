@@ -16,10 +16,11 @@ class EXPClctTypeCell: UICollectionViewCell {
     
     //weak var delegate: ExploreCategorySearch?
     
-    var btnType: UIButton!
-    var category = ""
-    var indexPath: IndexPath!
-    var state = CategoryState.initial {
+    private var btnType: UIButton!
+    private var category = ""
+    
+    public var indexPath: IndexPath!
+    public var state = CategoryState.initial {
         didSet {
             guard fullLoaded else { return }
             switch state {
@@ -39,9 +40,7 @@ class EXPClctTypeCell: UICollectionViewCell {
         }
     }
     
-    var fullLoaded = false
-    
-    internal var widthContraint = [NSLayoutConstraint]() {
+    private var widthContraint = [NSLayoutConstraint]() {
         didSet {
             if oldValue.count != 0 {
                 removeConstraints(oldValue)
@@ -52,6 +51,8 @@ class EXPClctTypeCell: UICollectionViewCell {
         }
     }
     
+    private var fullLoaded = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         loadCellItems()
@@ -59,10 +60,10 @@ class EXPClctTypeCell: UICollectionViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
-    func setButtonColor(selected: Bool) {
+    private func setButtonColor(selected: Bool) {
         btnType.isSelected = selected
         if selected {
             btnType.titleLabel?.font = FaeFont(fontType: .demiBold, size: 15)
@@ -71,7 +72,7 @@ class EXPClctTypeCell: UICollectionViewCell {
         }
     }
     
-    func loadCellItems() {
+    private func loadCellItems() {
         btnType = UIButton()
         btnType.setTitle("", for: .normal)
         btnType.setTitleColor(.lightGray, for: .normal)
@@ -84,7 +85,7 @@ class EXPClctTypeCell: UICollectionViewCell {
         addConstraintsWithFormat("V:[v0(36)]-0-|", options: [], views: btnType)
     }
     
-    @objc func actionSearch() {
+    @objc private func actionSearch() {
         guard indexPath != nil else { return }
         //delegate?.search(category: category, indexPath: indexPath)
     }
