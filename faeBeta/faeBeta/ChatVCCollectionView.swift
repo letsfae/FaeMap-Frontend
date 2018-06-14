@@ -14,8 +14,9 @@ import AVFoundation
 import SwiftyJSON
 import RealmSwift
 
+// MARK: - collectionView delegate
 extension ChatViewController {
-    // MARK: - collection view delegate
+    /// datasource
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCellCustom
@@ -79,7 +80,7 @@ extension ChatViewController {
         return arrFaeMessages.count
     }
     
-    // this delegate is used to tell which bubble image should be used on current message
+    /// Set bubble image for incoming/outgoing messages
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, messageBubbleImageDataForItemAt indexPath: IndexPath!) -> JSQMessageBubbleImageDataSource! {
         var outgoingBubble = JSQMessagesBubbleImageFactoryCustom(bubble: UIImage(named: "bubble2"), capInsets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)).outgoingMessagesBubbleImage(with: UIColor._2499090())
         let message = arrFaeMessages[indexPath.row]
@@ -94,7 +95,7 @@ extension ChatViewController {
         }
     }
     
-    // this is used to edit top label of every cell
+    /// Set top label for timestamp if necessary
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellTopLabelAt indexPath: IndexPath!) -> NSAttributedString! {
         let faeMessage = arrFaeMessages[indexPath.row]
         if indexPath.row == 0 {
@@ -108,7 +109,7 @@ extension ChatViewController {
         return nil
     }
     
-    //this is to modify the label height
+    /// Set the label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellTopLabelAt indexPath: IndexPath!) -> CGFloat {
         let faeMessage = arrFaeMessages[indexPath.row]
         if indexPath.row == 0 {
@@ -122,28 +123,25 @@ extension ChatViewController {
         return 0.0
     }
     
+    /// Set bottom label height
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, layout collectionViewLayout: JSQMessagesCollectionViewFlowLayoutCustom!, heightForCellBottomLabelAt indexPath: IndexPath!) -> CGFloat {
         return 0.0
     }
     
-    
+    /// Set bottom label content
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, attributedTextForCellBottomLabelAt indexPath: IndexPath!) -> NSAttributedString! {
         return NSAttributedString(string: "")
     }
     
-    // bind avatar image
+    /// Set avatar image
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
         let faeMessage = arrFaeMessages[indexPath.row]
         let avatar = avatarDictionary.object(forKey: faeMessage.senderId) as! JSQMessageAvatarImageDataSource
         return avatar 
     }
     
-    // delegate when user tap the bubble, like image, location
+    /// Called when user tap the bubble, including image, location, place, collection
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
-        /*if inputToolbar.frame.minY > screenHeight - floatInputBarHeight {
-            closeToolbarContentView()
-        }
-        floatContentOffsetY = collectionView.contentOffset.y*/
         let faeMessage = arrFaeMessages[indexPath.row]
         let realm = try! Realm()
         guard let realmMessage = realm.filterMessage(faeMessage.messageId) else {
@@ -259,6 +257,7 @@ extension ChatViewController {
         }
     }
     
+    /// Set long press menu for cell
     override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
         /*let JSQMessage = arrFaeMessages[indexPath.item]
         if ["[Picture]", "[Sticker]", "text"].contains(JSQMessage.messageType) {
@@ -306,6 +305,7 @@ extension ChatViewController {
         }
     }
 
+    /// Called when avatar tapped
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
         view.endEditing(true)
         //resetToolbarButtonIcon()
@@ -339,5 +339,4 @@ extension ChatViewController: NameCardDelegate {
         addFriendVC.modalPresentationStyle = .overCurrentContext
         present(addFriendVC, animated: false)
     }    
-    
 }
