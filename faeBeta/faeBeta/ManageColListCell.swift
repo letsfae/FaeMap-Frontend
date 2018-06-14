@@ -119,7 +119,9 @@ class ColListPlaceCell: UITableViewCell {
     
     func setValueForPlace(_ placeInfo: PlacePin) {
         lblColName.text = placeInfo.name
-        lblColAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblColAddr.text = addr
         lblColMemo.text = placeInfo.memo
         setConstraints(memo: placeInfo.memo)
         imgPic.backgroundColor = .white
