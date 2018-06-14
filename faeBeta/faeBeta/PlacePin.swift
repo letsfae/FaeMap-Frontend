@@ -27,14 +27,18 @@ class PlacePin: NSObject, FaePin {
     var price = ""
     var phone = ""
     var arrListSavedThisPin = [Int]()
-    var hours = [String: String]()
+    var hours = [String: [String]]()
     var memo: String = ""
     
     init(json: JSON) {
         id = json["place_id"].intValue
         name = json["name"].stringValue
         address1 = json["location"]["address"].stringValue
-        address2 = json["location"]["city"].stringValue + ", " + json["location"]["state"].stringValue + " " + json["location"]["zip_code"].stringValue + ", " + json["location"]["country"].stringValue
+        address2 = json["location"]["city"].stringValue == "" ? "" : json["location"]["city"].stringValue + ", "
+        address2 += json["location"]["state"].stringValue == "" ? "" : json["location"]["state"].stringValue + " "
+        address2 += json["location"]["zip_code"].string == nil || json["location"]["zip_code"].stringValue == "" ? "" : json["location"]["zip_code"].stringValue + ", "
+        address2 += json["location"]["country"].stringValue == "" ? "" : json["location"]["country"].stringValue
+        
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         if let _3 = json["categories"]["class3"].string {
             class_2 = _3
@@ -65,8 +69,12 @@ class PlacePin: NSObject, FaePin {
         price = json["priceRange"].stringValue
         phone = json["phone"].stringValue
         for (key, subJson) in json["hour"] {
-            hours = hours + processHours(day: key, hour: subJson.stringValue)
-            //print(subJson.stringValue)
+            hours = hours + processHours(day: key, hour: subJson)
+//            if subJson.string != nil {
+//                print("String \(subJson.stringValue)")
+//            } else {
+//                print("Array \(subJson.arrayValue)")
+//            }
         }
         
         memo = json["user_pin_operations"]["memo"].stringValue
@@ -84,49 +92,90 @@ func +<Key, Value> (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {
     return result
 }
 
-func processHours(day: String, hour: String) -> [String: String] {
-    var real_hour = hour
-    if hour == "" {
-        real_hour = "N/A"
-    }
-    var dayDict = [String: String]()
-    let days_raw = day.split(separator: ",")
-    if days_raw.count == 1 {
-        let days = String(days_raw[0]).split(separator: "–")
+func processHours(day: String, hour: JSON) -> [String: [String]] {
+//    var real_hour = hour
+//    if hour.count == 0 {
+//        real_hour.append("N/A")
+//    }
+    var dayDict = [String: [String]]()
+    
+    for days_raw in day.split(separator: ",") {
+        let days = String(days_raw).trimmingCharacters(in: .whitespaces).split(separator: "–")
         if days.count == 1 {
-            dayDict[String(days[0])] = real_hour
+            let d = String(days[0])
+            var list = dayDict[d] ?? []
+            if hour.string != nil {
+                list.append(hour.stringValue)
+                dayDict[d] = list
+            } else if hour.array != nil {
+                for h in hour.arrayValue {
+                    list.append(h.stringValue)
+                    dayDict[d] = list
+                }
+            } else {
+                list.append("N/A")
+                dayDict[d] = list
+            }
         } else if days.count == 2 {
             let day_0 = String(days[0])
             let day_1 = String(days[1])
             let arrDays = getDays(day_0, day_1)
             for d in arrDays {
-                dayDict[d] = real_hour
+                var list = dayDict[d] ?? []
+                if hour.string != nil {
+                    list.append(hour.stringValue)
+                    dayDict[d] = list
+                } else if hour.array != nil {
+                    for h in hour.arrayValue {
+                        list.append(h.stringValue)
+                        dayDict[d] = list
+                    }
+                } else {
+                    list.append("N/A")
+                    dayDict[d] = list
+                }
+            }
+        }
+    }
+    
+    /*
+    if days_raw.count == 1 {
+        let days = String(days_raw[0]).split(separator: "–")
+        if days.count == 1 {
+            dayDict = getHour(String(days[0]), hour)
+        } else if days.count == 2 {
+            let day_0 = String(days[0])
+            let day_1 = String(days[1])
+            let arrDays = getDays(day_0, day_1)
+            for d in arrDays {
+                dayDict = getHour(d, hour)
             }
         }
     } else if days_raw.count == 2 {
         var days = String(days_raw[0]).split(separator: "–")
         if days.count == 1 {
-            dayDict[day] = real_hour
+            dayDict = getHour(day, hour)
         } else if days.count == 2 {
             let day_0 = String(days[0])
             let day_1 = String(days[1])
             let arrDays = getDays(day_0, day_1)
-            for day in arrDays {
-                dayDict[day] = real_hour
+            for d in arrDays {
+                dayDict = getHour(d, hour)
             }
         }
         days = String(days_raw[1]).trim().split(separator: "–")
         if days.count == 1 {
-            dayDict[day] = real_hour
+            dayDict = getHour(day, hour)
         } else if days.count == 2 {
             let day_0 = String(days[0])
             let day_1 = String(days[1])
             let arrDays = getDays(day_0, day_1)
-            for day in arrDays {
-                dayDict[day] = real_hour
+            for d in arrDays {
+                dayDict = getHour(d, hour)
             }
         }
     }
+   */
     
     return dayDict
 }

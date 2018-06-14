@@ -65,7 +65,9 @@ class AllPlacesCell: UITableViewCell {
     
     func setValueForCell(place: PlacePin) {
         lblPlaceName.text = place.name
-        lblPlaceAddr.text = place.address1 + ", " + place.address2
+        var addr = place.address1 == "" ? "" : place.address1 + ", "
+        addr += place.address2
+        lblPlaceAddr.text = addr
         lblOpeninghour.text = place.class_1
         lblPrice.text = place.price
         imgPlaceIcon.backgroundColor = .white

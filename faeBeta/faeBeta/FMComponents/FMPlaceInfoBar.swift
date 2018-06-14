@@ -444,7 +444,7 @@ class PlaceView: UIView {
     private var lblHours: UILabel!
     private var lblPrice: UILabel!
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    private var arrHour = [String]()
+    private var arrHour = [[String]]()
     private var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
@@ -495,6 +495,8 @@ class PlaceView: UIView {
         addConstraintsWithFormat("H:|-90-[v0]-30-|", options: [], views: lblHours)
         addConstraintsWithFormat("V:|-57-[v0(16)]", options: [], views: lblHours)
         lblHours.text = ""
+        // TODO: Vicky
+        lblHours.lineBreakMode = .byTruncatingTail
         
         lblPrice = UILabel()
         addSubview(lblPrice)
@@ -519,15 +521,18 @@ class PlaceView: UIView {
     
     func setValueForPlace(placeInfo: PlacePin) {
         lblName.text = placeInfo.name
-        lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblAddr.text = addr
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .clear
         if placeInfo.hours.count > 0 {
             arrHour.removeAll()
             for day in arrDay {
                 if placeInfo.hours.index(forKey: day) == nil {
-                    arrHour.append("N/A")
+                    arrHour.append(["N/A"])
                 } else {
+                    // TODO: Vicky
                     arrHour.append(placeInfo.hours[day]!)
                 }
             }
@@ -535,14 +540,24 @@ class PlaceView: UIView {
             let calendar = Calendar.current
             let components = calendar.dateComponents([.weekday], from: date)
             
+            // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
             if let weekday = components.weekday {
+                var dayIdx = weekday
+                
                 if weekday == 7 {
-                    lblHours.text = arrDay[0] + ": " + arrHour[0]
+                    dayIdx = 0
                 } else if weekday == 8 {
-                    lblHours.text = arrDay[1] + ": " + arrHour[1]
-                } else {
-                    lblHours.text = arrDay[weekday] + ": " + arrHour[weekday]
+                    dayIdx = 1
                 }
+                
+                var hour = arrHour[dayIdx][0]
+                if arrHour[0].count > 1 {
+                    for hourIdx in 1..<arrHour[dayIdx].count {
+                        hour += ", " + arrHour[dayIdx][hourIdx]
+                    }
+                }
+                
+                lblHours.text = arrDay[dayIdx] + ": " + hour
             } else {
                 lblHours.text = nil
             }

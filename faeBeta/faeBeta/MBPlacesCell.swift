@@ -169,7 +169,9 @@ class PlacesCollectionCell: UICollectionViewCell {
     func setValueForColCell(place: PlacePin) {
         imgPic.image = nil
         lblName.text = place.name
-        lblAddress.text = place.address1 + ", " + place.address2
+        var addr = place.address1 == "" ? "" : place.address1 + ", "
+        addr += place.address2
+        lblAddress.text = addr
         imgPic.backgroundColor = .white
         indicatorView.startAnimating()
         General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPic) {
