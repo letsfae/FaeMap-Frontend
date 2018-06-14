@@ -82,6 +82,7 @@ class ChatInputBarButton: UIButton {
         }
     }
     
+    /// Image name for normal and selected state
     var imageNormalName: String = ""
     var imageSelectedName: String? = ""
     

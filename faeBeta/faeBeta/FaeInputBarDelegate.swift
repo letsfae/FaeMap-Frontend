@@ -8,44 +8,27 @@
 
 import UIKit
 
-/// A protocol that can receive different event notifications from the MessageInputBar.
+/// A protocol that can receive different event notifications from the FaeInputBar.
 protocol FaeInputBarDelegate: AnyObject {
     
-    /// Called when the default send button has been selected.
-    ///
-    /// - Parameters:
-    ///   - inputBar: The `MessageInputBar`.
-    ///   - text: The current text in the `InputTextView` of the `MessageInputBar`.
+    /// Called when the default send button has been selected
     func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?)
     
-    /// Called when the instrinsicContentSize of the MessageInputBar has changed.
-    /// Can be used for adjusting content insets on other views to make sure
-    /// the MessageInputBar does not cover up any other view.
-    ///
-    /// - Parameters:
-    ///   - inputBar: The `MessageInputBar`.
-    ///   - size: The new instrinsic content size.
+    /// Called when the instrinsicContentSize of the MessageInputBar has changed
     func faeInputBar(_ inputBar: FaeInputBar, didChangeIntrinsicContentTo size: CGSize)
     
-    /// Called when the `MessageInputBar`'s `InputTextView`'s text has changed.
-    /// Useful for adding your own logic without the need of assigning a delegate or notification.
-    ///
-    /// - Parameters:
-    ///   - inputBar: The MessageInputBar
-    ///   - text: The current text in the MessageInputBar's InputTextView
+    /// Called when the `FaeInputBar`'s `InputTextView`'s text has changed
     func faeInputBar(_ inputBar: FaeInputBar, textViewTextDidChangeTo text: String)
     
+    /// Called when a sticker has been selected from the sticker keyboard
     func faeInputBar(_ inputBar: FaeInputBar, didSendStickerWith name: String, isFaeHeart faeHeart: Bool)
     
-    func faeInputBar(_ inputBar: FaeInputBar, showFullAlbumWith photoPicker: FaePhotoPicker)
-    
+    /// Called when the send button has been selected from the quick photo picker
     func faeInputBar(_ inputBar: FaeInputBar, didPressQuickSendImages images: [FaePHAsset])
     
-    func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any)
-    
+    /// Called when the recording has finished
     func faeInputBar(_ inputBar: FaeInputBar, needToSendAudioData data: Data)
     
-    func faeInputBar(_ inputBar: FaeInputBar, showFullLocation show: Bool)
-    
-    
+    /// Called when full view of tools needs to be shown, including full map, full photo picker, system camera
+    func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any?)
 }

@@ -7,43 +7,59 @@
 //
 
 import UIKit
+import Photos
 
 class FaeInputBar: UIView {
+    // MARK: - Properties
     
     weak var delegate: FaeInputBarDelegate?
-    var backgroundView: UIView = {
+    
+    /// The backgroundView anchored to the bottom, left, and right of the FaeInputBar
+    /// which leaves a safe area for iPhone X
+    private var backgroundView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
         return view
     }()
     
-    var contentView: UIView = {
+    /// The contentView holds the InputTextView and the right/bottom InputStackView
+    private var contentView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let separatorLineTop = SeparatorLine()
-    let separatorLineMiddle = SeparatorLine()
+    /// The separator line at the top
+    private let separatorLineTop = SeparatorLine()
     
-    let topStackView: ChatInputStackView = {
+    /// The separator line between InputTextView and bottomStackView
+    private let separatorLineMiddle = SeparatorLine()
+    
+    /// The topStackView holds the place/location pin details
+    private let topStackView: ChatInputStackView = {
         let stackView = ChatInputStackView(axis: .horizontal, spacing: 0)
         stackView.alignment = .fill
         return stackView
     }()
-    var boolHasPin: Bool {
+    
+    /// Determines if the topStackView should be shown
+    private var boolHasPin: Bool {
         return topStackView.arrangedSubviews.count > 0
     }
     
-    let rightStackView = ChatInputStackView(axis: .horizontal, spacing: 0)
+    /// The rightSrackView holds the FaeHeartButton
+    private let rightStackView = ChatInputStackView(axis: .horizontal, spacing: 0)
     
-    let bottomStackView: ChatInputStackView = {
+    /// The bottonStackView holds InputBarButton,
+    /// including keyboard, sticker, photo, camera, recorder, map, send
+    private let bottomStackView: ChatInputStackView = {
         let stackView = ChatInputStackView(axis: .horizontal, spacing: 12)
         stackView.distribution = .equalCentering
         return stackView
     }()
     
+    /// The InputTextView where user types in
     lazy var inputTextView: ChatInputTextView = {
         let textView = ChatInputTextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -51,58 +67,68 @@ class FaeInputBar: UIView {
         return textView
     }()
     
-    var padding: UIEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 6) {
+    /// The anchor constants that inset the contentView
+    private var padding: UIEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 6) {
         didSet {
             updatePadding()
         }
     }
     
-    var topStackViewPadding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) {
+    /// The anchor constants used by the topStackView
+    private var topStackViewPadding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0) {
         didSet {
             updateTopStackViewPadding()
         }
     }
     
-    var textViewPadding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 8) {
+    /// The anchor constants used by the InputTextView
+    private var textViewPadding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 8) {
         didSet {
             updateTextViewPadding()
         }
     }
     
+    /// Returns the mose recent size calculated by `calculateIntrinsicContentSize()`
     override var intrinsicContentSize: CGSize {
         return cachedIntrinsicContentSize
     }
+    
+    /// Decreases the times of calling delegate to post intrinsicContentSize changing
     private(set) var previousIntrinsicContentSize: CGSize?
+    
+    /// The most recent calculation of the intrinsicContentSize
     private lazy var cachedIntrinsicContentSize: CGSize = calculateIntrinsicContentSize()
     
+    /// Determines if the maxTextViewHeight has been met
     private(set) var isOverMaxTextViewHeight = false
     
-    var maxTextViewHeight: CGFloat = 0 {
+    /// The maximum height the InputTextView can reach
+    private var maxTextViewHeight: CGFloat = 0 {
         didSet {
             textViewHeightAnchor?.constant = maxTextViewHeight
             invalidateIntrinsicContentSize()
         }
     }
     
-    var requiredInputTextViewHeight: CGFloat {
+    /// The height that will fit the current text in the InputTextView based on its current bounds
+    private var requiredInputTextViewHeight: CGFloat {
         let maxTextViewSize = CGSize(width: inputTextView.bounds.width, height: .greatestFiniteMagnitude)
         return inputTextView.sizeThatFits(maxTextViewSize).height.rounded(.down)
     }
     
+    /// The fixed widthAnchor constant of the rightStackView
     private(set) var rightStackViewWidthConstant: CGFloat = 52 {
         didSet {
             rightStackViewLayoutSet?.width?.constant = rightStackViewWidthConstant
         }
     }
     
+    /// Buttons within FaeInputBar
     private(set) var rightStackViewItems: [ChatInputBarButton] = []
     private(set) var bottomStackViewItems: [ChatInputBarButton] = []
     private var sendButton: ChatInputBarButton!
-    var items: [ChatInputBarButton] {
-        return [rightStackViewItems, bottomStackViewItems].flatMap { $0 }
-    }
     
-    
+    // MARK: Auto-Layout management
     private var textViewLayoutSet: NSLayoutConstraintSet?
     private var textViewHeightAnchor: NSLayoutConstraint?
     private var topStackViewLayoutSet: NSLayoutConstraintSet?
@@ -112,14 +138,17 @@ class FaeInputBar: UIView {
     private var windowAnchor: NSLayoutConstraint?
     private var backgroundViewBottomAnchor: NSLayoutConstraint?
     
+    // MARK: Views in InputView
     var viewStickerPicker: StickerKeyboardView!
     var faePhotoPicker: FaePhotoPicker!
     var btnQuickSendImage: UIButton!
     var viewAudioRecorder: AudioRecorderView!
     var viewMiniLoc = LocationPickerMini()
+    
     enum InputView: Int {
         case keyboard, sticker, photo, camera, recorder, map, send
     }
+    /// Current inputView type
     var currentInputView: InputView = .keyboard {
         didSet {
             defer {
@@ -127,12 +156,11 @@ class FaeInputBar: UIView {
             }
         }
     }
-    var imgHeart: UIImageView!
-    var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
-    var animatingHeartTimer: Timer!
     
+    /// FaeInputBar has shown for at least once
     var boolIsFirstShown: Bool = true
     
+    // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -151,12 +179,12 @@ class FaeInputBar: UIView {
         setupConstraints(to: window)
     }
     
+    // MARK: - Setup
     private func setup() {
         autoresizingMask = [.flexibleHeight]
         setupSubviews()
         setupConstraints()
         setupObservers()
-        
     }
     
     private func setupObservers() {
@@ -165,35 +193,7 @@ class FaeInputBar: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(textViewDidEndEditing), name: .UITextViewTextDidEndEditing, object: inputTextView)
     }
     
-    
-    func calculateIntrinsicContentSize() -> CGSize {
-        var inputTextViewHeight = requiredInputTextViewHeight
-        if inputTextViewHeight >= maxTextViewHeight {
-            if !isOverMaxTextViewHeight {
-                textViewHeightAnchor?.isActive = true
-                inputTextView.isScrollEnabled = true
-                isOverMaxTextViewHeight = true
-            }
-            inputTextViewHeight = maxTextViewHeight
-        } else {
-            if isOverMaxTextViewHeight {
-                textViewHeightAnchor?.isActive = false
-                inputTextView.isScrollEnabled = false
-                isOverMaxTextViewHeight = false
-                inputTextView.invalidateIntrinsicContentSize()
-            }
-        }
-        
-        let totalPadding = padding.top + padding.bottom + topStackViewPadding.top + textViewPadding.top + textViewPadding.bottom
-        let topStackViewHeight = topStackView.arrangedSubviews.count > 0 ? topStackView.bounds.height : 0
-        let bottomStackViewHeight = bottomStackView.bounds.height
-        let verticalStackViewHeight = topStackViewHeight + bottomStackViewHeight
-        let requiredHeight = inputTextViewHeight + totalPadding + verticalStackViewHeight
-        return CGSize(width: bounds.width, height: requiredHeight)
-    }
-    
     private func setupSubviews() {
-        //setupTopStackView()
         setupRightStackView()
         setupBottomStackView()
         addSubview(backgroundView)
@@ -204,6 +204,42 @@ class FaeInputBar: UIView {
         contentView.addSubview(rightStackView)
         contentView.addSubview(separatorLineMiddle)
         contentView.addSubview(bottomStackView)
+    }
+    
+    private func setupRightStackView() {
+        let heart = FaeHeartButton()
+        heart.delegate = self
+        performLayout(false) {
+            self.rightStackView.addArrangedSubview(heart)
+            guard self.superview != nil else { return }
+            self.rightStackView.layoutIfNeeded()
+            self.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    private func setupBottomStackView() {
+        let items = [
+            makeButton(named: "keyboardEnd", tag: InputView.keyboard.rawValue, highlight: "keyboard"),
+            makeButton(named: "sticker", tag: InputView.sticker.rawValue, highlight: "stickerChosen"),
+            makeButton(named: "imagePicker", tag: InputView.photo.rawValue, highlight: "imagePickerChosen"),
+            makeButton(named: "camera", tag: InputView.camera.rawValue, highlight: ""),
+            makeButton(named: "voiceMessage", tag: InputView.recorder.rawValue, highlight: "voiceMessage_red"),
+            makeButton(named: "shareLocation", tag: InputView.map.rawValue, highlight: "locationChosen"),
+            makeButton(named: "cannotSendMessage", tag: InputView.send.rawValue, highlight: "canSendMessage").configure { btn in
+                btn.isEnabled = false
+            }
+        ]
+        sendButton = items.last!
+        performLayout(false) {
+            self.bottomStackViewItems = items
+            self.bottomStackViewItems.forEach {
+                $0.parentStackViewPosition = .bottom
+                self.bottomStackView.addArrangedSubview($0)
+            }
+            guard self.superview != nil else { return }
+            self.bottomStackView.layoutIfNeeded()
+            self.invalidateIntrinsicContentSize()
+        }
     }
     
     private func setupConstraints() {
@@ -263,91 +299,6 @@ class FaeInputBar: UIView {
         activateConstraints()
     }
     
-    private func setupRightStackView() {
-        let items = [makeButton(named: "pinDetailLikeHeartHollow", tag: 7)]
-        imgHeart = items[0].imageView!
-        let heart = FaeHeartButton()
-        heart.delegate = self
-        performLayout(false) {
-            //self.rightStackViewItems = items
-            /*self.rightStackViewItems.forEach {
-                $0.parentStackViewPosition = .right
-                self.rightStackView.addArrangedSubview($0)
-            }*/
-            self.rightStackView.addArrangedSubview(heart)
-            guard self.superview != nil else { return }
-            self.rightStackView.layoutIfNeeded()
-            self.invalidateIntrinsicContentSize()
-        }
-    }
-    
-    private func setupBottomStackView() {
-        let items = [
-            makeButton(named: "keyboardEnd", tag: InputView.keyboard.rawValue, highlight: "keyboard"),
-            makeButton(named: "sticker", tag: InputView.sticker.rawValue, highlight: "stickerChosen"),
-            makeButton(named: "imagePicker", tag: InputView.photo.rawValue, highlight: "imagePickerChosen"),
-            makeButton(named: "camera", tag: InputView.camera.rawValue, highlight: ""),
-            makeButton(named: "voiceMessage", tag: InputView.recorder.rawValue, highlight: "voiceMessage_red"),
-            makeButton(named: "shareLocation", tag: InputView.map.rawValue, highlight: "locationChosen"),
-            makeButton(named: "cannotSendMessage", tag: InputView.send.rawValue, highlight: "canSendMessage").configure { btn in
-                btn.isEnabled = false
-            }
-        ]
-        sendButton = items.last!
-        performLayout(false) {
-            self.bottomStackViewItems = items
-            self.bottomStackViewItems.forEach {
-                $0.parentStackViewPosition = .bottom
-                self.bottomStackView.addArrangedSubview($0)
-            }
-            guard self.superview != nil else { return }
-            self.bottomStackView.layoutIfNeeded()
-            self.invalidateIntrinsicContentSize()
-        }
-    }
-    
-    func makeButton(named: String, tag: Int, highlight: String? = "") -> ChatInputBarButton {
-        return ChatInputBarButton()
-            .configure {
-                $0.spacing = .fixed(10)
-                $0.setSize(CGSize(width: 29, height: 29), animated: false)
-                $0.tag = tag
-                $0.imageNormalName = named
-                $0.imageSelectedName = highlight
-                $0.isSelected = false
-            }.onTouchUpInside { button in
-                if button.tag == InputView.send.rawValue {
-                    let trimmedText = self.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-                    if self.boolHasPin, let pinView = self.topStackView.arrangedSubviews[0] as? InputBarTopPinView {
-                        self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: pinView)
-
-                    } else {
-                        self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: nil)
-                    }
-                } else {
-                    self.currentInputView = InputView(rawValue: button.tag)!
-                    for btn in self.bottomStackViewItems {
-                        if btn.tag != InputView.send.rawValue {
-                            btn.isSelected = btn.tag == button.tag
-                        }
-                    }
-                    //UIView.setAnimationsEnabled(false)
-                    //UIView.animate(withDuration: 0.3, animations: {
-                    //self.inputTextView.resignFirstResponder()
-                        if button.tag == 0 {
-                            self.inputTextView.inputView = nil
-                        } else {
-                            self.inputTextView.inputView = self.setupInputView(button.tag)
-                        }
-                        self.inputTextView.reloadInputViews()
-                        //UIView.setAnimationsEnabled(true)
-                        self.inputTextView.becomeFirstResponder()
-                        //self.superview?.superview?.layoutIfNeeded()
-                    //})
-                }
-        }
-    }
-    
     private func setupConstraints(to window: UIWindow?) {
         if #available(iOS 11.0, *) {
             guard UIScreen.main.nativeBounds.height == 2436 else { return }
@@ -362,6 +313,7 @@ class FaeInputBar: UIView {
         }
     }
     
+    // MARK: - Constraint layout updates
     private func updatePadding() {
         topStackViewLayoutSet?.bottom?.constant = -padding.top
         contentViewLayoutSet?.top?.constant = padding.top
@@ -385,7 +337,6 @@ class FaeInputBar: UIView {
         topStackViewLayoutSet?.right?.constant = -topStackViewPadding.right
     }
     
-    
     override func invalidateIntrinsicContentSize() {
         super.invalidateIntrinsicContentSize()
         cachedIntrinsicContentSize = calculateIntrinsicContentSize()
@@ -393,6 +344,41 @@ class FaeInputBar: UIView {
             delegate?.faeInputBar(self, didChangeIntrinsicContentTo: cachedIntrinsicContentSize)
             previousIntrinsicContentSize = cachedIntrinsicContentSize
         }
+    }
+    
+    // MARK: - Helper methods
+    private func calculateIntrinsicContentSize() -> CGSize {
+        var inputTextViewHeight = requiredInputTextViewHeight
+        if inputTextViewHeight >= maxTextViewHeight {
+            if !isOverMaxTextViewHeight {
+                textViewHeightAnchor?.isActive = true
+                inputTextView.isScrollEnabled = true
+                isOverMaxTextViewHeight = true
+            }
+            inputTextViewHeight = maxTextViewHeight
+        } else {
+            if isOverMaxTextViewHeight {
+                textViewHeightAnchor?.isActive = false
+                inputTextView.isScrollEnabled = false
+                isOverMaxTextViewHeight = false
+                inputTextView.invalidateIntrinsicContentSize()
+            }
+        }
+        
+        let totalPadding = padding.top + padding.bottom + topStackViewPadding.top + textViewPadding.top + textViewPadding.bottom
+        let topStackViewHeight = topStackView.arrangedSubviews.count > 0 ? topStackView.bounds.height : 0
+        let bottomStackViewHeight = bottomStackView.bounds.height
+        let verticalStackViewHeight = topStackViewHeight + bottomStackViewHeight
+        let requiredHeight = inputTextViewHeight + totalPadding + verticalStackViewHeight
+        return CGSize(width: bounds.width, height: requiredHeight)
+    }
+    
+    func calculateMaxTextViewHeight() -> CGFloat {
+        return 90
+        /*if traitCollection.verticalSizeClass == .regular {
+         return (UIScreen.main.bounds.height / 3).rounded(.down)
+         }
+         return (UIScreen.main.bounds.height / 5).rounded(.down)*/
     }
     
     func layoutStackViews(_ positions: [ChatInputStackView.Position] = [.left, .right, .bottom, .top]) {
@@ -445,63 +431,64 @@ class FaeInputBar: UIView {
         topStackViewLayoutSet?.deactivate()
     }
     
-    func setStackViewItems(_ items: [ChatInputBarButton], forStack position: ChatInputStackView.Position, animated: Bool) {
-        
-        func setNewItems() {
-            switch position {
-            case .right:
-                rightStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-                rightStackViewItems = items
-                rightStackViewItems.forEach {
-                    //$0.messageInputBar = self
-                    $0.parentStackViewPosition = position
-                    rightStackView.addArrangedSubview($0)
+    // MARK: - Button within bottomStackView configuration & actions
+    private func makeButton(named: String, tag: Int, highlight: String? = "") -> ChatInputBarButton {
+        return ChatInputBarButton()
+            .configure {
+                $0.spacing = .fixed(10)
+                $0.setSize(CGSize(width: 29, height: 29), animated: false)
+                $0.tag = tag
+                $0.imageNormalName = named
+                $0.imageSelectedName = highlight
+                $0.isSelected = false
+            }.onTouchUpInside { button in
+                if button.tag == InputView.send.rawValue {
+                    let trimmedText = self.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if self.boolHasPin, let pinView = self.topStackView.arrangedSubviews[0] as? InputBarTopPinView {
+                        self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: pinView)
+                        
+                    } else {
+                        self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: nil)
+                    }
+                } else if button.tag == InputView.camera.rawValue {
+                    self.delegate?.faeInputBar(self, showFullView: "camera", with: nil)
+                    self.inputTextView.inputView = nil
+                    self.inputTextView.reloadInputViews()
+                } else {
+                    self.currentInputView = InputView(rawValue: button.tag)!
+                    for btn in self.bottomStackViewItems {
+                        if btn.tag != InputView.send.rawValue {
+                            btn.isSelected = btn.tag == button.tag
+                        }
+                    }
+                    if button.tag == InputView.keyboard.rawValue {
+                        self.inputTextView.inputView = nil
+                        self.inputTextView.reloadInputViews()
+                        self.inputTextView.becomeFirstResponder()
+                    } else {
+                        if let inputView = self.setupInputView(button.tag) {
+                            self.inputTextView.inputView = inputView
+                            self.inputTextView.reloadInputViews()
+                            self.inputTextView.becomeFirstResponder()
+                        } else {
+                            self.inputTextView.inputView = nil
+                            self.inputTextView.reloadInputViews()
+                            button.isSelected = false
+                            self.currentInputView = .keyboard
+                            self.inputTextView.resignFirstResponder()
+                        }
+                    }
                 }
-                guard superview != nil else { return }
-                rightStackView.layoutIfNeeded()
-            case .bottom:
-                bottomStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-                bottomStackViewItems = items
-                bottomStackViewItems.forEach {
-                    //$0.messageInputBar = self
-                    $0.parentStackViewPosition = position
-                    bottomStackView.addArrangedSubview($0)
-                }
-                guard superview != nil else { return }
-                bottomStackView.layoutIfNeeded()
-            default: break
-            }
-            invalidateIntrinsicContentSize()
-        }
-        
-        performLayout(animated) {
-            setNewItems()
         }
     }
     
-    func calculateMaxTextViewHeight() -> CGFloat {
-        if traitCollection.verticalSizeClass == .regular {
-            return (UIScreen.main.bounds.height / 3).rounded(.down)
-        }
-        return (UIScreen.main.bounds.height / 5).rounded(.down)
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.verticalSizeClass != previousTraitCollection?.verticalSizeClass || traitCollection.horizontalSizeClass != previousTraitCollection?.horizontalSizeClass {
-            maxTextViewHeight = calculateMaxTextViewHeight()
-            invalidateIntrinsicContentSize()
-        }
-    }
-    
+    // MARK: - Notification actions
     @objc
     func textViewDidChange() {
         let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
         sendButton.isEnabled = !trimmedText.isEmpty
         inputTextView.placeholderLabel.isHidden = !inputTextView.text.isEmpty
-        
-        //items.forEach { $0.textViewDidChangeAction(with: inputTextView) }
         
         delegate?.faeInputBar(self, textViewTextDidChangeTo: trimmedText)
         
@@ -511,8 +498,6 @@ class FaeInputBar: UIView {
         }
     }
     
-    /// Calls each items `keyboardEditingBeginsAction` method
-    /// Invalidates the intrinsicContentSize so that the keyboard does not overlap the view
     @objc
     func textViewDidBeginEditing() {
         if inputTextView.isFirstResponder && !boolIsFirstShown {
@@ -538,14 +523,8 @@ class FaeInputBar: UIView {
                 boolIsFirstShown = false
             }
         }
-        /*bottomStackViewItems.forEach {
-            if $0.tag == InputView.keyboard.rawValue {
-                $0.isSelected = true
-            }
-        }*/
     }
     
-    /// Calls each items `keyboardEditingEndsAction` method
     @objc
     func textViewDidEndEditing() {
         bottomStackViewItems.forEach {
@@ -561,6 +540,7 @@ class FaeInputBar: UIView {
     }
 }
 
+// MARK: - Manage the topStackView holding the Pin details
 extension FaeInputBar {
     func setupTopStackView(placemark: CLPlacemark? = nil, thumbnail: UIImage? = nil, place: PlacePin? = nil) {
         let view = InputBarTopPinView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 76))
@@ -604,58 +584,91 @@ extension FaeInputBar {
     }
 }
 
+// MARK: - InputView delegates
 extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRecorderViewDelegate {
     
-    func setupInputView(_ tag: Int) -> UIView {
+    func setupInputView(_ tag: Int) -> UIView? {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
-        switch tag {
-        case 1:
+        switch InputView(rawValue: tag) {
+        case .sticker?:
             viewStickerPicker = StickerKeyboardView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: floatInputViewHeight))
             viewStickerPicker.delegate = self
             return viewStickerPicker
-        case 2:
-            var configure = FaePhotoPickerConfigure()
-            configure.boolFullPicker = false
-            configure.sizeThumbnail = CGSize(width: 220, height: floatInputViewHeight)
+        case .photo?:
             
-            faePhotoPicker = FaePhotoPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight), with: configure)
+            func showLibrary() -> UIView {
+                var configure = FaePhotoPickerConfigure()
+                configure.boolFullPicker = false
+                configure.sizeThumbnail = CGSize(width: 220, height: floatInputViewHeight)
+                
+                faePhotoPicker = FaePhotoPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight), with: configure)
+                
+                faePhotoPicker.selectHandler = observeOnSelectedCount
+                
+                let btnMoreImage = UIButton(frame: CGRect(x: 10, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
+                btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
+                btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
+                faePhotoPicker.addSubview(btnMoreImage)
+                
+                btnQuickSendImage = UIButton(frame: CGRect(x: floatInputViewHeight - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
+                btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
+                btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
+                return faePhotoPicker
+            }
             
-            faePhotoPicker.selectHandler = observeOnSelectedCount
+            let semaphore = DispatchSemaphore(value: 0)
+            var view: UIView?
+            if PHPhotoLibrary.authorizationStatus() != .authorized {
+                PHPhotoLibrary.requestAuthorization { [weak self] status in
+                    if status != .authorized {
+                        print("not authorized!")
+                        DispatchQueue.main.async {
+                            let vc = self?.delegate as! ChatViewController
+                            vc.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+                        }
+                    } else {
+                        view = showLibrary()
+                    }
+                    semaphore.signal()
+                }
+            } else {
+                view = showLibrary()
+                semaphore.signal()
+            }
+            semaphore.wait()
             
-            let btnMoreImage = UIButton(frame: CGRect(x: 10, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
-            btnMoreImage.setImage(UIImage(named: "moreImage"), for: UIControlState())
-            btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
-            faePhotoPicker.addSubview(btnMoreImage)
-            
-            btnQuickSendImage = UIButton(frame: CGRect(x: floatInputViewHeight - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
-            btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
-            btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
-            return faePhotoPicker
-        case 4:
+            return view
+        case .recorder?:
             viewAudioRecorder = AudioRecorderView(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
             viewAudioRecorder.backgroundColor = backgroundView.backgroundColor
             viewAudioRecorder.delegate = self
             return viewAudioRecorder
-        case 5:
-            //let viewMiniLoc = LocationPickerMini()
+        case .map?:
             viewMiniLoc.delegate = self
             return viewMiniLoc
         default: break
         }
-        return UIView()
+        return nil
     }
     
+    // MARK: SendStickerDelegate
     func sendStickerWithImageName(_ name: String) {
         delegate?.faeInputBar(self, didSendStickerWith: name, isFaeHeart: false)
     }
     
-    func appendEmojiWithImageName(_ name: String) { }
+    func appendEmojiWithImageName(_ name: String) {
+        inputTextView.insertText("[\(name)]")
+
+    }
     
-    func deleteEmoji() { }
+    func deleteEmoji() {
+        let previous = inputTextView.text
+        inputTextView.text = previous?.stringByDeletingLastEmoji()
+    }
     
-    
+    // MARK: Quick photo picker button actions
     @objc func showFullAlbum() {
-        delegate?.faeInputBar(self, showFullAlbumWith: faePhotoPicker)
+        delegate?.faeInputBar(self, showFullView: "photo", with: nil)
     }
 
     @objc func sendImageFromQuickPicker() {
@@ -669,8 +682,9 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
         btnQuickSendImage.isHidden = (count == 0)
     }
     
+    // MARK: LocationPickerMiniDelegate
     func showFullLocationView() {
-        delegate?.faeInputBar(self, showFullLocation: true)
+        delegate?.faeInputBar(self, showFullView: "map", with: nil)
     }
     
     func sendLocationMessageFromMini(_ locationPickerMini: LocationPickerMini) {
@@ -688,7 +702,7 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
         }
     }
     
-    //
+    // MARK: AudioRecorderViewDelegate
     func audioRecorderView(_ audioView: AudioRecorderView, needToSendAudioData data: Data) {
         delegate?.faeInputBar(self, needToSendAudioData: data)
     }

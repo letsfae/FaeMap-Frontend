@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MARK: - ChatInputStackView
 class ChatInputStackView: UIStackView {
     
     /// The stack view position in the MessageInputBar
@@ -33,11 +34,11 @@ class ChatInputStackView: UIStackView {
         setup()
     }
     
-    required public init(coder: NSCoder) {
+    required init(coder: NSCoder) {
         super.init(coder: coder)
     }
     
-    // MARK: - Setup
+    // MARK: Setup
     
     /// Sets up the default properties
     func setup() {
@@ -47,15 +48,10 @@ class ChatInputStackView: UIStackView {
     }
 }
 
-class UIStackWrapView: UIView {
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: screenWidth, height: 76.0)
-    }
-}
-
+// MARK: - SeparatorLine
 class SeparatorLine: UIView {
     
-    // MARK: - Properties
+    // MARK: Properties
     
     /// The height of the line
     var height: CGFloat = 1.0 {
@@ -68,7 +64,7 @@ class SeparatorLine: UIView {
         return CGSize(width: super.intrinsicContentSize.width, height: height)
     }
     
-    // MARK: - Initialization
+    // MARK: Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -88,16 +84,19 @@ class SeparatorLine: UIView {
     }
 }
 
+// MARK: - FaeHeartButton
 protocol FaeHeartButtonDelegate: class {
     func faeHeartButton(_ faeHeartButton: FaeHeartButton)
 }
 
 class FaeHeartButton: UIButton, CAAnimationDelegate {
+    // MARK: Properties
     var imgHeartDic: [CAAnimation: UIImageView] = [CAAnimation: UIImageView]()
     var animatingHeartTimer: Timer!
     var imgView: UIImageView!
     weak var delegate: FaeHeartButtonDelegate?
     
+    // MARK: init
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
@@ -112,7 +111,8 @@ class FaeHeartButton: UIButton, CAAnimationDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func actionTapped() {
+    // MARK: Actions
+    @objc private func actionTapped() {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
@@ -120,20 +120,20 @@ class FaeHeartButton: UIButton, CAAnimationDelegate {
         delegate?.faeHeartButton(self)
     }
     
-    @objc func actionHolding() {
+    @objc private func actionHolding() {
         if animatingHeartTimer == nil {
             animatingHeartTimer = Timer.scheduledTimer(timeInterval: 0.15, target: self, selector: #selector(heartAnimated), userInfo: nil, repeats: true)
         }
     }
     
-    @objc func actionLeave() {
+    @objc private func actionLeave() {
         if animatingHeartTimer != nil {
             animatingHeartTimer.invalidate()
             animatingHeartTimer = nil
         }
     }
     
-    @objc func heartAnimated() {
+    @objc private func heartAnimated() {
         guard let imageView = imageView else { return }
         imgView = UIImageView(frame: CGRect(x: 0, y: 0, width: 26, height: 22))
         imgView.image = #imageLiteral(resourceName: "pinDetailLikeHeartFull")
@@ -170,7 +170,7 @@ class FaeHeartButton: UIButton, CAAnimationDelegate {
         imgView.layer.position = CGPoint(x: imageView.center.x, y: imageView.center.y)
     }
     
-    // CAAnimationDelegate
+    // MARK: CAAnimationDelegate
     func animationDidStart(_ anim: CAAnimation) {
         if anim.duration == 1 {
             imgHeartDic[anim] = imgView

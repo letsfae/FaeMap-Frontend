@@ -1026,8 +1026,6 @@ extension FaeMapViewController {
             self.faeMapView.mapGesture(isOn: true)
         }
         UINavigationBar.appearance().shadowImage = imgNavBarDefaultShadow
-        // check if the user's logged in the backendless
-        //let chatVC = UIStoryboard(name: "Chat", bundle: nil).instantiateInitialViewController()! as! RecentViewController
         let chatVC = RecentViewController()
         navigationController?.pushViewController(chatVC, animated: true)
     }

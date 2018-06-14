@@ -12,7 +12,7 @@ class ChatInputTextView: UITextView {
     
     // MARK: - Properties
     
-    open override var text: String! {
+    override var text: String! {
         didSet {
             postTextViewDidChangeNotification()
             placeholderLabel.isHidden = !text.isEmpty
@@ -20,7 +20,7 @@ class ChatInputTextView: UITextView {
     }
     
     /// A UILabel that holds the InputTextView's placeholder text
-    open let placeholderLabel: UILabel = {
+    let placeholderLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.textColor = .lightGray
@@ -31,41 +31,41 @@ class ChatInputTextView: UITextView {
     }()
     
     /// The placeholder text that appears when there is no text. The default value is "New Message"
-    open var placeholder: String? = "Type something..." {
+    var placeholder: String? = "Type something..." {
         didSet {
             placeholderLabel.text = placeholder
         }
     }
     
     /// The placeholderLabel's textColor
-    open var placeholderTextColor: UIColor? = .lightGray {
+    var placeholderTextColor: UIColor? = .lightGray {
         didSet {
             placeholderLabel.textColor = placeholderTextColor
         }
     }
     
     /// The UIEdgeInsets the placeholderLabel has within the InputTextView
-    open var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7) {
+    var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7) {
         didSet {
             updateConstraintsForPlaceholderLabel()
         }
     }
     
     /// The font of the InputTextView. When set the placeholderLabel's font is also updated
-    open override var font: UIFont! {
+    override var font: UIFont! {
         didSet {
             placeholderLabel.font = font
         }
     }
     
     /// The textAlignment of the InputTextView. When set the placeholderLabel's textAlignment is also updated
-    open override var textAlignment: NSTextAlignment {
+    override var textAlignment: NSTextAlignment {
         didSet {
             placeholderLabel.textAlignment = textAlignment
         }
     }
     
-    open override var scrollIndicatorInsets: UIEdgeInsets {
+    override var scrollIndicatorInsets: UIEdgeInsets {
         didSet {
             // When .zero a rendering issue can occur
             if scrollIndicatorInsets == .zero {
@@ -77,8 +77,10 @@ class ChatInputTextView: UITextView {
         }
     }
     
-    /// A weak reference to the MessageInputBar that the InputTextView is contained within
+    /// A weak reference to the FaeInputBar that the InputTextView is contained within
     weak var faeInputBar: FaeInputBar?
+    
+    /// Current inputView, including keyboard, sticker, photo, recorder, map
     var currentInputView: FaeInputBar.InputView = .keyboard
     
     /// The constraints of the placeholderLabel
@@ -86,16 +88,16 @@ class ChatInputTextView: UITextView {
     
     // MARK: - Initializers
     
-    public convenience init() {
+    convenience init() {
         self.init(frame: .zero)
     }
     
-    public override init(frame: CGRect, textContainer: NSTextContainer?) {
+    override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         setup()
     }
     
-    required public init?(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
@@ -103,7 +105,7 @@ class ChatInputTextView: UITextView {
     // MARK: - Setup
     
     /// Sets up the default properties
-    open func setup() {
+    func setup() {
         
         font = UIFont.preferredFont(forTextStyle: .body)
         textContainerInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
@@ -152,6 +154,7 @@ class ChatInputTextView: UITextView {
         NotificationCenter.default.post(name: .UITextViewTextDidChange, object: self)
     }
     
+    /// Post notiofication when textView is tapped
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         if let touch = touches.first {
@@ -161,6 +164,7 @@ class ChatInputTextView: UITextView {
         }
     }
     
+    /// Prevent showing menu when current inputView is not the keyboard
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if currentInputView != .keyboard {
             return false

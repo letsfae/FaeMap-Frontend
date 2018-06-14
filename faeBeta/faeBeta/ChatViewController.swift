@@ -15,22 +15,26 @@ import AVFoundation
 import RealmSwift
 
 class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControllerDelegate {
+    // MARK: - Properties
+    
+    /// Views
     var faeInputBar = FaeInputBar()
     private var uiviewNavBar: FaeNavBar!
     var uiviewNameCard: FMNameCardView!
-    // Chat info & data source
+    
+    /// Chat info & data source
     var strChatId: String = ""
     var intIsGroup: Int = 0
     var arrUserIDs: [String] = []
     var arrRealmUsers: [RealmUser] = []
-    var arrFaeMessages: [FaeMessage] = [] // data source of collectionView
+    var arrFaeMessages: [FaeMessage] = [] /// data source of collectionView
     var resultRealmMessages: Results<RealmMessage>!
     var notificationToken: NotificationToken?
     let intNumberOfMessagesOneTime = 15
     
-    var boolLoadingPreviousMessages = false // load previous message when scroll to the top
+    var boolLoadingPreviousMessages = false
     var boolJustSentHeart = false // avoid sending heart continuously
-    var avatarDictionary: NSMutableDictionary = [:] // avatars of users in this chatting
+    var avatarDictionary: NSMutableDictionary = [:]
     private var playingAudio: JSQAudioMediaItemCustom?
     weak var mapDelegate: LocDetailDelegate?
     
@@ -51,8 +55,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     }
     
     var boolIsDisappearing: Bool = false
-    var boolForceBottom: Bool = true
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -67,6 +71,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         super.viewWillAppear(animated)
         //view.layoutIfNeeded()
         //collectionView.collectionViewLayout.invalidateLayout()
+        if !isFirstLayout {
+            scrollToBottom(animated: false)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -98,6 +105,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         removeKeyboardObservers()
     }
     
+    // MARK: - Setup
     private func setupCollectionView() {
         collectionView.backgroundColor = UIColor._241241241()
         collectionView.keyboardDismissMode = .interactive
@@ -137,7 +145,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
-    
     private func navigationBarSet() {
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         view.addSubview(uiviewNavBar)
@@ -147,18 +154,19 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         uiviewNavBar.lblTitle.text = arrRealmUsers[1].display_name
     }
     
-    @objc private func navigationLeftItemTapped() {
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    func addKeyboardObservers() {
+    private func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDidChangeState(_:)), name: .UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleTextViewDidBeginEditing(_:)), name: .UITextViewTextDidBeginEditing, object: nil)
     }
     
-    func removeKeyboardObservers() {
+    private func removeKeyboardObservers() {
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillChangeFrame, object: nil)
         NotificationCenter.default.removeObserver(self, name: .UITextViewTextDidBeginEditing, object: nil)
+    }
+    
+    // MARK: - Button actions & notification
+    @objc private func navigationLeftItemTapped() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     @objc
@@ -196,6 +204,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(animated: false)
     }
     
+    // MARK: - Layout helper
     func scrollDialogToBottom(animated: Bool = false) {
         let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
         collectionView.performBatchUpdates(nil) { _ in
@@ -215,12 +224,31 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         return 0
     }
+    
+    func showAlertView(withWarning text: String) {
+        let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        alert.modalPresentationStyle = .currentContext
+        let rootViewController: UIViewController =
+            UIApplication.shared.windows.last!.rootViewController!
+        rootViewController.present(alert, animated: true, completion: nil)
+    }
 }
 
+extension ChatViewController {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == collectionView {
+            let currentOffset = scrollView.contentOffset.y
+            if currentOffset < 1 && !boolLoadingPreviousMessages && !isFirstLayout {
+                loadPrevMessagesFromRealm()
+            }
+        }
+    }
+}
+
+// MARK: - FaeInputBarDelegate & InputView related delegates
 extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, BoardsSearchDelegate {
-    
-    
-    // MARK:
+    // MARK: FaeInputBarDelegate
     func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?) {
         if let pinView = pinView {
             if let location = pinView.location {
@@ -253,13 +281,6 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         }
     }
     
-    func faeInputBar(_ inputBar: FaeInputBar, showFullAlbumWith photoPicker: FaePhotoPicker) {
-        let vcFullAlbum = FullAlbumViewController()
-        vcFullAlbum.prePhotoPicker = photoPicker
-        vcFullAlbum.delegate = self
-        navigationController?.pushViewController(vcFullAlbum, animated: true)
-    }
-    
     func faeInputBar(_ inputBar: FaeInputBar, didPressQuickSendImages images: [FaePHAsset]) {
         sendMediaMessage(images)
     }
@@ -268,16 +289,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         storeChatMessageToRealm(type: "[Audio]", text: "[Audio]", media: data)
     }
     
-    func faeInputBar(_ inputBar: FaeInputBar, showFullLocation show: Bool) {
-        let vc = SelectLocationViewController()
-        vc.boolFromChat = true
-        vc.boolSearchEnabled = true
-        vc.delegate = self
-        Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any) {
+    func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any?) {
         switch type {
         case "photo":
             let vcFullAlbum = FullAlbumViewController()
@@ -287,7 +299,6 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         case "camera":
             let camera = Camera(delegate_: self)
             camera.presentPhotoCamera(self, canEdit: false)
-            break
         case "map":
             let vc = SelectLocationViewController()
             vc.boolFromChat = true
@@ -299,7 +310,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         }
     }
     
-    // MARK:
+    // MARK: FullAlbumSelectionDelegate
     func finishChoosing(with faePHAssets: [FaePHAsset]) {
         sendMediaMessage(faePHAssets)
     }
@@ -317,7 +328,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         }
     }
     
-    // MARK:
+    // MARK: BoardsSearchDelegate
     func sendLocationBack(address: RouteAddress) {
         let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -338,6 +349,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
     }
 }
 
+// MARK: - UIImagePickerControllerDelegate
 extension ChatViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
         let type = info[UIImagePickerControllerMediaType] as! String
@@ -346,8 +358,9 @@ extension ChatViewController: UIImagePickerControllerDelegate {
             let picture = info[UIImagePickerControllerOriginalImage] as! UIImage
             storeChatMessageToRealm(type: "[Picture]", text: "[Picture]", media: RealmChat.compressImageToData(picture))
             //sendMessage(picture: picture, date: Date())
-            
-            UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+            if PHPhotoLibrary.authorizationStatus() == .authorized {
+                UIImageWriteToSavedPhotosAlbum(picture, self, #selector(ChatViewController.image(_:didFinishSavingWithError:contextInfo:)), nil)
+            }
         case (kUTTypeMovie as String as String):
             let movieURL = info[UIImagePickerControllerMediaURL] as! URL
             
@@ -384,11 +397,18 @@ extension ChatViewController: UIImagePickerControllerDelegate {
         
     }
     
+    /*func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        faeInputBar.setNeedsLayout()
+        faeInputBar.layoutIfNeeded()
+        picker.dismiss(animated: true, completion: nil)
+    }*/
+    
     @objc func image(_ image: UIImage, didFinishSavingWithError error: NSError, contextInfo: AnyObject?) {
         //appWillEnterForeground()
     }
 }
 
+// MARK: - JSQAudioMediaItemDelegateCustom
 extension ChatViewController: JSQAudioMediaItemDelegateCustom {
     func audioMediaItem(_ audioMediaItem: JSQAudioMediaItemCustom, didChangeAudioCategory category: String, options: AVAudioSessionCategoryOptions = [], error: Error?) {
     }

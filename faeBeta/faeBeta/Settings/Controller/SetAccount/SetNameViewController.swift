@@ -62,8 +62,8 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         case other
     }
     
-    var enterMode: SettingEnterMode!
-    var pswdEnterMode: PasswordEnterMode!
+    var enterMode: SettingEnterMode = .name
+    var pswdEnterMode: PasswordEnterMode = .password
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -95,6 +95,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         btnSave.addTarget(self, action: #selector(self.actionSave(_:)), for: .touchUpInside)
         view.addSubview(btnSave)
         
+        
         switch enterMode {
         case .name:
             lblTitle.text = "\nYour Full Name"
@@ -115,7 +116,6 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         case .newEmail:
             lblTitle.text = "\nYour New Email"
             loadChangeEmailPage()
-        default: break
         }
         
         if enterMode == .name || enterMode == .password || enterMode == .newEmail {
