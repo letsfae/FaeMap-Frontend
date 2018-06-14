@@ -95,7 +95,6 @@
 		9F99F0E52025751D007CE6FE /* FaePhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */; };
 		9F99F0E720257584007CE6FE /* FaePhotoPickerCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */; };
 		9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */; };
-		9FA6FC0F20BF80E700D0F0A8 /* ChatVCInputbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */; };
 		9FAAA4AD2091418E008BB358 /* UIApplication+UIWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */; };
 		9FAAA4AE2091418E008BB358 /* SKMesurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4962091418A008BB358 /* SKMesurement.swift */; };
 		9FAAA4B02091418E008BB358 /* SKPaginationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAAA4982091418B008BB358 /* SKPaginationView.swift */; };
@@ -464,7 +463,6 @@
 		9F99F0E42025751D007CE6FE /* FaePhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoLibrary.swift; sourceTree = "<group>"; };
 		9F99F0E620257584007CE6FE /* FaePhotoPickerCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaePhotoPickerCells.swift; sourceTree = "<group>"; };
 		9F99F0E82025925A007CE6FE /* FullAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAlbumViewController.swift; sourceTree = "<group>"; };
-		9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVCInputbar.swift; sourceTree = "<group>"; };
 		9FAAA4952091418A008BB358 /* UIApplication+UIWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+UIWindow.swift"; sourceTree = "<group>"; };
 		9FAAA4962091418A008BB358 /* SKMesurement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKMesurement.swift; sourceTree = "<group>"; };
 		9FAAA4982091418B008BB358 /* SKPaginationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPaginationView.swift; sourceTree = "<group>"; };
@@ -1063,7 +1061,6 @@
 			children = (
 				9F96BC3A20C308660080DCED /* InputBar */,
 				B064EEDA1D6E0CFC00C078F5 /* ChatViewController.swift */,
-				9FA6FC0E20BF80E700D0F0A8 /* ChatVCInputbar.swift */,
 				DCF1EBD11DA31D240066B3ED /* ChatVCCollectionView.swift */,
 				DCF1EBD31DA31E8C0066B3ED /* ChatVCHandleMessages.swift */,
 				DC3354151DBFE72100F7317F /* FaeChatToolBarContentView.swift */,
@@ -2127,7 +2124,6 @@
 				B3273E671F8C220700CFEC8E /* FaeCollection.swift in Sources */,
 				B385802B1F9F069900E40284 /* VerifyCodeViewController.swift in Sources */,
 				50188F3C1FC36C390038CAFF /* CCHMapClusterController.m in Sources */,
-				9FA6FC0F20BF80E700D0F0A8 /* ChatVCInputbar.swift in Sources */,
 				B064EF231D7207DB00C078F5 /* FinishViewController.swift in Sources */,
 				B0714DFC1D62523500356705 /* RegisterEmailViewController.swift in Sources */,
 				DC88D65A1DE8250500C36B35 /* UIImage+Gif.swift in Sources */,
