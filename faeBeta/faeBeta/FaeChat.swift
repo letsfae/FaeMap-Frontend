@@ -17,7 +17,8 @@ class FaeChat {
     // MARK: - Handle sending messages
     func observeMessageChange() {
         DispatchQueue.global(qos: .background).async {
-            autoreleasepool {
+            autoreleasepool { [weak self] in
+                guard let `self` = self else { return }
                 self.notificationRunLoop = CFRunLoopGetCurrent()
                 CFRunLoopPerformBlock(self.notificationRunLoop, CFRunLoopMode.defaultMode.rawValue) {
                     let realm = try! Realm()
@@ -151,12 +152,7 @@ class FaeChat {
     
     func storeToRealm(_ message: String, with chat_id: String, is_group: Int) {
         guard let messageData = message.data(using: .utf8, allowLossyConversion: false) else { return }
-        var messageJSON: JSON!
-        do {
-            messageJSON = try JSON(data: messageData)
-        } catch {
-            print("JSON Error: \(error)")
-        }
+        let messageJSON = JSON(data: messageData)
         let login_user_id = "\(Key.shared.user_id)"
         let realm = try! Realm()
         let callGroup = DispatchGroup()
@@ -236,13 +232,7 @@ class FaeChat {
     func downloadImageFor(_ message: JSON, primary_key: String) {
         let strDetail = message["text"].stringValue.replacingOccurrences(of: "\\", with: "")
         guard let dataDetail = strDetail.data(using: .utf8) else { return }
-        var json: JSON!
-        do {
-            json = try JSON(data: dataDetail)
-        } catch {
-            print("JSON Error: \(error)")
-        }
-        guard let imageURL = json["imageURL"].string else { return }
+        guard let imageURL = JSON(data: dataDetail)["imageURL"].string else { return }
         downloadImage(URL: imageURL) { rawData in
             guard let data = rawData else { return }
             DispatchQueue.global(qos: .userInitiated).async {

@@ -33,8 +33,8 @@ class PlaceViewMapController: BasicMapController {
         uiviewTopBar.addConstraintsWithFormat("V:|-13-[v0(25)]", options: [], views: lblTopBarCenter)
     }
     
-    func addPlaceToMap(pin: PlacePin) {
-        let anno = FaePinAnnotation(type: "place", cluster: placeClusterManager, data: pin as AnyObject)
+    private func addPlaceToMap(pin: PlacePin) {
+        let anno = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: pin as AnyObject)
         placeClusterManager.addAnnotations([anno], withCompletionHandler: nil)
         
         // single pin loading, so disable its user interaction

@@ -26,7 +26,7 @@ class CollectionsListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
 
     fileprivate func loadCellContent() {
@@ -86,7 +86,7 @@ class CollectionsEmptyListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     fileprivate func loadCellContent() {

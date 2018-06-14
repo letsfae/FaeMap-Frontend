@@ -9,55 +9,58 @@
 import UIKit
 import SwiftyJSON
 
-protocol PlaceDetailDelegate: class {
-    func getRouteToPin(mode: CollectionTableMode, placeInfo: PlacePin?)
-}
-
 enum EnterPlaceLocDetailMode {
     case collection
     case boards
     case map
 }
 
-class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate {
+class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, AfterAddedToListDelegate, SKPhotoBrowserDelegate {
     
-    weak var delegate: MapSearchDelegate?
-    weak var featureDelegate: PlaceDetailDelegate?
+    public var place: PlacePin!
+    private var uiviewHeader: UIView!
+    private var uiview_bottomLine: UIView!
+    private var uiviewSubHeader: FixedHeader!
+    private var uiviewFixedHeader: FixedHeader!
     
-    var place: PlacePin!
-    var allPlaces = [PlacePin]()
-    var uiviewHeader: UIView!
-    var uiview_bottomLine: UIView!
-    var uiviewSubHeader: FixedHeader!
-    var uiviewFixedHeader: FixedHeader!
-    var uiviewScrollingPhotos: InfiniteScrollingView!
-    var uiviewFooter: UIView!
-    var btnBack: UIButton!
-    var btnSave: UIButton!
-    var imgSaved: UIImageView!
-    var btnRoute: UIButton!
-    var btnShare: UIButton!
-    var tblPlaceDetail: UITableView!
-    let arrTitle = ["Similar Places", "Near this Place"]
-    var arrRelatedPlaces = [[PlacePin]]()
-    var arrSimilarPlaces = [PlacePin]()
-    var arrNearbyPlaces = [PlacePin]()
-    let faePinAction = FaePinAction()
-    var boolSaved: Bool = false
-    var uiviewSavedList: AddPinToCollectionView!
-    var uiviewAfterAdded: AfterAddedToListView!
-    var arrListSavedThisPin = [Int]()
-    var boolSavedListLoaded = false
-    var uiviewWhite: UIView!
-    var intHaveHour = 0
-    var intHaveWebPhone = 0
-    var boolHaveWeb = false
-    var intCellCount = 0
-    var intSimilar = 0
-    var intNearby = 0
+    private var uiviewPlaceImages: PlacePinImagesView!
+    
+    private var uiviewFooter: UIView!
+    private var btnBack: UIButton!
+    private var btnSave: UIButton!
+    private var imgSaved: UIImageView!
+    private var btnRoute: UIButton!
+    private var btnShare: UIButton!
+    private var tblPlaceDetail: UITableView!
+    private let arrTitle = ["Similar Places", "Near this Place"]
+    private var arrRelatedPlaces = [[PlacePin]]()
+    private var arrSimilarPlaces = [PlacePin]()
+    private var arrNearbyPlaces = [PlacePin]()
+    private let faePinAction = FaePinAction()
+    private var boolSaved: Bool = false
+    private var uiviewSavedList: AddPinToCollectionView!
+    private var uiviewAfterAdded: AfterAddedToListView!
+    private var arrListSavedThisPin = [Int]()
+    private var boolSavedListLoaded = false
+    private var uiviewWhite: UIView!
+    private var intHaveHour = 0
+    private var intHaveWebPhone = 0
+    private var boolHaveWeb = false
+    private var intCellCount = 0
+    private var intSimilar = 0
+    private var intNearby = 0
+    private var isScrollViewDidScrollEnabled: Bool = true
+//    private var boolMapFold: Bool = true
+//    private var boolHourFold: Bool = true
+    private var arrDay_LG = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
+    private var arrHour = [[String]]()
+    private var dayIdx = 0
     
     var boolShared: Bool = false
-    var enterMode: EnterPlaceLocDetailMode!
+    public var enterMode: EnterPlaceLocDetailMode!
+    
+    // MARK: - Life Cycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +73,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         view.bringSubview(toFront: uiviewAfterAdded)
         checkSavedStatus() {}
         setCellCount()
+        calculateOpeningHour()
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
         
@@ -87,6 +91,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             catDict[content] = catDict[content]! + 1;
         }
         favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+        
+        print("placeId \(place.id)")
     }
     
     deinit {
@@ -96,7 +102,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PlaceDetailCell.boolFold = true
+        PlaceDetailCell.boolMapFold = true
+        PlaceDetailCell.boolHourFold = true
         if boolShared {
             //uiviewAfterAdded.lblSaved.text = "You shared a Place."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
@@ -130,7 +137,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         UIApplication.shared.statusBarStyle = .default
     }
     
-    func initPlaceRelatedData() {
+    // MARK: -
+    
+    private func initPlaceRelatedData() {
         uiviewSubHeader.setValue(place: place)
         uiviewFixedHeader.setValue(place: place)
         tblPlaceDetail.reloadData()
@@ -143,7 +152,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func setCellCount() {
+    private func setCellCount() {
         guard place != nil else { return }
         intHaveHour = place.hours.count > 0 ? 1 : 0
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
@@ -151,7 +160,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         intCellCount = intHaveHour + intHaveWebPhone + 2
     }
     
-    func checkSavedStatus(_ completion: @escaping () -> ()) {
+    private func checkSavedStatus(_ completion: @escaping () -> ()) {
         FaeMap.shared.getPin(type: "place", pinId: String(place.id)) { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
@@ -180,7 +189,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func getRelatedPlaces(_ lat: String, _ long: String, isSimilar: Bool, _ completion: @escaping () -> Void) {
+    private func getRelatedPlaces(_ lat: String, _ long: String, isSimilar: Bool, _ completion: @escaping () -> Void) {
         if isSimilar {
             arrSimilarPlaces.removeAll()
             FaeSearch.shared.whereKey("content", value: place.class_2 == "" ? place.class_1 : place.class_2)
@@ -230,10 +239,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    func loadHeader() {
+    // MARK: - UI Setups
+    
+    private func loadHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 309 + device_offset_top - 27 + txtHeight))
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 101 - 27 + txtHeight))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: (309 - 27 + txtHeight) * screenHeightFactor + device_offset_top))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 * screenHeightFactor + device_offset_top, width: screenWidth, height: (101 - 27 + txtHeight) * screenHeightFactor))
         uiviewSubHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewSubHeader.lblCategory.frame.origin.y - 27 + txtHeight
         uiviewSubHeader.lblCategory.frame.origin.y = origin_y
@@ -241,9 +252,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSubHeader.setValue(place: place)
     }
     
-    func loadFixedHeader() {
+    private func loadFixedHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
-        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22, w: 414, h: 101-27+txtHeight))
+        uiviewFixedHeader = FixedHeader(frame: CGRect(x: 0, y: 22 * screenHeightFactor, width: screenWidth, height: (101-27+txtHeight) * screenHeightFactor))
         if screenHeight == 812 { uiviewFixedHeader.frame.origin.y = 30 }
         uiviewFixedHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewFixedHeader.lblCategory.frame.origin.y - 27 + txtHeight
@@ -258,17 +269,21 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewWhite.alpha = 0
     }
     
-    func loadMidTable() {
+    private func loadMidTable() {
         tblPlaceDetail = UITableView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 49 - device_offset_bot), style: .plain)
         view.addSubview(tblPlaceDetail)
         tblPlaceDetail.tableHeaderView = uiviewHeader
         
         tblPlaceDetail.delegate = self
         tblPlaceDetail.dataSource = self
-        tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
-        tblPlaceDetail.register(PlaceDetailHoursCell.self, forCellReuseIdentifier: "PlaceDetailHoursCell")
-        tblPlaceDetail.register(PlaceDetailSection3Cell.self, forCellReuseIdentifier: "PlaceDetailSection3Cell")
+        tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "map")
+        tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "hour")
+        tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "web")
+        tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "phone")
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
+        tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
+        tblPlaceDetail.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
+        tblPlaceDetail.register(PlaceHourMayVaryCell.self, forCellReuseIdentifier: "PlaceHourMayVaryCell")
         tblPlaceDetail.separatorStyle = .none
         tblPlaceDetail.showsVerticalScrollIndicator = false
         if #available(iOS 11.0, *) {
@@ -281,18 +296,23 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
         
-        uiviewScrollingPhotos = InfiniteScrollingView(frame: CGRect(x: 0, y: 0, w: 414, h: 208 + device_offset_top))
-        uiviewScrollingPhotos.viewCtrler = self
-        tblPlaceDetail.addSubview(uiviewScrollingPhotos)
+        uiviewPlaceImages = PlacePinImagesView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 208 * screenHeightFactor + device_offset_top))
+        tblPlaceDetail.addSubview(uiviewPlaceImages)
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionTapImages))
+        uiviewPlaceImages.addGestureRecognizer(tapGes)
+        tapGes.cancelsTouchesInView = true
+
+        uiviewPlaceImages.arrURLs = place.imageURLs
+        uiviewPlaceImages.loadContent()
+        uiviewPlaceImages.setup()
         let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
-        uiviewScrollingPhotos.addSubview(bottomLine)
-        uiviewScrollingPhotos.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
-        uiviewScrollingPhotos.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-        uiviewScrollingPhotos.loadImages(place: place)
+        uiviewPlaceImages.addSubview(bottomLine)
+        uiviewPlaceImages.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
+        uiviewPlaceImages.addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
-    func loadFooter() {
+    private func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
@@ -332,21 +352,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         loadAddtoCollection()
     }
     
-    @objc func showSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
-            self.imgSaved.alpha = 1
-        }, completion: nil)
-    }
-    
-    @objc func hideSavedNoti() {
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
-            self.imgSaved.alpha = 0
-        }, completion: nil)
-    }
-    
-    fileprivate func loadAddtoCollection() {
+    private func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
         uiviewSavedList.tableMode = .place
@@ -359,31 +365,49 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    var boolAnimateTo_1 = true
+    @objc private func showSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
+            self.imgSaved.alpha = 1
+        }, completion: nil)
+    }
     
+    @objc private func hideSavedNoti() {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+            self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
+            self.imgSaved.alpha = 0
+        }, completion: nil)
+    }
+
+    // MARK: - UIScrollViewDelegate
+    
+    private var boolAnimateTo_1 = true
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if uiviewScrollingPhotos != nil {
-            var frame = uiviewScrollingPhotos.frame
+        guard scrollView == tblPlaceDetail else { return }
+        if uiviewPlaceImages != nil {
+            var frame = uiviewPlaceImages.frame
             if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
-                uiviewScrollingPhotos.frame = frame
-                let height = (208 + device_offset_top) * screenHeightFactor - tblPlaceDetail.contentOffset.y
-                uiviewScrollingPhotos.frame.size.height = height
-                uiviewScrollingPhotos.imgPic_1.frame.size.height = height
+                uiviewPlaceImages.frame = frame
+                let height = 208 * screenHeightFactor + device_offset_top - tblPlaceDetail.contentOffset.y
+                uiviewPlaceImages.frame.size.height = height
+                uiviewPlaceImages.contentSize.height = height
+                uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].frame.size.height = height
             } else {
                 frame.origin.y = 0
-                uiviewScrollingPhotos.frame.origin.y = 0
+                uiviewPlaceImages.frame.origin.y = 0
             }
         }
         var offset_y: CGFloat = 186 * screenHeightFactor
-        if screenHeight == 812 { offset_y = 180 }
+        if screenHeight == 812 { offset_y = 182 }
         if tblPlaceDetail.contentOffset.y >= offset_y {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default
             if boolAnimateTo_1 {
                 boolAnimateTo_1 = false
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.uiviewScrollingPhotos.alpha = 0
+                    self.uiviewPlaceImages.alpha = 0
                     self.uiviewSubHeader.alpha = 0
                     self.uiviewWhite.alpha = 1
                 })
@@ -396,25 +420,31 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if boolAnimateTo_1 == false {
                 boolAnimateTo_1 = true
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.uiviewScrollingPhotos.alpha = 1
+                    self.uiviewPlaceImages.alpha = 1
                 })
             }
         }
     }
     
-    @objc func backToMapBoard(_ sender: UIButton) {
-        let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        hideAddCollectionView()
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func backToMapBoard(_ sender: UIButton) {
+        let mbIsOn = SideMenuViewController.boolMapBoardIsOn
         if mbIsOn {
             Key.shared.initialCtrler?.goToMapBoard(animated: false)
         }
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func saveThisPin() {
+    @objc private func saveThisPin() {
         func showCollections() {
             uiviewSavedList.tableMode = .place
             //uiviewSavedList.loadCollectionData()
-            uiviewSavedList.pinToSave = FaePinAnnotation(type: "place", cluster: nil, data: place)
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: .place, cluster: nil, data: place)
             uiviewSavedList.show()
         }
         if boolSavedListLoaded {
@@ -426,51 +456,51 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         }
     }
     
-    @objc func routeToThisPin() {
+    @objc private func routeToThisPin() {
         let vc = RoutingMapController()
         vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
         vc.destinationAddr = RouteAddress(name: place.name, coordinate: place.coordinate)
         vc.destPlaceInfo = self.place
         vc.mode = .place
         navigationController?.pushViewController(vc, animated: false)
-        
-        /*
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-            ctrler.routingMode = .fromPinDetail
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        featureDelegate = Key.shared.FMVCtrler
-        featureDelegate?.getRouteToPin(mode: .place, placeInfo: place)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
-        */
     }
     
-    @objc func shareThisPin() {
+    @objc private func shareThisPin() {
         let vcShareCollection = NewChatShareController(friendListMode: .place)
         vcShareCollection.placeDetail = place
         vcShareCollection.boolFromPlaceDetail = true
         navigationController?.pushViewController(vcShareCollection, animated: true)
     }
     
-    func showAddCollectionView() {
+    private func showAddCollectionView() {
         uiviewSavedList.show()
     }
     
-    @objc func hideAddCollectionView() {
+    @objc private func hideAddCollectionView() {
         uiviewSavedList.hide()
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        hideAddCollectionView()
+    @objc private func actionTapImages() {
+        guard uiviewPlaceImages.arrSKPhoto.count > 0 else {
+            return
+        }
+        let browser = SKPhotoBrowser(originImage: uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].image ?? UIImage(), photos: uiviewPlaceImages.arrSKPhoto, animatedFromView: uiviewPlaceImages)
+        browser.initializePageIndex(uiviewPlaceImages.currentPage)
+        browser.delegate = self
+        present(browser, animated: true, completion: nil)
     }
     
-    // SeeAllPlacesDelegate
+    // MARK: - SKPhotoBrowserDelegate
+    func didScrollToIndex(_ browser: SKPhotoBrowser, index: Int) {
+        print("didScrollToIndex")
+        uiviewPlaceImages.updateContent(index)
+    }
+    
+    func viewForPhoto(_ browser: SKPhotoBrowser, index: Int) -> UIView? {
+        return uiviewPlaceImages
+    }
+    
+    // MARK: - SeeAllPlacesDelegate
     func jumpToAllPlaces(places: [PlacePin], title: String) {
         let vc = AllPlacesViewController()
         vc.recommendedPlaces = places
@@ -479,19 +509,26 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
+        guard var arrCtrlers = navigationController?.viewControllers else {
+            showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
+            return
+        }
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = place
-        navigationController?.pushViewController(vcPlaceDetail, animated: true)
+        arrCtrlers.removeLast()
+        arrCtrlers.append(vcPlaceDetail)
+        
+        navigationController?.setViewControllers(arrCtrlers, animated: true)
     }
     
-    // AddPintoCollectionDelegate
+    // MARK: - AddPintoCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .place
         present(vc, animated: true)
     }
     
-    // AfterAddedToListDelegate
+    // MARK: - AfterAddedToListDelegate
     func seeList() {
         // TODO VICKY
         uiviewAfterAdded.hide()
@@ -524,7 +561,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
 }
 
+// MARK: - FixedHeader
+
 class FixedHeader: UIView {
+    
     var lblName: UILabel!
     var lblCategory: UILabel!
     var lblPrice: UILabel!
@@ -535,10 +575,10 @@ class FixedHeader: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
-    fileprivate func setupUI() {
+    private func setupUI() {
         backgroundColor = .white
         
         lblName = UILabel(frame: CGRect(x: 20, y: 21 * screenHeightFactor, width: screenWidth - 40, height: 27))
@@ -564,12 +604,310 @@ class FixedHeader: UIView {
         uiviewLine.backgroundColor = UIColor._241241241()
         addSubview(uiviewLine)
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewLine)
-        addConstraintsWithFormat("V:[v0(\(5 * screenHeightFactor))]-\(5 * screenHeightFactor)-|", options: [], views: uiviewLine)
+        addConstraintsWithFormat("V:[v0(\(5 * screenHeightFactor))]-0-|", options: [], views: uiviewLine)
     }
     
-    func setValue(place: PlacePin) {
+    public func setValue(place: PlacePin) {
         lblName.text = place.name
         lblCategory.text = place.class_1
         lblPrice.text = place.price
+    }
+}
+
+extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate, PlaceDetailMapCellDelegate {
+    
+    // MARK: - UITableViewDelegate & Datasource
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return intCellCount
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        func similarNearbyCount() -> Int {
+            let count = intSimilar + intNearby
+            if count == 0 {
+                return 0
+            } else if count == 1 {
+                return 1
+            } else {
+                return 2
+            }
+        }
+        
+        if intHaveHour == 0 && intHaveWebPhone == 0 {
+            if section == 0 {
+                return PlaceDetailCell.boolMapFold ? 1 : 2
+            } else {
+                return similarNearbyCount()
+            }
+        } else if intHaveHour == 0 && intHaveWebPhone == 1 {
+            if section == 0 {
+                return PlaceDetailCell.boolMapFold ? 1 : 2
+            } else if section == 1 {
+                if place.phone == "" { return 1 }
+                if place.url == "" { return 1 }
+                return 2
+            } else {
+                return similarNearbyCount()
+            }
+        } else if intHaveHour == 1 && intHaveWebPhone == 0  {
+            if section == 0 {
+                return PlaceDetailCell.boolMapFold ? 1 : 2
+            } else if section == 1 {
+                return PlaceDetailCell.boolHourFold ? 1 : 9
+            } else {
+                return similarNearbyCount()
+            }
+        } else {
+            if section == 0 {  // map
+                return PlaceDetailCell.boolMapFold ? 1 : 2
+            } else if section == 1 {  // hours
+                return PlaceDetailCell.boolHourFold ? 1 : 9
+            } else if section == 2 {  // web & phone
+                if place.phone == "" { return 1 }
+                if place.url == "" { return 1 }
+                return 2
+            } else {
+                return similarNearbyCount()
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        tblPlaceDetail.rowHeight = UITableViewAutomaticDimension
+        tblPlaceDetail.estimatedRowHeight = 60
+        let section = indexPath.section
+        if intHaveHour == 0 && intHaveWebPhone == 0 {
+            if section == 0 {
+                return tblPlaceDetail.rowHeight
+            } else {
+                return 222
+            }
+        } else if intHaveHour == 1 && intHaveWebPhone == 1 {
+            if section <= 2 {
+                return tblPlaceDetail.rowHeight
+            } else {
+                return 222
+            }
+        } else {
+            if section <= 1 {
+                return tblPlaceDetail.rowHeight
+            } else {
+                return 222
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let section = indexPath.section
+        let row = indexPath.row
+        if intHaveHour == 0 && intHaveWebPhone == 0 {
+            if section == 0 {
+                return indexPath.row == 0 ? getDetailCell(tableView, indexPath, "map") : getMapDetailCell(tableView, indexPath)
+            } else {
+                return getMBCell(tableView, indexPath)
+            }
+        } else if intHaveHour == 0 && intHaveWebPhone == 1 {
+            if section == 0 {
+                return indexPath.row == 0 ? getDetailCell(tableView, indexPath, "map") : getMapDetailCell(tableView, indexPath)
+            } else if section == 1 {
+                if place.phone == "" && row == 0 {
+                    return getDetailCell(tableView, indexPath, "web")
+                } else if place.url == "" && row == 0 {
+                    return getDetailCell(tableView, indexPath, "phone")
+                } else if indexPath.row == 0 {
+                    return getDetailCell(tableView, indexPath, "web")
+                } else {
+                    return getDetailCell(tableView, indexPath, "phone")
+                }
+            } else {
+                return getMBCell(tableView, indexPath)
+            }
+        } else if intHaveHour == 1 && intHaveWebPhone == 0  {
+            if section == 0 {  // map
+                return indexPath.row == 0 ? getDetailCell(tableView, indexPath, "map") : getMapDetailCell(tableView, indexPath)
+            } else if section == 1 {  // hours
+                if indexPath.row == 0 {
+                    return getDetailCell(tableView, indexPath, "hour")
+                } else if indexPath.row == 8 {
+                    return getHoursHintCell(tableView, indexPath)
+                } else {
+                    return getOpeningHoursCell(tableView, indexPath)
+                }
+            } else {
+                return getMBCell(tableView, indexPath)
+            }
+        } else {
+            if section == 0 {
+                return indexPath.row == 0 ? getDetailCell(tableView, indexPath, "map") : getMapDetailCell(tableView, indexPath)
+            } else if section == 1 {
+                if indexPath.row == 0 {
+                    return getDetailCell(tableView, indexPath, "hour")
+                } else if indexPath.row == 8 {
+                    return getHoursHintCell(tableView, indexPath)
+                } else {
+                    return getOpeningHoursCell(tableView, indexPath)
+                }
+            } else if section == 2 {
+                if place.phone == "" && row == 0 {
+                    return getDetailCell(tableView, indexPath, "web")
+                } else if place.url == "" && row == 0 {
+                    return getDetailCell(tableView, indexPath, "phone")
+                } else if indexPath.row == 0 {
+                    return getDetailCell(tableView, indexPath, "web")
+                } else {
+                    return getDetailCell(tableView, indexPath, "phone")
+                }
+            } else {
+                return getMBCell(tableView, indexPath)
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        func tapMapOrHour(_ identifier: String) {
+            if identifier == "map" {
+                PlaceDetailCell.boolMapFold = !PlaceDetailCell.boolMapFold
+            } else if identifier == "hour" {
+                PlaceDetailCell.boolHourFold = !PlaceDetailCell.boolHourFold
+            }
+            
+            tableView.reloadData()
+            //                UIView.setAnimationsEnabled(false)
+            //                tableView.beginUpdates()
+            //                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
+            //                tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            //                tableView.endUpdates()
+            //                UIView.setAnimationsEnabled(true)
+        }
+        
+        func tapWebOrPhone() {
+            var strURL = ""
+            if boolHaveWeb && indexPath.row == 0 {
+                strURL = place.url
+            } else {
+                let phoneNum = place.phone.onlyNumbers()
+                strURL = "tel://\(phoneNum)"
+            }
+            if let url = URL(string: strURL), UIApplication.shared.canOpenURL(url) {
+                if #available(iOS 10, *) {
+                    UIApplication.shared.open(url)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
+            }
+        }
+        let section = indexPath.section
+        if intHaveHour == 0 && intHaveWebPhone == 0 {
+            if section == 0 {
+                tapMapOrHour("map")
+            }
+        } else if intHaveHour == 0 && intHaveWebPhone == 1 {
+            if section == 0 {
+                tapMapOrHour("map")
+            } else if section == 1 {
+                tapWebOrPhone()
+            }
+        } else if intHaveHour == 1 && intHaveWebPhone == 0  {
+            if section == 0 {
+                tapMapOrHour("map")
+            } else if section == 1 {
+                tapMapOrHour("hour")
+            }
+        } else {
+            if section == 0 {
+                tapMapOrHour("map")
+            } else if section == 1 {
+                tapMapOrHour("hour")
+            } else if section == 2 {
+                tapWebOrPhone()
+            }
+        }
+    }
+    
+    func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> MBPlacesCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
+        cell.delegate = self
+        let count = intSimilar + intNearby
+        if count == 1 {
+            if intSimilar == 1 {
+                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+            } else {
+                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+            }
+        } else {
+            if indexPath.row == 0 {
+                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+            } else {
+                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+            }
+        }
+        return cell
+    }
+    
+    func getDetailCell(_ tableView: UITableView, _ indexPath: IndexPath, _ identifier: String) -> PlaceDetailCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! PlaceDetailCell
+        cell.setValueForCell(identifier, place: place, dayIdx: dayIdx, arrHour: arrHour)
+        return cell
+    }
+    
+    func getMapDetailCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceDetailMapCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceDetailMapCell", for: indexPath) as! PlaceDetailMapCell
+        cell.delegate = self
+        cell.setValueForCell(place: place)
+        return cell
+    }
+    
+//    func getHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceDetailCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "hour", for: indexPath) as! PlaceDetailCell
+//        cell.setValueForHourCell(dayIdx: dayIdx, arrHour: arrHour)
+//        return cell
+//    }
+    
+    func getOpeningHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceOpeningHourCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
+        let row = (indexPath.row - 1 + dayIdx) % arrDay.count
+        let day = arrDay_LG[row]
+        let hour = arrHour[row]
+        cell.setValueForOpeningHourCell(day, hour, bold: indexPath.row == 1)
+        return cell
+    }
+
+    func getHoursHintCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceHourMayVaryCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceHourMayVaryCell", for: indexPath) as! PlaceHourMayVaryCell
+        return cell
+    }
+    
+    func calculateOpeningHour() {
+        for day in arrDay {
+            if place.hours.index(forKey: day) == nil {
+                arrHour.append(["N/A"])
+            } else {
+                arrHour.append(place.hours[day]!)
+            }
+        }
+        
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.weekday], from: date)
+        
+        // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
+        if let weekday = components.weekday {
+            dayIdx = weekday
+            
+            if weekday == 7 {
+                dayIdx = 0
+            } else if weekday == 8 {
+                dayIdx = 1
+            }
+        }
+    }
+    
+    func jumpToMainMapWithPlace() {
+        let vcMap = PlaceViewMapController()
+        vcMap.placePin = self.place
+        vcMap.mapCenter = .placeCoordinate
+        navigationController?.pushViewController(vcMap, animated: false)
     }
 }

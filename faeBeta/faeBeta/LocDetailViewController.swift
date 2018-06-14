@@ -28,45 +28,44 @@ protocol LocDetailDelegate: class {
 class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
-    weak var featureDelegate: PlaceDetailDelegate?
     weak var locationDelegate: LocDetailDelegate?
     
-    var coordinate: CLLocationCoordinate2D!
+    public var coordinate: CLLocationCoordinate2D!
     
-    var uiviewHeader: UIView!
-    var uiviewSubHeader: FixedHeader!
-    var uiviewFooter: UIView!
+    private var uiviewHeader: UIView!
+    private var uiviewSubHeader: FixedHeader!
+    private var uiviewFooter: UIView!
     
-    var btnBack: UIButton!
-    var btnSave: UIButton!
-    var imgSaved: UIImageView!
-    var btnRoute: UIButton!
-    var btnShare: UIButton!
+    private var btnBack: UIButton!
+    private var btnSave: UIButton!
+    private var imgSaved: UIImageView!
+    private var btnRoute: UIButton!
+    private var btnShare: UIButton!
     
-    var tblNearby: UITableView!
-    var arrNearbyPlaces = [PlacePin]()
-    let faeMap = FaeMap()
-    let faePinAction = FaePinAction()
-    var boolSaved: Bool = false
+    private var tblNearby: UITableView!
+    private var arrNearbyPlaces = [PlacePin]()
+    private let faeMap = FaeMap()
+    private let faePinAction = FaePinAction()
+    private var boolSaved: Bool = false
     
-    var uiviewSavedList: AddPinToCollectionView!
-    var uiviewAfterAdded: AfterAddedToListView!
+    private var uiviewSavedList: AddPinToCollectionView!
+    private var uiviewAfterAdded: AfterAddedToListView!
     
-    var lblClctViewTitle: UILabel!
-    var btnSeeAll: UIButton!
-    var clctNearby: UICollectionView!
-    var uiviewClctView: UIView!
+    private var lblClctViewTitle: UILabel!
+    private var btnSeeAll: UIButton!
+    private var clctNearby: UICollectionView!
+    private var uiviewClctView: UIView!
     weak var delegateSeeAll: SeeAllPlacesDelegate?
     
-    var strLocName = ""
-    var strLocAddr = ""
+    public var strLocName = ""
+    public var strLocAddr = ""
     
-    var mapView: MKMapView!
+    private var mapView: MKMapView!
     
-    var arrListSavedThisPin = [Int]()
-    var boolSavedListLoaded = false
+    private var arrListSavedThisPin = [Int]()
+    private var boolSavedListLoaded = false
     
-    var fullLoaded = false
+    private var fullLoaded = false
     
     var locationId: Int = 0 {
         didSet {
@@ -75,9 +74,9 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    var boolShared: Bool = false
-    var enterMode: EnterPlaceLocDetailMode!
-    var boolCreated: Bool = false
+    public var boolShared: Bool = false
+    public var enterMode: EnterPlaceLocDetailMode!
+    public var boolCreated: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -198,13 +197,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.icon.image = #imageLiteral(resourceName: "icon_destination")
+            anView.assignImage(#imageLiteral(resourceName: "icon_destination"))
             return anView
         }
         return nil
     }
     
-    func loadMap() {
+    private func loadMap() {
         mapView = MKMapView()
         if screenHeight == 812 {
             mapView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: 352 + 60 + device_offset_top * 2)
@@ -232,7 +231,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    @objc func handleMapTap() {
+    @objc private func handleMapTap() {
         hideAddCollectionView()
         
         var arrCtrlers = navigationController?.viewControllers
@@ -249,7 +248,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
-    func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
+    private func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
         faeMap.whereKey("geo_latitude", value: "\(lat)")
         faeMap.whereKey("geo_longitude", value: "\(long)")
         faeMap.whereKey("radius", value: "\(radius)")
@@ -274,13 +273,13 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func loadHeader() {
+    private func loadHeader() {
         uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - 101 * screenHeightFactor - device_offset_bot, width: screenWidth, height: 101 * screenHeightFactor))
         view.addSubview(uiviewSubHeader)
         uiviewSubHeader.lblPrice.isHidden = true
     }
     
-    func loadFooter() {
+    private func loadFooter() {
         uiviewFooter = UIView(frame: CGRect(x: 0, y: screenHeight - 49 - device_offset_bot, width: screenWidth, height: 49 + device_offset_bot))
         view.addSubview(uiviewFooter)
         
@@ -320,28 +319,28 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         loadAddtoCollection()
     }
     
-    @objc func showSavedNoti(_ sender: Notification) {
+    @objc private func showSavedNoti(_ sender: Notification) {
         if let id = sender.object as? Int {
             self.locationId = id
         }
         savedNotiAnimation()
     }
     
-    func savedNotiAnimation() {
+    private func savedNotiAnimation() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 29, y: 5, width: 18, height: 18)
             self.imgSaved.alpha = 1
         }, completion: nil)
     }
     
-    func hideSavedNoti() {
+    private func hideSavedNoti() {
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
             self.imgSaved.frame = CGRect(x: 38, y: 14, width: 0, height: 0)
             self.imgSaved.alpha = 0
         }, completion: nil)
     }
     
-    fileprivate func loadAddtoCollection() {
+    private func loadAddtoCollection() {
         uiviewSavedList = AddPinToCollectionView()
         uiviewSavedList.delegate = self
         uiviewSavedList.tableMode = .place
@@ -354,18 +353,18 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.uiviewAfterAdded = uiviewAfterAdded
     }
     
-    @objc func backToMapBoard(_ sender: UIButton) {
+    @objc private func backToMapBoard(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     
-    @objc func saveThisPin() {
+    @objc private func saveThisPin() {
         print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
 //            uiviewSavedList.loadCollectionData()
             guard let position = coordinate else { return }
             let pinData = LocationPin(position: position)
-            uiviewSavedList.pinToSave = FaePinAnnotation(type: "location", cluster: nil, data: pinData as AnyObject)
+            uiviewSavedList.pinToSave = FaePinAnnotation(type: .location, cluster: nil, data: pinData as AnyObject)
             uiviewSavedList.show()
             uiviewSavedList.fromLocDetail = true
             uiviewSavedList.locId = locationId
@@ -380,7 +379,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    @objc func routeToThisPin() {
+    @objc private func routeToThisPin() {
         guard coordinate != nil else {
             showAlert(title: "Unexpected Error Occured!", message: "Please try again later", viewCtrler: self)
             return
@@ -390,11 +389,9 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         vc.startPointAddr = RouteAddress(name: "Current Location", coordinate: LocManager.shared.curtLoc.coordinate)
         vc.destinationAddr = RouteAddress(name: strLocName, coordinate: coordinate)
         navigationController?.pushViewController(vc, animated: false)
-//        featureDelegate?.getRouteToPin(mode: .location, placeInfo: nil)
-//        navigationController?.popViewController(animated: false)
     }
     
-    @objc func shareThisPin() {
+    @objc private func shareThisPin() {
         let vcShareLoc = NewChatShareController(friendListMode: .location)
         AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
             vcShareLoc.locationDetail = "\(self.coordinate?.latitude ?? 0.0),\(self.coordinate?.longitude ?? 0.0),\(self.strLocName),\(self.strLocAddr)"
@@ -404,11 +401,11 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         }
     }
     
-    func showAddCollectionView() {
+    private func showAddCollectionView() {
         uiviewSavedList.show()
     }
     
-    @objc func hideAddCollectionView() {
+    @objc private func hideAddCollectionView() {
         uiviewSavedList.hide()
     }
     
@@ -464,5 +461,58 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         } else if uiviewSavedList.arrListSavedThisPin.count == 1 {
             savedNotiAnimation()
         }
+    }
+}
+
+extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    private func loadCollectionView() {
+        uiviewClctView = UIView(frame: CGRect(x: 0, y: screenHeight - 234 - 49 - device_offset_bot, width: screenWidth, height: 234))
+        uiviewClctView.isHidden = true
+        view.addSubview(uiviewClctView)
+        
+        lblClctViewTitle = UILabel(frame: CGRect(x: 15, y: 15, width: 150, height: 20))
+        lblClctViewTitle.font = UIFont(name: "AvenirNext-DemiBold", size: 15)
+        lblClctViewTitle.textColor = UIColor._138138138()
+        lblClctViewTitle.text = "Near this Location"
+        uiviewClctView.addSubview(lblClctViewTitle)
+        
+        btnSeeAll = UIButton(frame: CGRect(x: screenWidth - 78, y: 5, width: 78, height: 40))
+        btnSeeAll.setTitleColor(UIColor._155155155(), for: .normal)
+        btnSeeAll.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        btnSeeAll.addTarget(self, action: #selector(btnSeeAllTapped(_:)), for: .touchUpInside)
+        uiviewClctView.addSubview(btnSeeAll)
+        
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.itemSize = CGSize(width: 122, height: 222 - 45)
+        flowLayout.minimumLineSpacing = 20
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.sectionInset = UIEdgeInsetsMake(0, 24, 0, 24)
+        clctNearby = UICollectionView(frame: CGRect(x: 0, y: 45, width: screenWidth, height: 222 - 45), collectionViewLayout: flowLayout)
+        clctNearby.showsHorizontalScrollIndicator = false
+        clctNearby.delegate = self
+        clctNearby.dataSource = self
+        clctNearby.register(PlacesCollectionCell.self, forCellWithReuseIdentifier: "PlacesCollectionCell")
+        clctNearby.backgroundColor = .clear
+        uiviewClctView.addSubview(clctNearby)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return arrNearbyPlaces.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let colCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlacesCollectionCell", for: indexPath) as! PlacesCollectionCell
+        let place = arrNearbyPlaces[indexPath.row]
+        colCell.setValueForColCell(place: place)
+        return colCell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        jumpToPlaceDetail(place: arrNearbyPlaces[indexPath.row])
+    }
+    
+    @objc private func btnSeeAllTapped(_ sender: UIButton) {
+        delegateSeeAll?.jumpToAllPlaces(places: arrNearbyPlaces, title: "Near this Location")
     }
 }

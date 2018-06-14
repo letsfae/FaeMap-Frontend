@@ -37,7 +37,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     // Boolean values
     var fullyLoaded = false // if all ui components are fully loaded
-    var PLACE_INSTANT_SHOWUP = false
+    var PIN_INSTANT_SHOWUP = false
     
     var mapCenter: MapCenter = .currentUser
     var placePin: PlacePin?
@@ -69,9 +69,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         faeMapView.showsPointsOfInterest = false
         faeMapView.showsCompass = true
         faeMapView.tintColor = UIColor._2499090()
-//        faeMapView.singleTap.isEnabled = !boolFromExplore
-//        faeMapView.doubleTap.isEnabled = !boolFromExplore
-//        faeMapView.longPress.isEnabled = !boolFromExplore
         view.addSubview(faeMapView)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
@@ -169,9 +166,9 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
             guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
-            if firstAnn.type == "place" {
+            if firstAnn.type == .place {
                 return viewForPlace(annotation: annotation, first: firstAnn)
-            } else if firstAnn.type == "location" {
+            } else if firstAnn.type == .location {
                 return viewForLocation(annotation: annotation, first: firstAnn)
             }
         } else if annotation is AddressAnnotation {
@@ -184,7 +181,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
             } else {
                 anView = AddressAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             }
-            anView.icon.image = addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination")
+            anView.assignImage(addressAnno.isStartPoint ? #imageLiteral(resourceName: "icon_startpoint") : #imageLiteral(resourceName: "icon_destination"))
             return anView
         }
         return nil
@@ -194,7 +191,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         
         Key.shared.lastChosenLoc = mapView.centerCoordinate
         if uiviewPlaceBar.tag > 0 {
-            uiviewPlaceBar.annotations = visiblePlaces(mapView: faeMapView)
+            uiviewPlaceBar.annotations = visiblePins(mapView: faeMapView, type: .place)
         }
         
     }
@@ -204,7 +201,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, didAddAnnotationViews annotationViews: [Any]!) {
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
-                if PLACE_INSTANT_SHOWUP { // immediatelly show up
+                if PIN_INSTANT_SHOWUP { // immediatelly show up
                     anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
                     anView.alpha = 1
                 } else {
@@ -219,11 +216,15 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
                     }
                 }
             } else if let anView = annotationView as? LocPinAnnotationView {
-                anView.alpha = 0
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.2, animations: {
-                        anView.alpha = 1
-                    })
+                if PIN_INSTANT_SHOWUP {
+                    anView.alpha = 1
+                } else {
+                    anView.alpha = 0
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.2, animations: {
+                            anView.alpha = 1
+                        })
+                    }
                 }
             } else if let anView = annotationView as? MKAnnotationView {
                 anView.alpha = 0
@@ -253,16 +254,12 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == "place" {
+        if firstAnn.type == .place {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
-        } else if firstAnn.type == "location" {
+        } else if firstAnn.type == .location {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
-                anView.assignImage(firstAnn.icon)
-            }
-        } else {
-            if let anView = faeMapView.view(for: mapClusterAnnotation) as? SocialPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
         }
@@ -301,7 +298,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         selectedPlaceAnno = anView
         selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
         selectedPlaceAnno?.zPos = 199
-        guard firstAnn.type == "place" else { return }
+        guard firstAnn.type == .place else { return }
         uiviewPlaceBar.show()
         uiviewPlaceBar.resetSubviews()
         uiviewPlaceBar.tag = 1
@@ -320,7 +317,6 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         } else {
             anView = LocPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-//        locAnnoView = anView
         anView.assignImage(first.icon)
         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
         anView.alpha = 1

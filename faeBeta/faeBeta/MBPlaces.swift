@@ -11,6 +11,7 @@ import SwiftyJSON
 
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
+    
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
         btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
@@ -218,7 +219,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     func jumpToPlaceDetail(place: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = place
-        vcPlaceDetail.allPlaces = mbPlaces
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     

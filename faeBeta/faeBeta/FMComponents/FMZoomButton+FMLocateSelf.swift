@@ -11,15 +11,16 @@ import UIKit
 class FMZoomButton: UIButton {
     
     var mapView: FaeMapView!
-    var btnSmall: UIButton!
-    var btnLarge: UIButton!
-    var btnZoomIn: UIButton!
-    var btnZoomOut: UIButton!
-    var prevRegion: MKCoordinateRegion!
-    var prev_y: CGFloat = 0
-    var gesLongPress: UILongPressGestureRecognizer!
-    var gesPan: UIPanGestureRecognizer!
-    var prevRotation: CLLocationDirection!
+    private var btnSmall: UIButton!
+    private var btnLarge: UIButton!
+    private var btnZoomIn: UIButton!
+    private var btnZoomOut: UIButton!
+    private var prevRegion: MKCoordinateRegion!
+    private var prev_y: CGFloat = 0
+    private var multiplier: Double = 0
+    private var gesLongPress: UILongPressGestureRecognizer!
+    private var gesPan: UIPanGestureRecognizer!
+    private var prevRotation: CLLocationDirection!
     
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153 - device_offset_bot_main, width: 60, height: 60))
@@ -33,12 +34,10 @@ class FMZoomButton: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
-    var multiplier: Double = 0
-    
-    @objc func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+    @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
             largeMode()
             prevRegion = mapView.region
@@ -52,15 +51,16 @@ class FMZoomButton: UIButton {
             if Key.shared.autoCycle {
                 Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
                 Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
+                
+                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
             }
-            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
-            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
-            
-            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
-            
-            Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
-            Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
@@ -69,7 +69,7 @@ class FMZoomButton: UIButton {
         }
     }
     
-    @objc func handlePan(_ sender: UIPanGestureRecognizer) {
+    @objc private func handlePan(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
             prevRegion = mapView.region
             prevRotation = mapView.camera.heading
@@ -78,18 +78,33 @@ class FMZoomButton: UIButton {
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
-            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
-            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            // previous version before 05/29/18
+//            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+//            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+//            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+//            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            if Key.shared.autoCycle {
+                Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
+                Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
+                
+                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
+                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+                
+                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
+                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
+            }
         } else if sender.state == .changed {
             let point = sender.location(in: self)
             let m = Double(point.y - prev_y)
+            multiplier = m
             zoom(multiplier: m * 0.05)
         }
     }
     
-    func zoom(multiplier: Double) {
+    private func zoom(multiplier: Double) {
         guard prevRegion != nil else { return }
         var region = prevRegion
         var span = prevRegion.span
@@ -117,12 +132,12 @@ class FMZoomButton: UIButton {
         mapView.setCamera(camera, animated: false)
     }
     
-    func makeZoom(_ timer: Timer) {
+    private func makeZoom(_ timer: Timer) {
         guard let region = timer.userInfo as? MKCoordinateRegion else { return }
         mapView.setRegion(region, animated: false)
     }
     
-    @objc func largeMode() {
+    @objc private func largeMode() {
         guard !self.isSelected else { return }
         self.isSelected = true
         UIView.animate(withDuration: 0.2) {
@@ -144,7 +159,7 @@ class FMZoomButton: UIButton {
         }
     }
     
-    @objc func zoomIn() {
+    @objc private func zoomIn() {
         var region = mapView.region
         var span = mapView.region.span
         span.latitudeDelta *= 0.5
@@ -153,7 +168,7 @@ class FMZoomButton: UIButton {
         mapView.setRegion(region, animated: true)
     }
     
-    @objc func zoomOut() {
+    @objc private func zoomOut() {
         var region = mapView.region
         var span = mapView.region.span
         span.latitudeDelta *= 2
@@ -208,7 +223,7 @@ class FMZoomButton: UIButton {
 class FMLocateSelf: UIButton {
     
     var mapView: MKMapView!
-    var nameCard = FMNameCardView()
+    var nameCard: FMNameCardView!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 21, y: screenHeight - 153 - device_offset_bot_main, width: 60, height: 60))
@@ -216,7 +231,7 @@ class FMLocateSelf: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
@@ -226,7 +241,7 @@ class FMLocateSelf: UIButton {
         adjustsImageWhenHighlighted = false
     }
     
-    @objc func actionLocateSelf(_ sender: UIButton) {
+    @objc private func actionLocateSelf(_ sender: UIButton) {
         FaeSearch.shared.search { (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }

@@ -25,8 +25,7 @@ protocol PassStatusFromViewToButtonDelegate: class {
 class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     
     weak var delegate: NameCardDelegate?
-    let faeContact = FaeContact()
-    var statusMode: FriendStatus = .defaultMode
+    private var statusMode: FriendStatus = .defaultMode
     
     var userId: Int = 0 {
         didSet {
@@ -35,60 +34,60 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     }
     //var requestId: Int = -1
     
-    var boolCardOpened = false
-    var boolOptionsOpened = false
+    private var boolCardOpened = false
+    private var boolOptionsOpened = false
     
-    let initialFrame = CGRect.zero
-    let secondaryFrame: CGRect = {
+    private let initialFrame = CGRect.zero
+    private let secondaryFrame: CGRect = {
         return CGRect(x: 160, y: 175, w: 0, h: 0) // y: 350
     }()
-    let initFrame: CGRect = {
+    private let initFrame: CGRect = {
 //        if screenHeight == 812 {
 //            return CGRect(x: 269, y: 180 / 736 * 812, w: 0, h: 0)
 //        }
         return CGRect(x: 269, y: 180, w: 0, h: 0)
     }()
-    let nextFrame: CGRect = {
+    private let nextFrame: CGRect = {
 //        if screenHeight == 812 {
 //            return CGRect(x: 105, y: 180 / 736 * 812, w: 164, h: 110)
 //        }
         return CGRect(x: 105, y: 180, w: 164, h: 110)
     }()
-    let firstBtnFrame = CGRect(x: 129, y: 220, w: 50, h: 51)
-    let secondBtnFrame = CGRect(x: 198, y: 220, w: 50, h: 51)
+    private let firstBtnFrame = CGRect(x: 129, y: 220, w: 50, h: 51)
+    private let secondBtnFrame = CGRect(x: 198, y: 220, w: 50, h: 51)
     
-    let nameCardAnchor = CGPoint(x: 0.5, y: 1.0)
-    var imgAvatarShadow: UIImageView!
-    var btnChat: UIButton!
-    var btnCloseOptions: UIButton!
+    private let nameCardAnchor = CGPoint(x: 0.5, y: 1.0)
+    private var imgAvatarShadow: UIImageView!
+    private var btnChat: UIButton!
+    private var btnCloseOptions: UIButton!
     var btnProfile: UIButton!
-    var btnOptions: UIButton!
-    var btnCloseCard: UIButton!
-    var btnEditNameCard: UIButton!
+    private var btnOptions: UIButton!
+    private var btnCloseCard: UIButton!
+    private var btnEditNameCard: UIButton!
     var imgAvatar: UIImageView!
     var imgBackShadow: UIImageView!
     var imgCover: UIImageView!
-    var imgMiddleLine: UIImageView!
+    private var imgMiddleLine: UIImageView!
     var lblNickName: UILabel!
-    var lblUserName: UILabel!
-    var uiviewPrivacy: FaeGenderView!
-    var imgMoreOptions: UIImageView!
-    var btnReport: UIButton!
-    var btnShare: UIButton!
-    var btnBlock: UIButton!
-    var imgMoodAvatar: UIImageView!
+    private var lblUserName: UILabel!
+    private var uiviewPrivacy: FaeGenderView!
+    private var imgMoreOptions: UIImageView!
+    private var btnReport: UIButton!
+    private var btnShare: UIButton!
+    private var btnBlock: UIButton!
+    private var imgMoodAvatar: UIImageView!
     
-    var btnLeftPart: UIButton!
-    var btnRightPart: UIButton!
-    var btnTopPart: UIButton!
-    var btnBottomPart: UIButton!
+    private var btnLeftPart: UIButton!
+    private var btnRightPart: UIButton!
+    private var btnTopPart: UIButton!
+    private var btnBottomPart: UIButton!
     
-    var isAnimating = false
+    private var isAnimating = false
     
-    var uiviewBackground: UIButton!
-    var boolPending = false
+    private var uiviewBackground: UIButton!
+    private var boolPending = false
     
-    var cgfloatCenter: CGFloat = {
+    private var cgfloatCenter: CGFloat = {
         return 276 / 736 * screenHeight
     }()
     
@@ -108,7 +107,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         }
     }
     
-    var fullLoaded = false
+    private var fullLoaded = false
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
@@ -120,7 +119,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func showFullNameCard() {
@@ -128,42 +127,42 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         if screenHeight == 812 {
             iPhone_X_offset = 129 / 736 * 812 + 50
         }
-        self.frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)
-        self.imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
-        self.imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
-        self.imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
-        self.imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
-        self.imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
-        self.btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
-        self.imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
-        self.btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
-        self.btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
-        self.uiviewPrivacy.frame = CGRect(x: 41, y: 171, w: 46, h: 18)
-        self.btnLeftPart.frame = CGRect(x: 0, y: 0, w: 26, h: 350)
-        self.btnRightPart.frame = CGRect(x: 294, y: 0, w: 26, h: 350)
-        self.btnTopPart.frame = CGRect(x: 26, y: 0, w: 268, h: 38)
-        self.btnBottomPart.frame = CGRect(x: 26, y: 312, w: 268, h: 38)
-        self.lblNickName.frame = CGRect(x: 67, y: 202, w: 186, h: 25)
-        self.lblNickName.alpha = 1
-        self.lblUserName.frame = CGRect(x: 75, y: 228, w: 171, h: 18)
-        self.lblUserName.alpha = 1
+        frame = CGRect(x: 47, y: iPhone_X_offset, w: 320, h: 350)
+        imgBackShadow.frame = CGRect(x: 0, y: 0, w: 320, h: 350) // height 301
+        imgCover.frame = CGRect(x: 26, y: 37, w: 268, h: 125)
+        imgAvatarShadow.frame = CGRect(x: 116, y: 112, w: 88, h: 88)
+        imgAvatar.frame = CGRect(x: 123, y: 119, w: 74, h: 74)
+        imgMoodAvatar.frame = CGRect(x: 169, y: 167, w: 35, h: 33)
+        btnChat.frame = CGRect(x: self.userId == Key.shared.user_id ? 146.5 : 98.5, y: 272, w: 27, h: 27)
+        imgMiddleLine.frame = CGRect(x: 41, y: 259.5, w: 238, h: 1)
+        btnOptions.frame = CGRect(x: 247, y: 171, w: 32, h: 18)
+        btnProfile.frame = CGRect(x: 195, y: 272, w: 27, h: 27)
+        uiviewPrivacy.frame = CGRect(x: 41, y: 171, w: 46, h: 18)
+        btnLeftPart.frame = CGRect(x: 0, y: 0, w: 26, h: 350)
+        btnRightPart.frame = CGRect(x: 294, y: 0, w: 26, h: 350)
+        btnTopPart.frame = CGRect(x: 26, y: 0, w: 268, h: 38)
+        btnBottomPart.frame = CGRect(x: 26, y: 312, w: 268, h: 38)
+        lblNickName.frame = CGRect(x: 67, y: 202, w: 186, h: 25)
+        lblNickName.alpha = 1
+        lblUserName.frame = CGRect(x: 75, y: 228, w: 171, h: 18)
+        lblUserName.alpha = 1
     }
     
     // MARK: - Actions
     
-    @objc func openFaeUsrInfo() {
+    @objc private func openFaeUsrInfo() {
         delegate?.openFaeUsrInfo()
     }
     
-    @objc func btnChatAction() {
+    @objc private func btnChatAction() {
         delegate?.chatUser(id: userId)
     }
     
-    func reportUser() {
+    private func reportUser() {
         delegate?.reportUser(id: userId)
     }
     
-    @objc func hideOptions(_ sender: UIButton) {
+    @objc private func hideOptions(_ sender: UIButton) {
         guard boolOptionsOpened else { return }
         boolOptionsOpened = false
         btnOptions.isSelected = false
@@ -182,7 +181,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         }), completion: nil)
     }
     
-    @objc func showOptions(_ sender: UIButton) {
+    @objc private func showOptions(_ sender: UIButton) {
         var thisIsMe = false
         if userId == Int(Key.shared.user_id) {
             print("[showNameCardOptions] this is me")
@@ -262,7 +261,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         */
     }
     
-    func updateNameCard(with userId: Int) {
+    private func updateNameCard(with userId: Int) {
         uiviewPrivacy.isHidden = true
         if userId == 1 {
             imgAvatar.image = UIImage(named: "faeAvatar")
@@ -295,7 +294,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         }
     }
     
-    func show(avatar: UIImage? = nil, completionHandler: @escaping () -> Void) {
+    public func show(avatar: UIImage? = nil, completionHandler: @escaping () -> Void) {
         guard !isAnimating else { return }
         isAnimating = true
         boolCardOpened = true
@@ -353,7 +352,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         })
     }
     
-    func hide(completionHandler: @escaping () -> Void) {
+    public func hide(completionHandler: @escaping () -> Void) {
         guard boolCardOpened else { completionHandler(); return }
         guard !isAnimating else { completionHandler(); return }
         boolCardOpened = false
@@ -547,7 +546,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         self.hide {}
     }
     
-    func getFriendStatus(id: Int) {
+    private func getFriendStatus(id: Int) {
         statusMode = .defaultMode
         let realm = try! Realm()
         if let user = realm.filterUser(id: id) {
@@ -583,7 +582,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         }
     }
     
-    fileprivate func setButtonImage() {
+    private func setButtonImage() {
         switch statusMode {
         case .defaultMode:
             btnProfile.setImage(#imageLiteral(resourceName: "btnAddFriend"), for: .normal)
@@ -601,7 +600,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
         }
     }
     
-    @objc func chooseFriendActions(_ sender: UIButton) {
+    @objc private func chooseFriendActions(_ sender: UIButton) {
         switch sender.currentImage {
         case #imageLiteral(resourceName: "btnAddFriend")?:
             statusMode = .defaultMode

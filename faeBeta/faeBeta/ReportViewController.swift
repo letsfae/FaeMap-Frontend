@@ -15,18 +15,18 @@ class ReportViewController: UIViewController, UITextViewDelegate {
      *  1 == feedback
      *  2 == tag
      */
-    var reportType: Int = 0
-    let REPORT = 0
-    let FEEDBACK = 1
-    let TAG = 2
-    let colorPlaceHolder = UIColor(r: 155, g: 155, b: 155, alpha: 100)
+    public var reportType: Int = 0
+    private let REPORT = 0
+    private let FEEDBACK = 1
+    private let TAG = 2
+    private let colorPlaceHolder = UIColor(r: 155, g: 155, b: 155, alpha: 100)
     
-    var btnBack: UIButton!
-    var imgDesc: UIImageView!
-    var txtViewContent: UITextView!
-    var btnSend: UIButton!
-    var lblPlaceholder: UILabel!
-    var preStatusBarStyle = UIStatusBarStyle.default
+    private var btnBack: UIButton!
+    private var imgDesc: UIImageView!
+    private var txtViewContent: UITextView!
+    private var btnSend: UIButton!
+    private var lblPlaceholder: UILabel!
+    private var preStatusBarStyle = UIStatusBarStyle.default
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,7 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         UIApplication.shared.statusBarStyle = preStatusBarStyle
     }
     
-    func loadBasicItems() {
+    private func loadBasicItems() {
         btnBack = UIButton()
         btnBack.setImage(UIImage(named: "reportCommentBackToMap"), for: UIControlState())
         view.addSubview(btnBack)
@@ -108,28 +108,28 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         txtViewContent.addSubview(lblPlaceholder)
     }
     
-    @objc func actionBackToCommentPinDetail(_ sender: UIButton) {
+    @objc private func actionBackToCommentPinDetail(_ sender: UIButton) {
         txtViewContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func actionSendReport(_ sender: UIButton) {
+    @objc private func actionSendReport(_ sender: UIButton) {
         txtViewContent.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func handleTap() {
+    @objc private func handleTap() {
         view.endEditing(true)
     }
     
-    func addObservers() {
+    private func addObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tapGesture)
     }
     
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc private func keyboardWillShow(_ notification: Notification) {
         let info = notification.userInfo!
         let keyboardFrame: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         
@@ -142,16 +142,17 @@ class ReportViewController: UIViewController, UITextViewDelegate {
         })
     }
     
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc private func keyboardWillHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.btnSend.frame.origin.y = screenHeight - 30 - 50 * screenHeightFactor
         })
     }
     
-    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc private func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         txtViewContent.endEditing(true)
     }
     
+    // MARK: - TextView Delegate
     func textViewDidChange(_ textView: UITextView) {
         if textView == txtViewContent {
             let spacing = CharacterSet.whitespacesAndNewlines

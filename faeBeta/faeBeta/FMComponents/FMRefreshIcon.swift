@@ -10,19 +10,19 @@ import UIKit
 
 class FMRefreshIcon: UIButton {
     
-    var polygonInside: UIImageView!
-    var polygonOutside: UIImageView!
+    private var polygonInside: UIImageView!
+    private var polygonOutside: UIImageView!
     
-    var filterCircle_1: UIImageView!
-    var filterCircle_2: UIImageView!
-    var filterCircle_3: UIImageView!
-    var filterCircle_4: UIImageView!
+    private var filterCircle_1: UIImageView!
+    private var filterCircle_2: UIImageView!
+    private var filterCircle_3: UIImageView!
+    private var filterCircle_4: UIImageView!
     
-    var mapFilterArrow: UIImageView!
+    private var mapFilterArrow: UIImageView!
     
     var isSpinning = false
     
-    var boolHideInsides: Bool = false {
+    private var boolHideInsides: Bool = false {
         didSet {
             guard filterCircle_1 != nil else { return }
             guard filterCircle_2 != nil else { return }
@@ -46,10 +46,10 @@ class FMRefreshIcon: UIButton {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
-    fileprivate func loadMapFilter() {
+    private func loadMapFilter() {
         polygonOutside = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         polygonOutside.image = #imageLiteral(resourceName: "mapFilterHexagon")
         polygonOutside.contentMode = .scaleAspectFit
@@ -63,12 +63,12 @@ class FMRefreshIcon: UIButton {
         startAnimation()
     }
     
-    @objc func startAnimation() {
+    @objc private func startAnimation() {
         animateInsideCircles()
 //        animateMapFilterArrow()
     }
     
-    func animateInsideCircles() {
+    private func animateInsideCircles() {
         
         func createFilterCircle() -> UIImageView {
             let xAxis: CGFloat = 22
@@ -119,7 +119,7 @@ class FMRefreshIcon: UIButton {
         }), completion: nil)
     }
     
-    func stopIconSpin() {
+    public func stopIconSpin() {
         
         polygonOutside.layer.removeAllAnimations()
         
@@ -142,7 +142,7 @@ class FMRefreshIcon: UIButton {
         }
     }
     
-    func startIconSpin() {
+    public func startIconSpin() {
         guard self.center.y == screenHeight - 25 - device_offset_bot else { return }
         guard isSpinning == false else { return }
         self.boolHideInsides = true
@@ -169,31 +169,5 @@ class FMRefreshIcon: UIButton {
             self.polygonInside.transform = CGAffineTransform(rotationAngle: -(CGFloat.pi * 0.999))
         }, completion: nil)
     }
-    /*
-    func animateMapFilterArrow() {
-        
-        if mapFilterArrow != nil {
-            mapFilterArrow.removeFromSuperview()
-        }
-        
-        mapFilterArrow = UIImageView(frame: CGRect(x: 0, y: -8, width: 16, height: 8))
-        mapFilterArrow.center.x = 22
-        mapFilterArrow.image = #imageLiteral(resourceName: "mapFilterArrow")
-        mapFilterArrow.contentMode = .scaleAspectFit
-        addSubview(mapFilterArrow)
-        
-        UIView.animate(withDuration: 0.75, delay: 0, options: [.repeat, .autoreverse], animations: {
-            UIView.setAnimationRepeatCount(5)
-            self.mapFilterArrow.frame.origin.y = -13
-        }, completion: nil)
-        
-        UIView.animate(withDuration: 0.5, delay: 6.2, options: [], animations: {
-            self.mapFilterArrow.alpha = 0
-        }, completion: { _ in
-            if self.mapFilterArrow != nil {
-                self.mapFilterArrow.removeFromSuperview()
-            }
-        })
-    }
- */
+    
 }

@@ -9,11 +9,13 @@
 import UIKit
 
 class LeftMarginToEnableNavGestureView: UIView {
+    
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 65 + device_offset_top, width: 15, height: screenHeight - 65 - device_offset_top))
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
+    
 }

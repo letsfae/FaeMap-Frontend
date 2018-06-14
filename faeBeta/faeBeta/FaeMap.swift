@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class FaeMap {
     
@@ -50,6 +51,37 @@ class FaeMap {
         getFromURL("pins/saved", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
+        }
+    }
+    
+    // Get single pin's save info
+    func getPinSavedInfo(id: Int, type: String, _ completion: @escaping ([Int]) -> Void) {
+        FaeMap.shared.getPin(type: type, pinId: String(id)) { (status, message) in
+            var ids = [Int]()
+            guard status / 100 == 2 else {
+                completion(ids)
+                return
+            }
+            guard message != nil else {
+                completion(ids)
+                return
+            }
+            let resultJson = JSON(message!)
+            guard let is_saved = resultJson["user_pin_operations"]["is_saved"].string else {
+                completion(ids)
+                return
+            }
+            guard is_saved != "false" else {
+                completion(ids)
+                return
+            }
+            
+            for colIdRaw in is_saved.split(separator: ",") {
+                let strColId = String(colIdRaw)
+                guard let colId = Int(strColId) else { continue }
+                ids.append(colId)
+            }
+            completion(ids)
         }
     }
     

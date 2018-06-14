@@ -15,8 +15,8 @@ class InfiniteScrollingView: UIView {
     var imgPic_0: UIImageView!
     var imgPic_1: UIImageView!
     var imgPic_2: UIImageView!
-    var boolLeft: Bool!
-    var boolRight: Bool!
+    var boolLeft: Bool = true
+    var boolRight: Bool = true
     
     var panGesture: UIPanGestureRecognizer!
     
@@ -26,12 +26,12 @@ class InfiniteScrollingView: UIView {
         super.init(frame: frame)
         loadContent()
         
-        if placePhotos.count > 1 {
+//        if placePhotos.count > 1 {
             panGesture = UIPanGestureRecognizer()
             panGesture.maximumNumberOfTouches = 1
             panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
             addGestureRecognizer(panGesture)
-        }
+//        }
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapToShowImage))
         if panGesture != nil {
@@ -41,7 +41,7 @@ class InfiniteScrollingView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     func loadImages(place: PlacePin) {
@@ -51,7 +51,7 @@ class InfiniteScrollingView: UIView {
     }
     
     func downloadImageForView(place: PlacePin, url: String, imgPic: UIImageView) {
-        General.shared.downloadImageForView(place: place, url: url, imgPic: imgPic)
+        General.shared.downloadImageForView(url: url, imgPic: imgPic)
     }
     
     func loadContent() {
@@ -79,8 +79,8 @@ class InfiniteScrollingView: UIView {
 //            imgPic_1.image = placePhotos[0]
 //            imgPic_2.image = placePhotos[1 % placePhotos.count]
         }
-        boolLeft = placePhotos.count > 1
-        boolRight = placePhotos.count > 1
+//        boolLeft = placePhotos.count > 1
+//        boolRight = placePhotos.count > 1
     }
     
     @objc func tapToShowImage() {
@@ -94,7 +94,7 @@ class InfiniteScrollingView: UIView {
     }
     
     func panToPrev(_ time: Double = 0.3) {
-        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.imgPic_0.frame.origin.x = 0
             self.imgPic_1.frame.origin.x += screenWidth
         }, completion: {_ in
@@ -109,7 +109,7 @@ class InfiniteScrollingView: UIView {
     }
     
     func panToNext(_ time: Double = 0.3) {
-        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.imgPic_1.frame.origin.x = -screenWidth
             self.imgPic_2.frame.origin.x = 0
         }, completion: { _ in
@@ -124,9 +124,15 @@ class InfiniteScrollingView: UIView {
     }
     
     func panBack(_ time: Double = 0.3) {
-        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveLinear, animations: {
             self.resetSubviews()
         }, completion: nil)
+    }
+    
+    func resetSubviews() {
+        imgPic_0.frame.origin.x = -screenWidth
+        imgPic_1.frame.origin.x = 0
+        imgPic_2.frame.origin.x = screenWidth
     }
     
     var end: CGFloat = 0
@@ -141,17 +147,20 @@ class InfiniteScrollingView: UIView {
             let distanceMoved = end - location.x
             let percent = distanceMoved / screenWidth
             resumeTime = abs(Double(CGFloat(distanceMoved) / velocity.x))
-            if resumeTime > 0.5 {
+            if resumeTime > 1 {
+                resumeTime = 1
+            } else if resumeTime < 0.5 {
                 resumeTime = 0.5
-            } else if resumeTime < 0.3 {
-                resumeTime = 0.3
             }
             let absPercent: CGFloat = 0.1
             if percent < -absPercent {
+                joshprint("prev")
                 panToPrev(resumeTime)
             } else if percent > absPercent {
+                joshprint("next")
                 panToNext(resumeTime)
             } else {
+                joshprint("stay")
                 panBack(resumeTime)
             }
         } else if pan.state == .changed {
@@ -165,10 +174,6 @@ class InfiniteScrollingView: UIView {
         }
     }
     
-    func resetSubviews() {
-        imgPic_0.frame.origin.x = -screenWidth
-        imgPic_1.frame.origin.x = 0
-        imgPic_2.frame.origin.x = screenWidth
-    }
+    
 }
 

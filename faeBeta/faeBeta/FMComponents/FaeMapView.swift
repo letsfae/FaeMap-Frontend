@@ -13,6 +13,7 @@ import UIKit
     @objc optional func iconStyleChange(action: Int, isPlace: Bool)
     
     @objc optional func allPlacesDeselect(_ full: Bool)
+    @objc optional func allLocationsDeselect()
     
     @objc optional func placePinTap(view: MKAnnotationView)
     @objc optional func userPinTap(view: MKAnnotationView)
@@ -52,6 +53,7 @@ class FaeMapView: MKMapView {
     
     public var isSingleTapOnLocPinEnabled: Bool = false
     public var isDoubleTapOnMKAnnoViewEnabled: Bool = true
+    public var isSingleTapToShowFourIconsEnabled: Bool = true
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -83,7 +85,7 @@ class FaeMapView: MKMapView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     @objc private func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
@@ -104,6 +106,7 @@ class FaeMapView: MKMapView {
                     mapAction?.placePinTap?(view: anView)
                     anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {  // second tap place pin
+                    guard isSingleTapToShowFourIconsEnabled else { return }
                     anView.showButtons()
                     anView.optionsOpened = true
                     mapAction?.placePinTap?(view: anView)
@@ -124,6 +127,7 @@ class FaeMapView: MKMapView {
                 guard isSingleTapOnLocPinEnabled else { return }
                 if anView.optionsReady == false {
                     mapAction?.allPlacesDeselect?(true)
+                    mapAction?.allLocationsDeselect?()
                     mapAction?.locPinTap?(view: anView)
                     anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {
@@ -177,6 +181,7 @@ class FaeMapView: MKMapView {
         mapAction?.doubleTapAllTimeControl?()
     }
 
+    
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         
         guard blockTap == false else { return }
@@ -184,6 +189,7 @@ class FaeMapView: MKMapView {
         let numberOfTouches = sender.numberOfTouches
         guard numberOfTouches == 1 else { return }
         if sender.state == .began {
+            vibrate(type: 4)
             let v: Any? = hitTest(tapPoint, with: nil)
             isPlaceAnno = false
             if let anView = v as? PlacePinAnnotationView {

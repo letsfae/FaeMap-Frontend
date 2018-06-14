@@ -36,4 +36,5 @@ struct PinDetailUser {
         self.age = json["age"].stringValue
         self.profileImage = UIImage()
     }
+    
 }

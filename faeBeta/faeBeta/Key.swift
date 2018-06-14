@@ -37,9 +37,9 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
+    var joshDebug: Bool = true
     var vickyDebug: Bool = false
-    var felixDebug: Bool = true
+    var felixDebug: Bool = false
     
     // change this to .production to switch to production mode
     private let server = ServerType.development
@@ -112,6 +112,7 @@ class Key: NSObject { //  singleton class
     // MARK: - Location Seaerch
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedPrediction: GMSAutocompletePrediction?
+    var selectedSearchedCity: String?
     
     // MARK: - Temporary Variables
     var initialCtrler: InitialPageController?

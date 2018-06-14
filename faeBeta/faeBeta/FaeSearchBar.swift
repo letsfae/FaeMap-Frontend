@@ -14,7 +14,6 @@ class FaeSearchBar: UISearchBar {
     
     var preferredTextColor: UIColor!
     
-    
     // Only override drawRect: if you perform custom drawing.
     // An empty implementation adversely affects performance during animation.
     override func draw(_ rect: CGRect) {
@@ -23,7 +22,7 @@ class FaeSearchBar: UISearchBar {
         // Find the index of the search field in the search bar subviews.
         if let index = indexOfSearchFieldInSubviews() {
             // Access the search field
-            let searchField: UITextField = (subviews[0] ).subviews[index] as! UITextField
+            let searchField: UITextField = (subviews[0]).subviews[index] as! UITextField
             
             // Set its frame.
             searchField.frame = CGRect(x: 5.0, y: 5.0, width: frame.size.width - 10.0, height: frame.size.height - 10.0)
@@ -42,8 +41,6 @@ class FaeSearchBar: UISearchBar {
         super.draw(rect)
     }
     
-    
-    
     init(frame: CGRect, font: UIFont, textColor: UIColor) {
         super.init(frame: frame)
         
@@ -56,11 +53,9 @@ class FaeSearchBar: UISearchBar {
         
     }
     
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
     
     func indexOfSearchFieldInSubviews() -> Int! {
         // Uncomment the next line to see the search bar subviews.

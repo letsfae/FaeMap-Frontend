@@ -41,7 +41,7 @@ extension ChatViewController {
                 try! realm.commitWrite()
             }
         }
-        collectionView.reloadData()
+        finishReceivingMessage(animated: false)
         observeOnMessagesChange()
     }
     
@@ -216,12 +216,11 @@ extension ChatViewController {
     private func showOutgoingMessageInView(_ message: RealmMessage, faePHAsset: FaePHAsset? = nil) {
         let faeMessage = FaeMessageMaker.create(from: message, faePHAsset: faePHAsset)
         arrFaeMessages.append(faeMessage)
-        finishSendingMessage()
-        scrollToBottom(animated: true)
-        /*if !["[Picture]", "[Video]", "[Sticker]", "[Gif]", "[Heart]"].contains(message.type) {
+        if !["[Picture]", "[Video]", "[Sticker]", "[Gif]", "[Heart]"].contains(message.type) {
+            finishSendingMessage()
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)
-        }*/
+        }
         //scrollToBottom(animated: false)
     }
     

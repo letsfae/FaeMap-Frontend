@@ -10,13 +10,9 @@ import UIKit
 import SwiftyJSON
 import RealmSwift
 
-@objc protocol MapFilterMenuDelegate: class {
-    @objc optional func autoReresh(isOn: Bool)
-    @objc optional func autoCyclePins(isOn: Bool)
-    @objc optional func hideAvatars(isOn: Bool)
-    func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String)
-}
 
+
+/*
 class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     weak var delegate: MapFilterMenuDelegate?
@@ -571,3 +567,4 @@ class FMFilterMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
         }
     }
 }
+*/

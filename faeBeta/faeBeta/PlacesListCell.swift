@@ -29,14 +29,16 @@ class PlacesListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
         lblPlaceName.text = placeInfo.name
-        lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
+        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
+        addr += placeInfo.address2
+        lblAddress.text = addr
         imgPic.backgroundColor = .white
-        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgPic)
+        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgPic)
     }
     
     private func loadRecommendedCellContent() {
@@ -87,7 +89,7 @@ class CategoryListCell: UITableViewCell {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
     
     public func setValueForCategory(_ cat: (key: String, value: Int)) {

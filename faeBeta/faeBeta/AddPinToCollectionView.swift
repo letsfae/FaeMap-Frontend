@@ -15,34 +15,36 @@ protocol AddPinToCollectionDelegate: class {
 }
 
 class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource {
+    
     weak var delegate: AddPinToCollectionDelegate?
     
-    var uiviewHeader: UIView!
-    var btnNew: UIButton!
-    var btnCancel: UIButton!
+    private var uiviewHeader: UIView!
+    private var btnNew: UIButton!
+    private var btnCancel: UIButton!
     var tblAddCollection: UITableView!
-    var uiviewAfterAdded: AfterAddedToListView!
-    var realmColPlaces: Results<RealmCollection>!
-    var realmColLocations: Results<RealmCollection>!
-    let realm = try! Realm()
-    var tableMode: CollectionTableMode = .place {
+    
+    public var uiviewAfterAdded: AfterAddedToListView!
+    private var realmColPlaces: Results<RealmCollection>!
+    private var realmColLocations: Results<RealmCollection>!
+    private let realm = try! Realm()
+    public var tableMode: CollectionTableMode = .place {
         didSet {
             guard fullLoaded else { return }
             tblAddCollection.reloadData()
         }
     }
-    var pinToSave: FaePinAnnotation!
-    var timer: Timer?
+    public var pinToSave: FaePinAnnotation!
+    private var timer: Timer?
     var arrListSavedThisPin = [Int]() {
         didSet {
             guard fullLoaded else { return }
             tblAddCollection.reloadData()
         }
     }
-    var fullLoaded = false
-    var notificationToken: NotificationToken? = nil
-    var fromLocDetail = false
-    var locId = -1
+    private var fullLoaded = false
+    private var notificationToken: NotificationToken? = nil
+    public var fromLocDetail = false
+    public var locId = -1
     private var showed: Bool = false
     
     override init(frame: CGRect = .zero) {
@@ -54,15 +56,15 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         fullLoaded = true
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     deinit {
         notificationToken?.invalidate()
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func loadCollectionData() {
+
+    private func loadCollectionData() {
         /*realmColPlaces = RealmCollection.filterCollectedTypes(type: "place")
         realmColLocations = RealmCollection.filterCollectedTypes(type: "location")*/
         realmColPlaces = realm.filterCollectedTypes(type: "place")
@@ -85,7 +87,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         }, completion: nil)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         layer.zPosition = 1001
         
         uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 58))
@@ -120,10 +122,6 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         uiviewHeader.addSubview(btnNew)
         btnNew.addTarget(self, action: #selector(actionNew(_:)), for: .touchUpInside)
         
-        loadTable()
-    }
-    
-    fileprivate func loadTable() {
         tblAddCollection = UITableView(frame: CGRect(x: 0, y: 58, width: screenWidth, height: 434 * screenHeightFactor - 58))
         tblAddCollection.delegate = self
         tblAddCollection.dataSource = self
@@ -133,6 +131,187 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
         addSubview(tblAddCollection)
     }
     
+    // MARK: - Place Pin Save & Unsave
+    
+    private func savePlaceTo(collection: RealmCollection) {
+        guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
+        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
+            guard code / 100 == 2 else {
+                
+                return
+            }
+            self.hide()
+            self.uiviewAfterAdded.show("Collected to List!")
+            self.arrListSavedThisPin.append(collection.collection_id)
+            self.uiviewAfterAdded.pinIdInAction = placeData.id
+            //            self.tblAddCollection.reloadData()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_explore"), object: nil)
+            self.timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+            // save pin to RealmCollection
+            RealmCollection.savePin(collection_id: collection.collection_id, type: "place", pin_id: placeData.id)
+        })
+    }
+    
+    private func unsavePlaceFrom(collection: RealmCollection) {
+        guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
+        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
+            guard code / 100 == 2 else { return }
+            self.hide()
+            self.uiviewAfterAdded.show(save: false, "Removed from List!")
+            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
+            self.uiviewAfterAdded.pinIdInAction = placeData.id
+            self.tblAddCollection.reloadData()
+            if self.arrListSavedThisPin.count == 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
+            }
+            self.timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+            
+            // delete pin from RealmCollection
+            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: placeData.id)
+        })
+    }
+    
+    private func saveLocationTo(collection: RealmCollection) {
+        //print("[pin in action]" ,uiviewAfterAdded.pinIdInAction)
+        guard uiviewAfterAdded.pinIdInAction == -1 else {
+            let locationId = uiviewAfterAdded.pinIdInAction
+            saveLocationToWithId(collection, locationId)
+            return
+        }
+        
+        if fromLocDetail && uiviewAfterAdded.pinIdInAction > 0 {
+            let locationId = locId
+            saveLocationToWithId(collection, locationId)
+            return
+        }
+        
+        // TODO YUE 这个地方经常报错
+        Key.shared.FMVCtrler?.useActivityIndicator(on: true)
+        
+        // 1: get screen shot of loc pin
+        mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
+            FaeImage.shared.type = "image"
+            FaeImage.shared.image = snapShotImage
+            
+            // 2: upload the screen shot and get file id
+            FaeImage.shared.faeUploadFile { (status, message) in
+                guard status / 100 == 2 && message != nil else {
+                    Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                    showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
+                    return
+                }
+                let fileIDJSON = JSON(message!)
+                let fileId = fileIDJSON["file_id"].intValue
+                
+                // 3: create a loc pin in server with file id
+                FaeMap.shared.whereKey("content", value: "\(fileId)")
+                FaeMap.shared.whereKey("file_ids", value: "\(fileId)")
+                FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
+                FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
+                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+                    guard status / 100 == 2 else {
+                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
+                        return
+                    }
+                    guard message != nil else {
+                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
+                        return
+                    }
+                    let idJSON = JSON(message!)
+                    let locationId = idJSON["location_id"].intValue
+                    print("locationId \(locationId)")
+                    self.uiviewAfterAdded.pinIdInAction = locationId
+                    
+                    // 4: save loc pin to server
+                    self.saveLocationToWithId(collection, locationId)
+                })
+            }
+        }
+    }
+    
+    private func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
+        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
+            Key.shared.FMVCtrler?.useActivityIndicator(on: false)
+            guard code / 100 == 2 else {
+                showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
+                return
+            }
+            self.hide()
+            self.uiviewAfterAdded.show("Collected to List!")
+            self.arrListSavedThisPin.append(collection.collection_id)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
+            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+            
+            // save pin to RealmCollection
+            
+            RealmCollection.savePin(collection_id: collection.collection_id, type: "location", pin_id: locationId)
+        })
+    }
+    
+    private func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
+        let loc_id = fromLocDetail ? locId : locationId
+        print("unsave \(collection) \(locId)")
+        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { (code, result) in
+            guard code / 100 == 2 else { return }
+            self.hide()
+            self.uiviewAfterAdded.show(save: false, "Removed from List!")
+            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
+            self.uiviewAfterAdded.pinIdInAction = loc_id
+//            self.tblAddCollection.reloadData()
+            if self.arrListSavedThisPin.count == 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: loc_id)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: loc_id)
+            }
+            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
+            
+            // unsave pin from RealmCollection
+            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: loc_id)
+        })
+    }
+    
+    private func observeOnCollectionChange() {
+        let datasource = tableMode == .place ? realmColPlaces : realmColLocations
+        notificationToken?.invalidate()
+        notificationToken = datasource?.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableview = self?.tblAddCollection else { return }
+            switch changes {
+            case .initial:
+                tableview.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableview.beginUpdates()
+                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
+                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
+                tableview.endUpdates()
+            case .error:
+                print("error")
+            }
+        }
+    }
+    
+    @objc private func timerFunc() {
+        uiviewAfterAdded.hide()
+    }
+    
+    @objc private func actionCancel(_ sender: UIButton) {
+        self.hide()
+    }
+    
+    @objc private func actionNew(_ sender: UIButton) {
+        delegate?.createColList()
+    }
+}
+
+// MARK: - Table View Delegate
+
+extension AddPinToCollectionView {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
@@ -172,163 +351,11 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             }
         }
     }
-    
-    func savePlaceTo(collection: RealmCollection) {
-        guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
-        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
-            guard code / 100 == 2 else { return }
-            self.hide()
-            self.uiviewAfterAdded.show("Collected to List!")
-            self.arrListSavedThisPin.append(collection.collection_id)
-            self.uiviewAfterAdded.pinIdInAction = placeData.id
-            //            self.tblAddCollection.reloadData()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_place"), object: nil)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_explore"), object: nil)
-            self.timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-            // save pin to RealmCollection
-            RealmCollection.savePin(collection_id: collection.collection_id, type: "place", pin_id: placeData.id)
-        })
-    }
-    
-    func unsavePlaceFrom(collection: RealmCollection) {
-        guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
-        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
-            guard code / 100 == 2 else { return }
-            self.hide()
-            self.uiviewAfterAdded.show(save: false, "Removed from List!")
-            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
-            self.uiviewAfterAdded.pinIdInAction = placeData.id
-            self.tblAddCollection.reloadData()
-            if self.arrListSavedThisPin.count == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_place"), object: nil)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
-            }
-            self.timer = Timer.scheduledTimer(timeInterval: 4, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-            
-            // delete pin from RealmCollection
-            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: placeData.id)
-        })
-    }
-    
-    func saveLocationTo(collection: RealmCollection) {
-        guard self.uiviewAfterAdded.pinIdInAction == -1 else {
-            let locationId = self.uiviewAfterAdded.pinIdInAction
-            saveLocationToWithId(collection, locationId)
-            return
-        }
-        
-        if fromLocDetail && uiviewAfterAdded.pinIdInAction > 0 {
-            let locationId = locId
-            saveLocationToWithId(collection, locationId)
-            return
-        }
-        
-        // TODO YUE 这个地方经常报错
-        Key.shared.FMVCtrler?.useActivityIndicator(on: true)
-        mapScreenShot(coordinate: pinToSave.coordinate) { (snapShotImage) in
-            FaeImage.shared.type = "image"
-            FaeImage.shared.image = snapShotImage
-            FaeImage.shared.faeUploadFile { (status, message) in
-                guard status / 100 == 2 else {
-                    Key.shared.FMVCtrler?.useActivityIndicator(on: false)
-                    showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
-                    return
-                }
-                guard message != nil else {
-                    Key.shared.FMVCtrler?.useActivityIndicator(on: false)
-                    showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
-                    return
-                }
-                let fileIDJSON = JSON(message!)
-                let fileId = fileIDJSON["file_id"].intValue
-                FaeMap.shared.whereKey("content", value: "\(fileId)")
-                FaeMap.shared.whereKey("file_ids", value: "\(fileId)")
-                FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
-                FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
-                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
-                    guard status / 100 == 2 else {
-                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
-                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
-                        return
-                    }
-                    guard message != nil else {
-                        Key.shared.FMVCtrler?.useActivityIndicator(on: false)
-                        showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
-                        return
-                    }
-                    let idJSON = JSON(message!)
-                    let locationId = idJSON["location_id"].intValue
-                    print("locationId \(locationId)")
-                    self.uiviewAfterAdded.pinIdInAction = locationId
-                    self.saveLocationToWithId(collection, locationId)
-                })
-            }
-        }
-    }
-    
-    func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
-        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
-            Key.shared.FMVCtrler?.useActivityIndicator(on: false)
-            guard code / 100 == 2 else {
-                showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler!)
-                return
-            }
-            self.hide()
-            self.uiviewAfterAdded.show("Collected to List!")
-            self.arrListSavedThisPin.append(collection.collection_id)
-//            self.tblAddCollection.reloadData()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_loc"), object: locationId)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "showSavedNoti_locDetail"), object: locationId)
-            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-            
-            // save pin to RealmCollection
-            
-            RealmCollection.savePin(collection_id: collection.collection_id, type: "location", pin_id: locationId)
-        })
-    }
-    
-    func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
-        let loc_id = fromLocDetail ? locId : locationId
-        print("unsave \(collection) \(locId)")
-        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { (code, result) in
-            guard code / 100 == 2 else { return }
-            self.hide()
-            self.uiviewAfterAdded.show(save: false, "Removed from List!")
-            self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
-            self.uiviewAfterAdded.pinIdInAction = loc_id
-//            self.tblAddCollection.reloadData()
-            if self.arrListSavedThisPin.count == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_loc"), object: loc_id)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "hideSavedNoti_locDetail"), object: loc_id)
-            }
-            self.timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(self.timerFunc), userInfo: nil, repeats: false)
-            
-            // unsave pin from RealmCollection
-            RealmCollection.unsavePin(collection_id: collection.collection_id, type: "location", pin_id: loc_id)
-        })
-    }
-    
-    private func observeOnCollectionChange() {
-        let datasource = tableMode == .place ? realmColPlaces : realmColLocations
-        notificationToken?.invalidate()
-        notificationToken = datasource?.observe { (changes: RealmCollectionChange) in
-            guard let tableview = self.tblAddCollection else { return }
-            switch changes {
-            case .initial:
-                tableview.reloadData()
-            case .update(_, let deletions, let insertions, let modifications):
-                tableview.beginUpdates()
-                tableview.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}), with: .right)
-                tableview.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0)}), with: .none)
-                tableview.endUpdates()
-            case .error:
-                print("error")
-            }
-        }
-    }
+}
+
+// MARK: - Get Screen Shot of Location with Map
+
+extension AddPinToCollectionView {
     
     func mapScreenShot(coordinate: CLLocationCoordinate2D, size: CGSize = CGSize(width: 66, height: 66), icon: Bool = true, _ completion: @escaping (UIImage) -> Void) {
         let mapSnapshotOptions = MKMapSnapshotOptions()
@@ -368,132 +395,5 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             
             completion(imgFinal!)
         }
-    }
-    
-    @objc func timerFunc() {
-        uiviewAfterAdded.hide()
-    }
-    
-    @objc func actionCancel(_ sender: UIButton) {
-        self.hide()
-    }
-    
-    @objc func actionNew(_ sender: UIButton) {
-        delegate?.createColList()
-    }
-}
-
-protocol AfterAddedToListDelegate: class {
-    func seeList()
-    func undoCollect(colId: Int, mode: UndoMode)
-}
-
-enum UndoMode {
-    case save
-    case unsave
-}
-
-class AfterAddedToListView: UIView {
-    
-    weak var delegate: AfterAddedToListDelegate?
-    var uiviewAfterAdded: UIView!
-    var pinIdInAction: Int = -1
-    var selectedCollection: RealmCollection!
-    var lblSaved: FaeLabel!
-    var mode: UndoMode = .save
-    var btnUndo: UIButton!
-    var btnSeeList: UIButton!
-    private var showed: Bool = false
-    
-    override init(frame: CGRect = .zero) {
-        let height: CGFloat = screenHeight == 812 ? 49 + device_offset_bot : 60
-        super.init(frame: CGRect(x: 0, y: screenHeight, width: screenWidth, height: height))
-        loadContent()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func loadContent() {
-        
-        layer.zPosition = 1002
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.bounds
-        addSubview(blurEffectView)
-        
-        lblSaved = FaeLabel(CGRect(x: 20, y: 19, width: 170, height: 25), .left, .medium, 18, .white)
-        lblSaved.text = "Collected to List!"
-        addSubview(lblSaved)
-        
-        btnUndo = UIButton()
-        btnUndo.setTitle("Undo", for: .normal)
-        btnUndo.setTitleColor(.white, for: .normal)
-        btnUndo.setTitleColor(.lightGray, for: .highlighted)
-        btnUndo.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
-        btnUndo.addTarget(self, action: #selector(undoCollecting), for: .touchUpInside)
-        addSubview(btnUndo)
-        addConstraintsWithFormat("H:[v0(46)]-109-|", options: [], views: btnUndo)
-        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnUndo)
-        
-        btnSeeList = UIButton()
-        btnSeeList.setTitle("See List", for: .normal)
-        btnSeeList.setTitleColor(.white, for: .normal)
-        btnSeeList.setTitleColor(.lightGray, for: .highlighted)
-        btnSeeList.titleLabel?.font = FaeFont(fontType: .demiBold, size: 18)
-        btnSeeList.addTarget(self, action: #selector(goToList), for: .touchUpInside)
-        addSubview(btnSeeList)
-        addConstraintsWithFormat("H:[v0(64)]-20-|", options: [], views: btnSeeList)
-        addConstraintsWithFormat("V:|-19-[v0(25)]", options: [], views: btnSeeList)
-    }
-    
-    @objc func undoCollecting() {
-        guard let col = selectedCollection, pinIdInAction != -1 else { return }
-        self.hide()
-        switch mode {
-        case .save:
-            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
-                guard status / 100 == 2 else { return }
-                joshprint("[undoCollecting] successfully saved again")
-                self.selectedCollection = nil
-                self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
-                
-                RealmCollection.savePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
-            }
-        case .unsave:
-            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
-                guard status / 100 == 2 else { return }
-                joshprint("[undoCollecting] successfully unsave this pin")
-                self.selectedCollection = nil
-                self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
-                
-                RealmCollection.unsavePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
-            }
-        }
-    }
-    
-    @objc func goToList() {
-        delegate?.seeList()
-    }
-    
-    func show(save: Bool = true, _ content: String) {
-        //lblSaved.text = save ? "Collected to List!" : "Removed from List!"
-        lblSaved.text = content
-        mode = !save ? .save : .unsave
-        guard !showed else { return }
-        showed = true
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight - self.frame.size.height
-        }, completion: nil)
-    }
-    
-    func hide() {
-        guard showed else { return }
-        showed = false
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.origin.y = screenHeight
-        }, completion: nil)
     }
 }

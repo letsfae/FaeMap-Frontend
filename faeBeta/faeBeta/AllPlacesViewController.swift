@@ -140,7 +140,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @objc func actionGoBack(_ sender: UIButton) {
-        let mbIsOn = LeftSlidingMenuViewController.boolMapBoardIsOn
+        let mbIsOn = SideMenuViewController.boolMapBoardIsOn
         if mbIsOn {
             Key.shared.initialCtrler?.goToMapBoard(animated: false)
         }
@@ -151,7 +151,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let vc = AllPlacesMapController()
         vc.strTitle = strTitle
-        vc.arrPlaces = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
+        vc.arrPins = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
         navigationController?.pushViewController(vc, animated: false)
         
         return

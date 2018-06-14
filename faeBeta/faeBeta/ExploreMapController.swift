@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionMapController: BasicMapController, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
+class ExploreMapController: BasicMapController, UICollectionViewDelegate, UICollectionViewDataSource, UIScrollViewDelegate, EXPCellDelegate {
     
     // MARK: - Vars
     
@@ -16,6 +16,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     var strCategory: String = ""
     private var clctViewMap: UICollectionView!
     private var intCurtPage = 0
+    private var intPrevPage = 0
     private var placeAnnos = [FaePinAnnotation]()
     
     // MARK: - Life Cycles
@@ -27,6 +28,10 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
         loadAnnotations(places: arrExpPlace)
         setTitle(type: strCategory)
         faeMapView.singleTap.isEnabled = true
+        faeMapView.doubleTap.isEnabled = false
+        faeMapView.longPress.isEnabled = false
+        faeMapView.isSingleTapToShowFourIconsEnabled = false
+        faeMapView.mapAction = self
         btnZoom.isHidden = true
         btnLocat.isHidden = true
     }
@@ -85,8 +90,9 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageWidth: CGFloat = 233
         intCurtPage = Int((clctViewMap.contentOffset.x + 63) / pageWidth)
+        guard intPrevPage != intCurtPage else { return }
         highlightPlace(intCurtPage)
-        print("scrollViewDidEndDecelerating")
+        intPrevPage = intCurtPage
     }
 
     private func highlightPlace(_ idx: Int) {
@@ -140,7 +146,7 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     }
     
     private func loadAnnotations(places: [PlacePin]) {
-        placeAnnos = places.map { FaePinAnnotation(type: "place", cluster: self.placeClusterManager, data: $0) }
+        placeAnnos = places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
         placeClusterManager.addAnnotations(placeAnnos, withCompletionHandler: {
             self.highlightPlace(0)
         })
@@ -216,4 +222,20 @@ class CollectionMapController: BasicMapController, UICollectionViewDelegate, UIC
     
     // MARK: Find Map Annotation
     
+}
+
+extension ExploreMapController: MapAction {
+    
+    func placePinTap(view: MKAnnotationView) {
+        tapPlacePin(didSelect: view)
+    }
+    
+    func allPlacesDeselect(_ full: Bool) {
+        deselectAllAnnotations(full: full)
+    }
+    
+    func singleElsewhereTapExceptInfobar() {
+        faeMapView.mapGesture(isOn: true)
+        deselectAllAnnotations(full: true)
+    }
 }

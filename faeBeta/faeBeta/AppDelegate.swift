@@ -35,9 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    fileprivate func sync(_ completion: @escaping (Bool) -> Void) {
+    fileprivate func sync(_ completion: @escaping (Int) -> Void) {
         FaePush.shared.getSync { (status, _) in
-            completion(status / 100 == 2)
+            completion(status)
         }
     }
     
@@ -46,53 +46,78 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FaeCoreData.shared.readLogInfo()
         
         let vc = LaunchLoadingController()
-//        let vc = RoutingMapController()
-        self.navMain.viewControllers = [vc]
-        self.navMain.navigationBar.isHidden = true
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = self.navMain
-        self.window?.makeKeyAndVisible()
-        
-//        return
-        
-        func configureNavCtrler() {
-            let vcRoot = !Key.shared.is_Login ? WelcomeViewController() : InitialPageController()
-            Key.shared.navOpenMode = !Key.shared.is_Login ? .welcomeFirst : .mapFirst
-            self.navMain.setViewControllers([vcRoot], animated: false)
-            LocManager.shared.updateCurtLoc() // update user current location
-            self.configureNotifications()
-            if !Key.shared.is_Login && !Key.shared.isFirstUse() {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
-                    showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: vcRoot)
-                    FaeCoreData.shared.save("userTokenEncode", value: "")
-                })
-            }
-        }
+        navMain.viewControllers = [vc]
+        navMain.navigationBar.isHidden = true
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = navMain
+        window?.makeKeyAndVisible()
         
         if Key.shared.isFirstUse() {
-            configureNavCtrler()
+            let vcRoot = WelcomeViewController()
+            Key.shared.navOpenMode = .welcomeFirst
+            navMain.setViewControllers([vcRoot], animated: false)
+            LocManager.shared.updateCurtLoc() // update user current location
+            configureNotifications()
+            testReachability()
         } else {
-            sync { (success) in
-                Key.shared.is_Login = success
+            sync { (status) in
+                guard status / 100 == 2 else {
+                    let vcRoot = WelcomeViewController()
+                    Key.shared.navOpenMode = .welcomeFirst
+                    self.navMain.setViewControllers([vcRoot], animated: false)
+                    LocManager.shared.updateCurtLoc() // update user current location
+                    self.configureNotifications()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                        // if unauthorized, the following will be triggerred when authorization fail, meaning that other device has login to this account
+                        if status == 401 {
+                            // meaning that current device has been notified with "Another device has logged on" message
+                            guard Key.shared.userTokenEncode != "session_lost" else {
+                                return
+                            }
+                            showAlert(title: "Connection Lost", message: "Another device has logged on to Fae Map with this Account!", viewCtrler: vcRoot)
+                            FaeCoreData.shared.save("userTokenEncode", value: "session_lost")
+                        }
+                        // if status is not 401, meaning that connection is lost due to network issues
+                        else {
+                            showAlert(title: "Connection Lost", message: "please re-login your account!", viewCtrler: vcRoot)
+                            FaeCoreData.shared.save("userTokenEncode", value: "session_lost")
+                        }
+                        self.testReachability()
+                    })
+                    return
+                }
+                Key.shared.is_Login = true
+                FaeCoreData.shared.save("is_Login", value: Key.shared.is_Login)
                 if Key.shared.is_Login, let _ = FaeCoreData.shared.readByKey("signup") {
                     for key in ["signup", "signup_first_name", "signup_last_name", "signup_username", "signup_password", "signup_gender", "signup_dateofbirth", "signup_email"] {
                         FaeCoreData.shared.removeByKey(key)
                     }
                 }
                 DispatchQueue.main.async {
-                    configureNavCtrler()
+                    let vcRoot = InitialPageController()
+                    Key.shared.navOpenMode = .mapFirst
+                    self.navMain.setViewControllers([vcRoot], animated: false)
+                    LocManager.shared.updateCurtLoc() // update user current location
                     self.configureNotifications()
+                    self.testReachability()
                 }
             }
         }
-
-        
     }
     
     fileprivate func configureNotifications() {
         let notificationType: UIUserNotificationType = [.alert, .badge, .sound]
         let settings: UIUserNotificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(settings)
+    }
+    
+    fileprivate func testReachability() {
+        if reachability.currentReachabilityStatus == .notReachable {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25, execute: {
+                self.window?.makeKeyAndVisible()
+                self.window?.visibleViewController?.present(DisconnectionViewController.shared, animated: true, completion: nil)
+            })
+        }
     }
     
     fileprivate func configureReachability() {
@@ -102,6 +127,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do {
             try reachability.startNotifier()
         } catch {
+        
         }
     }
     
@@ -128,7 +154,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let reach = notification.object as! Reachability
         if reach.isReachable && reachaVCPresented {
             // joshprint("[AppDelegate | reachabilityChanged] vc.isBeingPresented")
-            DisconnectionViewController.shared.dismiss(animated: true, completion: nil)
+            DisconnectionViewController.shared.dismiss(animated: true, completion: {
+                DisconnectionViewController.shared.lblFailMessage.isHidden = true
+            })
             reachaVCPresented = false
         } else if !reach.isReachable && !reachaVCPresented {
             // joshprint("[AppDelegate | reachabilityChanged] Network not reachable")
