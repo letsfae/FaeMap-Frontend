@@ -754,22 +754,21 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         func tapMapOrHour(_ identifier: String) {
-            if indexPath.row == 0 {
-                if identifier == "map" {
-                    PlaceDetailCell.boolMapFold = !PlaceDetailCell.boolMapFold
-                } else if identifier == "hour" {
-                    PlaceDetailCell.boolHourFold = !PlaceDetailCell.boolHourFold
-                }
-                
-                tableView.reloadData()
-                UIView.setAnimationsEnabled(false)
-                tableView.beginUpdates()
-//                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
-//                tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-                tableView.endUpdates()
-                UIView.setAnimationsEnabled(true)
+            if identifier == "map" {
+                PlaceDetailCell.boolMapFold = !PlaceDetailCell.boolMapFold
+            } else if identifier == "hour" {
+                PlaceDetailCell.boolHourFold = !PlaceDetailCell.boolHourFold
             }
+            
+            tableView.reloadData()
+            //                UIView.setAnimationsEnabled(false)
+            //                tableView.beginUpdates()
+            //                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
+            //                tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            //                tableView.endUpdates()
+            //                UIView.setAnimationsEnabled(true)
         }
+        
         func tapWebOrPhone() {
             var strURL = ""
             if boolHaveWeb && indexPath.row == 0 {
@@ -860,10 +859,10 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         let hour = arrHour[row]
         cell.setValueForOpeningHourCell(day: day, hour: hour)
         
-        if indexPath.row == 1 {
-            cell.lblDay.font = UIFont(name: "AvenirNext-Bold", size: 15)
-            cell.lblHour.font = UIFont(name: "AvenirNext-Bold", size: 15)
-        }
+//        if indexPath.row == 1 {
+//            cell.lblDay.font = UIFont(name: "AvenirNext-Bold", size: 15)
+//            cell.lblHour.font = UIFont(name: "AvenirNext-Bold", size: 15)
+//        }
         
         cell.setValueForOpeningHourCell(day: day, hour: hour)
         return cell
