@@ -766,17 +766,20 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        func tapMapOrHour() {
-            let cell = tableView.cellForRow(at: indexPath) as! PlaceDetailCell
-            PlaceDetailCell.boolFold = cell.imgDownArrow.image == #imageLiteral(resourceName: "arrow_up")
-            UIView.setAnimationsEnabled(false)
-            tableView.beginUpdates()
-            tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            tableView.endUpdates()
-            UIView.setAnimationsEnabled(true)
-            uiviewPlaceImages.removeFromSuperview()
-            uiviewHeader.addSubview(uiviewPlaceImages)
-            uiviewPlaceImages.loadPageCtrl()
+        func tapMapOrHour(_ identifier: String) {
+            if identifier == "map" {
+                PlaceDetailCell.boolMapFold = !PlaceDetailCell.boolMapFold
+            } else if identifier == "hour" {
+                PlaceDetailCell.boolHourFold = !PlaceDetailCell.boolHourFold
+            }
+            
+            tableView.reloadData()
+            //                UIView.setAnimationsEnabled(false)
+            //                tableView.beginUpdates()
+            //                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
+            //                tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            //                tableView.endUpdates()
+            //                UIView.setAnimationsEnabled(true)
         }
         
         func tapWebOrPhone() {
@@ -867,14 +870,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         let row = (indexPath.row - 1 + dayIdx) % arrDay.count
         let day = arrDay_LG[row]
         let hour = arrHour[row]
-        cell.setValueForOpeningHourCell(day: day, hour: hour)
-        
-//        if indexPath.row == 1 {
-//            cell.lblDay.font = UIFont(name: "AvenirNext-Bold", size: 15)
-//            cell.lblHour.font = UIFont(name: "AvenirNext-Bold", size: 15)
-//        }
-        
-        cell.setValueForOpeningHourCell(day: day, hour: hour)
+        cell.setValueForOpeningHourCell(day, hour, bold: indexPath.row == 1)
         return cell
     }
 

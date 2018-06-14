@@ -490,6 +490,7 @@ class PlaceDetailSection3Cell: PlaceDetailCell {
 */
 
 class PlaceOpeningHourCell: UITableViewCell {
+    
     var lblDay: UILabel!
     var lblHour: UILabel!
     
@@ -521,7 +522,7 @@ class PlaceOpeningHourCell: UITableViewCell {
         addConstraintsWithFormat("V:|-4-[v0]-4-|", options: [], views: lblHour)
     }
     
-    func setValueForOpeningHourCell(day: String, hour: [String]) {
+    func setValueForOpeningHourCell(_ day: String, _ hour: [String], bold: Bool) {
         lblDay.text = day
         var openingHour = hour[0]
         if hour.count > 1 {
@@ -531,6 +532,9 @@ class PlaceOpeningHourCell: UITableViewCell {
         }
         
         lblHour.text = openingHour
+        
+        lblDay.font = bold ? FaeFont(fontType: .bold, size: 15) : FaeFont(fontType: .medium, size: 15)
+        lblHour.font = bold ? FaeFont(fontType: .bold, size: 15) : FaeFont(fontType: .medium, size: 15)
     }
 }
 
