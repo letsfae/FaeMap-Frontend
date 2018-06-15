@@ -11,32 +11,7 @@ import SwiftyJSON
 
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
-    
-    func loadPlaceSearchHeader() {
-        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
-        btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
-        btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
-        btnSearchAllPlaces.contentHorizontalAlignment = .left
-        uiviewNavBar.addSubview(btnSearchAllPlaces)
-        
-        lblSearchContent = UILabel(frame: CGRect(x: 24, y: 10, width: 200, height: 25))
-        lblSearchContent.textColor = UIColor._898989()
-        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        lblSearchContent.text = "All Places"
-        btnSearchAllPlaces.addSubview(lblSearchContent)
-        
-        btnSearchAllPlaces.isHidden = true
-        
-        // Click to clear search results
-        btnClearSearchRes = UIButton()
-        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
-        btnClearSearchRes.isHidden = true
-        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
-        uiviewNavBar.addSubview(btnClearSearchRes)
-        uiviewNavBar.addConstraintsWithFormat("H:[v0(36.45)]-5-|", options: [], views: btnClearSearchRes)
-        uiviewNavBar.addConstraintsWithFormat("V:[v0(36.45)]-5.55-|", options: [], views: btnClearSearchRes)
-    }
-    
+
     func loadPlaceHeader() {
         uiviewPlaceHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 246))
         uiviewPlaceHeader.backgroundColor = .white
@@ -192,15 +167,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
-        searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-    }
-    
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
@@ -229,7 +195,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         placeTableMode = .recommend
         btnNavBarMenu.isHidden = false
         btnClearSearchRes.isHidden = true
-        btnSearchAllPlaces.isHidden = true
         tblMapBoard.tableHeaderView = uiviewPlaceHeader
         reloadTableMapBoard()
     }
@@ -240,21 +205,12 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         if lblSearchContent.text != "All Places" {
             btnClearSearchRes.isHidden = false
         }
-        btnSearchAllPlaces.isHidden = false
         tblMapBoard.tableHeaderView = nil
         reloadTableMapBoard()
     }
     // MapBoardPlaceTabDelegate End
 
     // BoardsSearchDelegate
-    func jumpToPlaceSearchResult(searchText: String, places: [PlacePin]) {
-        btnClearSearchRes.isHidden = false
-        lblSearchContent.text = searchText
-        
-        mbPlaces.removeAll()
-        mbPlaces = places
-        tblMapBoard.reloadData()
-    }
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
         LocManager.shared.searchedLoc = location
@@ -265,7 +221,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         } else {
             getPlaceInfo(content: lblSearchContent.text!, source: "name")
         }
-//        getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         tblMapBoard.reloadData()
     }
 }

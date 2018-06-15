@@ -44,8 +44,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     // uiviews with shadow under table views
     var uiviewSchResBg: UIView!
     var uiviewSchLocResBg: UIView!
+    
     // table tblSearchRes used for search places & display table "use current location"
     var tblPlacesRes: UITableView!
+    
     // table tblLocationRes used for search locations
     var tblLocationRes: UITableView!
     
@@ -53,26 +55,23 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var lblNoResults: UILabel!
     var activityView: UIActivityIndicatorView!
     
-    // MapKit address autocompletion
-    var searchCompleter = MKLocalSearchCompleter()
-    var searchResults = [MKLocalSearchCompletion]()
-    
-    // Geobytes
+    // Geobytes City Data
     var geobytesCityData = [String]()
     
     var boolFromChat: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor._241241241()
         loadSearchBar()
         loadPlaceBtns()
         loadTable()
         loadNoResultsView()
-        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         schPlaceBar.txtSchField.becomeFirstResponder()
-        searchCompleter.delegate = self
     }
     
     // shows "no results"

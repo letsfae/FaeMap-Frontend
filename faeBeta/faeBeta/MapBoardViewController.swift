@@ -75,7 +75,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var uiviewPlaceHedaderView1: UIView!
     var uiviewPlaceHedaderView2: UIView!
     var pageCtrlPlace: UIPageControl!
-    var btnSearchAllPlaces: UIButton!
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
     var imgIcon: UIImageView!
@@ -189,8 +188,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         btnNavBarSetTitle()
         
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
-        
-        loadPlaceSearchHeader()
     }
     
     @objc func actionLeftWindowShow(_ sender: UIButton) {
