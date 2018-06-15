@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 
 class MBTalkCommentsCell: UITableViewCell {
@@ -93,3 +94,4 @@ class MBTalkCommentsCell: UITableViewCell {
         addConstraintsWithFormat("V:|-15-[v0(39)]-10-[v1]-7-[v2(32)]-10-|", options: [], views: imgAvatar, lblContent, uiviewFav)
     }
 }
+ */

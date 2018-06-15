@@ -9,6 +9,7 @@
 import UIKit
 
 // for TalkTalk page
+/*
 extension MapBoardViewController {
     // function for loading talk post uiview and switch buttons
     func loadTalkPostHead() {
@@ -177,4 +178,5 @@ extension MapBoardViewController {
         }
     }
 }
+ */
 

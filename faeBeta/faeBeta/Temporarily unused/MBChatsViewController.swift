@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 import SwiftyJSON
 
@@ -250,3 +251,4 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 }
+ */
