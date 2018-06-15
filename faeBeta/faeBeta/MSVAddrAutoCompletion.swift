@@ -28,12 +28,12 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             self.geobytesCityData.removeAll()
             guard status / 100 == 2 else {
                 // TODO YUE
-                self.showOrHideViews(searchText: searchText)
+                self.showOrHideViews(isSearchTextEmpty: searchText == "")
                 return
             }
             guard let result = result else {
                 // TODO YUE
-                self.showOrHideViews(searchText: searchText)
+                self.showOrHideViews(isSearchTextEmpty: searchText == "")
                 return
             }
             let value = JSON(result)
@@ -46,7 +46,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 self.geobytesCityData.append(city.stringValue)
                 
             }
-            self.showOrHideViews(searchText: searchText)
+            self.showOrHideViews(isSearchTextEmpty: searchText == "")
         }
         // 以下为Google Place API 使用的代码
 //        Key.shared.selectedPrediction = nil
@@ -70,7 +70,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         searchResults = completer.results
         filteredLocations = searchResults.map({ $0.title })
         tblLocationRes.reloadData()
-        showOrHideViews(searchText: completer.queryFragment)
+        showOrHideViews(isSearchTextEmpty: completer.queryFragment == "")
     }
     
     // MKLocalSearchCompleterDelegate

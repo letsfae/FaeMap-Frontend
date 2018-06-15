@@ -9,7 +9,7 @@
 import RxSwift
 import RxCocoa
 import Foundation
-import CoreLocation
+import SwiftyJSON
 
 class CitySearcherViewViewModel {
     
@@ -18,21 +18,11 @@ class CitySearcherViewViewModel {
     var querying: Driver<Bool> { return _querying.asDriver() }
     var locations: Driver<[String]> { return _locations.asDriver() }
     
-    // MARK: -
-    
     private let _querying = BehaviorRelay<Bool>(value: false)
     private let _locations = BehaviorRelay<[String]>(value: [])
     
-    // MARK: -
-    
     var hasLocations: Bool { return numberOfLocations > 0 }
     var numberOfLocations: Int { return _locations.value.count }
-    
-    // MARK: -
-    
-    private lazy var geocoder = CLGeocoder()
-    
-    // MARK: -
     
     private let disposeBag = DisposeBag()
     
@@ -40,7 +30,7 @@ class CitySearcherViewViewModel {
     
     init(query: Driver<String>) {
         query
-            .throttle(0.5)
+            .throttle(1)
             .distinctUntilChanged()
             .drive(onNext: { [weak self] (addressString) in
                 self?.geocode(addressString: addressString)
@@ -57,8 +47,7 @@ class CitySearcherViewViewModel {
     
     func viewModelForLocation(at index: Int) -> String? {
         guard let location = location(at: index) else { return nil }
-//        return LocationsViewLocationViewModel(location: location.location, locationAsString: location.name)
-        return ""
+        return location
     }
     
     // MARK: - Helper Methods
@@ -72,23 +61,28 @@ class CitySearcherViewViewModel {
         _querying.accept(true)
         
         // Geocode Address String
-        geocoder.geocodeAddressString(addressString) { [weak self] (placemarks, error) in
+        
+        CitySearcher.shared.cityAutoComplete(addressString) { [weak self] (status, result) in
             var locations: [String] = []
-            
             self?._querying.accept(false)
-            
-            if let error = error {
-                print("Unable to Forward Geocode Address (\(error))")
-                
-            } else if let _placemarks = placemarks {
-                locations = _placemarks.flatMap({ (placemark) -> String? in
-                    guard let name = placemark.name else { return nil }
-                    guard let location = placemark.location else { return nil }
-//                    return Location(name: name, latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                    return ""
-                })
+            self?._querying.accept(false)
+            guard status / 100 == 2 else {
+                self?._locations.accept([])
+                return
             }
-            
+            guard let result = result else {
+                self?._locations.accept([])
+                return
+            }
+            let value = JSON(result)
+            let citys = value.arrayValue
+            for city in citys {
+                if city.stringValue == "%s" || city.stringValue == "" {
+                    break
+                }
+                locations.append(city.stringValue)
+                
+            }
             self?._locations.accept(locations)
         }
     }

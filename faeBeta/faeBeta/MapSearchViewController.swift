@@ -8,6 +8,8 @@
 import SwiftyJSON
 import MapKit
 import GooglePlaces
+import RxSwift
+import RxCocoa
 
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
@@ -68,6 +70,21 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     var boolFromChat: Bool = false
     
+    // RxSwift
+    var viewModel: CitySearcherViewViewModel!
+    private let disposeBag = DisposeBag()
+    
+    func loadCitySearchViewModel() {
+        var oneTimeFlag = 0
+        viewModel = CitySearcherViewViewModel(query: schLocationBar.txtSchField.rx.text.orEmpty.asDriver())
+        viewModel.locations
+            .drive(onNext: { [unowned self] (_) in
+                guard oneTimeFlag == 2 else { oneTimeFlag += 1; return }
+                self.showOrHideViews(isSearchTextEmpty: self.schLocationBar.txtSchField.text == "")
+            })
+            .disposed(by: disposeBag)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //navigationController?.isNavigationBarHidden = true
@@ -79,6 +96,8 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar.txtSchField.becomeFirstResponder()
         searchCompleter.delegate = self
+        
+        loadCitySearchViewModel()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -304,13 +323,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     @objc func backToMap(_ sender: UIButton) {
-//        delegate?.backToMainMapFromMapSearch()
         navigationController?.popViewController(animated: false)
     }
     
     func getPlaceInfo(content: String = "", source: String = "name") {
         guard content != "" else {
-            showOrHideViews(searchText: content)
+            showOrHideViews(isSearchTextEmpty: content == "")
             return
         }
         FaeSearch.shared.whereKey("content", value: content)
@@ -324,22 +342,18 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
                                                       "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
-//                print("[loadMapSearchPlaceInfo] status/100 != 2")
-                self.showOrHideViews(searchText: content)
+                self.showOrHideViews(isSearchTextEmpty: content == "")
                 return
             }
             let placeInfoJSON = JSON(message!)
-//            print(placeInfoJSON)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
-//                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
-                self.showOrHideViews(searchText: content)
+                self.showOrHideViews(isSearchTextEmpty: content == "")
                 return
             }
             self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
-//            print(self.filteredPlaces.count)
             
             if source == "name" {
-                self.showOrHideViews(searchText: content)
+                self.showOrHideViews(isSearchTextEmpty: content == "")
             } else {
                 self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces)
                 self.navigationController?.popViewController(animated: false)

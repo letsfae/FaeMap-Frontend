@@ -21,7 +21,10 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         if cellStatus == 1 {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
-                cell.lblLocationName.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
+//                cell.lblLocationName.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
+                if let vm = viewModel.viewModelForLocation(at: indexPath.row) {
+                    cell.lblLocationName.attributedText = vm.faeSearchBarAttributedText()
+                }
                 cell.bottomLine.isHidden = false
                 if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
                     cell.bottomLine.isHidden = true
@@ -77,7 +80,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             return section == 1 ? filteredPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
         } else {
 //            return tableView == tblLocationRes ? googlePredictions.count : arrCurtLocList.count
-            return tableView == tblLocationRes ? geobytesCityData.count : arrCurtLocList.count
+            return tableView == tblLocationRes ? viewModel.numberOfLocations : arrCurtLocList.count
         }
     }
     

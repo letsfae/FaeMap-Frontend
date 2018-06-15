@@ -11,12 +11,12 @@ import UIKit
 extension MapSearchViewController {
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
-    func showOrHideViews(searchText: String) {
+    func showOrHideViews(isSearchTextEmpty: Bool) {
         // search places
         if cellStatus == 0 {
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
-            if searchText != "" && (filteredPlaces.count != 0 || filteredCategory.count != 0) {
+            if !isSearchTextEmpty && (filteredPlaces.count != 0 || filteredCategory.count != 0) {
                 uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
@@ -26,7 +26,7 @@ extension MapSearchViewController {
             } else {
                 uiviewPics.isHidden = false
                 uiviewSchResBg.isHidden = true
-                if searchText == "" {
+                if isSearchTextEmpty {
                     uiviewPics.frame.origin.y = 124 + device_offset_top
                 } else {
                     uiviewPics.frame.origin.y = 124 + uiviewNoResults.frame.height + 5 + device_offset_top
@@ -34,7 +34,7 @@ extension MapSearchViewController {
             }
             
             // for uiviewNoResults
-            if searchText != "" && filteredPlaces.count == 0 && filteredCategory.count == 0 {
+            if !isSearchTextEmpty && filteredPlaces.count == 0 && filteredCategory.count == 0 {
                 uiviewNoResults.isHidden = false
             } else {
                 uiviewNoResults.isHidden = true
@@ -66,12 +66,12 @@ extension MapSearchViewController {
             uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
-            if searchText == "" || geobytesCityData.count == 0 {
+            if isSearchTextEmpty || viewModel.numberOfLocations == 0 {
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
                 uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewSchLocResBg.isHidden = false
-                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * geobytesCityData.count))
+                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * viewModel.numberOfLocations))
                 tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
                 uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
             }
@@ -105,14 +105,14 @@ extension MapSearchViewController {
             cellStatus = 0
             if searchBar.txtSchField.text == "" {
                 if let text = searchBar.txtSchField.text {
-                    showOrHideViews(searchText: text)
+                    showOrHideViews(isSearchTextEmpty: text == "")
                 } else {
-                    showOrHideViews(searchText: "")
+                    showOrHideViews(isSearchTextEmpty: true)
                 }
             } else {
                 schPlaceBar.btnClose.isHidden = false
                 if let text = searchBar.txtSchField.text {
-                    showOrHideViews(searchText: text)
+                    showOrHideViews(isSearchTextEmpty: text == "")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.filterPlaceCat(searchText: text)  // crash when entering from map
                         self.getPlaceInfo(content: text)
@@ -134,7 +134,7 @@ extension MapSearchViewController {
                     searchBar.btnClose.isHidden = false
                 }
             }
-            showOrHideViews(searchText: searchBar.txtSchField.text!)
+            showOrHideViews(isSearchTextEmpty: searchBar.txtSchField.text == "")
         }
     }
     
@@ -143,10 +143,10 @@ extension MapSearchViewController {
         if searchBar == schLocationBar {
             cellStatus = 1
             if searchText == "" {
-                showOrHideViews(searchText: searchText)
+                showOrHideViews(isSearchTextEmpty: true)
             }
             //            searchCompleter.queryFragment = searchText
-            placeAutocomplete(searchText)
+//            placeAutocomplete(searchText)
         } else {
             cellStatus = 0
             filterPlaceCat(searchText: searchText)
@@ -178,7 +178,7 @@ extension MapSearchViewController {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
                 Key.shared.selectedSearchedCity = geobytesCityData[0]
                 geobytesCityData.removeAll()
-                showOrHideViews(searchText: "")
+                showOrHideViews(isSearchTextEmpty: true)
                 schPlaceBar.txtSchField.becomeFirstResponder()
             }
         }
