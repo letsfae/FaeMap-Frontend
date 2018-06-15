@@ -96,7 +96,7 @@ class SetAvatar {
             imagePickerDelegate = currentVC
         default: break
         }
-        let menu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        let menu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         menu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .default) { (alert: UIAlertAction) in
             var photoStatus = PHPhotoLibrary.authorizationStatus()
