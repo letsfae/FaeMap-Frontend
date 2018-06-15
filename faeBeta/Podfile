@@ -4,7 +4,7 @@ use_frameworks!
 
 target 'faeBeta' do
     pod 'Alamofire’
-    pod 'SwiftyJSON’, '~> 3.1.4’
+    pod 'SwiftyJSON’
     pod 'JSQMessagesViewController'
     pod 'RealmSwift'
     pod 'TTRangeSlider'

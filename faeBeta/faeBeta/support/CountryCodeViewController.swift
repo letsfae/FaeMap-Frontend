@@ -51,8 +51,12 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
     private func getPhoneCode() {
         let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
         let jsonData = NSData(contentsOfFile: path!)
-        let json = JSON(data: jsonData! as Data)["data"]
-        
+        var json: JSON!
+        do {
+            json = try JSON(data: jsonData! as Data)["data"]
+        } catch {
+            print("JSON Error: \(error)")
+        }
         for each in json.array! {
             let country = CountryCodeStruct(json: each)
             arrCountries.append(country)

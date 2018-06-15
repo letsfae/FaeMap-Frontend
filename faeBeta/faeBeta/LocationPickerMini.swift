@@ -13,7 +13,7 @@ import CoreLocation
 
 protocol LocationPickerMiniDelegate: class {
     func showFullLocationView()
-    func sendLocationMessageFromMini()
+    func sendLocationMessageFromMini(_ locationPickerMini: LocationPickerMini)
 }
 
 class LocationPickerMini: UIView, MKMapViewDelegate {
@@ -32,7 +32,7 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Setup UI
@@ -96,7 +96,7 @@ class LocationPickerMini: UIView, MKMapViewDelegate {
     }
     
     @objc func sendLocationMessageFromMini() {
-        delegate?.sendLocationMessageFromMini()
+        delegate?.sendLocationMessageFromMini(self)
     }
     
     func actionSelfPosition(_ sender: UIButton) {
