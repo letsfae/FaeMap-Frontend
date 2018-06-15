@@ -10,10 +10,7 @@ import UIKit
 import SwiftyJSON
 import GooglePlaces
 
-// TODO: Yue
 @objc protocol BoardsSearchDelegate: class {
-    //    func backToPlaceSearchView()
-    //    func backToLocationSearchView()
     @objc optional func jumpToPlaceSearchResult(searchText: String, places: [PlacePin])
     @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
     @objc optional func chooseLocationOnMap()
@@ -30,11 +27,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     
     var enterMode: CollectionTableMode = .place
     weak var delegate: BoardsSearchDelegate?
-    var arrCurtLocList = ["Use my Current Location", "Choose Location on Map"]
+    var fixedLocOptions = ["Use my Current Location", "Choose Location on Map"]
     
     var searchedPlaces = [PlacePin]()
     var filteredPlaces = [PlacePin]()
-    //    var searchedLocations = [String]()   有location数据后使用
     var filteredLocations = [String]()
     
     var btnBack: UIButton!
@@ -394,7 +390,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             if boolCurtLocSelected {
                 uiviewSchResBg.frame.size.height = 48
             } else {
-                uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
+                uiviewSchResBg.frame.size.height = CGFloat(fixedLocOptions.count * 48)
             }
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
@@ -420,29 +416,21 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         if enterMode == .location {
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath as IndexPath) as! LocationListCell
+                let isLast = indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1
                 if isCitySearch {
-                    cell.lblLocationName.attributedText = googlePredictions[indexPath.row].faeSearchBarAttributedText()
+                    cell.setValueForLocationPrediction(googlePredictions[indexPath.row], last: isLast)
                 } else {
-                    cell.lblLocationName.attributedText = nil
-                    cell.lblLocationName.text = filteredLocations[indexPath.row]
-                }
-                cell.bottomLine.isHidden = false
-                if indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1 {
-                    cell.bottomLine.isHidden = true
+                    cell.configureCellOption(filteredLocations[indexPath.row], last: isLast)
                 }
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MyFixedCell", for: indexPath as IndexPath) as! LocationListCell
                 if boolCurtLocSelected {
-                    cell.lblLocationName.text = arrCurtLocList[1]
-                    cell.bottomLine.isHidden = true
+                    cell.configureCellOption(fixedLocOptions[1], last: true)
                     return cell
                 }
-                cell.lblLocationName.text = arrCurtLocList[indexPath.row]
-                cell.bottomLine.isHidden = false
-                if indexPath.row == arrCurtLocList.count - 1 {
-                    cell.bottomLine.isHidden = true
-                }
+                let isLast = indexPath.row == fixedLocOptions.count - 1
+                cell.configureCellOption(fixedLocOptions[indexPath.row], last: isLast)
                 return cell
             }
         } else if enterMode == .place {
@@ -461,7 +449,6 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Joshua: 0829 Modified
         if enterMode == .place {
             return filteredPlaces.count
         } else {
@@ -471,12 +458,10 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                 if boolCurtLocSelected {
                     return 1
                 } else {
-                    return arrCurtLocList.count
+                    return fixedLocOptions.count
                 }
             }
         }
-        // End of Joshua: 0829 Modified
-        //        return enterMode == .place ? filteredPlaces.count : (tableView == tblLocationRes ? filteredLocations.count : arrCurtLocList.count)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
