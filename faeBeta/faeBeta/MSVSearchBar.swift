@@ -13,7 +13,8 @@ extension MapSearchViewController {
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
         // search places
-        if cellStatus == 0 {
+        switch schBarType {
+        case .place:
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
             if searchText != "" && (filteredPlaces.count != 0 || filteredCategory.count != 0) {
@@ -40,30 +41,11 @@ extension MapSearchViewController {
                 uiviewNoResults.isHidden = true
             }
             tblPlacesRes.isScrollEnabled = true
-        } else {  // search location
-            // 以下为Google Place API 使用的代码
-//            uiviewPics.isHidden = true
-//            uiviewNoResults.isHidden = true
-//            uiviewSchResBg.isHidden = false
-//            uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
-//            tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
-//
-//            if searchText == "" || googlePredictions.count == 0 {
-//                uiviewSchResBg.frame.origin.y = 124 + device_offset_top
-//                uiviewSchLocResBg.isHidden = true
-//            } else {
-//                uiviewSchLocResBg.isHidden = false
-//                uiviewSchLocResBg.frame.size.height = min(screenHeight - 240 - device_offset_top - device_offset_bot, CGFloat(48 * googlePredictions.count))
-//                tblLocationRes.frame.size.height = uiviewSchLocResBg.frame.size.height
-//                uiviewSchResBg.frame.origin.y = 124 + uiviewSchLocResBg.frame.height + 5 + device_offset_top
-//            }
-//            tblPlacesRes.isScrollEnabled = false
-//            tblLocationRes.reloadData()
-            
+        case .location:
             uiviewPics.isHidden = true
             uiviewNoResults.isHidden = true
             uiviewSchResBg.isHidden = false
-            uiviewSchResBg.frame.size.height = CGFloat(arrCurtLocList.count * 48)
+            uiviewSchResBg.frame.size.height = CGFloat(fixedLocOptions.count * 48)
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             
             if searchText == "" || geobytesCityData.count == 0 {
@@ -86,7 +68,7 @@ extension MapSearchViewController {
     
     func filterPlaceCat(searchText: String, scope: String = "All") {
         // TODO VICKY 为什么造成crash?
-        var filtered = categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
+        var filtered = Key.shared.categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
         if filtered.count == 0 {
             filteredCategory = []
@@ -100,9 +82,10 @@ extension MapSearchViewController {
     
     // FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
-        if searchBar == schPlaceBar {   // search places
+        switch searchBar {
+        case schPlaceBar:
             schLocationBar.btnClose.isHidden = true
-            cellStatus = 0
+            schBarType = .place
             if searchBar.txtSchField.text == "" {
                 if let text = searchBar.txtSchField.text {
                     showOrHideViews(searchText: text)
@@ -122,9 +105,9 @@ extension MapSearchViewController {
                     getPlaceInfo(content: "")
                 }
             }
-        } else {   // search locations
+        case schLocationBar:
             schPlaceBar.btnClose.isHidden = true
-            cellStatus = 1
+            schBarType = .location
             if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
                 searchBar.txtSchField.placeholder = searchBar.txtSchField.text
                 searchBar.txtSchField.text = ""
@@ -135,22 +118,26 @@ extension MapSearchViewController {
                 }
             }
             showOrHideViews(searchText: searchBar.txtSchField.text!)
+        default:
+            break
         }
     }
     
     // FaeSearchBarTestDelegate
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String) {
-        if searchBar == schLocationBar {
-            cellStatus = 1
+        switch searchBar {
+        case schPlaceBar:
+            schBarType = .place
+            filterPlaceCat(searchText: searchText)
+            getPlaceInfo(content: searchText.lowercased())
+        case schLocationBar:
+            schBarType = .location
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
             }
-            //            searchCompleter.queryFragment = searchText
             placeAutocomplete(searchText)
-        } else {
-            cellStatus = 0
-            filterPlaceCat(searchText: searchText)
-            getPlaceInfo(content: searchText.lowercased())
+        default:
+            break
         }
     }
     
@@ -166,14 +153,6 @@ extension MapSearchViewController {
                 navigationController?.popViewController(animated: false)
             }
         } else {
-            // 以下为Google Place API 使用的代码
-//            if googlePredictions.count > 0 {
-//                schLocationBar.txtSchField.attributedText = googlePredictions[0].faeSearchBarAttributedText()
-//                Key.shared.selectedPrediction = googlePredictions[0]
-//                googlePredictions.removeAll()
-//                showOrHideViews(searchText: "")
-//                schPlaceBar.txtSchField.becomeFirstResponder()
-//            }
             if geobytesCityData.count > 0 {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
                 Key.shared.selectedSearchedCity = geobytesCityData[0]

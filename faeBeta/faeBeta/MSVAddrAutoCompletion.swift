@@ -48,21 +48,6 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             }
             self.showOrHideViews(searchText: searchText)
         }
-        // 以下为Google Place API 使用的代码
-//        Key.shared.selectedPrediction = nil
-//        googleFilter.type = .city
-//        GMSPlacesClient.shared().autocompleteQuery(searchText, bounds: nil, filter: googleFilter, callback: {(results, error) -> Void in
-//            if let error = error {
-//                joshprint("Autocomplete error \(error)")
-//                self.googlePredictions.removeAll(keepingCapacity: true)
-//                self.showOrHideViews(searchText: searchText)
-//                return
-//            }
-//            if let results = results {
-//                self.googlePredictions = results
-//            }
-//            self.showOrHideViews(searchText: searchText)
-//        })
     }
     
     // MKLocalSearchCompleterDelegate
