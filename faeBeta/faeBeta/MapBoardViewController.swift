@@ -12,10 +12,8 @@ import SwiftyJSON
 import TTRangeSlider
 
 enum MapBoardTableMode: Int {
-    case social = 0
     case people = 1
     case places = 2
-    case talk = 3
 }
 
 enum PlaceTableMode: Int {
@@ -28,7 +26,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
     var boolIsLoaded: Bool = false
-    var boolLoadedTalkPage = false
     var boolNoMatch: Bool = false
     var boolUsrVisibleIsOn: Bool = true
     var btnChangeAgeLB: UIButton!
@@ -38,16 +35,10 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var btnGenderBoth: UIButton!
     var btnGenderFemale: UIButton!
     var btnGenderMale: UIButton!
-    var btnMyTalks: UIButton!
     var btnNavBarMenu: UIButton!
     var btnPeople: UIButton!
     var imgPeopleLocDetail: UIImageView!
     var btnPlaces: UIButton!
-    var btnSocial: UIButton!
-    var btnTalk: UIButton!
-    var btnTalkFeed: UIButton!
-    var btnTalkMypost: UIButton!
-    var btnTalkTopic: UIButton!
     var curtTitle: String = "Places"
     var disVal: String = "23.0"
     var imgBubbleHint: UIImageView!
@@ -59,8 +50,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var lblDisVal: UILabel!
     var lblPlaces: UILabel!
     var lblPeople: UILabel!
-//    var mbComments = [MBSocialStruct]()
-//    var mbStories = [MBSocialStruct]()
     var mbPeople = [MBPeopleStruct]()
     var mbPlaces = [PlacePin]()
     
@@ -70,7 +59,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var sliderDisFilter: UISlider!
     var strBubbleHint: String = ""
     var tblMapBoard: UITableView!
-    var titleArray: [String] = ["Places", "People", "Social", "Talk Talk"]
+    var titleArray: [String] = ["Places", "People"]
     var uiviewAgeRedLine: UIView!
     var uiviewAllCom: UIView!
     var uiviewBubbleHint: UIView!
@@ -80,8 +69,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var uiviewNavBar: FaeNavBar!
     var uiviewPeopleLocDetail: UIView!
     var uiviewRedUnderLine: UIView!
-    var uiviewTalkPostHead: UIView!
-    var uiviewTalkTab: UIView!
     var uiviewPlaceTab: PlaceTabView!
     var uiviewPlaceHeader: UIView!
     var scrollViewPlaceHeader: UIScrollView!
@@ -108,55 +95,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var testArrOutdoors = [PlacePin]()
     var arrAllPlaces = [PlacePin]()
     
-    // data for social table
-    let lblTitleTxt: Array = ["Comments", "Chats", "Stories"]
-    let imgIconArr: [UIImage] = [#imageLiteral(resourceName: "mb_comment"), #imageLiteral(resourceName: "mb_chat"), #imageLiteral(resourceName: "mb_story")]
-    let lblContTxt: Array = ["70K Interactions Today", "180K Interactions Today", "3200 Interactions Today"]
-    
-    // data for talk feed table
-    let avatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
-    let valUsrName: Array = ["Balalaxiaomoxian", "Snowbearonmoon", "Snowbearonamouooonnnnnnn"]
-    let valTalkTime: Array = ["Yesterday", "Yesterday", "Mar 28, 2017"]
-    let valReplyCount: Array = [12, 0, 999]
-    let valContent: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME"]
-    let valTopic: Array = ["general", "relationships", "singlereadaytomingle"]
-    let valVoteCount: Array = [1, 888, 1]
-    
-    // data for talk topic table
-    let topic: Array = ["foodpics", "singlereadytomingle", "nightlife", "general", "funny", "whispers", "relationships", "topicsuggestions", "Q&A"]
-    let postsCount: Array = [288, 32, 288, 32, 288, 32, 288, 32, 288]
-    
-    // data for talk MyTalks table
-    let myTalk_avatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
-    let myTalk_valUsrName: Array = ["Balalaxiaomoxian", "Snowbearonmoon", "Snowbearonamouooonnnnnnn"]
-    let myTalk_valTalkTime: Array = ["Yesterday", "Yesterday", "Mar 28, 2017"]
-    let myTalk_valReplyCount: Array = [12, 0, 999]
-    let myTalk_valContent: Array = ["There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOME", "There's a party going on later near campus, anyone wanna go with me? Looking for around 3 more people! COMECOMECOMECOMECOMECOMECOMECOMECOME"]
-    let myTalk_valTopic: Array = ["general", "relationships", "sin@objc @objc @objc glereadaytomingle"]
-    let myTalk_valVoteCount: Array = [1, 888, 1]
-    
-    // data for talk Comments table
-    let comment_avatarArr: Array = [#imageLiteral(resourceName: "default_Avatar"), #imageLiteral(resourceName: "default_Avatar")]
-    let comment_valUsrName: Array = ["Anonymous", "Boogie Woogie Woogie"]
-    let comment_valTalkTime: Array = ["Septermber 23, 2015", "Mar 28, 2017"]
-    let comment_valContent: Array = ["LOL what are you talking abouta???", "I understand perfectly O(∩_∩)O"]
-    let comment_valVoteCount: Array = [90, 90]
- 
-    enum TalkTableMode: Int {
-        case feed = 0
-        case topic = 1
-        case post = 2
-    }
-    
-    enum TalkPostTableMode: Int {
-        case talk = 0
-        case comment = 1
-    }
-    
     var tableMode: MapBoardTableMode = .places
     var placeTableMode: PlaceTableMode = .recommend
-    var talkTableMode: TalkTableMode = .feed
-    var talkPostTableMode: TalkPostTableMode = .talk
     
     var chosenLoc: CLLocationCoordinate2D? // user-chosen location
     
@@ -179,20 +119,16 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         loadChooseNearbyPeopleView()
         loadChooseLocation()
         loadNavBar()
-        loadTalkTabView()
         loadAvatar()
         
         uiviewBubbleHint.alpha = 0
-        uiviewTalkTab.isHidden = true
 
         getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
         
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
-        uiviewTalkTab.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
-        boolLoadedTalkPage = true
         userInvisible(isOn: Key.shared.onlineStatus == 5)
     }
     
@@ -244,8 +180,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.leftBtn.setImage(#imageLiteral(resourceName: "mb_menu"), for: .normal)
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionLeftWindowShow(_:)), for: .touchUpInside)
-        uiviewNavBar.rightBtn.setImage(#imageLiteral(resourceName: "mb_talkPlus"), for: .normal)
-        uiviewNavBar.rightBtn.addTarget(self, action: #selector(self.addTalkFeed(_:)), for: .touchUpInside)
         uiviewNavBar.rightBtn.isHidden = true
         
         btnNavBarMenu = UIButton(frame: CGRect(x: (screenWidth - 260) / 2, y: 23 + device_offset_top, width: 260, height: 37))
@@ -364,22 +298,10 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         uiviewAllCom.addSubview(imgIconBeforeAllCom)
         uiviewAllCom.addSubview(lblAllCom)
-        
-        loadTalkPostHead()
     }
     
     // each time change the table mode (click the button in drop menu), call setViewContent()
     fileprivate func setViewContent() {
-        /*
-        if tableMode == .social || tableMode == .talk {
-            imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeAllCom")
-            lblAllCom.text = "All Communities"
-        } else {
-            imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-            lblAllCom.text = "Current Location"
-        }
-        */
-        
         if tableMode == .places {
             uiviewPlaceTab.isHidden = false
             tblMapBoard.tableHeaderView = uiviewPlaceHeader
@@ -394,34 +316,16 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
             btnSearchLoc.tag = 1
         }
-        
-        if tableMode == .talk {
-            uiviewTalkTab.isHidden = false
-            switchTalkTabPage()
-        } else {
-            if boolLoadedTalkPage {
-                uiviewNavBar.rightBtn.isHidden = true
-                uiviewTalkTab.isHidden = true
-                uiviewTalkPostHead.isHidden = true
-                uiviewAllCom.isHidden = false
-                uiviewNavBar.bottomLine.isHidden = false
-            }
-        }
     }
     
     fileprivate func loadTable() {
         tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 163 - device_offset_top - device_offset_bot), style: .plain)
         view.addSubview(tblMapBoard)
         tblMapBoard.backgroundColor = .white
-        tblMapBoard.register(MBSocialCell.self, forCellReuseIdentifier: "mbSocialCell")
         tblMapBoard.register(MBPeopleCell.self, forCellReuseIdentifier: "mbPeopleCell")
         tblMapBoard.register(MBPlacesCell.self, forCellReuseIdentifier: "mbPlacesCell")
         tblMapBoard.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
         
-        tblMapBoard.register(MBTalkFeedCell.self, forCellReuseIdentifier: "mbTalkFeedCell")
-        tblMapBoard.register(MBTalkTopicCell.self, forCellReuseIdentifier: "mbTalkTopicCell")
-        tblMapBoard.register(MBTalkMytalksCell.self, forCellReuseIdentifier: "mbTalkMytalksCell")
-        tblMapBoard.register(MBTalkCommentsCell.self, forCellReuseIdentifier: "mbTalkCommentsCell")
         tblMapBoard.delegate = self
         tblMapBoard.dataSource = self
         tblMapBoard.separatorStyle = .none
@@ -440,9 +344,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
                 self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
             })
             navBarMenuBtnClicked = true
-            if talkTableMode == .post {
-                uiviewNavBar.bottomLine.isHidden = false
-            }
         } else {
             hideDropDownMenu()
         }
@@ -489,23 +390,16 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         })
         
         navBarMenuBtnClicked = false
-        if tableMode == .talk && talkTableMode == .post {
-            uiviewNavBar.bottomLine.isHidden = true
-        }
     }
     
     // get current table mode: social / people / places / talk
     fileprivate func getCurtTableMode() {
-        if curtTitle == "Social" {
-            tableMode = .social
-        } else if curtTitle == "People" {
+        if curtTitle == "People" {
             tableMode = .people
             updateNearbyPeople()
         } else if curtTitle == "Places" {
             tableMode = .places
             getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
-        } else if curtTitle == "Talk Talk" {
-            tableMode = .talk
         }
         getPeoplePage()
     }

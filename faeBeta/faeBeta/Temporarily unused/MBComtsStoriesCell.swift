@@ -6,6 +6,7 @@
 //  Copyright © 2017年 fae. All rights reserved.
 //
 
+/*
 import UIKit
 
 // A protocol that the TableViewCell uses to inform its delegate of state change
@@ -243,3 +244,4 @@ class MBComtsStoriesCell: UITableViewCell, UIScrollViewDelegate {
         delegate?.likeThisPin(indexPath: indexForCurtCell, strPinId: strPinId)
     }
 }
+ */

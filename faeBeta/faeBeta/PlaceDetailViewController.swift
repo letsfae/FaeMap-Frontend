@@ -56,6 +56,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     private var arrHour = [[String]]()
     private var dayIdx = 0
+    var boolMapFold: Bool = true
+    var boolHourFold: Bool = true
+    private var mapIndexPath = [IndexPath]()
+    private var hourIndexPath = [IndexPath]()
     
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
@@ -102,8 +106,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PlaceDetailCell.boolMapFold = true
-        PlaceDetailCell.boolHourFold = true
+//        PlaceDetailCell.boolMapFold = true
+//        PlaceDetailCell.boolHourFold = true
         if boolShared {
             //uiviewAfterAdded.lblSaved.text = "You shared a Place."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
@@ -158,6 +162,13 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
         boolHaveWeb = place.url != ""
         intCellCount = intHaveHour + intHaveWebPhone + 2
+        
+        mapIndexPath.append(IndexPath(row: 1, section: 0))
+        if intHaveHour != 0 {
+            for idx in 1...8 {
+                hourIndexPath.append(IndexPath(row: idx, section: 1))
+            }
+        }
     }
     
     private func checkSavedStatus(_ completion: @escaping () -> ()) {
@@ -283,7 +294,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
         tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
         tblPlaceDetail.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
-        tblPlaceDetail.register(PlaceHourMayVaryCell.self, forCellReuseIdentifier: "PlaceHourMayVaryCell")
+        tblPlaceDetail.register(PlaceHoursHintCell.self, forCellReuseIdentifier: "PlaceHoursHintCell")
         tblPlaceDetail.separatorStyle = .none
         tblPlaceDetail.showsVerticalScrollIndicator = false
         if #available(iOS 11.0, *) {
@@ -637,13 +648,13 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         
         if intHaveHour == 0 && intHaveWebPhone == 0 {
             if section == 0 {
-                return PlaceDetailCell.boolMapFold ? 1 : 2
+                return boolMapFold ? 1 : 2
             } else {
                 return similarNearbyCount()
             }
         } else if intHaveHour == 0 && intHaveWebPhone == 1 {
             if section == 0 {
-                return PlaceDetailCell.boolMapFold ? 1 : 2
+                return boolMapFold ? 1 : 2
             } else if section == 1 {
                 if place.phone == "" { return 1 }
                 if place.url == "" { return 1 }
@@ -653,17 +664,17 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
             }
         } else if intHaveHour == 1 && intHaveWebPhone == 0  {
             if section == 0 {
-                return PlaceDetailCell.boolMapFold ? 1 : 2
+                return boolMapFold ? 1 : 2
             } else if section == 1 {
-                return PlaceDetailCell.boolHourFold ? 1 : 9
+                return boolHourFold ? 1 : 9
             } else {
                 return similarNearbyCount()
             }
         } else {
             if section == 0 {  // map
-                return PlaceDetailCell.boolMapFold ? 1 : 2
+                return boolMapFold ? 1 : 2
             } else if section == 1 {  // hours
-                return PlaceDetailCell.boolHourFold ? 1 : 9
+                return boolHourFold ? 1 : 9
             } else if section == 2 {  // web & phone
                 if place.phone == "" { return 1 }
                 if place.url == "" { return 1 }
@@ -768,18 +779,49 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         func tapMapOrHour(_ identifier: String) {
             if identifier == "map" {
-                PlaceDetailCell.boolMapFold = !PlaceDetailCell.boolMapFold
+                if mapIndexPath.count == 0 {
+                    return
+                }
+                boolMapFold = !boolMapFold
+                
+                if !boolMapFold {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.insertRows(at: mapIndexPath, with: .none)
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                } else {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.deleteRows(at: mapIndexPath, with: .none)
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                }
+                
             } else if identifier == "hour" {
-                PlaceDetailCell.boolHourFold = !PlaceDetailCell.boolHourFold
+                if hourIndexPath.count == 0 {
+                    return
+                }
+                boolHourFold = !boolHourFold
+                
+                if !boolHourFold {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.insertRows(at: hourIndexPath, with: .none)
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                } else {
+                    UIView.setAnimationsEnabled(false)
+                    tableView.beginUpdates()
+                    tableView.deleteRows(at: hourIndexPath, with: .none)
+                    tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    tableView.endUpdates()
+                    UIView.setAnimationsEnabled(true)
+                }
             }
-            
-            tableView.reloadData()
-            //                UIView.setAnimationsEnabled(false)
-            //                tableView.beginUpdates()
-            //                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
-            //                tableView.reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            //                tableView.endUpdates()
-            //                UIView.setAnimationsEnabled(true)
         }
         
         func tapWebOrPhone() {
@@ -849,6 +891,21 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     func getDetailCell(_ tableView: UITableView, _ indexPath: IndexPath, _ identifier: String) -> PlaceDetailCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! PlaceDetailCell
         cell.setValueForCell(identifier, place: place, dayIdx: dayIdx, arrHour: arrHour)
+        
+        if identifier == "map" {
+            if !boolMapFold {
+                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 9)
+            } else {
+                cell.foldOrUnfold(1, false, #imageLiteral(resourceName: "arrow_down"), 17)
+            }
+        } else if identifier == "hour" {
+            if !boolHourFold {
+                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 9)
+            } else {
+                cell.foldOrUnfold(0, false, #imageLiteral(resourceName: "arrow_down"), 17)
+            }
+        }
+        
         return cell
     }
     
@@ -859,12 +916,6 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         return cell
     }
     
-//    func getHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceDetailCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "hour", for: indexPath) as! PlaceDetailCell
-//        cell.setValueForHourCell(dayIdx: dayIdx, arrHour: arrHour)
-//        return cell
-//    }
-    
     func getOpeningHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceOpeningHourCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
         let row = (indexPath.row - 1 + dayIdx) % arrDay.count
@@ -874,8 +925,8 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         return cell
     }
 
-    func getHoursHintCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceHourMayVaryCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceHourMayVaryCell", for: indexPath) as! PlaceHourMayVaryCell
+    func getHoursHintCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceHoursHintCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceHoursHintCell", for: indexPath) as! PlaceHoursHintCell
         return cell
     }
     

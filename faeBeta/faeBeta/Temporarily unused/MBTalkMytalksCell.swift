@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 
 class MBTalkMytalksCell: UITableViewCell {
@@ -123,3 +124,4 @@ class MBTalkMytalksCell: UITableViewCell {
         addConstraintsWithFormat("V:|-15-[v0(50)]-10-[v1]-10-[v2(32)]-15-|", options: [], views: imgAvatar, lblContent, btnTalkTopic)
     }
 }
+ */

@@ -18,6 +18,7 @@ protocol PinDetailCollectionsDelegate: class {
     func backToCollections(likeCount: String, commentCount: String, pinLikeStatus: Bool, feelingArray: [Int])
 }
 
+/*
 protocol PinTalkTalkCellDelegate: class {
     func directReplyFromPinCell(_ username: String, index: IndexPath) // Reply to this user
     func showActionSheetFromPinCell(_ username: String, userid: Int, index: IndexPath)
@@ -28,3 +29,4 @@ protocol PinTalkTalkCellDelegate: class {
     //    func updateCommentVoteCount(index: IndexPath)
     // Vicky 06/21/17
 }
+ */
