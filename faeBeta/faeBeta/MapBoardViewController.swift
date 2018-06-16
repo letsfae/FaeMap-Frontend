@@ -189,6 +189,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         btnNavBarSetTitle()
         
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
+        loadPlaceSearchHeader()
     }
     
     @objc func actionLeftWindowShow(_ sender: UIButton) {
