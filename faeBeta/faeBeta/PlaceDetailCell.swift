@@ -59,7 +59,7 @@ class PlaceDetailCell: UITableViewCell {
         
         addSubview(lblContent)
         addConstraintsWithFormat("H:|-68-[v0]-68-|", options: [], views: lblContent)
-        addConstraintsWithFormat("V:|-18-[v0]-17-|", options: [], views: lblContent)
+        addConstraintsWithFormat("V:|-18-[v0]-18-|", options: [], views: lblContent)
     }
     
     func setValueForCell(_ identifier: String?, place: PlacePin, dayIdx: Int = 0, arrHour: [[String]] = [[]]) {
@@ -204,14 +204,16 @@ class PlaceDetailMapCell: UITableViewCell {
         imgViewMap.contentMode = .top
         imgViewMap.clipsToBounds = true
         imgViewMap.isUserInteractionEnabled = true
+        imgViewMap.layer.borderColor = UIColor._225225225().cgColor
+        imgViewMap.layer.borderWidth = 1
         addSubview(imgViewMap)
-        addConstraintsWithFormat("H:|-68-[v0(\(280 * screenWidthFactor))]", options: [], views: imgViewMap)
-        addConstraintsWithFormat("V:|-0-[v0(\(150))]-8-|", options: [], views: imgViewMap)
+        addConstraintsWithFormat("H:|-67-[v0(\(282 * screenWidthFactor))]", options: [], views: imgViewMap)
+        addConstraintsWithFormat("V:|-0-[v0(\(150))]-19-|", options: [], views: imgViewMap)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
         imgViewMap.addGestureRecognizer(tapGesture)
         
-        imgPlaceIcon = UIImageView(frame: CGRect(x: 0, y: 49, width: 56, height: 56))
-        imgPlaceIcon.center.x = 140 * screenWidthFactor
+        imgPlaceIcon = UIImageView(frame: CGRect(x: 0, y: 50, width: 56, height: 56))
+        imgPlaceIcon.center.x = 141 * screenWidthFactor
         imgViewMap.addSubview(imgPlaceIcon)
     }
     
