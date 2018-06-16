@@ -894,15 +894,15 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         
         if identifier == "map" {
             if !boolMapFold {
-                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 9)
+                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 10)
             } else {
-                cell.foldOrUnfold(1, false, #imageLiteral(resourceName: "arrow_down"), 17)
+                cell.foldOrUnfold(1, false, #imageLiteral(resourceName: "arrow_down"), 18)
             }
         } else if identifier == "hour" {
             if !boolHourFold {
-                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 9)
+                cell.foldOrUnfold(0, true, #imageLiteral(resourceName: "arrow_up"), 11)
             } else {
-                cell.foldOrUnfold(0, false, #imageLiteral(resourceName: "arrow_down"), 17)
+                cell.foldOrUnfold(0, false, #imageLiteral(resourceName: "arrow_down"), 18)
             }
         }
         
