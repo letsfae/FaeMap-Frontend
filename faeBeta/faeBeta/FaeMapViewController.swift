@@ -2611,7 +2611,6 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     
     private func routingHandleTap() {
         let chooseLocsVC = BoardsSearchViewController()
-        chooseLocsVC.enterMode = .location
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         chooseLocsVC.boolFromRouting = true

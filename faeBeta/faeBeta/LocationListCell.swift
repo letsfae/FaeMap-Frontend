@@ -7,15 +7,13 @@
 //
 
 import UIKit
-
 import GooglePlaces
 
 class LocationListCell: UITableViewCell {
     
-    var imgIcon: UIImageView!
-    var lblLocationName: UILabel!
-    var bottomLine: UIView!
-    var prediction: GMSAutocompletePrediction!
+    private var imgIcon: UIImageView!
+    private var lblLocationName: UILabel!
+    private var bottomLine: UIView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,9 +27,20 @@ class LocationListCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    func setValueForLocationPrediction(_ pred: GMSAutocompletePrediction) {
-        prediction = pred
+    func setValueForLocationPrediction(_ pred: GMSAutocompletePrediction, last: Bool) {
         lblLocationName.attributedText = pred.faeSearchBarAttributedText()
+        bottomLine.isHidden = last
+    }
+    
+    func configureCell(_ location: String, last: Bool) {
+        lblLocationName.attributedText = location.faeSearchBarAttributedText()
+        bottomLine.isHidden = last
+    }
+    
+    func configureCellOption(_ option: String, last: Bool) {
+        lblLocationName.attributedText = nil
+        lblLocationName.text = option
+        bottomLine.isHidden = last
     }
     
     fileprivate func loadRecommendedCellContent() {

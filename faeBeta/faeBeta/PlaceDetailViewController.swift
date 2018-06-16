@@ -778,50 +778,41 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         func tapMapOrHour(_ identifier: String) {
-            if identifier == "map" {
+            UIView.setAnimationsEnabled(false)
+            tableView.beginUpdates()
+            switch identifier {
+            case "map":
                 if mapIndexPath.count == 0 {
                     return
                 }
                 boolMapFold = !boolMapFold
                 
                 if !boolMapFold {
-                    UIView.setAnimationsEnabled(false)
-                    tableView.beginUpdates()
                     tableView.insertRows(at: mapIndexPath, with: .none)
-                    tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-                    tableView.endUpdates()
-                    UIView.setAnimationsEnabled(true)
                 } else {
-                    UIView.setAnimationsEnabled(false)
-                    tableView.beginUpdates()
                     tableView.deleteRows(at: mapIndexPath, with: .none)
-                    tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
-                    tableView.endUpdates()
-                    UIView.setAnimationsEnabled(true)
                 }
-                
-            } else if identifier == "hour" {
+                tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .none)
+            case "hour":
                 if hourIndexPath.count == 0 {
                     return
                 }
                 boolHourFold = !boolHourFold
-                
                 if !boolHourFold {
-                    UIView.setAnimationsEnabled(false)
-                    tableView.beginUpdates()
                     tableView.insertRows(at: hourIndexPath, with: .none)
-                    tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
-                    tableView.endUpdates()
-                    UIView.setAnimationsEnabled(true)
                 } else {
-                    UIView.setAnimationsEnabled(false)
-                    tableView.beginUpdates()
                     tableView.deleteRows(at: hourIndexPath, with: .none)
-                    tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
-                    tableView.endUpdates()
-                    UIView.setAnimationsEnabled(true)
                 }
+                tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+            default:
+                break
             }
+            tableView.endUpdates()
+            UIView.setAnimationsEnabled(true)
+            
+            uiviewPlaceImages.removeFromSuperview()
+            uiviewHeader.addSubview(uiviewPlaceImages)
+            uiviewPlaceImages.loadPageCtrl()
         }
         
         func tapWebOrPhone() {
