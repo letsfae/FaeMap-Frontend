@@ -12,6 +12,31 @@ import SwiftyJSON
 // for new Place page
 extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
 
+    func loadPlaceSearchHeader() {
+        btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
+        btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
+        btnSearchAllPlaces.addTarget(self, action: #selector(searchAllPlaces(_:)), for: .touchUpInside)
+        btnSearchAllPlaces.contentHorizontalAlignment = .left
+        uiviewNavBar.addSubview(btnSearchAllPlaces)
+        
+        lblSearchContent = UILabel(frame: CGRect(x: 24, y: 10, width: 200, height: 25))
+        lblSearchContent.textColor = UIColor._898989()
+        lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        lblSearchContent.text = "All Places"
+        btnSearchAllPlaces.addSubview(lblSearchContent)
+        
+        btnSearchAllPlaces.isHidden = true
+        
+        // Click to clear search results
+        btnClearSearchRes = UIButton()
+        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClearSearchRes.isHidden = true
+        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
+        uiviewNavBar.addSubview(btnClearSearchRes)
+        uiviewNavBar.addConstraintsWithFormat("H:[v0(36.45)]-5-|", options: [], views: btnClearSearchRes)
+        uiviewNavBar.addConstraintsWithFormat("V:[v0(36.45)]-5.55-|", options: [], views: btnClearSearchRes)
+    }
+    
     func loadPlaceHeader() {
         uiviewPlaceHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 246))
         uiviewPlaceHeader.backgroundColor = .white
