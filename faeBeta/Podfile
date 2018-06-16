@@ -10,7 +10,6 @@ target 'faeBeta' do
     pod 'TTRangeSlider'
     pod 'Gifu'
     pod 'IVBezierPathRenderer'
-    pod 'GooglePlaces'
     pod 'CHIPageControl/Aleppo'
     pod 'CHIPageControl/Chimayo'
 end

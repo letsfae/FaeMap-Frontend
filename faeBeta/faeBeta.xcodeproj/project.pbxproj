@@ -1674,7 +1674,6 @@
 				B0A2AC921CE3A3C6002E0C9D /* Frameworks */,
 				B0A2AC931CE3A3C6002E0C9D /* Resources */,
 				E38391E68675FBBB7D07EF60 /* [CP] Embed Pods Frameworks */,
-				54047E43D6A7BFFD1BECDF90 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1753,24 +1752,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		54047E43D6A7BFFD1BECDF90 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh",
-				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-faeBeta/Pods-faeBeta-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		693D638A48FC967652896206 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
