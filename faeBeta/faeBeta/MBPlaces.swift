@@ -153,6 +153,17 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         }
     }
     
+    @objc func searchAllPlaces(_ sender: UIButton) {
+        /*
+        let searchVC = BoardsSearchViewController()
+        searchVC.enterMode = .place
+        searchVC.delegate = self
+        searchVC.strSearchedPlace = lblSearchContent.text
+        searchVC.strPlaceholder = lblSearchContent.text
+        navigationController?.pushViewController(searchVC, animated: true)
+         */
+    }
+    
     @objc func searchByCategories(_ sender: UIButton) {
         var content = ""
         switch sender.tag {
