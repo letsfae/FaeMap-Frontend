@@ -9,7 +9,6 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
-import GooglePlaces
 
 class General: NSObject {
     
@@ -148,21 +147,8 @@ class General: NSObject {
                 var address = ""
                 
                 if full == false {
-//                    address = subLocality + ", " + locality + ", " + administrativeArea + ", " + country
                     address = (subLocality == "" ? "" : subLocality + ", ") + (locality == "" ? "" : locality + ", ") + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
                     if detach {
-                        /*
-                        if locality == administrativeArea {
-                            address = subLocality + ", " + locality + "@" + ", " + country
-                            completion(address as AnyObject)
-                            return
-                        }
-                        if locality == country {
-                            address = subLocality + ", " + locality + "@"
-                            completion(address as AnyObject)
-                            return
-                        }
-                        */
                         address = (subLocality == "" ? "" : subLocality + ", ") + locality + "@" + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
                         completion(address as AnyObject)
                     } else {
@@ -252,23 +238,6 @@ class General: NSObject {
                     }
                 }
             }
-        }
-    }
-    
-    // GMSLookUpPlaceForCoordinate
-    public func lookUpForCoordinate(_ completion: @escaping (GMSPlace) -> ()) {
-        if let placeId = Key.shared.selectedPrediction?.placeID {
-            GMSPlacesClient.shared().lookUpPlaceID(placeId, callback: { (gmsPlace, error) in
-                if let error = error {
-                    print("lookup place id query error: \(error.localizedDescription)")
-                    return
-                }
-                guard let place = gmsPlace else {
-                    print("No place details for \(placeId)")
-                    return
-                }
-                completion(place)
-            })
         }
     }
 }
