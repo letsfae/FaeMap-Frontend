@@ -145,17 +145,20 @@ class FaeInputBar: UIView {
     var viewAudioRecorder: AudioRecorderView!
     var viewMiniLoc = LocationPickerMini()
     
-    enum InputView: Int {
+    var prevInputView: UIView?
+    
+    enum InputViewType: Int {
         case keyboard, sticker, photo, camera, recorder, map, send
     }
     /// Current inputView type
-    var currentInputView: InputView = .keyboard {
+    var currentInputViewType: InputViewType = .keyboard {
         didSet {
             defer {
-                inputTextView.currentInputView = currentInputView
+                inputTextView.currentInputView = currentInputViewType
             }
         }
     }
+    var prevInputViewType: InputViewType = .keyboard
     
     /// FaeInputBar has shown for at least once
     var boolIsFirstShown: Bool = true
@@ -219,13 +222,13 @@ class FaeInputBar: UIView {
     
     private func setupBottomStackView() {
         let items = [
-            makeButton(named: "keyboardEnd", tag: InputView.keyboard.rawValue, highlight: "keyboard"),
-            makeButton(named: "sticker", tag: InputView.sticker.rawValue, highlight: "stickerChosen"),
-            makeButton(named: "imagePicker", tag: InputView.photo.rawValue, highlight: "imagePickerChosen"),
-            makeButton(named: "camera", tag: InputView.camera.rawValue, highlight: ""),
-            makeButton(named: "voiceMessage", tag: InputView.recorder.rawValue, highlight: "voiceMessage_red"),
-            makeButton(named: "shareLocation", tag: InputView.map.rawValue, highlight: "locationChosen"),
-            makeButton(named: "cannotSendMessage", tag: InputView.send.rawValue, highlight: "canSendMessage").configure { btn in
+            makeButton(named: "keyboardEnd", tag: InputViewType.keyboard.rawValue, highlight: "keyboard"),
+            makeButton(named: "sticker", tag: InputViewType.sticker.rawValue, highlight: "stickerChosen"),
+            makeButton(named: "imagePicker", tag: InputViewType.photo.rawValue, highlight: "imagePickerChosen"),
+            makeButton(named: "camera", tag: InputViewType.camera.rawValue, highlight: ""),
+            makeButton(named: "voiceMessage", tag: InputViewType.recorder.rawValue, highlight: "voiceMessage_red"),
+            makeButton(named: "shareLocation", tag: InputViewType.map.rawValue, highlight: "locationChosen"),
+            makeButton(named: "cannotSendMessage", tag: InputViewType.send.rawValue, highlight: "canSendMessage").configure { btn in
                 btn.isEnabled = false
             }
         ]
@@ -442,7 +445,7 @@ class FaeInputBar: UIView {
                 $0.imageSelectedName = highlight
                 $0.isSelected = false
             }.onTouchUpInside { button in
-                if button.tag == InputView.send.rawValue {
+                if button.tag == InputViewType.send.rawValue {
                     let trimmedText = self.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
                     if self.boolHasPin, let pinView = self.topStackView.arrangedSubviews[0] as? InputBarTopPinView {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: pinView)
@@ -450,32 +453,43 @@ class FaeInputBar: UIView {
                     } else {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: nil)
                     }
-                } else if button.tag == InputView.camera.rawValue {
+                } else if button.tag == InputViewType.camera.rawValue {
                     self.delegate?.faeInputBar(self, showFullView: "camera", with: nil)
                     self.inputTextView.inputView = nil
                     self.inputTextView.reloadInputViews()
+                    self.prevInputView = nil
                 } else {
-                    self.currentInputView = InputView(rawValue: button.tag)!
+                    //self.currentInputViewType = InputViewType(rawValue: button.tag)!
                     for btn in self.bottomStackViewItems {
-                        if btn.tag != InputView.send.rawValue {
+                        if btn.tag != InputViewType.send.rawValue {
                             btn.isSelected = btn.tag == button.tag
                         }
                     }
-                    if button.tag == InputView.keyboard.rawValue {
+                    if button.tag == InputViewType.keyboard.rawValue {
                         self.inputTextView.inputView = nil
                         self.inputTextView.reloadInputViews()
                         self.inputTextView.becomeFirstResponder()
+                        self.prevInputView = nil
+                        self.currentInputViewType = InputViewType(rawValue: button.tag)!
                     } else {
                         if let inputView = self.setupInputView(button.tag) {
                             self.inputTextView.inputView = inputView
                             self.inputTextView.reloadInputViews()
                             self.inputTextView.becomeFirstResponder()
+                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
                         } else {
-                            self.inputTextView.inputView = nil
-                            self.inputTextView.reloadInputViews()
+                            //self.inputTextView.inputView = self.prevInputView
+                            //self.inputTextView.reloadInputViews()
                             button.isSelected = false
-                            self.currentInputView = .keyboard
-                            self.inputTextView.resignFirstResponder()
+                            if self.inputTextView.isFirstResponder {
+                                for btn in self.bottomStackViewItems {
+                                    if btn.tag == self.currentInputViewType.rawValue {
+                                        btn.isSelected = true
+                                    }
+                                }
+                            }
+                            //self.currentInputViewType = .keyboard
+                            //self.inputTextView.resignFirstResponder()
                         }
                     }
                 }
@@ -501,16 +515,16 @@ class FaeInputBar: UIView {
     @objc
     func textViewDidBeginEditing() {
         if inputTextView.isFirstResponder && !boolIsFirstShown {
-            if currentInputView != .keyboard {
+            if currentInputViewType != .keyboard {
                 UIView.performWithoutAnimation {
                     self.inputTextView.inputView = nil
                     self.inputTextView.reloadInputViews()
                     //self.inputTextView.resignFirstResponder()
-                    self.currentInputView = .keyboard
+                    self.currentInputViewType = .keyboard
                     for btn in self.bottomStackViewItems {
-                        if btn.tag == InputView.keyboard.rawValue {
+                        if btn.tag == InputViewType.keyboard.rawValue {
                             btn.isSelected = true
-                        } else if btn.tag != InputView.send.rawValue {
+                        } else if btn.tag != InputViewType.send.rawValue {
                             btn.isSelected = false
                         }
                     }
@@ -518,7 +532,7 @@ class FaeInputBar: UIView {
                 }
             }
         } else {
-            if currentInputView == .keyboard {
+            if currentInputViewType == .keyboard {
                 bottomStackViewItems[0].isSelected = true
                 boolIsFirstShown = false
             }
@@ -528,7 +542,7 @@ class FaeInputBar: UIView {
     @objc
     func textViewDidEndEditing() {
         bottomStackViewItems.forEach {
-            if $0.tag != InputView.send.rawValue {
+            if $0.tag != InputViewType.send.rawValue {
                 $0.isSelected = false
             } else {
                 let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -536,7 +550,7 @@ class FaeInputBar: UIView {
             }
         }
         inputTextView.inputView = nil
-        currentInputView = .keyboard
+        currentInputViewType = .keyboard
     }
 }
 
@@ -589,7 +603,7 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     func setupInputView(_ tag: Int) -> UIView? {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
-        switch InputView(rawValue: tag) {
+        switch InputViewType(rawValue: tag) {
         case .sticker?:
             viewStickerPicker = StickerKeyboardView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: floatInputViewHeight))
             viewStickerPicker.delegate = self
@@ -618,24 +632,29 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
             
             let semaphore = DispatchSemaphore(value: 0)
             var view: UIView?
+            
             if PHPhotoLibrary.authorizationStatus() != .authorized {
-                PHPhotoLibrary.requestAuthorization { [weak self] status in
-                    if status != .authorized {
-                        print("not authorized!")
-                        DispatchQueue.main.async {
-                            let vc = self?.delegate as! ChatViewController
-                            vc.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+                //inputTextView.resignFirstResponder()
+                DispatchQueue.global().sync {
+                    PHPhotoLibrary.requestAuthorization { [weak self] status in
+                        if status != .authorized {
+                            print("not authorized!")
+                            DispatchQueue.main.async {
+                                let vc = self?.delegate as! ChatViewController
+                                vc.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
+                                //semaphore.signal()
+                            }
+                        } else {
+                            view = showLibrary()
                         }
-                    } else {
-                        view = showLibrary()
+                        //semaphore.signal()
                     }
-                    semaphore.signal()
                 }
             } else {
                 view = showLibrary()
-                semaphore.signal()
+                //semaphore.signal()
             }
-            semaphore.wait()
+            //semaphore.wait()
             
             return view
         case .recorder?:
