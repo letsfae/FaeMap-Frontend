@@ -181,7 +181,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     }
     
     @objc func showPhotoSelected(_ sender: UIGestureRecognizer) {
-        let alertMenu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        let alertMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertMenu.view.tintColor = UIColor._2499090()
         let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { (_: UIAlertAction) in
             //self.imagePicker.sourceType = .photoLibrary

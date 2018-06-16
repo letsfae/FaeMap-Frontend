@@ -584,14 +584,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: - Gesture Recognizers
     
     @objc private func tapToChooseLoc(_ tap: UITapGestureRecognizer) {
-        /*
-        let vc = BoardsSearchViewController()
-        vc.enterMode = .location
-        vc.delegate = self
-        vc.strSearchedLocation = strLocation
-        vc.strPlaceholder = strLocation
-        navigationController?.pushViewController(vc, animated: true)
- */
         let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
