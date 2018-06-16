@@ -231,6 +231,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         placeTableMode = .recommend
         btnNavBarMenu.isHidden = false
         btnClearSearchRes.isHidden = true
+        btnSearchAllPlaces.isHidden = true
         tblMapBoard.tableHeaderView = uiviewPlaceHeader
         reloadTableMapBoard()
     }
@@ -238,6 +239,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     func jumpToSearchPlaces() {
         placeTableMode = .search
         btnNavBarMenu.isHidden = true
+        btnSearchAllPlaces.isHidden = false
         if lblSearchContent.text != "All Places" {
             btnClearSearchRes.isHidden = false
         }
