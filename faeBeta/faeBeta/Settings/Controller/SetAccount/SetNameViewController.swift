@@ -95,6 +95,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         btnSave.addTarget(self, action: #selector(self.actionSave(_:)), for: .touchUpInside)
         view.addSubview(btnSave)
         
+        
         switch enterMode {
         case .name:
             lblTitle.text = "\nYour Full Name"

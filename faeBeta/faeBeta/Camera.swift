@@ -48,6 +48,8 @@ class Camera {
         imagePicker.videoMaximumDuration = 60
         imagePicker.videoQuality = .typeIFrame960x540
         imagePicker.delegate = delegate
+        //let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
+        //rootViewController.present(imagePicker, animated: true, completion: nil)
         target.present(imagePicker, animated: true, completion: nil)
     }
 }
