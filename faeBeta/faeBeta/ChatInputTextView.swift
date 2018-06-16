@@ -81,7 +81,7 @@ class ChatInputTextView: UITextView {
     weak var faeInputBar: FaeInputBar?
     
     /// Current inputView, including keyboard, sticker, photo, recorder, map
-    var currentInputView: FaeInputBar.InputView = .keyboard
+    var currentInputView: FaeInputBar.InputViewType = .keyboard
     
     /// The constraints of the placeholderLabel
     private var placeholderLabelConstraintSet: NSLayoutConstraintSet?
@@ -106,7 +106,7 @@ class ChatInputTextView: UITextView {
     
     /// Sets up the default properties
     func setup() {
-        
+        tintColor = UIColor._2499090()
         font = UIFont.preferredFont(forTextStyle: .body)
         textContainerInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         scrollIndicatorInsets = UIEdgeInsets(top: .leastNonzeroMagnitude,

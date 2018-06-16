@@ -980,11 +980,11 @@
 		9FF8F77320D336B000C807A8 /* InputBar */ = {
 			isa = PBXGroup;
 			children = (
+				9FF8F77820D336FD00C807A8 /* FaeInputBar.swift */,
+				9FF8F77720D336FD00C807A8 /* FaeInputBarDelegate.swift */,
 				9FF8F77620D336FD00C807A8 /* ChatInputBarButton.swift */,
 				9FF8F77B20D336FD00C807A8 /* ChatInputBarViews.swift */,
 				9FF8F77920D336FD00C807A8 /* ChatInputTextView.swift */,
-				9FF8F77820D336FD00C807A8 /* FaeInputBar.swift */,
-				9FF8F77720D336FD00C807A8 /* FaeInputBarDelegate.swift */,
 				9FF8F77A20D336FD00C807A8 /* InputBarTopPinView.swift */,
 				9FF8F77420D336FD00C807A8 /* NSLayoutConstraintSet.swift */,
 				9FF8F77520D336FD00C807A8 /* UIView+Extension.swift */,

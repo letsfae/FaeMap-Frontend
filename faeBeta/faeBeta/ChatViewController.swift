@@ -72,7 +72,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         //view.layoutIfNeeded()
         //collectionView.collectionViewLayout.invalidateLayout()
         if !isFirstLayout {
-            scrollToBottom(animated: false)
+            //scrollToBottom(animated: false)
         }
     }
     
@@ -103,6 +103,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     deinit {
         removeKeyboardObservers()
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
     // MARK: - Setup
@@ -116,6 +117,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
         collectionView.contentInset.top = device_offset_top
         faeInputBar.delegate = self
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
     private func setUserInfo() {
@@ -179,6 +182,15 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
         let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
         
+        /*let newBottomInset = view.frame.height - keyboardEndFrame.minY - iPhoneXBottomInset
+        let differenceOfBottomInset = newBottomInset - collectionViewBottomInset
+        if differenceOfBottomInset != 0 {
+            let contentOffset = CGPoint(x: collectionView.contentOffset.x, y: collectionView.contentOffset.y + differenceOfBottomInset)
+            collectionView.setContentOffset(contentOffset, animated: false)
+        }
+        
+        collectionViewBottomInset = newBottomInset*/
+        
         if (keyboardEndFrame.origin.y + keyboardEndFrame.size.height) > UIScreen.main.bounds.height {
             collectionViewBottomInset = view.frame.size.height - keyboardEndFrame.origin.y - iPhoneXBottomInset
         } else {
@@ -204,6 +216,11 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         scrollToBottom(animated: false)
     }
     
+    @objc
+    private func appWillEnterForeground() {
+        faeInputBar.inputTextView.resignFirstResponder()
+    }
+    
     // MARK: - Layout helper
     func scrollDialogToBottom(animated: Bool = false) {
         let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
@@ -227,7 +244,12 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     func showAlertView(withWarning text: String) {
         let alert = UIAlertController(title: text, message: "", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { _ in
+            //if self.faeInputBar.inputTextView.isFirstResponder {
+                //self.faeInputBar.inputTextView.becomeFirstResponder()
+                //self.faeInputBar.inputTextView.resignFirstResponder()
+            //}
+        }))
         alert.modalPresentationStyle = .currentContext
         let rootViewController: UIViewController =
             UIApplication.shared.windows.last!.rootViewController!
