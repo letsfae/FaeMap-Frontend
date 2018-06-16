@@ -85,6 +85,7 @@ extension MapSearchViewController {
         switch searchBar {
         case schPlaceBar:
             schLocationBar.btnClose.isHidden = true
+            
             schBarType = .place
             if searchBar.txtSchField.text == "" {
                 if let text = searchBar.txtSchField.text {
@@ -104,6 +105,9 @@ extension MapSearchViewController {
                     filterPlaceCat(searchText: "")
                     getPlaceInfo(content: "")
                 }
+            }
+            if schLocationBar.txtSchField.text == "" {
+                schLocationBar.txtSchField.text = schLocationBar.txtSchField.placeholder
             }
         case schLocationBar:
             schPlaceBar.btnClose.isHidden = true
