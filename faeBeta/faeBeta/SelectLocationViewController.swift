@@ -30,7 +30,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var btnSelect: FMDistIndicator!
     
     // Address parsing & display
-    private var imgSchbarShadow: UIImageView!
     private var lblSearchContent: UILabel!
     private var btnSearch: UIButton!
     private var btnClearSearchRes: UIButton!
@@ -62,6 +61,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var placesFromSearch = [FaePinAnnotation]()
     
     public var strShownLoc: String = ""
+    private var strRawLoc: String = ""
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation?
@@ -101,7 +101,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     override func viewDidLoad() {
         super.viewDidLoad()
         loadMapView()
-        loadSearchBar()
+        loadTopBar()
         loadButtons()
         loadLocationView()
         loadPlaceInfoBar()
@@ -164,28 +164,31 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         faeMapView.setRegion(coordinateRegion, animated: false)
     }
     
-    private func loadSearchBar() {
-        imgSchbarShadow = UIImageView()
-        imgSchbarShadow.frame = CGRect(x: 2, y: 17 + device_offset_top, width: 410 * screenWidthFactor, height: 60)
-        imgSchbarShadow.image = #imageLiteral(resourceName: "mapSearchBar")
-        view.addSubview(imgSchbarShadow)
-        imgSchbarShadow.layer.zPosition = 500
-        imgSchbarShadow.isUserInteractionEnabled = true
+    private var uiviewTopBar: UIView!
+    private var btnBack: UIButton!
+    
+    private func loadTopBar() {
         
-        // Left window on main map to open account system
-        let btnLeftWindow = UIButton()
-        btnLeftWindow.setImage(#imageLiteral(resourceName: "mainScreenSearchToFaeMap"), for: .normal)
-        imgSchbarShadow.addSubview(btnLeftWindow)
-        btnLeftWindow.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-6-[v0(40.5)]", options: [], views: btnLeftWindow)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0(48)]", options: [], views: btnLeftWindow)
-        btnLeftWindow.adjustsImageWhenDisabled = false
+        uiviewTopBar = UIView()
+        uiviewTopBar.backgroundColor = .white
+        uiviewTopBar.layer.cornerRadius = 2
+        view.addSubview(uiviewTopBar)
+        view.addConstraintsWithFormat("H:|-7-[v0]-7-|", options: [], views: uiviewTopBar)
+        view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(48)]", options: [], views: uiviewTopBar)
+        addShadow(view: uiviewTopBar, opa: 0.5, offset: CGSize.zero, radius: 3)
+        
+        btnBack = UIButton()
+        btnBack.setImage(#imageLiteral(resourceName: "navigationBack"), for: .normal)
+        btnBack.addTarget(self, action: #selector(actionBack(_:)), for: .touchUpInside)
+        uiviewTopBar.addSubview(btnBack)
+        uiviewTopBar.addConstraintsWithFormat("H:|-1-[v0(38.5)]", options: [], views: btnBack)
+        uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnBack)
         
         let imgSearchIcon = UIImageView()
         imgSearchIcon.image = boolSearchEnabled ? #imageLiteral(resourceName: "Search") : #imageLiteral(resourceName: "Location")
-        imgSchbarShadow.addSubview(imgSearchIcon)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-54-[v0(15)]", options: [], views: imgSearchIcon)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-23-[v0(15)]", options: [], views: imgSearchIcon)
+        uiviewTopBar.addSubview(imgSearchIcon)
+        uiviewTopBar.addConstraintsWithFormat("H:|-48-[v0(15)]", options: [], views: imgSearchIcon)
+        uiviewTopBar.addConstraintsWithFormat("V:|-17-[v0(15)]", options: [], views: imgSearchIcon)
         
         lblSearchContent = UILabel()
         lblSearchContent.text = boolFromChat ? "Search Place or Address" : strShownLoc
@@ -193,16 +196,17 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         lblSearchContent.lineBreakMode = .byTruncatingTail
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSearchContent.textColor = boolFromChat ? UIColor._182182182() : UIColor._898989()
-        imgSchbarShadow.addSubview(lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: lblSearchContent)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-18.5-[v0(25)]", options: [], views: lblSearchContent)
+        uiviewTopBar.addSubview(lblSearchContent)
+        uiviewTopBar.addConstraintsWithFormat("H:|-72-[v0]-15-|", options: [], views: lblSearchContent)
+        uiviewTopBar.addConstraintsWithFormat("V:|-12.5-[v0(25)]", options: [], views: lblSearchContent)
         
-        btnSearch = UIButton()
-        imgSchbarShadow.addSubview(btnSearch)
-        imgSchbarShadow.addConstraintsWithFormat("H:|-78-[v0]-60-|", options: [], views: btnSearch)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnSearch)
-        btnSearch.addTarget(self, action: #selector(self.actionSearch(_:)), for: .touchUpInside)
-        btnSearch.isEnabled = boolSearchEnabled
+        btnClearSearchRes = UIButton()
+        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
+        btnClearSearchRes.isHidden = true
+        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
+        uiviewTopBar.addSubview(btnClearSearchRes)
+        uiviewTopBar.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
+        uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnClearSearchRes)
     }
     
     private func loadButtons() {
@@ -235,14 +239,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         faeMapView.cgfloatCompassOffset = 73 + device_offset_bot - device_offset_bot_main //134
         faeMapView.layoutSubviews()
-        
-        btnClearSearchRes = UIButton()
-        btnClearSearchRes.setImage(#imageLiteral(resourceName: "mainScreenSearchClearSearchBar"), for: .normal)
-        btnClearSearchRes.isHidden = true
-        btnClearSearchRes.addTarget(self, action: #selector(self.actionClearSearchResults(_:)), for: .touchUpInside)
-        imgSchbarShadow.addSubview(btnClearSearchRes)
-        imgSchbarShadow.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
-        imgSchbarShadow.addConstraintsWithFormat("V:|-6-[v0]-6-|", options: [], views: btnClearSearchRes)
     }
     
     private func loadLocationView() {
@@ -303,7 +299,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
         if mode == .full {
-            General.shared.getAddress(location: location) { address in
+            General.shared.getAddress(location: location) { [weak self] address in
+                guard let `self` = self else { return }
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
                     //self.lblSearchContent.text = addr
@@ -311,12 +308,29 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 }
             }
         } else {
-            General.shared.getAddress(location: location, full: false) { address in
-                guard let addr = address as? String else { return }
-                DispatchQueue.main.async {
-                    self.lblSearchContent.text = addr
+            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self]  (address) in
+                guard let `self` = self else { return }
+                if let addr = address as? String {
+                    let new = addr.split(separator: "@")
+                    self.strRawLoc = String(new[0]) + "," + String(new[1])
+                    self.processAddress(String(new[0]), String(new[1]))
                 }
             }
+        }
+    }
+    
+    private func processAddress(_ city: String, _ state: String) {
+        let fullAttrStr = NSMutableAttributedString()
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 18)]
+        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 18)]
+        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+        
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+        DispatchQueue.main.async {
+            self.lblSearchContent.attributedText = fullAttrStr
         }
     }
     
@@ -539,9 +553,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - Actions in Controller
     
     @objc private func handleTap(_ tap: UITapGestureRecognizer) {
-        /* guard routeAddress != nil else { return }
-         navigationController?.popViewController(animated: false)
-         delegate?.sendLocationBack?(address: routeAddress) */
         if boolFromBoard {
             if selectedLocation != nil {
                 delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "\(selectedLocation!.address_1), \(selectedLocation!.address_2)", location: CLLocation(latitude: selectedLocation!.coordinate.latitude, longitude: selectedLocation!.coordinate.longitude))
@@ -549,8 +560,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
         } else {
             if boolFromExplore {
-                guard let addr = lblSearchContent.text else { return }
-                let address = RouteAddress(name: addr, coordinate: faeMapView.centerCoordinate)
+                let address = RouteAddress(name: strRawLoc, coordinate: faeMapView.centerCoordinate)
                 navigationController?.popViewController(animated: false)
                 delegate?.sendLocationBack?(address: address)
                 return

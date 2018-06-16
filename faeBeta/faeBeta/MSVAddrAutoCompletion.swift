@@ -8,17 +8,16 @@
 
 import UIKit
 import SwiftyJSON
-import GooglePlaces
 
 extension MapSearchViewController {
     
     // GMSLookUpPlaceForCoordinate
     func lookUpForCoordinate() {
-        General.shared.lookUpForCoordinate { (place) in
-            let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
-            self.delegate?.jumpToLocation?(region: region)
-            self.navigationController?.popViewController(animated: false)
-        }
+//        General.shared.lookUpForCoordinate { (place) in
+//            let region = MKCoordinateRegionMakeWithDistance(place.coordinate, 20000, 20000)
+//            self.delegate?.jumpToLocation?(region: region)
+//            self.navigationController?.popViewController(animated: false)
+//        }
     }
     
     // GMSAutocompleteFilter
