@@ -75,6 +75,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var uiviewPlaceHedaderView1: UIView!
     var uiviewPlaceHedaderView2: UIView!
     var pageCtrlPlace: UIPageControl!
+    var btnSearchAllPlaces: UIButton!
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
     var imgIcon: UIImageView!
