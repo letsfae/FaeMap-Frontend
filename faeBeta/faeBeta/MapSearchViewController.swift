@@ -14,6 +14,10 @@ import MapKit
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
 }
 
+enum NeedType {
+    case need_place, need_location, need_all
+}
+
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     weak var delegate: MapSearchDelegate?
@@ -40,6 +44,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         case place, location
     }
     var schBarType = SearchBarType.place
+    var needType = NeedType.need_place
     
     // uiviews with shadow under table views
     var uiviewSchResBg: UIView!
@@ -53,7 +58,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     var uiviewNoResults: UIView!
     var lblNoResults: UILabel!
-    var activityView: UIActivityIndicatorView!
+    var activityIndicator: UIActivityIndicatorView!
     
     // Geobytes City Data
     var geobytesCityData = [String]()
@@ -74,8 +79,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schPlaceBar.txtSchField.becomeFirstResponder()
     }
     
-    // shows "no results"
-    func loadNoResultsView() {
+    private func loadNoResultsView() {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         uiviewNoResults.layer.cornerRadius = 2
@@ -90,14 +94,14 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         lblNoResults.textColor = UIColor._115115115()
         lblNoResults.font = UIFont(name: "AvenirNext-Medium", size: 15)
         
-        activityView = createActivityIndicator(large: true)
-        activityView.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
-        uiviewNoResults.addSubview(activityView)
+        activityIndicator = createActivityIndicator(large: true)
+        activityIndicator.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
+        uiviewNoResults.addSubview(activityIndicator)
         
         addShadow(uiviewNoResults)
     }
     
-    func loadSearchBar() {
+    private func loadSearchBar() {
         uiviewSearch = UIView()
         view.addSubview(uiviewSearch)
         uiviewSearch.backgroundColor = .white
@@ -123,14 +127,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        // 以下为Google Place API 使用的代码
-        /*
-        if Key.shared.selectedPrediction != nil {
-            schLocationBar.txtSchField.attributedText = Key.shared.selectedPrediction?.faeSearchBarAttributedText()
-        } else {
-            schLocationBar.txtSchField.text = "Current Location"
-        }
-        */
+
         if Key.shared.selectedSearchedCity != nil {
             schLocationBar.txtSchField.attributedText = Key.shared.selectedSearchedCity?.faeSearchBarAttributedText()
         } else {
@@ -145,7 +142,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewSearch.addSubview(uiviewDivLine)
     }
     
-    // load six buttons
     func loadPlaceBtns() {
         uiviewPics = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 214))
         uiviewPics.backgroundColor = .white
@@ -189,7 +185,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     func loadTable() {
-        // background view with shadow of table tblPlacesRes
+        // background shadow view of tblPlacesRes
         uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
         addShadow(uiviewSchResBg)
@@ -206,7 +202,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         tblPlacesRes.register(LocationListCell.self, forCellReuseIdentifier: "MyFixedCell")
         tblPlacesRes.register(CategoryListCell.self, forCellReuseIdentifier: "SearchCategories")
         
-        // background view with shadow of table tblLocationRes
+        // background shadow view of tblLocationRes
         uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 240 - device_offset_top - device_offset_bot)) // 124 + 20 + 2 * 48
         uiviewSchLocResBg.backgroundColor = .clear
         view.addSubview(uiviewSchLocResBg)
