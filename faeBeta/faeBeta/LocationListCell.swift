@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GooglePlaces
 
 class LocationListCell: UITableViewCell {
     
@@ -27,10 +26,12 @@ class LocationListCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
+    /*
     func setValueForLocationPrediction(_ pred: GMSAutocompletePrediction, last: Bool) {
         lblLocationName.attributedText = pred.faeSearchBarAttributedText()
         bottomLine.isHidden = last
     }
+     */
     
     func configureCell(_ location: String, last: Bool) {
         lblLocationName.attributedText = location.faeSearchBarAttributedText()
@@ -70,6 +71,7 @@ class LocationListCell: UITableViewCell {
     
 }
 
+/*
 extension GMSAutocompletePrediction {
     func faeSearchBarAttributedText() -> NSAttributedString {
         let fullText: NSMutableAttributedString = NSMutableAttributedString()
@@ -84,3 +86,4 @@ extension GMSAutocompletePrediction {
         return fullText
     }
 }
+*/

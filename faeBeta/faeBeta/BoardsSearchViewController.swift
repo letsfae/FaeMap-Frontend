@@ -286,9 +286,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
                     self.navigationController?.popViewController(animated: false)
                 }
             }
-        } else { // fixed cell - "Use my Current Location", "Choose Location on Map"
+        } else {
+            // fixed cell - "Use my Current Location", "Choose Location on Map"
             if indexPath.row == 0 {
-                Key.shared.selectedPrediction = nil
                 if boolCurtLocSelected {
                     navigationController?.popViewController(animated: false)
                     delegate?.chooseLocationOnMap?()
