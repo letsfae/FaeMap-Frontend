@@ -714,12 +714,12 @@ extension FaeMapViewController {
     
     // MARK: -- Load Map Main Screen Buttons
     private func loadButton() {
-        uiviewSchbarShadow = UIView(frame: CGRect(x: 7, y: 23 + device_offset_top, width: screenWidth - 14, height: 48))
+        uiviewSchbarShadow = UIView(frame: CGRect(x: 8, y: 23 + device_offset_top, width: screenWidth - 16, height: 48))
         uiviewSchbarShadow.layer.zPosition = 500
         view.addSubview(uiviewSchbarShadow)
         addShadow(view: uiviewSchbarShadow, opa: 0.5, offset: CGSize.zero, radius: 3)
         
-        let uiviewSchbarSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 14, height: 48))
+        let uiviewSchbarSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth - 16, height: 48))
         uiviewSchbarSub.layer.cornerRadius = 2
         uiviewSchbarSub.backgroundColor = .white
         uiviewSchbarSub.clipsToBounds = true

@@ -28,7 +28,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 
                 cell.setValueForCategory(filteredCategory[indexPath.row])
                 cell.bottomLine.isHidden = false
-                if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 && filteredPlaces.count == 0 {
+                if indexPath.row == tblPlacesRes.numberOfRows(inSection: 0) - 1 && searchedPlaces.count == 0 {
                     cell.bottomLine.isHidden = true
                 }
                 
@@ -36,14 +36,10 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             } else {
                 // search places
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath as IndexPath) as! PlacesListCell
-                let place = filteredPlaces[indexPath.row]
                 
-                cell.setValueForPlace(place)
-                cell.bottomLine.isHidden = false
+                let isLast = indexPath.row == tblPlacesRes.numberOfRows(inSection: 1) - 1
+                cell.configureCell(searchedPlaces[indexPath.row], last: isLast)
                 
-                if indexPath.row == tblPlacesRes.numberOfRows(inSection: 1) - 1 {
-                    cell.bottomLine.isHidden = true
-                }
                 return cell
             }
         case .location:
@@ -75,7 +71,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch schBarType {
         case .place:
-            return section == 1 ? filteredPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
+            return section == 1 ? searchedPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
         case .location:
             return tableView == tblLocationRes ? geobytesCityData.count : fixedLocOptions.count
         }
@@ -88,17 +84,23 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch schBarType {
         case .place:
-            if indexPath.section == 1 {
-                // search places
-                let selectedPlace = filteredPlaces[indexPath.row]
-                schPlaceBar.txtSchField.resignFirstResponder()
-                let vc = PlaceDetailViewController()
-                vc.place = selectedPlace
-                navigationController?.pushViewController(vc, animated: false)
+            let selectedPlace = searchedPlaces[indexPath.row]
+            if boolFromChat {
+                delegate?.selectPlace?(place: selectedPlace)
+                navigationController?.popViewController(animated: false)
             } else {
-                // search categories
-                let selectedCat = filteredCategory[indexPath.row].key
-                getPlaceInfo(content: selectedCat, source: "categories")
+                if indexPath.section == 1 {
+                    // search places
+                    
+                    schPlaceBar.txtSchField.resignFirstResponder()
+                    let vc = PlaceDetailViewController()
+                    vc.place = selectedPlace
+                    navigationController?.pushViewController(vc, animated: false)
+                } else {
+                    // search categories
+                    let selectedCat = filteredCategory[indexPath.row].key
+                    getPlaceInfo(content: selectedCat, source: "categories")
+                }
             }
         case .location:
             if tableView == tblLocationRes {

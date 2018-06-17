@@ -12,6 +12,8 @@ import MapKit
     @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
+    @objc optional func selectPlace(place: PlacePin)
+    @objc optional func selectLocation(loc: PlacePin)
 }
 
 enum NeedType {
@@ -25,8 +27,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var filteredCategory = [(key: String, value: Int)]()
     var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
     var searchedPlaces = [PlacePin]()
-    var filteredPlaces = [PlacePin]()
-    var filteredLocations = [String]()
     var faeMapView: MKMapView!
     
     var btnBack: UIButton!
@@ -63,7 +63,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     // Geobytes City Data
     var geobytesCityData = [String]()
     
+    // Throttle
+    var placeThrottler = Throttler(name: "[Place]", seconds: 0.5)
+    var locThrottler = Throttler(name: "[Location]", seconds: 0.5)
+    
     var boolFromChat: Bool = false
+    var boolNoCategory: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -118,7 +123,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
         schPlaceBar.txtSchField.placeholder = !boolFromChat ? "Search Fae Map" : "Search Place or Address"
-        if strSearchedPlace != "Search Fae Map" {
+        if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false
         }
@@ -142,7 +147,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewSearch.addSubview(uiviewDivLine)
     }
     
-    func loadPlaceBtns() {
+    private func loadPlaceBtns() {
         uiviewPics = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 214))
         uiviewPics.backgroundColor = .white
         view.addSubview(uiviewPics)
@@ -184,7 +189,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         }
     }
     
-    func loadTable() {
+    private func loadTable() {
         // background shadow view of tblPlacesRes
         uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
@@ -226,7 +231,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiview.layer.shadowOpacity = 0.6
     }
     
-    @objc func backToMap(_ sender: UIButton) {
+    @objc private func backToMap(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
     
@@ -238,27 +243,31 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("size", value: "30")
+        FaeSearch.shared.whereKey("radius", value: "10000")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
                                                       "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
+            print("places fetching")
+            self.activityStatus(isOn: false)
             if status / 100 != 2 || message == nil {
+                self.searchedPlaces.removeAll(keepingCapacity: true)
                 self.showOrHideViews(searchText: content)
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
+                self.searchedPlaces.removeAll(keepingCapacity: true)
                 self.showOrHideViews(searchText: content)
                 return
             }
-            self.filteredPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            self.searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
             if source == "name" {
                 self.showOrHideViews(searchText: content)
             } else {
-                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces)
+                self.delegate?.jumpToPlaces?(searchText: content, places: self.searchedPlaces)
                 self.navigationController?.popViewController(animated: false)
             }
         }
@@ -292,5 +301,15 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             catDict[content] = catDict[content]! + 1;
         }
         favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+    }
+    
+    func activityStatus(isOn: Bool) {
+        if isOn {
+            activityIndicator.startAnimating()
+            lblNoResults.isHidden = true
+        } else {
+            activityIndicator.stopAnimating()
+            lblNoResults.isHidden = false
+        }
     }
 }

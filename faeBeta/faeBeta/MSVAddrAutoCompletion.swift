@@ -33,10 +33,10 @@ extension MapSearchViewController {
                 self.showOrHideViews(searchText: searchText)
                 return
             }
+            joshprint("got data from geobytes")
             let value = JSON(result)
             let citys = value.arrayValue
             for city in citys {
-                joshprint(city.stringValue)
                 if city.stringValue == "%s" || city.stringValue == "" {
                     break
                 }
