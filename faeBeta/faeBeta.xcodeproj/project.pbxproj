@@ -39,6 +39,7 @@
 		503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503BF9D6208517AA00635E65 /* RoutingMapController.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
 		504CE4D21F67BF4500070284 /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504CE4D11F67BF4500070284 /* ExploreViewController.swift */; };
+		504D36A220D5AB2700A5C829 /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D36A120D5AB2700A5C829 /* Throttler.swift */; };
 		505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */; };
 		505367CE1FA643050076D18D /* MSVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CD1FA643050076D18D /* MSVTableView.swift */; };
 		505367D01FA643D00076D18D /* MSVAddrAutoCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */; };
@@ -398,6 +399,7 @@
 		503BF9D6208517AA00635E65 /* RoutingMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingMapController.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
 		504CE4D11F67BF4500070284 /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
+		504D36A120D5AB2700A5C829 /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist"; sourceTree = "<group>"; };
 		505367CD1FA643050076D18D /* MSVTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVTableView.swift; sourceTree = "<group>"; };
 		505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVAddrAutoCompletion.swift; sourceTree = "<group>"; };
@@ -1590,6 +1592,7 @@
 				50234AF81F2865FD00055748 /* PlacePin.swift */,
 				B3273E681F8C28FE00CFEC8E /* PinCollection.swift */,
 				9F4736CC1FB811440058770C /* SetAvatar.swift */,
+				504D36A120D5AB2700A5C829 /* Throttler.swift */,
 				508768691F47AC6A009922BA /* UserPin.swift */,
 			);
 			name = "Classes+Structs";
@@ -1885,6 +1888,7 @@
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
 				B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */,
 				B84E1A591DCB99FB000E29B9 /* FaeCellForMainScreenSearch.swift in Sources */,
+				504D36A220D5AB2700A5C829 /* Throttler.swift in Sources */,
 				B37E5DC41F831040008A6B4B /* SettingsViewController.swift in Sources */,
 				B84BB9FB1DCAD8A800132BF7 /* UIViewExtension.swift in Sources */,
 				9FF8F77F20D336FD00C807A8 /* FaeInputBarDelegate.swift in Sources */,

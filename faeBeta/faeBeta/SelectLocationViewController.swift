@@ -24,6 +24,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     weak var delegate: BoardsSearchDelegate?
     
     // Screen Buttons
+    private var uiviewTopBar: UIView!
+    private var btnBack: UIButton!
     private var faeMapView: FaeMapView!
     private var btnLocat: FMLocateSelf!
     private var btnZoom: FMZoomButton!
@@ -70,6 +72,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var activityIndicatorLocPin: UIActivityIndicatorView!
     private var locationPinClusterManager: CCHMapClusterController!
     
+    let mapSearchVC = MapSearchViewController()
+    
     private var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
@@ -95,6 +99,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
         }
     }
+    
+    enum PreviousVC {
+        case board, chat, explore
+    }
+    
+    public var previousVC = PreviousVC.board
     
     // MARK: - Life Cycles
     
@@ -164,16 +174,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         faeMapView.setRegion(coordinateRegion, animated: false)
     }
     
-    private var uiviewTopBar: UIView!
-    private var btnBack: UIButton!
-    
     private func loadTopBar() {
-        
         uiviewTopBar = UIView()
         uiviewTopBar.backgroundColor = .white
         uiviewTopBar.layer.cornerRadius = 2
         view.addSubview(uiviewTopBar)
-        view.addConstraintsWithFormat("H:|-7-[v0]-7-|", options: [], views: uiviewTopBar)
+        view.addConstraintsWithFormat("H:|-8-[v0]-8-|", options: [], views: uiviewTopBar)
         view.addConstraintsWithFormat("V:|-\(23+device_offset_top)-[v0(48)]", options: [], views: uiviewTopBar)
         addShadow(view: uiviewTopBar, opa: 0.5, offset: CGSize.zero, radius: 3)
         
@@ -207,6 +213,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         uiviewTopBar.addSubview(btnClearSearchRes)
         uiviewTopBar.addConstraintsWithFormat("H:[v0(36.45)]-10-|", options: [], views: btnClearSearchRes)
         uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnClearSearchRes)
+        
+        let btn = UIButton()
+        uiviewTopBar.addSubview(btn)
+        uiviewTopBar.addConstraintsWithFormat("H:|-40-[v0]-0-|", options: [], views: btn)
+        uiviewTopBar.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btn)
+        btn.addTarget(self, action: #selector(actionTapTopBar(_:)), for: .touchUpInside)
     }
     
     private func loadButtons() {
@@ -708,6 +720,27 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             self.placesFromSearch.removeAll(keepingCapacity: true)
         }
         placeClusterManager.addAnnotations(faePlacePins, withCompletionHandler: nil)
+    }
+    
+    @objc private func actionTapTopBar(_ sender: UIButton) {
+        switch previousVC {
+        case .board:
+            break
+        case .chat:
+            mapSearchVC.boolNoCategory = true
+            mapSearchVC.boolFromChat = true
+            if let text = lblSearchContent.text {
+                mapSearchVC.strSearchedPlace = text
+            } else {
+                mapSearchVC.strSearchedPlace = ""
+            }
+            guard var arrVCs = navigationController?.viewControllers else { return }
+            arrVCs.removeLast()
+            arrVCs.append(mapSearchVC)
+            navigationController?.setViewControllers(arrVCs, animated: false)
+        case .explore:
+            break
+        }
     }
 }
 

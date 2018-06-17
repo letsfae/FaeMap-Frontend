@@ -17,15 +17,15 @@ extension MapSearchViewController {
         case .place:
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
-            if searchText != "" && (filteredPlaces.count != 0 || filteredCategory.count != 0) {
-                uiviewPics.isHidden = true
+            if searchText != "" && (searchedPlaces.count != 0 || filteredCategory.count != 0) {
+                uiviewPics.isHidden = true || boolNoCategory
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
                 let catCnt = filteredCategory.count >= 2 ? 2 : filteredCategory.count
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (filteredPlaces.count + catCnt)))
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (searchedPlaces.count + catCnt)))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
-                uiviewPics.isHidden = false
+                uiviewPics.isHidden = false || boolNoCategory
                 uiviewSchResBg.isHidden = true
                 if searchText == "" {
                     uiviewPics.frame.origin.y = 124 + device_offset_top
@@ -35,14 +35,14 @@ extension MapSearchViewController {
             }
             
             // for uiviewNoResults
-            if searchText != "" && filteredPlaces.count == 0 && filteredCategory.count == 0 {
+            if searchText != "" && searchedPlaces.count == 0 && filteredCategory.count == 0 {
                 uiviewNoResults.isHidden = false
             } else {
                 uiviewNoResults.isHidden = true
             }
             tblPlacesRes.isScrollEnabled = true
         case .location:
-            uiviewPics.isHidden = true
+            uiviewPics.isHidden = true || boolNoCategory
             uiviewNoResults.isHidden = true
             uiviewSchResBg.isHidden = false
             uiviewSchResBg.frame.size.height = CGFloat(fixedLocOptions.count * 48)
@@ -62,12 +62,15 @@ extension MapSearchViewController {
         }
         tblPlacesRes.reloadData()
         if boolFromChat {
-            uiviewPics.isHidden = true
+            uiviewPics.isHidden = true || boolNoCategory
         }
     }
     
     func filterPlaceCat(searchText: String, scope: String = "All") {
-        // TODO VICKY 为什么造成crash?
+        guard !boolFromChat else {
+            filteredCategory = []
+            return
+        }
         var filtered = Key.shared.categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
         if filtered.count == 0 {
@@ -85,7 +88,6 @@ extension MapSearchViewController {
         switch searchBar {
         case schPlaceBar:
             schLocationBar.btnClose.isHidden = true
-            
             schBarType = .place
             if searchBar.txtSchField.text == "" {
                 if let text = searchBar.txtSchField.text {
@@ -133,13 +135,25 @@ extension MapSearchViewController {
         case schPlaceBar:
             schBarType = .place
             filterPlaceCat(searchText: searchText)
-            getPlaceInfo(content: searchText.lowercased())
+            showOrHideViews(searchText: searchText)
+            activityStatus(isOn: true)
+            placeThrottler.throttle {
+                DispatchQueue.main.async {
+                    self.getPlaceInfo(content: searchText.lowercased())
+                }
+            }
+            if searchText == "" {
+                searchedPlaces.removeAll(keepingCapacity: true)
+                tblPlacesRes.reloadData()
+            }
         case schLocationBar:
             schBarType = .location
             if searchText == "" {
                 showOrHideViews(searchText: searchText)
             }
-            placeAutocomplete(searchText)
+            locThrottler.throttle {
+                self.placeAutocomplete(searchText)
+            }
         default:
             break
         }
@@ -153,7 +167,7 @@ extension MapSearchViewController {
                 // TODO Vicky - 为空一直都是按搜索返回地图，不搜出任何东西，就是原本的地图主页效果，但是地图当前的view会根据第二行的地点
                 lookUpForCoordinate()
             } else {
-                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: filteredPlaces)
+                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: searchedPlaces)
                 navigationController?.popViewController(animated: false)
             }
         } else {
