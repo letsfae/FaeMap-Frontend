@@ -626,8 +626,28 @@ class FMPlaceResultBarCell: UITableViewCell {
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update
+        let hoursToday = placeInfo.hoursToday
+        let openOrClose = placeInfo.openOrClose
+        if openOrClose == "N/A" {
+            lblHours.text = "N/A"
+        } else {
+            var hours = " "
+            for (index, hour) in hoursToday.enumerated() {
+                if hour == "24 Hours" {
+                    hours += hour
+                    break
+                } else {
+                    if index == hoursToday.count - 1 {
+                        hours += hour
+                    } else {
+                        hours += hour + ", "
+                    }
+                }
+            }
+            lblHours.text = openOrClose + hours
+        }
 //        lblHours.text = placeInfo.hours
-        if placeInfo.hours.count > 0 {
+        /*if placeInfo.hours.count > 0 {
             arrHour.removeAll()
             for day in arrDay {
                 if placeInfo.hours.index(forKey: day) == nil {
@@ -663,7 +683,7 @@ class FMPlaceResultBarCell: UITableViewCell {
             }
         } else {
             lblHours.text = nil
-        }
+        }*/
         General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgSavedItem)
     }
     

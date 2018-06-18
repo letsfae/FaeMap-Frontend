@@ -23,7 +23,7 @@ class ChatInputTextView: UITextView {
     let placeholderLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
-        label.textColor = .lightGray
+        label.textColor = UIColor._146146146()
         label.text = "Type something..."
         label.backgroundColor = .clear
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +107,8 @@ class ChatInputTextView: UITextView {
     /// Sets up the default properties
     func setup() {
         tintColor = UIColor._2499090()
-        font = UIFont.preferredFont(forTextStyle: .body)
+        //font = UIFont.preferredFont(forTextStyle: .body)
+        font = UIFont(name: "AvenirNext-Regular", size: 18)
         textContainerInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         scrollIndicatorInsets = UIEdgeInsets(top: .leastNonzeroMagnitude,
                                              left: .leastNonzeroMagnitude,
