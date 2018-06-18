@@ -349,7 +349,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private func updateSelfInfo() {
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
-            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
+            updateNickName.getSelfNamecard { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 else {
                     DispatchQueue.main.async {
                         self.jumpToWelcomeView(animated: false)
@@ -446,7 +447,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         self.selfAnView?.changeAvatar()
         FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
-        updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
+        updateMiniAvatar.updateAccountBasicInfo({ [weak self] (status: Int, _: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
@@ -548,7 +550,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private func storeRealmCollectionFromServer() {
         let realm = try! Realm()
         var setDeletedCollection = Set(realm.filterMyCollections().map { $0.collection_id })
-        FaeCollection.shared.getCollections {(status: Int, message: Any?) in
+        FaeCollection.shared.getCollections { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 let json = JSON(message!)
                 guard let collections = json.array else {
@@ -621,7 +624,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc private func syncMessagesFromServer() {
         //faeChat.getMessageFromServer()
         //self.faeChat.getMessageFromServer()
-        faePush.getSync { (status, message) in
+        faePush.getSync { [weak self] (status, message) in
+            guard let `self` = self else { return }
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
                 if let friend_request_count = messageJSON["friend_request"].int {
@@ -1303,11 +1307,11 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
             let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
             let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-            General.shared.getAddress(location: location) { (address) in
+            General.shared.getAddress(location: location) { [weak self] (address) in
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
-                    self.lblSearchContent.text = addr
-                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                    self?.lblSearchContent.text = addr
+                    self?.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
                 }
             }
         }
@@ -1622,10 +1626,11 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             self.placesFromSearch.removeAll()
             self.locationsFromSearch.removeAll()
             for id in savedPinIds {
-                FaeMap.shared.getPin(type: type, pinId: String(id), completion: { (status, message) in
+                FaeMap.shared.getPin(type: type, pinId: String(id), completion: { [weak self] (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
+                    guard let `self` = self else { return }
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
                         self.placesFromSearch.append(pinData)
@@ -2090,7 +2095,8 @@ extension FaeMapViewController {
         getMapUserInfo.whereKey("type", value: "user")
         getMapUserInfo.whereKey("max_count ", value: "100")
         //        getMapUserInfo.whereKey("user_updated_in", value: "180")
-        getMapUserInfo.getMapInformation { (status: Int, message: Any?) in
+        getMapUserInfo.getMapInformation { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 != 2 || message == nil {
                 print("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdateUsers = true
@@ -2331,7 +2337,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 selectedLocAnno?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
                 let coordinate = selectedLocation?.coordinate
-                AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+                AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [weak self] (snapShotImage) in
+                    guard let `self` = self else { return }
                     vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(self.uiviewLocationBar.lblName.text ?? "Invalid Name"),\(self.uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
                     vcShareCollection.locationSnapImage = snapShotImage
                     self.navigationController?.pushViewController(vcShareCollection, animated: true)
@@ -2442,11 +2449,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { [weak self] (ids) in
                 let placeData = placePin
                 placeData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = placeData as AnyObject
-                self.uiviewSavedList.arrListSavedThisPin = ids
+                self?.uiviewSavedList.arrListSavedThisPin = ids
                 anView.boolShowSavedNoti = ids.count > 0
             }
         }
@@ -2517,7 +2524,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "200")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))
                 self.boolCanUpdatePlaces = true
@@ -3046,16 +3054,17 @@ extension FaeMapViewController: LocDetailDelegate {
                 pinData.id = anView.locationId
             }
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { [weak self] (ids) in
                 pinData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = pinData as AnyObject
-                self.uiviewSavedList.arrListSavedThisPin = ids
+                self?.uiviewSavedList.arrListSavedThisPin = ids
                 anView.boolShowSavedNoti = ids.count > 0
             }
         }
         if !anView.optionsReady {
             let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
-            uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { [weak self] (address_1, address_2) in
+                guard let `self` = self else { return }
                 self.selectedLocation?.address_1 = address_1
                 self.selectedLocation?.address_2 = address_2
                 self.uiviewChooseLocs.updateDestination(name: address_1)
@@ -3131,7 +3140,8 @@ extension FaeMapViewController: LocDetailDelegate {
             selectedLocation?.isSelected = true
             selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
-            uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { [weak self] (address_1, address_2) in
+                guard let `self` = self else { return }
                 self.selectedLocation?.address_1 = address_1
                 self.selectedLocation?.address_2 = address_2
                 self.uiviewChooseLocs.updateDestination(name: address_1)

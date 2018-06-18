@@ -465,7 +465,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             }
         }
         
-        FaeCollection.shared.getOneCollection(String(colInfo.collection_id), completion: { (status, message) in
+        FaeCollection.shared.getOneCollection(String(colInfo.collection_id), completion: { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
@@ -481,7 +481,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 }
             }
             
-            self.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+            self?.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
         })
     }
     

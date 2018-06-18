@@ -225,10 +225,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         if enterMode == .email {
             delegate?.updateEmail()
         } else if enterMode == .phone {
-            faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
-                if(statusCode / 100 == 2) {
+            faeUser.getAccountBasicInfo{ [weak self] (statusCode: Int, result: Any?) in
+                if statusCode / 100 == 2 {
                     print("Successfully get account info \(statusCode) \(result!)")
-                    self.delegate?.updatePhone()
+                    self?.delegate?.updatePhone()
                 } else {
                     print("Fail to get account info \(statusCode) \(result!)")
                 }
@@ -270,14 +270,14 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         vc.strVerified = strEmail!
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
-        faeUser.updateEmail{ (statusCode, result) in
+        faeUser.updateEmail{ [weak self] (statusCode, result) in
             if(statusCode / 100 == 2 ) {
-                self.navigationController?.pushViewController(vc, animated: true)
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
             else {
                 print("Sent code fail")
             }
-            self.indicatorView.stopAnimating()
+            self?.indicatorView.stopAnimating()
         }
     }
     

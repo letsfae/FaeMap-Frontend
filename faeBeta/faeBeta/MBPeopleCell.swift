@@ -89,8 +89,8 @@ class MBPeopleCell: UITableViewCell {
             imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
         } else {
             lblUsrName.text = people.displayName
-            General.shared.avatar(userid: people.userId, completion: { (avatarImage) in
-                self.imgAvatar.image = avatarImage
+            General.shared.avatar(userid: people.userId, completion: { [weak self] (avatarImage) in
+                self?.imgAvatar.image = avatarImage
             })
         }
         lblIntro.text = people.shortIntro

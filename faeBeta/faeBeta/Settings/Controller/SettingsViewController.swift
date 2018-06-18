@@ -145,8 +145,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc private func logOut(_ sender: UIButton) {
         let logOut = FaeUser()
-        logOut.logOut { (_: Int?, _: Any?) in
-            self.jumpToWelcomeView(animated: true)
+        logOut.logOut { [weak self] (_: Int?, _: Any?) in
+            self?.jumpToWelcomeView(animated: true)
         }
     }
     

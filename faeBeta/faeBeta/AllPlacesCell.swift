@@ -68,9 +68,29 @@ class AllPlacesCell: UITableViewCell {
         var addr = place.address1 == "" ? "" : place.address1 + ", "
         addr += place.address2
         lblPlaceAddr.text = addr
-        lblOpeninghour.text = place.class_1
         lblPrice.text = place.price
         imgPlaceIcon.backgroundColor = .white
         General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPlaceIcon)
+        
+        let hoursToday = place.hoursToday
+        let openOrClose = place.openOrClose
+        if openOrClose == "N/A" {
+            lblOpeninghour.text = "N/A"
+        } else {
+            var hours = " "
+            for (index, hour) in hoursToday.enumerated() {
+                if hour == "24 Hours" {
+                    hours += hour
+                    break
+                } else {
+                    if index == hoursToday.count - 1 {
+                        hours += hour
+                    } else {
+                        hours += hour + ", "
+                    }
+                }
+            }
+            lblOpeninghour.text = openOrClose + hours
+        }
     }
 }

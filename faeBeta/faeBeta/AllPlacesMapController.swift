@@ -128,7 +128,8 @@ class AllPlacesMapController: BasicMapController {
         guard isFromCollection else { return }
         completionCount = 0
         func getPin(id: Int, type: CollectionTableMode) {
-            FaeMap.shared.getPin(type: type.rawValue, pinId: String(id)) { (status, message) in
+            FaeMap.shared.getPin(type: type.rawValue, pinId: String(id)) { [weak self] (status, message) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 else { return }
                 guard message != nil else { return }
                 let resultJson = JSON(message!)
@@ -202,11 +203,11 @@ class AllPlacesMapController: BasicMapController {
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { [weak self] (ids) in
                 let placeData = placePin
                 placeData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = placeData as AnyObject
-                self.uiviewSavedList.arrListSavedThisPin = ids
+                self?.uiviewSavedList.arrListSavedThisPin = ids
                 anView.boolShowSavedNoti = ids.count > 0
             }
         }
@@ -269,16 +270,17 @@ class AllPlacesMapController: BasicMapController {
                 pinData.id = anView.locationId
             }
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { (ids) in
+            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { [weak self] (ids) in
                 pinData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = pinData as AnyObject
-                self.uiviewSavedList.arrListSavedThisPin = ids
+                self?.uiviewSavedList.arrListSavedThisPin = ids
                 anView.boolShowSavedNoti = ids.count > 0
             }
         }
         if !anView.optionsReady {
             let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
-            uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { [weak self] (address_1, address_2) in
+                guard let `self` = self else { return }
                 self.selectedLocation?.address_1 = address_1
                 self.selectedLocation?.address_2 = address_2
                 self.destinationAddr = RouteAddress(name: address_1, coordinate: cllocation.coordinate)

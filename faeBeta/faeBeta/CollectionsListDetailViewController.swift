@@ -116,7 +116,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         imgAvatar.clipsToBounds = true
         imgAvatar.layer.borderWidth = 5
         imgAvatar.layer.borderColor = UIColor.white.cgColor
-        General.shared.avatar(userid: realmColDetails.user_id) { (avatarImage) in
+        General.shared.avatar(userid: realmColDetails.user_id) { [weak self] (avatarImage) in
+            guard let `self` = self else { return }
             self.imgAvatar.image = avatarImage
             self.imgAvatar.isUserInteractionEnabled = true
         }
@@ -437,13 +438,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                 btnMapView.isEnabled = true
             }
             for collectedPin in self.realmColDetails.pins {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { (status, message) in
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { [weak self] (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
                     let placeInfo = PlacePin(json: resultJson)
                     faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
-                    self.fetchedCount += 1
+                    self?.fetchedCount += 1
                 }
             }
             return
@@ -455,13 +456,14 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             }
         }
 
-        FaeCollection.shared.getOneCollection(String(colId), completion: { (status, message) in
+        FaeCollection.shared.getOneCollection(String(colId), completion: { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let arrLocPinId = resultJson["pins"].arrayValue//.reversed()
 //            print(arrLocPinId)
-
+            
+            guard let `self` = self else { return }
             self.loadFromServer = true
             
             if self.btnMapView != nil {
@@ -481,13 +483,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             }
             
             for collectedPin in arrLocPinId {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: collectedPin["pin_id"].stringValue) { (status, message) in
+                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: collectedPin["pin_id"].stringValue) { [weak self] (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
                     let resultJson = JSON(message!)
                     let placeInfo = PlacePin(json: resultJson)
                     faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin["pin_id"].intValue as AnyObject)
-                    self.fetchedCount += 1
+                    self?.fetchedCount += 1
                 }
             }
         })
@@ -584,7 +586,7 @@ class ColListDetailHeader: UITableViewCell {
         let nameAttr = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-DemiBold", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._2499090()]
         let curtStr = NSMutableAttributedString(string: "by ", attributes: attribute)
         
-        FaeGenderView.shared.loadGenderAge(id: colInfo.user_id) { (nickName, _, _) in
+        FaeGenderView.shared.loadGenderAge(id: colInfo.user_id) { [weak self] (nickName, _, _) in
             let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
             let updateTime = colInfo.last_updated_at
             let updateDate = updateTime.split(separator: " ")[0].split(separator: "-")
@@ -593,7 +595,7 @@ class ColListDetailHeader: UITableViewCell {
             curtStr.append(nameStr)
             curtStr.append(updateStr)
             
-            self.lblTime.attributedText = curtStr
+            self?.lblTime.attributedText = curtStr
         }
         
         lblName.text = colInfo.name
@@ -793,7 +795,8 @@ extension CollectionsListDetailViewController {
     }
     
     @objc func actionYes(_ sender: UIButton) {
-        FaeCollection.shared.deleteOneCollection(String(colId)) { (status: Int, message: Any?) in
+        FaeCollection.shared.deleteOneCollection(String(colId)) { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 self.animationHideOptions()
                 

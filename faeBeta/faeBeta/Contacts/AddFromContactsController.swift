@@ -69,7 +69,8 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
     func checkContactsPermission() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .restricted, .notDetermined:
-            contactStore.requestAccess(for: .contacts, completionHandler: { (success, _) in
+            contactStore.requestAccess(for: .contacts, completionHandler: { [weak self] (success, _) in
+                guard let `self` = self else { return }
                 if success {
                     self.boolAllowAccess = true
                     DispatchQueue.main.async {
@@ -192,7 +193,8 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
     
     func linkPhoneNumber() {
         let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+        getSelfInfo.getAccountBasicInfo({ [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 != 2 {
                 return
             }
@@ -267,7 +269,8 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         //        print(val)
         let faeUser = FaeUser()
         faeUser.whereKey("phone", value: val)
-        faeUser.checkPhoneExistence {(status: Int, message: Any?) in
+        faeUser.checkPhoneExistence { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 if let result = message {
                     let phoneJson = JSON(result)
@@ -277,7 +280,8 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
                         let relation = Relations(json: phoneJson[i]["relation"])
                         self.dictPhone.removeValue(forKey: phone)
                         
-                        faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                        faeUser.getUserCard(String(userId)) { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             if status / 100 == 2 {
                                 let json = JSON(message!)
                                 let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)

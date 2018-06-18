@@ -144,7 +144,8 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     @objc private func actionSaveIntro(_ sender: UIButton) {
         let user = FaeUser()
         user.whereKey("short_intro", value: textView.text!)
-        user.updateNameCard { (status, message) in
+        user.updateNameCard { [weak self] (status, message) in
+            guard let `self` = self else { return }
             if status / 100 == 2 { // TODO: error code undecided
                 self.delegate?.protSaveShortIntro(txtIntro: self.textView.text)
                 if let nav = self.navigationController {
@@ -158,8 +159,8 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
                 felixprint("update short intro failed")
                 let messageJSON = JSON(message!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { (prompt) in
-                        self.setRequestResult("Save Failed! Please try later!")
+                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                        self?.setRequestResult("Save Failed! Please try later!")
                     })
                 }
             }

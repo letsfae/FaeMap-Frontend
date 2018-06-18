@@ -138,7 +138,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     func checkSavedStatus(_ completion: @escaping () -> ()) {
         guard locationId != 0 else { return }
-        FaeMap.shared.getPin(type: "location", pinId: String(locationId)) { (status, message) in
+        FaeMap.shared.getPin(type: "location", pinId: String(locationId)) { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
@@ -156,6 +156,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
                 guard let colId = Int(strColId) else { continue }
                 ids.append(colId)
             }
+            guard let `self` = self else { return }
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids
             self.boolSavedListLoaded = true
@@ -173,7 +174,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         FaeMap.shared.whereKey("radius", value: "5000")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "20")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 //print("Get Related Places Fail \(status) \(message!)")
                 completion()
@@ -181,6 +182,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
             }
             let json = JSON(message!)
             guard let placeJson = json.array else { return }
+            guard let `self` = self else { return }
             self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
             self.uiviewClctView.isHidden = self.arrNearbyPlaces.count == 0
             completion()
@@ -393,7 +395,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     @objc private func shareThisPin() {
         let vcShareLoc = NewChatShareController(friendListMode: .location)
-        AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { (snapShotImage) in
+        AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [weak self] (snapShotImage) in
+            guard let `self` = self else { return }
             vcShareLoc.locationDetail = "\(self.coordinate?.latitude ?? 0.0),\(self.coordinate?.longitude ?? 0.0),\(self.strLocName),\(self.strLocAddr)"
             vcShareLoc.locationSnapImage = snapShotImage
             vcShareLoc.boolFromLocDetail = true

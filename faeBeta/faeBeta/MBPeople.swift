@@ -152,8 +152,9 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             return
         }
         showWaves()
-        getMBPeopleInfo ({ (count: Int) in
+        getMBPeopleInfo ({ [weak self] (count: Int) in
             //            print(self.mbPeople)
+            guard let `self` = self else { return }
             if count == 0 {   // self.mbPeople.count == 0
                 self.strBubbleHint = "We can’t find any matches nearby, try a different setting! :)"
                 self.lblBubbleHint.text = self.strBubbleHint

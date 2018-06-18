@@ -175,7 +175,8 @@ class FriendOperationFromContactsViewController: UIViewController {
         animationShowSelf()
         if action == "add" {
             indicatorView.startAnimating()
-            faeContact.sendFriendRequest(friendId: String(self.userId)) {(status: Int, message: Any?) in
+            faeContact.sendFriendRequest(friendId: String(self.userId)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Friend Request \nSent Successfully!"
                     let realm = try! Realm()
@@ -195,8 +196,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                     // 400-6   Bad request, you have already blocked this user
                     // 400-6   Bad request, you have already been blocked by the user
                     if let errorCode = JSON(message!)["error_code"].string {
-                        handleErrorCode(.contact, errorCode, { (errorMsg) in
-                            self.lblMsgSent.text = errorMsg
+                        handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                            self?.lblMsgSent.text = errorMsg
                         })
                     }
                     
@@ -219,7 +220,8 @@ class FriendOperationFromContactsViewController: UIViewController {
             }
         } else if action == "accept" {
             indicatorView.startAnimating()
-            faeContact.acceptFriendRequest(friendId: String(userId)) { (status: Int, message: Any?) in
+            faeContact.acceptFriendRequest(friendId: String(userId)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Accept Request \nSuccessfully!"
                     let realm = try! Realm()
@@ -235,8 +237,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
                     if let errorCode = JSON(message!)["error_code"].string {
-                        handleErrorCode(.contact, errorCode, { (errorMsg) in
-                            self.lblMsgSent.text = errorMsg
+                        handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                            self?.lblMsgSent.text = errorMsg
                         })
                     }
                 }
@@ -263,7 +265,8 @@ class FriendOperationFromContactsViewController: UIViewController {
     @objc func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
-            faeContact.ignoreFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
+            faeContact.ignoreFriendRequest(friendId: String(userId)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblMsgSent.text = "Ignore Request \nSuccessfully!"
                     let realm = try! Realm()
@@ -279,8 +282,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.lblMsgSent.text = "Internal Server \n Error!"
                 } else {
                     if let errorCode = JSON(message!)["error_code"].string {
-                        handleErrorCode(.contact, errorCode, { (errorMsg) in
-                            self.lblMsgSent.text = errorMsg
+                        handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                            self?.lblMsgSent.text = errorMsg
                         })
                     }
                 }
@@ -319,7 +322,8 @@ class FriendOperationFromContactsViewController: UIViewController {
         } else {
             indicatorView.startAnimating()
             if sender.tag == WITHDRAW_ACT {
-                faeContact.withdrawFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
+                faeContact.withdrawFriendRequest(friendId: String(userId)) { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Withdraw \nSuccessfully!"
                         let realm = try! Realm()
@@ -335,8 +339,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
                         if let errorCode = JSON(message!)["error_code"].string {
-                            handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                self.lblMsgSent.text = errorMsg
+                            handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                                self?.lblMsgSent.text = errorMsg
                             })
                         }
                     }
@@ -346,7 +350,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                     self.animationActionView()
                 }
             } else if sender.tag == RESEND_ACT {
-                faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") {(status: Int, message: Any?) in
+                faeContact.sendFriendRequest(friendId: String(userId), boolResend: "true") { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "Request Resent \nSuccessfully!"
                         let realm = try! Realm()
@@ -360,8 +365,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
                         if let errorCode = JSON(message!)["error_code"].string {
-                            handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                self.lblMsgSent.text = errorMsg
+                            handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                                self?.lblMsgSent.text = errorMsg
                             })
                         }
                     }
@@ -373,7 +378,8 @@ class FriendOperationFromContactsViewController: UIViewController {
             } else if sender.tag == BLOCK_ACT {
                 lblBlockHint.isHidden = true
                 uiviewMsgSent.frame.size.height = 161 * screenHeightFactor
-                faeContact.blockPerson(userId: String(userId)) {(status: Int, message: Any?) in
+                faeContact.blockPerson(userId: String(userId)) { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         self.lblMsgSent.text = "The user has been \nblocked successfully!"
                         let realm = try! Realm()
@@ -393,8 +399,8 @@ class FriendOperationFromContactsViewController: UIViewController {
                         self.lblMsgSent.text = "Internal Server \n Error!"
                     } else {
                         if let errorCode = JSON(message!)["error_code"].string {
-                            handleErrorCode(.contact, errorCode, { (errorMsg) in
-                                self.lblMsgSent.text = errorMsg
+                            handleErrorCode(.contact, errorCode, { [weak self] (errorMsg) in
+                                self?.lblMsgSent.text = errorMsg
                             })
                         }
                     }

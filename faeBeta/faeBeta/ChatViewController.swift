@@ -358,8 +358,8 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             guard let response = placemarks?[0] else { return }
-            AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { (snapShotImage) in
-                self.faeInputBar.setupTopStackView(placemark: response, thumbnail: snapShotImage)
+            AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { [weak self] (snapShotImage) in
+                self?.faeInputBar.setupTopStackView(placemark: response, thumbnail: snapShotImage)
             }
         })
     }

@@ -277,8 +277,9 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
             } else {
                 let searchRequest = MKLocalSearchRequest(completion: searchResults[indexPath.row])
                 let search = MKLocalSearch(request: searchRequest)
-                search.start { (response, error) in
+                search.start { [weak self] (response, error) in
                     guard let coordinate = response?.mapItems[0].placemark.coordinate else { return }
+                    guard let `self` = self else { return }
                     let address = RouteAddress(name: self.filteredLocations[indexPath.row])
                     address.coordinate = coordinate
                     self.delegate?.sendLocationBack?(address: address)
@@ -347,7 +348,8 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // MARK: -
     func placeAutocomplete(_ searchText: String) {
         Key.shared.selectedSearchedCity = nil
-        CitySearcher.shared.cityAutoComplete(searchText) { (status, result) in
+        CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
+            guard let `self` = self else { return }
             self.geobytesCityData.removeAll()
             guard status / 100 == 2 else {
                 self.showOrHideViews(searchText: searchText)

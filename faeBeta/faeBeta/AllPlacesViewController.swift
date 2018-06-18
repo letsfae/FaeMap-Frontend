@@ -153,7 +153,8 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         placesList.whereKey("radius", value: "50000")
         placesList.whereKey("type", value: "place")
         placesList.whereKey("max_count", value: "1000")
-        placesList.getMapInformation { (status: Int, message: Any?) in
+        placesList.getMapInformation { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 != 2 || message == nil {
                 print("[loadMapSearchPlaceInfo] status/100 != 2")
                 return

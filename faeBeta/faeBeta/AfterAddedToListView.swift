@@ -78,18 +78,20 @@ class AfterAddedToListView: UIView {
         self.hide()
         switch mode {
         case .save:
-            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
+            FaeCollection.shared.saveToCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { [weak self] (status, message) in
                 guard status / 100 == 2 else { return }
                 joshprint("[undoCollecting] successfully saved again")
+                guard let `self` = self else { return }
                 self.selectedCollection = nil
                 self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
 
                 RealmCollection.savePin(collection_id: col.collection_id, type: col.type, pin_id: self.pinIdInAction)
             }
         case .unsave:
-            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { (status, message) in
+            FaeCollection.shared.unsaveFromCollection(col.type, collectionID: String(col.collection_id), pinID: String(pinIdInAction)) { [weak self] (status, message) in
                 guard status / 100 == 2 else { return }
                 joshprint("[undoCollecting] successfully unsave this pin")
+                guard let `self` = self else { return }
                 self.selectedCollection = nil
                 self.delegate?.undoCollect(colId: col.collection_id, mode: self.mode)
                 

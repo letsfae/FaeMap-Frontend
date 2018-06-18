@@ -82,7 +82,7 @@ extension MapBoardViewController {
         mbPlacesList.whereKey("radius", value: "9999999999")
         mbPlacesList.whereKey("type", value: "place")
         mbPlacesList.whereKey("max_count", value: "1000")
-        mbPlacesList.getMapInformation { (status: Int, message: Any?) in
+        mbPlacesList.getMapInformation { [weak self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
                 return
@@ -97,6 +97,7 @@ extension MapBoardViewController {
                 return
             }
             
+            guard let `self` = self else { return }
             self.mbPlaces.removeAll()
             self.testArrPlaces.removeAll()
             
@@ -131,7 +132,7 @@ extension MapBoardViewController {
         FaeMap.shared.whereKey("geo_longitude", value: "\(location.longitude)")
         FaeMap.shared.whereKey("radius", value: "99999999999")
         FaeMap.shared.whereKey("type", value: "user")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPeopleInfo] status/100 != 2")
                 return
@@ -146,6 +147,7 @@ extension MapBoardViewController {
                 return
             }
             
+            guard let `self` = self else { return }
             self.mbPeople.removeAll()
             self.processMBInfo(results: peopleInfoJsonArray, type: "people")
             

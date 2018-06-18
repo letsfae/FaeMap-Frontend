@@ -189,8 +189,9 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
                 if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListLocationCell {
                     cell.btnSelect.isSelected = false
                 }
-                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) {(status: Int, message: Any?) in
+                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) { [weak self] (status: Int, message: Any?) in
                     // status == 400: data is in realm but not in server
+                    guard let `self` = self else { return }
                     if status / 100 == 2 || status == 400 {
                         RealmCollection.unsavePin(collection_id: self.colId, type: self.enterMode.rawValue, pin_id: pin_id)
                         self.deleteCount += 1

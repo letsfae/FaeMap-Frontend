@@ -62,7 +62,7 @@ class PlaceDetailCell: UITableViewCell {
         addConstraintsWithFormat("V:|-18-[v0]-18-|", options: [], views: lblContent)
     }
     
-    func setValueForCell(_ identifier: String?, place: PlacePin, dayIdx: Int = 0, arrHour: [[String]] = [[]]) {
+    func setValueForCell(_ identifier: String?, place: PlacePin) {
         switch identifier {
         case "map":
             imgIcon.image = #imageLiteral(resourceName: "place_location")
@@ -72,17 +72,6 @@ class PlaceDetailCell: UITableViewCell {
             break
         case "hour":
             imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-            /*let openStatus = closeOrOpen(arrHour[dayIdx])
-            var hour = " / " + arrHour[dayIdx][0]
-            if arrHour[0].count > 1 {
-                for hourIdx in 1..<arrHour[dayIdx].count {
-                    if openStatus == "Open" {
-                        hour += "\n\t\t" + arrHour[dayIdx][hourIdx]
-                    } else if openStatus == "Closed" {
-                        hour += "\n\t\t   " + arrHour[dayIdx][hourIdx]
-                    }
-                }
-            }*/
             let openStatus = place.openOrClose
             let todayHours = place.hoursToday
             var hour = " / " + todayHours[0]
@@ -216,23 +205,25 @@ class PlaceDetailMapCell: UITableViewCell {
         imgViewMap.contentMode = .top
         imgViewMap.clipsToBounds = true
         imgViewMap.isUserInteractionEnabled = true
-        imgViewMap.layer.borderColor = UIColor._225225225().cgColor
-        imgViewMap.layer.borderWidth = 1
+        
         addSubview(imgViewMap)
-        addConstraintsWithFormat("H:|-67-[v0(\(282 * screenWidthFactor))]", options: [], views: imgViewMap)
-        addConstraintsWithFormat("V:|-0-[v0(\(150))]-19-|", options: [], views: imgViewMap)
+        addConstraintsWithFormat("H:|-67-[v0(\(280 * screenWidthFactor + 2))]", options: [], views: imgViewMap)
+        addConstraintsWithFormat("V:|-0-[v0(\(152))]-19-|", options: [], views: imgViewMap)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
         imgViewMap.addGestureRecognizer(tapGesture)
         
         imgPlaceIcon = UIImageView(frame: CGRect(x: 0, y: 50, width: 56, height: 56))
-        imgPlaceIcon.center.x = 141 * screenWidthFactor
+        imgPlaceIcon.center.x = 140 * screenWidthFactor + 1
         imgViewMap.addSubview(imgPlaceIcon)
     }
     
     func setValueForCell(place: PlacePin) {
         imgPlaceIcon.image = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
-        AddPinToCollectionView().mapScreenShot(coordinate: place.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 200), icon: false) { (snapShotImage) in
+        AddPinToCollectionView().mapScreenShot(coordinate: place.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 152), icon: false) { [weak self] (snapShotImage) in
+            guard let `self` = self else { return }
             self.imgViewMap.image = snapShotImage
+            self.imgViewMap.layer.borderColor = UIColor._225225225().cgColor
+            self.imgViewMap.layer.borderWidth = 1
         }
     }
     

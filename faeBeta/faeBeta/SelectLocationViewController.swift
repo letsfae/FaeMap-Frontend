@@ -464,7 +464,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "200")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 return
             }
@@ -475,6 +475,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             guard mapPlaceJsonArray.count > 0 else {
                 return
             }
+            guard let `self` = self else { return }
             self.placeAdderQueue.cancelAllOperations()
             let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
             adder.completionBlock = {
@@ -532,7 +533,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             self.selectedLocation = FaePinAnnotation(type: .location, data: pinData as AnyObject)
             self.selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
             self.locationPinClusterManager.addAnnotations([self.selectedLocation!], withCompletionHandler: nil)
-            self.uiviewLocationBar.updateLocationInfo(location: cllocation) { (address_1, address_2) in
+            self.uiviewLocationBar.updateLocationInfo(location: cllocation) { [weak self] (address_1, address_2) in
+                guard let `self` = self else { return }
                 self.selectedLocation?.address_1 = address_1
                 self.selectedLocation?.address_2 = address_2
                 self.btnSelect.lblDistance.textColor = UIColor._2499090()

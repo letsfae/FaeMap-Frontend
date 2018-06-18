@@ -85,11 +85,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             } else {
                 location = LocManager.shared.curtLoc
             }
-            General.shared.getAddress(location: location, original: false, full: false, detach: true) { (address) in
+            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self] (address) in
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
-                    self.reloadBottomText(String(new[0]), String(new[1]))
-                    self.strLocation = "\(String(new[0])), \(String(new[1]))"
+                    self?.reloadBottomText(String(new[0]), String(new[1]))
+                    self?.strLocation = "\(String(new[0])), \(String(new[1]))"
                 }
             }
         }
@@ -550,7 +550,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         guard idx < arrPlaceData.count else { return }
         uiviewSavedList.pinToSave = FaePinAnnotation(type: .place, cluster: nil, data: arrPlaceData[idx] as AnyObject)
-        getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { (ids) in
+        getPinSavedInfo(id: arrPlaceData[idx].id, type: "place") { [weak self] (ids) in
+            guard let `self` = self else { return }
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids
             if ids.count > 0 {
@@ -752,7 +753,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 return
             }
             
-            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { (status, placesJSON) in
+            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { [weak self] (status, placesJSON) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 else {
                     //.fail
                     if indexPath == Key.shared.selectedTypeIdx {
@@ -826,7 +828,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
                                                           "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
             //FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
-            FaeSearch.shared.search { (status: Int, message: Any?) in
+            FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 != 2 || message == nil {
                     // 给CategoryState增加fail
                     if indexPath == Key.shared.selectedTypeIdx {

@@ -220,7 +220,8 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
         let faeUser = FaeUser()
         faeUser.whereKey("user_name", value: searchText)
         indicatorView.startAnimating()
-        faeUser.checkUserExistence() {(status: Int, message: Any?) in
+        faeUser.checkUserExistence() { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 let json = JSON(message!)
                 if !json["existence"].boolValue {
@@ -230,7 +231,8 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
                     return
                 }
                 let userId = json["user_id"].intValue
-                faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                faeUser.getUserCard(String(userId)) { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         let json = JSON(message!)
                         let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)

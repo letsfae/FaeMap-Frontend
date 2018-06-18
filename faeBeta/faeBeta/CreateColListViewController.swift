@@ -194,7 +194,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
-            faeCollection.createCollection {(status: Int, message: Any?) in
+            faeCollection.createCollection { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     let colId = JSON(message!)["collection_id"].intValue
                     
@@ -219,7 +220,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
-            faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
+            faeCollection.editOneCollection(String(colId)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     // store to realm
                     let realm = try! Realm()

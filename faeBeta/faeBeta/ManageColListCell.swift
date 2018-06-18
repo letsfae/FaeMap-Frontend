@@ -106,11 +106,12 @@ class ColListPlaceCell: UITableViewCell {
             setValueForPlace(placeInfo)
             return
         }
-        FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { (status, message) in
+        FaeMap.shared.getPin(type: "place", pinId: String(placeId)) { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let placeInfo = PlacePin(json: resultJson)
+            guard let `self` = self else { return }
             self.selectedPlace = placeInfo
             faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: placeId as AnyObject)
             self.setValueForPlace(placeInfo)
@@ -249,12 +250,13 @@ class ColListLocationCell: UITableViewCell {
             self.getAddressForLocation(locId, location)
             return
         }
-        FaeMap.shared.getPin(type: "location", pinId: String(locId)) { (status, message) in
+        FaeMap.shared.getPin(type: "location", pinId: String(locId)) { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
             let locationInfo = LocationPin(json: resultJson)
             faeLocationCache.setObject(locationInfo as AnyObject, forKey: locId as AnyObject)
+            guard let `self` = self else { return }
             self.setValueForLocation(locationInfo)
             self.getAddressForLocation(locId, locationInfo.location)
         }
@@ -284,7 +286,7 @@ class ColListLocationCell: UITableViewCell {
             })
             return
         }
-        General.shared.getAddress(location: location, original: true) { (original) in
+        General.shared.getAddress(location: location, original: true) { [weak self] (original) in
             guard let first = original as? CLPlacemark else { return }
             
             var name = ""
@@ -335,6 +337,7 @@ class ColListLocationCell: UITableViewCell {
             }
             
             DispatchQueue.main.async {
+                guard let `self` = self else { return }
                 self.lblItemName.text = address_1
                 self.lblItemAddr_1.text = address_2
                 self.lblItemAddr_2.text = address_3

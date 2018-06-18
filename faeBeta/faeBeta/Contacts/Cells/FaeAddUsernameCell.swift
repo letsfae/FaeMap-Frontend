@@ -225,8 +225,8 @@ class FaeAddUsernameCell: UITableViewCell {
     }
     
     func setValueForCell(user: UserNameCard) {
-        General.shared.avatar(userid: user.userId, completion: { (avatarImage) in
-            self.imgAvatar.image = avatarImage
+        General.shared.avatar(userid: user.userId, completion: { [weak self] (avatarImage) in
+            self?.imgAvatar.image = avatarImage
         })
         lblUserName.text = user.displayName
         lblUserSaying.text = user.userName

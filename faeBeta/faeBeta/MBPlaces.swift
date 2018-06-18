@@ -136,7 +136,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
                                                       "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-        FaeSearch.shared.search { (status: Int, message: Any?) in
+        FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 return
             }
@@ -144,6 +144,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
             guard let placeInfoJsonArray = placeInfoJSON.array else {
                 return
             }
+            guard let `self` = self else { return }
             self.mbPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
             
             self.lblSearchContent.text = content
