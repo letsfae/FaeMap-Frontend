@@ -31,10 +31,20 @@ class FaeInputBar: UIView {
     }()
     
     /// The separator line at the top
-    private let separatorLineTop = SeparatorLine()
+    private let separatorLineTop: SeparatorLine = {
+        let line = SeparatorLine()
+        line.height = 1.0
+        line.backgroundColor = UIColor._200199204()
+        return line
+    }()
     
     /// The separator line between InputTextView and bottomStackView
-    private let separatorLineMiddle = SeparatorLine()
+    private let separatorLineMiddle: SeparatorLine = {
+        let line = SeparatorLine()
+        line.height = 1.5
+        line.backgroundColor = UIColor._200199204()
+        return line
+    }()
     
     /// The topStackView holds the place/location pin details
     private let topStackView: ChatInputStackView = {
@@ -49,7 +59,11 @@ class FaeInputBar: UIView {
     }
     
     /// The rightSrackView holds the FaeHeartButton
-    private let rightStackView = ChatInputStackView(axis: .horizontal, spacing: 0)
+    private let rightStackView: ChatInputStackView = {
+        let stackView = ChatInputStackView(axis: .vertical, spacing: 0)
+        stackView.distribution = .equalSpacing
+        return stackView
+    }()
     
     /// The bottonStackView holds InputBarButton,
     /// including keyboard, sticker, photo, camera, recorder, map, send
@@ -82,7 +96,7 @@ class FaeInputBar: UIView {
     }
     
     /// The anchor constants used by the InputTextView
-    private var textViewPadding: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 8) {
+    private var textViewPadding: UIEdgeInsets = UIEdgeInsets(top: 3, left: 0, bottom: 12, right: 8) {
         didSet {
             updateTextViewPadding()
         }
@@ -117,7 +131,7 @@ class FaeInputBar: UIView {
     }
     
     /// The fixed widthAnchor constant of the rightStackView
-    private(set) var rightStackViewWidthConstant: CGFloat = 52 {
+    private(set) var rightStackViewWidthConstant: CGFloat = 31 {
         didSet {
             rightStackViewLayoutSet?.width?.constant = rightStackViewWidthConstant
         }
@@ -287,11 +301,11 @@ class FaeInputBar: UIView {
         rightStackViewLayoutSet = NSLayoutConstraintSet(
             top: rightStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
             bottom: rightStackView.bottomAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: 0),
-            right: rightStackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 0),
+            right: rightStackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             width: rightStackView.widthAnchor.constraint(equalToConstant: rightStackViewWidthConstant)
         )
         
-        separatorLineMiddle.addConstraints(inputTextView.bottomAnchor, left: leftAnchor, right: rightAnchor, topConstant: 10, leftConstant: 10, rightConstant: 10)
+        separatorLineMiddle.addConstraints(inputTextView.bottomAnchor, left: leftAnchor, right: rightAnchor, topConstant: 4, leftConstant: 10, rightConstant: 10)
         
         bottomStackViewLayoutSet = NSLayoutConstraintSet(
             top: bottomStackView.topAnchor.constraint(equalTo: inputTextView.bottomAnchor, constant: textViewPadding.bottom),

@@ -112,7 +112,7 @@ class PlaceDetailCell: UITableViewCell {
             break
         case "hour":
             imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-            let openStatus = closeOrOpen(arrHour[dayIdx])
+            /*let openStatus = closeOrOpen(arrHour[dayIdx])
             var hour = " / " + arrHour[dayIdx][0]
             if arrHour[0].count > 1 {
                 for hourIdx in 1..<arrHour[dayIdx].count {
@@ -120,6 +120,18 @@ class PlaceDetailCell: UITableViewCell {
                         hour += "\n\t\t" + arrHour[dayIdx][hourIdx]
                     } else if openStatus == "Closed" {
                         hour += "\n\t\t   " + arrHour[dayIdx][hourIdx]
+                    }
+                }
+            }*/
+            let openStatus = place.openOrClose
+            let todayHours = place.hoursToday
+            var hour = " / " + todayHours[0]
+            if todayHours.count > 1 {
+                for index in 1..<todayHours.count {
+                    if openStatus == "Open" {
+                        hour += "\n\t\t" + todayHours[index]
+                    } else {
+                        hour += "\n\t\t   " + todayHours[index]
                     }
                 }
             }
