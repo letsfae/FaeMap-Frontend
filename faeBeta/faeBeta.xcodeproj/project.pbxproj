@@ -42,7 +42,7 @@
 		504D36A220D5AB2700A5C829 /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504D36A120D5AB2700A5C829 /* Throttler.swift */; };
 		505367CC1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist in Resources */ = {isa = PBXBuildFile; fileRef = 505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */; };
 		505367CE1FA643050076D18D /* MSVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CD1FA643050076D18D /* MSVTableView.swift */; };
-		505367D01FA643D00076D18D /* MSVAddrAutoCompletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */; };
+		505367D01FA643D00076D18D /* MSVNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505367CF1FA643D00076D18D /* MSVNetwork.swift */; };
 		5057A4DF205FFA1700C6B99B /* PlacesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057A4DE205FFA1700C6B99B /* PlacesDownloader.swift */; };
 		505CAB222073FDF300BA12B3 /* ErrorCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505CAB212073FDF300BA12B3 /* ErrorCode.swift */; };
 		506D1FCD1F2A8237004119EA /* FMPlaceInfoBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */; };
@@ -402,7 +402,7 @@
 		504D36A120D5AB2700A5C829 /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
 		505367CB1FA533080076D18D /* client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "client_903657423337-vnriiu253k2uduinloids10tvkebaash.apps.googleusercontent.com.plist"; sourceTree = "<group>"; };
 		505367CD1FA643050076D18D /* MSVTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVTableView.swift; sourceTree = "<group>"; };
-		505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVAddrAutoCompletion.swift; sourceTree = "<group>"; };
+		505367CF1FA643D00076D18D /* MSVNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVNetwork.swift; sourceTree = "<group>"; };
 		5057A4DE205FFA1700C6B99B /* PlacesDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesDownloader.swift; sourceTree = "<group>"; };
 		505CAB212073FDF300BA12B3 /* ErrorCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCode.swift; sourceTree = "<group>"; };
 		506D1FCC1F2A8237004119EA /* FMPlaceInfoBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceInfoBar.swift; sourceTree = "<group>"; };
@@ -1485,7 +1485,7 @@
 				50902F541F2BB530002553F1 /* MapSearchViewController.swift */,
 				50995E331FA644D20079E820 /* MSVSearchBar.swift */,
 				505367CD1FA643050076D18D /* MSVTableView.swift */,
-				505367CF1FA643D00076D18D /* MSVAddrAutoCompletion.swift */,
+				505367CF1FA643D00076D18D /* MSVNetwork.swift */,
 				50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */,
 				50902F581F2BB72B002553F1 /* LocationListCell.swift */,
 				50902F5A1F2BB736002553F1 /* PlacesListCell.swift */,
@@ -2061,7 +2061,7 @@
 				B064EF051D6E34E200C078F5 /* FAETextField.swift in Sources */,
 				CE59B7EB1E53D5B9007FA078 /* LocationPickerMini.swift in Sources */,
 				DC74CE181DA821B5001BE220 /* JSQMessagesCollectionViewCellCustom.m in Sources */,
-				505367D01FA643D00076D18D /* MSVAddrAutoCompletion.swift in Sources */,
+				505367D01FA643D00076D18D /* MSVNetwork.swift in Sources */,
 				9FAAA4B52091418E008BB358 /* SKActionView.swift in Sources */,
 				B37E5DB91F831040008A6B4B /* SetAboutViewController.swift in Sources */,
 				9FC92AC52015526B00DD3250 /* StickerKeyboardView.swift in Sources */,

@@ -67,6 +67,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var boolFromChat: Bool = false
     var boolNoCategory: Bool = false
     
+    var flagPlaceFetched: Bool = false
+    var flagAddrFetched: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()
@@ -86,6 +89,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         uiviewNoResults.layer.cornerRadius = 2
+        uiviewNoResults.isHidden = true
         view.addSubview(uiviewNoResults)
         
         lblNoResults = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
@@ -190,6 +194,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     private func loadTable() {
         // background shadow view of tblPlacesRes
         uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
+        uiviewSchResBg.isHidden = true
         view.addSubview(uiviewSchResBg)
         addShadow(uiviewSchResBg)
         
@@ -209,6 +214,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         // background shadow view of tblLocationRes
         uiviewSchLocResBg = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: screenHeight - 240 - device_offset_top - device_offset_bot)) // 124 + 20 + 2 * 48
         uiviewSchLocResBg.backgroundColor = .clear
+        uiviewSchLocResBg.isHidden = true
         view.addSubview(uiviewSchLocResBg)
         addShadow(uiviewSchLocResBg)
         
@@ -232,44 +238,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     @objc private func backToMap(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
-    }
-    
-    func getPlaceInfo(content: String = "", source: String = "name") {
-        guard content != "" else {
-            showOrHideViews(searchText: content)
-            return
-        }
-        FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: source)
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "5")
-        FaeSearch.shared.whereKey("radius", value: "10000")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-        FaeSearch.shared.search { (status: Int, message: Any?) in
-            print("places fetching")
-            self.activityStatus(isOn: false)
-            if status / 100 != 2 || message == nil {
-                self.searchedPlaces.removeAll(keepingCapacity: true)
-                self.showOrHideViews(searchText: content)
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfoJsonArray = placeInfoJSON.array else {
-                self.searchedPlaces.removeAll(keepingCapacity: true)
-                self.showOrHideViews(searchText: content)
-                return
-            }
-            self.searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
-            if source == "name" {
-                self.showOrHideViews(searchText: content)
-            } else {
-                self.delegate?.jumpToPlaces?(searchText: content, places: self.searchedPlaces)
-                self.navigationController?.popViewController(animated: false)
-            }
-        }
     }
     
     @objc func searchByCategories(_ sender: UIButton) {
@@ -304,9 +272,17 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     func activityStatus(isOn: Bool) {
         if isOn {
+            guard !activityIndicator.isAnimating else { return }
             activityIndicator.startAnimating()
             lblNoResults.isHidden = true
+            if uiviewSchResBg.isHidden {
+                uiviewNoResults.isHidden = false
+            }
+            if !uiviewPics.isHidden {
+                uiviewPics.isHidden = true
+            }
         } else {
+            guard activityIndicator.isAnimating else { return }
             activityIndicator.stopAnimating()
             lblNoResults.isHidden = false
         }
