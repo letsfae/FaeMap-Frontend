@@ -9,7 +9,7 @@
 import UIKit
 import IVBezierPathRenderer
 
-class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCalculateDelegate {
+class RoutingMapController: BasicMapController, GeneralLocationSearchDelegate, FMRouteCalculateDelegate {
     
     private var btnDistIndicator: FMDistIndicator!
     private var uiviewChooseLocs: FMChooseLocs!
@@ -134,17 +134,17 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     @objc private func handleStartPointTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = false
+        GeneralLocationSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
     @objc private func handleDestinationTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = true
+        GeneralLocationSearchViewController.boolToDestination = true
         routingHandleTap()
     }
     
     private func routingHandleTap() {
-        let chooseLocsVC = BoardsSearchViewController()
+        let chooseLocsVC = GeneralLocationSearchViewController()
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         chooseLocsVC.boolFromRouting = true
@@ -266,7 +266,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         navigationController?.popViewController(animated: false)
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - GeneralLocationSearchDelegate
     func chooseLocationOnMap() {
         uiviewChooseLocs.hide(animated: false)
         modeSelecting = .on
@@ -274,7 +274,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     
     func sendLocationBack(address: RouteAddress) {
         faeMapView.removeAnnotations(addressAnnotations)
-        if BoardsSearchViewController.boolToDestination {
+        if GeneralLocationSearchViewController.boolToDestination {
             destinationAddr = address
             uiviewChooseLocs.lblDestination.text = address.name
             

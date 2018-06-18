@@ -2567,7 +2567,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
 }
 
 // MARK: - Routing
-extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
+extension FaeMapViewController: FMRouteCalculateDelegate, GeneralLocationSearchDelegate {
     
     private func loadDistanceComponents() {
         btnDistIndicator = FMDistIndicator()
@@ -2598,17 +2598,17 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
     }
     
     @objc private func handleStartPointTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = false
+        GeneralLocationSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
     @objc private func handleDestinationTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = true
+        GeneralLocationSearchViewController.boolToDestination = true
         routingHandleTap()
     }
     
     private func routingHandleTap() {
-        let chooseLocsVC = BoardsSearchViewController()
+        let chooseLocsVC = GeneralLocationSearchViewController()
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         chooseLocsVC.boolFromRouting = true
@@ -2620,17 +2620,17 @@ extension FaeMapViewController: FMRouteCalculateDelegate, BoardsSearchDelegate {
         sendLocationBack(address: routeAddress)
     }
     
-    // BoardsSearchDelegate
+    // GeneralLocationSearchDelegate
     func chooseLocationOnMap() {
         uiviewChooseLocs.hide(animated: false)
         mapMode = .selecting
         mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
-    // BoardsSearchDelegate
+    // GeneralLocationSearchDelegate
     func sendLocationBack(address: RouteAddress) {
         faeMapView.removeAnnotations(addressAnnotations)
-        if BoardsSearchViewController.boolToDestination {
+        if GeneralLocationSearchViewController.boolToDestination {
             destinationAddr = address
             uiviewChooseLocs.lblDestination.text = address.name
             if addressAnnotations.count > 0 {

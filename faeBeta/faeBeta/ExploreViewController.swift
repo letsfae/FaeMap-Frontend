@@ -15,7 +15,7 @@ protocol ExploreDelegate: class {
     func jumpToExpPlacesCollection(places: [PlacePin], category: String)
 }
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, EXPCellDelegate {
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, GeneralLocationSearchDelegate, EXPCellDelegate {
     
     // MARK: - Variables
     
@@ -925,7 +925,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         present(vc, animated: true)
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - GeneralLocationSearchDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")
         var array = [String]()

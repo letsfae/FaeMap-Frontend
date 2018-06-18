@@ -16,10 +16,6 @@ import MapKit
     @objc optional func selectLocation(loc: PlacePin)
 }
 
-enum NeedType {
-    case need_place, need_location, need_all
-}
-
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     weak var delegate: MapSearchDelegate?
@@ -27,6 +23,8 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var filteredCategory = [(key: String, value: Int)]()
     var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
     var searchedPlaces = [PlacePin]()
+    var searchedAddresses = [MKLocalSearchCompletion]()
+    var addressCompleter = MKLocalSearchCompleter()
     var faeMapView: MKMapView!
     
     var btnBack: UIButton!
@@ -44,7 +42,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         case place, location
     }
     var schBarType = SearchBarType.place
-    var needType = NeedType.need_place
     
     // uiviews with shadow under table views
     var uiviewSchResBg: UIView!
@@ -77,6 +74,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         loadPlaceBtns()
         loadTable()
         loadNoResultsView()
+        loadAddressCompleter()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -204,6 +202,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         tblPlacesRes.layer.masksToBounds = true
         tblPlacesRes.layer.cornerRadius = 2
         tblPlacesRes.register(PlacesListCell.self, forCellReuseIdentifier: "SearchPlaces")
+        tblPlacesRes.register(PlacesListCell.self, forCellReuseIdentifier: "SearchAddresses")
         tblPlacesRes.register(LocationListCell.self, forCellReuseIdentifier: "MyFixedCell")
         tblPlacesRes.register(CategoryListCell.self, forCellReuseIdentifier: "SearchCategories")
         
@@ -243,7 +242,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "30")
+        FaeSearch.shared.whereKey("size", value: "5")
         FaeSearch.shared.whereKey("radius", value: "10000")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])

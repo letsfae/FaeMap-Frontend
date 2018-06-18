@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 // for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
+extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, MapSearchDelegate {
 
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
@@ -35,6 +35,16 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         uiviewNavBar.addSubview(btnClearSearchRes)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(36.45)]-5-|", options: [], views: btnClearSearchRes)
         uiviewNavBar.addConstraintsWithFormat("V:[v0(36.45)]-5.55-|", options: [], views: btnClearSearchRes)
+    }
+    
+    @objc func searchAllPlaces(_ sender: UIButton) {
+        let searchVC = MapSearchViewController()
+        searchVC.delegate = self
+        searchVC.boolFromChat = false
+        if let text = lblSearchContent.text {
+            searchVC.strSearchedPlace = text
+        }
+        navigationController?.pushViewController(searchVC, animated: false)
     }
     
     func loadPlaceHeader() {
@@ -153,17 +163,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         }
     }
     
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        /*
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
-        searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-         */
-    }
-    
     @objc func searchByCategories(_ sender: UIButton) {
         var content = ""
         switch sender.tag {
@@ -248,7 +247,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     // MapBoardPlaceTabDelegate End
 
-    // BoardsSearchDelegate
+    // GeneralLocationSearchDelegate
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
         LocManager.shared.searchedLoc = location

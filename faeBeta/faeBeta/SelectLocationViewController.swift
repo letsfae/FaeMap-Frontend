@@ -21,7 +21,7 @@ enum SelectLoctionMode {
 class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer, PlaceViewDelegate, MapSearchDelegate {
     
     // MARK: - Variables Declarations
-    weak var delegate: BoardsSearchDelegate?
+    weak var delegate: GeneralLocationSearchDelegate?
     
     // Screen Buttons
     private var uiviewTopBar: UIView!

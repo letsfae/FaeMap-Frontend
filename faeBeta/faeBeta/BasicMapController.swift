@@ -18,7 +18,7 @@ enum MapCenter {
 class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer {
     
     // MARK: - Variables Declarations
-    weak var delegate: BoardsSearchDelegate?
+    weak var delegate: GeneralLocationSearchDelegate?
     
     // Top Bar
     var uiviewTopBar: UIView!
