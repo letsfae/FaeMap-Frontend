@@ -526,7 +526,28 @@ class PlaceView: UIView {
         lblAddr.text = addr
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .clear
-        if placeInfo.hours.count > 0 {
+        let hoursToday = placeInfo.hoursToday
+        let openOrClose = placeInfo.openOrClose
+        if openOrClose == "N/A" {
+            lblHours.text = "N/A"
+        } else {
+            var hours = " "
+            for (index, hour) in hoursToday.enumerated() {
+                if hour == "24 Hours" {
+                    hours += hour
+                    break
+                } else {
+                    if index == hoursToday.count - 1 {
+                        hours += hour
+                    } else {
+                        hours += hour + ", "
+                    }
+                }
+            }
+            lblHours.text = openOrClose + hours
+        }
+        
+        /*if placeInfo.hours.count > 0 {
             arrHour.removeAll()
             for day in arrDay {
                 if placeInfo.hours.index(forKey: day) == nil {
@@ -563,7 +584,7 @@ class PlaceView: UIView {
             }
         } else {
             lblHours.text = nil
-        }
+        }*/
         loadPlaceImage(placeInfo: placeInfo)
 //        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
