@@ -12,9 +12,9 @@ extension MapSearchViewController {
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
-        // search places
         switch schBarType {
         case .place:
+            guard flagPlaceFetched || flagAddrFetched else { return }
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
             let placeCnt = searchedPlaces.count
@@ -39,8 +39,16 @@ extension MapSearchViewController {
             // for uiviewNoResults
             if searchText != "" && (placeCnt + catCnt + addrCnt) == 0 {
                 uiviewNoResults.isHidden = false
+                uiviewSchResBg.isHidden = true
+                uiviewSchLocResBg.isHidden = true
+            } else if searchText == "" {
+                uiviewPics.isHidden = false
+                uiviewNoResults.isHidden = true
+                uiviewSchResBg.isHidden = true
+                uiviewSchLocResBg.isHidden = true
             } else {
                 uiviewNoResults.isHidden = true
+                uiviewPics.isHidden = true
             }
             tblPlacesRes.isScrollEnabled = true
         case .location:
@@ -62,10 +70,12 @@ extension MapSearchViewController {
             tblPlacesRes.isScrollEnabled = false
             tblLocationRes.reloadData()
         }
+        
         tblPlacesRes.reloadData()
         if boolFromChat {
             uiviewPics.isHidden = true || boolNoCategory
         }
+        activityStatus(isOn: false)
     }
     
     func filterPlaceCat(searchText: String, scope: String = "All") {
@@ -143,26 +153,35 @@ extension MapSearchViewController {
         switch searchBar {
         case schPlaceBar:
             schBarType = .place
-            filterPlaceCat(searchText: searchText)
-            showOrHideViews(searchText: searchText)
-            activityStatus(isOn: true)
-            placeThrottler.throttle {
-                DispatchQueue.main.async {
-                    self.getPlaceInfo(content: searchText.lowercased())
-                    self.addressCompleter.queryFragment = searchText
-                }
-            }
             if searchText == "" {
+                placeThrottler.cancelCurrentJob()
+                filteredCategory.removeAll(keepingCapacity: true)
                 searchedPlaces.removeAll(keepingCapacity: true)
+                searchedAddresses.removeAll(keepingCapacity: true)
                 tblPlacesRes.reloadData()
+                showOrHideViews(searchText: "")
+                flagPlaceFetched = false
+                flagAddrFetched = false
+            } else {
+                filterPlaceCat(searchText: searchText)
+                activityStatus(isOn: true)
+                placeThrottler.throttle {
+                    DispatchQueue.main.async {
+                        self.getPlaceInfo(content: searchText.lowercased())
+                        self.getAddresses(content: searchText)
+                    }
+                }
             }
         case schLocationBar:
             schBarType = .location
             if searchText == "" {
+                locThrottler.cancelCurrentJob()
+                geobytesCityData.removeAll(keepingCapacity: true)
                 showOrHideViews(searchText: searchText)
-            }
-            locThrottler.throttle {
-                self.placeAutocomplete(searchText)
+            } else {
+                locThrottler.throttle {
+                    self.placeAutocomplete(searchText)
+                }
             }
         default:
             break

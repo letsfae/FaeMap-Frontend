@@ -17,45 +17,40 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // search location
+        let section = indexPath.section
+        let isLast = indexPath.row == tableView.numberOfRows(inSection: section) - 1
         switch schBarType {
         case .place:
             guard tableView == tblPlacesRes else {
                 return UITableViewCell()
             }
-            if indexPath.section == 0 {
+            if section == 0 {
                 // search category
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchCategories", for: indexPath) as! CategoryListCell
                 if filteredCategory.isEmpty {
                     return cell
                 }
-                cell.setValueForCategory(filteredCategory[indexPath.row])
-                cell.bottomLine.isHidden = false
-                if indexPath.row == tableView.numberOfRows(inSection: 0) - 1 && searchedPlaces.count == 0 {
-                    cell.bottomLine.isHidden = true
-                }
+                cell.configureCell(filteredCategory[indexPath.row], last: isLast && searchedPlaces.count == 0)
                 return cell
             } else
-            if indexPath.section == 1 {
+            if section == 1 {
                 // search places
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchPlaces", for: indexPath) as! PlacesListCell
-                let isLast = indexPath.row == tableView.numberOfRows(inSection: 1) - 1
-                cell.configureCell(searchedPlaces[indexPath.row], last: isLast)
+                cell.configureCell(searchedPlaces[indexPath.row], last: isLast && searchedAddresses.count == 0)
                 return cell
             } else {
+                // search addresses
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchAddresses", for: indexPath) as! PlacesListCell
-                let isLast = indexPath.row == tableView.numberOfRows(inSection: 2) - 1
                 cell.configureCell(searchedAddresses[indexPath.row], last: isLast)
                 return cell
             }
         case .location:
             if tableView == tblLocationRes {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "SearchLocation", for: indexPath) as! LocationListCell
-                let isLast = indexPath.row == tblLocationRes.numberOfRows(inSection: 0) - 1
                 cell.configureCell(geobytesCityData[indexPath.row], last: isLast)
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "MyFixedCell", for: indexPath) as! LocationListCell
-                let isLast = indexPath.row == fixedLocOptions.count - 1
                 cell.configureCell(fixedLocOptions[indexPath.row], last: isLast)
                 return cell
             }
@@ -81,12 +76,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 return filteredCategory.count >= 2 ? 2 : filteredCategory.count
             case 1:
                 return searchedPlaces.count
-            case 2:
-                return searchedAddresses.count
             default:
-                return 0
+                return searchedAddresses.count
             }
-//            return section == 1 ? searchedPlaces.count : (filteredCategory.count >= 2 ? 2 : filteredCategory.count)
         case .location:
             return tableView == tblLocationRes ? geobytesCityData.count : fixedLocOptions.count
         }
@@ -104,17 +96,19 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 delegate?.selectPlace?(place: selectedPlace)
                 navigationController?.popViewController(animated: false)
             } else {
-                if indexPath.section == 1 {
-                    // search places
-                    
+                switch indexPath.section {
+                case 0:
+                    let selectedCat = filteredCategory[indexPath.row].key
+                    getPlaceInfo(content: selectedCat, source: "categories")
+                case 1:
                     schPlaceBar.txtSchField.resignFirstResponder()
                     let vc = PlaceDetailViewController()
                     vc.place = selectedPlace
-                    navigationController?.pushViewController(vc, animated: false)
-                } else {
-                    // search categories
-                    let selectedCat = filteredCategory[indexPath.row].key
-                    getPlaceInfo(content: selectedCat, source: "categories")
+                    navigationController?.pushViewController(vc, animated: true)
+                default:
+                    let vc = LocDetailViewController()
+                    navigationController?.pushViewController(vc, animated: true)
+                    break
                 }
             }
         case .location:

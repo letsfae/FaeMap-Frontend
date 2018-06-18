@@ -30,7 +30,11 @@ class Throttler {
         }
         let delay = Date.second(from: previousRun) > maxInterval ? 0.5 : maxInterval
         queue.asyncAfter(deadline: .now() + Double(delay), execute: job)
-        joshprint(throttlerName + ": \(Date.second(from: previousRun))")
+        // joshprint(throttlerName + ": \(Date.second(from: previousRun))")
+    }
+    
+    func cancelCurrentJob() {
+        job.cancel()
     }
 }
 

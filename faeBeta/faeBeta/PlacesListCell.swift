@@ -94,7 +94,7 @@ class CategoryListCell: UITableViewCell {
     
     private var imgPic: UIImageView!
     private var lblCatName: UILabel!
-    var bottomLine: UIView!
+    private var bottomLine: UIView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -111,6 +111,12 @@ class CategoryListCell: UITableViewCell {
     public func setValueForCategory(_ cat: (key: String, value: Int)) {
         imgPic.image = UIImage(named: "place_result_\(cat.value)")
         lblCatName.text = cat.key
+    }
+    
+    public func configureCell(_ cat: (key: String, value: Int), last: Bool) {
+        imgPic.image = UIImage(named: "place_result_\(cat.value)")
+        lblCatName.text = cat.key
+        bottomLine.isHidden = last
     }
     
     private  func loadCellContent() {
