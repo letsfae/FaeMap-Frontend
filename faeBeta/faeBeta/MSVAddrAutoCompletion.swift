@@ -9,7 +9,25 @@
 import UIKit
 import SwiftyJSON
 
-extension MapSearchViewController {
+extension MapSearchViewController: MKLocalSearchCompleterDelegate {
+    
+    func loadAddressCompleter() {
+        addressCompleter.delegate = self
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchedAddresses = completer.results
+        self.tblLocationRes.reloadData()
+        if self.searchedAddresses.count > 0 {
+            showOrHideViews(searchText: completer.queryFragment)
+        }
+    }
+    
+    // MKLocalSearchCompleterDelegate
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        // handle error
+    }
     
     // GMSLookUpPlaceForCoordinate
     func lookUpForCoordinate() {

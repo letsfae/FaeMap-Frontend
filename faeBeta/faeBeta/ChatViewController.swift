@@ -269,7 +269,7 @@ extension ChatViewController {
 }
 
 // MARK: - FaeInputBarDelegate & InputView related delegates
-extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, BoardsSearchDelegate, MapSearchDelegate {
+extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, GeneralLocationSearchDelegate, MapSearchDelegate {
     // MARK: FaeInputBarDelegate
     func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?) {
         if let pinView = pinView {
@@ -359,7 +359,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         }
     }
     
-    // MARK: BoardsSearchDelegate
+    // MARK: GeneralLocationSearchDelegate
     func sendLocationBack(address: RouteAddress) {
         let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {

@@ -9,7 +9,7 @@ import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - GeneralLocationSearchDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")
         var array = [String]()

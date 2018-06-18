@@ -14,6 +14,7 @@ class PlacesListCell: UITableViewCell {
     private var lblPlaceName: UILabel!
     private var lblAddress: UILabel!
     private var bottomLine: UIView!
+    private var identifier: String = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,15 +22,28 @@ class PlacesListCell: UITableViewCell {
         layoutMargins = UIEdgeInsets.zero
         selectionStyle = .none
         loadRecommendedCellContent()
+        if reuseIdentifier == "SearchAddresses" {
+            imgPic.frame = CGRect(x: 18, y: 16.5, width: 36, height: 39)
+            imgPic.image = #imageLiteral(resourceName: "searched_address")
+            imgPic.backgroundColor = .white
+            imgPic.contentMode = .scaleAspectFit
+            identifier = "SearchAddresses"
+        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imgPic.image = nil
+        imgPic.image = identifier == "SearchAddresses" ? #imageLiteral(resourceName: "searched_address") : nil
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    public func configureCell(_ addressInfo: MKLocalSearchCompletion, last: Bool) {
+        lblPlaceName.text = addressInfo.title
+        lblAddress.text = addressInfo.subtitle
+        bottomLine.isHidden = last
     }
     
     public func configureCell(_ placeInfo: PlacePin, last: Bool) {

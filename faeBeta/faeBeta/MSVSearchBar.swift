@@ -17,12 +17,14 @@ extension MapSearchViewController {
         case .place:
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
-            if searchText != "" && (searchedPlaces.count != 0 || filteredCategory.count != 0) {
+            let placeCnt = searchedPlaces.count
+            let catCnt = filteredCategory.count >= 2 ? 2 : filteredCategory.count
+            let addrCnt = searchedAddresses.count
+            if searchText != "" && (placeCnt + catCnt + addrCnt) > 0 {
                 uiviewPics.isHidden = true || boolNoCategory
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
-                let catCnt = filteredCategory.count >= 2 ? 2 : filteredCategory.count
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (searchedPlaces.count + catCnt)))
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (placeCnt + catCnt + addrCnt)))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
                 uiviewPics.isHidden = false || boolNoCategory
@@ -35,7 +37,7 @@ extension MapSearchViewController {
             }
             
             // for uiviewNoResults
-            if searchText != "" && searchedPlaces.count == 0 && filteredCategory.count == 0 {
+            if searchText != "" && (placeCnt + catCnt + addrCnt) == 0 {
                 uiviewNoResults.isHidden = false
             } else {
                 uiviewNoResults.isHidden = true
@@ -98,10 +100,17 @@ extension MapSearchViewController {
             } else {
                 schPlaceBar.btnClose.isHidden = false
                 if let text = searchBar.txtSchField.text {
-                    showOrHideViews(searchText: text)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.filterPlaceCat(searchText: text)  // crash when entering from map
-                        self.getPlaceInfo(content: text)
+                    filterPlaceCat(searchText: text.lowercased())
+                    showOrHideViews(searchText: text.lowercased())
+                    activityStatus(isOn: true)
+                    placeThrottler.throttle {
+                        DispatchQueue.main.async {
+                            if text.lowercased() == "all places" {
+                                
+                            } else {
+                                self.getPlaceInfo(content: text.lowercased())
+                            }
+                        }
                     }
                 } else {
                     filterPlaceCat(searchText: "")
@@ -140,6 +149,7 @@ extension MapSearchViewController {
             placeThrottler.throttle {
                 DispatchQueue.main.async {
                     self.getPlaceInfo(content: searchText.lowercased())
+                    self.addressCompleter.queryFragment = searchText
                 }
             }
             if searchText == "" {

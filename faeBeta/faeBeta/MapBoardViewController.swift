@@ -21,7 +21,7 @@ enum PlaceTableMode: Int {
     case search = 1
 }
 
-class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
+class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, GeneralLocationSearchDelegate {
     
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
