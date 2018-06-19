@@ -11,11 +11,12 @@ import MessageUI
 import Social
 
 class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
-  
+    // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var tblSpLove: UITableView!
     var arrStr: [String: String] = ["00": "Invite Friends!", "01": "From Contacts", "02": "From Facebook", "10": "Share Fae Map!", "11": "Send Message", "12": "Send Email", "13": "Share on Facebook", "14": "Share on Twitter", "15": "Other Options"]
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -24,6 +25,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
         loadTableView()
     }
     
+    // MARK: - Set up
     func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
@@ -45,11 +47,9 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
         tblSpLove.rowHeight = UITableViewAutomaticDimension
     }
     
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 3
-        }
-        return 6
+        return section == 0 ? 3 : 6
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -99,6 +99,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             switch indexPath.row {

@@ -45,6 +45,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
         loadAlertDeactive()
     }
     
+    // MARK: - Set up
     private func loadContent() {
         btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
@@ -164,7 +165,7 @@ class SetDeactiveViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc private func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     @objc private func DeactiveAccount(_ sender: UIButton) {

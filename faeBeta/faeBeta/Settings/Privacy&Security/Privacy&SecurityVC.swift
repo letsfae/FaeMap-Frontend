@@ -47,6 +47,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         loaduiviewAlert()
     }
     
+    // MARK: - Set up
     private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
@@ -315,7 +316,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 guard status / 100 == 2 else { return }
             }
         } else if section == 2 {
-            FaeContact().getBlockList({ (status, message) in
+            FaeContact().getBlockList({ [unowned self] (status, message) in
                 felixprint(status)
                 let json = JSON(message!)
                 if json.count != 0 {
@@ -343,8 +344,4 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         }
     }
-    
- 
-    
-
 }

@@ -25,6 +25,7 @@ class SetMapsViewController: UIViewController, UITableViewDataSource {
         loadTableView()
     }
     
+    // MARK: - Set up
     private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         uiviewNavBar.lblTitle.text = "Maps & Display"

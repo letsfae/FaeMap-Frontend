@@ -13,7 +13,7 @@ protocol SetNameBirthGenderDelegate: class {
     func updateInfo(target: String?)
 }
 
-class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
+class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegate {
     // MARK: - Properties
     private var lblTitle: UILabel!
     private var btnSave: UIButton!
@@ -74,6 +74,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
         createActivityIndicator()
     }
     
+    // MARK: - Set up
     private func loadNavBar() {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
@@ -258,12 +259,12 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
             lName = textLName.text
             keyValue["first_name"] = fName!
             keyValue["last_name"] = lName!
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
                 if status / 100 == 2 {
                     print("Successfully update name")
                     Key.shared.userFirstname = self.fName!
                     Key.shared.userLastname = self.lName!
-                    self.delegate?.updateInfo(target: "name")
+                    delegate?.updateInfo(target: "name")
                     self.navigationController?.popViewController(animated: true)
                 } else { // TODO: error code undecided
                     print("Fail to update name")
@@ -277,11 +278,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let dateString = dateFormatter.string(from: date!)
             keyValue["birthday"] = dateString
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
                 if status / 100 == 2 {
                     print("Successfully update birthday")
                     Key.shared.userBirthday = dateString
-                    self.delegate?.updateInfo(target: "birth")
+                    delegate?.updateInfo(target: "birth")
                     self.navigationController?.popViewController(animated: true)
                 } else { // TODO: error code undecided
                     print("Fail to update birthday")
@@ -290,11 +291,11 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
             })
         case .gender:
             keyValue["gender"] = gender!
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { (status: Int, message: Any?) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
                 if status / 100 == 2 {
                     print("Successfully update gender")
                     Key.shared.gender = self.gender!
-                    self.delegate?.updateInfo(target: "gender")
+                    delegate?.updateInfo(target: "gender")
                     self.navigationController?.popViewController(animated: true)
                 } else { // TODO: error code undecided
                     print("Fail to update gender")
@@ -303,7 +304,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
             })
         case .password:
             faeUser.whereKey("password", value: textPswd.text!)
-            faeUser.verifyPassword({(status: Int, message: Any?) in
+            faeUser.verifyPassword({ [unowned self] (status, message) in
                 if status / 100 == 2 {
                     let vc = SignInSupportNewPassViewController()
                     vc.enterMode = .oldPswd
@@ -318,7 +319,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
             })
         case .newEmail:
             faeUser.whereKey("email", value: textNewEmail.text!)
-            faeUser.checkEmailExistence {(status: Int, message: Any?) in
+            faeUser.checkEmailExistence { [unowned self] (status, message) in
                 if status / 100 == 2 {
                     let json = JSON(message!)
                     if json == JSON.null {
@@ -476,7 +477,7 @@ class SetNameViewController: UIViewController, FAENumberKeyboardDelegate {
 }
 
 // MARK: - Load choose reset password page
-extension SetNameViewController {
+extension SetUpdateAccountViewController {
     fileprivate func loadResetPassword() {
         uiviewGrayBg = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         view.addSubview(uiviewGrayBg)

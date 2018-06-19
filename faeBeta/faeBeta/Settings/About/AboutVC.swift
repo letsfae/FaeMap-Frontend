@@ -37,7 +37,7 @@ class SetAboutViewController: UIViewController, UITableViewDelegate, UITableView
     
     // MARK: - Button action
     @objc private func actionGoBack(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
     
     // MARK: - UITableViewDataSource
