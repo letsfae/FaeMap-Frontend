@@ -11,15 +11,16 @@ import RealmSwift
 import SwiftyJSON
 
 class SetBlockListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, FaeSearchBarTestDelegate {
+    // MARK: - Properties
+    private var uiviewNavBar: FaeNavBar!
+    private var uiviewSearchBar: UIView!
+    private var schbarBlocked: FaeSearchBarTest!
+    private var tblBlockList: UITableView!
     
-    var uiviewNavBar: FaeNavBar!
-    var uiviewSearchBar: UIView!
-    var schbarBlocked: FaeSearchBarTest!
-    var tblBlockList: UITableView!
+    private var arrRealmBlocked: Results<RealmUser>!
+    private var arrFiltered: [RealmUser] = []
     
-    var arrRealmBlocked: Results<RealmUser>!
-    var arrFiltered: [RealmUser] = []
-    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -30,7 +31,8 @@ class SetBlockListViewController: UIViewController, UITableViewDataSource, UITab
         super.didReceiveMemoryWarning()
     }
     
-    func setupUI() {
+    // MARK: - Set up
+    private func setupUI() {
         view.backgroundColor = .white
         
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
@@ -64,16 +66,17 @@ class SetBlockListViewController: UIViewController, UITableViewDataSource, UITab
         tblBlockList.register(FaeContactsCell.self, forCellReuseIdentifier: "FaeBlockedCell")
     }
     
-    @objc func actionBack() {
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func loadBlockedList() {
+    private func loadBlockedList() {
         let realm = try! Realm()
         arrRealmBlocked = realm.objects(RealmUser.self).filter("login_user_id == %@ AND relation == %@", "\(Key.shared.user_id)", BLOCKED)
     }
     
-    // MARK: FaeSearchBarTestDelegate
+    // MARK: - Button action
+    @objc private func actionBack() {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    // MARK: - FaeSearchBarTestDelegate
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest) {
         schbarBlocked.txtSchField.becomeFirstResponder()
     }
@@ -102,7 +105,7 @@ class SetBlockListViewController: UIViewController, UITableViewDataSource, UITab
         schbarBlocked.txtSchField.resignFirstResponder()
     }
     
-    // MARK: UITableViewDataSource
+    // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         /*if schbarBlocked.txtSchField.text != "" {
             return arrFiltered.count
@@ -148,7 +151,7 @@ class SetBlockListViewController: UIViewController, UITableViewDataSource, UITab
         return cell
     }
     
-    // MARK: UITableViewDelegate
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 74
     }

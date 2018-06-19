@@ -48,6 +48,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         loadContent()
     }
     
+    // MARK: - Set up
     private func loadNavBar() {
         let btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)
@@ -68,7 +69,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         btnUpdate.layer.masksToBounds = true
         btnUpdate.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 20)
         btnUpdate.backgroundColor = UIColor._2499090()
-        btnUpdate.addTarget(self, action: #selector(self.actionUpdate(_:)), for: .touchUpInside)
+        btnUpdate.addTarget(self, action: #selector(actionUpdate(_:)), for: .touchUpInside)
         view.addSubview(btnUpdate)
         
         switch enterMode {
@@ -225,10 +226,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         if enterMode == .email {
             delegate?.updateEmail()
         } else if enterMode == .phone {
-            faeUser.getAccountBasicInfo{ (statusCode: Int, result: Any?) in
-                if(statusCode / 100 == 2) {
+            faeUser.getAccountBasicInfo{  [weak delegate = self.delegate!] (statusCode, result) in
+                if statusCode / 100 == 2 {
                     print("Successfully get account info \(statusCode) \(result!)")
-                    self.delegate?.updatePhone()
+                    delegate?.updatePhone()
                 } else {
                     print("Fail to get account info \(statusCode) \(result!)")
                 }
@@ -241,7 +242,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     @objc private func actionUpdate(_ sender: UIButton) {
         switch enterMode {
         case .email:
-            let vc = SetNameViewController()
+            let vc = SetUpdateAccountViewController()
             vc.enterMode = .newEmail
             navigationController?.pushViewController(vc, animated: true)
         case .usrname:
@@ -270,8 +271,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         vc.strVerified = strEmail!
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
-        faeUser.updateEmail{ (statusCode, result) in
-            if(statusCode / 100 == 2 ) {
+        faeUser.updateEmail{ [unowned self] (statusCode, result) in
+            if statusCode / 100 == 2 {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
             else {

@@ -22,6 +22,7 @@ class SetFaeInc: UIViewController {
         loadContent()
     }
     
+    // MARK: - Set up
     private func loadContent() {
         btnBack = UIButton(frame: CGRect(x: 0, y: 21 + device_offset_top, width: 48, height: 48))
         view.addSubview(btnBack)

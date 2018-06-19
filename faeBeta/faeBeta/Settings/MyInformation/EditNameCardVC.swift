@@ -43,6 +43,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         uiviewNameCard.userId = Key.shared.user_id // refresh user namecard
     }
     
+    // MARK: - Set up
     private func loadContent() {
         faeNavBar = FaeNavBar()
         view.addSubview(faeNavBar)
@@ -56,6 +57,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
         uiviewNameCard.frame.origin.y = 65 + 11 + device_offset_top * screenHeightFactor
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.userId = Key.shared.user_id
+        uiviewNameCard.btnOptions.removeFromSuperview()
         view.addSubview(uiviewNameCard)
         
         uiviewInterval = UIView(frame: CGRect(x: 0, y: 390, w: 414, h: 5 / screenHeightFactor))
@@ -85,7 +87,7 @@ class SetInfoNamecard: UIViewController, UINavigationControllerDelegate, UITable
     private func updateInfo() {
         strDisplayName = Key.shared.nickname
         strShortIntro = Key.shared.introduction
-        getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
+        getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { [unowned self] status, result in
             guard status / 100 == 2 else { return }
             let rsltJSON = JSON(result!)
             self.strDisplayName = rsltJSON["nick_name"].stringValue
