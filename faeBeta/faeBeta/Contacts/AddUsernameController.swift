@@ -26,19 +26,19 @@ struct UserNameCard {
 class AddUsernameController: UIViewController {
     
     // MARK: - Properties
-    var uiviewNavBar: FaeNavBar!
-    var uiviewSchbar: UIView!
-    var schbarUsernames: FaeSearchBarTest!
-    var tblUsernames: UITableView!
-    var lblMyUsername: UILabel!
-    var lblMyUsernameField: UILabel!
-    var lblMyScreenname: UILabel!
-    var lblMyScreennameField: UILabel!
-    var imgGhost: UIImageView!
-    var boolSearched: Bool = false
-    var indicatorView: UIActivityIndicatorView!
+    private var uiviewNavBar: FaeNavBar!
+    private var uiviewSchbar: UIView!
+    private var schbarUsernames: FaeSearchBarTest!
+    private var tblUsernames: UITableView!
+    private var lblMyUsername: UILabel!
+    private var lblMyUsernameField: UILabel!
+    private var lblMyScreenname: UILabel!
+    private var lblMyScreennameField: UILabel!
+    private var imgGhost: UIImageView!
+    private var boolSearched: Bool = false
+    private var indicatorView: UIActivityIndicatorView!
     
-    var filtered = [UserNameCard]()
+    private var filtered = [UserNameCard]()
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -50,7 +50,7 @@ class AddUsernameController: UIViewController {
         schbarUsernames.txtSchField.becomeFirstResponder()
     }
     
-    func loadNavBar() {
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
@@ -59,7 +59,7 @@ class AddUsernameController: UIViewController {
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
     }
     
-    func loadSearchTable() {
+    private func loadSearchTable() {
         let uiviewSchbar = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
         schbarUsernames = FaeSearchBarTest(frame: CGRect(x: 5, y: 0, width: screenWidth, height: 48))
         schbarUsernames.txtSchField.placeholder = "Search Username"
@@ -129,10 +129,10 @@ class AddUsernameController: UIViewController {
         imgGhost.contentMode = .scaleAspectFit
         imgGhost.image = #imageLiteral(resourceName: "ghostBubble")
         view.addSubview(imgGhost)
-        imgGhost.isHidden = true // default hidden
+        imgGhost.isHidden = true /// default hidden
     }
     
-    func createActivityIndicator() {
+    private func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
@@ -142,11 +142,11 @@ class AddUsernameController: UIViewController {
     }
     
     // MARK: - Button action & gesture action
-    @objc func actionGoBack(_ sender: UIButton) {
+    @objc private func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc private func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarUsernames.txtSchField.resignFirstResponder()
     }
 }
@@ -207,7 +207,7 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
         filter(searchText: "")
     }
     
-    // search on the input text
+    /// search on the input text
     func filter(searchText: String) {
         boolSearched = true
         filtered.removeAll()
@@ -220,7 +220,7 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
         let faeUser = FaeUser()
         faeUser.whereKey("user_name", value: searchText)
         indicatorView.startAnimating()
-        faeUser.checkUserExistence() {(status: Int, message: Any?) in
+        faeUser.checkUserExistence() { [unowned self] (status, message) in
             if status / 100 == 2 {
                 let json = JSON(message!)
                 if !json["existence"].boolValue {
@@ -230,7 +230,7 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
                     return
                 }
                 let userId = json["user_id"].intValue
-                faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                faeUser.getUserCard(String(userId)) { [unowned self] (status, message) in
                     if status / 100 == 2 {
                         let json = JSON(message!)
                         let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)

@@ -14,6 +14,8 @@ protocol ContactsInviteDelegate: class {
 }
 
 class FaeInviteCell: UITableViewCell {
+    
+    // MARK: - Properties
     var lblName: UILabel!
     var lblTel: UILabel!
     var btnInvite: UIButton!
@@ -21,6 +23,7 @@ class FaeInviteCell: UITableViewCell {
     var indexPath: IndexPath!
     weak var delegate: ContactsInviteDelegate!
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -33,7 +36,8 @@ class FaeInviteCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    func loadInviteContent() {
+    // MARK: - Set up
+    private func loadInviteContent() {
         lblName = UILabel()
         lblName.textAlignment = .left
         lblName.textColor = UIColor._898989()
@@ -53,7 +57,7 @@ class FaeInviteCell: UITableViewCell {
         addSubview(btnInvite)
         btnInvite.setImage(#imageLiteral(resourceName: "btnInvite"), for: .normal)
         btnInvite.setImage(#imageLiteral(resourceName: "btnInvited"), for: .selected)
-        btnInvite.addTarget(self, action: #selector(self.changeInviteStatus(_:)), for: .touchUpInside)
+        btnInvite.addTarget(self, action: #selector(changeInviteStatus(_:)), for: .touchUpInside)
         addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnInvite)
         addConstraintsWithFormat("H:[v0(86)]-17-|", options: [], views: btnInvite)
         
@@ -64,7 +68,8 @@ class FaeInviteCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
-    @objc func changeInviteStatus(_ sender: UIButton) {
+    // MARK: - Button action
+    @objc private func changeInviteStatus(_ sender: UIButton) {
         delegate?.inviteToFaevorite(indexPath: indexPath)
     }
 }

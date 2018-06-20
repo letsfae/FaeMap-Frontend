@@ -26,17 +26,9 @@ class FaeScrollBar: UIView {
     weak var delegate: FaeScrollBarDelegate?
     private let floatBtnHeight: CGFloat = 30.0
     private var floatFingerToBtnTop: CGFloat = 0.0
-    private var floatBtnRange: CGFloat {
-        get {
-            return frame.height - floatBtnHeight
-        }
-    }
+    private var floatBtnRange: CGFloat { return frame.height - floatBtnHeight }
     private var floatScrollRange: CGFloat = 0.0
-    private var floatBtnYPositon: CGFloat {
-        get {
-            return btnIndicator.frame.origin.y
-        }
-    }
+    private var floatBtnYPositon: CGFloat { return btnIndicator.frame.origin.y }
     
     // MARK: init and setup
     init(frame: CGRect, scrollRange: CGFloat) {

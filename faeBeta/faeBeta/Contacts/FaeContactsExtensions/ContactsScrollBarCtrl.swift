@@ -16,8 +16,9 @@ extension ContactsViewController: UIScrollViewDelegate, FaeScrollBarDelegate {
             return
         }
         faeScrollBar = FaeScrollBar(frame: CGRect(x: screenWidth - 23, y: 117 + device_offset_top, width: 23, height: screenHeight - 114 - device_offset_top - 6 - device_offset_bot), scrollRange: tblContacts.contentSize.height - tblContacts.frame.height + device_offset_bot)
-        view.addSubview(faeScrollBar!)
-        faeScrollBar!.delegate = self
+        guard let faeScrollBar = faeScrollBar else { return }
+        view.addSubview(faeScrollBar)
+        faeScrollBar.delegate = self
     }
     
     // MARK: FaeScrollBarDelegate

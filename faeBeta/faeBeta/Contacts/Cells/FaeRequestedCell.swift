@@ -15,6 +15,7 @@ protocol ContactsRequestedDelegate: class {
 
 class FaeRequestedCell: UITableViewCell {
     
+    // MARK: - Properties
     weak var delegate: ContactsRequestedDelegate?
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
@@ -22,10 +23,10 @@ class FaeRequestedCell: UITableViewCell {
     var btnCancelRequest: UIButton!
     var btnResendRequest: UIButton!
     var userId: Int = -1
-    //var requestId: Int = -1
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -38,7 +39,8 @@ class FaeRequestedCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func loadFriendsCellContent() {
+    // MARK: - Set up
+    private func loadFriendsCellContent() {
         imgAvatar = UIImageView(frame: CGRect.zero)
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.layer.cornerRadius = 25
@@ -82,12 +84,11 @@ class FaeRequestedCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnCancelRequest, btnResendRequest)
     }
     
-    @objc func cancelRequest(_ sender: UIButton) {
-        self.delegate?.withdrawRequest(userId: userId, indexPath: indexPath)
+    @objc private func cancelRequest(_ sender: UIButton) {
+        delegate?.withdrawRequest(userId: userId, indexPath: indexPath)
     }
     
-    @objc func resendRequest(_ sender: UIButton) {
-        self.delegate?.resendRequest(userId: userId, indexPath: indexPath)
-
+    @objc private func resendRequest(_ sender: UIButton) {
+        delegate?.resendRequest(userId: userId, indexPath: indexPath)
     }
 }

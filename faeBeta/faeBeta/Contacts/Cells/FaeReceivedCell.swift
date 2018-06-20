@@ -15,6 +15,7 @@ protocol ContactsReceivedRequestsDelegate: class {
 
 class FaeReceivedCell: UITableViewCell {
     
+    // MARK: - Properties
     weak var delegate: ContactsReceivedRequestsDelegate?
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
@@ -25,6 +26,7 @@ class FaeReceivedCell: UITableViewCell {
     var indexPath: IndexPath!
     var bottomLine: UIView!
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -37,7 +39,8 @@ class FaeReceivedCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func loadFriendsCellContent() {
+    // MARK: - Set up
+    private func loadFriendsCellContent() {
         imgAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
@@ -59,12 +62,12 @@ class FaeReceivedCell: UITableViewCell {
         btnAgreeRequest = UIButton()
         addSubview(btnAgreeRequest)
         btnAgreeRequest.setImage(#imageLiteral(resourceName: "acceptRequest"), for: .normal)
-        btnAgreeRequest.addTarget(self, action: #selector(self.acceptRequest(_:)), for: .touchUpInside)
+        btnAgreeRequest.addTarget(self, action: #selector(acceptRequest(_:)), for: .touchUpInside)
         
         btnRefuseRequest = UIButton()
         addSubview(btnRefuseRequest)
         btnRefuseRequest.setImage(#imageLiteral(resourceName: "cancelRequest"), for: .normal)
-        btnRefuseRequest.addTarget(self, action: #selector(self.refuseRequest(_:)), for: .touchUpInside)
+        btnRefuseRequest.addTarget(self, action: #selector(refuseRequest(_:)), for: .touchUpInside)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = UIColor._200199204()
@@ -81,11 +84,12 @@ class FaeReceivedCell: UITableViewCell {
         addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAgreeRequest)
     }
     
-    @objc func refuseRequest(_ sender: UIButton) {
-        self.delegate?.refuseRequest(userId: userId, indexPath: indexPath)
+    // MARK: - Button actions
+    @objc private func refuseRequest(_ sender: UIButton) {
+        delegate?.refuseRequest(userId: userId, indexPath: indexPath)
     }
     
-    @objc func acceptRequest(_ sender: UIButton) {
-        self.delegate?.acceptRequest(userId: userId, indexPath: indexPath)
+    @objc private func acceptRequest(_ sender: UIButton) {
+        delegate?.acceptRequest(userId: userId, indexPath: indexPath)
     }
 }

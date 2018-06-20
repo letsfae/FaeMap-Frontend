@@ -10,7 +10,7 @@ import UIKit
 
 extension ContactsViewController {
     
-    // MARK: - setup UI
+    // MARK: - Setup UI
     func setupPopupViews() {
         setupChooseAnActionAlert()
         setupNoti()
@@ -203,6 +203,4 @@ extension ContactsViewController {
         view.bringSubview(toFront: uiviewOverlayGrayOpaque)
         view.bringSubview(toFront: uiviewChooseAction)
     }
-    
-
 }

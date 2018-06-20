@@ -12,7 +12,7 @@ import ContactsUI
 
 extension ContactsViewController {
     
-    // MARK: - setup UI
+    // MARK: - Setup UI
     func loadNavBar() {
         loadDropDownMenu()
         
@@ -90,19 +90,19 @@ extension ContactsViewController {
         uiviewDropDownMenu.addSubview(imgTick)
     }
     
-    // MARK: - helper functions
-    // left button action
+    // MARK: - Helper methods
+    /// left button action
     @objc fileprivate func backToMenu(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    // right button action
+    /// right button action
     @objc fileprivate func goToAddFriendView(_ sender: UIButton) {
         let vc = AddFriendViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    // a tap gesture to hide drop down menu
+    /// a tap gesture to hide drop down menu
     func tapDismissGestureOnDropdownMenu() -> UITapGestureRecognizer {
         var tapRecognizer = UITapGestureRecognizer()
         tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
@@ -115,7 +115,7 @@ extension ContactsViewController {
         hideDropdowmMenu()
     }
     
-    // nav bar menu action
+    /// nav bar menu action
     @objc fileprivate func toggleNavBarMenu(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
             UIView.animate(withDuration: 0.2, animations: {
@@ -138,7 +138,7 @@ extension ContactsViewController {
         btnNavBarSetTitle()
     }
     
-    // drop down menu action
+    /// drop down menu action
     @objc func dropDownMenuAct(_ sender: UIButton) {
         curtTitle = titleArray[sender.tag]
         
@@ -188,7 +188,7 @@ extension ContactsViewController {
         btnNavBarMenu.setAttributedTitle(curtTitlePlusImg, for: .normal)
     }
     
-    // update the count in the drop down menu
+    /// update the count in the drop down menu
     fileprivate func updateUserCount() {
         let attributedStr = NSMutableAttributedString()
         let strFriends = NSAttributedString(string: "Friends ", attributes: [NSAttributedStringKey.foregroundColor : UIColor._898989()])

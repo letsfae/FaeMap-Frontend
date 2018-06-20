@@ -20,6 +20,7 @@ protocol FaeAddUsernameDelegate: class {
 
 class FaeAddUsernameCell: UITableViewCell {
     
+    // MARK: - Properties
     var userId: Int = -1
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
@@ -27,7 +28,7 @@ class FaeAddUsernameCell: UITableViewCell {
     var bottomLine: UIView!
     var hasAddedFriend = false
     var friendStatus: FriendStatus = .defaultMode
-    var btnAddorAdded: UIButton! // btn that can substitute as the add button or the "added" button.
+    var btnAddorAdded: UIButton!
     var btnAcceptRequest: UIButton!
     var btnRefuseRequest: UIButton!
     var lblStatus: UILabel!
@@ -35,6 +36,7 @@ class FaeAddUsernameCell: UITableViewCell {
     var indexPath: IndexPath!
     weak var delegate: FaeAddUsernameDelegate!
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -56,6 +58,63 @@ class FaeAddUsernameCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
+    // MARK: - Set up
+    private func loadCellContent() {
+        imgAvatar = UIImageView()
+        imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
+        imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
+        imgAvatar.layer.cornerRadius = 25
+        imgAvatar.contentMode = .scaleAspectFill
+        imgAvatar.clipsToBounds = true
+        addSubview(imgAvatar)
+        
+        lblUserName = UILabel()
+        lblUserName.textAlignment = .left
+        lblUserName.textColor = UIColor._898989()
+        lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
+        addSubview(lblUserName)
+        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserName)
+        
+        lblUserSaying = UILabel()
+        lblUserSaying.textAlignment = .left
+        lblUserSaying.textColor = UIColor._155155155()
+        lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
+        addSubview(lblUserSaying)
+        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
+        
+        btnAddorAdded = UIButton()
+        btnAddorAdded.addTarget(self, action: #selector(changeButtonPic(_:)), for: .touchUpInside)
+        addSubview(btnAddorAdded)
+        addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnAddorAdded)
+        addConstraintsWithFormat("H:[v0(74)]-17-|", options: [], views: btnAddorAdded)
+        
+        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
+        
+        bottomLine = UIView()
+        bottomLine.backgroundColor = UIColor._200199204()
+        addSubview(bottomLine)
+        bottomLine.isHidden = false
+        addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
+        addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
+        
+        btnAcceptRequest = UIButton()
+        btnAcceptRequest.isHidden = true
+        addSubview(btnAcceptRequest)
+        btnAcceptRequest.addTarget(self, action: #selector(acceptResendRequest(_:)), for: .touchUpInside)
+        
+        btnRefuseRequest = UIButton()
+        addSubview(btnRefuseRequest)
+        btnRefuseRequest.isHidden = true
+        btnRefuseRequest.addTarget(self, action: #selector(refuseWithdrawRequest(_:)), for: .touchUpInside)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnAcceptRequest)
+        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnRefuseRequest)
+        addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAcceptRequest)
+        
+        lblStatus = FaeLabel(CGRect(x: screenWidth - 65, y: 29, width: 50, height: 18), .right, .demiBold, 13, UIColor._155155155())
+        addSubview(lblStatus)
+    }
+    
+    // MARK: - Helper methods
     func getFriendStatus(id: Int) {
         if id == Key.shared.user_id {
             friendStatus = .blocked_by
@@ -128,7 +187,7 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    fileprivate func setButtonImage() {
+    private func setButtonImage() {
         switch friendStatus {
         case .defaultMode:
             lblStatus.text = ""
@@ -169,61 +228,6 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    fileprivate func loadCellContent() {
-        imgAvatar = UIImageView()
-        imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
-        imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
-        imgAvatar.layer.cornerRadius = 25
-        imgAvatar.contentMode = .scaleAspectFill
-        imgAvatar.clipsToBounds = true
-        addSubview(imgAvatar)
-        
-        lblUserName = UILabel()
-        lblUserName.textAlignment = .left
-        lblUserName.textColor = UIColor._898989()
-        lblUserName.font = UIFont(name: "AvenirNext-Medium", size: 18)
-        addSubview(lblUserName)
-        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserName)
-        
-        lblUserSaying = UILabel()
-        lblUserSaying.textAlignment = .left
-        lblUserSaying.textColor = UIColor._155155155()
-        lblUserSaying.font = UIFont(name: "AvenirNext-Medium", size: 13)
-        addSubview(lblUserSaying)
-        addConstraintsWithFormat("H:|-86-[v0]-173-|", options: [], views: lblUserSaying)
-        
-        btnAddorAdded = UIButton()
-        btnAddorAdded.addTarget(self, action: #selector(self.changeButtonPic(_:)), for: .touchUpInside)
-        addSubview(btnAddorAdded)
-        addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnAddorAdded)
-        addConstraintsWithFormat("H:[v0(74)]-17-|", options: [], views: btnAddorAdded)
-        
-        addConstraintsWithFormat("V:|-17-[v0(22)]-0-[v1(20)]", options: [], views: lblUserName, lblUserSaying)
-        
-        bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor._200199204()
-        addSubview(bottomLine)
-        bottomLine.isHidden = false
-        addConstraintsWithFormat("H:|-73-[v0]-0-|", options: [], views: bottomLine)
-        addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
-        
-        btnAcceptRequest = UIButton()
-        btnAcceptRequest.isHidden = true
-        addSubview(btnAcceptRequest)
-        btnAcceptRequest.addTarget(self, action: #selector(self.acceptResendRequest(_:)), for: .touchUpInside)
-        
-        btnRefuseRequest = UIButton()
-        addSubview(btnRefuseRequest)
-        btnRefuseRequest.isHidden = true
-        btnRefuseRequest.addTarget(self, action: #selector(self.refuseWithdrawRequest(_:)), for: .touchUpInside)
-        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnAcceptRequest)
-        addConstraintsWithFormat("V:|-15-[v0]-15-|", options: [], views: btnRefuseRequest)
-        addConstraintsWithFormat("H:[v0(48)]-15-[v1(48)]-10-|", options: [], views:btnRefuseRequest, btnAcceptRequest)
-        
-        lblStatus = FaeLabel(CGRect(x: screenWidth - 65, y: 29, width: 50, height: 18), .right, .demiBold, 13, UIColor._155155155())
-        addSubview(lblStatus)
-    }
-    
     func setValueForCell(user: UserNameCard) {
         General.shared.avatar(userid: user.userId, completion: { (avatarImage) in
             self.imgAvatar.image = avatarImage
@@ -232,13 +236,14 @@ class FaeAddUsernameCell: UITableViewCell {
         lblUserSaying.text = user.userName
     }
     
-    @objc func changeButtonPic(_ sender: UIButton) {
+    // MARK: - Button actions
+    @objc private func changeButtonPic(_ sender: UIButton) {
         if sender.currentImage == #imageLiteral(resourceName: "addButton") {
             delegate.addFriend(indexPath: indexPath, user_id: userId)
         }
     }
     
-    @objc func acceptResendRequest(_ sender: UIButton) {
+    @objc private func acceptResendRequest(_ sender: UIButton) {
         if friendStatus == .pending {
             delegate.resendRequest(indexPath: indexPath, user_id: userId)
         } else {
@@ -246,7 +251,7 @@ class FaeAddUsernameCell: UITableViewCell {
         }
     }
     
-    @objc func refuseWithdrawRequest(_ sender: UIButton) {
+    @objc private func refuseWithdrawRequest(_ sender: UIButton) {
         if friendStatus == .pending {
             delegate.withdrawRequest(indexPath: indexPath, user_id: userId)
         } else {
