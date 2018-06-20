@@ -46,28 +46,28 @@ extension MapBoardViewController {
                     continue
                 }
                 
-                if selectedGender == "" {
-                    continue
-                }
-                if (mbPeopleData.dis > Double(disVal)!) {
-                    continue
-                }
-                if (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") {
-                    continue
-                }
-                
-                if lblAgeVal.text == "All" {
-                    self.mbPeople.append(mbPeopleData)
-                    continue
-                }
+//                if selectedGender == "" {
+//                    continue
+//                }
+//                if (mbPeopleData.dis > Double(disVal)!) {
+//                    continue
+//                }
+//                if (selectedGender == "Female" && mbPeopleData.gender != "female") || (selectedGender == "Male" && mbPeopleData.gender != "male") {
+//                    continue
+//                }
+//
+//                if lblAgeVal.text == "All" {
+//                    self.mbPeople.append(mbPeopleData)
+//                    continue
+//                }
                 
                 if mbPeopleData.age == "" {
                     continue
                 }
                 
-                if ((Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) && !(ageLBVal == 18 && ageUBVal == 55)) {
-                    continue
-                }
+//                if ((Int(mbPeopleData.age)! < ageLBVal) || (Int(mbPeopleData.age)! > ageUBVal) && !(ageLBVal == 18 && ageUBVal == 55)) {
+//                    continue
+//                }
                 
                 self.mbPeople.append(mbPeopleData)
             default: break

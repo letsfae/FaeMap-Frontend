@@ -259,6 +259,12 @@
 		B39C1E3F1F6DCE600075CF59 /* CountryCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */; };
 		B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */; };
 		B39C1E451F6DE2EE0075CF59 /* CountryCode.json in Resources */ = {isa = PBXBuildFile; fileRef = B39C1E441F6DE2EE0075CF59 /* CountryCode.json */; };
+		B3A3F5E120D88D860056EE50 /* BoardCategorySearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E020D88D860056EE50 /* BoardCategorySearchView.swift */; };
+		B3A3F5E320D897C70056EE50 /* BoardPeopleNearbyFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E220D897C70056EE50 /* BoardPeopleNearbyFilter.swift */; };
+		B3A3F5E520D8A8A60056EE50 /* BoardNoResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E420D8A8A60056EE50 /* BoardNoResultView.swift */; };
+		B3A3F5E720D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */; };
+		B3A3F5E920D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */; };
+		B3A3F5EB20D8C8980056EE50 /* BoardPeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */; };
 		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
 		B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */; };
@@ -640,6 +646,12 @@
 		B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeViewController.swift; sourceTree = "<group>"; };
 		B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeCell.swift; sourceTree = "<group>"; };
 		B39C1E441F6DE2EE0075CF59 /* CountryCode.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CountryCode.json; sourceTree = "<group>"; };
+		B3A3F5E020D88D860056EE50 /* BoardCategorySearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardCategorySearchView.swift; sourceTree = "<group>"; };
+		B3A3F5E220D897C70056EE50 /* BoardPeopleNearbyFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPeopleNearbyFilter.swift; sourceTree = "<group>"; };
+		B3A3F5E420D8A8A60056EE50 /* BoardNoResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardNoResultView.swift; sourceTree = "<group>"; };
+		B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceTabLeftViewModel.swift; sourceTree = "<group>"; };
+		B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceTabRightViewModel.swift; sourceTree = "<group>"; };
+		B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPeopleViewModel.swift; sourceTree = "<group>"; };
 		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailViewController.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
 		B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNameViewController.swift; sourceTree = "<group>"; };
@@ -1443,6 +1455,16 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		B3A3F5EE20D8C8C80056EE50 /* MapBoardViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */,
+				B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */,
+				B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */,
+			);
+			path = MapBoardViewModel;
+			sourceTree = "<group>";
+		};
 		B3B5201E1F5A41C900A6B0DC /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1495,6 +1517,7 @@
 			isa = PBXGroup;
 			children = (
 				B8849EA11EEB142600D4588D /* MapBoardViewController.swift */,
+				B3A3F5EE20D8C8C80056EE50 /* MapBoardViewModel */,
 				B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */,
 				B33F8A011F3EC1B50033610D /* Temporarily unused */,
 			);
@@ -1504,6 +1527,9 @@
 		B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */ = {
 			isa = PBXGroup;
 			children = (
+				B3A3F5E020D88D860056EE50 /* BoardCategorySearchView.swift */,
+				B3A3F5E220D897C70056EE50 /* BoardPeopleNearbyFilter.swift */,
+				B3A3F5E420D8A8A60056EE50 /* BoardNoResultView.swift */,
 				B8849EA41EEB143800D4588D /* MapBoardTableView.swift */,
 				B36D0D321F46513000DE3107 /* MBPlaces.swift */,
 				B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */,
@@ -1880,6 +1906,7 @@
 				9F99F0E12025746A007CE6FE /* FaePhotoPicker.swift in Sources */,
 				50178B7F2045A17D0068012C /* MBLoadingWaves.swift in Sources */,
 				DC4334131DCE4AD3009EBB70 /* JSQVideoMediaItemCustom.m in Sources */,
+				B3A3F5E520D8A8A60056EE50 /* BoardNoResultView.swift in Sources */,
 				50188F441FC36C390038CAFF /* CCHFadeInOutMapAnimator.m in Sources */,
 				DC4EC3681DACA446001D0EA5 /* JSQAudioMediaItemCustom.m in Sources */,
 				B0714DF41D62513300356705 /* EmailTextField.swift in Sources */,
@@ -1975,9 +2002,12 @@
 				B064EF551D74ED0D00C078F5 /* PasswordTableViewCell.swift in Sources */,
 				DCF1EBD41DA31E8C0066B3ED /* ChatVCHandleMessages.swift in Sources */,
 				B80D98EE1EFCA6B500AB27C4 /* PullToRefreshOption.swift in Sources */,
+				B3A3F5EB20D8C8980056EE50 /* BoardPeopleViewModel.swift in Sources */,
 				B0714E201D6253A600356705 /* SignInSupportNewPassViewController.swift in Sources */,
 				5080005C1F249FD2009E3720 /* FMRefreshIcon.swift in Sources */,
+				B3A3F5E920D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift in Sources */,
 				B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */,
+				B3A3F5E320D897C70056EE50 /* BoardPeopleNearbyFilter.swift in Sources */,
 				372F29CC1EADB817008113A4 /* Pls&LocSearchViewController.swift in Sources */,
 				B88A3E2C1DC8654A00351A2A /* ReportViewController.swift in Sources */,
 				B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */,
@@ -2014,6 +2044,7 @@
 				50E50C161F9EF861008645C8 /* LocationPin.swift in Sources */,
 				DC74CE1F1DA831B9001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.m in Sources */,
 				B05DAFE61D1320F700082A71 /* FaeMap.swift in Sources */,
+				B3A3F5E720D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift in Sources */,
 				B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */,
 				9FF8F78220D336FD00C807A8 /* InputBarTopPinView.swift in Sources */,
 				9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */,
@@ -2152,6 +2183,7 @@
 				9F99F0E92025925A007CE6FE /* FullAlbumViewController.swift in Sources */,
 				5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
+				B3A3F5E120D88D860056EE50 /* BoardCategorySearchView.swift in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,

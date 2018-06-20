@@ -103,8 +103,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        PlaceDetailCell.boolMapFold = true
-//        PlaceDetailCell.boolHourFold = true
         if boolShared {
             //uiviewAfterAdded.lblSaved.text = "You shared a Place."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)

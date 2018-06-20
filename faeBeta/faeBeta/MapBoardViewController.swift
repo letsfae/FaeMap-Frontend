@@ -23,58 +23,37 @@ enum PlaceTableMode: Int {
 
 class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, BoardsSearchDelegate {
     
-    var ageLBVal: Int = 18
-    var ageUBVal: Int = 21
-    var boolIsLoaded: Bool = false
     var boolNoMatch: Bool = false
     var boolUsrVisibleIsOn: Bool = true
-    var btnChangeAgeLB: UIButton!
-    var btnChangeAgeUB: UIButton!
-    var btnChangeDis: UIButton!
     var btnComments: UIButton!
-    var btnGenderBoth: UIButton!
-    var btnGenderFemale: UIButton!
-    var btnGenderMale: UIButton!
     var btnNavBarMenu: UIButton!
     var btnPeople: UIButton!
     var imgPeopleLocDetail: UIImageView!
     var btnPlaces: UIButton!
     var curtTitle: String = "Places"
-    var disVal: String = "23.0"
     var imgBubbleHint: UIImageView!
-    var imgIconBeforeAllCom: UIImageView!
+    var imgCurtLoc: UIImageView!
     var imgTick: UIImageView!
-    var lblAgeVal: UILabel!
     var lblAllCom: UILabel!
     var lblBubbleHint: UILabel!
-    var lblDisVal: UILabel!
     var lblPlaces: UILabel!
     var lblPeople: UILabel!
     var mbPeople = [MBPeopleStruct]()
     var mbPlaces = [PlacePin]()
     
     var navBarMenuBtnClicked = false
-    var selectedGender: String = "Both"
-    var sliderAgeFilter: TTRangeSlider!
-    var sliderDisFilter: UISlider!
     var strBubbleHint: String = ""
     var tblMapBoard: UITableView!
     var titleArray: [String] = ["Places", "People"]
-    var uiviewAgeRedLine: UIView!
     var uiviewAllCom: UIView!
     var uiviewBubbleHint: UIView!
-    var uiviewDisRedLine: UIView!
     var uiviewDropDownMenu: UIView!
     var uiviewLineBelowLoc: UIView!
     var uiviewNavBar: FaeNavBar!
-    var uiviewPeopleLocDetail: UIView!
+    var uiviewPeopleNearyFilter: BoardPeopleNearbyFilter!
     var uiviewRedUnderLine: UIView!
     var uiviewPlaceTab: PlaceTabView!
-    var uiviewPlaceHeader: UIView!
-    var scrollViewPlaceHeader: UIScrollView!
-    var uiviewPlaceHedaderView1: UIView!
-    var uiviewPlaceHedaderView2: UIView!
-    var pageCtrlPlace: UIPageControl!
+    var uiviewPlaceHeader: BoardCategorySearchView!
     var btnSearchAllPlaces: UIButton!
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
@@ -82,10 +61,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var lblCurtLoc: UILabel!
     var btnSearchLoc: UIButton!   // fake button to search location
     
-    var imgPlaces1: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames1: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-    var imgPlaces2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
-    var arrPlaceNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
     let arrTitle = ["Most Popular", "Recommended", "Nearby Food & Drinks", "Shopping", "Outdoors & Recreation"]
     var testArrPlaces = [[PlacePin]]()
     var testArrPopular = [PlacePin]()
@@ -162,7 +137,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
 //        print("[viewWillDisappear]")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        boolIsLoaded = false
     }
     
     // UIGestureRecognizerDelegate
@@ -274,8 +248,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         uiviewAllCom.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
         uiviewAllCom.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
         
-        imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
-        imgIconBeforeAllCom.contentMode = .center
+        imgCurtLoc = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
+        imgCurtLoc.contentMode = .center
         lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
         lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblAllCom.textColor = UIColor._107107107()
@@ -285,7 +259,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
         uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: imgPeopleLocDetail)
         
-        imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+        imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
         lblAllCom.text = "Current Location"
         
         setViewContent()
@@ -295,7 +269,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         uiviewLineBelowLoc.backgroundColor = UIColor._200199204()
         uiviewAllCom.addSubview(uiviewLineBelowLoc)
         
-        uiviewAllCom.addSubview(imgIconBeforeAllCom)
+        uiviewAllCom.addSubview(imgCurtLoc)
         uiviewAllCom.addSubview(lblAllCom)
     }
     

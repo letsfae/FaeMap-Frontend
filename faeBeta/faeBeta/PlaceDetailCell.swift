@@ -72,18 +72,25 @@ class PlaceDetailCell: UITableViewCell {
             break
         case "hour":
             imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-            let openStatus = place.openOrClose
+            var openStatus = place.openOrClose
             let todayHours = place.hoursToday
-            var hour = " / " + todayHours[0]
-            if todayHours.count > 1 {
-                for index in 1..<todayHours.count {
-                    if openStatus == "Open" {
-                        hour += "\n\t\t" + todayHours[index]
-                    } else {
-                        hour += "\n\t\t   " + todayHours[index]
+            var hour = ""
+            if todayHours.count == 1 && todayHours[0] == "N/A" && openStatus == "N/A" {
+                openStatus = ""
+                hour = "N/A"
+            } else {
+                hour = " / " + todayHours[0]
+                if todayHours.count > 1 {
+                    for index in 1..<todayHours.count {
+                        if openStatus == "Open" {
+                            hour += "\n\t\t" + todayHours[index]
+                        } else {
+                            hour += "\n\t\t   " + todayHours[index]
+                        }
                     }
                 }
             }
+            
             lblContent.attributedText = attributedHourText(openStatus: openStatus, hour: hour)
             break
         case "web":
@@ -124,51 +131,6 @@ class PlaceDetailCell: UITableViewCell {
         title_0_attr.append(title_1_attr)
         
         return title_0_attr
-    }
-    
-    func closeOrOpen(_ todayHour: [String]) -> String {
-        
-        // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
-        
-        for hour in todayHour {
-            if hour == "N/A" || hour == "24 Hours" || hour == "None" {
-                return hour
-            }
-            
-            var startHour: String = String(hour.split(separator: "–")[0])
-            var endHour: String = String(hour.split(separator: "–")[1])
-            if startHour == "Noon" {
-                startHour = "12:00 PM"
-            }
-            if endHour == "Noon" {
-                endHour = "12:00 PM"
-            } else if endHour == "Midnight" {
-                endHour = "00:00 AM"
-            }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.dateFormat = "h:mm a"
-            let dateStart = dateFormatter.date(from: startHour)
-            let dateEnd = dateFormatter.date(from: endHour)
-            dateFormatter.dateFormat = "HH:mm"
-            
-            let date24Start = dateFormatter.string(from: dateStart!)
-            let date24End = dateFormatter.string(from: dateEnd!)
-            
-            let hourStart = Int(date24Start.split(separator: ":")[0])!
-            var hourEnd = Int(date24End.split(separator: ":")[0])!
-            if endHour.contains("AM") {
-                hourEnd = hourEnd + 24
-            }
-            
-            let hourCurrent = Calendar.current.component(.hour, from: Date())
-            
-            if hourCurrent >= hourStart && hourCurrent < hourEnd {
-                return "Open"
-            }
-        }
-        return "Closed"
     }
 }
 
