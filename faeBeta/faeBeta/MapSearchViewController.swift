@@ -13,7 +13,7 @@ import MapKit
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
     @objc optional func selectPlace(place: PlacePin)
-    @objc optional func selectLocation(loc: PlacePin)
+    @objc optional func selectLocation(location: CLLocation)
 }
 
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
@@ -26,6 +26,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var searchedAddresses = [MKLocalSearchCompletion]()
     var addressCompleter = MKLocalSearchCompleter()
     var faeMapView: MKMapView!
+    var faeRegion: MKCoordinateRegion?
     
     var btnBack: UIButton!
     var uiviewSearch: UIView!
@@ -66,6 +67,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     var boolFromChat: Bool = false
     var boolNoCategory: Bool = false
+    var boolFromBoard: Bool = false
     
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
@@ -78,11 +80,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         loadTable()
         loadNoResultsView()
         loadAddressCompleter()
+        schPlaceBar.txtSchField.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        schPlaceBar.txtSchField.becomeFirstResponder()
     }
     
     private func loadNoResultsView() {

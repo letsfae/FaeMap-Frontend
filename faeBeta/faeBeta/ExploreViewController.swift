@@ -587,7 +587,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
-        vc.boolFromExplore = true
+        vc.previousVC = .explore
         navigationController?.pushViewController(vc, animated: false)
     }
     

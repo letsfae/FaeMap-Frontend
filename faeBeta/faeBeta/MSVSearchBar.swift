@@ -10,6 +10,34 @@ import UIKit
 
 extension MapSearchViewController {
     
+    func calculateTableHeight() -> Int {
+        let cateCnt = filteredCategory.count > 2 ? 2 : filteredCategory.count
+        var placeCnt =  searchedPlaces.count > 13 ? 13 : searchedPlaces.count
+        var addrCnt = searchedAddresses.count > 13 ? 13 : searchedAddresses.count
+        
+        if cateCnt == 0 && addrCnt == 0 {
+            
+        } else if cateCnt == 0 && addrCnt > 0 {
+            placeCnt = placeCnt > 8 ? 8 : placeCnt
+        } else if cateCnt > 0 && addrCnt == 0 {
+            if cateCnt + placeCnt > 13 {
+                placeCnt = 13 - cateCnt
+            }
+        } else {
+            placeCnt = placeCnt > 6 ? 6 : placeCnt
+        }
+        
+        if placeCnt > 0 {
+            addrCnt = addrCnt > 5 ? 5 : addrCnt
+        } else if cateCnt > 0 && placeCnt == 0 {
+            if cateCnt + addrCnt > 13 {
+                addrCnt = 13 - cateCnt
+            }
+        }
+        
+        return cateCnt + placeCnt + addrCnt
+    }
+    
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
     func showOrHideViews(searchText: String) {
         switch schBarType {
@@ -17,14 +45,12 @@ extension MapSearchViewController {
             guard flagPlaceFetched || flagAddrFetched else { return }
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
-            let placeCnt = searchedPlaces.count
-            let catCnt = filteredCategory.count >= 2 ? 2 : filteredCategory.count
-            let addrCnt = searchedAddresses.count
-            if searchText != "" && (placeCnt + catCnt + addrCnt) > 0 {
+            let cellCnt = calculateTableHeight()
+            if searchText != "" && cellCnt > 0 {
                 uiviewPics.isHidden = true || boolNoCategory
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
-                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * (placeCnt + catCnt + addrCnt)))
+                uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * cellCnt))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
                 uiviewPics.isHidden = false || boolNoCategory
@@ -37,7 +63,7 @@ extension MapSearchViewController {
             }
             
             // for uiviewNoResults
-            if searchText != "" && (placeCnt + catCnt + addrCnt) == 0 {
+            if searchText != "" && cellCnt == 0 {
                 uiviewNoResults.isHidden = false
                 uiviewSchResBg.isHidden = true
                 uiviewSchLocResBg.isHidden = true
@@ -163,10 +189,10 @@ extension MapSearchViewController {
                 flagPlaceFetched = false
                 flagAddrFetched = false
             } else {
-                filterPlaceCat(searchText: searchText)
                 activityStatus(isOn: true)
                 placeThrottler.throttle {
                     DispatchQueue.main.async {
+                        self.filterPlaceCat(searchText: searchText)
                         self.getPlaceInfo(content: searchText.lowercased())
                         self.getAddresses(content: searchText)
                     }

@@ -41,7 +41,8 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         let searchVC = MapSearchViewController()
         searchVC.delegate = self
         searchVC.boolFromChat = false
-        if let text = lblSearchContent.text {
+        searchVC.boolFromBoard = true
+        if let text = lblSearchContent.text, text != "All Places" {
             searchVC.strSearchedPlace = text
         }
         navigationController?.pushViewController(searchVC, animated: false)
@@ -137,15 +138,37 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     func getPlaceInfo(content: String = "", source: String = "categories") {
+        self.lblSearchContent.text = content
+        self.uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
+        self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
+        self.jumpToSearchPlaces()
+        
+        var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
+        let radius: Int = 160934
+        if let locToSearch = LocManager.shared.locToSearch_board {
+            locationToSearch = locToSearch
+        }
+        if let locText = lblAllCom.text {
+            print("[locText]", locText)
+            switch locText {
+            case "Current Location":
+                locationToSearch = LocManager.shared.curtLoc.coordinate
+                print("[searchArea] Current Location")
+            default:
+                print("[searchArea] other")
+                break
+            }
+        }
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("size", value: "20")
+        FaeSearch.shared.whereKey("radius", value: "\(radius)")
+        // pagination control should be added here
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
+        FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                      "longitude": locationToSearch.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 return
@@ -160,6 +183,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
             self.uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
             self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
             self.jumpToSearchPlaces()
+            // reload table
         }
     }
     
@@ -250,15 +274,33 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     // GeneralLocationSearchDelegate
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.searchedLoc = location
-        lblAllCom.text = searchText
+        LocManager.shared.locToSearch_board = location.coordinate
+        lblAllCom.attributedText = processAddress(searchText)
         imgIconBeforeAllCom.image = icon
         if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            getMBPlaceInfo()
         } else {
             getPlaceInfo(content: lblSearchContent.text!, source: "name")
         }
         tblMapBoard.reloadData()
+    }
+    
+    private func processAddress(_ address: String) -> NSAttributedString {
+        let array = address.split(separator: "@")
+        let city = String(array[0])
+        let state = String(array[1])
+        
+        let fullAttrStr = NSMutableAttributedString()
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 16)]
+        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 16)]
+        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+        
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+        
+        return fullAttrStr
     }
 }
 

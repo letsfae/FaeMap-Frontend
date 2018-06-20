@@ -61,6 +61,7 @@
 		50902F571F2BB566002553F1 /* FaeSearchBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */; };
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
 		50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F5A1F2BB736002553F1 /* PlacesListCell.swift */; };
+		50909F8120D9825C00FB1887 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50909F8020D9825C00FB1887 /* Defaults.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
 		50A9A5CA20AE2A2B00ACF689 /* AllPlacesMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */; };
@@ -232,7 +233,7 @@
 		B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
 		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
 		B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D341F46519500DE3107 /* MBTalkTalk.swift */; };
-		B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */; };
+		B36D0D371F46C59500DE3107 /* GeneralLocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */; };
 		B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */; };
 		B37E5DA11F831019008A6B4B /* GeneralCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9E1F831019008A6B4B /* GeneralCells.swift */; };
 		B37E5DA21F831019008A6B4B /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B37E5D9F1F831019008A6B4B /* SettingsCell.swift */; };
@@ -421,6 +422,7 @@
 		50902F561F2BB566002553F1 /* FaeSearchBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeSearchBarTest.swift; sourceTree = "<group>"; };
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		50902F5A1F2BB736002553F1 /* PlacesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListCell.swift; sourceTree = "<group>"; };
+		50909F8020D9825C00FB1887 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
 		50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesMapController.swift; sourceTree = "<group>"; };
@@ -614,7 +616,7 @@
 		B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCollectionBase.swift; sourceTree = "<group>"; };
 		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
-		B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsSearchViewController.swift; sourceTree = "<group>"; };
+		B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralLocationSearchViewController.swift; sourceTree = "<group>"; };
 		B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendOperationFromContactsViewController.swift; sourceTree = "<group>"; };
 		B37E5D9E1F831019008A6B4B /* GeneralCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralCells.swift; sourceTree = "<group>"; };
 		B37E5D9F1F831019008A6B4B /* SettingsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
@@ -1265,6 +1267,7 @@
 				B87E13881D96755C004C9242 /* FaePinAction.swift */,
 				1873C4C71F214261007669DD /* FaeContact.swift */,
 				B3273E661F8C220700CFEC8E /* FaeCollection.swift */,
+				50909F8020D9825C00FB1887 /* Defaults.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1508,7 +1511,7 @@
 			children = (
 				B8849EA41EEB143800D4588D /* MapBoardTableView.swift */,
 				B36D0D321F46513000DE3107 /* MBPlaces.swift */,
-				B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */,
+				B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */,
 				B8849EA31EEB143800D4588D /* MBPeople.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
 				B33F89FF1F3EB4E20033610D /* MBPlaceTabView.swift */,
@@ -1932,6 +1935,7 @@
 				B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
 				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
+				50909F8120D9825C00FB1887 /* Defaults.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
 				50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */,
 				B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */,
@@ -2123,7 +2127,7 @@
 				B0D8CF151D3D525C0030939E /* MoodAvatarTableViewCell.swift in Sources */,
 				B8849EC41EEB161900D4588D /* MBNetwork.swift in Sources */,
 				9FF8F77C20D336FD00C807A8 /* NSLayoutConstraintSet.swift in Sources */,
-				B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */,
+				B36D0D371F46C59500DE3107 /* GeneralLocationSearchViewController.swift in Sources */,
 				B064EF491D74ED0D00C078F5 /* TitleTableViewCell.swift in Sources */,
 				B8849EBA1EEB147A00D4588D /* MBChatBubblesCell.swift in Sources */,
 				B37E5DC11F831040008A6B4B /* SetShortIntro.swift in Sources */,
