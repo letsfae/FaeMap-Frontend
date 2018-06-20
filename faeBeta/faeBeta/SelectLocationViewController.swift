@@ -69,7 +69,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var placesFromSearch = [FaePinAnnotation]()
     
     public var strShownLoc: String = ""
-    private var strRawLoc: String = ""
+    private var strRawLoc_board: String = ""
+    private var strRawLoc_explore: String = ""
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation? {
@@ -177,19 +178,22 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         locationPinClusterManager.clusterer = self
         
         let camera = faeMapView.camera
-        if let loc = LocManager.shared.locToSearch_board {
-            camera.centerCoordinate = loc
-        } else {
-            camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-            if previousVC == .board {
-                if previousLabelText == "Current Location" {
-                    camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-                } else {
-                    if let locToSearch = LocManager.shared.locToSearch_board {
-                        camera.centerCoordinate = locToSearch
-                    }
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+        switch previousVC {
+        case .board:
+            if previousLabelText == "Current Location" {
+                camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+            } else {
+                if let locToSearch = LocManager.shared.locToSearch_board {
+                    camera.centerCoordinate = locToSearch
                 }
             }
+        case .explore:
+            if let locToSearch = LocManager.shared.locToSearch_explore {
+                camera.centerCoordinate = locToSearch
+            }
+        case .chat:
+            break
         }
         camera.altitude = 35000
         faeMapView.setCamera(camera, animated: false)
@@ -331,6 +335,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
         LocManager.shared.locToSearch_board = mapView.centerCoordinate
+        LocManager.shared.locToSearch_explore = mapView.centerCoordinate
         
         if uiviewPlaceBar.tag > 0 { uiviewPlaceBar.annotations = visiblePlaces() }
         
@@ -354,8 +359,16 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 guard let `self` = self else { return }
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
-                    self.strRawLoc = String(new[0]) + "@" + String(new[1])
-                    self.processAddress(String(new[0]), String(new[1]))
+                    guard new.count > 0 else { return }
+                    if new.count == 2 {
+                        self.strRawLoc_board = String(new[0]) + "@" + String(new[1])
+                        self.strRawLoc_explore = String(new[0]) + "," + String(new[1])
+                        self.processAddress(String(new[0]), String(new[1]))
+                    } else if new.count == 1 {
+                        self.strRawLoc_board = String(new[0]) + "@" + ""
+                        self.strRawLoc_explore = String(new[0]) + "@" + ""
+                        self.processAddress(String(new[0]), "")
+                    }
                     DispatchQueue.main.async {
                         self.btnSelect.lblDistance.textColor = UIColor._2499090()
                         self.btnSelect.isUserInteractionEnabled = true
@@ -484,6 +497,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     private func updatePlacePins() {
+        guard previousVC == .chat else { return }
         let coorDistance = faeBeta.cameraDiagonalDistance(mapView: faeMapView)
         refreshPlacePins(radius: coorDistance)
     }
@@ -558,6 +572,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     private func createLocationPin(point: CGPoint) {
+        guard previousVC == .chat else { return }
         guard modeLocation == .off else { return }
         modeLocCreating = .on
         
@@ -603,7 +618,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         case .board:
             let location = CLLocation(latitude: faeMapView.centerCoordinate.latitude,
                                       longitude: faeMapView.centerCoordinate.longitude)
-            delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: strRawLoc, location: location)
+            delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: strRawLoc_board, location: location)
             navigationController?.popViewController(animated: false)
         case .chat:
             if selectedLocation != nil {
@@ -617,7 +632,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 delegate?.sendPlaceBack?(placeData: placeData)
             }
         case .explore:
-            let address = RouteAddress(name: strRawLoc, coordinate: faeMapView.centerCoordinate)
+            let address = RouteAddress(name: strRawLoc_explore, coordinate: faeMapView.centerCoordinate)
             delegate?.sendLocationBack?(address: address)
             navigationController?.popViewController(animated: false)
         }

@@ -585,6 +585,7 @@ class FMLocationInfoBar: UIView {
     var activityIndicator: UIActivityIndicatorView!
     var lblName: UILabel!
     var lblAddr: UILabel!
+    var isShowed: Bool = false
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 8, y: 76 + device_offset_top, width: screenWidth - 16, height: 68))
@@ -651,12 +652,17 @@ class FMLocationInfoBar: UIView {
     }
     
     func show() {
+        guard !isShowed else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
-        }, completion: nil)
+        }, completion: { _ in
+            self.isShowed = true
+        })
     }
     
     func hide() {
+        guard isShowed else { return}
+        isShowed = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
         }, completion: { _ in

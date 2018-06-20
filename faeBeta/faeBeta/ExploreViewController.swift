@@ -489,6 +489,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: Location Text
     private func reloadBottomText(_ city: String, _ state: String) {
+        
         strLocation = "\(city), \(state)"
         let fullAttrStr = NSMutableAttributedString()
         let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
