@@ -15,6 +15,12 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         addressCompleter.delegate = self
     }
     
+    func reloadAddressCompleterRegion() {
+        if let region = faeRegion {
+            addressCompleter.region = region
+        }
+    }
+    
     func getAddresses(content searchText: String) {
         activityStatus(isOn: true)
         flagAddrFetched = false
@@ -26,7 +32,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         print("addresses fetched")
         flagAddrFetched = true
-        searchedAddresses = completer.results
+        searchedAddresses = completer.results.filter({ $0.subtitle != "Search Nearby" })
         print("addresses fetched - count:", searchedAddresses.count)
         showOrHideViews(searchText: completer.queryFragment)
     }
@@ -75,20 +81,62 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     func getPlaceInfo(content: String = "", source: String = "name") {
         activityStatus(isOn: true)
-        guard content != "" else {
+        guard !content.isEmpty else {
             showOrHideViews(searchText: content)
             return
         }
+        var radius: Int = 16666
+        var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
+        if boolFromBoard {
+            radius = 160934
+            if let locToSearch = LocManager.shared.locToSearch_board {
+                locationToSearch = locToSearch
+            }
+            if let locText = schLocationBar.txtSchField.text {
+                print("[locText]", locText)
+                switch locText {
+                case "Current Location":
+                    locationToSearch = LocManager.shared.curtLoc.coordinate
+                    print("[searchArea] Current Location")
+                default:
+                    print("[searchArea] other")
+                    break
+                }
+            }
+        } else {
+            locationToSearch = faeMapView.centerCoordinate
+            if let locToSearch = LocManager.shared.locToSearch_map {
+                locationToSearch = locToSearch
+            }
+            if let locText = schLocationBar.txtSchField.text {
+                print("[locText]", locText)
+                switch locText {
+                case "Current Location":
+                    locationToSearch = LocManager.shared.curtLoc.coordinate
+                    print("[searchArea] Current Location")
+                case "Current Map View":
+                    locationToSearch = faeMapView.centerCoordinate
+                    // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    print("[searchArea] Current Map View")
+                default:
+                    print("[searchArea] other")
+                    break
+                }
+            }
+        }
+        
+        print("[radius]", radius)
         flagPlaceFetched = false
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "5")
-        FaeSearch.shared.whereKey("radius", value: "10000")
+        FaeSearch.shared.whereKey("size", value: "20")
+        FaeSearch.shared.whereKey("radius", value: "16666")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
+        FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                      "longitude": locationToSearch.longitude])
         FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             print("places fetched")
             guard let `self` = self else { return }

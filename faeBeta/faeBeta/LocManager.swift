@@ -15,6 +15,8 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     var locManager: CLLocationManager!
     var curtLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
     var searchedLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
+    var locToSearch_map: CLLocationCoordinate2D?
+    var locToSearch_board: CLLocationCoordinate2D?
     var curtLat: CLLocationDegrees {
         return curtLoc.coordinate.latitude
     }
@@ -46,9 +48,6 @@ class LocManager: NSObject, CLLocationManagerDelegate {
         guard boolFirstLoad else { return }
         boolFirstLoad = false
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
-//        print("curtLoc \(curtLoc)")
-//        print("curtLat \(curtLat)")
-//        print("curtLon \(curtLong)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -58,17 +57,17 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .notDetermined:
-//            print("didChangeAuthorizationStatus .notDetermined")
+            //print("didChangeAuthorizationStatus .notDetermined")
             locManager.requestWhenInUseAuthorization()
         case .denied:
-//            print("didChangeAuthorizationStatus .denied")
+            //print("didChangeAuthorizationStatus .denied")
             self.jumpToLocationEnable()
         case .restricted:
-//            print("didChangeAuthorizationStatus .restricted")
+            //print("didChangeAuthorizationStatus .restricted")
             break
         case .authorizedAlways:
             UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
-//            print("didChangeAuthorizationStatus .authorizedAlways")
+            //print("didChangeAuthorizationStatus .authorizedAlways")
         case .authorizedWhenInUse:
             UIApplication.shared.keyWindow?.visibleViewController?.dismiss(animated: true)
         }

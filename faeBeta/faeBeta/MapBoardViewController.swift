@@ -123,7 +123,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         uiviewBubbleHint.alpha = 0
 
-        getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+        getMBPlaceInfo()
         
         tblMapBoard.addGestureRecognizer(setGestureRecognizer())
         uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
@@ -398,7 +398,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
             updateNearbyPeople()
         } else if curtTitle == "Places" {
             tableMode = .places
-            getMBPlaceInfo(latitude: LocManager.shared.curtLat, longitude: LocManager.shared.curtLong)
+            getMBPlaceInfo()
         }
         getPeoplePage()
     }

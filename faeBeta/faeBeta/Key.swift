@@ -110,6 +110,8 @@ class Key: NSObject { //  singleton class
     
     // MARK: - Location Seaerch
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var selectedLoc_map: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    var selectedLoc_board: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedSearchedCity: String?
     
     // MARK: - Temporary Variables

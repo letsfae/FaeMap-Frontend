@@ -75,14 +75,32 @@ extension MapBoardViewController {
         }
     }
     
-    func getMBPlaceInfo(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
-        let mbPlacesList = FaeMap()
-        mbPlacesList.whereKey("geo_latitude", value: "\(latitude)")
-        mbPlacesList.whereKey("geo_longitude", value: "\(longitude)")
-        mbPlacesList.whereKey("radius", value: "9999999999")
-        mbPlacesList.whereKey("type", value: "place")
-        mbPlacesList.whereKey("max_count", value: "1000")
-        mbPlacesList.getMapInformation { (status: Int, message: Any?) in
+    func getMBPlaceInfo() {
+        
+        var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
+        let radius: Int = 160934
+        if let locToSearch = LocManager.shared.locToSearch_board {
+            locationToSearch = locToSearch
+        }
+        if let locText = lblAllCom.text {
+            print("[locText]", locText)
+            switch locText {
+            case "Current Location":
+                locationToSearch = LocManager.shared.curtLoc.coordinate
+                print("[searchArea] Current Location")
+            default:
+                print("[searchArea] other")
+                break
+            }
+        }
+        
+        FaeMap.shared.whereKey("geo_latitude", value: "\(locationToSearch.latitude)")
+        FaeMap.shared.whereKey("geo_longitude", value: "\(locationToSearch.longitude)")
+        FaeMap.shared.whereKey("radius", value: "\(radius)")
+        FaeMap.shared.whereKey("type", value: "place")
+        FaeMap.shared.whereKey("max_count", value: "1000")
+        // pagination control should be added here
+        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
                 return

@@ -44,7 +44,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var setPlacePins = Set<Int>()
     private var arrPlaceData = [PlacePin]()
     private var selectedPlaceView: PlacePinAnnotationView?
-    private var selectedPlace: FaePinAnnotation?
+    private var selectedPlace: FaePinAnnotation? {
+        didSet {
+            if selectedPlace != nil {
+                selectedLocation = nil
+            }
+        }
+    }
     private var uiviewPlaceBar = FMPlaceInfoBar()
     private var placeAdderQueue: OperationQueue = {
         var queue = OperationQueue()
@@ -55,7 +61,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // Boolean values
     private var fullyLoaded = false // if all ui components are fully loaded
-    var boolFromBoard = false // if called from BoardSearchViewController
+    var boolFromBoard = false
     var boolSearchEnabled = false
     var boolFromExplore = false
     var boolFromChat = false
@@ -66,7 +72,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var strRawLoc: String = ""
     
     // Location Pin Control
-    private var selectedLocation: FaePinAnnotation?
+    private var selectedLocation: FaePinAnnotation? {
+        didSet {
+            if selectedLocation != nil {
+                selectedPlace = nil
+            }
+        }
+    }
     private var uiviewLocationBar: FMLocationInfoBar!
     private var selectedLocAnno: LocPinAnnotationView?
     private var activityIndicatorLocPin: UIActivityIndicatorView!
@@ -100,11 +112,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
-    enum PreviousVC {
-        case board, chat, explore
+    enum PreviousViewControlerType {
+        case board
+        case chat
+        case explore
     }
     
-    public var previousVC = PreviousVC.board
+    public var previousVC = PreviousViewControlerType.board
+    public var previousLabelText = ""
     
     // MARK: - Life Cycles
     
@@ -127,7 +142,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - Loading Parts
     
     private func loadPinIcon() {
-        guard !boolFromChat else { return }
+        guard previousVC != .chat else { return }
         let imgIcon = UIImageView(frame: CGRect(x: 0, y: 0, width: 48, height: 52))
         imgIcon.image = #imageLiteral(resourceName: "icon_destination")
         imgIcon.center.x = screenWidth / 2
@@ -162,16 +177,22 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         locationPinClusterManager.clusterer = self
         
         let camera = faeMapView.camera
-        if let loc = Key.shared.lastChosenLoc {
+        if let loc = LocManager.shared.locToSearch_board {
             camera.centerCoordinate = loc
         } else {
             camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+            if previousVC == .board {
+                if previousLabelText == "Current Location" {
+                    camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
+                } else {
+                    if let locToSearch = LocManager.shared.locToSearch_board {
+                        camera.centerCoordinate = locToSearch
+                    }
+                }
+            }
         }
-        // if mode == .part { camera.altitude = 35000 }
-        // faeMapView.setCamera(camera, animated: false)
-        let viewDistance: CLLocationDistance = boolFromExplore ? 15000 : 800
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, viewDistance, viewDistance)
-        faeMapView.setRegion(coordinateRegion, animated: false)
+        camera.altitude = 35000
+        faeMapView.setCamera(camera, animated: false)
     }
     
     private func loadTopBar() {
@@ -236,18 +257,17 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect = FMDistIndicator()
         btnSelect.frame.origin.y = screenHeight - 74 - device_offset_bot
         btnSelect.lblDistance.text = "Select"
-        btnSelect.lblDistance.textColor = UIColor._2499090()
-        btnSelect.isUserInteractionEnabled = true
+        btnSelect.lblDistance.textColor = UIColor._255160160()
+        btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        btnSelect.addGestureRecognizer(tapGesture)
         
         btnZoom = FMZoomButton()
         btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
         btnZoom.mapView = faeMapView
         view.addSubview(btnZoom)
         btnZoom.isHidden = boolFromExplore
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        btnSelect.addGestureRecognizer(tapGesture)
         
         faeMapView.cgfloatCompassOffset = 73 + device_offset_bot - device_offset_bot_main //134
         faeMapView.layoutSubviews()
@@ -301,16 +321,24 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         return nil
     }
     
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        guard previousVC == .board || previousVC == .explore else { return }
+        guard btnSelect != nil else { return }
+        btnSelect.lblDistance.textColor = UIColor._255160160()
+        btnSelect.isUserInteractionEnabled = false
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
-        Key.shared.lastChosenLoc = mapView.centerCoordinate
+        LocManager.shared.locToSearch_board = mapView.centerCoordinate
         
         if uiviewPlaceBar.tag > 0 { uiviewPlaceBar.annotations = visiblePlaces() }
         
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        if mode == .full {
+        switch mode {
+        case .full:
             General.shared.getAddress(location: location) { [weak self] address in
                 guard let `self` = self else { return }
                 guard let addr = address as? String else { return }
@@ -319,13 +347,19 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                     self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
                 }
             }
-        } else {
+        case .part:
+            // .chat or .explore
+            guard previousVC == .board || previousVC == .explore else { return }
             General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self]  (address) in
                 guard let `self` = self else { return }
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
-                    self.strRawLoc = String(new[0]) + "," + String(new[1])
+                    self.strRawLoc = String(new[0]) + "@" + String(new[1])
                     self.processAddress(String(new[0]), String(new[1]))
+                    DispatchQueue.main.async {
+                        self.btnSelect.lblDistance.textColor = UIColor._2499090()
+                        self.btnSelect.isUserInteractionEnabled = true
+                    }
                 }
             }
         }
@@ -565,30 +599,27 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - Actions in Controller
     
     @objc private func handleTap(_ tap: UITapGestureRecognizer) {
-        if boolFromBoard {
-            if selectedLocation != nil {
-                delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: "\(selectedLocation!.address_1), \(selectedLocation!.address_2)", location: CLLocation(latitude: selectedLocation!.coordinate.latitude, longitude: selectedLocation!.coordinate.longitude))
-                navigationController?.popViewController(animated: true)
-            }
-        } else {
-            if boolFromExplore {
-                let address = RouteAddress(name: strRawLoc, coordinate: faeMapView.centerCoordinate)
-                navigationController?.popViewController(animated: false)
-                delegate?.sendLocationBack?(address: address)
-                return
-            }
+        switch previousVC {
+        case .board:
+            let location = CLLocation(latitude: faeMapView.centerCoordinate.latitude,
+                                      longitude: faeMapView.centerCoordinate.longitude)
+            delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "mb_iconBeforeCurtLoc"), searchText: strRawLoc, location: location)
+            navigationController?.popViewController(animated: false)
+        case .chat:
             if selectedLocation != nil {
                 let address = RouteAddress(name: selectedLocation!.address_1, coordinate: selectedLocation!.coordinate)
                 navigationController?.popViewController(animated: false)
                 delegate?.sendLocationBack?(address: address)
-                return
             }
             if selectedPlace != nil {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
                 navigationController?.popViewController(animated: false)
                 delegate?.sendPlaceBack?(placeData: placeData)
-                return
             }
+        case .explore:
+            let address = RouteAddress(name: strRawLoc, coordinate: faeMapView.centerCoordinate)
+            delegate?.sendLocationBack?(address: address)
+            navigationController?.popViewController(animated: false)
         }
     }
     
