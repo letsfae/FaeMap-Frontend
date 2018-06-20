@@ -295,6 +295,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 }
                 if selectedLocation != nil {
                     locationPinClusterManager.removeAnnotations([selectedLocation!], withCompletionHandler: {
+                        self.locationPinClusterManager.isForcedRefresh = true
+                        self.locationPinClusterManager.manuallyCallRegionDidChange()
+                        self.locationPinClusterManager.isForcedRefresh = false
                         self.deselectAllLocAnnos()
                     })
                 }
@@ -1135,7 +1138,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
         
-        if PLACE_INSTANT_REMOVE { // immediatelly remove
+        
+        if (mapClusterController == placeClusterManager && PLACE_INSTANT_REMOVE) || (mapClusterController == locationPinClusterManager && LOC_INSTANT_REMOVE) { // immediatelly remove
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
                     if let anView = self.faeMapView.view(for: anno) {
@@ -1365,12 +1369,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewSavedList.arrListSavedThisPin.removeAll()
         uiviewAfterAdded.reset()
         boolCanOpenPin = true
-        
         selectedLocAnno?.hideButtons()
         selectedLocAnno?.zPos = 8.0
         selectedLocAnno?.optionsReady = false
         selectedLocAnno?.optionsOpened = false
-        selectedLocAnno?.removeFromSuperview()
         selectedLocAnno = nil
         selectedLocation = nil
     }
