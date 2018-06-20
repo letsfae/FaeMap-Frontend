@@ -18,36 +18,36 @@ class FriendOperationFromContactsViewController: UIViewController {
     
     // MARK: - Properties
     weak var delegate: FriendOperationFromContactsDelegate?
-    var uiviewChooseAction: UIView!
-    var uiviewMsgSent: UIView!
-    var btnIgnore: UIButton!
-    var btnBlock: UIButton!
-    var btnReport: UIButton!
-    var btnOK: UIButton!
-    var btnCancel:UIButton!
-    var btnFriendSentBack: UIButton!
-    var lblChoose: UILabel!
-    var lblMsgSent: UILabel!
-    var lblBlockHint: UILabel!
-    var indicatorView: UIActivityIndicatorView!
+    private var uiviewChooseAction: UIView!
+    private var uiviewMsgSent: UIView!
+    private var btnIgnore: UIButton!
+    private var btnBlock: UIButton!
+    private var btnReport: UIButton!
+    private var btnOK: UIButton!
+    private var btnCancel:UIButton!
+    private var btnFriendSentBack: UIButton!
+    private var lblChoose: UILabel!
+    private var lblMsgSent: UILabel!
+    private var lblBlockHint: UILabel!
+    private var indicatorView: UIActivityIndicatorView!
     var indexPath: IndexPath!
     
     var userId: Int = -1
-    let faeContact = FaeContact()
+    private let faeContact = FaeContact()
     
-    let OK = 0
-    let ADD_FRIEND_ACT = 1
-    let FOLLOW_ACT = 2
-    let WITHDRAW_ACT = 3
-    let RESEND_ACT = 4
-    let REMOVE_FRIEND_ACT = 5
-    let BLOCK_ACT = 6
-    let REPORT_ACT = 7
-    let UNFOLLOW_ACT = 8
-    let ACCEPT_ACT = 9
-    let IGNORE_ACT = 10
-    let EDIT_NAME_CARD = 11
-    let INFO_SETTING = 12
+    private let OK = 0
+    private let ADD_FRIEND_ACT = 1
+    private let FOLLOW_ACT = 2
+    private let WITHDRAW_ACT = 3
+    private let RESEND_ACT = 4
+    private let REMOVE_FRIEND_ACT = 5
+    private let BLOCK_ACT = 6
+    private let REPORT_ACT = 7
+    private let UNFOLLOW_ACT = 8
+    private let ACCEPT_ACT = 9
+    private let IGNORE_ACT = 10
+    private let EDIT_NAME_CARD = 11
+    private let INFO_SETTING = 12
     
     var statusMode: FriendStatus = .defaultMode
     var action: String = ""
@@ -64,7 +64,8 @@ class FriendOperationFromContactsViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    fileprivate func createActivityIndicator() {
+    // MARK: - Set up
+    private func createActivityIndicator() {
         indicatorView = UIActivityIndicatorView()
         indicatorView.activityIndicatorViewStyle = .whiteLarge
         indicatorView.center = view.center
@@ -74,7 +75,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         view.bringSubview(toFront: indicatorView)
     }
     
-    fileprivate func loadContent() {
+    private func loadContent() {
         uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 302))
         uiviewChooseAction.center.x = screenWidth / 2
         uiviewChooseAction.backgroundColor = .white
@@ -127,7 +128,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         getFriendStatus()
     }
     
-    fileprivate func loadSendActRequest() {
+    private func loadSendActRequest() {
         uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
         uiviewMsgSent.backgroundColor = .white
         uiviewMsgSent.center.x = screenWidth / 2
@@ -171,7 +172,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         view.addSubview(uiviewMsgSent)
     }
     
-    fileprivate func getFriendStatus() {
+    private func getFriendStatus() {
         animationShowSelf()
         if action == "add" {
             indicatorView.startAnimating()
@@ -260,7 +261,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     }
     
     // MARK: - Button actions
-    @objc func sentActRequest(_ sender: UIButton!) {
+    @objc private func sentActRequest(_ sender: UIButton!) {
         if sender.tag == IGNORE_ACT {
             indicatorView.startAnimating()
             faeContact.ignoreFriendRequest(friendId: String(userId)) {(status: Int, message: Any?) in
@@ -304,15 +305,15 @@ class FriendOperationFromContactsViewController: UIViewController {
         }
     }
     
-    @objc func actionCancel(_ sender: Any?) {
+    @objc private func actionCancel(_ sender: Any?) {
         animationHideSelf()
     }
     
-    @objc func actionFinish(_ sender: UIButton!) {
+    @objc private func actionFinish(_ sender: UIButton!) {
         animationHideSelf()
     }
     
-    @objc func actionOK(_ sender: UIButton) {
+    @objc private func actionOK(_ sender: UIButton) {
         uiviewMsgSent.frame.size.height = 161 * screenHeightFactor
         if sender.tag == OK {
             animationHideSelf()
@@ -408,7 +409,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     }
     
     // MARK: - Animations
-    func animationActionView() {
+    private func animationActionView() {
         uiviewChooseAction.isHidden = true
         uiviewChooseAction.alpha = 0
         uiviewMsgSent.alpha = 0
@@ -417,7 +418,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         }, completion: nil)
     }
     
-    func animationShowSelf() {
+    private func animationShowSelf() {
         view.alpha = 0
         uiviewChooseAction.alpha = 0
         uiviewMsgSent.alpha = 0
@@ -433,7 +434,7 @@ class FriendOperationFromContactsViewController: UIViewController {
         }, completion: nil)
     }
     
-    func animationHideSelf() {
+    private func animationHideSelf() {
         view.alpha = 1
         uiviewChooseAction.alpha = 1
         uiviewMsgSent.alpha = 1
