@@ -269,7 +269,7 @@ extension ChatViewController {
 }
 
 // MARK: - FaeInputBarDelegate & InputView related delegates
-extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, BoardsSearchDelegate {
+extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, SelectLocationDelegate, MapSearchDelegate {
     // MARK: FaeInputBarDelegate
     func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?) {
         if let pinView = pinView {
@@ -325,11 +325,19 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
             let vc = SelectLocationViewController()
             vc.boolFromChat = true
             vc.boolSearchEnabled = true
+            vc.previousVC = .chat
             vc.delegate = self
             Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
-            navigationController?.pushViewController(vc, animated: true)
+            navigationController?.pushViewController(vc, animated: false)
         default: break
         }
+    }
+    
+    // MARK: - MapSearchDelegate
+    func selectPlace(place: PlacePin) {
+        faeInputBar.setupTopStackView(place: place)
+        collectionViewBottomInset = faeInputBar.intrinsicContentSize.height
+        scrollToBottom(animated: false)
     }
     
     // MARK: FullAlbumSelectionDelegate
@@ -350,7 +358,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
         }
     }
     
-    // MARK: BoardsSearchDelegate
+    // MARK: SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -363,6 +371,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, B
     }
     
     func sendPlaceBack(placeData: PlacePin) {
+        joshprint("[sendPlaceBack] called")
         faeInputBar.setupTopStackView(place: placeData)
         collectionViewBottomInset = faeInputBar.intrinsicContentSize.height
         scrollToBottom(animated: false)

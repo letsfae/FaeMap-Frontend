@@ -20,6 +20,13 @@ func createActivityIndicator(large: Bool) -> UIActivityIndicatorView {
 }
 
 // MARK: - Map View
+func calculateRegion(miles: Double, coordinate: CLLocationCoordinate2D) -> MKCoordinateRegion {
+    let scalingFactor = abs( (cos(2 * .pi * coordinate.latitude / 360.0) ));
+    let span = MKCoordinateSpan(latitudeDelta: miles/69.0, longitudeDelta: miles/(scalingFactor * 69.0))
+    let region = MKCoordinateRegion(center: coordinate, span: span)
+    return region
+}
+
 func zoomToFitAllAnnotations(mapView: MKMapView, annotations: [MKPointAnnotation], edgePadding: UIEdgeInsets) {
     guard let firstAnn = annotations.first else { return }
     let point = MKMapPointForCoordinate(firstAnn.coordinate)

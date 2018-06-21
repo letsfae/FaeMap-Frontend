@@ -1,5 +1,5 @@
 //
-//  BoardsSearchViewController.swift
+//  GeneralLocationSearchViewController.swift
 //  faeBeta
 //
 //  Created by Faevorite 2 on 2017-08-17.
@@ -9,40 +9,33 @@
 import UIKit
 import SwiftyJSON
 
-@objc protocol BoardsSearchDelegate: class {
-    @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
-    @objc optional func chooseLocationOnMap()
-    @objc optional func sendLocationBack(address: RouteAddress)
-    @objc optional func sendPlaceBack(placeData: PlacePin)
-}
-
 enum EnterMode: String {
     case place = "place"
     case location = "location"
 }
 
-class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
+class GeneralLocationSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
     
-    weak var delegate: BoardsSearchDelegate?
+    weak var delegate: SelectLocationDelegate?
     
-    var fixedLocOptions = ["Use my Current Location", "Choose Location on Map"]
-    var filteredLocations = [String]()
+    private var fixedLocOptions = ["Use my Current Location", "Choose Location on Map"]
+    private var filteredLocations = [String]()
     
-    var btnBack: UIButton!
-    var uiviewSearch: UIView!
-    var schBar: FaeSearchBarTest!
+    private var btnBack: UIButton!
+    private var uiviewSearch: UIView!
+    private var schBar: FaeSearchBarTest!
     
     // uiviews with shadow under table views
-    var uiviewSchResBg: UIView!
-    var uiviewSchLocResBg: UIView!
+    private var uiviewSchResBg: UIView!
+    private var uiviewSchLocResBg: UIView!
     
     // table tblLocationRes used for search locations
-    var tblLocationRes: UITableView!
-    var tblPlacesRes: UITableView!
+    private var tblLocationRes: UITableView!
+    private var tblPlacesRes: UITableView!
     
-    var uiviewNoResults: UIView!
-    var lblNoResults: UILabel!
-    var activityView: UIActivityIndicatorView!
+    private var uiviewNoResults: UIView!
+    private var lblNoResults: UILabel!
+    private var activityView: UIActivityIndicatorView!
     
     // Joshua: Send label text back to start point or destination
     static var boolToDestination = false
@@ -50,14 +43,14 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     var boolFromRouting = false
     
     // MapKit address autocompletion
-    var searchCompleter = MKLocalSearchCompleter()
-    var searchResults = [MKLocalSearchCompletion]()
+    private var searchCompleter = MKLocalSearchCompleter()
+    private var searchResults = [MKLocalSearchCompletion]()
     
     // Switch between two google city search or address search
     var isCitySearch = false
     
     // Geobytes City Data
-    var geobytesCityData = [String]()
+    private var geobytesCityData = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +84,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     // shows "no results"
-    func loadNoResultsView() {
+    private func loadNoResultsView() {
         uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: 100))
         uiviewNoResults.backgroundColor = .white
         uiviewNoResults.layer.cornerRadius = 2
@@ -113,7 +106,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         addShadow(uiviewNoResults)
     }
     
-    func loadSearchBar() {
+    private func loadSearchBar() {
         uiviewSearch = UIView()
         view.addSubview(uiviewSearch)
         uiviewSearch.backgroundColor = .white
@@ -131,12 +124,12 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         schBar.delegate = self
         schBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
         if boolFromRouting {
-            schBar.txtSchField.placeholder = BoardsSearchViewController.boolToDestination ? "Choose Destination..." : "Choose Starting Point..."
+            schBar.txtSchField.placeholder = GeneralLocationSearchViewController.boolToDestination ? "Choose Destination..." : "Choose Starting Point..."
         }
         uiviewSearch.addSubview(schBar)
     }
     
-    func loadTable() {
+    private func loadTable() {
         // background view with shadow of table tblPlacesRes
         uiviewSchResBg = UIView(frame: CGRect(x: 8, y: 124 - 48 + device_offset_top, width: screenWidth - 16, height: screenHeight - 139 - device_offset_top)) // 124 + 15
         view.addSubview(uiviewSchResBg)
@@ -197,7 +190,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     // End of FaeSearchBarTestDelegate
     
     // show or hide uiviews/tableViews, change uiviews/tableViews size & origin.y
-    func showOrHideViews(searchText: String) {
+    private func showOrHideViews(searchText: String) {
         uiviewNoResults.isHidden = true
         uiviewSchResBg.isHidden = false
         if boolCurtLocSelected {
@@ -329,14 +322,14 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
         }
     }
     
-    func addShadow(_ uiview: UIView) {
+    private func addShadow(_ uiview: UIView) {
         uiview.layer.shadowColor = UIColor._898989().cgColor
         uiview.layer.shadowRadius = 2.2
         uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
         uiview.layer.shadowOpacity = 0.6
     }
     
-    @objc func backToBoards(_ sender: UIButton) {
+    @objc private func backToBoards(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
     
@@ -345,7 +338,7 @@ class BoardsSearchViewController: UIViewController, FaeSearchBarTestDelegate, UI
     }
     
     // MARK: -
-    func placeAutocomplete(_ searchText: String) {
+    private func placeAutocomplete(_ searchText: String) {
         Key.shared.selectedSearchedCity = nil
         CitySearcher.shared.cityAutoComplete(searchText) { (status, result) in
             self.geobytesCityData.removeAll()

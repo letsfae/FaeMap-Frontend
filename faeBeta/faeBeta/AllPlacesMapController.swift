@@ -230,22 +230,23 @@ class AllPlacesMapController: BasicMapController {
         
         uiviewPinActionDisplay.hide()
         
-        //        if let idx = selectedPlace?.class_2_icon_id {}
-        if full {
-            selectedPlace?.icon = #imageLiteral(resourceName: "place_map_48")
-            selectedPlace?.isSelected = false
-            guard let img = selectedPlace?.icon else { return }
-            selectedPlaceAnno?.assignImage(img)
-            selectedPlaceAnno?.hideButtons()
-            selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
-            selectedPlaceAnno?.zPos = 7
-            selectedPlaceAnno?.optionsReady = false
-            selectedPlaceAnno?.optionsOpened = false
-            selectedPlaceAnno = nil
-            selectedPlace = nil
-        } else {
-            selectedPlaceAnno?.hideButtons()
-            selectedPlaceAnno?.optionsOpened = false
+        if let idx = selectedPlace?.class_2_icon_id {
+            if full {
+                selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
+                selectedPlace?.isSelected = false
+                guard let img = selectedPlace?.icon else { return }
+                selectedPlaceAnno?.assignImage(img)
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.superview?.sendSubview(toBack: selectedPlaceAnno!)
+                selectedPlaceAnno?.zPos = 7
+                selectedPlaceAnno?.optionsReady = false
+                selectedPlaceAnno?.optionsOpened = false
+                selectedPlaceAnno = nil
+                selectedPlace = nil
+            } else {
+                selectedPlaceAnno?.hideButtons()
+                selectedPlaceAnno?.optionsOpened = false
+            }
         }
     }
     
