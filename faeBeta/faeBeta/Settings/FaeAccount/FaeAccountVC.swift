@@ -45,6 +45,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    // MARK: - Set up
     private func loadResetPswdSucceedPage() {
         uiviewGrayBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewGrayBG.backgroundColor = UIColor(r: 107, g: 105, b: 105, alpha: 70)
@@ -163,20 +164,20 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         let cell = tableView.cellForRow(at: indexPath) as! SetAccountCell
         switch indexPath.row {
         case 0:
-            let vc = SetNameViewController()
+            let vc = SetUpdateAccountViewController()
             vc.delegate = self
             vc.enterMode = .name
             vc.fName = Key.shared.userFirstname
             vc.lName = Key.shared.userLastname
             navigationController?.pushViewController(vc, animated: true)
         case 1:
-            let vc = SetNameViewController()
+            let vc = SetUpdateAccountViewController()
             vc.delegate = self
             vc.enterMode = .birth
             vc.dateOfBirth = cell.lblContent.text
             navigationController?.pushViewController(vc, animated: true)
         case 2:
-            let vc = SetNameViewController()
+            let vc = SetUpdateAccountViewController()
             vc.delegate = self
             vc.enterMode = .gender
             vc.gender = cell.lblContent.text
@@ -208,7 +209,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
                 navigationController?.pushViewController(vc, animated: true)
             }
         case 6:
-            let vc = SetNameViewController()
+            let vc = SetUpdateAccountViewController()
             vc.enterMode = .password
             vc.pswdEnterMode = .password
             navigationController?.pushViewController(vc, animated: true)

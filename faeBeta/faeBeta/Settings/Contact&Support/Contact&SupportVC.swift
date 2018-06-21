@@ -20,7 +20,7 @@ class SetContactViewController: UIViewController, UITableViewDelegate, UITableVi
         view.backgroundColor = .white
         uiviewNavbar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavbar)
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
         uiviewNavbar.lblTitle.text = "Contact"
         uiviewNavbar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
         uiviewNavbar.loadBtnConstraints()

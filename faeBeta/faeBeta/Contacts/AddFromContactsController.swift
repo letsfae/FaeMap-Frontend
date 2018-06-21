@@ -28,52 +28,74 @@ struct RegisteredUser {
 class AddFromContactsController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Properties
-    var uiviewNavBar: FaeNavBar!
-    var uiviewSchbar: UIView!
-    var schbarFromContacts: FaeSearchBarTest!
-    var tblFromContacts: UITableView!
-    var filteredUnregistered = [UserNameCard]()
-    var arrUnregistered = [UserNameCard]()
-    var filteredRegistered = [RegisteredUser]()
-    var arrRegistered = [RegisteredUser]()
-    var uiviewNotAllowed: UIView!
-    var imgGhost: UIImageView!
-    var lblPrompt: UILabel!
-    var lblInstructions: UILabel!
-    var btnAllowAccess: UIButton!
-    var boolAllowAccess = false
-    var contactStore = CNContactStore()
-    var phoneNumbers: String = ""
-    var dictCountryCode: Dictionary = [String : CountryCodeStruct]()
-    var dictPhone: Dictionary = [String: UserNameCard]()
-    var selectedIdx = [IndexPath]()
+    private var uiviewNavBar: FaeNavBar!
+    private var uiviewSchbar: UIView!
+    private var schbarFromContacts: FaeSearchBarTest!
+    private var tblFromContacts: UITableView!
+    private var uiviewNotAllowed: UIView!
+    private var imgGhost: UIImageView!
+    private var lblPrompt: UILabel!
+    private var lblInstructions: UILabel!
+    private var btnAllowAccess: UIButton!
+    private var activityIndicator: UIActivityIndicatorView!
+    
+    private var filteredUnregistered = [UserNameCard]()
+    private var arrUnregistered = [UserNameCard]()
+    private var filteredRegistered = [RegisteredUser]()
+    private var arrRegistered = [RegisteredUser]()
+    
+    private var boolAllowAccess = false
+    private var contactStore = CNContactStore()
+    private var phoneNumbers: String = ""
+    private var dictCountryCode: Dictionary = [String : CountryCodeStruct]()
+    private var dictPhone: Dictionary = [String: UserNameCard]()
+    private var selectedIdx = [IndexPath]()
     
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         loadNavBar()
+        loadActivityIndicator()
         definesPresentationContext = true
         view.backgroundColor = .white
-        checkContactsPermission()
+        if Key.shared.userPhoneVerified {
+            checkContactsPermission()
+        } else {
+            linkPhoneNumber()
+        }
     }
     
-    func loadNavBar() {
+    // MARK: - Set up
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
         uiviewNavBar.loadBtnConstraints()
         uiviewNavBar.lblTitle.text = "Add From Contacts"
-        uiviewNavBar.leftBtn.addTarget(self, action: #selector(self.actionGoBack(_:)), for: .touchUpInside)
+        uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
     }
     
-    func checkContactsPermission() {
+    private func loadActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .whiteLarge
+        activityIndicator.center.x = screenWidth / 2
+        activityIndicator.center.y = screenHeight / 2
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        view.addSubview(activityIndicator)
+        view.bringSubview(toFront: activityIndicator)
+    }
+    
+    private func checkContactsPermission() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .restricted, .notDetermined:
-            contactStore.requestAccess(for: .contacts, completionHandler: { (success, _) in
+            contactStore.requestAccess(for: .contacts, completionHandler: { [unowned self] (success, _) in
                 if success {
                     self.boolAllowAccess = true
                     DispatchQueue.main.async {
+                        self.activityIndicator.startAnimating()
                         self.setup()
+                        self.activityIndicator.stopAnimating()
                     }
                 } else {
                     self.boolAllowAccess = false
@@ -91,14 +113,16 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func setup() {
-        loadSearchTable()
-        loadNotAllowedView()
-        showView()
-        linkPhoneNumber()
+    private func setup() {
+        if boolAllowAccess {
+            loadSearchTable()
+            openContacts()
+        } else {
+            loadNotAllowedView()
+        }
     }
     
-    func loadSearchTable() {
+    private func loadSearchTable() {
         uiviewSchbar = UIView(frame: CGRect(x: 0, y: 64 + device_offset_top, width: screenWidth, height: 50))
         schbarFromContacts = FaeSearchBarTest(frame: CGRect(x: 5, y: 1, width: screenWidth, height: 48))
         schbarFromContacts.txtSchField.placeholder = "Search Contacts"
@@ -133,7 +157,7 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         view.addSubview(tblFromContacts)
     }
     
-    func loadNotAllowedView() {
+    private func loadNotAllowedView() {
         uiviewNotAllowed = UIView(frame: CGRect(x: 0, y: 65, width: screenWidth, height: screenHeight - 65))
         imgGhost = UIImageView()
         imgGhost.frame = CGRect(x: (screenWidth - 252) / 2, y: 119 * screenHeightFactor, width: 252, height: 209)
@@ -172,12 +196,12 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         let padding = (screenWidth - 300 * screenWidthFactor) / 2
         uiviewNotAllowed.addConstraintsWithFormat("H:|-\(padding)-[v0(\(300 * screenWidthFactor))]", options: [], views: btnAllowAccess)
         
-        uiviewNotAllowed.addConstraintsWithFormat("V:[v0(56)]-23-[v1(44)]-59-[v2(50)]-36-|", options: [], views: lblPrompt, lblInstructions, btnAllowAccess)
+        uiviewNotAllowed.addConstraintsWithFormat("V:[v0(56)]-23-[v1(44)]-59-[v2(50)]-\(36+device_offset_bot)-|", options: [], views: lblPrompt, lblInstructions, btnAllowAccess)
         
         view.addSubview(uiviewNotAllowed)
     }
     
-    func showView() {
+    private func showView() {
         if boolAllowAccess {
             openContacts()
             uiviewNotAllowed.isHidden = true
@@ -190,9 +214,13 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    func linkPhoneNumber() {
-        let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({(status: Int, message: Any?) in
+    private func linkPhoneNumber() {
+        let vc = SignInPhoneViewController()
+        vc.delegate = self
+        vc.enterMode = .contacts
+        present(vc, animated: true)
+        /*let getSelfInfo = FaeUser()
+        getSelfInfo.getAccountBasicInfo({ [unowned self] (status, message) in
             if status / 100 != 2 {
                 return
             }
@@ -207,10 +235,10 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
                 vc.enterMode = .contacts
                 self.present(vc, animated: true)
             }
-        })
+        })*/
     }
     
-    func openContacts() {
+    private func openContacts() {
         let path = Bundle.main.path(forResource: "CountryCode", ofType: "json")
         let jsonData = NSData(contentsOfFile: path!)
         var phoneJson: JSON!
@@ -267,7 +295,7 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
         //        print(val)
         let faeUser = FaeUser()
         faeUser.whereKey("phone", value: val)
-        faeUser.checkPhoneExistence {(status: Int, message: Any?) in
+        faeUser.checkPhoneExistence { [unowned self] (status, message) in
             if status / 100 == 2 {
                 if let result = message {
                     let phoneJson = JSON(result)
@@ -277,7 +305,7 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
                         let relation = Relations(json: phoneJson[i]["relation"])
                         self.dictPhone.removeValue(forKey: phone)
                         
-                        faeUser.getUserCard(String(userId)) {(status: Int, message: Any?) in
+                        faeUser.getUserCard(String(userId)) { [unowned self] (status, message) in
                             if status / 100 == 2 {
                                 let json = JSON(message!)
                                 let userInfo = UserNameCard(user_id: userId, nick_name: json["nick_name"].stringValue, user_name: json["user_name"].stringValue)
@@ -307,15 +335,15 @@ class AddFromContactsController: UIViewController, UIScrollViewDelegate {
     }
     
     // MARK: - Button & gesture actions
-    @objc func actionGoBack(_ sender: UIButton) {
+    @objc private func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
+    @objc private func tapOutsideToDismissKeyboard(_ sender: UITapGestureRecognizer) {
         schbarFromContacts.txtSchField.resignFirstResponder()
     }
     
-    @objc func actionAllowAccess(_ sender: UIButton) {
+    @objc private func actionAllowAccess(_ sender: UIButton) {
         let entityType = CNEntityType.contacts
         let authStatus = CNContactStore.authorizationStatus(for: entityType)
         if authStatus == .denied {

@@ -11,6 +11,7 @@ import SwiftyJSON
 
 class FaeContactsCell: UITableViewCell {
     
+    // MARK: - Properties
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
@@ -19,6 +20,7 @@ class FaeContactsCell: UITableViewCell {
     var lblStatus: UILabel!
     var friendStatus: FriendStatus = .accepted
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -38,7 +40,8 @@ class FaeContactsCell: UITableViewCell {
         imgAvatar.image = nil
     }
     
-    fileprivate func loadFriendsCellContent() {
+    // MARK: - Set up
+    private func loadFriendsCellContent() {
         imgAvatar = UIImageView(frame: CGRect(x: 14, y: 12, width: 50, height: 50))
         imgAvatar.layer.cornerRadius = 25
         imgAvatar.contentMode = .scaleAspectFill
