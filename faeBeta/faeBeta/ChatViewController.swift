@@ -269,7 +269,7 @@ extension ChatViewController {
 }
 
 // MARK: - FaeInputBarDelegate & InputView related delegates
-extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, GeneralLocationSearchDelegate, MapSearchDelegate {
+extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, SelectLocationDelegate, MapSearchDelegate {
     // MARK: FaeInputBarDelegate
     func faeInputBar(_ inputBar: FaeInputBar, didPressSendButtonWith text: String, with pinView: InputBarTopPinView?) {
         if let pinView = pinView {
@@ -327,7 +327,6 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, G
             vc.boolSearchEnabled = true
             vc.previousVC = .chat
             vc.delegate = self
-            vc.mapSearchVC.delegate = self
             Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
             navigationController?.pushViewController(vc, animated: false)
         default: break
@@ -359,7 +358,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, G
         }
     }
     
-    // MARK: GeneralLocationSearchDelegate
+    // MARK: SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
@@ -372,6 +371,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, G
     }
     
     func sendPlaceBack(placeData: PlacePin) {
+        joshprint("[sendPlaceBack] called")
         faeInputBar.setupTopStackView(place: placeData)
         collectionViewBottomInset = faeInputBar.intrinsicContentSize.height
         scrollToBottom(animated: false)

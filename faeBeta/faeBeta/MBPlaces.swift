@@ -42,6 +42,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         searchVC.delegate = self
         searchVC.boolFromChat = false
         searchVC.boolFromBoard = true
+        searchVC.previousVC = .board
         if let text = lblSearchContent.text, text != "All Places" {
             searchVC.strSearchedPlace = text
         }
@@ -271,7 +272,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     // MapBoardPlaceTabDelegate End
 
-    // GeneralLocationSearchDelegate
+    // SelectLocationDelegate
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
         LocManager.shared.locToSearch_board = location.coordinate

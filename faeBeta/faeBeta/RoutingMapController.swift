@@ -9,7 +9,7 @@
 import UIKit
 import IVBezierPathRenderer
 
-class RoutingMapController: BasicMapController, GeneralLocationSearchDelegate, FMRouteCalculateDelegate {
+class RoutingMapController: BasicMapController, SelectLocationDelegate, FMRouteCalculateDelegate {
     
     private var btnDistIndicator: FMDistIndicator!
     private var uiviewChooseLocs: FMChooseLocs!
@@ -266,7 +266,7 @@ class RoutingMapController: BasicMapController, GeneralLocationSearchDelegate, F
         navigationController?.popViewController(animated: false)
     }
     
-    // MARK: - GeneralLocationSearchDelegate
+    // MARK: - SelectLocationDelegate
     func chooseLocationOnMap() {
         uiviewChooseLocs.hide(animated: false)
         modeSelecting = .on
