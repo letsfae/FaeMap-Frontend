@@ -15,7 +15,7 @@ protocol ExploreDelegate: class {
     func jumpToExpPlacesCollection(places: [PlacePin], category: String)
 }
 
-class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, BoardsSearchDelegate, EXPCellDelegate {
+class ExploreViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, AddPinToCollectionDelegate, AfterAddedToListDelegate, SelectLocationDelegate, EXPCellDelegate {
     
     // MARK: - Variables
     
@@ -489,6 +489,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: Location Text
     private func reloadBottomText(_ city: String, _ state: String) {
+        
         strLocation = "\(city), \(state)"
         let fullAttrStr = NSMutableAttributedString()
         let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
@@ -587,7 +588,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         let vc = SelectLocationViewController()
         vc.delegate = self
         vc.mode = .part
-        vc.boolFromExplore = true
+        vc.previousVC = .explore
         navigationController?.pushViewController(vc, animated: false)
     }
     
@@ -925,7 +926,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         present(vc, animated: true)
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")
         var array = [String]()

@@ -9,7 +9,7 @@ import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")
         var array = [String]()
@@ -122,7 +122,11 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             let vc = SelectLocationViewController()
             vc.delegate = self
             vc.mode = .part
-            vc.boolFromExplore = true
+            vc.boolFromBoard = true
+            vc.previousVC = .board
+            if let text = lblSearchContent.text {
+                vc.previousLabelText = text
+            }
             navigationController?.pushViewController(vc, animated: false)
         }
     }
