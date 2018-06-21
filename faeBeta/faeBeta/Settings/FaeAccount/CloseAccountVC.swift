@@ -45,9 +45,10 @@ class SetCloseViewController: UIViewController, UIScrollViewDelegate {
         loadAlertClose()
     }
     
+    // MARK: - Set up
     private func loaduiviewBackground() {
-        btnBackground = UIButton(frame: self.view.frame)
-        uiviewBackground = UIView(frame: self.view.frame)
+        btnBackground = UIButton(frame: view.frame)
+        uiviewBackground = UIView(frame: view.frame)
         view.addSubview(uiviewBackground)
         uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)

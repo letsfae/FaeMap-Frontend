@@ -910,8 +910,9 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     func getOpeningHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceOpeningHourCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
         let row = (indexPath.row - 1 + dayIdx) % arrDay.count
-        let day = arrDay_LG[row]
-        let hour = arrHour[row]
+        let day = arrDay[row]
+        //let hour = arrHour[row]
+        let hour = place.hours[day] ?? ["N/A"]
         cell.setValueForOpeningHourCell(day, hour, bold: indexPath.row == 1)
         return cell
     }

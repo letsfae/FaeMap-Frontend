@@ -27,6 +27,7 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         loadActivityIndicator()
     }
     
+    // MARK: - Set up
     private func loadActivityIndicator() {
         activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = .whiteLarge

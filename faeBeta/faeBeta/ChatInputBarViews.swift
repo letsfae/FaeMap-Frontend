@@ -54,7 +54,7 @@ class SeparatorLine: UIView {
     // MARK: Properties
     
     /// The height of the line
-    var height: CGFloat = 1.0 {
+    var height: CGFloat = 2.0 {
         didSet {
             invalidateIntrinsicContentSize()
         }
@@ -78,7 +78,7 @@ class SeparatorLine: UIView {
     
     /// Sets up the default properties
     func setup() {
-        backgroundColor = .lightGray
+        backgroundColor = UIColor._200199204()
         translatesAutoresizingMaskIntoConstraints = false
         setContentHuggingPriority(.defaultHigh, for: .vertical)
     }

@@ -74,7 +74,7 @@ struct Relations {
 
 class ContactsViewController: UIViewController {
     
-    // MARK: - static functions
+    // MARK: - Static functions
     //         to pull latest friend list, received requests, sent requests, and block list
     static func loadFriendsList() {
         let realmUser = RealmUser(value: ["\(Key.shared.user_id)_\(Key.shared.user_id)", String(Key.shared.user_id), String(Key.shared.user_id), Key.shared.username, Key.shared.nickname, MYSELF, Key.shared.age, true, Key.shared.gender, true, "", ""])
@@ -171,7 +171,7 @@ class ContactsViewController: UIViewController {
         
     }
     
-    // MARK: - properties
+    // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var uiviewDropDownMenu: UIView!
     var btnTop: UIButton!
@@ -195,15 +195,15 @@ class ContactsViewController: UIViewController {
     var schbarContacts: FaeSearchBarTest!
     var uiviewSchbar: UIView!
     var uiviewBottomNav: UIView!
-    var btnFFF: UIButton! // btnFFF switches to friends, following, followed.
-    var btnRR: UIButton! // btnRR switches to requests, requested.
-    var cellStatus = 0 // 3 cases: 1st case is Contacts - 0, 2nd is RecievedRequests - 1, 3rd is Requested - 2.
-                       // This is used to switch out cell types and cells in the main table (tblContacts)
+    var btnFFF: UIButton! /// btnFFF switches to friends, following, followed.
+    var btnRR: UIButton! /// btnRR switches to requests, requested.
+    var cellStatus = 0 /// 3 cases: 1st case is Contacts - 0, 2nd is RecievedRequests - 1, 3rd is Requested - 2.
+                       /// This is used to switch out cell types and cells in the main table (tblContacts)
     
     let apiCalls = FaeContact()
     var indicatorView: UIActivityIndicatorView!
     
-    // ContactsNotificationCtrl.swift variable declaration for UI objects
+    /// ContactsNotificationCtrl.swift variable declaration for UI objects
     var uiviewChooseAction: UIView!
     var uiviewNotification: UIView!
     var lblTitleInActions: UILabel!
@@ -235,7 +235,7 @@ class ContactsViewController: UIViewController {
     let ACCEPT = 9
     let IGNORE = 10
     
-    var notificationToken: NotificationToken? = nil
+    private var notificationToken: NotificationToken? = nil
     
     var uiviewNameCard = FMNameCardView()
     
@@ -277,7 +277,8 @@ class ContactsViewController: UIViewController {
         }
         notificationToken?.invalidate()
         guard let tableView = tblContacts else { return }
-        notificationToken = tableDataSource.observe { (changes: RealmCollectionChange) in
+        notificationToken = tableDataSource.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let `self` = self else { return }
             switch changes {
             case .initial:
                 felixprint("contacts initial")

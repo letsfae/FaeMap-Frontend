@@ -10,6 +10,7 @@ import UIKit
 
 class FaeRecommendedCell: UITableViewCell {
     
+    // MARK: - Properties
     var imgAvatar: UIImageView!
     var lblUserName: UILabel!
     var lblUserSaying: UILabel!
@@ -18,6 +19,7 @@ class FaeRecommendedCell: UITableViewCell {
     var bottomLine: UIView!
     var hasAddFriend = false
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -30,7 +32,8 @@ class FaeRecommendedCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func loadRecommendedCellContent() {
+    // MARK: - Set up
+    private func loadRecommendedCellContent() {
         imgAvatar = UIImageView()
         imgAvatar.frame = CGRect(x: 14, y: 12, width: 50, height: 50)
         imgAvatar.image = #imageLiteral(resourceName: "defaultMen")
@@ -62,7 +65,7 @@ class FaeRecommendedCell: UITableViewCell {
         
         btnAddFriend = UIButton()
         btnAddFriend.setImage(#imageLiteral(resourceName: "addButton"), for: .normal)
-        btnAddFriend.addTarget(self, action: #selector(self.changeButtonPic(_:)), for: .touchUpInside)
+        btnAddFriend.addTarget(self, action: #selector(changeButtonPic(_:)), for: .touchUpInside)
         addSubview(btnAddFriend)
         addConstraintsWithFormat("V:|-26-[v0(29)]", options: [], views: btnAddFriend)
         addConstraintsWithFormat("H:[v0(74)]-17-|", options: [], views: btnAddFriend)
@@ -76,12 +79,12 @@ class FaeRecommendedCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
     }
     
-    @objc func changeButtonPic(_ sender: UIButton) {
+    // MARK: - Button action
+    @objc private func changeButtonPic(_ sender: UIButton) {
         if !hasAddFriend {
             btnAddFriend.setImage(#imageLiteral(resourceName: "btnAdded"), for: .normal)
             hasAddFriend = true
-        }
-        else {
+        } else {
             btnAddFriend.setImage(#imageLiteral(resourceName: "addButton"), for: .normal)
             hasAddFriend = false
         }

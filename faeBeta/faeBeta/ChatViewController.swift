@@ -295,9 +295,11 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
     }
     
     func faeInputBar(_ inputBar: FaeInputBar, didSendStickerWith name: String, isFaeHeart faeHeart: Bool) {
-        if faeHeart && !boolJustSentHeart {
-            storeChatMessageToRealm(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
-            boolJustSentHeart = true
+        if faeHeart {
+            if !boolJustSentHeart {
+                storeChatMessageToRealm(type: "[Heart]", text: "pinDetailLikeHeartFullLarge")
+                boolJustSentHeart = true
+            }
         } else {
             storeChatMessageToRealm(type: "[Sticker]", text: name)
         }

@@ -10,11 +10,13 @@ import UIKit
 
 class FaeAddFriendOptionsCell: UITableViewCell {
     
+    // MARK: - Properties
     var imgIcon: UIImageView!
     var lblOption: UILabel!
-    var imgArrow: UIImageView!
+    private var imgArrow: UIImageView!
     var bottomLine: UIView!
     
+    // MARK: - init
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         separatorInset = UIEdgeInsets.zero
@@ -27,7 +29,8 @@ class FaeAddFriendOptionsCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func loadAddFriendOptionsCellContent() {
+    // MARK: - Set up
+    private func loadAddFriendOptionsCellContent() {
         imgIcon = UIImageView()
         imgIcon.frame = CGRect(x: 15, y: 12, width: 28, height: 28)
         imgIcon.contentMode = .scaleAspectFit

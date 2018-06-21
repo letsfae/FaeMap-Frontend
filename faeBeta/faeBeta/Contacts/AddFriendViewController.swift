@@ -9,13 +9,14 @@
 import UIKit
 
 class AddFriendViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     // MARK: - Properties
-    let optionsArray: [String] = ["Add by Username", "From Contacts", "Scan Nearby", "Share Username"]
-    let recommendedFriendsArray: [Friends] = []
-    let optionsImagesArray = [#imageLiteral(resourceName: "searchUsernamesIcon"), #imageLiteral(resourceName: "fromContactsIcon"), #imageLiteral(resourceName: "scanNearbyIcon"), #imageLiteral(resourceName: "shareUsernameIcon")]
-    var tblOptions: UITableView!
-    var uiviewNavBar: FaeNavBar!
-    var imgCity: UIImageView!
+    private let optionsArray: [String] = ["Add by Username", "From Contacts", "Scan Nearby", "Share Username"]
+    private let recommendedFriendsArray: [Friends] = []
+    private let optionsImagesArray = [#imageLiteral(resourceName: "searchUsernamesIcon"), #imageLiteral(resourceName: "fromContactsIcon"), #imageLiteral(resourceName: "scanNearbyIcon"), #imageLiteral(resourceName: "shareUsernameIcon")]
+    private var tblOptions: UITableView!
+    private var uiviewNavBar: FaeNavBar!
+    private var imgCity: UIImageView!
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -24,7 +25,8 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         loadTable()
     }
     
-    func loadNavBar() {
+    // MARK: - Set up
+    private func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
         uiviewNavBar.rightBtn.isHidden = true
@@ -33,7 +35,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         uiviewNavBar.leftBtn.addTarget(self, action: #selector(actionGoBack(_:)), for: .touchUpInside)
     }
     
-    func loadTable() {
+    private func loadTable() {
         tblOptions = UITableView()
         tblOptions.separatorStyle = .none
         tblOptions.frame = CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: screenHeight - 65 - device_offset_top)
@@ -50,7 +52,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         view.addSubview(imgCity)
     }
     
-    @objc func actionGoBack(_ sender: UIButton) {
+    @objc private func actionGoBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
     

@@ -61,7 +61,7 @@ class FMNameCardView: UIView, PassStatusFromViewToButtonDelegate {
     private var btnChat: UIButton!
     private var btnCloseOptions: UIButton!
     var btnProfile: UIButton!
-    private var btnOptions: UIButton!
+    var btnOptions: UIButton!
     private var btnCloseCard: UIButton!
     private var btnEditNameCard: UIButton!
     var imgAvatar: UIImageView!

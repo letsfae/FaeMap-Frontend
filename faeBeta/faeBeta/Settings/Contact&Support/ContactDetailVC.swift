@@ -77,8 +77,8 @@ class SetContactDetailViewController: UIViewController {
     }
     
     private func addObersers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     private func setTitleText() {
@@ -123,7 +123,7 @@ class SetContactDetailViewController: UIViewController {
         }
         let info = notification.userInfo!
         let frameKeyboard: CGRect = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: {
             self.btnSend.frame.origin.y = screenHeight - frameKeyboard.height - 14 - 50
         })
     }
@@ -132,7 +132,7 @@ class SetContactDetailViewController: UIViewController {
         if boolWillDisappear {
             return
         }
-        UIView.animate(withDuration: 0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { 
             self.btnSend.frame.origin.y = screenHeight - 30 - 50 - device_offset_bot
         })
     }
