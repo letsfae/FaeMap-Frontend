@@ -18,6 +18,7 @@ class LocManager: NSObject, CLLocationManagerDelegate {
     var locToSearch_map: CLLocationCoordinate2D?
     var locToSearch_board: CLLocationCoordinate2D?
     var locToSearch_explore: CLLocationCoordinate2D?
+    var locToSearch_chat: CLLocationCoordinate2D?
     
     var curtLoc = CLLocation(latitude: 34.020554, longitude: -118.285447)
     var curtLat: CLLocationDegrees {

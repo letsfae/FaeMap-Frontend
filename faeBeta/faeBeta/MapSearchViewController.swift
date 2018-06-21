@@ -72,6 +72,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
     
+    enum PreviousViewControllerType {
+        case chat, map, board
+    }
+    
+    var previousVC = PreviousViewControllerType.map
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()

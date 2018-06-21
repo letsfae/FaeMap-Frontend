@@ -87,23 +87,9 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         }
         var radius: Int = 16666
         var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
-        if boolFromBoard {
-            radius = 160934
-            if let locToSearch = LocManager.shared.locToSearch_board {
-                locationToSearch = locToSearch
-            }
-            if let locText = schLocationBar.txtSchField.text {
-                print("[locText]", locText)
-                switch locText {
-                case "Current Location":
-                    locationToSearch = LocManager.shared.curtLoc.coordinate
-                    print("[searchArea] Current Location")
-                default:
-                    print("[searchArea] other")
-                    break
-                }
-            }
-        } else {
+        
+        switch previousVC {
+        case .map:
             locationToSearch = faeMapView.centerCoordinate
             if let locToSearch = LocManager.shared.locToSearch_map {
                 locationToSearch = locToSearch
@@ -124,15 +110,51 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                     break
                 }
             }
+        case .board:
+            radius = 160934
+            if let locToSearch = LocManager.shared.locToSearch_board {
+                locationToSearch = locToSearch
+            }
+            if let locText = schLocationBar.txtSchField.text {
+                print("[locText]", locText)
+                switch locText {
+                case "Current Location":
+                    locationToSearch = LocManager.shared.curtLoc.coordinate
+                    print("[searchArea] Current Location")
+                default:
+                    print("[searchArea] other")
+                    break
+                }
+            }
+        case .chat:
+            locationToSearch = faeMapView.centerCoordinate
+            if let locToSearch = LocManager.shared.locToSearch_chat {
+                locationToSearch = locToSearch
+            }
+            if let locText = schLocationBar.txtSchField.text {
+                print("[locText]", locText)
+                switch locText {
+                case "Current Location":
+                    locationToSearch = LocManager.shared.curtLoc.coordinate
+                    print("[searchArea] Current Location")
+                case "Current Map View":
+                    locationToSearch = faeMapView.centerCoordinate
+                    // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    print("[searchArea] Current Map View")
+                default:
+                    print("[searchArea] other")
+                    break
+                }
+            }
         }
         
-        print("[radius]", radius)
         flagPlaceFetched = false
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
         FaeSearch.shared.whereKey("size", value: "20")
-        FaeSearch.shared.whereKey("radius", value: "16666")
+        FaeSearch.shared.whereKey("radius", value: "\(radius)")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,

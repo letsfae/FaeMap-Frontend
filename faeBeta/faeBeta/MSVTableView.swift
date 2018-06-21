@@ -56,21 +56,51 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         switch schBarType {
         case .place:
             if boolFromChat {
-                let selectedPlace = searchedPlaces[indexPath.row]
-                delegate?.selectPlace?(place: selectedPlace)
-                navigationController?.popViewController(animated: false)
+                switch indexPath.section {
+                case 0:
+                    // category
+                    break
+                case 1:
+                    // place
+                    let selectedPlace = searchedPlaces[indexPath.row]
+                    delegate?.selectPlace?(place: selectedPlace)
+                    gotoChatViewController()
+                case 2:
+                    // address
+                    let address = searchedAddresses[indexPath.row]
+                    let coder = CLGeocoder()
+                    coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
+                        guard let `self` = self else {
+                            return
+                        }
+                        guard error == nil else {
+                            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
+                            return
+                        }
+                        guard let placeMarks = results else { return }
+                        guard let first = placeMarks.first else { return }
+                        guard let loc = first.location else { return }
+                        self.delegate?.selectLocation?(location: loc)
+                        self.gotoChatViewController()
+                    }
+                default:
+                    break
+                }
             } else {
                 switch indexPath.section {
                 case 0:
+                    // category
                     let selectedCat = filteredCategory[indexPath.row].key
                     getPlaceInfo(content: selectedCat, source: "categories")
                 case 1:
+                    // place
                     let selectedPlace = searchedPlaces[indexPath.row]
                     schPlaceBar.txtSchField.resignFirstResponder()
                     let vc = PlaceDetailViewController()
                     vc.place = selectedPlace
                     navigationController?.pushViewController(vc, animated: true)
                 default:
+                    // address
                     let address = searchedAddresses[indexPath.row]
                     let coder = CLGeocoder()
                     coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
@@ -85,8 +115,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                         self.delegate?.selectLocation?(location: loc)
                         self.navigationController?.popViewController(animated: false)
                     }
-                    
-                    break
                 }
             }
         case .location:
@@ -123,10 +151,10 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.btnClose.isHidden = true
                 if indexPath.row == 0 {
                     let curLoc = LocManager.shared.curtLoc.coordinate
-                    LocManager.shared.locToSearch_map = curLoc
+                    updateSavedLocationToSearchInEachViewController(coordinate: curLoc)
                     faeRegion = calculateRegion(miles: 100, coordinate: curLoc)
                 } else {
-                    LocManager.shared.locToSearch_map = faeMapView.centerCoordinate
+                    updateSavedLocationToSearchInEachViewController(coordinate: faeMapView.centerCoordinate)
                     faeRegion = calculateRegion(miles: 100, coordinate: faeMapView.centerCoordinate)
                 }
                 reloadAddressCompleterRegion()
@@ -197,4 +225,33 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
         schPlaceBar.txtSchField.resignFirstResponder()
         schLocationBar.txtSchField.resignFirstResponder()
     }
+}
+
+extension MapSearchViewController {
+    
+    func gotoChatViewController() {
+        guard var arrCtrlers = navigationController?.viewControllers else {
+            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
+            return
+        }
+        arrCtrlers.removeLast()
+        arrCtrlers.removeLast()
+        guard arrCtrlers.last is ChatViewController else {
+            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
+            return
+        }
+        navigationController?.setViewControllers(arrCtrlers, animated: false)
+    }
+    
+    func updateSavedLocationToSearchInEachViewController(coordinate: CLLocationCoordinate2D) {
+        switch previousVC {
+        case .map:
+            LocManager.shared.locToSearch_map = coordinate
+        case .board:
+            LocManager.shared.locToSearch_board = coordinate
+        case .chat:
+            LocManager.shared.locToSearch_chat = coordinate
+        }
+    }
+    
 }

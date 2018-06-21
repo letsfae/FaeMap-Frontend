@@ -9,13 +9,6 @@
 import UIKit
 import SwiftyJSON
 
-@objc protocol GeneralLocationSearchDelegate: class {
-    @objc optional func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation)
-    @objc optional func chooseLocationOnMap()
-    @objc optional func sendLocationBack(address: RouteAddress)
-    @objc optional func sendPlaceBack(placeData: PlacePin)
-}
-
 enum EnterMode: String {
     case place = "place"
     case location = "location"
@@ -23,7 +16,7 @@ enum EnterMode: String {
 
 class GeneralLocationSearchViewController: UIViewController, FaeSearchBarTestDelegate, UITableViewDelegate, UITableViewDataSource, MKLocalSearchCompleterDelegate {
     
-    weak var delegate: GeneralLocationSearchDelegate?
+    weak var delegate: SelectLocationDelegate?
     
     private var fixedLocOptions = ["Use my Current Location", "Choose Location on Map"]
     private var filteredLocations = [String]()
