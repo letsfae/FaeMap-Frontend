@@ -246,7 +246,7 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imgAvatar.image = images[0]
         let avatar = FaeImage()
         avatar.image = images[0]
-        avatar.faeUploadProfilePic { [weak self] (code: Int, _: Any?) in
+        avatar.faeUploadProfilePic { (code: Int, _: Any?) in
             if code / 100 == 2 {
             } else {
             }

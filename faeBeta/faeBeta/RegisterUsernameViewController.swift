@@ -135,7 +135,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
             } else {
                 let messageJSON = JSON(message!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                    handleErrorCode(.auth, error_code, { (prompt) in
                         // handle
                         felixprint("\(error_code)")
                     })
