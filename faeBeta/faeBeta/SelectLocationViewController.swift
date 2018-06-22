@@ -202,7 +202,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 camera.centerCoordinate = locToSearch
             }
         case .chat:
-            break
+            if let locToSearch = LocManager.shared.locToSearch_chat {
+                camera.centerCoordinate = locToSearch
+            }
         }
         camera.altitude = 35000
         faeMapView.setCamera(camera, animated: false)
