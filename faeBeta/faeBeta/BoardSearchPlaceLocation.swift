@@ -31,11 +31,6 @@ extension MapBoardViewController: SelectLocationDelegate {
         }
     }
     
-    // function for search places
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        
-    }
-    
     // MARK: - SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")

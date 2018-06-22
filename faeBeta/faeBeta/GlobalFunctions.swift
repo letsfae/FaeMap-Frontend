@@ -207,6 +207,39 @@ func vibrate(type: Int) {
     
 }
 
+func processLocationName(separator: Character, text: String, size: CGFloat = 16, size2: CGFloat = 16) -> NSAttributedString? {
+    var arrNames = text.split(separator: separator)
+    var array = [String]()
+    guard arrNames.count >= 1 else { return nil }
+    for i in 0..<arrNames.count {
+        let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
+        array.append(name)
+    }
+    if array.count >= 3 {
+        return reloadBottomText(array[0], array[1] + ", " + array[2], size, size2)
+    } else if array.count == 1 {
+        return reloadBottomText(array[0], "", size, size2)
+    } else if array.count == 2 {
+        return reloadBottomText(array[0], array[1], size, size2)
+    }
+    return nil
+}
+
+func reloadBottomText(_ city: String, _ state: String, _ size: CGFloat = 16, _ size2: CGFloat = 16) -> NSAttributedString {
+    let fullAttrStr = NSMutableAttributedString()
+
+    let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: size)!]
+    let title_0_attr = NSMutableAttributedString(string: city + " ", attributes: attrs_0)
+    
+    let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: size2)!]
+    let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+    
+    fullAttrStr.append(title_0_attr)
+    fullAttrStr.append(title_1_attr)
+    
+    return fullAttrStr
+}
+
 func showAlert(title: String, message: String, viewCtrler: UIViewController?, handler: ((UIAlertAction) -> Void)? = nil) {
     guard let viewCtrler = viewCtrler else { return }
     let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

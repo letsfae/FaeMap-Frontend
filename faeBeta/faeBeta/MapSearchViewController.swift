@@ -14,6 +14,7 @@ import MapKit
     @objc optional func jumpToLocation(region: MKCoordinateRegion)
     @objc optional func selectPlace(place: PlacePin)
     @objc optional func selectLocation(location: CLLocation)
+    @objc optional func jumpToCategory(category: String)
 }
 
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
@@ -38,6 +39,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
     var strSearchedPlace = ""
+    var strSearchedLocation = ""
     var cellStatus = 0
     enum SearchBarType {
         case place, location
@@ -86,11 +88,23 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         loadTable()
         loadNoResultsView()
         loadAddressCompleter()
+        preloadSearchLocation()
         schPlaceBar.txtSchField.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    private func preloadSearchLocation() {
+        guard previousVC == .board else { return }
+        guard strSearchedLocation != "" else { return }
+        joshprint("[preloadSearchLocation]", strSearchedLocation)
+        if let attrText = processLocationName(separator: "@", text: strSearchedLocation, size: 18, size2: 16) {
+            schLocationBar.txtSchField.attributedText = attrText
+        } else {
+            fatalError("Processing Location Name Fail, Need To Check Function")
+        }
     }
     
     private func loadNoResultsView() {
@@ -133,7 +147,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
         schPlaceBar.txtSchField.placeholder = !boolFromChat ? "Search Fae Map" : "Search Place or Address"
-        if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" {
+        if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false
         }
