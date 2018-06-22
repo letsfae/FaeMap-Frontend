@@ -30,6 +30,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     // MKLocalSearchCompleterDelegate
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        guard previousVC != .board else { return }
         print("addresses fetched")
         flagAddrFetched = true
         searchedAddresses = completer.results.filter({ $0.subtitle != "Search Nearby" })
@@ -40,6 +41,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     // MKLocalSearchCompleterDelegate
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // handle error
+        guard previousVC != .board else { return }
         print("addr fetching failed", error.localizedDescription)
         flagAddrFetched = true
         searchedAddresses = completer.results

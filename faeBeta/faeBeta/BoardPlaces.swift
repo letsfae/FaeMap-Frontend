@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 // for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate {
+extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate, MapSearchDelegate {
     // MARK: - Load place part of boards
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
@@ -58,14 +58,36 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     
     // MARK: - Button actions
     @objc func searchAllPlaces(_ sender: UIButton) {
-        /*
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
+        let searchVC = MapSearchViewController()
+        searchVC.boolNoCategory = false
+        searchVC.boolFromChat = false
         searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-         */
+        searchVC.previousVC = .board
+        if let text = lblSearchContent.text {
+            searchVC.strSearchedPlace = text
+        }
+        if let text = locToSearchTextRaw {
+            searchVC.strSearchedLocation = text
+        }
+        //searchVC.searchedPlaces = viewModelPlaces.places
+        navigationController?.pushViewController(searchVC, animated: false)
+    }
+    
+    // MARK: - MapSearchDelegate
+    func jumpToPlaces(searchText: String, places: [PlacePin]) {
+        lblSearchContent.text = searchText
+        // TODO VICKY - MAPSEARCH
+        // 搜索name, 回传的参数里places没有用
+        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
+        // if nil, then use LocManager.shared.curtLoc
+    }
+    
+    func jumpToCategory(category: String) {
+        lblSearchContent.text = category
+        // TODO VICKY - MAPSEARCH
+        // 搜索category
+        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
+        // if nil, then use LocManager.shared.curtLoc
     }
     
     @objc func actionClearSearchResults(_ sender: UIButton) {
@@ -124,11 +146,18 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         tblPlaceRight.isHidden = false
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.searchedLoc = location
-        lblCurtLoc.text = searchText
+        LocManager.shared.locToSearch_board = location.coordinate
+        locToSearchTextRaw = searchText
+        joshprint("[jumpToLocationSearchResult]", searchText)
+        if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {
+            lblCurtLoc.attributedText = attrText
+        } else {
+            fatalError("Processing Location Name Fail, Need To Check Function")
+        }
         imgCurtLoc.image = icon
+        
         if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
 //            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         } else {
