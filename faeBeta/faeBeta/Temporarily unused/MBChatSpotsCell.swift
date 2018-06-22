@@ -5,7 +5,7 @@
 //  Created by vicky on 4/12/17.
 //  Copyright © 2017 Yue. All rights reserved.
 //
-
+/*
 import UIKit
 
 class MBChatSpotsCell: UITableViewCell {
@@ -65,3 +65,4 @@ class MBChatSpotsCell: UITableViewCell {
     }
 
 }
+ */

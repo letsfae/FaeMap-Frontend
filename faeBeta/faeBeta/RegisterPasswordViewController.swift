@@ -95,7 +95,8 @@ class RegisterPasswordViewController: RegisterBaseViewController {
             if (savedPassword as? String) != password! && Key.shared.is_Login {
                 faeUser.whereKey("old_password", value: (savedPassword as? String)!)
                 faeUser.whereKey("new_password", value: password!)
-                faeUser.updatePassword({ (_, _) in
+                faeUser.updatePassword({ [weak self] (_, _) in
+                    guard let `self` = self else { return }
                     self.savePasswordInUser()
                     self.jumpToRegisterNext()
                 })

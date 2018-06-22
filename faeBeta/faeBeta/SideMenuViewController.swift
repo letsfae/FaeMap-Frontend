@@ -355,19 +355,19 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func loadUserInfo() {
-        General.shared.avatarCached(userid: Key.shared.user_id, completion:  { (avatarImage) in
-            self.imgAvatar.image = avatarImage
+        General.shared.avatarCached(userid: Key.shared.user_id, completion:  { [weak self] (avatarImage) in
+            self?.imgAvatar.image = avatarImage
         })
-        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
-            self.imgAvatar.image = avatarImage
+        General.shared.avatar(userid: Key.shared.user_id, completion: { [weak self] (avatarImage) in
+            self?.imgAvatar.image = avatarImage
         })
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
-            updateNickName.getSelfNamecard { (status: Int, message: Any?) in
+            updateNickName.getSelfNamecard { [weak self] (status: Int, message: Any?) in
                 guard status / 100 == 2 else { return }
                 let nickNameInfo = JSON(message!)
                 DispatchQueue.main.async {
-                    self.lblNickName.text = nickNameInfo["nick_name"].stringValue
+                    self?.lblNickName.text = nickNameInfo["nick_name"].stringValue
                 }
             }
         }

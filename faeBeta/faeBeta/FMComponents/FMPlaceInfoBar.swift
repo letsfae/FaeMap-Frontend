@@ -262,9 +262,9 @@ class FMPlaceInfoBar: UIView {
     }
     
     func resetSubviews() {
-        imgBack_0.frame.origin.x = -screenWidth + 7
-        imgBack_1.frame.origin.x = 7
-        imgBack_2.frame.origin.x = screenWidth + 7
+        imgBack_0.frame.origin.x = -screenWidth + 8
+        imgBack_1.frame.origin.x = 8
+        imgBack_2.frame.origin.x = screenWidth + 8
     }
     
     func load(for placeInfo: PlacePin) {
@@ -366,8 +366,8 @@ class FMPlaceInfoBar: UIView {
     
     private func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.imgBack_0.frame.origin.x = 7
-            self.imgBack_1.frame.origin.x += screenWidth + 7
+            self.imgBack_0.frame.origin.x = 8
+            self.imgBack_1.frame.origin.x += screenWidth + 8
         }, completion: {_ in
             if self.state == .map {
                 self.delegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
@@ -380,8 +380,8 @@ class FMPlaceInfoBar: UIView {
     
     private func panToNext(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.imgBack_1.frame.origin.x = -screenWidth + 7
-            self.imgBack_2.frame.origin.x = 7
+            self.imgBack_1.frame.origin.x = -screenWidth + 8
+            self.imgBack_2.frame.origin.x = 8
         }, completion: { _ in
             if self.state == .map {
                 self.delegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
@@ -448,7 +448,7 @@ class PlaceView: UIView {
     private var indicator: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
+        super.init(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         loadContent()
     }
     
@@ -547,44 +547,6 @@ class PlaceView: UIView {
             lblHours.text = openOrClose + hours
         }
         
-        /*if placeInfo.hours.count > 0 {
-            arrHour.removeAll()
-            for day in arrDay {
-                if placeInfo.hours.index(forKey: day) == nil {
-                    arrHour.append(["N/A"])
-                } else {
-                    // TODO: Vicky
-                    arrHour.append(placeInfo.hours[day]!)
-                }
-            }
-            let date = Date()
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.weekday], from: date)
-            
-            // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
-            if let weekday = components.weekday {
-                var dayIdx = weekday
-                
-                if weekday == 7 {
-                    dayIdx = 0
-                } else if weekday == 8 {
-                    dayIdx = 1
-                }
-                
-                var hour = arrHour[dayIdx][0]
-                if arrHour[0].count > 1 {
-                    for hourIdx in 1..<arrHour[dayIdx].count {
-                        hour += ", " + arrHour[dayIdx][hourIdx]
-                    }
-                }
-                
-                lblHours.text = arrDay[dayIdx] + ": " + hour
-            } else {
-                lblHours.text = nil
-            }
-        } else {
-            lblHours.text = nil
-        }*/
         loadPlaceImage(placeInfo: placeInfo)
 //        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
@@ -606,11 +568,13 @@ class FMLocationInfoBar: UIView {
     var activityIndicator: UIActivityIndicatorView!
     var lblName: UILabel!
     var lblAddr: UILabel!
+    var isShowed: Bool = false
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 70 + device_offset_top, width: 414 * screenWidthFactor, height: 80))
+        super.init(frame: CGRect(x: 8, y: 76 + device_offset_top, width: screenWidth - 16, height: 68))
         loadContent()
         loadActivityIndicator()
+        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -620,10 +584,13 @@ class FMLocationInfoBar: UIView {
     private func loadContent() {
         layer.zPosition = 605
         
-        let imgBack = UIImageView(frame: CGRect(x: 2, y: 0, width: 410 * screenWidthFactor, height: 80))
-        imgBack.contentMode = .scaleAspectFit
-        imgBack.image = #imageLiteral(resourceName: "location_bar_shadow")
-        addSubview(imgBack)
+        let uiviewBkgd = UIView()
+        uiviewBkgd.layer.cornerRadius = 2
+        uiviewBkgd.backgroundColor = .white
+        uiviewBkgd.clipsToBounds = true
+        addSubview(uiviewBkgd)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewBkgd)
         
         imgType = UIImageView()
         imgType.clipsToBounds = true
@@ -631,24 +598,24 @@ class FMLocationInfoBar: UIView {
         imgType.contentMode = .scaleAspectFit
         imgType.alpha = 0
         addSubview(imgType)
-        addConstraintsWithFormat("H:|-15-[v0(58)]", options: [], views: imgType)
-        addConstraintsWithFormat("V:|-11-[v0(58)]", options: [], views: imgType)
+        addConstraintsWithFormat("H:|-9-[v0(58)]", options: [], views: imgType)
+        addConstraintsWithFormat("V:|-5-[v0(58)]", options: [], views: imgType)
         
         lblName = UILabel()
         addSubview(lblName)
         lblName.textAlignment = .left
         lblName.textColor = UIColor._898989()
         lblName.font = UIFont(name: "AvenirNext-Medium", size: 15)
-        addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblName)
-        addConstraintsWithFormat("V:|-22-[v0(20)]", options: [], views: lblName)
+        addConstraintsWithFormat("H:|-77-[v0]-30-|", options: [], views: lblName)
+        addConstraintsWithFormat("V:|-16-[v0(20)]", options: [], views: lblName)
         
         lblAddr = UILabel()
         addSubview(lblAddr)
         lblAddr.textAlignment = .left
         lblAddr.textColor = UIColor._107107107()
         lblAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        addConstraintsWithFormat("H:|-83-[v0]-30-|", options: [], views: lblAddr)
-        addConstraintsWithFormat("V:|-43-[v0(16)]", options: [], views: lblAddr)
+        addConstraintsWithFormat("H:|-77-[v0]-30-|", options: [], views: lblAddr)
+        addConstraintsWithFormat("V:|-37-[v0(16)]", options: [], views: lblAddr)
     }
     
     private func loadActivityIndicator() {
@@ -668,12 +635,17 @@ class FMLocationInfoBar: UIView {
     }
     
     func show() {
+        guard !isShowed else { return }
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 1
-        }, completion: nil)
+        }, completion: { _ in
+            self.isShowed = true
+        })
     }
     
     func hide() {
+        guard isShowed else { return}
+        isShowed = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
         }, completion: { _ in

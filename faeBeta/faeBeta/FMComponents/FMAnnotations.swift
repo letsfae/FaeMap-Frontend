@@ -287,7 +287,8 @@ class SelfAnnotationView: MKAnnotationView {
     
     @objc private func getSelfAccountInfo() {
         let getSelfInfo = FaeUser()
-        getSelfInfo.getAccountBasicInfo({ (status, message) in
+        getSelfInfo.getAccountBasicInfo({ [weak self] (status, message) in
+            guard let `self` = self else { return }
             guard status / 100 == 2 else {
                 self.mapAvatar = 1
                 self.invisibleOff()

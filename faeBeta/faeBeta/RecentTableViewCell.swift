@@ -243,10 +243,12 @@ class RecentTableViewCell: UITableViewCell {
         distanceToLeft.constant = floatKBounceValue;
         
         //UIView.animate(withDuration: 0.3, animations: {
-        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+        self.updateConstraintsIfNeeded(animated, completion:{ [weak self] (finished: Bool) in
+            guard let `self` = self else { return }
             self.distanceToRight.constant = 0
             self.distanceToLeft.constant = 0
-            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            self.updateConstraintsIfNeeded(animated, completion:{ [weak self] (finished: Bool) in
+                guard let `self` = self else { return }
                 self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
                 if notifyDelegate {
                     self.delegate.cellDidClose(self)
@@ -270,12 +272,14 @@ class RecentTableViewCell: UITableViewCell {
         distanceToRight.constant = floatButtonTotalWidth + floatKBounceValue
         
         //UIView.animate(withDuration: 0.3, animations: {
-        self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+        self.updateConstraintsIfNeeded(animated, completion:{ [weak self] (finished: Bool) in
             //3
+            guard let `self` = self else { return }
             self.distanceToLeft.constant = -self.floatButtonTotalWidth
             self.distanceToRight.constant = self.floatButtonTotalWidth
-            self.updateConstraintsIfNeeded(animated, completion:{ (finished: Bool) in
+            self.updateConstraintsIfNeeded(animated, completion:{ [weak self] (finished: Bool) in
                 //4
+                guard let `self` = self else { return }
                 self.floatStartingRightLayoutConstraintConstant = self.distanceToRight.constant
             })
         })

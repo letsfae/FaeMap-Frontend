@@ -282,7 +282,7 @@ class FaeChat {
     func handleFriendRelation(with userId: String, on message: String, time: String) {
         switch message {
         case "send friend request":
-            FaeUser().getUserCard(String(userId)) {(status: Int, message: Any?) in
+            FaeUser().getUserCard(String(userId)) { (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     let json = JSON(message!)
                     let realm = try! Realm()

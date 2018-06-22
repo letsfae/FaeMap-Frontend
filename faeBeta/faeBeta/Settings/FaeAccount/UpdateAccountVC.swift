@@ -331,7 +331,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
                         self.indicatorView.stopAnimating()
                     } else {
                         self.faeUser.whereKey("email", value: self.textNewEmail.text!)
-                        self.faeUser.updateEmail {(status: Int, message: Any?) in
+                        self.faeUser.updateEmail { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             if status / 100 == 2 {
                                 let vc = VerifyCodeViewController()
                                 vc.enterMode = .email

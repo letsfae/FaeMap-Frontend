@@ -91,7 +91,7 @@ class ContactsViewController: UIViewController {
             realm.add(realmFaeAvatar, update: true)
         }
         var setDeletedFriends = Set(realm.filterFriends().map { $0.id })
-        FaeContact().getFriends() {(status, message) in
+        FaeContact().getFriends() { (status, message) in
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {
@@ -144,7 +144,7 @@ class ContactsViewController: UIViewController {
     static func loadSentFriendRequests() {
         let realm = try! Realm()
         var setDeletedSent = Set(realm.filterSentFriendRequest().map { $0.id })
-        FaeContact().getFriendRequestsSent { (status, message) in
+        FaeContact().getFriendRequestsSent {(status, message) in
             if status / 100 == 2 {
                 let messageJSON = JSON(message!)
                 for (_, user):(String, JSON) in messageJSON {

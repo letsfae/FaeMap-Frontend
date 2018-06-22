@@ -99,8 +99,8 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         if let savedUsername = FaeCoreData.shared.readByKey("signup_username") {
             if (savedUsername as? String) != username! {
                 if Key.shared.is_Login {
-                    faeUser.logOut({ (_, _) in
-                        self.checkForUniqueUsername()
+                    faeUser.logOut({ [weak self] (_, _) in
+                        self?.checkForUniqueUsername()
                     })
                 } else {
                     checkForUniqueUsername()
@@ -117,7 +117,8 @@ class RegisterUsernameViewController: RegisterBaseViewController {
     private func checkForUniqueUsername() {
         faeUser.whereKey("user_name", value: username!)
         showActivityIndicator()
-        faeUser.checkUserExistence {(status, message) in
+        faeUser.checkUserExistence { [weak self] (status, message) in
+            guard let `self` = self else { return }
             self.hideActivityIndicator()
             if status/100 == 2 {
                 let valueInfo = JSON(message!)

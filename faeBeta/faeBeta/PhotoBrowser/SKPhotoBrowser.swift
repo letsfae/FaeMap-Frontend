@@ -240,7 +240,8 @@ open class SKPhotoBrowser: UIViewController {
         }
         
         activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-        activityViewController.completionWithItemsHandler = { (activity, success, items, error) in
+        activityViewController.completionWithItemsHandler = { [weak self] (activity, success, items, error) in
+            guard let `self` = self else { return }
             self.hideControlsAfterDelay()
             self.activityViewController = nil
         }

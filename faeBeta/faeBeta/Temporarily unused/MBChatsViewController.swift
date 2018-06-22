@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 import SwiftyJSON
 
@@ -110,21 +111,21 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         uiviewAllCom.backgroundColor = .white
         self.view.addSubview(uiviewAllCom)
         
-        let imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 13, y: 13, width: 24, height: 24))
-        imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeAllCom")
-        uiviewAllCom.addSubview(imgIconBeforeAllCom)
+        let imgCurtLoc = UIImageView(frame: CGRect(x: 13, y: 13, width: 24, height: 24))
+        imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeAllCom")
+        uiviewAllCom.addSubview(imgCurtLoc)
         
-        let lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 22))
-        lblAllCom.text = "All Communities"
-        lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblAllCom.textColor = UIColor._107107107()
-        uiviewAllCom.addSubview(lblAllCom)
+        let lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 22))
+        lblCurtLoc.text = "All Communities"
+        lblCurtLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblCurtLoc.textColor = UIColor._107107107()
+        uiviewAllCom.addSubview(lblCurtLoc)
         
         // draw line
-        let lblAllComUnderLine = UIView(frame: CGRect(x: 0, y: uiviewAllCom.frame.height - 1, width: screenWidth, height: 1))
-        lblAllComUnderLine.layer.borderColor = UIColor._200199204cg()
-        lblAllComUnderLine.layer.borderWidth = 1
-        uiviewAllCom.addSubview(lblAllComUnderLine)
+        let lblCurtLocUnderLine = UIView(frame: CGRect(x: 0, y: uiviewAllCom.frame.height - 1, width: screenWidth, height: 1))
+        lblCurtLocUnderLine.layer.borderColor = UIColor._200199204cg()
+        lblCurtLocUnderLine.layer.borderWidth = 1
+        uiviewAllCom.addSubview(lblCurtLocUnderLine)
     }
 
     fileprivate func loadTable() {
@@ -250,3 +251,4 @@ class MBChatsViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 }
+ */

@@ -83,8 +83,8 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
         imgAvatar.clipsToBounds = true
         imgAvatar.contentMode = UIViewContentMode.scaleAspectFill
         
-        General.shared.avatar(userid: Key.shared.user_id, completion: { (avatarImage) in
-            self.imgAvatar.image = avatarImage
+        General.shared.avatar(userid: Key.shared.user_id, completion: { [weak self] (avatarImage) in
+            self?.imgAvatar.image = avatarImage
         })
         
         scroll.addSubview(imgAvatar)
@@ -181,9 +181,9 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
     }
     
     @objc func showPhotoSelected(_ sender: UIGestureRecognizer) {
-        let alertMenu = UIAlertController(title: nil, message: "Choose image", preferredStyle: .actionSheet)
+        let alertMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertMenu.view.tintColor = UIColor._2499090()
-        let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { (_: UIAlertAction) in
+        let showLibrary = UIAlertAction(title: "Choose from library", style: .destructive) { [weak self] (_: UIAlertAction) in
             //self.imagePicker.sourceType = .photoLibrary
 //            alertMenu.removeFromParentViewController()
             //self.present(self.imagePicker,animated:true,completion:nil)
@@ -199,15 +199,15 @@ class MyFaeMainPageViewController: UIViewController, UIImagePickerControllerDele
 //            })
             
             alertMenu.removeFromParentViewController()
-            self.checkLibraryAccessStatus()
+            self?.checkLibraryAccessStatus()
         }
         
-        let showCamera = UIAlertAction(title: "Take photos", style: .destructive) { (_: UIAlertAction) in
+        let showCamera = UIAlertAction(title: "Take photos", style: .destructive) { [weak self] (_: UIAlertAction) in
 //            self.imagePicker.sourceType = .camera
 //            self.present(self.imagePicker, animated: true, completion: nil)
             
             alertMenu.removeFromParentViewController()
-            self.checkCameraAccessStatus()
+            self?.checkCameraAccessStatus()
         }
         
         let cancel = UIAlertAction(title: "Cancel", style: .cancel)

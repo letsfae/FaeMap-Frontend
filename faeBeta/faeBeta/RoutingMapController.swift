@@ -9,7 +9,7 @@
 import UIKit
 import IVBezierPathRenderer
 
-class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCalculateDelegate {
+class RoutingMapController: BasicMapController, SelectLocationDelegate, FMRouteCalculateDelegate {
     
     private var btnDistIndicator: FMDistIndicator!
     private var uiviewChooseLocs: FMChooseLocs!
@@ -134,18 +134,17 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     }
     
     @objc private func handleStartPointTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = false
+        GeneralLocationSearchViewController.boolToDestination = false
         routingHandleTap()
     }
     
     @objc private func handleDestinationTap(_ tap: UITapGestureRecognizer) {
-        BoardsSearchViewController.boolToDestination = true
+        GeneralLocationSearchViewController.boolToDestination = true
         routingHandleTap()
     }
     
     private func routingHandleTap() {
-        let chooseLocsVC = BoardsSearchViewController()
-        chooseLocsVC.enterMode = .location
+        let chooseLocsVC = GeneralLocationSearchViewController()
         chooseLocsVC.delegate = self
         chooseLocsVC.boolCurtLocSelected = uiviewChooseLocs.lblStartPoint.text == "Current Location" || uiviewChooseLocs.lblDestination.text == "Current Location"
         chooseLocsVC.boolFromRouting = true
@@ -253,11 +252,11 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        General.shared.getAddress(location: location) { (address) in
+        General.shared.getAddress(location: location) { [weak self] (address) in
             guard let addr = address as? String else { return }
             DispatchQueue.main.async {
-                self.lblSearchContent.text = addr
-                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                self?.lblSearchContent.text = addr
+                self?.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
             }
         }
     }
@@ -267,7 +266,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
         navigationController?.popViewController(animated: false)
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func chooseLocationOnMap() {
         uiviewChooseLocs.hide(animated: false)
         modeSelecting = .on
@@ -275,7 +274,7 @@ class RoutingMapController: BasicMapController, BoardsSearchDelegate, FMRouteCal
     
     func sendLocationBack(address: RouteAddress) {
         faeMapView.removeAnnotations(addressAnnotations)
-        if BoardsSearchViewController.boolToDestination {
+        if GeneralLocationSearchViewController.boolToDestination {
             destinationAddr = address
             uiviewChooseLocs.lblDestination.text = address.name
             

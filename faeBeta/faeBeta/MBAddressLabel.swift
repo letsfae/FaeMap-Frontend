@@ -6,6 +6,7 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
+/*
 import UIKit
 import CoreLocation
 
@@ -50,3 +51,4 @@ class MBAddressLabel: UILabel {
         }
     }
 }
+*/

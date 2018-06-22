@@ -18,7 +18,7 @@ enum MapCenter {
 class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterControllerDelegate, CCHMapAnimator, CCHMapClusterer {
     
     // MARK: - Variables Declarations
-    weak var delegate: BoardsSearchDelegate?
+    weak var delegate: SelectLocationDelegate?
     
     // Top Bar
     var uiviewTopBar: UIView!
@@ -119,7 +119,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         view.addSubview(btnZoom)
         btnZoom.isHidden = true
         
-        faeMapView.cgfloatCompassOffset = 73 + device_offset_bot_main - device_offset_bot_main //134
+        faeMapView.compassOffset = 73 + device_offset_bot_main - device_offset_bot_main //134
         faeMapView.layoutSubviews()
     }
     

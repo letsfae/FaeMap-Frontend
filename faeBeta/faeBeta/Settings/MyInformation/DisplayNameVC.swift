@@ -133,8 +133,8 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
                 felixprint("update display name failed")
                 let messageJSON = JSON(message!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { (prompt) in
-                        self.setRequestResult("Save Failed! Please try later!")
+                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                        self?.setRequestResult("Save Failed! Please try later!")
                     })
                 }
             }
