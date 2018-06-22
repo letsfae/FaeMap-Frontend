@@ -164,7 +164,8 @@ class RegisterEmailViewController: RegisterBaseViewController {
         if let savedEmail = FaeCoreData.shared.readByKey("signup_email") {
             if (savedEmail as? String) != email! && Key.shared.is_Login {
                 faeUser.whereKey("email", value: email!)
-                faeUser.updateEmail({ (_, _) in
+                faeUser.updateEmail({ [weak self] (_, _) in
+                    guard let `self` = self else { return }
                     let vc = VerifyCodeViewController()
                     vc.enterMode = .email
                     vc.enterEmailMode = .signup
@@ -192,10 +193,12 @@ class RegisterEmailViewController: RegisterBaseViewController {
         faeUser.signUpInBackground { status, message in
             if status / 100 == 2 {
                 self.faeUser.keyValue.removeValue(forKey: "email")
-                self.faeUser.logInBackground({ (status: Int, message: Any?) in
+                self.faeUser.logInBackground({ [weak self] (status: Int, message: Any?) in
                     if status / 100 == 2 {
+                        guard let `self` = self else { return }
                         self.faeUser.whereKey("email", value: self.email!)
-                        self.faeUser.updateEmail {(status: Int, message: Any?) in
+                        self.faeUser.updateEmail { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             if status / 100 == 2 {
                                 let vc = VerifyCodeViewController()
                                 vc.enterMode = .email
@@ -207,8 +210,9 @@ class RegisterEmailViewController: RegisterBaseViewController {
                                 print("[Update Email Fail] \(status) \(message!)")
                                 let messageJSON = JSON(message!)
                                 if let error_code = messageJSON["error_code"].string {
-                                    handleErrorCode(.auth, error_code, { (prompt) in
+                                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
                                         // handle
+                                        guard let `self` = self else { return }
                                         self.hideActivityIndicator()
                                     })
                                 }
@@ -220,12 +224,12 @@ class RegisterEmailViewController: RegisterBaseViewController {
             } else {
                 let messageJSON = JSON(message!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { (prompt) in
+                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
                         // handle
                         if error_code == "422-3" {
-                            self.setEmailExists()
+                            self?.setEmailExists()
                         }
-                        self.hideActivityIndicator()
+                        self?.hideActivityIndicator()
                     })
                 }
             }

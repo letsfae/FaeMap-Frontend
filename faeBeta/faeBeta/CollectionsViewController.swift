@@ -16,7 +16,7 @@ enum CollectionTableMode: String {
 }
 
 class CollectionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
-    
+    // MARK: - Properties
     private var btnNavBarMenu: UIButton!
     private var imgTick: UIImageView!
     private var uiviewDropDownMenu: UIView!
@@ -35,6 +35,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
     private var realmColPlaces: Results<RealmCollection>!
     private var realmColLocations: Results<RealmCollection>!
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -201,6 +202,7 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         navBarMenuBtnClicked = false
     }
     
+    // MARK: - Button actions
     @objc private func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -244,6 +246,13 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         observeOnCollectionChange()
     }
     
+    @objc private func createNewList() {
+        let vc = CreateColListViewController()
+        vc.enterMode = tableMode
+        present(vc, animated: true)
+    }
+    
+    // MARK: - UITableViewDataSource & UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
@@ -316,17 +325,12 @@ class CollectionsViewController: UIViewController, UITableViewDelegate, UITableV
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    @objc private func createNewList() {
-        let vc = CreateColListViewController()
-        vc.enterMode = tableMode
-        present(vc, animated: true)
-    }
-    
-    // MARK: - UIScrollView Delegate
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }
     
+    // MARK: - observation of data source of tableview change
     private func observeOnCollectionChange() {
         let datasource = tableMode == .place ? realmColPlaces : realmColLocations
         notificationToken?.invalidate()

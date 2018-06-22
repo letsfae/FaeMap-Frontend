@@ -125,7 +125,8 @@ class RegisterConfirmViewController: RegisterBaseViewController {
     
     func loginUser() {
         showActivityIndicator()
-        faeUser.logInBackground({ (status: Int, message: Any?) in
+        faeUser.logInBackground({ [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             self.hideActivityIndicator()
             if status / 100 == 2 {
                 self.jumpToEnableNotification()

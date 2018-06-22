@@ -9,7 +9,6 @@
 import UIKit
 import CoreLocation
 import SwiftyJSON
-import TTRangeSlider
 
 enum MapBoardTableMode: Int {
     case people = 1
@@ -17,157 +16,164 @@ enum MapBoardTableMode: Int {
 }
 
 enum PlaceTableMode: Int {
-    case recommend = 0
-    case search = 1
+    case left = 0
+    case right = 1
 }
 
-class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate, SelectLocationDelegate {
+class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecognizerDelegate, CLLocationManagerDelegate, UIScrollViewDelegate {
     
     var ageLBVal: Int = 18
     var ageUBVal: Int = 21
     var boolIsLoaded: Bool = false
     var boolNoMatch: Bool = false
     var boolUsrVisibleIsOn: Bool = true
-    var btnChangeAgeLB: UIButton!
-    var btnChangeAgeUB: UIButton!
-    var btnChangeDis: UIButton!
-    var btnComments: UIButton!
-    var btnGenderBoth: UIButton!
-    var btnGenderFemale: UIButton!
-    var btnGenderMale: UIButton!
     var btnNavBarMenu: UIButton!
     var btnPeople: UIButton!
     var imgPeopleLocDetail: UIImageView!
     var btnPlaces: UIButton!
     var curtTitle: String = "Places"
-    var disVal: String = "23.0"
-    var imgBubbleHint: UIImageView!
-    var imgIconBeforeAllCom: UIImageView!
+    var imgCurtLoc: UIImageView!
     var imgTick: UIImageView!
-    var lblAgeVal: UILabel!
-    var lblAllCom: UILabel!
-    var lblBubbleHint: UILabel!
-    var lblDisVal: UILabel!
+    var lblCurtLoc: UILabel!
     var lblPlaces: UILabel!
     var lblPeople: UILabel!
-    var mbPeople = [MBPeopleStruct]()
-    var mbPlaces = [PlacePin]()
+    var viewModelCategories: BoardPlaceTabLeftViewModel!
+    var viewModelPlaces: BoardPlaceTabRightViewModel!
+    var viewModelPeople: BoardPeopleViewModel!
     
     var navBarMenuBtnClicked = false
-    var selectedGender: String = "Both"
-    var sliderAgeFilter: TTRangeSlider!
-    var sliderDisFilter: UISlider!
-    var strBubbleHint: String = ""
-    var tblMapBoard: UITableView!
+    var tblPlaceLeft: UITableView!
+    var tblPlaceRight: UITableView!
+    var tblPeople: UITableView!
     var titleArray: [String] = ["Places", "People"]
-    var uiviewAgeRedLine: UIView!
-    var uiviewAllCom: UIView!
-    var uiviewBubbleHint: UIView!
-    var uiviewDisRedLine: UIView!
+    var uiviewCurtLoc: UIView!
     var uiviewDropDownMenu: UIView!
     var uiviewLineBelowLoc: UIView!
     var uiviewNavBar: FaeNavBar!
-    var uiviewPeopleLocDetail: UIView!
-    var uiviewRedUnderLine: UIView!
+    var uiviewPeopleNearyFilter: BoardPeopleNearbyFilter!
     var uiviewPlaceTab: PlaceTabView!
-    var uiviewPlaceHeader: UIView!
-    var scrollViewPlaceHeader: UIScrollView!
-    var uiviewPlaceHedaderView1: UIView!
-    var uiviewPlaceHedaderView2: UIView!
-    var pageCtrlPlace: UIPageControl!
+    var uiviewPlaceHeader: BoardCategorySearchView!
     var btnSearchAllPlaces: UIButton!
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
-    var imgIcon: UIImageView!
-    var lblCurtLoc: UILabel!
     var btnSearchLoc: UIButton!   // fake button to search location
-    
-    var imgPlaces1: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames1: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-    var imgPlaces2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
-    var arrPlaceNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
-    let arrTitle = ["Most Popular", "Recommended", "Nearby Food & Drinks", "Shopping", "Outdoors & Recreation"]
+
     var testArrPlaces = [[PlacePin]]()
-    var testArrPopular = [PlacePin]()
-    var testArrRecommend = [PlacePin]()
-    var testArrFood = [PlacePin]()
-    var testArrShopping = [PlacePin]()
-    var testArrOutdoors = [PlacePin]()
-    var arrAllPlaces = [PlacePin]()
+//    var testArrPopular = [PlacePin]()
+//    var testArrRecommend = [PlacePin]()
+//    var testArrFood = [PlacePin]()
+//    var testArrShopping = [PlacePin]()
+//    var testArrOutdoors = [PlacePin]()
+//    var arrAllPlaces = [PlacePin]()
     
     var tableMode: MapBoardTableMode = .places
-    var placeTableMode: PlaceTableMode = .recommend
+    var placeTableMode: PlaceTableMode = .left
+    private var indicatorView: UIActivityIndicatorView!
     
-    var chosenLoc: CLLocationCoordinate2D? // user-chosen location
+    var selectedLoc: CLLocationCoordinate2D? // user-chosen location
     
     // Loading Waves
-    var uiviewAvatarWaveSub: UIView!
-    var imgAvatar: FaeAvatarView!
-    var filterCircle_1: UIImageView!
-    var filterCircle_2: UIImageView!
-    var filterCircle_3: UIImageView!
-    var filterCircle_4: UIImageView!
+    var uiviewAvatarWave: BoardAvatarWaves!
+    // name card view - when click people cell
+    var uiviewNameCard = FMNameCardView()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
         // loading order
         loadTable()
-        loadCannotFindPeople()
         loadPlaceTabView()
-        loadChooseNearbyPeopleView()
+        loadNearbyPeopleFilter()
         loadChooseLocation()
         loadNavBar()
-        loadAvatar()
+        loadAvatarWaves()
         
-        uiviewBubbleHint.alpha = 0
-
-        getMBPlaceInfo()
+        createActivityIndicator()
+        loadViewModels()
+        loadNameCard()
         
-        tblMapBoard.addGestureRecognizer(setGestureRecognizer())
-        uiviewBubbleHint.addGestureRecognizer(setGestureRecognizer())
+        tblPlaceLeft.addGestureRecognizer(setGestureRecognizer())
+        tblPlaceRight.addGestureRecognizer(setGestureRecognizer())
+        tblPeople.addGestureRecognizer(setGestureRecognizer())
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
         userInvisible(isOn: Key.shared.onlineStatus == 5)
     }
     
-    func setGestureRecognizer() -> UITapGestureRecognizer {
-        var tapRecognizer = UITapGestureRecognizer()
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
-        tapRecognizer.numberOfTapsRequired = 1
-        tapRecognizer.cancelsTouchesInView = false
-        
-        return tapRecognizer
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
-//        print("viewDidAppear")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         navigationController?.interactivePopGestureRecognizer?.delegate = self
         
         // 使用navigationController之后，存在space between navigation bar and first cell，加上这句话后可解决这个问题
         automaticallyAdjustsScrollViewInsets = false
-        tblMapBoard.contentInset = .zero
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         automaticallyAdjustsScrollViewInsets = false
-        tblMapBoard.contentInset = .zero
-        loadWaves()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
 //        print("[viewWillDisappear]")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        boolIsLoaded = false
     }
     
-    // UIGestureRecognizerDelegate
-    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
+    func loadViewModels() {
+        // viewModelCategories - BoardPlaceTabLeftViewModel
+        viewModelCategories = BoardPlaceTabLeftViewModel()
+        viewModelCategories.location = LocManager.shared.curtLoc.coordinate
+        viewModelCategories.categoriesDataLoaded = { [unowned self] (categories) in
+            self.tblPlaceLeft.reloadData()
+        }
+        
+        // viewModelPlaces - BoardPlaceTabRightViewModel
+        viewModelPlaces = BoardPlaceTabRightViewModel()
+        viewModelPlaces.category = "All Places"
+        viewModelPlaces.placesDataLoaded = { [unowned self] (places) in
+            self.tblPlaceRight.reloadData()
+        }
+        viewModelPlaces.boolDataLoaded = { [unowned self] (loaded) in
+            if loaded {
+                self.indicatorView.stopAnimating()
+                self.tblPlaceRight.isUserInteractionEnabled = true
+            } else {
+                self.indicatorView.startAnimating()
+                self.tblPlaceRight.isUserInteractionEnabled = false
+            }
+        }
+        
+        // viewModelPeople - BoardPeopleViewModel
+        viewModelPeople = BoardPeopleViewModel()
+        viewModelPeople.location = LocManager.shared.curtLoc.coordinate
+        viewModelPeople.boolUserVisible = { [unowned self] (visible) in
+            self.tblPeople.reloadData()
+        }
+        
+        viewModelPeople.peopleDataLoaded = { [unowned self] (people) in
+            self.tblPeople.reloadData()
+        }
+        viewModelPeople.boolDataLoaded = { [unowned self] (loaded) in
+            if loaded {
+                self.uiviewAvatarWave.hideWaves()
+                self.tblPeople.isUserInteractionEnabled = true
+            } else {
+                self.uiviewAvatarWave.showWaves()
+                self.tblPeople.isUserInteractionEnabled = false
+            }
+        }
+    }
+    
+    fileprivate func createActivityIndicator() {
+        indicatorView = UIActivityIndicatorView()
+        indicatorView.activityIndicatorViewStyle = .whiteLarge
+        indicatorView.center = CGPoint(x: view.center.x, y: view.center.y - CGFloat(114))
+        indicatorView.hidesWhenStopped = true
+        indicatorView.color = UIColor._2499090()
+        tblPlaceRight.addSubview(indicatorView)
+        view.bringSubview(toFront: indicatorView)
     }
     
     fileprivate func loadNavBar() {
@@ -190,14 +196,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         btnNavBarMenu.addTarget(self, action: #selector(navBarMenuAct(_:)), for: .touchUpInside)
         loadPlaceSearchHeader()
-    }
-    
-    @objc func actionLeftWindowShow(_ sender: UIButton) {
-        let leftMenuVC = SideMenuViewController()
-        leftMenuVC.delegate = self
-        leftMenuVC.displayName = Key.shared.nickname
-        leftMenuVC.modalPresentationStyle = .overCurrentContext
-        present(leftMenuVC, animated: false, completion: nil)
     }
     
     fileprivate func btnNavBarSetTitle() {
@@ -263,85 +261,141 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     }
     
     fileprivate func loadChooseLocation() {
-        uiviewAllCom = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
-        uiviewAllCom.backgroundColor = .white
-        view.addSubview(uiviewAllCom)
+        uiviewCurtLoc = UIView(frame: CGRect(x: 0, y: 65 + device_offset_top, width: screenWidth, height: 49))
+        uiviewCurtLoc.backgroundColor = .white
+        view.addSubview(uiviewCurtLoc)
         
         btnSearchLoc = UIButton()
         btnSearchLoc.tag = 0
-        uiviewAllCom.addSubview(btnSearchLoc)
+        uiviewCurtLoc.addSubview(btnSearchLoc)
         btnSearchLoc.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
-        uiviewAllCom.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
-        uiviewAllCom.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
+        uiviewCurtLoc.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
+        uiviewCurtLoc.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
         
-        imgIconBeforeAllCom = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
-        imgIconBeforeAllCom.contentMode = .center
-        lblAllCom = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
-        lblAllCom.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblAllCom.textColor = UIColor._107107107()
+        imgCurtLoc = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
+        imgCurtLoc.contentMode = .center
+        lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
+        lblCurtLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
+        lblCurtLoc.textColor = UIColor._107107107()
         imgPeopleLocDetail = UIImageView()
         imgPeopleLocDetail.contentMode = .center
-        uiviewAllCom.addSubview(imgPeopleLocDetail)
-        uiviewAllCom.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
-        uiviewAllCom.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: imgPeopleLocDetail)
+        uiviewCurtLoc.addSubview(imgPeopleLocDetail)
+        uiviewCurtLoc.addConstraintsWithFormat("H:[v0(39)]-5-|", options: [], views: imgPeopleLocDetail)
+        uiviewCurtLoc.addConstraintsWithFormat("V:|-6-[v0(38)]", options: [], views: imgPeopleLocDetail)
         
-        imgIconBeforeAllCom.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        lblAllCom.text = "Current Location"
+        imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+        lblCurtLoc.text = "Current Location"
         
         setViewContent()
         
         // draw line
         uiviewLineBelowLoc = UIView(frame: CGRect(x: 0, y: 48, width: screenWidth, height: 1))
         uiviewLineBelowLoc.backgroundColor = UIColor._200199204()
-        uiviewAllCom.addSubview(uiviewLineBelowLoc)
+        uiviewCurtLoc.addSubview(uiviewLineBelowLoc)
         
-        uiviewAllCom.addSubview(imgIconBeforeAllCom)
-        uiviewAllCom.addSubview(lblAllCom)
+        uiviewCurtLoc.addSubview(imgCurtLoc)
+        uiviewCurtLoc.addSubview(lblCurtLoc)
+    }
+    
+    // load three tables
+    fileprivate func loadTable() {
+        loadPlaceHeader()
+        
+        tblPlaceLeft = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - 51 - device_offset_top - device_offset_bot), style: .plain)
+        view.addSubview(tblPlaceLeft)
+        tblPlaceLeft.backgroundColor = .white
+        tblPlaceLeft.register(BoardPlacesCell.self, forCellReuseIdentifier: "BoardPlacesCell")
+        tblPlaceLeft.tableHeaderView = uiviewPlaceHeader
+        tblPlaceLeft.delegate = self
+        tblPlaceLeft.dataSource = self
+        tblPlaceLeft.separatorStyle = .none
+        tblPlaceLeft.showsVerticalScrollIndicator = false
+        tblPlaceLeft.scrollsToTop = true
+        
+        tblPlaceRight = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - 51 - device_offset_top - device_offset_bot), style: .plain)
+        view.addSubview(tblPlaceRight)
+        tblPlaceRight.backgroundColor = .white
+        tblPlaceRight.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
+        tblPlaceRight.register(BoardNoResultCell.self, forCellReuseIdentifier: "BoardNoResultCell")
+        tblPlaceRight.delegate = self
+        tblPlaceRight.dataSource = self
+        tblPlaceRight.separatorStyle = .none
+        tblPlaceRight.showsVerticalScrollIndicator = false
+        tblPlaceRight.scrollsToTop = true
+        
+        tblPeople = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot), style: .plain)
+        view.addSubview(tblPeople)
+        tblPeople.backgroundColor = .white
+        tblPeople.register(BoardPeopleCell.self, forCellReuseIdentifier: "BoardPeopleCell")
+        tblPeople.register(BoardNoResultCell.self, forCellReuseIdentifier: "BoardNoResultCell")
+        tblPeople.delegate = self
+        tblPeople.dataSource = self
+        tblPeople.separatorStyle = .none
+        tblPeople.showsVerticalScrollIndicator = false
+        tblPeople.scrollsToTop = true
+        
+//        tblPlaceLeft.backgroundColor = .blue
+//        tblPlaceRight.backgroundColor = .green
+//        tblPeople.backgroundColor = .red
     }
     
     // each time change the table mode (click the button in drop menu), call setViewContent()
     fileprivate func setViewContent() {
         if tableMode == .places {
             uiviewPlaceTab.isHidden = false
-            tblMapBoard.tableHeaderView = uiviewPlaceHeader
-            tblMapBoard.frame.size.height = screenHeight - 163 - device_offset_top - device_offset_bot
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
             btnSearchLoc.tag = 0
-//            switchPlaceTabPage()
+            
+            tblPeople.isHidden = true
+            if placeTableMode == .left {
+                tblPlaceLeft.isHidden = false
+                tblPlaceRight.isHidden = true
+            } else {
+                tblPlaceLeft.isHidden = true
+                tblPlaceRight.isHidden = false
+            }
         } else {
             uiviewPlaceTab.isHidden = true
-            tblMapBoard.tableHeaderView = nil
-            tblMapBoard.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot
             imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_curtLoc")
             btnSearchLoc.tag = 1
+            
+            tblPeople.isHidden = false
+            tblPlaceLeft.isHidden = true
+            tblPlaceRight.isHidden = true
         }
     }
     
-    fileprivate func loadTable() {
-        tblMapBoard = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 163 - device_offset_top - device_offset_bot), style: .plain)
-        view.addSubview(tblMapBoard)
-        tblMapBoard.backgroundColor = .white
-        tblMapBoard.register(MBPeopleCell.self, forCellReuseIdentifier: "mbPeopleCell")
-        tblMapBoard.register(MBPlacesCell.self, forCellReuseIdentifier: "mbPlacesCell")
-        tblMapBoard.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
+    // MARK: - UIGestureRecognizerDelegate
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
+    
+    func setGestureRecognizer() -> UITapGestureRecognizer {
+        var tapRecognizer = UITapGestureRecognizer()
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(rollUpDropDownMenu(_:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.cancelsTouchesInView = false
         
-        tblMapBoard.delegate = self
-        tblMapBoard.dataSource = self
-        tblMapBoard.separatorStyle = .none
-        tblMapBoard.showsVerticalScrollIndicator = false
-        
-        loadPlaceHeader()
+        return tapRecognizer
+    }
+    
+    // MARK: - Button actions
+    @objc func actionLeftWindowShow(_ sender: UIButton) {
+        let leftMenuVC = SideMenuViewController()
+        leftMenuVC.delegate = self
+        leftMenuVC.displayName = Key.shared.nickname
+        leftMenuVC.modalPresentationStyle = .overCurrentContext
+        present(leftMenuVC, animated: false, completion: nil)
     }
     
     // function for drop down menu button, to show / hide the drop down menu
     @objc func navBarMenuAct(_ sender: UIButton) {
         if !navBarMenuBtnClicked {
-            uiviewDropDownMenu.isHidden = false
+            showDropDownMenu()
+            
             btnNavBarMenu.setAttributedTitle(nil, for: .normal)
             btnNavBarMenu.setTitle("Choose a Board...", for: .normal)
-            UIView.animate(withDuration: 0.2, animations: {
-                self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
-            })
+            
             navBarMenuBtnClicked = true
         } else {
             hideDropDownMenu()
@@ -364,20 +418,23 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         case 1:
             curtTitle = titleArray[1]
             imgTick.frame.origin.y = 70
-        case 2:
-            curtTitle = titleArray[2]
-            imgTick.frame.origin.y = 120
-        case 3:
-            curtTitle = titleArray[3]
-            imgTick.frame.origin.y = 168
         default: return
         }
+        
         btnNavBarSetTitle()
         getCurtTableMode()
         hideDropDownMenu()
         setViewContent()
         
-        reloadTableMapBoard()
+//        reloadTableMapBoard()
+    }
+    
+    // MARK: - Animations
+    fileprivate func showDropDownMenu() {
+        uiviewDropDownMenu.isHidden = false
+        UIView.animate(withDuration: 0.2, animations: {
+            self.uiviewDropDownMenu.frame.origin.y = 65 + device_offset_top
+        })
     }
     
     fileprivate func hideDropDownMenu() {
@@ -395,30 +452,28 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     fileprivate func getCurtTableMode() {
         if curtTitle == "People" {
             tableMode = .people
-            updateNearbyPeople()
         } else if curtTitle == "Places" {
             tableMode = .places
-            getMBPlaceInfo()
         }
-        getPeoplePage()
     }
     
-    func reloadTableMapBoard() {
-        tblMapBoard.reloadData()
-        tblMapBoard.layoutIfNeeded()
-        tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
-    }
+//    func reloadTableMapBoard() {
+//        tblMapBoard.reloadData()
+//        tblMapBoard.layoutIfNeeded()
+//        tblMapBoard.setContentOffset(CGPoint.zero, animated: false)
+//    }
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         hideDropDownMenu()
     }
     
+    // MARK: - LeftSlidingMenuDelegate
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         navigationController?.pushViewController(moodAvatarVC, animated: true)
     }
     func jumpToCollections() {
-//        let vcCollections = CollectionsBoardViewController()
         let vcCollections = CollectionsViewController()
         navigationController?.pushViewController(vcCollections, animated: true)
     }
@@ -443,6 +498,59 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         if let vcRoot = vc as? InitialPageController {
             vcRoot.goToFaeMap()
             SideMenuViewController.boolMapBoardIsOn = false
+        }
+    }
+}
+
+extension MapBoardViewController: SelectLocationDelegate {
+    // MARK: - BoardsSearchDelegate
+    func sendLocationBack(address: RouteAddress) {
+        var arrNames = address.name.split(separator: ",")
+        var array = [String]()
+        guard arrNames.count >= 1 else { return }
+        for i in 0..<arrNames.count {
+            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
+            array.append(name)
+        }
+        if array.count >= 3 {
+            reloadBottomText(array[0], array[1] + ", " + array[2])
+        } else if array.count == 1 {
+            reloadBottomText(array[0], "")
+        } else if array.count == 2 {
+            reloadBottomText(array[0], array[1])
+        }
+        //        self.selectedLoc = address.coordinate
+        viewModelCategories.location = address.coordinate
+        viewModelPlaces.location = address.coordinate
+        viewModelPeople.location = address.coordinate
+        rollUpFilter()
+    }
+    
+    func reloadBottomText(_ city: String, _ state: String) {
+        let fullAttrStr = NSMutableAttributedString()
+        //        let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
+        //        let first_attch = InlineTextAttachment()
+        //        first_attch.fontDescender = -2
+        //        first_attch.image = UIImage(cgImage: (firstImg.cgImage)!, scale: 3, orientation: .up)
+        //        let firstImg_attach = NSAttributedString(attachment: first_attch)
+        //
+        //        let secondImg = #imageLiteral(resourceName: "exp_bottom_loc_arrow")
+        //        let second_attch = InlineTextAttachment()
+        //        second_attch.fontDescender = -1
+        //        second_attch.image = UIImage(cgImage: (secondImg.cgImage)!, scale: 3, orientation: .up)
+        //        let secondImg_attach = NSAttributedString(attachment: second_attch)
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
+        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+        
+        //        fullAttrStr.append(firstImg_attach)
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+        //        fullAttrStr.append(secondImg_attach)
+        DispatchQueue.main.async {
+            self.lblCurtLoc.attributedText = fullAttrStr
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  MBPlacesCell.swift
+//  BoardPlacesCell.swift
 //  FaeMapBoard
 //
 //  Created by vicky on 4/14/17.
@@ -9,17 +9,17 @@
 import UIKit
 
 protocol SeeAllPlacesDelegate: class {
-    func jumpToAllPlaces(places inCategory: [PlacePin], title: String)
+    func jumpToAllPlaces(places inCategory: BoardPlaceCategoryViewModel)
     func jumpToPlaceDetail(place: PlacePin)
 }
 
-class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     weak var delegate: SeeAllPlacesDelegate?
     var lblTitle: UILabel!
     var btnSeeAll: UIButton!
     var colInfo: UICollectionView!
-    var places = [PlacePin]()
+    var viewModelPlaces: BoardPlaceCategoryViewModel!
     var title: String!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -59,32 +59,38 @@ class MBPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewD
         colInfo.backgroundColor = .clear
     }
     
-    func setValueForCell(title: String, places: [PlacePin]) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
-        self.title = title
+    func setValueForCell(title: String, viewModelPlaces: BoardPlaceCategoryViewModel) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
+        self.title = viewModelPlaces.title
         lblTitle.text = title
-        
-        self.places = places
+
+        self.viewModelPlaces = viewModelPlaces
         colInfo.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return places.count
+        if let viewModelPlaces = viewModelPlaces {
+            return viewModelPlaces.numberOfPlaces
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let colCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlacesCollectionCell", for: indexPath) as! PlacesCollectionCell
-        let place = places[indexPath.row]
-        colCell.setValueForColCell(place: place)
+        
+        if let viewModelPlace = viewModelPlaces.viewModel(for: indexPath.row) {
+            colCell.setValueForColCell(place: viewModelPlace)
+        }
+        
         return colCell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.jumpToPlaceDetail(place: places[indexPath.row])
+        delegate?.jumpToPlaceDetail(place: viewModelPlaces.places[indexPath.row])
     }
     
     @objc func btnSeeAllTapped(_ sender: UIButton) {
         Key.shared.mapHeadTitle = self.title
-        delegate?.jumpToAllPlaces(places: places, title: title)
+        delegate?.jumpToAllPlaces(places: viewModelPlaces)
     }
     
     /*
@@ -166,12 +172,15 @@ class PlacesCollectionCell: UICollectionViewCell {
         addSubview(indicatorView)
     }
     
-    func setValueForColCell(place: PlacePin) {
+    func setValueForColCell(place: BoardPlaceViewModel) {
         imgPic.image = nil
         lblName.text = place.name
-        var addr = place.address1 == "" ? "" : place.address1 + ", "
-        addr += place.address2
-        lblAddress.text = addr
+        lblAddress.text = place.address
+//        lblName.text = place.name
+//        var addr = place.address1 == "" ? "" : place.address1 + ", "
+//        addr += place.address2
+//        lblAddress.text = addr
+        
         imgPic.backgroundColor = .white
         indicatorView.startAnimating()
         General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPic) {

@@ -216,13 +216,13 @@ extension ChatViewController {
             } catch {
                 print("JSON Error: \(error)")
             }
-            FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { (status: Int, message: Any?) in
+            FaeMap().getPin(type: "place", pinId: jsonPlace["id"].stringValue) { [weak self] (status: Int, message: Any?) in
                 if status / 100 == 2 {
                     guard let placeInfo = message else { return }
                     let jsonPlace = JSON(placeInfo)
                     let vcPlaceDetail = PlaceDetailViewController()
                     vcPlaceDetail.place = PlacePin(json: jsonPlace)
-                    self.navigationController?.pushViewController(vcPlaceDetail, animated: true)
+                    self?.navigationController?.pushViewController(vcPlaceDetail, animated: true)
                 }
             }
         case "[Collection]":

@@ -212,7 +212,8 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
     func animateWithdrawal(listType: Int) {
         switch listType {
         case WITHDRAW:
-            apiCalls.withdrawFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
+            apiCalls.withdrawFriendRequest(friendId: String(idGlobal)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Request Withdraw \nSuccessfully!"
                     let realm = try! Realm()
@@ -233,7 +234,8 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
             }
             break
         case BLOCK:
-            apiCalls.blockPerson(userId: String(idGlobal)) {(status: Int, message: Any?) in
+            apiCalls.blockPerson(userId: String(idGlobal)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "The user has been \nblocked successfully!"
                     let realm = try! Realm()
@@ -258,7 +260,8 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
             }
             break
         case IGNORE:
-            apiCalls.ignoreFriendRequest(friendId: String(idGlobal)) {(status: Int, message: Any?) in
+            apiCalls.ignoreFriendRequest(friendId: String(idGlobal)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 self.showNoti(type: self.IGNORE)
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Ignore Request \nSuccessfully!"
@@ -278,7 +281,8 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
             }
             break
         case ACCEPT:
-            apiCalls.acceptFriendRequest(friendId: String(idGlobal)) { (status: Int, message: Any?) in
+            apiCalls.acceptFriendRequest(friendId: String(idGlobal)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 self.showNoti(type: self.ACCEPT)
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Accept Request \nSuccessfully!"
@@ -298,7 +302,8 @@ extension ContactsViewController: ContactsReceivedRequestsDelegate, ContactsRequ
                 self.indicatorView.stopAnimating()
             }
         case RESEND:
-            apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") {(status, message) in
+            apiCalls.sendFriendRequest(friendId: String(self.idGlobal), boolResend: "true") { [weak self] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     self.lblNotificationText.text = "Request Resent \nSuccessfully!"
                     let realm = try! Realm()
@@ -364,8 +369,8 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate {
             if let data = realmUser.avatar?.userSmallAvatar {
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
-            General.shared.avatar(userid: Int(realmUser.id)!, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
+            General.shared.avatar(userid: Int(realmUser.id)!, completion: { [weak cell] (avatarImage) in
+                cell?.imgAvatar.image = avatarImage
             })
             cell.lblUserName.text = realmUser.display_name
             cell.lblUserSaying.text = realmUser.user_name
@@ -384,8 +389,8 @@ extension ContactsViewController: UITableViewDataSource, UITableViewDelegate {
             if let data = realmUser.avatar?.userSmallAvatar {
                 cell.imgAvatar.image = UIImage(data: data as Data)
             }
-            General.shared.avatar(userid: Int(realmUser.id)!, completion: { (avatarImage) in
-                cell.imgAvatar.image = avatarImage
+            General.shared.avatar(userid: Int(realmUser.id)!, completion: { [weak cell] (avatarImage) in
+                cell?.imgAvatar.image = avatarImage
             })
             cell.lblUserName.text = realmUser.display_name
             cell.lblUserSaying.text = realmUser.user_name

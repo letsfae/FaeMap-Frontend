@@ -104,7 +104,8 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
             let param = ["email": email!,
                          "code": code!,
                          "password": password!]
-            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     if self.enterFrom == .login {
                         let user = FaeUser()
@@ -112,7 +113,8 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
                         user.whereKey("password", value: self.password!)
                         user.whereKey("device_id", value: Key.shared.headerDeviceID)
                         user.whereKey("is_mobile", value: "true")
-                        user.logInBackground { (status: Int, message: Any?) in
+                        user.logInBackground { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             self.shouldShowActivityIndicator(false)
                             if status / 100 == 2 {
                                 self.navigationController?.popToRootViewController(animated: false)
@@ -148,15 +150,17 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
             let param = ["phone": phone!,
                          "code": code!,
                          "password": password!]
-            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            postToURL("/reset_login/password", parameter: param, authentication: Key.shared.headerAuthentication()) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     if self.enterFrom == .login {
                         let user = FaeUser()
-                        user.whereKey("phone", value: self.phone!)
-                        user.whereKey("password", value: self.password!)
+                        user.whereKey("phone", value: (self.phone)!)
+                        user.whereKey("password", value: (self.password)!)
                         user.whereKey("device_id", value: Key.shared.headerDeviceID)
                         user.whereKey("is_mobile", value: "true")
-                        user.logInBackground { (status: Int, message: Any?) in
+                        user.logInBackground { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             self.shouldShowActivityIndicator(false)
                             if status / 100 == 2 {
                                 self.navigationController?.popToRootViewController(animated: false)
@@ -191,7 +195,8 @@ class SignInSupportNewPassViewController: RegisterBaseViewController {
         } else {  // enterMode == .oldPswd
             faeUser.whereKey("old_password", value: oldPassword!)
             faeUser.whereKey("new_password", value: password!)
-            faeUser.updatePassword {(status: Int, message: Any?) in
+            faeUser.updatePassword { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     let vc = SetAccountViewController()
                     vc.boolResetPswd = true

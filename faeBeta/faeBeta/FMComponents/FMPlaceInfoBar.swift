@@ -547,44 +547,6 @@ class PlaceView: UIView {
             lblHours.text = openOrClose + hours
         }
         
-        /*if placeInfo.hours.count > 0 {
-            arrHour.removeAll()
-            for day in arrDay {
-                if placeInfo.hours.index(forKey: day) == nil {
-                    arrHour.append(["N/A"])
-                } else {
-                    // TODO: Vicky
-                    arrHour.append(placeInfo.hours[day]!)
-                }
-            }
-            let date = Date()
-            let calendar = Calendar.current
-            let components = calendar.dateComponents([.weekday], from: date)
-            
-            // components.weekday 2 - Mon, 3 - Tue, 4 - Wed, 5 - Thur, 6 - Fri, 7 - Sat, 8 - Sun
-            if let weekday = components.weekday {
-                var dayIdx = weekday
-                
-                if weekday == 7 {
-                    dayIdx = 0
-                } else if weekday == 8 {
-                    dayIdx = 1
-                }
-                
-                var hour = arrHour[dayIdx][0]
-                if arrHour[0].count > 1 {
-                    for hourIdx in 1..<arrHour[dayIdx].count {
-                        hour += ", " + arrHour[dayIdx][hourIdx]
-                    }
-                }
-                
-                lblHours.text = arrDay[dayIdx] + ": " + hour
-            } else {
-                lblHours.text = nil
-            }
-        } else {
-            lblHours.text = nil
-        }*/
         loadPlaceImage(placeInfo: placeInfo)
 //        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }

@@ -158,7 +158,8 @@ class SignInEmailViewController: UIViewController {
         indicatorView.startAnimating()
 
         faeUser.whereKey("email", value: txtEmail.text!)
-        faeUser.resetPassword{ (statusCode, result) in
+        faeUser.resetPassword{ [weak self] (statusCode, result) in
+            guard let `self` = self else { return }
             if statusCode / 100 == 2 {
                 self.setupEnteringVerificationCode()
             } else if statusCode == 500 {
@@ -166,7 +167,8 @@ class SignInEmailViewController: UIViewController {
             } else { // TODO: error code done
                 let messageJSON = JSON(result!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { (prompt) in
+                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                        guard let `self` = self else { return }
                         self.setResetResult(prompt)
                     }, "resetByEmail")
                 }

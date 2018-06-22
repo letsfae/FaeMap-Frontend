@@ -11,7 +11,7 @@ import SwiftyJSON
 import RealmSwift
 
 class CreateColListViewController: UIViewController, UITextViewDelegate {
-    
+    // MARK: - Properties
     public var enterMode: CollectionTableMode!
     private var uiviewNavBar: UIView!
     private var btnCancel: UIButton!
@@ -47,6 +47,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
     }
     private var numLinesDesp = 1
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -173,6 +174,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         uiviewPrivacy.addSubview(lblPrivacy)
     }
     
+    // MARK: - Button actions
     @objc private func actionCancel(_ sender: UIButton) {
         textviewListName.resignFirstResponder()
         textviewDesp.resignFirstResponder()
@@ -194,7 +196,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
-            faeCollection.createCollection {(status: Int, message: Any?) in
+            faeCollection.createCollection { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     let colId = JSON(message!)["collection_id"].intValue
                     
@@ -219,7 +222,8 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                 faeCollection.whereKey("description", value: strListDesp)
             }
             faeCollection.whereKey("is_private", value: "true")
-            faeCollection.editOneCollection(String(colId)) {(status: Int, message: Any?) in
+            faeCollection.editOneCollection(String(colId)) { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     // store to realm
                     let realm = try! Realm()
@@ -239,6 +243,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - UITextView Delegate
     func textViewDidBeginEditing(_ textView: UITextView) {
         if (textView == textviewListName && strListName == "") || (textView == textviewDesp && strListDesp == "") {
             textView.selectedTextRange = textView.textRange(from: textView.beginningOfDocument, to: textView.beginningOfDocument)
@@ -320,6 +325,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         }
     }
     
+    // MARK: - Keyboard show & hide
     @objc private func keyboardWillShow(_ notification: Notification) {
         let userInfo: NSDictionary = notification.userInfo! as NSDictionary
         let keyboardFrame: NSValue = userInfo.value(forKey: UIKeyboardFrameEndUserInfoKey) as! NSValue

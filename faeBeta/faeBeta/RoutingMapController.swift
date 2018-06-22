@@ -252,11 +252,11 @@ class RoutingMapController: BasicMapController, SelectLocationDelegate, FMRouteC
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        General.shared.getAddress(location: location) { (address) in
+        General.shared.getAddress(location: location) { [weak self] (address) in
             guard let addr = address as? String else { return }
             DispatchQueue.main.async {
-                self.lblSearchContent.text = addr
-                self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                self?.lblSearchContent.text = addr
+                self?.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
             }
         }
     }

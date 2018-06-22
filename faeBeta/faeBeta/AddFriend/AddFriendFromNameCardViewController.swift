@@ -30,6 +30,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     // MARK: - Properties
     weak var delegate: PassStatusFromViewToButtonDelegate?
     weak var contactsDelegate: AddFriendFromNameCardDelegate?
+    var uiviewBackground: UIView!
     var uiviewChooseAction: UIView!
     var uiviewMsgSent: UIView!
     var btnActFirst: UIButton!
@@ -65,12 +66,9 @@ class AddFriendFromNameCardViewController: UIViewController {
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor._107105105_a50()
+        view.backgroundColor = .clear//UIColor._107105105_a50()
         loadContent()
         createActivityIndicator()
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
-        view.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +77,12 @@ class AddFriendFromNameCardViewController: UIViewController {
     }
     
     fileprivate func loadContent() {
+        uiviewBackground = UIView(frame: view.frame)
+        uiviewBackground.backgroundColor = UIColor._107105105_a50()
+        view.addSubview(uiviewBackground)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
+        uiviewBackground.addGestureRecognizer(tapGesture)
+        
         uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 237))
         uiviewChooseAction.center.x = screenWidth / 2
         uiviewChooseAction.backgroundColor = .white
