@@ -82,7 +82,7 @@ class BoardPeopleCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(18)]-12-|", options: [], views: lblDistance)
     }
     
-    func setValueForCell(people: BoardOneUserViewModel) {
+    func setValueForCell(people: BoardUserInfoViewModel) {
         if people.avatar == nil {
             General.shared.avatar(userid: people.people.userId, completion: { (avatarImage) in
                 self.imgAvatar.image = avatarImage

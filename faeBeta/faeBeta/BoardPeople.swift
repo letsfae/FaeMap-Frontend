@@ -25,28 +25,7 @@ extension MapBoardViewController: BoardPeopleNearbyFilterDelegate, NameCardDeleg
         uiviewNameCard.delegate = self
     }
     
-    // MARK: - Button actions
-    // function for button on upper right of People table mode
-    @objc func chooseNearbyPeopleInfo(_ sender: UIButton) {
-        // in people page
-        if sender.tag == 1 {
-            imgPeopleLocDetail.image = #imageLiteral(resourceName: "mb_rightArrow")
-            sender.tag = 0
-            uiviewLineBelowLoc.frame.origin.x = 14
-            uiviewLineBelowLoc.frame.size.width = screenWidth - 28
-            uiviewPeopleNearyFilter.animateShow()
-            
-            self.tblPeople.delaysContentTouches = false
-        } else {
-            // in both place & people
-            let vc = SelectLocationViewController()
-            vc.delegate = self
-            vc.mode = .part
-            vc.boolFromExplore = true
-            navigationController?.pushViewController(vc, animated: false)
-        }
-    }
-    
+    // function for roll up filter
     func rollUpFilter() {
         if uiviewPeopleNearyFilter != nil && !uiviewPeopleNearyFilter.isHidden {
             uiviewPeopleNearyFilter.animateHide()
