@@ -14,6 +14,7 @@ protocol ManageColListDelegate: class {
 }
 
 class ManageColListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditMemoDelegate {
+    // MARK: - Properties
     var uiviewNavBar: UIView!
     var btnDone: UIButton!
     var tblManageList: UITableView!
@@ -34,6 +35,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
     let realm = try! Realm()
     var realmPins = List<CollectedPin>()
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -123,19 +125,10 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         uiviewTabBar.addSubview(btnRemove)
     }
     
+    // MARK: - Button actions
     @objc func actionDone(_ sender: UIButton) {
         delegate?.returnValBack()
         dismiss(animated: true)
-    }
-    
-    var desiredCount = 0
-    var deleteCount = 0 {
-        didSet {
-            guard desiredCount != 0 && deleteCount != 0 else { return }
-            if deleteCount == desiredCount {
-                reloadAfterDelete()
-            }
-        }
     }
     
     @objc func actionOperateList(_ sender: UIButton) {
@@ -189,8 +182,9 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
                 if let cell = self.tblManageList.cellForRow(at: idxPath) as? ColListLocationCell {
                     cell.btnSelect.isSelected = false
                 }
-                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) {(status: Int, message: Any?) in
+                FaeCollection.shared.unsaveFromCollection(enterMode.rawValue, collectionID: String(colId), pinID: String(pin_id)) { [weak self] (status: Int, message: Any?) in
                     // status == 400: data is in realm but not in server
+                    guard let `self` = self else { return }
                     if status / 100 == 2 || status == 400 {
                         RealmCollection.unsavePin(collection_id: self.colId, type: self.enterMode.rawValue, pin_id: pin_id)
                         self.deleteCount += 1
@@ -228,6 +222,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    // MARK: - UITableView DataSource & Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return realmPins.count
     }
@@ -281,6 +276,16 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         selectedIdx.sort{$0.row > $1.row}
     }
     
+    var desiredCount = 0
+    var deleteCount = 0 {
+        didSet {
+            guard desiredCount != 0 && deleteCount != 0 else { return }
+            if deleteCount == desiredCount {
+                reloadAfterDelete()
+            }
+        }
+    }
+    
     func reloadAfterDelete() {
         tblManageList.performUpdate({
             self.tblManageList.deleteRows(at: selectedIdx, with: UITableViewRowAnimation.right)
@@ -291,7 +296,7 @@ class ManageColListViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
-    // EditMemoDelegate
+    // MARK: - EditMemoDelegate
     func saveMemo(memo: String) {
         tblManageList.reloadData()
     }

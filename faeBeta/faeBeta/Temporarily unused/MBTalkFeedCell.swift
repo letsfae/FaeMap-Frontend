@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 
 class MBTalkFeedCell: UITableViewCell {
@@ -126,4 +127,4 @@ class MBTalkFeedCell: UITableViewCell {
 //        addConstraintsWithFormat("V:[v0(32)]-15-|", options: [], views: btnTalkTopic)
     }
 }
-
+*/

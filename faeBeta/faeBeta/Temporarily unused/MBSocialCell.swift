@@ -6,6 +6,7 @@
 //  Copyright © 2017 Yue. All rights reserved.
 //
 
+/*
 import UIKit
 
 class MBSocialCell: UITableViewCell {
@@ -52,3 +53,4 @@ class MBSocialCell: UITableViewCell {
         addConstraintsWithFormat("V:|-18-[v0(25)]-1-[v1(18)]", options: [], views: lblTitle, lblContent)
     }
 }
+ */

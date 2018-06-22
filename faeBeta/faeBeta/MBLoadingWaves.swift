@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 extension MapBoardViewController {
     
     func loadAvatar() {
@@ -15,7 +15,7 @@ extension MapBoardViewController {
         var yAxis: CGFloat = 324.5 * screenHeightFactor
         yAxis += screenHeight == 812 ? 80 : 0
         
-        uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenWidth))
+        uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenWidth))
         uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
         uiviewAvatarWaveSub.alpha = 0
         view.addSubview(uiviewAvatarWaveSub)
@@ -94,10 +94,9 @@ extension MapBoardViewController {
     
     func showWaves() {
         UIView.animate(withDuration: 0.3, animations: {
-            if self.tblMapBoard != nil {
-                self.tblMapBoard.alpha = 0
+            if self.tblPeople != nil {
+                self.tblPeople.alpha = 0
             }
-            self.uiviewBubbleHint.alpha = 0
             self.uiviewAvatarWaveSub.alpha = 1
         })
     }
@@ -106,12 +105,11 @@ extension MapBoardViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.uiviewAvatarWaveSub.alpha = 0
             if count == 0 {   // self.mbPeople.count == 0
-                self.tblMapBoard.alpha = 0
-                self.uiviewBubbleHint.alpha = 1
+                self.tblPeople.alpha = 0
             } else {
-                self.tblMapBoard.alpha = 1
-                self.uiviewBubbleHint.alpha = 0
+                self.tblPeople.alpha = 1
             }
         })
     }
 }
+ */

@@ -114,7 +114,8 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        General.shared.getAddress(location: location) { (address) in
+        General.shared.getAddress(location: location) { [weak self] (address) in
+            guard let `self` = self else { return }
             guard let addr = address as? String else { return }
             self.faeSearchController.faeSearchBar.text = addr
             self.latitudeForPin = mapCenterCoordinate.latitude
@@ -260,7 +261,8 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let address = searchResults[indexPath.row].title + searchResults[indexPath.row].subtitle
-        General.shared.getLocation(address: address) { (coordinate) in
+        General.shared.getLocation(address: address) { [weak self] (coordinate) in
+            guard let `self` = self else { return }
             if let coor = coordinate {
                 let camera = self.faeMapView.camera
                 camera.centerCoordinate = coor
@@ -326,7 +328,8 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         
         if searchResults.count > 0 {
             let address = searchResults[0].title + searchResults[0].subtitle
-            General.shared.getLocation(address: address) { (coordinate) in
+            General.shared.getLocation(address: address) { [weak self] (coordinate) in
+                guard let `self` = self else { return }
                 if let coor = coordinate {
                     let camera = self.faeMapView.camera
                     camera.centerCoordinate = coor

@@ -185,7 +185,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
         user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
         if enterMode != .signInSupport {
             strVerified.contains("@") ? user.whereKey("email", value: strVerified) : user.whereKey("user_name", value: strVerified)
-            user.updatePhoneNumber {(status, message) in
+            user.updatePhoneNumber { [weak self] (status, message) in
+                guard let `self` = self else { return }
                 print("[UPDATE PHONE] \(status) \(message!)")
                 if status / 100 == 2 {
                     self.setupEnteringVerificationCode()
@@ -194,7 +195,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                 } else { // TODO: error code done
                     let messageJSON = JSON(message!)
                     if let error_code = messageJSON["error_code"].string {
-                        handleErrorCode(.auth, error_code, { (prompt) in
+                        handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                            guard let `self` = self else { return }
                             self.setRequestResult(prompt)
                         }, "resetByPhone")
                     }
@@ -202,7 +204,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                 self.indicatorView.stopAnimating()
             }
         } else {
-            user.checkPhoneExistence{(status: Int, message: Any?) in
+            user.checkPhoneExistence{ [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     let phoneJSON = JSON(message!)
                     if phoneJSON.count == 0 {
@@ -210,8 +213,9 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                         self.setRequestResult("We could’t find an account linked \nwith this Phone Number!")
                     } else {
                         self.user.whereKey("phone", value: "(" + self.phoneCode + ")" + self.phoneNumber)
-                        self.strVerified.contains("@") ? self.user.whereKey("email", value: self.strVerified) : self.user.whereKey("user_name", value: self.strVerified)
-                        self.user.resetPassword {(status: Int, message: Any?) in
+                        (self.strVerified.contains("@")) ? self.user.whereKey("email", value: self.strVerified) : self.user.whereKey("user_name", value: self.strVerified)
+                        self.user.resetPassword { [weak self] (status: Int, message: Any?) in
+                            guard let `self` = self else { return }
                             if status / 100 == 2 {
                                 self.setupEnteringVerificationCode()
                             } else if status == 500 {
@@ -219,7 +223,8 @@ class SignInPhoneViewController: UIViewController, FAENumberKeyboardDelegate, Co
                             } else { // TODO: error code undecided
                                 let messageJSON = JSON(message!)
                                 if let error_code = messageJSON["error_code"].string {
-                                    handleErrorCode(.auth, error_code, { (prompt) in
+                                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                        guard let `self` = self else { return }
                                         self.setRequestResult(prompt)
                                     }, "resetByPhone")
                                 }

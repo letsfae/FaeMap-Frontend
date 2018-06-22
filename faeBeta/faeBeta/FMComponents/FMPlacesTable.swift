@@ -126,9 +126,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func resetSubviews() {
-        imgBack_0.frame.origin.x = -screenWidth + 7
-        uiviewTblBckg.frame.origin.x = 7
-        imgBack_2.frame.origin.x = screenWidth + 7
+        imgBack_0.frame.origin.x = -screenWidth + 8
+        uiviewTblBckg.frame.origin.x = 8
+        imgBack_2.frame.origin.x = screenWidth + 8
     }
     
     func load(for placeInfo: PlacePin) {
@@ -249,8 +249,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     private func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.imgBack_0.frame.origin.x = 7
-            self.uiviewTblBckg.frame.origin.x += screenWidth + 7
+            self.imgBack_0.frame.origin.x = 8
+            self.uiviewTblBckg.frame.origin.x += screenWidth + 8
         }, completion: {_ in
             if self.state == .map {
                 self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
@@ -266,8 +266,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     private func panToNext(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
-            self.uiviewTblBckg.frame.origin.x = -screenWidth + 7
-            self.imgBack_2.frame.origin.x = 7
+            self.uiviewTblBckg.frame.origin.x = -screenWidth + 8
+            self.imgBack_2.frame.origin.x = 8
         }, completion: { _ in
             if self.state == .map {
                 self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
@@ -346,7 +346,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: - Load Table
     
     private func loadContent() {
-        uiviewTblBckg = UIView(frame: CGRect(x: 7, y: 0, width: screenWidth - 14, height: 90))
+        uiviewTblBckg = UIView(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         uiviewTblBckg.backgroundColor = .clear
         addSubview(uiviewTblBckg)
         addShadow(view: uiviewTblBckg, opa: 0.5, offset: CGSize.zero, radius: 3)
@@ -357,7 +357,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         tblResults.dataSource = self
         tblResults.tableFooterView = UIView()
         tblResults.layer.cornerRadius = 2
-        tblResults.alwaysBounceVertical = false
+        //tblResults.alwaysBounceVertical = false
         tblResults.bounces = false
         tblResults.clipsToBounds = true
         tblResults.layer.cornerRadius = 2

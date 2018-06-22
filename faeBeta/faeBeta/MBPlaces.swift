@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 // for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate {
-    
+extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, MapSearchDelegate {
+
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
         btnSearchAllPlaces.setImage(#imageLiteral(resourceName: "Search"), for: .normal)
@@ -35,6 +35,18 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         uiviewNavBar.addSubview(btnClearSearchRes)
         uiviewNavBar.addConstraintsWithFormat("H:[v0(36.45)]-5-|", options: [], views: btnClearSearchRes)
         uiviewNavBar.addConstraintsWithFormat("V:[v0(36.45)]-5.55-|", options: [], views: btnClearSearchRes)
+    }
+    
+    @objc func searchAllPlaces(_ sender: UIButton) {
+        let searchVC = MapSearchViewController()
+        searchVC.delegate = self
+        searchVC.boolFromChat = false
+        searchVC.boolFromBoard = true
+        searchVC.previousVC = .board
+        if let text = lblSearchContent.text, text != "All Places" {
+            searchVC.strSearchedPlace = text
+        }
+        navigationController?.pushViewController(searchVC, animated: false)
     }
     
     func loadPlaceHeader() {
@@ -127,15 +139,37 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     }
     
     func getPlaceInfo(content: String = "", source: String = "categories") {
+        self.lblSearchContent.text = content
+        self.uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
+        self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
+        self.jumpToSearchPlaces()
+        
+        var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
+        let radius: Int = 160934
+        if let locToSearch = LocManager.shared.locToSearch_board {
+            locationToSearch = locToSearch
+        }
+        if let locText = lblAllCom.text {
+            print("[locText]", locText)
+            switch locText {
+            case "Current Location":
+                locationToSearch = LocManager.shared.curtLoc.coordinate
+                print("[searchArea] Current Location")
+            default:
+                print("[searchArea] other")
+                break
+            }
+        }
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "99999999")
+        FaeSearch.shared.whereKey("size", value: "20")
+        FaeSearch.shared.whereKey("radius", value: "\(radius)")
+        // pagination control should be added here
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                      "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
+        FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                      "longitude": locationToSearch.longitude])
         FaeSearch.shared.search { (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 return
@@ -150,6 +184,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
             self.uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
             self.uiviewPlaceTab.btnPlaceTabRight.isSelected = true
             self.jumpToSearchPlaces()
+            // reload table
         }
     }
     
@@ -192,15 +227,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
-        searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-    }
-    
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
@@ -237,36 +263,45 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     func jumpToSearchPlaces() {
         placeTableMode = .search
         btnNavBarMenu.isHidden = true
+        btnSearchAllPlaces.isHidden = false
         if lblSearchContent.text != "All Places" {
             btnClearSearchRes.isHidden = false
         }
-        btnSearchAllPlaces.isHidden = false
         tblMapBoard.tableHeaderView = nil
         reloadTableMapBoard()
     }
     // MapBoardPlaceTabDelegate End
 
-    // BoardsSearchDelegate
-    func jumpToPlaceSearchResult(searchText: String, places: [PlacePin]) {
-        btnClearSearchRes.isHidden = false
-        lblSearchContent.text = searchText
-        
-        mbPlaces.removeAll()
-        mbPlaces = places
-        tblMapBoard.reloadData()
-    }
+    // SelectLocationDelegate
     
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.searchedLoc = location
-        lblAllCom.text = searchText
+        LocManager.shared.locToSearch_board = location.coordinate
+        lblAllCom.attributedText = processAddress(searchText)
         imgIconBeforeAllCom.image = icon
         if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            getMBPlaceInfo()
         } else {
             getPlaceInfo(content: lblSearchContent.text!, source: "name")
         }
-//        getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         tblMapBoard.reloadData()
+    }
+    
+    private func processAddress(_ address: String) -> NSAttributedString {
+        let array = address.split(separator: "@")
+        let city = String(array[0])
+        let state = String(array[1])
+        
+        let fullAttrStr = NSMutableAttributedString()
+        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 16)]
+        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        
+        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 16)]
+        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
+        
+        fullAttrStr.append(title_0_attr)
+        fullAttrStr.append(title_1_attr)
+        
+        return fullAttrStr
     }
 }
 

@@ -5,7 +5,7 @@
 //  Created by vicky on 4/30/17.
 //  Copyright © 2017 Yue. All rights reserved.
 //
-
+/*
 import UIKit
 
 class MBTalkTopicCell: UITableViewCell {
@@ -39,3 +39,4 @@ class MBTalkTopicCell: UITableViewCell {
         lblPostsCount.textColor = UIColor._155155155()
     }
 }
+ */

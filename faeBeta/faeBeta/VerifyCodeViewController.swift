@@ -219,14 +219,14 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
         view.endEditing(true)
         let user = FaeUser()
         user.whereKey("phone", value: "(" + strCountryCode + ")" + strPhoneNumber)
-        user.updatePhoneNumber {(status, message) in
+        user.updatePhoneNumber { [weak self] (status, message) in
             print("[UPDATE PHONE] \(status) \(message!)")
             if status / 100 == 2 {
                 
             } else {// TODO: error code undecided
                 
             }
-            self.indicatorView.stopAnimating()
+            self?.indicatorView.stopAnimating()
         }
     }
     
@@ -261,7 +261,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
             // reset_login veify
             switch enterEmailMode {
             case .signInSupport:
-                faeUser.validateCode{ (statusCode, result) in
+                faeUser.validateCode{ [weak self] (statusCode, result) in
+                    guard let `self` = self else { return }
                     if statusCode / 100 == 2 {
                         let controller = SignInSupportNewPassViewController()
                         controller.enterMode = self.enterMode
@@ -274,7 +275,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     } else { // TODO: error code undecided, 403-4 time out
                         let resultJSON = JSON(result!)
                         if let error_code = resultJSON["error_code"].string {
-                            handleErrorCode(.auth, error_code, { (prompt) in
+                            handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                guard let `self` = self else { return }
                                 self.setVerifyResult(prompt)
                             })
                         }
@@ -282,7 +284,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     self.indicatorView.stopAnimating()
                 }
             case .settings, .signup:
-                faeUser.verifyEmail {(status: Int, message: Any?) in
+                faeUser.verifyEmail { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         if self.enterEmailMode == .settings {
                             Key.shared.userEmailVerified = true
@@ -312,7 +315,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     } else { // TODO: error code done
                         let messageJSON = JSON(message!)
                         if let error_code = messageJSON["error_code"].string {
-                            handleErrorCode(.auth, error_code, { (prompt) in
+                            handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                guard let `self` = self else { return }
                                 self.setVerifyResult(prompt)
                             })
                         }
@@ -328,7 +332,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                 if enterPhoneMode == .signInSupport {
                     strVerified.contains("@") ? faeUser.whereKey("email", value: strVerified) : faeUser.whereKey("user_name", value: strVerified)
                 }
-                faeUser.validateCode {(status: Int, message: Any?) in
+                faeUser.validateCode { [weak self] (status: Int, message: Any?) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         if self.enterPhoneMode == .signInSupport {
                             let controller = SignInSupportNewPassViewController()
@@ -347,7 +352,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     } else { // TODO: error code undecided
                         let messageJSON = JSON(message!)
                         if let error_code = messageJSON["error_code"].string {
-                            handleErrorCode(.auth, error_code, { (prompt) in
+                            handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                guard let `self` = self else { return }
                                 self.setVerifyResult(prompt)
                             })
                         }
@@ -355,7 +361,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     self.indicatorView.stopAnimating()
                 }
             case .settings, .settingsUpdate, .contacts:
-                faeUser.verifyPhoneNumber {(status, message) in
+                faeUser.verifyPhoneNumber { [weak self] (status, message) in
+                    guard let `self` = self else { return }
                     if status / 100 == 2 {
                         switch self.enterPhoneMode {
                         case .settings:
@@ -391,7 +398,8 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
                     } else { // TODO: error code undecided, error message
                         let messageJSON = JSON(message!)
                         if let error_code = messageJSON["error_code"].string {
-                            handleErrorCode(.auth, error_code, { (prompt) in
+                            handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                guard let `self` = self else { return }
                                 self.setVerifyResult(prompt)
                             })
                                 /*if self.enterPhoneMode == .contacts {
@@ -438,7 +446,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
     
     @objc private func resendVerificationCode() {
         if enterMode == .email { // TODO: error code undecided
-            postToURL("reset_login/code", parameter: ["email": strVerified], authentication: nil, completion: {(statusCode, result) in })
+            postToURL("reset_login/code", parameter: ["email": strVerified], authentication: nil, completion: { (statusCode, result) in })
         } else {
             actionSendCode()
         }

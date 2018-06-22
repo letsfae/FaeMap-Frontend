@@ -6,6 +6,7 @@
 //  Copyright © 2017年 fae. All rights reserved.
 //
 
+/*
 import UIKit
 import SwiftyJSON
 
@@ -392,3 +393,4 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
         cellCurtIndex = indexPath
     }
 }
+*/

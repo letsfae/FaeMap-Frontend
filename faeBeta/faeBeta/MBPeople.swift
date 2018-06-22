@@ -9,7 +9,7 @@ import TTRangeSlider
 
 extension MapBoardViewController: TTRangeSliderDelegate {
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         var arrNames = address.name.split(separator: ",")
         var array = [String]()
@@ -117,19 +117,16 @@ extension MapBoardViewController: TTRangeSliderDelegate {
             }, completion: nil)
             self.tblMapBoard.delaysContentTouches = false
             sliderDisFilter.setValue(Float(disVal)!, animated: false)
-        } else { // in both place & people
-            /* 老板要求改为直接地图上选取
-            let vc = BoardsSearchViewController()
-            vc.strSearchedLocation = lblAllCom.text
-            vc.enterMode = .location
-            vc.isCitySearch = true
-            vc.delegate = self
-            navigationController?.pushViewController(vc, animated: true)
-            */
+        } else {
+            // in both place & people
             let vc = SelectLocationViewController()
             vc.delegate = self
             vc.mode = .part
-            vc.boolFromExplore = true
+            vc.boolFromBoard = true
+            vc.previousVC = .board
+            if let text = lblSearchContent.text {
+                vc.previousLabelText = text
+            }
             navigationController?.pushViewController(vc, animated: false)
         }
     }
@@ -357,13 +354,5 @@ extension MapBoardViewController: TTRangeSliderDelegate {
         } else {
             lblAgeVal.text = "\(ageLBVal)-\(ageUBVal)"
         }
-    }
-    
-    func searchLoc(_ sender: UIButton) {
-        let vc = BoardsSearchViewController()
-        vc.strSearchedLocation = lblAllCom.text
-        vc.enterMode = .location
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: true)
     }
 }

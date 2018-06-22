@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 
 class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
+    // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var lblScanTitle: UILabel!
     var lblScanSubtitle: UILabel!
@@ -22,6 +23,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     var filterCircle_4: UIImageView!
     var arrNearby = [UserNameCard]()
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         view.backgroundColor = .white
         loadNavBar()
@@ -42,13 +44,15 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    // MARK: - Load tableView data source
     func loadNearbyPeople(_ completion: ((Int) -> ())?) {
         let faeMap = FaeMap()
         faeMap.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
         faeMap.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         faeMap.whereKey("radius", value: "9999999")
         faeMap.whereKey("type", value: "user")
-        faeMap.getMapInformation { (status: Int, message: Any?) in
+        faeMap.getMapInformation { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 != 2 || message == nil {
                 print("[loadNearbyPeople] status/100 != 2")
                 return
@@ -70,6 +74,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    // MARK: - Set up UI
     func loadNavBar() {
         uiviewNavBar = FaeNavBar(frame: .zero)
         view.addSubview(uiviewNavBar)
@@ -200,6 +205,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         tblUsernames.alpha = 0
     }
     
+    // MARK: - Button actions
     @objc func actionGoBack(_ sender: UIButton) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -208,6 +214,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    // MARK: - UITableViewDataSource & Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return arrNearby.count
     }
@@ -230,7 +237,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         return 74
     }
     
-    // FaeAddUsernameDelegate
+    // MARK: - FaeAddUsernameDelegate
     func addFriend(indexPath: IndexPath, user_id: Int) {
         let vc = FriendOperationFromContactsViewController()
         vc.delegate = self
@@ -280,11 +287,9 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         vc.modalPresentationStyle = .overCurrentContext
         present(vc, animated: false)
     }
-    // FaeAddUsernameDelegate End
     
-    // FriendOperationFromContactsDelegate
+    // MARK: - FriendOperationFromContactsDelegate
     func passFriendStatusBack(indexPath: IndexPath) {
         tblUsernames.reloadRows(at: [indexPath], with: .none)
     }
-    // FriendOperationFromContactsDelegate End
 }

@@ -13,7 +13,8 @@ class PlacesListCell: UITableViewCell {
     private var imgPic: UIImageView!
     private var lblPlaceName: UILabel!
     private var lblAddress: UILabel!
-    var bottomLine: UIView!
+    private var bottomLine: UIView!
+    private var identifier: String = ""
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -21,24 +22,38 @@ class PlacesListCell: UITableViewCell {
         layoutMargins = UIEdgeInsets.zero
         selectionStyle = .none
         loadRecommendedCellContent()
+        if reuseIdentifier == "SearchAddresses" {
+            imgPic.frame = CGRect(x: 18, y: 16.5, width: 36, height: 39)
+            imgPic.image = #imageLiteral(resourceName: "searched_address")
+            imgPic.backgroundColor = .white
+            imgPic.contentMode = .scaleAspectFit
+            identifier = "SearchAddresses"
+        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        imgPic.image = nil
+        imgPic.image = identifier == "SearchAddresses" ? #imageLiteral(resourceName: "searched_address") : nil
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    public func setValueForPlace(_ placeInfo: PlacePin) {
+    public func configureCell(_ addressInfo: MKLocalSearchCompletion, last: Bool) {
+        lblPlaceName.text = addressInfo.title
+        lblAddress.text = addressInfo.subtitle
+        bottomLine.isHidden = last
+    }
+    
+    public func configureCell(_ placeInfo: PlacePin, last: Bool) {
         lblPlaceName.text = placeInfo.name
         var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
         addr += placeInfo.address2
         lblAddress.text = addr
-        imgPic.backgroundColor = .white
+        imgPic.backgroundColor = ._210210210()
         General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgPic)
+        bottomLine.isHidden = last
     }
     
     private func loadRecommendedCellContent() {
@@ -47,12 +62,13 @@ class PlacesListCell: UITableViewCell {
         imgPic.contentMode = .scaleAspectFill
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 3
+        imgPic.backgroundColor = ._210210210()
         addSubview(imgPic)
         
         lblPlaceName = UILabel()
         lblPlaceName.textAlignment = .left
         lblPlaceName.lineBreakMode = .byTruncatingTail
-        lblPlaceName.textColor = UIColor._898989()
+        lblPlaceName.textColor = ._898989()
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblPlaceName)
         addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblPlaceName)
@@ -60,14 +76,14 @@ class PlacesListCell: UITableViewCell {
         lblAddress = UILabel()
         lblAddress.textAlignment = .left
         lblAddress.lineBreakMode = .byTruncatingTail
-        lblAddress.textColor = UIColor._107107107()
+        lblAddress.textColor = ._107107107()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblAddress)
         addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblAddress)
         addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblPlaceName, lblAddress)
         
         bottomLine = UIView()
-        bottomLine.backgroundColor = UIColor._200199204()
+        bottomLine.backgroundColor = ._200199204()
         addSubview(bottomLine)
         addConstraintsWithFormat("H:|-69.5-[v0]-0-|", options: [], views: bottomLine)
         addConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: bottomLine)
@@ -78,7 +94,7 @@ class CategoryListCell: UITableViewCell {
     
     private var imgPic: UIImageView!
     private var lblCatName: UILabel!
-    var bottomLine: UIView!
+    private var bottomLine: UIView!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -95,6 +111,12 @@ class CategoryListCell: UITableViewCell {
     public func setValueForCategory(_ cat: (key: String, value: Int)) {
         imgPic.image = UIImage(named: "place_result_\(cat.value)")
         lblCatName.text = cat.key
+    }
+    
+    public func configureCell(_ cat: (key: String, value: Int), last: Bool) {
+        imgPic.image = UIImage(named: "place_result_\(cat.value)")
+        lblCatName.text = cat.key
+        bottomLine.isHidden = last
     }
     
     private  func loadCellContent() {

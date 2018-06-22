@@ -39,7 +39,7 @@ class FaeMapView: MKMapView {
     private var block = false
     public var blockTap = false
     
-    public var cgfloatCompassOffset: CGFloat = 215 // 134 & 215
+    public var compassOffset: CGFloat = 215 // 134 & 215
     
     var singleTap: UITapGestureRecognizer!
     var doubleTap: UITapGestureRecognizer!
@@ -59,7 +59,7 @@ class FaeMapView: MKMapView {
         super.layoutSubviews()
         // customize the compass view in the way our app's ui
         if let compassView = self.subviews.filter({ $0.isKind(of: NSClassFromString("MKCompassView")!)}).first {
-            compassView.frame = CGRect(x: 21, y: screenHeight - cgfloatCompassOffset - device_offset_bot_main, width: 60, height: 60)
+            compassView.frame = CGRect(x: 21, y: screenHeight - compassOffset - device_offset_bot_main, width: 60, height: 60)
             if let imgView = compassView.subviews.first as? UIImageView {
                 imgView.image = #imageLiteral(resourceName: "mainScreenNorth")
             }
@@ -89,7 +89,6 @@ class FaeMapView: MKMapView {
     }
     
     @objc private func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
-        
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }
