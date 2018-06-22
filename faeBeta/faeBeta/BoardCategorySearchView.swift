@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol BoardCategorySearchDelegate {
+protocol BoardCategorySearchDelegate: class {
     func searchByCategories(category: String)
 }
 
@@ -23,6 +23,8 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
     fileprivate var arrCatNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
     fileprivate var lblCats: UILabel!
     fileprivate var btnCats: UIButton!
+    
+    weak var delegate: BoardCategorySearchDelegate?
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 246))
@@ -102,7 +104,7 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
             btnCats[i].layer.masksToBounds = true
             btnCats[i].setImage(imgPlace[i], for: .normal)
             btnCats[i].tag = i + tag
-            btnCats[i].addTarget(self, action: #selector(searchByCategories(_:)), for: .touchUpInside)
+            btnCats[i].addTarget(self, action: #selector(search(_:)), for: .touchUpInside)
             lblCats[i].text = arrCatName[i]
             lblCats[i].textAlignment = .center
             lblCats[i].textColor = UIColor._138138138()
@@ -110,7 +112,8 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         }
     }
     
-    @objc func searchByCategories(_ sender: UIButton) {
+    // MARK: - Button actions
+    @objc func search(_ sender: UIButton) {
         var content = ""
         switch sender.tag {
         case 0:
@@ -140,13 +143,15 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         default: break
         }
 
-//        searchByCategories(content)
+        delegate?.searchByCategories(category: content)
     }
     
+    // MARK: - PageControl actions
     @objc func changePage(_ sender: Any?) {
         scrollView.contentOffset.x = screenWidth * CGFloat(pageCtrl.currentPage)
     }
     
+    // MARK: - UIScrollViewDelegate
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         pageCtrl.currentPage = scrollView.contentOffset.x == 0 ? 0 : 1
     }

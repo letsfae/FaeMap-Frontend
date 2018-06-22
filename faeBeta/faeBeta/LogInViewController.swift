@@ -210,8 +210,8 @@ class LogInViewController: UIViewController {
         user.whereKey("password", value: txtPassword.text!)
         user.whereKey("device_id", value: Key.shared.headerDeviceID)
         user.whereKey("is_mobile", value: "true")
-        user.logInBackground { [weak self] (status: Int, message: Any?) in
-            guard let `self` = self else { return }
+        user.logInBackground { (status: Int, message: Any?) in
+//            guard let `self` = self else { return }
             if status / 100 == 2 {
                 let vcNext = InitialPageController()
                 self.navigationController?.pushViewController(vcNext, animated: true)

@@ -210,7 +210,7 @@
 		B33F89FA1F3CDFC50033610D /* AddFriendFromNameCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */; };
 		B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */; };
 		B33F89FE1F3EA3870033610D /* AllPlacesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */; };
-		B33F8A001F3EB4E20033610D /* MBPlaceTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FF1F3EB4E20033610D /* MBPlaceTabView.swift */; };
+		B33F8A001F3EB4E20033610D /* BoardPlaceTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33F89FF1F3EB4E20033610D /* BoardPlaceTabView.swift */; };
 		B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */; };
 		B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */; };
 		B33FB2411F267CA600EC6655 /* AddFromContactsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */; };
@@ -229,7 +229,7 @@
 		B33FB24F1F267CA600EC6655 /* ContactsNavBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */; };
 		B35DD60F1FCD44D10099AC3E /* RealmCollectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */; };
 		B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
-		B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* MBPlaces.swift */; };
+		B36D0D331F46513000DE3107 /* BoardPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* BoardPlaces.swift */; };
 		B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D341F46519500DE3107 /* MBTalkTalk.swift */; };
 		B36D0D371F46C59500DE3107 /* BoardsSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */; };
 		B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */; };
@@ -265,6 +265,10 @@
 		B3A3F5E720D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */; };
 		B3A3F5E920D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */; };
 		B3A3F5EB20D8C8980056EE50 /* BoardPeopleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */; };
+		B3A3F62B20DA07E60056EE50 /* BoardPlaceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F62A20DA07E60056EE50 /* BoardPlaceViewModel.swift */; };
+		B3A3F62D20DB02A30056EE50 /* BoardNoResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F62C20DB02A30056EE50 /* BoardNoResultCell.swift */; };
+		B3A3F62F20DB0ABD0056EE50 /* BoardOneUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F62E20DB0ABD0056EE50 /* BoardOneUserViewModel.swift */; };
+		B3A3F63320DB53090056EE50 /* BoardAvatarWaves.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F63220DB53090056EE50 /* BoardAvatarWaves.swift */; };
 		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
 		B3D106DE1F8891AC00A1725A /* SetNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */; };
@@ -302,14 +306,14 @@
 		B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */; };
 		B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */; };
 		B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA11EEB142600D4588D /* MapBoardViewController.swift */; };
-		B8849EA51EEB143800D4588D /* MBPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA31EEB143800D4588D /* MBPeople.swift */; };
-		B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA41EEB143800D4588D /* MapBoardTableView.swift */; };
+		B8849EA51EEB143800D4588D /* BoardPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA31EEB143800D4588D /* BoardPeople.swift */; };
+		B8849EA61EEB143800D4588D /* BoardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA41EEB143800D4588D /* BoardTableView.swift */; };
 		B8849EB51EEB147A00D4588D /* MBSocialCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA71EEB147A00D4588D /* MBSocialCell.swift */; };
 		B8849EB81EEB147A00D4588D /* MBChatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EAA1EEB147A00D4588D /* MBChatsViewController.swift */; };
 		B8849EB91EEB147A00D4588D /* MBChatSpotsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EAB1EEB147A00D4588D /* MBChatSpotsCell.swift */; };
 		B8849EBA1EEB147A00D4588D /* MBChatBubblesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EAC1EEB147A00D4588D /* MBChatBubblesCell.swift */; };
-		B8849EBD1EEB147A00D4588D /* MBPeopleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EAF1EEB147A00D4588D /* MBPeopleCell.swift */; };
-		B8849EBE1EEB147A00D4588D /* MBPlacesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB01EEB147A00D4588D /* MBPlacesCell.swift */; };
+		B8849EBD1EEB147A00D4588D /* BoardPeopleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EAF1EEB147A00D4588D /* BoardPeopleCell.swift */; };
+		B8849EBE1EEB147A00D4588D /* BoardPlacesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB01EEB147A00D4588D /* BoardPlacesCell.swift */; };
 		B8849EBF1EEB147A00D4588D /* MBTalkFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB11EEB147A00D4588D /* MBTalkFeedCell.swift */; };
 		B8849EC01EEB147A00D4588D /* MBTalkTopicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB21EEB147A00D4588D /* MBTalkTopicCell.swift */; };
 		B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */; };
@@ -598,7 +602,7 @@
 		B33F89F91F3CDFC50033610D /* AddFriendFromNameCardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendFromNameCardViewController.swift; sourceTree = "<group>"; };
 		B33F89FB1F3E83A10033610D /* AllPlacesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesViewController.swift; sourceTree = "<group>"; };
 		B33F89FD1F3EA3870033610D /* AllPlacesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesCell.swift; sourceTree = "<group>"; };
-		B33F89FF1F3EB4E20033610D /* MBPlaceTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaceTabView.swift; sourceTree = "<group>"; };
+		B33F89FF1F3EB4E20033610D /* BoardPlaceTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceTabView.swift; sourceTree = "<group>"; };
 		B33FB22D1F267C0500EC6655 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		B33FB22F1F267C0500EC6655 /* AddFriendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendViewController.swift; sourceTree = "<group>"; };
 		B33FB2301F267C0500EC6655 /* AddFromContactsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFromContactsController.swift; sourceTree = "<group>"; };
@@ -616,7 +620,7 @@
 		B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScrollBarCtrl.swift; sourceTree = "<group>"; };
 		B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavBarCtrl.swift; sourceTree = "<group>"; };
 		B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCollectionBase.swift; sourceTree = "<group>"; };
-		B36D0D321F46513000DE3107 /* MBPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBPlaces.swift; sourceTree = "<group>"; };
+		B36D0D321F46513000DE3107 /* BoardPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
 		B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardsSearchViewController.swift; sourceTree = "<group>"; };
 		B379A4ED1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendOperationFromContactsViewController.swift; sourceTree = "<group>"; };
@@ -652,6 +656,10 @@
 		B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceTabLeftViewModel.swift; sourceTree = "<group>"; };
 		B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceTabRightViewModel.swift; sourceTree = "<group>"; };
 		B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPeopleViewModel.swift; sourceTree = "<group>"; };
+		B3A3F62A20DA07E60056EE50 /* BoardPlaceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaceViewModel.swift; sourceTree = "<group>"; };
+		B3A3F62C20DB02A30056EE50 /* BoardNoResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardNoResultCell.swift; sourceTree = "<group>"; };
+		B3A3F62E20DB0ABD0056EE50 /* BoardOneUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardOneUserViewModel.swift; sourceTree = "<group>"; };
+		B3A3F63220DB53090056EE50 /* BoardAvatarWaves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardAvatarWaves.swift; sourceTree = "<group>"; };
 		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailViewController.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
 		B3D106DD1F8891AC00A1725A /* SetNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNameViewController.swift; sourceTree = "<group>"; };
@@ -691,14 +699,14 @@
 		B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPlacesStruct.swift; sourceTree = "<group>"; };
 		B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPeopleStruct.swift; sourceTree = "<group>"; };
 		B8849EA11EEB142600D4588D /* MapBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBoardViewController.swift; sourceTree = "<group>"; };
-		B8849EA31EEB143800D4588D /* MBPeople.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPeople.swift; sourceTree = "<group>"; };
-		B8849EA41EEB143800D4588D /* MapBoardTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBoardTableView.swift; sourceTree = "<group>"; };
+		B8849EA31EEB143800D4588D /* BoardPeople.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardPeople.swift; sourceTree = "<group>"; };
+		B8849EA41EEB143800D4588D /* BoardTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardTableView.swift; sourceTree = "<group>"; };
 		B8849EA71EEB147A00D4588D /* MBSocialCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBSocialCell.swift; sourceTree = "<group>"; };
 		B8849EAA1EEB147A00D4588D /* MBChatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBChatsViewController.swift; sourceTree = "<group>"; };
 		B8849EAB1EEB147A00D4588D /* MBChatSpotsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBChatSpotsCell.swift; sourceTree = "<group>"; };
 		B8849EAC1EEB147A00D4588D /* MBChatBubblesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBChatBubblesCell.swift; sourceTree = "<group>"; };
-		B8849EAF1EEB147A00D4588D /* MBPeopleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPeopleCell.swift; sourceTree = "<group>"; };
-		B8849EB01EEB147A00D4588D /* MBPlacesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPlacesCell.swift; sourceTree = "<group>"; };
+		B8849EAF1EEB147A00D4588D /* BoardPeopleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardPeopleCell.swift; sourceTree = "<group>"; };
+		B8849EB01EEB147A00D4588D /* BoardPlacesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardPlacesCell.swift; sourceTree = "<group>"; };
 		B8849EB11EEB147A00D4588D /* MBTalkFeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkFeedCell.swift; sourceTree = "<group>"; };
 		B8849EB21EEB147A00D4588D /* MBTalkTopicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkTopicCell.swift; sourceTree = "<group>"; };
 		B8849EB31EEB147A00D4588D /* MBTalkMytalksCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBTalkMytalksCell.swift; sourceTree = "<group>"; };
@@ -1460,9 +1468,21 @@
 			children = (
 				B3A3F5E620D8C8780056EE50 /* BoardPlaceTabLeftViewModel.swift */,
 				B3A3F5E820D8C88C0056EE50 /* BoardPlaceTabRightViewModel.swift */,
+				B3A3F62A20DA07E60056EE50 /* BoardPlaceViewModel.swift */,
 				B3A3F5EA20D8C8980056EE50 /* BoardPeopleViewModel.swift */,
+				B3A3F62E20DB0ABD0056EE50 /* BoardOneUserViewModel.swift */,
 			);
 			path = MapBoardViewModel;
+			sourceTree = "<group>";
+		};
+		B3A3F63420DB57720056EE50 /* MapBoardTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				B8849EAF1EEB147A00D4588D /* BoardPeopleCell.swift */,
+				B8849EB01EEB147A00D4588D /* BoardPlacesCell.swift */,
+				B3A3F62C20DB02A30056EE50 /* BoardNoResultCell.swift */,
+			);
+			path = MapBoardTableCell;
 			sourceTree = "<group>";
 		};
 		B3B5201E1F5A41C900A6B0DC /* Cells */ = {
@@ -1519,6 +1539,7 @@
 				B8849EA11EEB142600D4588D /* MapBoardViewController.swift */,
 				B3A3F5EE20D8C8C80056EE50 /* MapBoardViewModel */,
 				B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */,
+				B3A3F63420DB57720056EE50 /* MapBoardTableCell */,
 				B33F8A011F3EC1B50033610D /* Temporarily unused */,
 			);
 			name = Board;
@@ -1530,14 +1551,13 @@
 				B3A3F5E020D88D860056EE50 /* BoardCategorySearchView.swift */,
 				B3A3F5E220D897C70056EE50 /* BoardPeopleNearbyFilter.swift */,
 				B3A3F5E420D8A8A60056EE50 /* BoardNoResultView.swift */,
-				B8849EA41EEB143800D4588D /* MapBoardTableView.swift */,
-				B36D0D321F46513000DE3107 /* MBPlaces.swift */,
+				B8849EA41EEB143800D4588D /* BoardTableView.swift */,
+				B36D0D321F46513000DE3107 /* BoardPlaces.swift */,
+				B8849EA31EEB143800D4588D /* BoardPeople.swift */,
 				B36D0D361F46C59500DE3107 /* BoardsSearchViewController.swift */,
-				B8849EA31EEB143800D4588D /* MBPeople.swift */,
+				B33F89FF1F3EB4E20033610D /* BoardPlaceTabView.swift */,
+				B3A3F63220DB53090056EE50 /* BoardAvatarWaves.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
-				B33F89FF1F3EB4E20033610D /* MBPlaceTabView.swift */,
-				B8849EAF1EEB147A00D4588D /* MBPeopleCell.swift */,
-				B8849EB01EEB147A00D4588D /* MBPlacesCell.swift */,
 				50178B7E2045A17D0068012C /* MBLoadingWaves.swift */,
 			);
 			name = MapBoardExtensions;
@@ -1954,6 +1974,7 @@
 				B323A0EE1F425D6E005C24D1 /* PlaceDetailViewController.swift in Sources */,
 				B37E5DBD1F831040008A6B4B /* SetCloseViewController.swift in Sources */,
 				B837D1F21D8F2F8500E44FAE /* PasswordTextField.swift in Sources */,
+				B3A3F62D20DB02A30056EE50 /* BoardNoResultCell.swift in Sources */,
 				189CA0B91EF452C200BAF75A /* MBComtsStoriesCell.swift in Sources */,
 				B85A38661EDE39EC00241781 /* FaeImageView.swift in Sources */,
 				50ACED7B1FEC9E75007A1CA4 /* FMDropUpMenu.swift in Sources */,
@@ -1968,6 +1989,7 @@
 				B37E5DB71F831040008A6B4B /* SetAccountViewController.swift in Sources */,
 				9FAAA4C7209145EC008BB358 /* UIImage+Rotation.swift in Sources */,
 				B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */,
+				B3A3F63320DB53090056EE50 /* BoardAvatarWaves.swift in Sources */,
 				9FAAA4B92091418E008BB358 /* SKIndicatorView.swift in Sources */,
 				9FAAA4BD2091418E008BB358 /* SKCache.swift in Sources */,
 				B064EF1B1D6E354A00C078F5 /* WelcomePageControl.swift in Sources */,
@@ -2049,7 +2071,7 @@
 				9FF8F78220D336FD00C807A8 /* InputBarTopPinView.swift in Sources */,
 				9F4736CD1FB811440058770C /* SetAvatar.swift in Sources */,
 				B80D98EF1EFCA6B500AB27C4 /* PullToRefreshView.swift in Sources */,
-				B33F8A001F3EB4E20033610D /* MBPlaceTabView.swift in Sources */,
+				B33F8A001F3EB4E20033610D /* BoardPlaceTabView.swift in Sources */,
 				9FAAA4AD2091418E008BB358 /* UIApplication+UIWindow.swift in Sources */,
 				B0CFC9AA1CED345500EC356A /* FaeCoreData.swift in Sources */,
 				B8849EC11EEB147A00D4588D /* MBTalkMytalksCell.swift in Sources */,
@@ -2103,7 +2125,7 @@
 				B36D0D351F46519500DE3107 /* MBTalkTalk.swift in Sources */,
 				B3170EA31F45613B0072F9CD /* CreateColListViewController.swift in Sources */,
 				50188F431FC36C390038CAFF /* CCHNearCenterMapClusterer.m in Sources */,
-				B36D0D331F46513000DE3107 /* MBPlaces.swift in Sources */,
+				B36D0D331F46513000DE3107 /* BoardPlaces.swift in Sources */,
 				9FAAA4B42091418E008BB358 /* SKCacheable.swift in Sources */,
 				B0BF35811D8DC8D700B0540B /* JSQMessagesViewControllerCustom.m in Sources */,
 				9FC92ACB2015547700DD3250 /* StickerCollection.swift in Sources */,
@@ -2166,14 +2188,14 @@
 				502F145520CDA6FE00572FD7 /* AfterAddedToListView.swift in Sources */,
 				B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */,
 				B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */,
-				B8849EA51EEB143800D4588D /* MBPeople.swift in Sources */,
-				B8849EBE1EEB147A00D4588D /* MBPlacesCell.swift in Sources */,
+				B8849EA51EEB143800D4588D /* BoardPeople.swift in Sources */,
+				B8849EBE1EEB147A00D4588D /* BoardPlacesCell.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B37E5DBB1F831040008A6B4B /* SetMapsViewController.swift in Sources */,
 				B0714D491D5E435200356705 /* FaeSearchController.swift in Sources */,
 				B30B87861F7F0F3400B52027 /* ManageColListCell.swift in Sources */,
-				B8849EBD1EEB147A00D4588D /* MBPeopleCell.swift in Sources */,
-				B8849EA61EEB143800D4588D /* MapBoardTableView.swift in Sources */,
+				B8849EBD1EEB147A00D4588D /* BoardPeopleCell.swift in Sources */,
+				B8849EA61EEB143800D4588D /* BoardTableView.swift in Sources */,
 				9F99F0E720257584007CE6FE /* FaePhotoPickerCells.swift in Sources */,
 				86242F921D9B173B00F9FA2A /* JSQMessagesComposerTextViewCustom.m in Sources */,
 				B0BF357B1D8DC8D700B0540B /* JSQMessagesMediaViewBubbleImageMaskerCustom.m in Sources */,
@@ -2184,6 +2206,7 @@
 				5080005E1F2521B3009E3720 /* GCDControl.swift in Sources */,
 				8660BBF01D9063D000D4820C /* JSQMessagesCollectionViewCustom.m in Sources */,
 				B3A3F5E120D88D860056EE50 /* BoardCategorySearchView.swift in Sources */,
+				B3A3F62F20DB0ABD0056EE50 /* BoardOneUserViewModel.swift in Sources */,
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
@@ -2202,6 +2225,7 @@
 				B0B95B4C1DBBC99D00B203D8 /* MyFaeMainPageViewController.swift in Sources */,
 				B064EF141D6E353E00C078F5 /* WelcomeContentContainerFace.swift in Sources */,
 				B84024801F0C1AC400AC6283 /* MoodAvatarImages.swift in Sources */,
+				B3A3F62B20DA07E60056EE50 /* BoardPlaceViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

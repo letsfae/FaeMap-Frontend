@@ -9,13 +9,17 @@
 import UIKit
 import TTRangeSlider
 
+protocol BoardPeopleNearbyFilterDelegate: class {
+    func filterPeople()
+}
+
 class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
     // MARK: - Properties
     // Distance
     fileprivate var lblDisVal: UILabel!
     fileprivate var sliderDisFilter: UISlider!
     fileprivate var uiviewDisRedLine: UIView!
-    fileprivate var valDis: String = "23.0"
+    var valDis: String = "23.0"
     
     // Gender
     fileprivate var btnGenderBoth: UIButton!
@@ -24,19 +28,22 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
     fileprivate var imgGenderBoth: UIImageView!
     fileprivate var imgGenderFemale: UIImageView!
     fileprivate var imgGenderMale: UIImageView!
-    fileprivate var valGender: String = "Both"
+    var valGender: String = "Both"
     
     // Age
     fileprivate var lblAgeVal: UILabel!
     fileprivate var sliderAgeFilter: TTRangeSlider!
     fileprivate var uiviewAgeRedLine: UIView!
-    fileprivate var valAgeLB: Int = 18
-    fileprivate var valAgeUB: Int = 21
+    var valAgeLB: Int = 18
+    var valAgeUB: Int = 33
+    var valAllAge: String = ""
     
+    weak var delegate: BoardPeopleNearbyFilterDelegate!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 113, width: screenWidth, height: 316))
+        super.init(frame: CGRect(x: 0, y: -203, width: screenWidth, height: 316))
         backgroundColor = .white
+        isHidden = true
         setupUI()
     }
     
@@ -192,12 +199,12 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         sliderDisFilter.setValue(Float(valDis)!, animated: false)
     }
     
+    // MARK: - Button actions
     @objc func rollUpSelf(_ sender: Any?) {
-        
+        delegate?.filterPeople()
     }
     
     @objc func selectGender(_ sender: UIButton) {
-        print(sender.tag)
         if sender.tag == 0 {
             valGender = "Both"
         } else if sender.tag == 1 {
@@ -229,11 +236,30 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         lblDisVal.text = "\(valDis) km"
     }
     
+    // MARK: - Animations
+    func animateHide() {
+//        delegate?.filterPeople(distance: valDis, gender: valGender, ageLB: valAgeLB, ageUB: valAgeUB, allAge: valAllAge)
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = -203
+        }, completion: { _ in
+            self.isHidden = true
+        })
+    }
+    
+    func animateShow() {
+        isHidden = false
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
+            self.frame.origin.y = 113 + device_offset_top
+        }, completion: nil)
+    }
+    
+    // MARK: - TTRangeSliderDelegate
     func rangeSlider(_ sender: TTRangeSlider, didChangeSelectedMinimumValue selectedMinimum: Float, andMaximumValue selectedMaximum: Float) {
         valAgeLB = Int(selectedMinimum)
         valAgeUB = Int(selectedMaximum)
         if valAgeLB == 18 && valAgeUB == 50 {
-            lblAgeVal.text = "All"
+            valAllAge = ""
+            lblAgeVal.text = valAllAge
         } else if valAgeUB == 50 {
             lblAgeVal.text = "\(valAgeLB)-50+"
         } else {

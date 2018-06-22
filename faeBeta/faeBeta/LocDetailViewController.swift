@@ -67,6 +67,8 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     
     private var fullLoaded = false
     
+    private var viewModelNearby: BoardPlaceCategoryViewModel!
+    
     var locationId: Int = 0 {
         didSet {
             guard fullLoaded else { return }
@@ -110,6 +112,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         let lat = String(coordinate.latitude)
         let long = String(coordinate.longitude)
         self.getNearbyPlaces(lat, long) {
+            self.viewModelNearby = BoardPlaceCategoryViewModel(title: "Near this Location", places: self.arrNearbyPlaces)
             self.clctNearby.reloadData()
         }
         if boolShared {
@@ -413,10 +416,12 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
     }
     
     // SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: [PlacePin], title: String) {
+    func jumpToAllPlaces(places: BoardPlaceCategoryViewModel) {
         let vc = AllPlacesViewController()
-        vc.recommendedPlaces = places
-        vc.strTitle = title
+        vc.viewModelPlaces = places
+        vc.strTitle = places.title
+//        vc.recommendedPlaces = places
+//        vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -483,6 +488,7 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
         btnSeeAll = UIButton(frame: CGRect(x: screenWidth - 78, y: 5, width: 78, height: 40))
         btnSeeAll.setTitleColor(UIColor._155155155(), for: .normal)
         btnSeeAll.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        btnSeeAll.setTitle("See All", for: .normal)
         btnSeeAll.addTarget(self, action: #selector(btnSeeAllTapped(_:)), for: .touchUpInside)
         uiviewClctView.addSubview(btnSeeAll)
         
@@ -506,8 +512,10 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let colCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlacesCollectionCell", for: indexPath) as! PlacesCollectionCell
-        let place = arrNearbyPlaces[indexPath.row]
-        colCell.setValueForColCell(place: place)
+//        let place = arrNearbyPlaces[indexPath.row]
+        if let viewModelPlace = viewModelNearby.viewModel(for: indexPath.row) {
+            colCell.setValueForColCell(place: viewModelPlace)
+        }
         return colCell
     }
     
@@ -516,6 +524,12 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
     }
     
     @objc private func btnSeeAllTapped(_ sender: UIButton) {
-        delegateSeeAll?.jumpToAllPlaces(places: arrNearbyPlaces, title: "Near this Location")
+        let vc = AllPlacesViewController()
+        vc.viewModelPlaces = viewModelNearby
+        vc.strTitle = viewModelNearby.title
+        //        vc.recommendedPlaces = places
+        //        vc.strTitle = title
+        navigationController?.pushViewController(vc, animated: true)
+//        delegateSeeAll?.jumpToAllPlaces(places: viewModelNearby)
     }
 }

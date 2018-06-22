@@ -58,6 +58,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var mapIndexPath = [IndexPath]()
     private var hourIndexPath = [IndexPath]()
     
+    private var viewModelSimilar: BoardPlaceCategoryViewModel?
+    private var viewModelNearby: BoardPlaceCategoryViewModel?
+    
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
     
@@ -146,6 +149,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let long = String(place.coordinate.longitude)
         getRelatedPlaces(lat, long, isSimilar: true) {
             self.getRelatedPlaces(lat, long, isSimilar: false, {
+                self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
+                self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
                 self.tblPlaceDetail.reloadData()
             })
         }
@@ -289,7 +294,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "hour")
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "web")
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "phone")
-        tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
+        tblPlaceDetail.register(BoardPlacesCell.self, forCellReuseIdentifier: "BoardPlacesCell")
         tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
         tblPlaceDetail.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
         tblPlaceDetail.register(PlaceHoursHintCell.self, forCellReuseIdentifier: "PlaceHoursHintCell")
@@ -510,10 +515,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     // MARK: - SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: [PlacePin], title: String) {
+    func jumpToAllPlaces(places: BoardPlaceCategoryViewModel) {
         let vc = AllPlacesViewController()
-        vc.recommendedPlaces = places
-        vc.strTitle = title
+        vc.viewModelPlaces = places
+        vc.strTitle = places.title
+//        vc.recommendedPlaces = places
+//        vc.strTitle = places.title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -857,21 +864,29 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         }
     }
     
-    func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> MBPlacesCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
+    func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> BoardPlacesCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BoardPlacesCell", for: indexPath) as! BoardPlacesCell
         cell.delegate = self
         let count = intSimilar + intNearby
         if count == 1 {
             if intSimilar == 1 {
-                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+                if let viewModelSimilar = viewModelSimilar {
+                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                }
             } else {
-                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+                if let viewModelNearby = viewModelNearby {
+                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                }
             }
         } else {
             if indexPath.row == 0 {
-                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+                if let viewModelSimilar = viewModelSimilar {
+                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                }
             } else {
-                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+                if let viewModelNearby = viewModelNearby {
+                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                }
             }
         }
         return cell

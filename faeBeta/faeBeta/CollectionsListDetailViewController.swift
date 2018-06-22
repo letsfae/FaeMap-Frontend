@@ -11,7 +11,7 @@ import SwiftyJSON
 import RealmSwift
 
 class CollectionsListDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, ColListDetailHeaderDelegate, ManageColListDelegate {
-    
+    // MARK: - Properties
     var enterMode: CollectionTableMode!
     
     var uiviewFixedHeader: UIView!
@@ -60,6 +60,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var boolFromChat: Bool = false
     var boolReadMore: Bool = false
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -223,6 +224,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         btnMore.isHidden = boolFromChat
     }
     
+    // MARK: - Button actions
     @objc func actionBack(_ sender: UIButton) {
         navigationController?.popViewController(animated: true)
     }
@@ -265,8 +267,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         animationShowOptions()
     }
     
-    // MARK: - TableView Delegates
-    
+    // MARK: - UITableView DataSource & Delegate
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -392,6 +393,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    // MARK: - UIScrollView Delegate
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if imgHeader != nil {
             var frame = imgHeader.frame
@@ -418,6 +420,7 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         }
     }
     
+    // MARK: - Get details of saved items
     var desiredCount = 0
     var fetchedCount = 0 {
         didSet {
@@ -524,12 +527,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
 }
 
-// MARK: -
+// MARK: - ColListDetailHeaderDelegate
 protocol ColListDetailHeaderDelegate: class {
     func readMore()
 }
 
-// MARK: -
+// MARK: - First section of table (the header information of the view)
 class ColListDetailHeader: UITableViewCell {
     var lblName: UILabel!
     var lblTime: UILabel!
@@ -643,6 +646,8 @@ class ColListDetailHeader: UITableViewCell {
     }
 }
 
+// MARK: - Empty table cell (Second section of table)
+// Empty table cell if there's no place/location collected
 class ColListEmptyCell: UITableViewCell {
     var imgEmpty: UIImageView!
     
@@ -668,6 +673,7 @@ class ColListEmptyCell: UITableViewCell {
 }
 
 extension CollectionsListDetailViewController {
+    // MARK: - Load pop-up window for manage collection list
     fileprivate func loadChooseOption() {
         uiviewShadowBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewShadowBG.backgroundColor = UIColor._107105105_a50()
@@ -767,6 +773,7 @@ extension CollectionsListDetailViewController {
         view.addSubview(uiviewMsgHint)
     }
     
+    // MARK: - Button actions
     @objc func actionCancel(_ sender: Any) {
         animationHideOptions()
     }
@@ -825,7 +832,7 @@ extension CollectionsListDetailViewController {
         }
     }
     
-    // animations
+    // MARK: - Animations
     func animationActionView() {
         uiviewChooseAction.isHidden = true
         uiviewMsgHint.isHidden = false
@@ -858,9 +865,8 @@ extension CollectionsListDetailViewController {
             self.uiviewMsgHint.isHidden = true
         })
     }
-    // animations end
     
-    // ManageColListDelegate
+    // MARK: - ManageColListDelegate
     func returnValBack() {
         tblColListDetail.reloadData()
 //        let section = IndexSet(integer: 1)

@@ -182,7 +182,6 @@ class PlacePin: NSObject, FaePin {
     }
     
     private func closeOrOpen(_ todayHour: [String]) -> String {
-        
         // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
         
         for hour in todayHour {
@@ -196,7 +195,9 @@ class PlacePin: NSObject, FaePin {
             
             var startHour: String = String(hour.split(separator: "–")[0])
             var endHour: String = String(hour.split(separator: "–")[1])
-            if startHour == "Noon" {
+            if startHour == "Midnight" {
+                startHour = "00:00 AM"
+            } else if startHour == "Noon" {
                 startHour = "12:00 PM"
             }
             if endHour == "Noon" {
@@ -212,6 +213,7 @@ class PlacePin: NSObject, FaePin {
             let dateEnd = dateFormatter.date(from: endHour)
             dateFormatter.dateFormat = "HH:mm"
             
+            // TODD: dateStart和dateEnd使用forced unwrapping很危险
             let date24Start = dateFormatter.string(from: dateStart!)
             let date24End = dateFormatter.string(from: dateEnd!)
             

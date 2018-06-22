@@ -63,34 +63,46 @@ class AllPlacesCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(18)]-9-|", options: [], views: lblPrice)
     }
     
-    func setValueForCell(place: PlacePin) {
+    func setValueForCell(place: BoardPlaceViewModel) {
+        // if use BoardPlaceViewModel
         lblPlaceName.text = place.name
-        var addr = place.address1 == "" ? "" : place.address1 + ", "
-        addr += place.address2
-        lblPlaceAddr.text = addr
+        lblPlaceAddr.text = place.address
         lblPrice.text = place.price
+        lblOpeninghour.text = place.openingHour
+        
+//        lblPlaceName.text = place.name
+//        var addr = place.address1 == "" ? "" : place.address1 + ", "
+//        addr += place.address2
+//        lblPlaceAddr.text = addr
+//
+//        lblPrice.text = place.price
+//
+//        var opening = ""
+//
+//        let hoursToday = place.hoursToday
+//        let openOrClose = place.openOrClose
+//        if openOrClose == "N/A" {
+//            opening = "N/A"
+//        } else {
+//            var hours = " "
+//            for (index, hour) in hoursToday.enumerated() {
+//                if hour == "24 Hours" {
+//                    hours += hour
+//                    break
+//                } else {
+//                    if index == hoursToday.count - 1 {
+//                        hours += hour
+//                    } else {
+//                        hours += hour + ", "
+//                    }
+//                }
+//            }
+//            opening = openOrClose + hours
+//        }
+//
+//        lblOpeninghour.text = opening
+        
         imgPlaceIcon.backgroundColor = .white
         General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPlaceIcon)
-        
-        let hoursToday = place.hoursToday
-        let openOrClose = place.openOrClose
-        if openOrClose == "N/A" {
-            lblOpeninghour.text = "N/A"
-        } else {
-            var hours = " "
-            for (index, hour) in hoursToday.enumerated() {
-                if hour == "24 Hours" {
-                    hours += hour
-                    break
-                } else {
-                    if index == hoursToday.count - 1 {
-                        hours += hour
-                    } else {
-                        hours += hour + ", "
-                    }
-                }
-            }
-            lblOpeninghour.text = openOrClose + hours
-        }
     }
 }

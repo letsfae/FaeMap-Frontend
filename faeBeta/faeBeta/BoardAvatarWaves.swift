@@ -1,30 +1,43 @@
 //
-//  MBLoadingWaves.swift
+//  BoardAvatarWaves.swift
 //  faeBeta
 //
-//  Created by Yue Shen on 2/27/18.
+//  Created by Faevorite 2 on 2018-06-20.
 //  Copyright © 2018 fae. All rights reserved.
 //
 
 import UIKit
-/*
-extension MapBoardViewController {
+
+class BoardAvatarWaves: UIView {
+    fileprivate var imgAvatar: FaeAvatarView!
+    fileprivate var filterCircle_1: UIImageView!
+    fileprivate var filterCircle_2: UIImageView!
+    fileprivate var filterCircle_3: UIImageView!
+    fileprivate var filterCircle_4: UIImageView!
+    
+    override init(frame: CGRect = CGRect.zero) {
+        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 114))
+        backgroundColor = .white
+        loadAvatar()
+        loadWaves()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     func loadAvatar() {
         let xAxis: CGFloat = screenWidth / 2
-        var yAxis: CGFloat = 324.5 * screenHeightFactor
-        yAxis += screenHeight == 812 ? 80 : 0
-        
-        uiviewAvatarWaveSub = UIView(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenWidth))
-        uiviewAvatarWaveSub.center = CGPoint(x: xAxis, y: yAxis)
-        uiviewAvatarWaveSub.alpha = 0
-        view.addSubview(uiviewAvatarWaveSub)
+        let yAxis: CGFloat = (screenHeight - 114 - device_offset_top - device_offset_bot) / 2
+//        yAxis += screenHeight == 812 ? 80 : 0
+        center = CGPoint(x: xAxis, y: yAxis)
+        alpha = 0
         
         let imgAvatarSub = UIImageView(frame: CGRect(x: 0, y: 0, width: 98, height: 98))
         imgAvatarSub.contentMode = .scaleAspectFill
         imgAvatarSub.image = #imageLiteral(resourceName: "exp_avatar_border")
         imgAvatarSub.center = CGPoint(x: xAxis, y: xAxis)
-        uiviewAvatarWaveSub.addSubview(imgAvatarSub)
+        addSubview(imgAvatarSub)
         
         imgAvatar = FaeAvatarView(frame: CGRect(x: 0, y: 0, width: 86, height: 86))
         imgAvatar.layer.cornerRadius = 43
@@ -32,7 +45,7 @@ extension MapBoardViewController {
         imgAvatar.center = CGPoint(x: xAxis, y: xAxis)
         imgAvatar.isUserInteractionEnabled = false
         imgAvatar.clipsToBounds = true
-        uiviewAvatarWaveSub.addSubview(imgAvatar)
+        addSubview(imgAvatar)
         imgAvatar.userID = Key.shared.user_id
         imgAvatar.loadAvatar(id: Key.shared.user_id)
     }
@@ -57,14 +70,14 @@ extension MapBoardViewController {
         filterCircle_2 = createFilterCircle()
         filterCircle_3 = createFilterCircle()
         filterCircle_4 = createFilterCircle()
-        uiviewAvatarWaveSub.addSubview(filterCircle_1)
-        uiviewAvatarWaveSub.addSubview(filterCircle_2)
-        uiviewAvatarWaveSub.addSubview(filterCircle_3)
-        uiviewAvatarWaveSub.addSubview(filterCircle_4)
-        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_1)
-        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_2)
-        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_3)
-        uiviewAvatarWaveSub.sendSubview(toBack: filterCircle_4)
+        addSubview(filterCircle_1)
+        addSubview(filterCircle_2)
+        addSubview(filterCircle_3)
+        addSubview(filterCircle_4)
+        sendSubview(toBack: filterCircle_1)
+        sendSubview(toBack: filterCircle_2)
+        sendSubview(toBack: filterCircle_3)
+        sendSubview(toBack: filterCircle_4)
         
         waveAnimation(circle: filterCircle_1, delay: 0)
         waveAnimation(circle: filterCircle_2, delay: 0.5)
@@ -93,23 +106,14 @@ extension MapBoardViewController {
     }
     
     func showWaves() {
-        UIView.animate(withDuration: 0.3, animations: {
-            if self.tblPeople != nil {
-                self.tblPeople.alpha = 0
-            }
-            self.uiviewAvatarWaveSub.alpha = 1
-        })
+//        UIView.animate(withDuration: 0.3, animations: {
+            self.alpha = 1
+//        })
     }
     
-    func hideWaves(count: Int) {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.uiviewAvatarWaveSub.alpha = 0
-            if count == 0 {   // self.mbPeople.count == 0
-                self.tblPeople.alpha = 0
-            } else {
-                self.tblPeople.alpha = 1
-            }
-        })
+    func hideWaves() {
+//        UIView.animate(withDuration: 0.3, animations: {
+            self.alpha = 0
+//        })
     }
 }
- */

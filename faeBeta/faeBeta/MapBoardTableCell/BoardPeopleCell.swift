@@ -1,5 +1,5 @@
 //
-//  MBPeopleCell.swift
+//  BoardPeopleCell.swift
 //  FaeMapBoard
 //
 //  Created by vicky on 4/14/17.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MBPeopleCell: UITableViewCell {
+class BoardPeopleCell: UITableViewCell {
 
     var imgAvatar: UIImageView!
     var lblUsrName: UILabel!
@@ -17,7 +17,6 @@ class MBPeopleCell: UITableViewCell {
     var imgGender: UIImageView!
     var imgGenderWithAge: UIImageView!
     var lblAge: UILabel!
-    var distance: String!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -83,48 +82,17 @@ class MBPeopleCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(18)]-12-|", options: [], views: lblDistance)
     }
     
-    func setValueForCell(people: MBPeopleStruct, curtLoc: CLLocation) {
-        if people.displayName == "" {
-            lblUsrName.text = "Someone"
-            imgAvatar.image = #imageLiteral(resourceName: "default_Avatar")
-        } else {
-            lblUsrName.text = people.displayName
-            General.shared.avatar(userid: people.userId, completion: { [weak self] (avatarImage) in
-                self?.imgAvatar.image = avatarImage
+    func setValueForCell(people: BoardOneUserViewModel) {
+        if people.avatar == nil {
+            General.shared.avatar(userid: people.people.userId, completion: { (avatarImage) in
+                self.imgAvatar.image = avatarImage
             })
         }
+        lblUsrName.text = people.name
         lblIntro.text = people.shortIntro
-        
-        if people.age == "" {
-            imgGenderWithAge.isHidden = true
-            imgGender.isHidden = false
-            if people.gender == "female" {
-                imgGender.image = #imageLiteral(resourceName: "mb_female")
-            } else {
-                imgGender.image = #imageLiteral(resourceName: "mb_male")
-            }
-        } else {
-            imgGender.isHidden = true
-            imgGenderWithAge.isHidden = false
-            if people.gender == "female" {
-                imgGenderWithAge.image = #imageLiteral(resourceName: "mb_femaleWithAge")
-            } else {
-                imgGenderWithAge.image = #imageLiteral(resourceName: "mb_maleWithAge")
-            }
-            lblAge.text = people.age
-        }
-        
-        let curtPos = curtLoc
-        
-        let dis = curtPos.distance(from: people.position) / 1000
-        if dis < 0.1 {
-            distance = "< 0.1 km"
-        } else if dis > 999 {
-            distance = "> 999 km"
-        } else {
-            distance = String(format: "%.1f", dis) + " km"
-        }
-        
-        lblDistance.text = distance
+        imgGender.image = people.imageGenderAndAge
+        imgGenderWithAge.image = people.imageGenderAndAge
+        lblAge.text = people.age
+        lblDistance.text = people.distance
     }
 }

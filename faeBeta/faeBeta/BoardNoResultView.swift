@@ -13,7 +13,7 @@ class BoardNoResultView: UIView {
     fileprivate var imgBubbleHint: UIImageView!
     
     override init(frame: CGRect = CGRect.zero) {
-        super.init(frame: CGRect(x: 0, y: 114, width: screenWidth, height: screenHeight - 114))
+        super.init(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight - 114 - 51))
         backgroundColor = .white
         setupUI()
     }
