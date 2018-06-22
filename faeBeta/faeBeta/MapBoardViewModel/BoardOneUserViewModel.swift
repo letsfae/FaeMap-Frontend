@@ -1,5 +1,5 @@
 //
-//  BoardOneUserViewModel.swift
+//  BoardUserInfoViewModel.swift
 //  faeBeta
 //
 //  Created by Faevorite 2 on 2018-06-20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct BoardOneUserViewModel {
+struct BoardUserInfoViewModel {
     let people: BoardPeopleStruct
     
     var name: String {

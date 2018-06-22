@@ -92,9 +92,9 @@ class BoardPeopleViewModel {
         return users[index]
     }
     
-    func viewModel(for index: Int) -> BoardOneUserViewModel? {
+    func viewModel(for index: Int) -> BoardUserInfoViewModel? {
         guard let people = people(at: index) else { return nil }
-        return BoardOneUserViewModel(people: people)
+        return BoardUserInfoViewModel(people: people)
     }
     
     func getPeopleInfo(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {

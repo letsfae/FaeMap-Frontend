@@ -273,6 +273,7 @@
 		B39C1E3F1F6DCE600075CF59 /* CountryCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */; };
 		B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */; };
 		B39C1E451F6DE2EE0075CF59 /* CountryCode.json in Resources */ = {isa = PBXBuildFile; fileRef = B39C1E441F6DE2EE0075CF59 /* CountryCode.json */; };
+		B3A3F63920DD64140056EE50 /* BoardSearchPlaceLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */; };
 		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
 		B3D106DE1F8891AC00A1725A /* UpdateAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */; };
@@ -667,6 +668,7 @@
 		B39C1E3E1F6DCE600075CF59 /* CountryCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeViewController.swift; sourceTree = "<group>"; };
 		B39C1E401F6DD6F70075CF59 /* CountryCodeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodeCell.swift; sourceTree = "<group>"; };
 		B39C1E441F6DE2EE0075CF59 /* CountryCode.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CountryCode.json; sourceTree = "<group>"; };
+		B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardSearchPlaceLocation.swift; sourceTree = "<group>"; };
 		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailVC.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
 		B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAccountVC.swift; sourceTree = "<group>"; };
@@ -915,11 +917,11 @@
 		50868F0620DCD91F002CC681 /* MapBoardViewModels */ = {
 			isa = PBXGroup;
 			children = (
-				50868EF220DCD480002CC681 /* BoardOneUserViewModel.swift */,
-				50868EF520DCD481002CC681 /* BoardPeopleViewModel.swift */,
 				50868EF320DCD480002CC681 /* BoardPlaceTabLeftViewModel.swift */,
 				50868EF420DCD480002CC681 /* BoardPlaceTabRightViewModel.swift */,
 				50868EF620DCD481002CC681 /* BoardPlaceViewModel.swift */,
+				50868EF520DCD481002CC681 /* BoardPeopleViewModel.swift */,
+				50868EF220DCD480002CC681 /* BoardOneUserViewModel.swift */,
 			);
 			name = MapBoardViewModels;
 			sourceTree = "<group>";
@@ -1543,6 +1545,16 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		B3A3F63720DD627C0056EE50 /* MapBoardTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				504EA81C20DCD2D6005BBFCC /* BoardPlacesCell.swift */,
+				504EA81A20DCD2CB005BBFCC /* BoardPeopleCell.swift */,
+				50868F0220DCD5B1002CC681 /* BoardNoResultCell.swift */,
+			);
+			name = MapBoardTableCell;
+			sourceTree = "<group>";
+		};
 		B3B5201E1F5A41C900A6B0DC /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1588,6 +1600,7 @@
 				B8849EA11EEB142600D4588D /* MapBoardViewController.swift */,
 				50868F0620DCD91F002CC681 /* MapBoardViewModels */,
 				B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */,
+				B3A3F63720DD627C0056EE50 /* MapBoardTableCell */,
 				B33F8A011F3EC1B50033610D /* Temporarily unused */,
 			);
 			name = Board;
@@ -1597,17 +1610,15 @@
 			isa = PBXGroup;
 			children = (
 				50868F0420DCD5EB002CC681 /* BoardNoResultView.swift */,
-				50868F0220DCD5B1002CC681 /* BoardNoResultCell.swift */,
 				50868F0020DCD593002CC681 /* BoardAvatarWaves.swift */,
 				50868EFE20DCD550002CC681 /* BoardPeopleNearbyFilter.swift */,
 				50868EFC20DCD524002CC681 /* BoardCategorySearchView.swift */,
-				504EA81C20DCD2D6005BBFCC /* BoardPlacesCell.swift */,
-				504EA81A20DCD2CB005BBFCC /* BoardPeopleCell.swift */,
-				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
 				B8849EA41EEB143800D4588D /* BoardTableView.swift */,
+				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
 				B36D0D321F46513000DE3107 /* BoardPlaces.swift */,
-				B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */,
 				B8849EA31EEB143800D4588D /* BoardPeople.swift */,
+				B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */,
+				B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
 				50178B7E2045A17D0068012C /* MBLoadingWaves.swift */,
 			);
@@ -1977,6 +1988,7 @@
 				50CB40821F3E738C00A20C6E /* FMPlacesTable.swift in Sources */,
 				B33FB2481F267CA600EC6655 /* FaeReceivedCell.swift in Sources */,
 				507D19FF1F57746300F98663 /* UITableViewExtension.swift in Sources */,
+				B3A3F63920DD64140056EE50 /* BoardSearchPlaceLocation.swift in Sources */,
 				B33FB2491F267CA600EC6655 /* FaeRecommendedCell.swift in Sources */,
 				9FAAA4B82091418E008BB358 /* SKAnimator.swift in Sources */,
 				B33FB24A1F267CA600EC6655 /* FaeRequestedCell.swift in Sources */,
