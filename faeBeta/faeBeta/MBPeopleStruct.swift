@@ -10,13 +10,13 @@ import Foundation
 import SwiftyJSON
 import CoreLocation
 
-extension MBPeopleStruct: Equatable {
-    static func ==(lhs: MBPeopleStruct, rhs: MBPeopleStruct) -> Bool {
+extension BoardPeopleStruct: Equatable {
+    static func ==(lhs: BoardPeopleStruct, rhs: BoardPeopleStruct) -> Bool {
         return lhs.userId == rhs.userId
     }
 }
 
-struct MBPeopleStruct {
+struct BoardPeopleStruct {
     let userId: Int
     let userName : String
     let displayName: String
@@ -24,10 +24,9 @@ struct MBPeopleStruct {
     let gender: String
     let age: String
     let position: CLLocation
-    var distance: String
-    let dis: Double
+    let distance: Double
     
-    init(json: JSON, centerLoc: CLLocationCoordinate2D? = nil) {
+    init(json: JSON) {
         userId = json["user_id"].intValue
         userName = json["user_name"].stringValue
         displayName = json["user_nick_name"].stringValue
@@ -38,22 +37,9 @@ struct MBPeopleStruct {
         position = CLLocation(latitude: json["geolocation"][0]["latitude"].doubleValue,
                               longitude: json["geolocation"][0]["longitude"].doubleValue)
 
-        var location: CLLocationCoordinate2D!
-        if let loc = centerLoc {
-            location = loc
-        } else {
-            location = LocManager.shared.curtLoc.coordinate
-        }
-        
+        let location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate
         let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)
         
-        dis = curtPos.distance(from: position) / 1000
-        if dis < 0.1 {
-            distance = "< 0.1 km"
-        } else if dis > 999 {
-            distance = "> 999 km"
-        } else {
-            distance = String(format: "%.1f", dis) + " km"
-        }
+        distance = curtPos.distance(from: position) / 1000
     }
 }

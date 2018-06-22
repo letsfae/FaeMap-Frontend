@@ -110,10 +110,6 @@ class PlacePin: NSObject, FaePin {
     }
     
     private func processHours(day: String, hour: JSON) -> [String: [String]] {
-        //    var real_hour = hour
-        //    if hour.count == 0 {
-        //        real_hour.append("N/A")
-        //    }
         var dayDict = [String: [String]]()
         
         for days_raw in day.split(separator: ",") {
@@ -126,7 +122,7 @@ class PlacePin: NSObject, FaePin {
                     dayDict[d] = list
                 } else if hour.array != nil {
                     for h in hour.arrayValue {
-                        if h != "" {
+                        if h != "" && h.stringValue != "" {
                             list.append(h.stringValue)
                             dayDict[d] = list
                         }
@@ -146,8 +142,10 @@ class PlacePin: NSObject, FaePin {
                         dayDict[d] = list
                     } else if hour.array != nil {
                         for h in hour.arrayValue {
-                            list.append(h.stringValue)
-                            dayDict[d] = list
+                            if h != "" && h.stringValue != "" {
+                                list.append(h.stringValue)
+                                dayDict[d] = list
+                            }
                         }
                     } else {
                         list.append("N/A")
@@ -156,45 +154,6 @@ class PlacePin: NSObject, FaePin {
                 }
             }
         }
-        
-        /*
-         if days_raw.count == 1 {
-         let days = String(days_raw[0]).split(separator: "–")
-         if days.count == 1 {
-         dayDict = getHour(String(days[0]), hour)
-         } else if days.count == 2 {
-         let day_0 = String(days[0])
-         let day_1 = String(days[1])
-         let arrDays = getDays(day_0, day_1)
-         for d in arrDays {
-         dayDict = getHour(d, hour)
-         }
-         }
-         } else if days_raw.count == 2 {
-         var days = String(days_raw[0]).split(separator: "–")
-         if days.count == 1 {
-         dayDict = getHour(day, hour)
-         } else if days.count == 2 {
-         let day_0 = String(days[0])
-         let day_1 = String(days[1])
-         let arrDays = getDays(day_0, day_1)
-         for d in arrDays {
-         dayDict = getHour(d, hour)
-         }
-         }
-         days = String(days_raw[1]).trim().split(separator: "–")
-         if days.count == 1 {
-         dayDict = getHour(day, hour)
-         } else if days.count == 2 {
-         let day_0 = String(days[0])
-         let day_1 = String(days[1])
-         let arrDays = getDays(day_0, day_1)
-         for d in arrDays {
-         dayDict = getHour(d, hour)
-         }
-         }
-         }
-         */
         
         return dayDict
     }
@@ -223,7 +182,6 @@ class PlacePin: NSObject, FaePin {
     }
     
     private func closeOrOpen(_ todayHour: [String]) -> String {
-        
         // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
         
         for hour in todayHour {
@@ -237,7 +195,9 @@ class PlacePin: NSObject, FaePin {
             
             var startHour: String = String(hour.split(separator: "–")[0])
             var endHour: String = String(hour.split(separator: "–")[1])
-            if startHour == "Noon" {
+            if startHour == "Midnight" {
+                startHour = "00:00 AM"
+            } else if startHour == "Noon" {
                 startHour = "12:00 PM"
             }
             if endHour == "Noon" {
@@ -253,6 +213,7 @@ class PlacePin: NSObject, FaePin {
             let dateEnd = dateFormatter.date(from: endHour)
             dateFormatter.dateFormat = "HH:mm"
             
+            // TODD: dateStart和dateEnd使用forced unwrapping很危险
             let date24Start = dateFormatter.string(from: dateStart!)
             let date24End = dateFormatter.string(from: dateEnd!)
             

@@ -62,7 +62,7 @@ class PlaceDetailCell: UITableViewCell {
         addConstraintsWithFormat("V:|-18-[v0]-18-|", options: [], views: lblContent)
     }
     
-    func setValueForCell(_ identifier: String?, place: PlacePin, dayIdx: Int = 0, arrHour: [[String]] = [[]]) {
+    func setValueForCell(_ identifier: String?, place: PlacePin) {
         switch identifier {
         case "map":
             imgIcon.image = #imageLiteral(resourceName: "place_location")
@@ -72,29 +72,25 @@ class PlaceDetailCell: UITableViewCell {
             break
         case "hour":
             imgIcon.image = #imageLiteral(resourceName: "place_openinghour")
-            /*let openStatus = closeOrOpen(arrHour[dayIdx])
-            var hour = " / " + arrHour[dayIdx][0]
-            if arrHour[0].count > 1 {
-                for hourIdx in 1..<arrHour[dayIdx].count {
-                    if openStatus == "Open" {
-                        hour += "\n\t\t" + arrHour[dayIdx][hourIdx]
-                    } else if openStatus == "Closed" {
-                        hour += "\n\t\t   " + arrHour[dayIdx][hourIdx]
-                    }
-                }
-            }*/
-            let openStatus = place.openOrClose
+            var openStatus = place.openOrClose
             let todayHours = place.hoursToday
-            var hour = " / " + todayHours[0]
-            if todayHours.count > 1 {
-                for index in 1..<todayHours.count {
-                    if openStatus == "Open" {
-                        hour += "\n\t\t" + todayHours[index]
-                    } else {
-                        hour += "\n\t\t   " + todayHours[index]
+            var hour = ""
+            if todayHours.count == 1 && todayHours[0] == "N/A" && openStatus == "N/A" {
+                openStatus = ""
+                hour = "N/A"
+            } else {
+                hour = " / " + todayHours[0]
+                if todayHours.count > 1 {
+                    for index in 1..<todayHours.count {
+                        if openStatus == "Open" {
+                            hour += "\n\t\t" + todayHours[index]
+                        } else {
+                            hour += "\n\t\t   " + todayHours[index]
+                        }
                     }
                 }
             }
+            
             lblContent.attributedText = attributedHourText(openStatus: openStatus, hour: hour)
             break
         case "web":
@@ -136,51 +132,6 @@ class PlaceDetailCell: UITableViewCell {
         
         return title_0_attr
     }
-    
-    func closeOrOpen(_ todayHour: [String]) -> String {
-        
-        // MARK: - Jichao fix: bug here, if todayHour is "24 hours", need a check for this case
-        
-        for hour in todayHour {
-            if hour == "N/A" || hour == "24 Hours" || hour == "None" {
-                return hour
-            }
-            
-            var startHour: String = String(hour.split(separator: "–")[0])
-            var endHour: String = String(hour.split(separator: "–")[1])
-            if startHour == "Noon" {
-                startHour = "12:00 PM"
-            }
-            if endHour == "Noon" {
-                endHour = "12:00 PM"
-            } else if endHour == "Midnight" {
-                endHour = "00:00 AM"
-            }
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.dateFormat = "h:mm a"
-            let dateStart = dateFormatter.date(from: startHour)
-            let dateEnd = dateFormatter.date(from: endHour)
-            dateFormatter.dateFormat = "HH:mm"
-            
-            let date24Start = dateFormatter.string(from: dateStart!)
-            let date24End = dateFormatter.string(from: dateEnd!)
-            
-            let hourStart = Int(date24Start.split(separator: ":")[0])!
-            var hourEnd = Int(date24End.split(separator: ":")[0])!
-            if endHour.contains("AM") {
-                hourEnd = hourEnd + 24
-            }
-            
-            let hourCurrent = Calendar.current.component(.hour, from: Date())
-            
-            if hourCurrent >= hourStart && hourCurrent < hourEnd {
-                return "Open"
-            }
-        }
-        return "Closed"
-    }
 }
 
 protocol PlaceDetailMapCellDelegate: class {
@@ -216,23 +167,25 @@ class PlaceDetailMapCell: UITableViewCell {
         imgViewMap.contentMode = .top
         imgViewMap.clipsToBounds = true
         imgViewMap.isUserInteractionEnabled = true
-        imgViewMap.layer.borderColor = UIColor._225225225().cgColor
-        imgViewMap.layer.borderWidth = 1
+        
         addSubview(imgViewMap)
-        addConstraintsWithFormat("H:|-67-[v0(\(282 * screenWidthFactor))]", options: [], views: imgViewMap)
-        addConstraintsWithFormat("V:|-0-[v0(\(150))]-19-|", options: [], views: imgViewMap)
+        addConstraintsWithFormat("H:|-67-[v0(\(280 * screenWidthFactor + 2))]", options: [], views: imgViewMap)
+        addConstraintsWithFormat("V:|-0-[v0(\(152))]-19-|", options: [], views: imgViewMap)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleMapTap))
         imgViewMap.addGestureRecognizer(tapGesture)
         
         imgPlaceIcon = UIImageView(frame: CGRect(x: 0, y: 50, width: 56, height: 56))
-        imgPlaceIcon.center.x = 141 * screenWidthFactor
+        imgPlaceIcon.center.x = 140 * screenWidthFactor + 1
         imgViewMap.addSubview(imgPlaceIcon)
     }
     
     func setValueForCell(place: PlacePin) {
         imgPlaceIcon.image = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
-        AddPinToCollectionView().mapScreenShot(coordinate: place.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 200), icon: false) { (snapShotImage) in
+        AddPinToCollectionView().mapScreenShot(coordinate: place.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 152), icon: false) { [weak self] (snapShotImage) in
+            guard let `self` = self else { return }
             self.imgViewMap.image = snapShotImage
+            self.imgViewMap.layer.borderColor = UIColor._225225225().cgColor
+            self.imgViewMap.layer.borderWidth = 1
         }
     }
     

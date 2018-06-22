@@ -50,16 +50,16 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var intSimilar = 0
     private var intNearby = 0
     private var isScrollViewDidScrollEnabled: Bool = true
-//    private var boolMapFold: Bool = true
-//    private var boolHourFold: Bool = true
     private var arrDay_LG = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
-    private var arrHour = [[String]]()
     private var dayIdx = 0
-    var boolMapFold: Bool = true
-    var boolHourFold: Bool = true
+    private var boolMapFold: Bool = true
+    private var boolHourFold: Bool = true
     private var mapIndexPath = [IndexPath]()
     private var hourIndexPath = [IndexPath]()
+    
+    private var viewModelSimilar: BoardPlaceCategoryViewModel?
+    private var viewModelNearby: BoardPlaceCategoryViewModel?
     
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
@@ -77,7 +77,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         view.bringSubview(toFront: uiviewAfterAdded)
         checkSavedStatus() {}
         setCellCount()
-        calculateOpeningHour()
+        calculateTodayDate()
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_placeDetail"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_placeDetail"), object: nil)
         
@@ -106,8 +106,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        PlaceDetailCell.boolMapFold = true
-//        PlaceDetailCell.boolHourFold = true
         if boolShared {
             //uiviewAfterAdded.lblSaved.text = "You shared a Place."
             uiviewAfterAdded.lblSaved.frame = CGRect(x: 20, y: 19, width: 200, height: 25)
@@ -151,6 +149,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let long = String(place.coordinate.longitude)
         getRelatedPlaces(lat, long, isSimilar: true) {
             self.getRelatedPlaces(lat, long, isSimilar: false, {
+                self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
+                self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
                 self.tblPlaceDetail.reloadData()
             })
         }
@@ -172,7 +172,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     private func checkSavedStatus(_ completion: @escaping () -> ()) {
-        FaeMap.shared.getPin(type: "place", pinId: String(place.id)) { (status, message) in
+        FaeMap.shared.getPin(type: "place", pinId: String(place.id)) { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
             let resultJson = JSON(message!)
@@ -190,6 +190,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 guard let colId = Int(strColId) else { continue }
                 ids.append(colId)
             }
+            guard let `self` = self else { return }
             self.arrListSavedThisPin = ids
             self.uiviewSavedList.arrListSavedThisPin = ids
             self.boolSavedListLoaded = true
@@ -212,7 +213,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                           "longitude": long])
-            FaeSearch.shared.search { (status, message) in
+            FaeSearch.shared.search { [weak self] (status, message) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")
                     self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
@@ -233,7 +235,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeMap.shared.whereKey("radius", value: "5000")
             FaeMap.shared.whereKey("type", value: "place")
             FaeMap.shared.whereKey("max_count", value: "20")
-            FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+            FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")
                     self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
@@ -291,7 +294,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "hour")
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "web")
         tblPlaceDetail.register(PlaceDetailCell.self, forCellReuseIdentifier: "phone")
-        tblPlaceDetail.register(MBPlacesCell.self, forCellReuseIdentifier: "MBPlacesCell")
+        tblPlaceDetail.register(BoardPlacesCell.self, forCellReuseIdentifier: "BoardPlacesCell")
         tblPlaceDetail.register(PlaceDetailMapCell.self, forCellReuseIdentifier: "PlaceDetailMapCell")
         tblPlaceDetail.register(PlaceOpeningHourCell.self, forCellReuseIdentifier: "PlaceOpeningHourCell")
         tblPlaceDetail.register(PlaceHoursHintCell.self, forCellReuseIdentifier: "PlaceHoursHintCell")
@@ -512,10 +515,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     // MARK: - SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: [PlacePin], title: String) {
+    func jumpToAllPlaces(places: BoardPlaceCategoryViewModel) {
         let vc = AllPlacesViewController()
-        vc.recommendedPlaces = places
-        vc.strTitle = title
+        vc.viewModelPlaces = places
+        vc.strTitle = places.title
+//        vc.recommendedPlaces = places
+//        vc.strTitle = places.title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -859,21 +864,29 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         }
     }
     
-    func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> MBPlacesCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MBPlacesCell", for: indexPath) as! MBPlacesCell
+    func getMBCell(_ tableView: UITableView, _ indexPath: IndexPath) -> BoardPlacesCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BoardPlacesCell", for: indexPath) as! BoardPlacesCell
         cell.delegate = self
         let count = intSimilar + intNearby
         if count == 1 {
             if intSimilar == 1 {
-                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+                if let viewModelSimilar = viewModelSimilar {
+                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                }
             } else {
-                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+                if let viewModelNearby = viewModelNearby {
+                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                }
             }
         } else {
             if indexPath.row == 0 {
-                cell.setValueForCell(title: arrTitle[0], places: arrSimilarPlaces)
+                if let viewModelSimilar = viewModelSimilar {
+                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                }
             } else {
-                cell.setValueForCell(title: arrTitle[1], places: arrNearbyPlaces)
+                if let viewModelNearby = viewModelNearby {
+                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                }
             }
         }
         return cell
@@ -881,7 +894,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     
     func getDetailCell(_ tableView: UITableView, _ indexPath: IndexPath, _ identifier: String) -> PlaceDetailCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! PlaceDetailCell
-        cell.setValueForCell(identifier, place: place, dayIdx: dayIdx, arrHour: arrHour)
+        cell.setValueForCell(identifier, place: place)
         
         if identifier == "map" {
             if !boolMapFold {
@@ -910,9 +923,8 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     func getOpeningHoursCell(_ tableView: UITableView, _ indexPath: IndexPath) -> PlaceOpeningHourCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlaceOpeningHourCell", for: indexPath) as! PlaceOpeningHourCell
         let row = (indexPath.row - 1 + dayIdx) % arrDay.count
-        let day = arrDay[row]
-        //let hour = arrHour[row]
-        let hour = place.hours[day] ?? ["N/A"]
+        let day = arrDay_LG[row]
+        let hour = place.hours[arrDay[row]] ?? ["N/A"]
         cell.setValueForOpeningHourCell(day, hour, bold: indexPath.row == 1)
         return cell
     }
@@ -922,15 +934,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         return cell
     }
     
-    func calculateOpeningHour() {
-        for day in arrDay {
-            if place.hours.index(forKey: day) == nil {
-                arrHour.append(["N/A"])
-            } else {
-                arrHour.append(place.hours[day]!)
-            }
-        }
-        
+    func calculateTodayDate() {
         let date = Date()
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday], from: date)

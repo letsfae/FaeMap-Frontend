@@ -168,7 +168,8 @@ class RegisterInfoViewController: RegisterBaseViewController {
     override func continueButtonPressed() {
         if Key.shared.is_Login {
             setValueInUser()
-            faeUser.updateAccountBasicInfo({ (_, _) in
+            faeUser.updateAccountBasicInfo({ [weak self] (_, _) in
+                guard let `self` = self else { return }
                 self.jumpToRegisterNext()
             })
         } else {

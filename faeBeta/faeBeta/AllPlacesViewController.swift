@@ -6,8 +6,6 @@
 //  Copyright © 2017 fae. All rights reserved.
 //
 
-// This ViewController is currently unused
-
 import UIKit
 import SwiftyJSON
 
@@ -16,33 +14,26 @@ enum AllPlacesEnterMode: Int {
     case placeDetail = 2
 }
 
-protocol AllPlacesDelegate: class {
-    func jumpToAllPlaces(places: [PlacePin])
-}
-
-class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, MapBoardPlaceTabDelegate {
-    
-    weak var delegate: AllPlacesDelegate?
+class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+     // MARK: - Properties
     
     var uiviewNavBar: FaeNavBar!
     var tblAllPlaces: UITableView!
     var strTitle: String! = ""
+    var viewModelPlaces: BoardPlaceCategoryViewModel!
     var recommendedPlaces = [PlacePin]()
     var searchedPlaces = [PlacePin]()
     var uiviewFooterTab: PlaceTabView!
-    var placeTableMode: PlaceTableMode = .recommend
+    var placeTableMode: PlaceTableMode = .left
     var arrAllPlaces = [PlacePin]()
     var searchedLoc: CLLocation!
     
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         loadNavBar()
         loadTable()
-//        loadFooter()
-//        searchedLoc = LocManager.shared.curtLoc
-        // 如果是从place detail进来的话，以下这行是不是可以做个判断以免加载了未用信息？
-//        getPlaceInfo()
     }
 
     fileprivate func loadNavBar() {
@@ -68,12 +59,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         tblAllPlaces.contentInset = inset
     }
     
-    fileprivate func loadFooter() {
-        uiviewFooterTab = PlaceTabView()
-        uiviewFooterTab.delegate = self
-        view.addSubview(uiviewFooterTab)
-    }
-    
+    // MARK: - Button actions
     @objc func actionGoBack(_ sender: UIButton) {
         let mbIsOn = SideMenuViewController.boolMapBoardIsOn
         if mbIsOn {
@@ -85,7 +71,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
     @objc func jumpToMapPlaces(_ sender: UIButton) {
         let vc = AllPlacesMapController()
         vc.strTitle = strTitle
-        vc.arrPins = placeTableMode == .recommend ? recommendedPlaces : searchedPlaces
+        vc.arrPins = placeTableMode == .left ? viewModelPlaces.places : searchedPlaces
         navigationController?.pushViewController(vc, animated: false)
     }
     
@@ -94,88 +80,43 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
         tblAllPlaces.reloadData()
     }
     
-    // MapBoardPlaceTabDelegate
-    func jumpToRecommendedPlaces() {
-        placeTableMode = .recommend
-        uiviewNavBar.lblTitle.isHidden = false
-        uiviewNavBar.rightBtn.isHidden = false
-        tblAllPlaces.frame.origin.y = 65 + device_offset_top
-        tblAllPlaces.frame.size.height = screenHeight - 114 - device_offset_top - device_offset_bot
-        tblAllPlaces.reloadData()
-    }
-    
-    func jumpToSearchPlaces() {
-        placeTableMode = .search
-        uiviewNavBar.lblTitle.isHidden = true
-        uiviewNavBar.rightBtn.isHidden = true
-        tblAllPlaces.frame.origin.y = 114 + device_offset_top
-        tblAllPlaces.frame.size.height = screenHeight - 114 - 49 - device_offset_top - device_offset_bot
-        tblAllPlaces.reloadData()
-    }
-    // MapBoardPlaceTabDelegate End
-    
+    // MARK: - UITableViewDataSource & Delegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 90
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if placeTableMode == .recommend {
-            return recommendedPlaces.count
-        } else {
-            return searchedPlaces.count
-        }
+//        if placeTableMode == .left {
+//            return recommendedPlaces.count
+//        } else {
+//            return searchedPlaces.count
+//        }
+        return viewModelPlaces.numberOfPlaces
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllPlacesCell", for: indexPath) as! AllPlacesCell
-        if placeTableMode == .recommend {
-        cell.setValueForCell(place: recommendedPlaces[indexPath.row]) //, curtLoc: LocManager.shared.curtLoc)
-        } else {
-            cell.setValueForCell(place: searchedPlaces[indexPath.row])
+//        if placeTableMode == .left {
+//            cell.setValueForCell(place: recommendedPlaces[indexPath.row]) //, curtLoc: LocManager.shared.curtLoc)
+//        } else {
+//            cell.setValueForCell(place: searchedPlaces[indexPath.row])
+//        }
+        if let viewModelPlace = viewModelPlaces.viewModel(for: indexPath.row) {
+            cell.setValueForCell(place: viewModelPlace)
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vcPlaceDetail = PlaceDetailViewController()
-        if placeTableMode == .recommend {
-            vcPlaceDetail.place = recommendedPlaces[indexPath.row]
-        } else {
-            vcPlaceDetail.place = searchedPlaces[indexPath.row]
+//        if placeTableMode == .left {
+//            vcPlaceDetail.place = recommendedPlaces[indexPath.row]
+//        } else {
+//            vcPlaceDetail.place = searchedPlaces[indexPath.row]
+//        }
+        if let viewModelPlace = viewModelPlaces.viewModel(for: indexPath.row) {
+            vcPlaceDetail.place = viewModelPlace.place
         }
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
-    }
-    
-    func getPlaceInfo() {
-        let placesList = FaeMap()
-        placesList.whereKey("geo_latitude", value: "\(searchedLoc.coordinate.latitude)")
-        placesList.whereKey("geo_longitude", value: "\(searchedLoc.coordinate.longitude)")
-        placesList.whereKey("radius", value: "50000")
-        placesList.whereKey("type", value: "place")
-        placesList.whereKey("max_count", value: "1000")
-        placesList.getMapInformation { (status: Int, message: Any?) in
-            if status / 100 != 2 || message == nil {
-                print("[loadMapSearchPlaceInfo] status/100 != 2")
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfoJsonArray = placeInfoJSON.array else {
-                print("[loadMapSearchPlaceInfo] fail to parse map search place info")
-                return
-            }
-            if placeInfoJsonArray.count <= 0 {
-                print("[loadMapSearchPlaceInfo] array is nil")
-                return
-            }
-            
-            self.searchedPlaces.removeAll()
-            
-            for result in placeInfoJsonArray {
-                let placeData = PlacePin(json: result)
-                self.searchedPlaces.append(placeData)
-            }
-            
-            self.arrAllPlaces = self.searchedPlaces
-        }
     }
 }

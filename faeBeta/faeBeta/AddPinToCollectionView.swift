@@ -135,11 +135,12 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     
     private func savePlaceTo(collection: RealmCollection) {
         guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
-        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
+        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { [weak self] (code, result) in
             guard code / 100 == 2 else {
                 
                 return
             }
+            guard let `self` = self else { return }
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.collection_id)
@@ -156,8 +157,9 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     
     private func unsavePlaceFrom(collection: RealmCollection) {
         guard let placeData = pinToSave.pinInfo as? PlacePin else { return }
-        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { (code, result) in
+        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(placeData.id)", completion: { [weak self] (code, result) in
             guard code / 100 == 2 else { return }
+            guard let `self` = self else { return }
             self.hide()
             self.uiviewAfterAdded.show(save: false, "Removed from List!")
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })
@@ -198,7 +200,7 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
             FaeImage.shared.image = snapShotImage
             
             // 2: upload the screen shot and get file id
-            FaeImage.shared.faeUploadFile { (status, message) in
+            FaeImage.shared.faeUploadFile { [weak self] (status, message) in
                 guard status / 100 == 2 && message != nil else {
                     Key.shared.FMVCtrler?.useActivityIndicator(on: false)
                     showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
@@ -208,11 +210,12 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                 let fileId = fileIDJSON["file_id"].intValue
                 
                 // 3: create a loc pin in server with file id
+                guard let `self` = self else { return }
                 FaeMap.shared.whereKey("content", value: "\(fileId)")
                 FaeMap.shared.whereKey("file_ids", value: "\(fileId)")
                 FaeMap.shared.whereKey("geo_latitude", value: "\(self.pinToSave.coordinate.latitude)")
                 FaeMap.shared.whereKey("geo_longitude", value: "\(self.pinToSave.coordinate.longitude)")
-                FaeMap.shared.postPin(type: "location", completion: { (status, message) in
+                FaeMap.shared.postPin(type: "location", completion: { [weak self] (status, message) in
                     guard status / 100 == 2 else {
                         Key.shared.FMVCtrler?.useActivityIndicator(on: false)
                         showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
@@ -226,22 +229,23 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
                     let idJSON = JSON(message!)
                     let locationId = idJSON["location_id"].intValue
                     print("locationId \(locationId)")
-                    self.uiviewAfterAdded.pinIdInAction = locationId
+                    self?.uiviewAfterAdded.pinIdInAction = locationId
                     
                     // 4: save loc pin to server
-                    self.saveLocationToWithId(collection, locationId)
+                    self?.saveLocationToWithId(collection, locationId)
                 })
             }
         }
     }
     
     private func saveLocationToWithId(_ collection: RealmCollection, _ locationId: Int) {
-        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { (code, result) in
+        FaeCollection.shared.saveToCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(locationId)", completion: { [weak self] (code, result) in
             Key.shared.FMVCtrler?.useActivityIndicator(on: false)
             guard code / 100 == 2 else {
                 showAlert(title: "Tried to save pin but failed", message: "please try again", viewCtrler: Key.shared.FMVCtrler)
                 return
             }
+            guard let `self` = self else { return }
             self.hide()
             self.uiviewAfterAdded.show("Collected to List!")
             self.arrListSavedThisPin.append(collection.collection_id)
@@ -258,8 +262,9 @@ class AddPinToCollectionView: UIView, UITableViewDelegate, UITableViewDataSource
     private func unsaveLocationFrom(_ collection: RealmCollection, _ locationId: Int) {
         let loc_id = fromLocDetail ? locId : locationId
         print("unsave \(collection) \(locId)")
-        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { (code, result) in
+        FaeCollection.shared.unsaveFromCollection(collection.type, collectionID: "\(collection.collection_id)", pinID: "\(loc_id)", completion: { [weak self] (code, result) in
             guard code / 100 == 2 else { return }
+            guard let `self` = self else { return }
             self.hide()
             self.uiviewAfterAdded.show(save: false, "Removed from List!")
             self.arrListSavedThisPin = self.arrListSavedThisPin.filter({ $0 != collection.collection_id })

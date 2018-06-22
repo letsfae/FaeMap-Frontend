@@ -541,7 +541,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "200")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 return
             }
@@ -552,6 +552,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             guard mapPlaceJsonArray.count > 0 else {
                 return
             }
+            guard let `self` = self else { return }
             self.placeAdderQueue.cancelAllOperations()
             let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
             adder.completionBlock = {

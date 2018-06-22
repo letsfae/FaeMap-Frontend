@@ -140,10 +140,10 @@ class MoodAvatarViewController: UIViewController, UITableViewDelegate, UITableVi
         Key.shared.miniAvatar = "miniAvatar_\(Key.shared.userMiniAvatar)"
         FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
-        updateMiniAvatar.updateAccountBasicInfo({ (status: Int, _: Any?) in
+        updateMiniAvatar.updateAccountBasicInfo({ [weak self] (status: Int, _: Any?) in
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
-                self.navigationController?.popViewController(animated: true)
+                self?.navigationController?.popViewController(animated: true)
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
             } else {
                 print("Fail to update miniavatar")

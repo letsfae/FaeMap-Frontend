@@ -179,7 +179,8 @@ class RegisterPhoneViewController: RegisterBaseViewController {
         activityIndicator.startAnimating()
         self.view.endEditing(true)
         user.whereKey("phone", value: "(" + phoneCode + ")" + phoneNumber)
-        user.checkPhoneExistence{(status, message) in
+        user.checkPhoneExistence{ [weak self] (status, message) in
+            guard let `self` = self else { return }
             felixprint("\(status) \(message!)")
             if status / 100 == 2 {
                 if let numbers = message as? NSArray {
