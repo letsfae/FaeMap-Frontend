@@ -181,7 +181,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             if statusCode / 100 == 2 {
                 if let response = result as? NSDictionary {
                     let id = response["chat_id"] as! Int
-                    deleteFromURL("chats_v2/\(id)", parameter: [:], completion: { [weak self] (statusCode, result) in
+                    deleteFromURL("chats_v2/\(id)", parameter: [:], completion: { (statusCode, result) in
                         if statusCode / 100 == 2 {
                             print("delete \(chat_id) successfully")
                         }
