@@ -268,7 +268,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         btnSearchLoc = UIButton()
         btnSearchLoc.tag = 0
         uiviewCurtLoc.addSubview(btnSearchLoc)
-        btnSearchLoc.addTarget(self, action: #selector(chooseNearbyPeopleInfo(_:)), for: .touchUpInside)
+        btnSearchLoc.addTarget(self, action: #selector(selectLocation(_:)), for: .touchUpInside)
         uiviewCurtLoc.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
         uiviewCurtLoc.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnSearchLoc)
         
@@ -425,8 +425,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         getCurtTableMode()
         hideDropDownMenu()
         setViewContent()
-        
-//        reloadTableMapBoard()
     }
     
     // MARK: - Animations
@@ -498,59 +496,6 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         if let vcRoot = vc as? InitialPageController {
             vcRoot.goToFaeMap()
             SideMenuViewController.boolMapBoardIsOn = false
-        }
-    }
-}
-
-extension MapBoardViewController: SelectLocationDelegate {
-    // MARK: - BoardsSearchDelegate
-    func sendLocationBack(address: RouteAddress) {
-        var arrNames = address.name.split(separator: ",")
-        var array = [String]()
-        guard arrNames.count >= 1 else { return }
-        for i in 0..<arrNames.count {
-            let name = String(arrNames[i]).trimmingCharacters(in: CharacterSet.whitespaces)
-            array.append(name)
-        }
-        if array.count >= 3 {
-            reloadBottomText(array[0], array[1] + ", " + array[2])
-        } else if array.count == 1 {
-            reloadBottomText(array[0], "")
-        } else if array.count == 2 {
-            reloadBottomText(array[0], array[1])
-        }
-        //        self.selectedLoc = address.coordinate
-        viewModelCategories.location = address.coordinate
-        viewModelPlaces.location = address.coordinate
-        viewModelPeople.location = address.coordinate
-        rollUpFilter()
-    }
-    
-    func reloadBottomText(_ city: String, _ state: String) {
-        let fullAttrStr = NSMutableAttributedString()
-        //        let firstImg = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-        //        let first_attch = InlineTextAttachment()
-        //        first_attch.fontDescender = -2
-        //        first_attch.image = UIImage(cgImage: (firstImg.cgImage)!, scale: 3, orientation: .up)
-        //        let firstImg_attach = NSAttributedString(attachment: first_attch)
-        //
-        //        let secondImg = #imageLiteral(resourceName: "exp_bottom_loc_arrow")
-        //        let second_attch = InlineTextAttachment()
-        //        second_attch.fontDescender = -1
-        //        second_attch.image = UIImage(cgImage: (secondImg.cgImage)!, scale: 3, orientation: .up)
-        //        let secondImg_attach = NSAttributedString(attachment: second_attch)
-        let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
-        
-        let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!]
-        let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
-        
-        //        fullAttrStr.append(firstImg_attach)
-        fullAttrStr.append(title_0_attr)
-        fullAttrStr.append(title_1_attr)
-        //        fullAttrStr.append(secondImg_attach)
-        DispatchQueue.main.async {
-            self.lblCurtLoc.attributedText = fullAttrStr
         }
     }
 }
