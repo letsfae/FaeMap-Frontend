@@ -64,7 +64,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     // place
                     let selectedPlace = searchedPlaces[indexPath.row]
                     delegate?.selectPlace?(place: selectedPlace)
-                    gotoChatViewController()
+                    navigationController?.popViewController(animated: false)
                 case 2:
                     // address
                     let address = searchedAddresses[indexPath.row]
@@ -81,7 +81,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                         guard let first = placeMarks.first else { return }
                         guard let loc = first.location else { return }
                         self.delegate?.selectLocation?(location: loc)
-                        self.gotoChatViewController()
+                        self.navigationController?.popViewController(animated: false)
                     }
                 default:
                     break
@@ -229,6 +229,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
 
 extension MapSearchViewController {
     
+    /*
     func gotoChatViewController() {
         guard var arrCtrlers = navigationController?.viewControllers else {
             showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
@@ -242,7 +243,8 @@ extension MapSearchViewController {
         }
         navigationController?.setViewControllers(arrCtrlers, animated: false)
     }
-    
+    */
+ 
     func updateSavedLocationToSearchInEachViewController(coordinate: CLLocationCoordinate2D) {
         switch previousVC {
         case .map:
