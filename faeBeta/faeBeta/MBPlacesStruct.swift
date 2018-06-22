@@ -43,7 +43,7 @@ struct MBPlacesStruct {
             location = LocManager.shared.curtLoc.coordinate
         }
         
-        let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)
+        let curtPos = CLLocation(latitude: location.latitude, longitude: location.longitude)	
 
         dis = curtPos.distance(from: position) / 1000
         if dis < 0.1 {
