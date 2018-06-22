@@ -614,7 +614,7 @@ extension FaeInputBar {
 }
 
 // MARK: - InputView delegates
-extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRecorderViewDelegate {
+extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRecorderViewDelegate {
     
     func setupInputView(_ tag: Int) -> UIView? {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
@@ -684,6 +684,7 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
             //viewMiniLoc = LocationPickerMini()
             //viewMiniLoc.delegate = self
             viewMiniLoc = LocationMiniPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
+            viewMiniLoc.delegate = self
             return viewMiniLoc
         default: break
         }
@@ -719,6 +720,28 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     private func observeOnSelectedCount(_ count: Int) {
         btnQuickSendImage.isHidden = (count == 0)
+    }
+    
+    // MARK: LocationMiniPickerDelegate
+    func showFullLocationView(_ locationMiniPicker: LocationMiniPicker) {
+        delegate?.faeInputBar(self, showFullView: "map", with: nil)
+    }
+    
+    func selectLocation(_ locationMiniPicker: LocationMiniPicker, location: CLLocation) {
+        UIGraphicsBeginImageContext(locationMiniPicker.frame.size)
+        locationMiniPicker.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let thunbmnail = UIGraphicsGetImageFromCurrentImageContext() {
+            CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
+                guard let response = placemarks?[0] else {
+                    return // TODO
+                }
+                self.setupTopStackView(placemark: response, thumbnail: thunbmnail)
+            }
+        }
+    }
+    
+    func selectPlacePin(_ locationMiniPicker: LocationMiniPicker, placePin: PlacePin) {
+        setupTopStackView(place: placePin)
     }
     
     // MARK: LocationPickerMiniDelegate
