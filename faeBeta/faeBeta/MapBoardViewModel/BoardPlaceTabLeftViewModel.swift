@@ -10,8 +10,8 @@ import UIKit
 import SwiftyJSON
 
 class BoardPlaceTabLeftViewModel {
-    let arrCategories: [String] = ["Restaurants", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
-    var arrTitle: [String] = ["Restaurants", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
+    let arrCategories: [String] = ["Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
+    var arrCategory: [String] = []
     
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
         didSet {
@@ -34,18 +34,20 @@ class BoardPlaceTabLeftViewModel {
     }
     
     // MARK: - Methods
-    private func categoryPlaces(at index: Int) -> [PlacePin]? {
-        guard index < categoryToPlaces.count else { return nil }
-        if categoryToPlaces[arrCategories[index]] == nil {
-            return nil
+    private func categoryPlaces(at index: Int) -> (String, [PlacePin]?) {
+        guard index < categoryToPlaces.count else { return ("", nil) }
+        let category = arrCategory[index]
+        if categoryToPlaces[category] == nil {
+            return ("", nil)
         }
         
-        return categoryToPlaces[arrCategories[index]]
+        return (category, categoryToPlaces[category])
     }
     
     func viewModel(for index: Int) -> BoardPlaceCategoryViewModel? {
-        guard let categoryPlaces = categoryPlaces(at: index) else { return nil }
-        return BoardPlaceCategoryViewModel(title: "", places: categoryPlaces)
+        let (title, categoryPlaces) = self.categoryPlaces(at: index)
+        guard let places = categoryPlaces else { return nil }
+        return BoardPlaceCategoryViewModel(title: "Nearby \(title)", places: places)
     }
     
     
@@ -73,6 +75,7 @@ class BoardPlaceTabLeftViewModel {
             guard let `self` = self else { return }
             
             if placePins.count > 0 {
+                self.arrCategory.append(content)
                 self.categoryToPlaces[content] = placePins
             }
         }

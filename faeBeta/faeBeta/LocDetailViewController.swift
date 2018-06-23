@@ -25,7 +25,7 @@ protocol LocDetailDelegate: class {
     func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool)
 }
 
-class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
+class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
     weak var locationDelegate: LocDetailDelegate?
@@ -415,15 +415,15 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         uiviewSavedList.hide()
     }
     
-    // SeeAllPlacesDelegate
-    func jumpToAllPlaces(places: BoardPlaceCategoryViewModel) {
-        let vc = AllPlacesViewController()
-        vc.viewModelPlaces = places
-        vc.strTitle = places.title
-//        vc.recommendedPlaces = places
-//        vc.strTitle = title
-        navigationController?.pushViewController(vc, animated: true)
-    }
+    // MARK: - SeeAllPlacesDelegate
+//    func jumpToAllPlaces(places: BoardPlaceCategoryViewModel) {
+//        let vc = AllPlacesViewController()
+//        vc.viewModelPlaces = places
+//        vc.strTitle = places.title
+////        vc.recommendedPlaces = places
+////        vc.strTitle = title
+//        navigationController?.pushViewController(vc, animated: true)
+//    }
     
     func jumpToPlaceDetail(place: PlacePin) {
         let vcPlaceDetail = PlaceDetailViewController()
@@ -431,7 +431,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
-    // AddPinToCollectionDelegate
+    // MARK: - AddPinToCollectionDelegate
     func createColList() {
         let vc = CreateColListViewController()
         vc.enterMode = .location
@@ -451,7 +451,7 @@ class LocDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinToC
         navigationController?.pushViewController(vcList, animated: true)
     }
     
-    // AfterAddedToListDelegate
+    // MARK: - AfterAddedToListDelegate
     func undoCollect(colId: Int, mode: UndoMode) {
         uiviewAfterAdded.hide()
         uiviewSavedList.show()

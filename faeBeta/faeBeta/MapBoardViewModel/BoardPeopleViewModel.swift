@@ -46,7 +46,7 @@ class BoardPeopleViewModel {
         return numberOfUsers > 0
     }
     
-    var valDis: String = "23.0" {
+    var valDis: Double = 23.0 {
         didSet {
             if oldValue != valDis {
                 getPeopleInfo(latitude: location.latitude, longitude: location.longitude)
@@ -86,6 +86,16 @@ class BoardPeopleViewModel {
         }
     }
     
+    var unit: String = Key.shared.measurementUnits == "imperial" ? " mi" : " km" {
+        didSet {
+            if oldValue != unit {
+                getPeopleInfo(latitude: location.latitude, longitude: location.longitude)
+            }
+        }
+    }
+    
+    private let factor = 0.621371
+    
     // MARK: - Methods
     private func people(at index: Int) -> BoardPeopleStruct? {
         guard index < users.count else { return nil }
@@ -94,14 +104,15 @@ class BoardPeopleViewModel {
     
     func viewModel(for index: Int) -> BoardUserInfoViewModel? {
         guard let people = people(at: index) else { return nil }
-        return BoardUserInfoViewModel(people: people)
+        return BoardUserInfoViewModel(people: people, unit: unit)
     }
     
     func getPeopleInfo(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         loaded = false
+        let radius: Int = Key.shared.measurementUnits == "imperial" ? Int(100000 / factor) : 100000
         FaeMap.shared.whereKey("geo_latitude", value: "\(latitude)")
         FaeMap.shared.whereKey("geo_longitude", value: "\(longitude)")
-        FaeMap.shared.whereKey("radius", value: "100000")   // 100km
+        FaeMap.shared.whereKey("radius", value: "\(radius)")   // 100km, 100mi
         FaeMap.shared.whereKey("type", value: "user")
         FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             self?.loaded = true
@@ -123,7 +134,7 @@ class BoardPeopleViewModel {
     
     fileprivate func processPeopleInfo(results: [JSON], type: String) -> [BoardPeopleStruct] {
         var users: [BoardPeopleStruct] = []
-        
+        let distance: Double = Key.shared.measurementUnits == "imperial" ? valDis / factor : valDis
         for result in results {
             let peopleData = BoardPeopleStruct(json: result)
             if peopleData.userId == Key.shared.user_id {
@@ -134,7 +145,7 @@ class BoardPeopleViewModel {
                 continue
             }
             
-            if (peopleData.distance > Double(valDis)!) {
+            if (peopleData.distance > distance) {
                 continue
             }
             
