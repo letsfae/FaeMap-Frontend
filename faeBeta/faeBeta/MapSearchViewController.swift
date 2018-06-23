@@ -281,6 +281,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             content = "Hotels"
         default: break
         }
+        
         getPlaceInfo(content: content, source: "categories")
 
         if catDict[content] == nil {

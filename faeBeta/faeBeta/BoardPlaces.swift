@@ -49,47 +49,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         view.addSubview(uiviewPlaceTab)
     }
     
-//    func getPlaceInfo(content: String = "", source: String = "categories") {
-//        lblSearchContent.text = content
-//        uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
-//        uiviewPlaceTab.btnPlaceTabRight.isSelected = true
-//        jumpToRightTab()
-//    }
-    
     // MARK: - Button actions
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        let searchVC = MapSearchViewController()
-        searchVC.boolNoCategory = false
-        searchVC.boolFromChat = false
-        searchVC.delegate = self
-        searchVC.previousVC = .board
-        if let text = lblSearchContent.text {
-            searchVC.strSearchedPlace = text
-        }
-        if let text = locToSearchTextRaw {
-            searchVC.strSearchedLocation = text
-        }
-        //searchVC.searchedPlaces = viewModelPlaces.places
-        navigationController?.pushViewController(searchVC, animated: false)
-    }
-    
-    // MARK: - MapSearchDelegate
-    func jumpToPlaces(searchText: String, places: [PlacePin]) {
-        lblSearchContent.text = searchText
-        // TODO VICKY - MAPSEARCH
-        // 搜索name, 回传的参数里places没有用
-        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
-        // if nil, then use LocManager.shared.curtLoc
-    }
-    
-    func jumpToCategory(category: String) {
-        lblSearchContent.text = category
-        // TODO VICKY - MAPSEARCH
-        // 搜索category
-        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
-        // if nil, then use LocManager.shared.curtLoc
-    }
-    
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
@@ -103,7 +63,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         vc.viewModelPlaces = places
         vc.strTitle = places.title
 //        vc.recommendedPlaces = places
-        vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -144,26 +103,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         
         tblPlaceLeft.isHidden = true
         tblPlaceRight.isHidden = false
-    }
-    
-    // MARK: - SelectLocationDelegate
-    func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.locToSearch_board = location.coordinate
-        locToSearchTextRaw = searchText
-        joshprint("[jumpToLocationSearchResult]", searchText)
-        if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {
-            lblCurtLoc.attributedText = attrText
-        } else {
-            fatalError("Processing Location Name Fail, Need To Check Function")
-        }
-        imgCurtLoc.image = icon
-        
-        if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-//            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        } else {
-//            getPlaceInfo(content: lblSearchContent.text!, source: "name")
-        }
-//        tblMapBoard.reloadData()
     }
     
     // MARK: - BoardCategorySearchDelegate

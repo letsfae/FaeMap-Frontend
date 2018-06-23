@@ -69,17 +69,9 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BoardPlacesCell", for: indexPath) as! BoardPlacesCell
             cell.delegate = self
             
-            let title = ""//viewModelCategories.arrTitle[indexPath.row]
-            
             if let placeCategory = viewModelCategories.viewModel(for: indexPath.row) {
-                cell.setValueForCell(title: title, viewModelPlaces: placeCategory)
+                cell.setValueForCell(viewModelPlaces: placeCategory)
             }
-            
-//            let title = arrTitle[indexPath.row]
-//            let placeCategory = testArrPlaces[indexPath.row]
-//            cell.places = placeCategory
-            //                cell.tableCellIndexPath = indexPath
-//            cell.setValueForCell(title: title, places: placeCategory)//, place: place, curtLoc: LocManager.shared.curtLoc)
             return cell
         case tblPlaceRight:
             if !viewModelPlaces.hasPlaces {

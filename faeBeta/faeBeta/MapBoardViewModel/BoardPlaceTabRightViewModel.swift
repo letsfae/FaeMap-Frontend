@@ -15,7 +15,7 @@ class BoardPlaceTabRightViewModel {
             if category == "All Places" {
                 getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
             } else {
-                searchByCategories(content: category, source: "categories", latitude: location.latitude, longitude: location.longitude)
+                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
             }
         }
     }
@@ -26,7 +26,7 @@ class BoardPlaceTabRightViewModel {
                 if category == "All Places" {
                     getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
                 } else {
-                    searchByCategories(content: category, source: "categories", latitude: location.latitude, longitude: location.longitude)
+                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
                 }
             }
         }
@@ -103,7 +103,7 @@ class BoardPlaceTabRightViewModel {
         }
     }
     
-    private func searchByCategories(content: String, source: String = "categories", latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    func searchByCategories(content: String, source: String = "categories", latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var places: [PlacePin] = []
         loaded = false
         FaeSearch.shared.whereKey("content", value: content)
