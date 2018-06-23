@@ -10,6 +10,7 @@ import UIKit
 
 struct BoardUserInfoViewModel {
     let people: BoardPeopleStruct
+    let unit: String
     
     var name: String {
         return people.displayName == "" ? "Someone" : people.displayName
@@ -53,15 +54,19 @@ struct BoardUserInfoViewModel {
     
     var distance: String {
         var distance = ""
-        
-        let dis = people.distance
+        var dis: Double = people.distance
+//        var unit: String = " km"
+        if Key.shared.measurementUnits == "imperial" {
+            dis *= 0.621371
+//            unit = " mi"
+        }
         
         if dis < 0.1 {
-            distance = "< 0.1 km"
+            distance = "< 0.1\(unit)"
         } else if dis > 999 {
-            distance = "> 999 km"
+            distance = "> 999\(unit)"
         } else {
-            distance = String(format: "%.1f", dis) + " km"
+            distance = String(format: "%.1f", dis) + unit
         }
         
         return distance

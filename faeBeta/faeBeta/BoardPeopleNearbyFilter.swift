@@ -16,24 +16,33 @@ protocol BoardPeopleNearbyFilterDelegate: class {
 class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
     // MARK: - Properties
     // Distance
-    fileprivate var lblDisVal: UILabel!
-    fileprivate var sliderDisFilter: UISlider!
-    fileprivate var uiviewDisRedLine: UIView!
-    var valDis: String = "23.0"
+    private var lblDisVal: UILabel!
+    private var sliderDisFilter: UISlider!
+    private var uiviewDisRedLine: UIView!
+    private var factor = 0.621371
+    var valDis: Double = 23.0
+    
+    var unit = Key.shared.measurementUnits == "imperial" ? " mi" : " km" {
+        didSet {
+            if oldValue != unit {
+                updateUIAfterMeasurementUnitChange()
+            }
+        }
+    }
     
     // Gender
-    fileprivate var btnGenderBoth: UIButton!
-    fileprivate var btnGenderFemale: UIButton!
-    fileprivate var btnGenderMale: UIButton!
-    fileprivate var imgGenderBoth: UIImageView!
-    fileprivate var imgGenderFemale: UIImageView!
-    fileprivate var imgGenderMale: UIImageView!
+    private var btnGenderBoth: UIButton!
+    private var btnGenderFemale: UIButton!
+    private var btnGenderMale: UIButton!
+    private var imgGenderBoth: UIImageView!
+    private var imgGenderFemale: UIImageView!
+    private var imgGenderMale: UIImageView!
     var valGender: String = "Both"
     
     // Age
-    fileprivate var lblAgeVal: UILabel!
-    fileprivate var sliderAgeFilter: TTRangeSlider!
-    fileprivate var uiviewAgeRedLine: UIView!
+    private var lblAgeVal: UILabel!
+    private var sliderAgeFilter: TTRangeSlider!
+    private var uiviewAgeRedLine: UIView!
     var valAgeLB: Int = 18
     var valAgeUB: Int = 33
     var valAllAge: String = ""
@@ -51,7 +60,7 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func setupUI() {
+    private func setupUI() {
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(rollUpSelf(_:)))
         addGestureRecognizer(swipeGesture)
         swipeGesture.direction = .up
@@ -79,7 +88,7 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         lblDis.text = "Maximum Distance"
         
         lblDisVal = UILabel(frame: CGRect(x: screenWidth - 95, y: 22, width: 80, height: 22))
-        lblDisVal.text = "\(valDis) km"
+        lblDisVal.text = String(format: "%.1f", valDis) + unit
         lblDisVal.textAlignment = .right
         
         let lblGender = UILabel(frame: CGRect(x: 15, y: 119, width: 150, height: 21))
@@ -196,7 +205,7 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         btnUpArrow.addTarget(self, action: #selector(self.rollUpSelf(_:)), for: .touchUpInside)
         
         // set initial value for distance
-        sliderDisFilter.setValue(Float(valDis)!, animated: false)
+        sliderDisFilter.setValue(Float(valDis), animated: false)
     }
     
     // MARK: - Button actions
@@ -215,7 +224,7 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         highlightSelectedGender()
     }
     
-    fileprivate func highlightSelectedGender() {
+    private func highlightSelectedGender() {
         if valGender == "Both" {
             imgGenderBoth.image = #imageLiteral(resourceName: "mb_btnOvalSelected")
             imgGenderFemale.image = #imageLiteral(resourceName: "mb_btnOvalUnselected")
@@ -232,13 +241,12 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
     }
     
     @objc func changeDisRange(_ sender: UISlider) {
-        valDis = String(format: "%.1f", sender.value)
-        lblDisVal.text = "\(valDis) km"
+        valDis = Double(sender.value)
+        lblDisVal.text = String(format: "%.1f", valDis) + unit
     }
     
     // MARK: - Animations
     func animateHide() {
-//        delegate?.filterPeople(distance: valDis, gender: valGender, ageLB: valAgeLB, ageUB: valAgeUB, allAge: valAllAge)
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.frame.origin.y = -203
         }, completion: { _ in
@@ -265,5 +273,11 @@ class BoardPeopleNearbyFilter: UIView, TTRangeSliderDelegate {
         } else {
             lblAgeVal.text = "\(valAgeLB)-\(valAgeUB)"
         }
+    }
+    
+    // After select "imperial" or "metric" in Settings page
+    private func updateUIAfterMeasurementUnitChange() {
+        lblDisVal.text = String(format: "%.1f", valDis) + unit
+        sliderDisFilter.setValue(Float(valDis), animated: false)
     }
 }
