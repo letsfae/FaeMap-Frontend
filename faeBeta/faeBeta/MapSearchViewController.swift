@@ -11,7 +11,6 @@ import MapKit
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
-    @objc optional func jumpToLocation(region: MKCoordinateRegion)
     @objc optional func selectPlace(place: PlacePin)
     @objc optional func selectLocation(location: CLLocation)
     @objc optional func jumpToCategory(category: String)
