@@ -49,25 +49,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         view.addSubview(uiviewPlaceTab)
     }
     
-//    func getPlaceInfo(content: String = "", source: String = "categories") {
-//        lblSearchContent.text = content
-//        uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
-//        uiviewPlaceTab.btnPlaceTabRight.isSelected = true
-//        jumpToRightTab()
-//    }
-    
     // MARK: - Button actions
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        /*
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
-        searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-         */
-    }
-    
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
@@ -81,7 +63,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         vc.viewModelPlaces = places
         vc.strTitle = places.title
 //        vc.recommendedPlaces = places
-        vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
     

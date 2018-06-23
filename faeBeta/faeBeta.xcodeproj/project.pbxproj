@@ -1609,15 +1609,15 @@
 		B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				50868F0420DCD5EB002CC681 /* BoardNoResultView.swift */,
-				50868F0020DCD593002CC681 /* BoardAvatarWaves.swift */,
-				50868EFE20DCD550002CC681 /* BoardPeopleNearbyFilter.swift */,
-				50868EFC20DCD524002CC681 /* BoardCategorySearchView.swift */,
 				B8849EA41EEB143800D4588D /* BoardTableView.swift */,
-				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
 				B36D0D321F46513000DE3107 /* BoardPlaces.swift */,
 				B8849EA31EEB143800D4588D /* BoardPeople.swift */,
 				B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */,
+				50868EFC20DCD524002CC681 /* BoardCategorySearchView.swift */,
+				50868EFE20DCD550002CC681 /* BoardPeopleNearbyFilter.swift */,
+				50868F0420DCD5EB002CC681 /* BoardNoResultView.swift */,
+				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
+				50868F0020DCD593002CC681 /* BoardAvatarWaves.swift */,
 				B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
 				50178B7E2045A17D0068012C /* MBLoadingWaves.swift */,

@@ -113,10 +113,17 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         automaticallyAdjustsScrollViewInsets = false
+        
+        // After select "imperial" or "metric" in Settings page
+        if let viewModelPeople = viewModelPeople {
+            viewModelPeople.unit = Key.shared.measurementUnits == "imperial" ? " mi" : " km"
+        }
+        if let uiviewPeopleFilter = uiviewPeopleNearyFilter {
+            uiviewPeopleFilter.unit = Key.shared.measurementUnits == "imperial" ? " mi" : " km"
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-//        print("[viewWillDisappear]")
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }

@@ -31,9 +31,17 @@ extension MapBoardViewController: SelectLocationDelegate {
         }
     }
     
+    // MARK: - Button actions
     // function for search places
     @objc func searchAllPlaces(_ sender: UIButton) {
-        
+        /*
+         let searchVC = BoardsSearchViewController()
+         searchVC.enterMode = .place
+         searchVC.delegate = self
+         searchVC.strSearchedPlace = lblSearchContent.text
+         searchVC.strPlaceholder = lblSearchContent.text
+         navigationController?.pushViewController(searchVC, animated: true)
+         */
     }
     
     // MARK: - SelectLocationDelegate

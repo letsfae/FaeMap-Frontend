@@ -59,9 +59,9 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
         colInfo.backgroundColor = .clear
     }
     
-    func setValueForCell(title: String, viewModelPlaces: BoardPlaceCategoryViewModel) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
+    func setValueForCell(viewModelPlaces: BoardPlaceCategoryViewModel) {
         self.title = viewModelPlaces.title
-        lblTitle.text = title
+        lblTitle.text = viewModelPlaces.title
 
         self.viewModelPlaces = viewModelPlaces
         colInfo.reloadData()

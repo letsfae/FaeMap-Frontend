@@ -871,21 +871,21 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         if count == 1 {
             if intSimilar == 1 {
                 if let viewModelSimilar = viewModelSimilar {
-                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                    cell.setValueForCell(viewModelPlaces: viewModelSimilar)
                 }
             } else {
                 if let viewModelNearby = viewModelNearby {
-                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                    cell.setValueForCell(viewModelPlaces: viewModelNearby)
                 }
             }
         } else {
             if indexPath.row == 0 {
                 if let viewModelSimilar = viewModelSimilar {
-                    cell.setValueForCell(title: arrTitle[0], viewModelPlaces: viewModelSimilar)
+                    cell.setValueForCell(viewModelPlaces: viewModelSimilar)
                 }
             } else {
                 if let viewModelNearby = viewModelNearby {
-                    cell.setValueForCell(title: arrTitle[1], viewModelPlaces: viewModelNearby)
+                    cell.setValueForCell(viewModelPlaces: viewModelNearby)
                 }
             }
         }
