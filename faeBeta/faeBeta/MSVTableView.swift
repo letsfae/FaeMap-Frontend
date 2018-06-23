@@ -87,11 +87,17 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     break
                 }
             } else {
+                // not from chat
                 switch indexPath.section {
                 case 0:
                     // category
                     let selectedCat = filteredCategory[indexPath.row].key
-                    getPlaceInfo(content: selectedCat, source: "categories")
+                    if previousVC == .board {
+                        delegate?.jumpToCategory?(category: selectedCat)
+                        navigationController?.popViewController(animated: false)
+                    } else {
+                        getPlaceInfo(content: selectedCat, source: "categories")
+                    }
                 case 1:
                     // place
                     let selectedPlace = searchedPlaces[indexPath.row]

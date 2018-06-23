@@ -282,7 +282,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         default: break
         }
         
-        getPlaceInfo(content: content, source: "categories")
+        if previousVC == .board {
+            delegate?.jumpToCategory?(category: content)
+            navigationController?.popViewController(animated: false)
+        } else {
+            getPlaceInfo(content: content, source: "categories")
+        }
 
         if catDict[content] == nil {
             catDict[content] = 0
