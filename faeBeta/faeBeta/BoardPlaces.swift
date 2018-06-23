@@ -105,26 +105,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         tblPlaceRight.isHidden = false
     }
     
-    // MARK: - SelectLocationDelegate
-    func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.locToSearch_board = location.coordinate
-        locToSearchTextRaw = searchText
-        joshprint("[jumpToLocationSearchResult]", searchText)
-        if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {
-            lblCurtLoc.attributedText = attrText
-        } else {
-            fatalError("Processing Location Name Fail, Need To Check Function")
-        }
-        imgCurtLoc.image = icon
-        
-        if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-//            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        } else {
-//            getPlaceInfo(content: lblSearchContent.text!, source: "name")
-        }
-//        tblMapBoard.reloadData()
-    }
-    
     // MARK: - BoardCategorySearchDelegate
     func searchByCategories(category: String) {
         lblSearchContent.text = category
