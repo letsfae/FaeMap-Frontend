@@ -202,7 +202,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 camera.centerCoordinate = locToSearch
             }
         case .chat:
-            break
+            if let locToSearch = LocManager.shared.locToSearch_chat {
+                camera.centerCoordinate = locToSearch
+            }
         }
         camera.altitude = 35000
         faeMapView.setCamera(camera, animated: false)
@@ -390,7 +392,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private func processAddress(_ city: String, _ state: String) {
         let fullAttrStr = NSMutableAttributedString()
         let attrs_0 = [NSAttributedStringKey.foregroundColor: UIColor._898989(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 18)]
-        let title_0_attr = NSMutableAttributedString(string: "  " + city + " ", attributes: attrs_0)
+        let title_0_attr = NSMutableAttributedString(string: city + " ", attributes: attrs_0)
         
         let attrs_1 = [NSAttributedStringKey.foregroundColor: UIColor._138138138(), NSAttributedStringKey.font: FaeFont(fontType: .medium, size: 18)]
         let title_1_attr = NSMutableAttributedString(string: state + "  ", attributes: attrs_1)
@@ -792,7 +794,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             mapSearchVC.boolFromChat = true
             mapSearchVC.faeMapView = faeMapView
             mapSearchVC.delegate = self
-            mapSearchVC.previousVC = .board
+            mapSearchVC.previousVC = .chat
             if let text = lblSearchContent.text {
                 mapSearchVC.strSearchedPlace = text
             } else {

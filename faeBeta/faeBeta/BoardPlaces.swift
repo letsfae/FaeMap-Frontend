@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 // for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate {
+extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate, MapSearchDelegate {
     // MARK: - Load place part of boards
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
@@ -105,11 +105,18 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         tblPlaceRight.isHidden = false
     }
     
-    // MARK: - BoardsSearchDelegate
+    // MARK: - SelectLocationDelegate
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.searchedLoc = location
-        lblCurtLoc.text = searchText
+        LocManager.shared.locToSearch_board = location.coordinate
+        locToSearchTextRaw = searchText
+        joshprint("[jumpToLocationSearchResult]", searchText)
+        if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {
+            lblCurtLoc.attributedText = attrText
+        } else {
+            fatalError("Processing Location Name Fail, Need To Check Function")
+        }
         imgCurtLoc.image = icon
+        
         if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
 //            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         } else {
