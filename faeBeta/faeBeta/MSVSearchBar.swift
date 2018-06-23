@@ -42,7 +42,6 @@ extension MapSearchViewController {
     func showOrHideViews(searchText: String) {
         switch schBarType {
         case .place:
-            guard flagPlaceFetched || flagAddrFetched else { return }
             uiviewSchLocResBg.isHidden = true
             // for uiviewPics & uiviewSchResBg
             let cellCnt = calculateTableHeight()

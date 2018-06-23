@@ -32,6 +32,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var imgPeopleLocDetail: UIImageView!
     var btnPlaces: UIButton!
     var curtTitle: String = "Places"
+    var locToSearchTextRaw: String?
     var imgCurtLoc: UIImageView!
     var imgTick: UIImageView!
     var lblCurtLoc: UILabel!
