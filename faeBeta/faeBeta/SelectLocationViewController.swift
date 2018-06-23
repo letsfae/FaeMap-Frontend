@@ -413,7 +413,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 anView.imgIcon.frame = CGRect(x: 28, y: 56, width: 0, height: 0)
                 let delay: Double = Double(arc4random_uniform(100)) / 100 // Delay 0-1 seconds, randomly
                 DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveLinear, animations: {
+                    UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                         anView.imgIcon.frame = CGRect(x: 0, y: 0, width: 56, height: 56)
                         anView.alpha = 1
                     }, completion: nil)
@@ -451,23 +451,65 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
-        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
-        if firstAnn.type == .place {
+        switch mapClusterController {
+        case placeClusterManager:
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
-                anView.assignImage(firstAnn.icon)
+                var found = false
+                for annotation in mapClusterAnnotation.annotations {
+                    guard let pin = annotation as? FaePinAnnotation else { continue }
+                    guard let sPlace = selectedPlace else { continue }
+                    if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
+                        found = true
+                        anView.assignImage(pin.icon)
+                    }
+                }
+                if !found {
+                    let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+                    anView.assignImage(firstAnn.icon)
+                }
+                anView.superview?.bringSubview(toFront: anView)
             }
-        } else if firstAnn.type == .location {
+//        case userClusterManager:
+//            let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+//            if let anView = faeMapView.view(for: mapClusterAnnotation) as? UserPinAnnotationView {
+//                anView.assignImage(firstAnn.avatar)
+//                anView.superview?.bringSubview(toFront: anView)
+//            }
+        case locationPinClusterManager:
+            break
+        default:
+            break
+        }
+        
+        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+        if firstAnn.type == .location {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? LocPinAnnotationView {
                 anView.assignImage(firstAnn.icon)
             }
         }
+        if selectedPlaceAnno != nil {
+            selectedPlaceAnno?.superview?.bringSubview(toFront: selectedPlaceAnno!)
+            selectedPlaceAnno?.layer.zPosition = 199
+        }
     }
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, coordinateForAnnotations annotations: Set<AnyHashable>!, in mapRect: MKMapRect) -> IsSelectedCoordinate {
+        for annotation in annotations {
+            guard let pin = annotation as? FaePinAnnotation else { continue }
+            if pin.isSelected {
+                return IsSelectedCoordinate(isSelected: true, coordinate: pin.coordinate)
+            }
+        }
         guard let firstAnn = annotations.first as? FaePinAnnotation else {
             return IsSelectedCoordinate(isSelected: false, coordinate: CLLocationCoordinate2DMake(0, 0))
         }
         return IsSelectedCoordinate(isSelected: false, coordinate: firstAnn.coordinate)
+        /*
+        guard let firstAnn = annotations.first as? FaePinAnnotation else {
+            return IsSelectedCoordinate(isSelected: false, coordinate: CLLocationCoordinate2DMake(0, 0))
+        }
+        return IsSelectedCoordinate(isSelected: false, coordinate: firstAnn.coordinate)
+         */
     }
     
     // MARK: - Place & Location Managements
@@ -746,6 +788,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         return places
     }
     
+    // MARK: - MapSearchDelegate
     @objc func jumpToOnePlace(searchText: String, place: PlacePin) { // TODO
         let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: place)
         lblSearchContent.text = searchText
