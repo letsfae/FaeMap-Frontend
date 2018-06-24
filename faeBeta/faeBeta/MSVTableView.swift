@@ -131,23 +131,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
-                CitySearcher.shared.cityDetail(geobytesCityData[indexPath.row]) { [weak self] (status, location) in
-                    guard let `self` = self else { return }
-                    guard status / 100 == 2 else {
-                        return
-                    }
-                    guard let location = location as? CLLocation else {
-                        return
-                    }
-                    LocManager.shared.locToSearch_map = location.coordinate
-                    self.faeRegion = calculateRegion(miles: 100, coordinate: location.coordinate)
-                    self.reloadAddressCompleterRegion()
-                    guard self.schPlaceBar != nil else { return }
-                    guard let searchText = self.schPlaceBar.txtSchField.text else { return }
-                    guard searchText != "Search Fae Map" else { return }
-                    guard searchText != "Search Place or Address" else { return }
-                    self.getPlaceInfo(content: searchText, source: "name")
-                }
+                lookUpForCoordinate(cityData: geobytesCityData[indexPath.row])
             } else {
                 // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
