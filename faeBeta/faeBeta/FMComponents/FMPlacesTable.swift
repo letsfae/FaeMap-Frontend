@@ -113,6 +113,13 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         super.init(coder: aDecoder)
     }
     
+    // MARK: - No Result and Loading
+    public func showOrHideNoResult(show: Bool) {
+        self.show()
+        imgBack_1.showOrHideNoResultIndicator(show: show)
+        shrink {}
+    }
+    
     // MARK: - Load Bar
     
     private func loadBar() {

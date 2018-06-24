@@ -558,6 +558,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func hide() {
+        
         Key.shared.FMVCtrler?.btnDropUpMenu.isSelected = false
         Key.shared.FMVCtrler?.mapGesture(isOn: true)
         Key.shared.FMVCtrler?.animateMainScreenButtons(hide: false, animated: true)

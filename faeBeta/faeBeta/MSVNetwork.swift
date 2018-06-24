@@ -31,10 +31,10 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     // MKLocalSearchCompleterDelegate
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         guard previousVC != .board else { return }
-        print("addresses fetched")
+        joshprint("addresses fetched")
         flagAddrFetched = true
         searchedAddresses = completer.results.filter({ $0.subtitle != "Search Nearby" })
-        print("addresses fetched - count:", searchedAddresses.count)
+        joshprint("addresses fetched - count:", searchedAddresses.count)
         showOrHideViews(searchText: completer.queryFragment)
     }
     
@@ -42,10 +42,10 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         // handle error
         guard previousVC != .board else { return }
-        print("addr fetching failed", error.localizedDescription)
+        joshprint("addr fetching failed", error.localizedDescription)
         flagAddrFetched = true
         searchedAddresses = completer.results
-        print("addr fetching failed - count:", searchedAddresses.count)
+        joshprint("addr fetching failed - count:", searchedAddresses.count)
         showOrHideViews(searchText: completer.queryFragment)
     }
     
@@ -87,7 +87,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             showOrHideViews(searchText: content)
             return
         }
-        var radius: Int = 16666
+        var radius: Int = 100000
         var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
         
         switch previousVC {
@@ -97,34 +97,35 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                print("[locText]", locText)
+                joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    print("[searchArea] Current Location")
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    print("[searchArea] Current Map View")
+                    joshprint("[searchArea] Current Map View")
                 default:
-                    print("[searchArea] other")
+                    joshprint("[searchArea] other")
                     break
                 }
             }
         case .board:
-            radius = 160934
+            //radius = 160934
             if let locToSearch = LocManager.shared.locToSearch_board {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                print("[locText]", locText)
+                joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    print("[searchArea] Current Location")
+                    joshprint("[searchArea] Current Location")
                 default:
-                    print("[searchArea] other")
+                    joshprint("[searchArea] other")
                     break
                 }
             }
@@ -134,18 +135,19 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                print("[locText]", locText)
+                joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    print("[searchArea] Current Location")
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    print("[searchArea] Current Map View")
+                    joshprint("[searchArea] Current Map View")
                 default:
-                    print("[searchArea] other")
+                    joshprint("[searchArea] other")
                     break
                 }
             }
@@ -155,14 +157,14 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "20")
+        FaeSearch.shared.whereKey("size", value: "200")
         FaeSearch.shared.whereKey("radius", value: "\(radius)")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                       "longitude": locationToSearch.longitude])
         FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
-            print("places fetched")
+            joshprint("places fetched")
             guard let `self` = self else { return }
             self.flagPlaceFetched = true
             if status / 100 != 2 || message == nil {
