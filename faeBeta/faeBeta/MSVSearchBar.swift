@@ -215,12 +215,15 @@ extension MapSearchViewController {
     
     // FaeSearchBarTestDelegate
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
+        guard !isCategorySearching else {
+            return
+        }
         switch searchBar {
         case schPlaceBar:
             joshprint("[schPlaceBar] clicked")
             searchBar.txtSchField.resignFirstResponder()
             if searchBar.txtSchField.text == "" {
-                lookUpForCoordinate()
+                
             } else {
                 if flagPlaceFetched {
                     delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: searchedPlaces)
@@ -234,6 +237,7 @@ extension MapSearchViewController {
             if geobytesCityData.count > 0 {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
                 Key.shared.selectedSearchedCity = geobytesCityData[0]
+                lookUpForCoordinate(cityData: geobytesCityData[0])
                 geobytesCityData.removeAll()
                 showOrHideViews(searchText: "")
                 schPlaceBar.txtSchField.becomeFirstResponder()

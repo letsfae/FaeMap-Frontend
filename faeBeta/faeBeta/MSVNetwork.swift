@@ -49,9 +49,32 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         showOrHideViews(searchText: completer.queryFragment)
     }
     
-    //
-    func lookUpForCoordinate() {
-        
+    // Look for coordinate
+    func lookUpForCoordinate(cityData: String) {
+        CitySearcher.shared.cityDetail(cityData) { [weak self] (status, location) in
+            guard let `self` = self else { return }
+            guard status / 100 == 2 else {
+                return
+            }
+            guard let location = location as? CLLocation else {
+                return
+            }
+            switch self.previousVC {
+            case .map:
+                LocManager.shared.locToSearch_map = location.coordinate
+            case .board:
+                LocManager.shared.locToSearch_board = location.coordinate
+            case .chat:
+                LocManager.shared.locToSearch_chat = location.coordinate
+            }
+            self.faeRegion = calculateRegion(miles: 100, coordinate: location.coordinate)
+            self.reloadAddressCompleterRegion()
+            guard self.schPlaceBar != nil else { return }
+            guard let searchText = self.schPlaceBar.txtSchField.text else { return }
+            guard searchText != "Search Fae Map" else { return }
+            guard searchText != "Search Place or Address" else { return }
+            self.getPlaceInfo(content: searchText, source: "name")
+        }
     }
     
     // GMSAutocompleteFilter
@@ -82,6 +105,9 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     }
     
     func getPlaceInfo(content: String = "", source: String = "name") {
+        if source == "categories" {
+            isCategorySearching = true
+        }
         activityStatus(isOn: true)
         guard !content.isEmpty else {
             showOrHideViews(searchText: content)
@@ -113,6 +139,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                     break
                 }
             }
+            LocManager.shared.locToSearch_map = locationToSearch
         case .board:
             //radius = 160934
             if let locToSearch = LocManager.shared.locToSearch_board {
@@ -129,6 +156,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                     break
                 }
             }
+            LocManager.shared.locToSearch_board = locationToSearch
         case .chat:
             locationToSearch = faeMapView.centerCoordinate
             if let locToSearch = LocManager.shared.locToSearch_chat {
@@ -151,6 +179,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                     break
                 }
             }
+            LocManager.shared.locToSearch_chat = locationToSearch
         }
         
         flagPlaceFetched = false
@@ -166,14 +195,16 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             joshprint("places fetched")
             guard let `self` = self else { return }
-            self.flagPlaceFetched = true
+            //self.flagPlaceFetched = true
             if status / 100 != 2 || message == nil {
+                self.isCategorySearching = false
                 self.searchedPlaces.removeAll(keepingCapacity: true)
                 self.showOrHideViews(searchText: content)
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfoJsonArray = placeInfoJSON.array else {
+                self.isCategorySearching = false
                 self.searchedPlaces.removeAll(keepingCapacity: true)
                 self.showOrHideViews(searchText: content)
                 return
@@ -182,7 +213,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             if source == "name" {
                 self.showOrHideViews(searchText: content)
             } else {
-                // TODO JOSHUA:这地方有点问题
+                self.isCategorySearching = false
                 self.delegate?.jumpToPlaces?(searchText: content, places: self.searchedPlaces)
                 self.navigationController?.popViewController(animated: false)
             }

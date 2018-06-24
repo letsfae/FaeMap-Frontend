@@ -46,7 +46,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var tblLocationRes: UITableView! // table used for search locations
     
     var uiviewNoResults: UIView!
-    var lblNoResults: UILabel!
+    var lblNoResult: UILabel!
     var activityIndicator: UIActivityIndicatorView!
     
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
@@ -70,6 +70,8 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
 
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
+    
+    var isCategorySearching: Bool = false
     
     enum PreviousViewControllerType {
         case chat, map, board
@@ -112,14 +114,14 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewNoResults.isHidden = true
         view.addSubview(uiviewNoResults)
         
-        lblNoResults = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
-        uiviewNoResults.addSubview(lblNoResults)
-        lblNoResults.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
-        lblNoResults.numberOfLines = 0
-        lblNoResults.text = "No Results Found...\nTry a Different Search!"
-        lblNoResults.textAlignment = .center
-        lblNoResults.textColor = UIColor._115115115()
-        lblNoResults.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblNoResult = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
+        uiviewNoResults.addSubview(lblNoResult)
+        lblNoResult.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
+        lblNoResult.numberOfLines = 0
+        lblNoResult.text = "No Results Found...\nTry a Different Search!"
+        lblNoResult.textAlignment = .center
+        lblNoResult.textColor = UIColor._115115115()
+        lblNoResult.font = UIFont(name: "AvenirNext-Medium", size: 15)
         
         activityIndicator = createActivityIndicator(large: true)
         activityIndicator.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
@@ -301,7 +303,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         if isOn {
             guard !activityIndicator.isAnimating else { return }
             activityIndicator.startAnimating()
-            lblNoResults.isHidden = true
+            lblNoResult.isHidden = true
             if uiviewSchResBg.isHidden {
                 uiviewNoResults.isHidden = false
             }
@@ -311,7 +313,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         } else {
             guard activityIndicator.isAnimating else { return }
             activityIndicator.stopAnimating()
-            lblNoResults.isHidden = false
+            lblNoResult.isHidden = false
         }
     }
 }
