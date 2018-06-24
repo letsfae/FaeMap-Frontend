@@ -215,16 +215,22 @@ extension MapSearchViewController {
     
     // FaeSearchBarTestDelegate
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest) {
-        if searchBar == schPlaceBar {
+        switch searchBar {
+        case schPlaceBar:
+            joshprint("[schPlaceBar] clicked")
             searchBar.txtSchField.resignFirstResponder()
             if searchBar.txtSchField.text == "" {
-                // TODO Vicky - 为空一直都是按搜索返回地图，不搜出任何东西，就是原本的地图主页效果，但是地图当前的view会根据第二行的地点
                 lookUpForCoordinate()
             } else {
-                delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: searchedPlaces)
+                if flagPlaceFetched {
+                    delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: searchedPlaces)
+                } else {
+                    delegate?.continueSearching?(searchText: searchBar.txtSchField.text!)
+                }
                 navigationController?.popViewController(animated: false)
             }
-        } else {
+        case schLocationBar:
+            joshprint("[schLocationBar] clicked")
             if geobytesCityData.count > 0 {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
                 Key.shared.selectedSearchedCity = geobytesCityData[0]
@@ -232,6 +238,8 @@ extension MapSearchViewController {
                 showOrHideViews(searchText: "")
                 schPlaceBar.txtSchField.becomeFirstResponder()
             }
+        default:
+            break
         }
     }
     

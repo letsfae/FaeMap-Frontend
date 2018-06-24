@@ -789,23 +789,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     // MARK: - MapSearchDelegate
-    @objc func jumpToOnePlace(searchText: String, place: PlacePin) { // TODO
-        let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: place)
-        lblSearchContent.text = searchText
-        lblSearchContent.textColor = UIColor._898989()
-        btnClearSearchRes.isHidden = false
-        let camera = faeMapView.camera
-        camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: false)
-        uiviewPlaceBar.load(for: place)
-        placesFromSearch.append(pin)
-        removePlacePins({
-            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-        })
-        selectedPlace = pin
-        btnSelect.lblDistance.textColor = UIColor._2499090()
-        btnSelect.isUserInteractionEnabled = true
-    }
     
     private func removePlacePins(_ completion: (() -> ())? = nil) {
         //let placesNeedToRemove = faePlacePins.filter({ $0 != selectedPlace })

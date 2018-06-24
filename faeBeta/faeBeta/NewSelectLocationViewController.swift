@@ -903,24 +903,6 @@ extension NewSelectLocationViewController: MKMapViewDelegate, CCHMapClusterContr
 extension NewSelectLocationViewController: MapSearchDelegate {
     
     // MapSearchDelegate
-    func jumpToOnePlace(searchText: String, place: PlacePin) {
-        lblSearchContent.text = searchText
-        lblSearchContent.textColor = UIColor._898989()
-        btnClearSearchRes.isHidden = false
-        let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: place)
-        let camera = faeMapView.camera
-        camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: false)
-        tblPlaceResult.load(for: place)
-        pinsFromSearch.append(pin)
-        removePlacePins({
-            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-        })
-        selectedPlace = pin
-        btnSelect.lblDistance.textColor = UIColor._2499090()
-        btnSelect.isUserInteractionEnabled = true
-    }
-    
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         PLACE_ENABLE = false
         updateUI(searchText: searchText)

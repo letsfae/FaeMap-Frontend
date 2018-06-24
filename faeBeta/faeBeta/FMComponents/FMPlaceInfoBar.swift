@@ -446,14 +446,19 @@ class PlaceView: UIView {
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     private var arrHour = [[String]]()
     private var indicator: UIActivityIndicatorView!
+    private var indicatorNoResult: UIActivityIndicatorView!
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         loadContent()
+        loadNoResultIndicator()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     private func loadContent() {
-        
         let uiviewBkgd = UIView()
         uiviewBkgd.layer.cornerRadius = 2
         uiviewBkgd.backgroundColor = .white
@@ -515,8 +520,24 @@ class PlaceView: UIView {
         addSubview(indicator)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    private func loadNoResultIndicator() {
+        indicatorNoResult = createActivityIndicator(large: true)
+        indicatorNoResult.center.x = screenWidth / 2 - 8
+        indicatorNoResult.center.y = 45
+        addSubview(indicatorNoResult)
+    }
+    
+    public func showOrHideNoResultIndicator(show: Bool) {
+        if show {
+            indicatorNoResult.startAnimating()
+        } else {
+            indicatorNoResult.stopAnimating()
+        }
+        imgType.isHidden = show
+        lblName.isHidden = show
+        lblAddr.isHidden = show
+        lblHours.isHidden = show
+        lblPrice.isHidden = show
     }
     
     func setValueForPlace(placeInfo: PlacePin) {

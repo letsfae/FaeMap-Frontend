@@ -9,76 +9,74 @@ import SwiftyJSON
 import MapKit
 
 @objc protocol MapSearchDelegate: class {
-    @objc optional func jumpToOnePlace(searchText: String, place: PlacePin)
+    @objc optional func jumpToCategory(category: String)
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
+    @objc optional func continueSearching(searchText: String)
     @objc optional func selectPlace(place: PlacePin)
     @objc optional func selectLocation(location: CLLocation)
-    @objc optional func jumpToCategory(category: String)
 }
 
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     weak var delegate: MapSearchDelegate?
     
-    var filteredCategory = [(key: String, value: Int)]()
-    var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
-    var searchedPlaces = [PlacePin]()
-    var searchedAddresses = [MKLocalSearchCompletion]()
-    var addressCompleter = MKLocalSearchCompleter()
-    var faeMapView: MKMapView!
+    public var strSearchedPlace = ""
+    public var strSearchedLocation = ""
+    
+    public var boolFromChat: Bool = false
+    public var boolNoCategory: Bool = false
+    public var boolFromBoard: Bool = false
+    
+    public var faeMapView: MKMapView!
     var faeRegion: MKCoordinateRegion?
     
+    // UI's
     var btnBack: UIButton!
     var uiviewSearch: UIView!
     var uiviewPics: UIView!
     var schPlaceBar: FaeSearchBarTest!
     var schLocationBar: FaeSearchBarTest!
-    var btnPlaces = [UIButton]()
-    var lblPlaces = [UILabel]()
-    var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-    var strSearchedPlace = ""
-    var strSearchedLocation = ""
-    var cellStatus = 0
-    enum SearchBarType {
-        case place, location
-    }
-    var schBarType = SearchBarType.place
+    var btnCategories = [UIButton]()
+    var lblCategories = [UILabel]()
     
-    // uiviews with shadow under table views
-    var uiviewSchResBg: UIView!
-    var uiviewSchLocResBg: UIView!
+    var uiviewSchResBg: UIView!    // uiviews with shadow under table views
+    var uiviewSchLocResBg: UIView! // uiviews with shadow under table views
     
-    // table tblSearchRes used for search places & display table "use current location"
-    var tblPlacesRes: UITableView!
-    
-    // table tblLocationRes used for search locations
-    var tblLocationRes: UITableView!
+    var tblPlacesRes: UITableView!   // table used for search places & display table fixedLocOptions
+    var tblLocationRes: UITableView! // table used for search locations
     
     var uiviewNoResults: UIView!
     var lblNoResults: UILabel!
     var activityIndicator: UIActivityIndicatorView!
     
-    // Geobytes City Data
-    var geobytesCityData = [String]()
+    var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
+    var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
+
+    enum SearchBarType {
+        case place, location
+    }
+    var schBarType = SearchBarType.place
+    
+    var filteredCategory = [(key: String, value: Int)]()
+    var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
+    var searchedPlaces = [PlacePin]()
+    var searchedAddresses = [MKLocalSearchCompletion]() // Apple Place Data
+    var addressCompleter = MKLocalSearchCompleter()     // Apple Place Data Getter
+    var geobytesCityData = [String]()                   // Geobytes City Data
     
     // Throttle
     var placeThrottler = Throttler(name: "[Place]", seconds: 0.5)
     var locThrottler = Throttler(name: "[Location]", seconds: 0.5)
-    
-    var boolFromChat: Bool = false
-    var boolNoCategory: Bool = false
-    var boolFromBoard: Bool = false
-    
+
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
     
     enum PreviousViewControllerType {
         case chat, map, board
     }
-    
     var previousVC = PreviousViewControllerType.map
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()
@@ -95,6 +93,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         super.viewDidAppear(animated)
     }
     
+    // MARK: - Load UI's
     private func preloadSearchLocation() {
         guard previousVC == .board else { return }
         guard strSearchedLocation != "" else { return }
@@ -177,38 +176,38 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
         for _ in 0..<6 {
-            btnPlaces.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
-            lblPlaces.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
+            btnCategories.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
+            lblCategories.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
         }
         
         for i in 0..<6 {
             if i >= 3 {
-                btnPlaces[i].frame.origin.y = 117
+                btnCategories[i].frame.origin.y = 117
             }
             if i == 1 || i == 4 {
-                btnPlaces[i].frame.origin.x = (screenWidth - 16 - 58) / 2
+                btnCategories[i].frame.origin.x = (screenWidth - 16 - 58) / 2
             } else if i == 2 || i == 5 {
-                btnPlaces[i].frame.origin.x = screenWidth - 126
+                btnCategories[i].frame.origin.x = screenWidth - 126
             }
             
-            lblPlaces[i].center = CGPoint(x: btnPlaces[i].center.x, y: btnPlaces[i].center.y + 43)
+            lblCategories[i].center = CGPoint(x: btnCategories[i].center.x, y: btnCategories[i].center.y + 43)
             
-            uiviewPics.addSubview(btnPlaces[i])
-            uiviewPics.addSubview(lblPlaces[i])
+            uiviewPics.addSubview(btnCategories[i])
+            uiviewPics.addSubview(lblCategories[i])
             
-            btnPlaces[i].layer.borderColor = UIColor._225225225().cgColor
-            btnPlaces[i].layer.borderWidth = 2
-            btnPlaces[i].layer.cornerRadius = 8.0
-            btnPlaces[i].contentMode = .scaleAspectFit
-            btnPlaces[i].layer.masksToBounds = true
-            btnPlaces[i].setImage(imgPlaces[i], for: .normal)
-            btnPlaces[i].tag = i
-            btnPlaces[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            btnCategories[i].layer.borderColor = UIColor._225225225().cgColor
+            btnCategories[i].layer.borderWidth = 2
+            btnCategories[i].layer.cornerRadius = 8.0
+            btnCategories[i].contentMode = .scaleAspectFit
+            btnCategories[i].layer.masksToBounds = true
+            btnCategories[i].setImage(imgPlaces[i], for: .normal)
+            btnCategories[i].tag = i
+            btnCategories[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
             
-            lblPlaces[i].text = arrPlaceNames[i]
-            lblPlaces[i].textAlignment = .center
-            lblPlaces[i].textColor = UIColor._138138138()
-            lblPlaces[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
+            lblCategories[i].text = arrPlaceNames[i]
+            lblCategories[i].textAlignment = .center
+            lblCategories[i].textColor = UIColor._138138138()
+            lblCategories[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
         }
     }
     
@@ -250,13 +249,14 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         tblLocationRes.register(LocationListCell.self, forCellReuseIdentifier: "SearchLocation")
     }
     
-    func addShadow(_ uiview: UIView) {
+    private func addShadow(_ uiview: UIView) {
         uiview.layer.shadowColor = UIColor._898989().cgColor
         uiview.layer.shadowRadius = 2.2
         uiview.layer.shadowOffset = CGSize(width: 0, height: 1)
         uiview.layer.shadowOpacity = 0.6
     }
     
+    // MARK: - Actions
     @objc private func backToMap(_ sender: UIButton) {
         navigationController?.popViewController(animated: false)
     }
