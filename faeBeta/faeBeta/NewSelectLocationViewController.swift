@@ -497,7 +497,7 @@ extension NewSelectLocationViewController {
         btnClearSearchRes.isHidden = true
         btnZoom.isHidden = false
         
-        tblPlaceResult.state = .map
+        tblPlaceResult.searchState = .map
         swipingState = .map
         tblPlaceResult.hide(animated: false)
         hideTableResultsExpandingIndicator()

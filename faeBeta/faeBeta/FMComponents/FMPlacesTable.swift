@@ -66,7 +66,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    var state: PlaceInfoBarState = .map {
+    var searchState: PlaceInfoBarState = .map {
         didSet {
             boolLeft = annotations.count > 1 || places.count > 1
             boolRight = annotations.count > 1 || places.count > 1
@@ -158,7 +158,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func loading(current: PlacePin) {
-        state = .multipleSearch
+        searchState = .multipleSearch
         imgBack_1.setValueForPlace(placeInfo: current)
         groupLastSelected[tblResults.tag] = current
         self.alpha = 1
@@ -223,7 +223,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
-        state = .map
+        searchState = .map
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
@@ -260,9 +260,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.imgBack_0.frame.origin.x = 8
             self.uiviewTblBckg.frame.origin.x += screenWidth + 8
         }, completion: {_ in
-            if self.state == .map {
+            if self.searchState == .map {
                 self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
-            } else if self.state == .multipleSearch {
+            } else if self.searchState == .multipleSearch {
                 if self.currentIdx == 0 {
                     self.goingToPrevGroup = true
                 }
@@ -277,9 +277,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.uiviewTblBckg.frame.origin.x = -screenWidth + 8
             self.imgBack_2.frame.origin.x = 8
         }, completion: { _ in
-            if self.state == .map {
+            if self.searchState == .map {
                 self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
-            } else if self.state == .multipleSearch {
+            } else if self.searchState == .multipleSearch {
                 if self.currentIdx == self.places.count - 1 {
                     self.goingToNextGroup = true
                 }
@@ -352,7 +352,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - Load Table
-    
     private func loadContent() {
         uiviewTblBckg = UIView(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         uiviewTblBckg.backgroundColor = .clear
