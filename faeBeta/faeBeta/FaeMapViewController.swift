@@ -76,7 +76,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Discovery Button
     private var btnDiscovery: UIButton!
     
-    // Filter Hexagon and Menu
+    // Refresh Hexagon and Menu
     private var btnRefreshIcon: FMRefreshIcon! // Filter Button
     private var uiviewDropUpMenu: FMDropUpMenu! //
     private var sizeFrom: CGFloat = 0 // Pan gesture var
@@ -174,21 +174,23 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var unreadNotiToken: NotificationToken? = nil
     
     // Filter Menu Place Collection Interface to Show All Saved Pins
-    private var desiredCount = 0
-    private var completionCount = 0 {
+    private var desiredCountOfPinsFromCollection = 0
+    private var completionCountOfPinsFromCollection = 0 {
         didSet {
             guard fullyLoaded else {
                 isPinsFromCollectionLoading = false
                 return
             }
-            guard desiredCount > 0 else {
+            guard desiredCountOfPinsFromCollection > 0 else {
                 isPinsFromCollectionLoading = false
                 return
             }
-            guard desiredCount == completionCount else {
+            guard desiredCountOfPinsFromCollection == completionCountOfPinsFromCollection else {
                 isPinsFromCollectionLoading = false
                 return
             }
+            jumpToPlaces(searchText: "", places: placesFromCollection)
+            /*
             PLACE_INSTANT_SHOWUP = true
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
             tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: placesFromCollection)
@@ -207,6 +209,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             camera.centerCoordinate = first.coordinate
             faeMapView.setCamera(camera, animated: true)
             placeClusterManager.maxZoomLevelForClustering = 0
+            */
         }
     }
     
@@ -326,6 +329,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             uiviewCollectionbarShadow.isHidden = modeCollection != .on
             uiviewSchbarShadow.isHidden = modeCollection == .on
+            btnTapToShowResultTbl.alpha = modeCollection == .on ? 1 : 0
+            btnTapToShowResultTbl.isHidden = modeCollection != .on
+            tblPlaceResult.isHidden = modeCollection != .on
         }
     }
     
@@ -1007,7 +1013,7 @@ extension FaeMapViewController {
         btnLocateSelf.isHidden = false
         btnZoom.isHidden = false
 
-        tblPlaceResult.state = .map
+        tblPlaceResult.searchState = .map
         swipingState = .map
         tblPlaceResult.hide(animated: false)
         showOrHideTableResultsExpandingIndicator()
@@ -1680,8 +1686,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         isPinsFromCollectionLoading = true
         animateMainItems(show: true, animated: false)
         PLACE_ENABLE = false
-        desiredCount = savedPinIds.count
-        completionCount = 0
+        desiredCountOfPinsFromCollection = savedPinIds.count
+        completionCountOfPinsFromCollection = 0
         placeClusterManager.isForcedRefresh = true
         placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
         placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
@@ -1696,15 +1702,17 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                     if type == "place" {
                         let pinData = PlacePin(json: resultJson)
                         self.placesFromCollection.append(pinData)
+                        /*
                         let pin = FaePinAnnotation(type: FaePinType(rawValue: type)!, cluster: self.placeClusterManager, data: pinData as AnyObject)
                         self.pinsFromCollection.append(pin)
+                         */
                     } else if type == "location" {
                         let pinData = LocationPin(json: resultJson)
                         self.locationsFromCollection.append(pinData)
                         let pin = FaePinAnnotation(type: FaePinType(rawValue: type)!, cluster: self.locationPinClusterManager, data: pinData as AnyObject)
                         self.pinsFromCollection.append(pin)
                     }
-                    self.completionCount += 1
+                    self.completionCountOfPinsFromCollection += 1
                 })
             }
         })
@@ -1934,26 +1942,33 @@ extension FaeMapViewController: MapSearchDelegate {
      */
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         PLACE_ENABLE = false
-        strSearchedText = searchText
-        updateUI(searchText: searchText)
+        
+        if modeCollection == .on {
+            placesFromCollection = places
+        } else {
+            strSearchedText = searchText
+            updateUI(searchText: searchText)
+            placesFromSearch = places
+            swipingState = .multipleSearch
+        }
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
         cancelAllPinLoading()
         showOrHideRefreshIcon(show: false, animated: false)
-        placesFromSearch = places
         btnTapToShowResultTbl.isHidden = places.count <= 1
         if let first = places.first {
-            swipingState = .multipleSearch
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
             tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places)
             tblPlaceResult.loading(current: places[0])
-            pinsFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
-            
+            let pinsToAdd = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+            if modeCollection == .on {
+                pinsFromCollection = pinsToAdd
+            } else {
+                pinsFromSearch = pinsToAdd
+            }
             removePlaceUserPins({
-                self.PLACE_INSTANT_SHOWUP = true
-                self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
+                self.addPlaceAnnotations(with: pinsToAdd, forced: true, instantly: true, {
                     self.goTo(annotation: nil, place: first, animated: true)
-                    self.PLACE_INSTANT_SHOWUP = false
                 })
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
                                            places: self.tblPlaceResult.places,
@@ -2591,11 +2606,16 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         tblPlaceResult.resetSubviews()
         tblPlaceResult.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: false)
-        if swipingState == .map {
-            tblPlaceResult.loadingData(current: cluster)
-        } else if swipingState == .multipleSearch {
+        if modeCollection == .on {
             tblPlaceResult.loading(current: placePin)
+        } else {
+            if swipingState == .map {
+                tblPlaceResult.loadingData(current: cluster)
+            } else if swipingState == .multipleSearch {
+                tblPlaceResult.loading(current: placePin)
+            }
         }
+        
     }
     
     private func updatePlacePins() {
@@ -3368,7 +3388,7 @@ extension FaeMapViewController: MapAction {
     
     func singleElsewhereTapExceptInfobar() {
         faeMapView.mapGesture(isOn: true)
-        if swipingState != .multipleSearch {
+        if swipingState != .multipleSearch && modeCollection == .off {
             tblPlaceResult.hide()
             showOrHideTableResultsExpandingIndicator()
         }
