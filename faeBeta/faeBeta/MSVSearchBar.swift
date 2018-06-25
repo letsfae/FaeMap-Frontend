@@ -155,8 +155,9 @@ extension MapSearchViewController {
             if schLocationBar.txtSchField.text == "" {
                 if schLocationBar.txtSchField.placeholder != "Current Location" || schLocationBar.txtSchField.placeholder != "Current Map View" {
                     schLocationBar.txtSchField.text = strPreviousFixedOptionSelection
+                } else {
+                    schLocationBar.txtSchField.text = schLocationBar.txtSchField.placeholder
                 }
-                schLocationBar.txtSchField.text = schLocationBar.txtSchField.placeholder
             }
         case schLocationBar:
             schPlaceBar.btnClose.isHidden = true
