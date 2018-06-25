@@ -541,6 +541,7 @@ class PlaceView: UIView {
         lblNoResult.textAlignment = .center
         lblNoResult.textColor = UIColor._115115115()
         lblNoResult.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblNoResult.isHidden = true
     }
     
     public func showOrHideLoadingIndicator(show: Bool) {

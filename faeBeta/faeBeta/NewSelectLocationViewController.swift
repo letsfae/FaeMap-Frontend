@@ -916,6 +916,7 @@ extension NewSelectLocationViewController: MapSearchDelegate {
             tblPlaceResult.loading(current: places[0])
             pinsFromSearch = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
             removePlacePins({
+                
                 self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
                     if let first = places.first {
