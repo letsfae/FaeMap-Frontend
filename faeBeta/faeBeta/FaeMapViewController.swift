@@ -144,6 +144,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private let faeChat = FaeChat()
     private let faePush = FaePush()
     private var intFriendsRequested: Int = 0
+    private var unreadNotiToken: NotificationToken? = nil
     
     // Collections Managements
     private var placesFromCollection = [PlacePin]()
@@ -171,8 +172,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var LOC_INSTANT_REMOVE = false
     private var USE_TEST_PLACES = false
     
-    private var unreadNotiToken: NotificationToken? = nil
-    
     // Filter Menu Place Collection Interface to Show All Saved Pins
     private var desiredCountOfPinsFromCollection = 0
     private var completionCountOfPinsFromCollection = 0 {
@@ -190,26 +189,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                 return
             }
             jumpToPlaces(searchText: "", places: placesFromCollection)
-            /*
-            PLACE_INSTANT_SHOWUP = true
-            tblPlaceResult.changeState(isLoading: false, isNoResult: false)
-            tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: placesFromCollection)
-            tblPlaceResult.loading(current: placesFromCollection[0])
-            showOrHideTableResultsExpandingIndicator(show: true, animated: true)
-            placeClusterManager.addAnnotations(self.pinsFromCollection, withCompletionHandler: {
-                self.placeClusterManager.isForcedRefresh = false
-                self.PLACE_INSTANT_SHOWUP = false
-                self.goTo(annotation: nil, place: self.placesFromCollection[0], animated: false)
-                self.isPinsFromCollectionLoading = false
-            })
-            guard let first = pinsFromCollection.first else { return }
-            //faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: first.coordinate, animated: true)
-            let camera = faeMapView.camera
-            camera.altitude = 100000
-            camera.centerCoordinate = first.coordinate
-            faeMapView.setCamera(camera, animated: true)
-            placeClusterManager.maxZoomLevelForClustering = 0
-            */
         }
     }
     
@@ -372,12 +351,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
-    
-    private func jumpToMyFaeMainPage() {
-        let vc = MyFaeMainPageViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
+
     private func updateSelfInfo() {
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
@@ -678,8 +652,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
                     realmCol.pins.append(collectedPin)
                 }
             }
-            
-//            print("Successfully get collections")
         })
     }
     
@@ -1026,12 +998,9 @@ extension FaeMapViewController {
         faeMapView.mapGesture(isOn: true)
         deselectAllPlaceAnnos()
         showOrHideRefreshIcon(show: true, animated: true)
-        placeClusterManager.isForcedRefresh = true
-        placeClusterManager.removeAnnotations(pinsFromSearch) {
+        removePlaceAnnotations(with: pinsFromSearch, forced: true, instantly: true) {
             self.pinsFromSearch.removeAll(keepingCapacity: true)
-            self.placeClusterManager.addAnnotations(self.faePlacePins, withCompletionHandler: {
-                self.placeClusterManager.isForcedRefresh = false
-            })
+            self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true)
         }
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
     }
@@ -1525,10 +1494,6 @@ extension FaeMapViewController: SideMenuDelegate, ButtonFinishClickedDelegate {
     func jumpToSettings() {
         let vcSettings = SettingsViewController()
         navigationController?.pushViewController(vcSettings, animated: true)
-    }
-    
-    func jumpToFaeUserMainPage() {
-        self.jumpToMyFaeMainPage()
     }
     
     func reloadSelfPosition() {
@@ -2366,7 +2331,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     private func routingPlace(_ placeInfo: PlacePin) {
         pinToRoute = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: placeInfo)
         pinToRoute.animatable = false
-        pinsToRoute.append(pinToRoute)
+        pinsToRoute = [pinToRoute]
         HIDE_AVATARS = true
         PLACE_ENABLE = false
         // remove place pins but don't delete them
@@ -2403,22 +2368,27 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     private func routingLocation(pin: FaePinAnnotation) {
         guard let pin = self.selectedLocation else { return }
+        pinToRoute = pin
+        pinsToRoute = [pinToRoute]
         uiviewLocationBar.hide()
         selectedLocAnno?.hideButtons()
         selectedLocAnno?.optionsToNormal()
         HIDE_AVATARS = true
         PLACE_ENABLE = false
         // remove place pins but don't delete them
-        placeClusterManager.removeAnnotations(faePlacePins, withCompletionHandler: nil)
-        placeClusterManager.removeAnnotations(pinsFromSearch, withCompletionHandler: {
-            self.placeClusterManager.isForcedRefresh = true
-            self.placeClusterManager.manuallyCallRegionDidChange()
-            self.placeClusterManager.isForcedRefresh = false
-            //self.tempFaePins.removeAll()
-            //self.tempFaePins.append(pin)
-            //self.locationPinClusterManager.addAnnotations(self.tempFaePins, withCompletionHandler: nil)
+        var pinsToRemove = [FaePinAnnotation]()
+        if modeCollection == .off {
+            if swipingState == .multipleSearch {
+                pinsToRemove = pinsFromSearch
+            } else {
+                pinsToRemove = faePlacePins
+            }
+        } else {
+            pinsToRemove = pinsFromCollection
+        }
+        removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) {
             self.routeCalculator(destination: pin.coordinate)
-        })
+        }
         // stop user pins changing location and popping up
         for user in self.faeUserPins {
             user.isValid = false
@@ -2874,6 +2844,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
         isRoutingCancelled = true
         
         var isReAddUsersEnabled = false
+        var isInCollectionOrSearch = true
         var pinsToReAdd = [FaePinAnnotation]()
         if modeCollection == .off {
             if swipingState == .multipleSearch {
@@ -2881,6 +2852,7 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
             } else {
                 pinsToReAdd = faePlacePins
                 isReAddUsersEnabled = true
+                isInCollectionOrSearch = false
             }
         } else {
             pinsToReAdd = pinsFromCollection
@@ -2890,15 +2862,14 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
         }
         if pinToRoute.type == .place {
             removePlaceAnnotations(with: pinsToRoute, forced: true, instantly: false) {
-                self.pinsToRoute.removeAll()
                 self.addPlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true)
-            }
-        } else if pinToRoute.type == .location {
-            removeLocationAnnotations(with: [self.pinToRoute], forced: true, instantly: false) {
-                if self.selectedLocation != nil {
-                    self.addLocationAnnotations(with: [self.selectedLocation!], forced: true, instantly: true)
+                if isInCollectionOrSearch {
+                    self.tblPlaceResult.show()
+                    self.showOrHideTableResultsExpandingIndicator(show: true, animated: true)
                 }
             }
+        } else if pinToRoute.type == .location {
+            addPlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true)
         }
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
@@ -3369,6 +3340,9 @@ extension FaeMapViewController: MapAction {
     
     func locPinTap(view: MKAnnotationView) {
         tapLocationPin(didSelect: view)
+        uiviewLocationBar.show()
+        tblPlaceResult.hide()
+        showOrHideTableResultsExpandingIndicator(show: false, animated: true)
     }
     
     func allPlacesDeselect(_ full: Bool) {
