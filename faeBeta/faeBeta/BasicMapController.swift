@@ -291,7 +291,7 @@ class BasicMapController: UIViewController, MKMapViewDelegate, CCHMapClusterCont
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        let idx = firstAnn.class_2_icon_id
+        let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn

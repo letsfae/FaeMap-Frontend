@@ -435,7 +435,7 @@ class FMPlaceInfoBar: UIView {
 
 class PlaceView: UIView {
     
-    private var class_2_icon_id = 0
+    private var category_icon_id = 0
     private var imgType: UIImageView!
     private var lblName: UILabel!
     private var lblAddr: UILabel!

@@ -547,7 +547,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        let idx = firstAnn.class_2_icon_id
+        let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
@@ -750,7 +750,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MARK: - Auxiliary Map Functions
     
     private func deselectAllPlaceAnnos() {
-        if let idx = selectedPlace?.class_2_icon_id {
+        if let idx = selectedPlace?.category_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
             selectedPlaceAnno?.layer.zPosition = CGFloat(selectedPlaceAnno?.tag ?? 7)
