@@ -57,28 +57,28 @@ extension MapSearchViewController {
                 if searchText == "" {
                     uiviewPics.frame.origin.y = 124 + device_offset_top
                 } else {
-                    uiviewPics.frame.origin.y = 124 + uiviewNoResults.frame.height + 5 + device_offset_top
+                    uiviewPics.frame.origin.y = 124 + uiviewNoResult.frame.height + 5 + device_offset_top
                 }
             }
             
             // for uiviewNoResults
             if searchText != "" && cellCnt == 0 {
-                uiviewNoResults.isHidden = false
+                uiviewNoResult.isHidden = false
                 uiviewSchResBg.isHidden = true
                 uiviewSchLocResBg.isHidden = true
             } else if searchText == "" {
                 uiviewPics.isHidden = false
-                uiviewNoResults.isHidden = true
+                uiviewNoResult.isHidden = true
                 uiviewSchResBg.isHidden = true
                 uiviewSchLocResBg.isHidden = true
             } else {
-                uiviewNoResults.isHidden = true
+                uiviewNoResult.isHidden = true
                 uiviewPics.isHidden = true
             }
             tblPlacesRes.isScrollEnabled = true
         case .location:
             uiviewPics.isHidden = true || boolNoCategory
-            uiviewNoResults.isHidden = true
+            uiviewNoResult.isHidden = true
             uiviewSchResBg.isHidden = false
             uiviewSchResBg.frame.size.height = CGFloat(fixedLocOptions.count * 48)
             tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
@@ -153,13 +153,17 @@ extension MapSearchViewController {
                 }
             }
             if schLocationBar.txtSchField.text == "" {
+                if schLocationBar.txtSchField.placeholder != "Current Location" || schLocationBar.txtSchField.placeholder != "Current Map View" {
+                    schLocationBar.txtSchField.text = strPreviousFixedOptionSelection
+                }
                 schLocationBar.txtSchField.text = schLocationBar.txtSchField.placeholder
             }
         case schLocationBar:
             schPlaceBar.btnClose.isHidden = true
             schBarType = .location
             if searchBar.txtSchField.text == "Current Location" || searchBar.txtSchField.text == "Current Map View" {
-                searchBar.txtSchField.placeholder = searchBar.txtSchField.text
+                //searchBar.txtSchField.placeholder = searchBar.txtSchField.text
+                searchBar.txtSchField.placeholder = "Type 3 letters to search"
                 searchBar.txtSchField.text = ""
                 searchBar.btnClose.isHidden = true
             } else {
@@ -190,7 +194,8 @@ extension MapSearchViewController {
             } else {
                 activityStatus(isOn: true)
                 placeThrottler.throttle {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let `self` = self else { return }
                         self.filterPlaceCat(searchText: searchText)
                         self.getPlaceInfo(content: searchText.lowercased())
                         self.getAddresses(content: searchText)
@@ -205,7 +210,9 @@ extension MapSearchViewController {
                 showOrHideViews(searchText: searchText)
             } else {
                 locThrottler.throttle {
-                    self.placeAutocomplete(searchText)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.placeAutocomplete(searchText)
+                    }
                 }
             }
         default:

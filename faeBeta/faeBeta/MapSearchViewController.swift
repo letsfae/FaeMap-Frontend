@@ -20,6 +20,13 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     weak var delegate: MapSearchDelegate?
     
+    // Previous View Controller Type
+    enum PreviousViewControllerType {
+        case chat, map, board
+    }
+    public var previousVC = PreviousViewControllerType.map
+    
+    // Public Variables
     public var strSearchedPlace = ""
     public var strSearchedLocation = ""
     
@@ -33,29 +40,31 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     // UI's
     var btnBack: UIButton!
     var uiviewSearch: UIView!
-    var uiviewPics: UIView!
     var schPlaceBar: FaeSearchBarTest!
     var schLocationBar: FaeSearchBarTest!
+    var activityIndicatorLocationSearch: UIActivityIndicatorView!
+    
+    var uiviewPics: UIView!
     var btnCategories = [UIButton]()
     var lblCategories = [UILabel]()
     
     var uiviewSchResBg: UIView!    // uiviews with shadow under table views
     var uiviewSchLocResBg: UIView! // uiviews with shadow under table views
-    
     var tblPlacesRes: UITableView!   // table used for search places & display table fixedLocOptions
     var tblLocationRes: UITableView! // table used for search locations
     
-    var uiviewNoResults: UIView!
+    var uiviewNoResult: UIView!
     var lblNoResult: UILabel!
-    var activityIndicator: UIActivityIndicatorView!
+    var activityIndicatorNoResult: UIActivityIndicatorView!
     
+    // Data
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-
     enum SearchBarType {
         case place, location
     }
     var schBarType = SearchBarType.place
+    var strPreviousFixedOptionSelection: String = "Current Location"
     
     var filteredCategory = [(key: String, value: Int)]()
     var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
@@ -68,15 +77,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var placeThrottler = Throttler(name: "[Place]", seconds: 0.5)
     var locThrottler = Throttler(name: "[Location]", seconds: 0.5)
 
+    // Boolean Flags
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
-    
     var isCategorySearching: Bool = false
     
-    enum PreviousViewControllerType {
-        case chat, map, board
-    }
-    var previousVC = PreviousViewControllerType.map
+    
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -108,14 +114,14 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     }
     
     private func loadNoResultsView() {
-        uiviewNoResults = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
-        uiviewNoResults.backgroundColor = .white
-        uiviewNoResults.layer.cornerRadius = 2
-        uiviewNoResults.isHidden = true
-        view.addSubview(uiviewNoResults)
+        uiviewNoResult = UIView(frame: CGRect(x: 8, y: 124 + device_offset_top, width: screenWidth - 16, height: 100))
+        uiviewNoResult.backgroundColor = .white
+        uiviewNoResult.layer.cornerRadius = 2
+        uiviewNoResult.isHidden = true
+        view.addSubview(uiviewNoResult)
         
         lblNoResult = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
-        uiviewNoResults.addSubview(lblNoResult)
+        uiviewNoResult.addSubview(lblNoResult)
         lblNoResult.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
         lblNoResult.numberOfLines = 0
         lblNoResult.text = "No Results Found...\nTry a Different Search!"
@@ -123,11 +129,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         lblNoResult.textColor = UIColor._115115115()
         lblNoResult.font = UIFont(name: "AvenirNext-Medium", size: 15)
         
-        activityIndicator = createActivityIndicator(large: true)
-        activityIndicator.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
-        uiviewNoResults.addSubview(activityIndicator)
+        activityIndicatorNoResult = createActivityIndicator(large: true)
+        activityIndicatorNoResult.center = CGPoint(x: screenWidth / 2 - 8, y: 50)
+        uiviewNoResult.addSubview(activityIndicatorNoResult)
         
-        addShadow(uiviewNoResults)
+        addShadow(uiviewNoResult)
     }
     
     private func loadSearchBar() {
@@ -169,6 +175,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiviewDivLine.layer.borderWidth = 1
         uiviewDivLine.layer.borderColor = UIColor._200199204cg()
         uiviewSearch.addSubview(uiviewDivLine)
+        
+        activityIndicatorLocationSearch = createActivityIndicator(large: false)
+        activityIndicatorLocationSearch.center.x = 24
+        activityIndicatorLocationSearch.center.y = 72.5
+        uiviewSearch.addSubview(activityIndicatorLocationSearch)
     }
     
     private func loadPlaceBtns() {
@@ -301,18 +312,18 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     func activityStatus(isOn: Bool) {
         if isOn {
-            guard !activityIndicator.isAnimating else { return }
-            activityIndicator.startAnimating()
+            guard !activityIndicatorNoResult.isAnimating else { return }
+            activityIndicatorNoResult.startAnimating()
             lblNoResult.isHidden = true
             if uiviewSchResBg.isHidden {
-                uiviewNoResults.isHidden = false
+                uiviewNoResult.isHidden = false
             }
             if !uiviewPics.isHidden {
                 uiviewPics.isHidden = true
             }
         } else {
-            guard activityIndicator.isAnimating else { return }
-            activityIndicator.stopAnimating()
+            guard activityIndicatorNoResult.isAnimating else { return }
+            activityIndicatorNoResult.stopAnimating()
             lblNoResult.isHidden = false
         }
     }
