@@ -164,5 +164,10 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         } else if page == numPages+1 {
             contentOffset = CGPoint(x: pageWidth, y: 0)
         }
+        if currentPage == viewObjects.count {
+            currentPage = 0
+        } else if currentPage == -1 {
+            currentPage = viewObjects.count - 1
+        }
     }
 }

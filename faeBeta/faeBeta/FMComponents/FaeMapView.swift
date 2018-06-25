@@ -36,6 +36,7 @@ class FaeMapView: MKMapView {
     weak var mapAction: MapAction?
     
     private var isPlaceAnno = true
+    private var isLocAnno = true
     private var block = false
     public var blockTap = false
     
@@ -194,6 +195,7 @@ class FaeMapView: MKMapView {
             if let anView = v as? PlacePinAnnotationView {
                 block = true
                 isPlaceAnno = true
+                isLocAnno = false
                 mapAction?.locPinCreatingCancel?()
                 if anView.arrBtns.count == 0 {
                     mapAction?.allPlacesDeselect?(true)
@@ -205,8 +207,14 @@ class FaeMapView: MKMapView {
                 block = true
                 mapAction?.locPinCreatingCancel?()
             } else if let anView = v as? LocPinAnnotationView {
+                block = true
+                isPlaceAnno = false
+                isLocAnno = true
                 if anView.arrBtns.count == 0 {
+                    mapAction?.allLocationsDeselect?()
                     mapAction?.allPlacesDeselect?(true)
+                    anView.optionsOpened = true
+                    mapAction?.locPinTap?(view: anView)
                     anView.showButtons()
                 }
             } else {
@@ -223,12 +231,13 @@ class FaeMapView: MKMapView {
                 }
                 anView.optionsReady = true
             } else if let anView = v as? LocPinAnnotationView {
-                if !anView.optionsOpened {
+                if anView.optionsOpened {
                     anView.hideButtons()
                 }
                 anView.optionsReady = true
             } else {
                 selectedPlaceAnno?.hideButtons()
+                selectedLocAnno?.hideButtons()
             }
             if let anView = selectedPlaceAnno {
                 anView.chooseAction()
@@ -261,7 +270,8 @@ class FaeMapView: MKMapView {
                 } else {
                     mapAction?.iconStyleChange?(action: 0, isPlace: true)
                 }
-            } else {
+            }
+            if isLocAnno {
                 guard let anView = selectedLocAnno else { return }
                 guard anView.arrBtns.count == 4 else { return }
                 let point = sender.location(in: anView)

@@ -200,7 +200,6 @@ protocol PlaceViewDelegate: class {
 }
 
 enum PlaceInfoBarState: String {
-    case singleSearch
     case multipleSearch
     case map
 }
@@ -268,7 +267,6 @@ class FMPlaceInfoBar: UIView {
     }
     
     func load(for placeInfo: PlacePin) {
-        state = .singleSearch
         imgBack_1.setValueForPlace(placeInfo: placeInfo)
         self.alpha = 1
         boolLeft = false
@@ -437,7 +435,7 @@ class FMPlaceInfoBar: UIView {
 
 class PlaceView: UIView {
     
-    private var class_2_icon_id = 0
+    private var category_icon_id = 0
     private var imgType: UIImageView!
     private var lblName: UILabel!
     private var lblAddr: UILabel!
@@ -445,15 +443,26 @@ class PlaceView: UIView {
     private var lblPrice: UILabel!
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     private var arrHour = [[String]]()
-    private var indicator: UIActivityIndicatorView!
+    private var indicatorImage: UIActivityIndicatorView!
+    private var indicatorLoading: UIActivityIndicatorView!
+    private var lblNoResult: UILabel!
+    public var isLoadingIndicatorAndNoResultLabelEnabled: Bool = false
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         loadContent()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    public func loadExtraParts() {
+        loadLoadingIndicator()
+        loadNoResultLabel()
+    }
+    
     private func loadContent() {
-        
         let uiviewBkgd = UIView()
         uiviewBkgd.layer.cornerRadius = 2
         uiviewBkgd.backgroundColor = .white
@@ -506,17 +515,53 @@ class PlaceView: UIView {
         addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:|-63-[v0(18)]", options: [], views: lblPrice)
         
-        indicator = UIActivityIndicatorView()
-        indicator.activityIndicatorViewStyle = .white
-        indicator.center.x = 45
-        indicator.center.y = 45
-        indicator.hidesWhenStopped = true
-        indicator.color = UIColor._2499090()
-        addSubview(indicator)
+        indicatorImage = UIActivityIndicatorView()
+        indicatorImage.activityIndicatorViewStyle = .white
+        indicatorImage.center.x = 45
+        indicatorImage.center.y = 45
+        indicatorImage.hidesWhenStopped = true
+        indicatorImage.color = UIColor._2499090()
+        addSubview(indicatorImage)
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    private func loadLoadingIndicator() {
+        indicatorLoading = createActivityIndicator(large: true)
+        indicatorLoading.center.x = screenWidth / 2 - 8
+        indicatorLoading.center.y = 45
+        addSubview(indicatorLoading)
+    }
+    
+    private func loadNoResultLabel() {
+        lblNoResult = UILabel(frame: CGRect(x: 0, y: 0, width: 211, height: 50))
+        addSubview(lblNoResult)
+        lblNoResult.center.x = screenWidth / 2 - 8
+        lblNoResult.center.y = 45
+        lblNoResult.numberOfLines = 0
+        lblNoResult.text = "No Results Found...\nTry a Different Search!"
+        lblNoResult.textAlignment = .center
+        lblNoResult.textColor = UIColor._115115115()
+        lblNoResult.font = UIFont(name: "AvenirNext-Medium", size: 15)
+        lblNoResult.isHidden = true
+    }
+    
+    public func showOrHideLoadingIndicator(show: Bool) {
+        guard isLoadingIndicatorAndNoResultLabelEnabled else { return }
+        if show {
+            indicatorLoading.startAnimating()
+        } else {
+            indicatorLoading.stopAnimating()
+        }
+        imgType.isHidden = show
+        lblName.isHidden = show
+        lblAddr.isHidden = show
+        lblHours.isHidden = show
+        lblPrice.isHidden = show
+        indicatorImage.isHidden = show
+    }
+    
+    public func showOrHideNoResultIndicator(show: Bool) {
+        guard isLoadingIndicatorAndNoResultLabelEnabled else { return }
+        lblNoResult.isHidden = !show
     }
     
     func setValueForPlace(placeInfo: PlacePin) {
@@ -553,10 +598,10 @@ class PlaceView: UIView {
     
     private func loadPlaceImage(placeInfo: PlacePin) {
         imgType.alpha = 0
-        indicator.startAnimating()
+        indicatorImage.startAnimating()
         General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgType) {
             self.imgType.alpha = 1
-            self.indicator.stopAnimating()
+            self.indicatorImage.stopAnimating()
         }
     }
     
@@ -648,14 +693,13 @@ class FMLocationInfoBar: UIView {
         isShowed = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
-        }, completion: { _ in
-            self.imgType.alpha = 0
-        })
+        }, completion: nil)
     }
     
     public func updateLocationInfo(location: CLLocation, _ completion: @escaping (String, String) -> Void) {
         show()
         updateLocationBar(name: "", address: "")
+        imgType.alpha = 0
         activityIndicator.startAnimating()
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else {

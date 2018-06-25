@@ -10,7 +10,7 @@ import UIKit
 import SwiftyJSON
 
 // for new Place page
-extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate {
+extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate, BoardCategorySearchDelegate, MapSearchDelegate {
     // MARK: - Load place part of boards
     func loadPlaceSearchHeader() {
         btnSearchAllPlaces = UIButton(frame: CGRect(x: 50, y: 20 + device_offset_top, width: screenWidth - 50, height: 43))
@@ -49,25 +49,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         view.addSubview(uiviewPlaceTab)
     }
     
-//    func getPlaceInfo(content: String = "", source: String = "categories") {
-//        lblSearchContent.text = content
-//        uiviewPlaceTab.btnPlaceTabLeft.isSelected = false
-//        uiviewPlaceTab.btnPlaceTabRight.isSelected = true
-//        jumpToRightTab()
-//    }
-    
     // MARK: - Button actions
-    @objc func searchAllPlaces(_ sender: UIButton) {
-        /*
-        let searchVC = BoardsSearchViewController()
-        searchVC.enterMode = .place
-        searchVC.delegate = self
-        searchVC.strSearchedPlace = lblSearchContent.text
-        searchVC.strPlaceholder = lblSearchContent.text
-        navigationController?.pushViewController(searchVC, animated: true)
-         */
-    }
-    
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
@@ -81,7 +63,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         vc.viewModelPlaces = places
         vc.strTitle = places.title
 //        vc.recommendedPlaces = places
-        vc.strTitle = title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -122,19 +103,6 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         
         tblPlaceLeft.isHidden = true
         tblPlaceRight.isHidden = false
-    }
-    
-    // MARK: - BoardsSearchDelegate
-    func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
-        LocManager.shared.searchedLoc = location
-        lblCurtLoc.text = searchText
-        imgCurtLoc.image = icon
-        if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-//            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        } else {
-//            getPlaceInfo(content: lblSearchContent.text!, source: "name")
-        }
-//        tblMapBoard.reloadData()
     }
     
     // MARK: - BoardCategorySearchDelegate

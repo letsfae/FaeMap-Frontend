@@ -11,18 +11,21 @@ import SwiftyJSON
 import CoreLocation
 
 class PlacePin: NSObject, FaePin {
-    
     var id: Int = 0
     var name: String = ""
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var class_2: String = ""
-    var class_2_icon_id: Int = 48
+    
     var address1: String = ""
     var address2: String = ""
     var icon: UIImage?
     var imageURL = ""
     var imageURLs = [String]()
     var class_1: String = ""
+    var class_2: String = ""
+    var class_3: String = ""
+    var class_4: String = ""
+    var category: String = ""
+    var category_icon_id: Int = 48
     var url = ""
     var price = ""
     var phone = ""
@@ -64,23 +67,35 @@ class PlacePin: NSObject, FaePin {
         address2 += json["location"]["country"].stringValue == "" ? "" : json["location"]["country"].stringValue
         
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
-        if let _3 = json["categories"]["class3"].string {
-            class_2 = _3
-        } else if let _2 = json["categories"]["class2"].string {
-            class_2 = _2
-        }
-        /**
-        if json["categories"]["class2"].stringValue != "" {
-            print(json["categories"]["class2"].stringValue)
-        }
-         */
-        if let _3_icon_id = json["categories"]["class3_icon_id"].int {
-            class_2_icon_id = _3_icon_id
-        } else if let _2_icon_id = json["categories"]["class2_icon_id"].int {
-            class_2_icon_id = _2_icon_id
-        }
-        icon = UIImage(named: "place_map_\(self.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
+        
+        // process categories
         class_1 = json["categories"]["class1"].stringValue
+        class_2 = json["categories"]["class2"].stringValue
+        class_3 = json["categories"]["class3"].stringValue
+        class_4 = json["categories"]["class4"].stringValue
+        
+        if json["categories"]["class4"].stringValue != "" {
+            category = json["categories"]["class4"].stringValue
+        } else if json["categories"]["class3"].stringValue != "" {
+            category = json["categories"]["class3"].stringValue
+        } else if json["categories"]["class2"].stringValue != "" {
+            category = json["categories"]["class2"].stringValue
+        } else if json["categories"]["class1"].stringValue != "" {
+            category = json["categories"]["class1"].stringValue
+        }
+
+        if let _4_icon_id = json["categories"]["class4_icon_id"].int {
+            category_icon_id = _4_icon_id
+        } else if let _3_icon_id = json["categories"]["class3_icon_id"].int {
+            category_icon_id = _3_icon_id
+        } else if let _2_icon_id = json["categories"]["class2_icon_id"].int {
+            category_icon_id = _2_icon_id
+        } else if let _1_icon_id = json["categories"]["class1_icon_id"].int {
+            category_icon_id = _1_icon_id
+        }
+            
+        icon = UIImage(named: "place_map_\(self.category_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
+        
         
         if let arrImgURLs = json["img"].array {
             for imgURL in arrImgURLs {
@@ -249,7 +264,6 @@ class PlacePin: NSObject, FaePin {
         }
         return arrDay[dayIndex]
     }
-
 }
 
 // Make dictionary type 'plusable' or 'addable'
@@ -275,10 +289,10 @@ func generator(_ center: CLLocationCoordinate2D, _ number: Int, _ offset: Int) -
         let x_offset = Double.random(min: -0.321778, max: 0.321778)
         let y_offset = Double.random(min: -0.321778, max: 0.321778)
         place.coordinate = CLLocationCoordinate2D(latitude: center.latitude + y_offset, longitude: center.longitude + x_offset)
-        place.class_2_icon_id = Int(arc4random_uniform(91) + 1)
+        place.category_icon_id = Int(arc4random_uniform(91) + 1)
         place.address1 = "address1"
         place.address2 = "address2"
-        place.icon = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
+        place.icon = UIImage(named: "place_map_\(place.category_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         place.price = "$$"
         place.phone = "+1 (213)309-2068"
         
@@ -286,5 +300,4 @@ func generator(_ center: CLLocationCoordinate2D, _ number: Int, _ offset: Int) -
     }
     
     return places
-    
 }

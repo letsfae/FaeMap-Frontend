@@ -14,7 +14,7 @@ import RealmSwift
     @objc optional func autoReresh(isOn: Bool)
     @objc optional func autoCyclePins(isOn: Bool)
     @objc optional func hideAvatars(isOn: Bool)
-    func showSavedPins(type: String, savedPinIds: [Int], isCollections: Bool, colName: String)
+    func showPinsFromCollection(type: String, savedPinIds: [Int], colInfo: RealmCollection)
 }
 
 class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -455,7 +455,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             for pin in colInfo.pins {
                 arrSavedPinIds.append(pin.pin_id)
             }
-            delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+            delegate?.showPinsFromCollection(type: colInfo.type, savedPinIds: arrSavedPinIds, colInfo: colInfo)
             return
         }
         
@@ -481,7 +481,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
                 }
             }
             
-            self?.delegate?.showSavedPins(type: colInfo.type, savedPinIds: arrSavedPinIds, isCollections: true, colName: colInfo.name)
+            self?.delegate?.showPinsFromCollection(type: colInfo.type, savedPinIds: arrSavedPinIds, colInfo: colInfo)
         })
     }
     
@@ -558,6 +558,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     }
     
     func hide() {
+        
         Key.shared.FMVCtrler?.btnDropUpMenu.isSelected = false
         Key.shared.FMVCtrler?.mapGesture(isOn: true)
         Key.shared.FMVCtrler?.animateMainScreenButtons(hide: false, animated: true)
