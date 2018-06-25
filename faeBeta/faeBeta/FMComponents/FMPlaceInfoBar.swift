@@ -693,14 +693,13 @@ class FMLocationInfoBar: UIView {
         isShowed = false
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveLinear, animations: {
             self.alpha = 0
-        }, completion: { _ in
-            self.imgType.alpha = 0
-        })
+        }, completion: nil)
     }
     
     public func updateLocationInfo(location: CLLocation, _ completion: @escaping (String, String) -> Void) {
         show()
         updateLocationBar(name: "", address: "")
+        imgType.alpha = 0
         activityIndicator.startAnimating()
         General.shared.getAddress(location: location, original: true) { (original) in
             guard let first = original as? CLPlacemark else {
