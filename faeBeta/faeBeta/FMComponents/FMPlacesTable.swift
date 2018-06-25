@@ -591,7 +591,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class FMPlaceResultBarCell: UITableViewCell {
     
-    private var class_2_icon_id = 0
+    private var category_icon_id = 0
     private var imgSavedItem: UIImageView!
     private var lblItemName: UILabel!
     private var lblItemAddr: UILabel!

@@ -1343,7 +1343,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
         
-        if let idx = selectedPlace?.class_2_icon_id {
+        if let idx = selectedPlace?.category_icon_id {
             if full {
                 selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
                 selectedPlace?.isSelected = false
@@ -2339,7 +2339,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
-        anView.iconIndex = first.class_2_icon_id
+        anView.iconIndex = first.category_icon_id
         if swipingState == .multipleSearch {
             if let placePin = first.pinInfo as? PlacePin {
                 let tag = tblPlaceResult.tblResults.tag
@@ -2413,7 +2413,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        let idx = firstAnn.class_2_icon_id
+        let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         firstAnn.isSelected = true
         anView.assignImage(firstAnn.icon)
