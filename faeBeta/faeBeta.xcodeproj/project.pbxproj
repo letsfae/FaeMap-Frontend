@@ -75,6 +75,7 @@
 		50902F591F2BB72C002553F1 /* LocationListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F581F2BB72B002553F1 /* LocationListCell.swift */; };
 		50902F5B1F2BB736002553F1 /* PlacesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50902F5A1F2BB736002553F1 /* PlacesListCell.swift */; };
 		50909F8120D9825C00FB1887 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50909F8020D9825C00FB1887 /* Defaults.swift */; };
+		50947E0820DDC198009E2618 /* NewSelectLocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50947E0720DDC198009E2618 /* NewSelectLocationViewController.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
 		50A9A5CA20AE2A2B00ACF689 /* AllPlacesMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */; };
@@ -308,7 +309,6 @@
 		B86AE0501ED4FC4400D1357D /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86AE04F1ED4FC4400D1357D /* General.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B8849E9E1EEB141A00D4588D /* MBSocialStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */; };
-		B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */; };
 		B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */; };
 		B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA11EEB142600D4588D /* MapBoardViewController.swift */; };
 		B8849EA51EEB143800D4588D /* BoardPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA31EEB143800D4588D /* BoardPeople.swift */; };
@@ -447,6 +447,7 @@
 		50902F581F2BB72B002553F1 /* LocationListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListCell.swift; sourceTree = "<group>"; };
 		50902F5A1F2BB736002553F1 /* PlacesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesListCell.swift; sourceTree = "<group>"; };
 		50909F8020D9825C00FB1887 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		50947E0720DDC198009E2618 /* NewSelectLocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSelectLocationViewController.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
 		50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesMapController.swift; sourceTree = "<group>"; };
@@ -705,7 +706,6 @@
 		B86AE04F1ED4FC4400D1357D /* General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBSocialStruct.swift; sourceTree = "<group>"; };
-		B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPlacesStruct.swift; sourceTree = "<group>"; };
 		B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPeopleStruct.swift; sourceTree = "<group>"; };
 		B8849EA11EEB142600D4588D /* MapBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBoardViewController.swift; sourceTree = "<group>"; };
 		B8849EA31EEB143800D4588D /* BoardPeople.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardPeople.swift; sourceTree = "<group>"; };
@@ -1420,6 +1420,7 @@
 				50F1D4FF204CF3F300AC57AC /* BasicMapController.swift */,
 				503BF9D6208517AA00635E65 /* RoutingMapController.swift */,
 				B85FE6D31DB8791600BB8F6A /* SelectLocationViewController.swift */,
+				50947E0720DDC198009E2618 /* NewSelectLocationViewController.swift */,
 				B0714D2B1D5E435200356705 /* FaeMapViewController.swift */,
 				50111C241F476063004EA00E /* FMComponents */,
 				B0714D7C1D5E438F00356705 /* MapViewExtensions */,
@@ -1609,15 +1610,15 @@
 		B8849E9A1EEB13FD00D4588D /* MapBoardExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				50868F0420DCD5EB002CC681 /* BoardNoResultView.swift */,
-				50868F0020DCD593002CC681 /* BoardAvatarWaves.swift */,
-				50868EFE20DCD550002CC681 /* BoardPeopleNearbyFilter.swift */,
-				50868EFC20DCD524002CC681 /* BoardCategorySearchView.swift */,
 				B8849EA41EEB143800D4588D /* BoardTableView.swift */,
-				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
 				B36D0D321F46513000DE3107 /* BoardPlaces.swift */,
 				B8849EA31EEB143800D4588D /* BoardPeople.swift */,
 				B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */,
+				50868EFC20DCD524002CC681 /* BoardCategorySearchView.swift */,
+				50868EFE20DCD550002CC681 /* BoardPeopleNearbyFilter.swift */,
+				50868F0420DCD5EB002CC681 /* BoardNoResultView.swift */,
+				504EA81820DCD278005BBFCC /* BoardPlaceTabView.swift */,
+				50868F0020DCD593002CC681 /* BoardAvatarWaves.swift */,
 				B36D0D361F46C59500DE3107 /* GeneralLocationSearchViewController.swift */,
 				B8849EC31EEB161900D4588D /* MBNetwork.swift */,
 				50178B7E2045A17D0068012C /* MBLoadingWaves.swift */,
@@ -1689,7 +1690,6 @@
 				50A9FBB020BDD3D900171ADB /* MapPinCollections.swift */,
 				B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */,
 				B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */,
-				B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */,
 				B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */,
 				B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */,
 				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
@@ -2277,6 +2277,7 @@
 				B064EEEA1D6E0D1000C078F5 /* StickerDictionary.swift in Sources */,
 				50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */,
 				DC084A8F1DDC4E84007DCC88 /* EmojiService.m in Sources */,
+				50947E0820DDC198009E2618 /* NewSelectLocationViewController.swift in Sources */,
 				9F64FF381FBBCF0000388C10 /* RegisterPhoneViewController.swift in Sources */,
 				B85FFE941EA84CEB0079D1A7 /* CollectionSearchViewController(General).swift in Sources */,
 				B379A4EE1FA2C21400075BC3 /* FriendOperationFromContactsViewController.swift in Sources */,
@@ -2285,7 +2286,6 @@
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
 				B39C1E3F1F6DCE600075CF59 /* CountryCodeViewController.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
-				B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				507BE10C1F5A4ABD0077A959 /* FaeFont.swift in Sources */,

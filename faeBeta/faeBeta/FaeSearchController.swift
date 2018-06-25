@@ -10,11 +10,8 @@ import UIKit
 
 protocol FaeSearchControllerDelegate: class {
     func didStartSearching()
-    
     func didTapOnSearchButton()
-    
     func didTapOnCancelButton()
-    
     func didChangeSearchText(_ searchText: String)
 }
 

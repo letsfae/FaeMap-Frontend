@@ -164,7 +164,7 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
     
     private func deselectAllAnnotations(full: Bool = true) {
         
-        if let idx = selectedPlace?.class_2_icon_id {
+        if let idx = selectedPlace?.category_icon_id {
             if full {
                 selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
                 selectedPlace?.isSelected = false

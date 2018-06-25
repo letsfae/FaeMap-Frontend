@@ -290,6 +290,8 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                     let cell2 = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
                     Key.shared.measurementUnits = "imperial"
+                    let boardPeopleVM = BoardPeopleViewModel()
+                    boardPeopleVM.unit = " mi"
                     FaeUser.shared.whereKey("measurement_units", value: "imperial")
                     FaeUser.shared.setUserSettings { (status, message) in
                         guard status / 100 == 2 else { return }
@@ -302,6 +304,8 @@ class SetGeneralViewController: UIViewController, UITableViewDelegate, UITableVi
                     let cell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! GeneralSubTitleCell
                     cell2.btnSelect.isSelected = false
                     Key.shared.measurementUnits = "metric"
+                    let boardPeopleVM = BoardPeopleViewModel()
+                    boardPeopleVM.unit = " km"
                     FaeUser.shared.whereKey("measurement_units", value: "metric")
                     FaeUser.shared.setUserSettings { (status, message) in
                         guard status / 100 == 2 else { return }

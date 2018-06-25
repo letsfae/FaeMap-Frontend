@@ -59,9 +59,9 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
         colInfo.backgroundColor = .clear
     }
     
-    func setValueForCell(title: String, viewModelPlaces: BoardPlaceCategoryViewModel) {//, place: MBPlacesStruct, curtLoc: CLLocation) {
+    func setValueForCell(viewModelPlaces: BoardPlaceCategoryViewModel) {
         self.title = viewModelPlaces.title
-        lblTitle.text = title
+        lblTitle.text = viewModelPlaces.title
 
         self.viewModelPlaces = viewModelPlaces
         colInfo.reloadData()
@@ -92,44 +92,6 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
         Key.shared.mapHeadTitle = self.title
         delegate?.jumpToAllPlaces(places: viewModelPlaces)
     }
-    
-    /*
-    fileprivate func loadCellContent() {
-        imgPlaceIcon = UIImageView(frame: CGRect(x: 20, y: 20, width: 50, height: 50))
-        addSubview(imgPlaceIcon)
-        imgPlaceIcon.contentMode = .scaleAspectFill
-        
-        lblPlaceName = UILabel()
-        addSubview(lblPlaceName)
-        lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblPlaceName.textColor = UIColor._898989()
-        lblPlaceName.lineBreakMode = .byTruncatingTail
-        addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceName)
-        
-        lblPlaceAddr = UILabel()
-        addSubview(lblPlaceAddr)
-        lblPlaceAddr.font = UIFont(name: "AvenirNext-Medium", size: 12)
-        lblPlaceAddr.textColor = UIColor._182182182()
-        lblPlaceAddr.lineBreakMode = .byTruncatingTail
-        addConstraintsWithFormat("H:|-93-[v0]-90-|", options: [], views: lblPlaceAddr)
-        addConstraintsWithFormat("V:|-26-[v0(22)]-1-[v1(16)]", options: [], views: lblPlaceName, lblPlaceAddr)
-        
-        lblDistance = UILabel()
-        addSubview(lblDistance)
-        lblDistance.font = UIFont(name: "AvenirNext-Medium", size: 16)
-        lblDistance.textColor = UIColor._155155155()
-        lblDistance.textAlignment = .right
-        addConstraintsWithFormat("H:[v0(70)]-10-|", options: [], views: lblDistance)
-        addConstraintsWithFormat("V:|-34-[v0(22)]", options: [], views: lblDistance)
-    }
-    
-    func setValueForCell(place: MBPlacesStruct, curtLoc: CLLocation) {
-        imgPlaceIcon.image = place.icon
-        lblPlaceName.text = place.name
-        lblPlaceAddr.text = place.address
-        lblDistance.text = place.distance
-    }
-    */
 }
 
 class PlacesCollectionCell: UICollectionViewCell {

@@ -87,11 +87,17 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     break
                 }
             } else {
+                // not from chat
                 switch indexPath.section {
                 case 0:
                     // category
                     let selectedCat = filteredCategory[indexPath.row].key
-                    getPlaceInfo(content: selectedCat, source: "categories")
+                    if previousVC == .board {
+                        delegate?.jumpToCategory?(category: selectedCat)
+                        navigationController?.popViewController(animated: false)
+                    } else {
+                        getPlaceInfo(content: selectedCat, source: "categories")
+                    }
                 case 1:
                     // place
                     let selectedPlace = searchedPlaces[indexPath.row]
@@ -125,28 +131,13 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
-                CitySearcher.shared.cityDetail(geobytesCityData[indexPath.row]) { [weak self] (status, location) in
-                    guard let `self` = self else { return }
-                    guard status / 100 == 2 else {
-                        return
-                    }
-                    guard let location = location as? CLLocation else {
-                        return
-                    }
-                    LocManager.shared.locToSearch_map = location.coordinate
-                    self.faeRegion = calculateRegion(miles: 100, coordinate: location.coordinate)
-                    self.reloadAddressCompleterRegion()
-                    guard self.schPlaceBar != nil else { return }
-                    guard let searchText = self.schPlaceBar.txtSchField.text else { return }
-                    guard searchText != "Search Fae Map" else { return }
-                    guard searchText != "Search Place or Address" else { return }
-                    self.getPlaceInfo(content: searchText, source: "name")
-                }
+                lookUpForCoordinate(cityData: geobytesCityData[indexPath.row])
             } else {
                 // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 Key.shared.selectedSearchedCity = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 if indexPath.row == 0 {

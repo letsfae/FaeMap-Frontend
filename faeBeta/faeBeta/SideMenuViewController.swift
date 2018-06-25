@@ -15,7 +15,6 @@ protocol SideMenuDelegate: class {
     func userInvisible(isOn: Bool)
     func jumpToMoodAvatar()
     func jumpToSettings()
-    func jumpToFaeUserMainPage()
     func jumpToCollections()
     func jumpToContacts()
     func reloadSelfPosition()
@@ -31,7 +30,6 @@ enum TableSelctions {
     case collections
     case myActivities
     case settings
-    case myFaeMainPage
 }
 
 class SideMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -131,7 +129,7 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         imgAvatar.contentMode = .scaleAspectFill
         imgAvatar.layer.masksToBounds = true
         imgAvatar.isUserInteractionEnabled = true
-        let imgTapGes = UITapGestureRecognizer(target: self, action: #selector(actionJumpToMainPage))
+        let imgTapGes = UITapGestureRecognizer(target: self, action: #selector(actionAvatarClick))
         imgAvatar.addGestureRecognizer(imgTapGes)
         
         lblNickName = UILabel(frame: CGRect(x: 0, y: 139, width: 184, height: 27))
@@ -302,19 +300,13 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
                 case .settings:
                     self.tableSelections = .none
                     self.delegate?.jumpToSettings()
-                case .myFaeMainPage:
-                    self.tableSelections = .none
-                    self.delegate?.jumpToFaeUserMainPage()
                 default: break
                 }
             })
         }
     }
     
-    @objc func actionJumpToMainPage() {
-        //        tableSelections = .myFaeMainPage
-        //        actionCloseMenu(btnBackground)
-        //addProfileAvatar()
+    @objc func actionAvatarClick() {
         SetAvatar.addUserImage(vc: self, type: "sideMenu")
     }
     

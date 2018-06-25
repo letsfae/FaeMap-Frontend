@@ -70,7 +70,7 @@ enum FaePinType: String {
     
     // place pin
     var icon = UIImage()
-    var class_2_icon_id: Int = 48
+    var category_icon_id: Int = 48
     var pinInfo: AnyObject!
     private var selected = false
     
@@ -120,7 +120,7 @@ enum FaePinType: String {
         case .place:
             guard let placePin = data as? PlacePin else { return }
             id = placePin.id
-            class_2_icon_id = placePin.class_2_icon_id
+            category_icon_id = placePin.category_icon_id
             icon = placePin.icon ?? #imageLiteral(resourceName: "place_map_48")
             coordinate = placePin.coordinate
         case .location:

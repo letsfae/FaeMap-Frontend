@@ -56,14 +56,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     private var prevPlacePin: PlacePin!
     private var nextPlacePin: PlacePin!
     
-    private var boolDisableSwipe = false {
+    private var isLoading: Bool = false
+    private var isNoResult: Bool = false
+    
+    private var isSwipeDisabled = false {
         didSet {
-            self.boolLeft = !boolDisableSwipe
-            self.boolRight = !boolDisableSwipe
+            self.boolLeft = !isSwipeDisabled
+            self.boolRight = !isSwipeDisabled
         }
     }
     
-    var state: PlaceInfoBarState = .map {
+    var searchState: PlaceInfoBarState = .map {
         didSet {
             boolLeft = annotations.count > 1 || places.count > 1
             boolRight = annotations.count > 1 || places.count > 1
@@ -113,12 +116,28 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         super.init(coder: aDecoder)
     }
     
-    // MARK: - Load Bar
+    // MARK: - No Result and Loading
+    public func changeState(isLoading: Bool, isNoResult: Bool) {
+        self.show()
+        imgBack_1.showOrHideLoadingIndicator(show: isLoading)
+        imgBack_1.showOrHideNoResultIndicator(show: isNoResult)
+        self.isSwipeDisabled = isLoading || isNoResult
+        self.isLoading = isLoading
+        self.isNoResult = isNoResult
+        shrink {}
+    }
     
+    public func canExpandOrShrink() -> Bool {
+        return !isLoading && !isNoResult
+    }
+    
+    // MARK: - Load Bar
     private func loadBar() {
         addSubview(imgBack_0)
         uiviewTblBckg.addSubview(imgBack_1)
         imgBack_1.frame.origin.x = 0
+        imgBack_1.isLoadingIndicatorAndNoResultLabelEnabled = true
+        imgBack_1.loadExtraParts()
         addSubview(imgBack_2)
         addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
         addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
@@ -132,7 +151,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func load(for placeInfo: PlacePin) {
-        state = .singleSearch
         imgBack_1.setValueForPlace(placeInfo: placeInfo)
         self.alpha = 1
         boolLeft = false
@@ -140,7 +158,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func loading(current: PlacePin) {
-        state = .multipleSearch
+        searchState = .multipleSearch
         imgBack_1.setValueForPlace(placeInfo: current)
         groupLastSelected[tblResults.tag] = current
         self.alpha = 1
@@ -150,15 +168,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         
         for i in 0..<places.count {
             if places[i] == current {
-                // joshprint("[loading], find equals")
                 prev_idx = (i - 1) < 0 ? places.count - 1 : i - 1
                 next_idx = (i + 1) >= places.count ? 0 : i + 1
                 currentIdx = i
                 configureIndexForPanGes()
-                // joshprint("[loading], count = \(places.count)")
-                // joshprint("[loading],     i = \(i)")
-                // joshprint("[loading],  prev = \(prev_idx)")
-                // joshprint("[loading],  next = \(next_idx)")
                 break
             } else {
                 continue
@@ -210,7 +223,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
-        state = .map
+        searchState = .map
         if let place = current.annotations.first as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
@@ -221,13 +234,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         var next_idx = 0
         for i in 0..<annotations.count {
             if annotations[i] == current {
-                //                joshprint("[loadingData], find equals")
                 prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
                 next_idx = (i + 1) >= annotations.count ? 0 : i + 1
-                //                joshprint("[loadingData], count = \(annotations.count)")
-                //                joshprint("[loadingData],     i = \(i)")
-                //                joshprint("[loadingData],  prev = \(prev_idx)")
-                //                joshprint("[loadingData],  next = \(next_idx)")
                 break
             } else {
                 continue
@@ -252,9 +260,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.imgBack_0.frame.origin.x = 8
             self.uiviewTblBckg.frame.origin.x += screenWidth + 8
         }, completion: {_ in
-            if self.state == .map {
+            if self.searchState == .map {
                 self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
-            } else if self.state == .multipleSearch {
+            } else if self.searchState == .multipleSearch {
                 if self.currentIdx == 0 {
                     self.goingToPrevGroup = true
                 }
@@ -269,9 +277,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.uiviewTblBckg.frame.origin.x = -screenWidth + 8
             self.imgBack_2.frame.origin.x = 8
         }, completion: { _ in
-            if self.state == .map {
+            if self.searchState == .map {
                 self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
-            } else if self.state == .multipleSearch {
+            } else if self.searchState == .multipleSearch {
                 if self.currentIdx == self.places.count - 1 {
                     self.goingToNextGroup = true
                 }
@@ -305,7 +313,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 resumeTime = 0.3
             }
             let absPercent: CGFloat = 0.1
-            guard !boolDisableSwipe else { return }
+            guard !isSwipeDisabled else { return }
             if percent < -absPercent {
                 //guard boolLeft else { return }
                 guard !imgBack_0.isHidden else {
@@ -324,7 +332,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 panBack(resumeTime)
             }
         } else if pan.state == .changed {
-            guard !boolDisableSwipe else { return }
+            guard !isSwipeDisabled else { return }
             let translation = pan.translation(in: self)
             imgBack_0.center.x = imgBack_0.center.x + translation.x
             uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
@@ -344,7 +352,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - Load Table
-    
     private func loadContent() {
         uiviewTblBckg = UIView(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         uiviewTblBckg.backgroundColor = .clear
@@ -513,7 +520,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         self.uiviewTblBckg.frame.size.height = 90
         self.dictOffset.removeAll()
         self.tblResults.contentOffset = .zero
-        self.boolDisableSwipe = true
+        self.isSwipeDisabled = true
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.frame.size.height = screenHeight == 812 ? 587 : 556 * screenHeightFactor
             self.tblResults.alpha = 1
@@ -540,7 +547,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             completion()
         }, completion: { _ in
             self.showed = false
-            self.boolDisableSwipe = false
+            self.isSwipeDisabled = false || self.isNoResult || self.isLoading
         })
     }
     
@@ -591,7 +598,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class FMPlaceResultBarCell: UITableViewCell {
     
-    private var class_2_icon_id = 0
+    private var category_icon_id = 0
     private var imgSavedItem: UIImageView!
     private var lblItemName: UILabel!
     private var lblItemAddr: UILabel!
