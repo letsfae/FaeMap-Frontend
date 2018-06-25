@@ -1390,7 +1390,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
         
-        if let idx = selectedPlace?.class_2_icon_id {
+        if let idx = selectedPlace?.category_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             selectedPlace?.isSelected = false
             guard let img = selectedPlace?.icon else { return }
@@ -2679,7 +2679,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
             return delay
         }
-        
         func stopIconSpin(delay: Double) {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                 self.btnRefreshIcon.stopIconSpin()
