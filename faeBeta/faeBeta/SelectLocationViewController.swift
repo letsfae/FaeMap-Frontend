@@ -141,6 +141,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadPlaceInfoBar()
         loadPinIcon()
         fullyLoaded = true
+        mapView(faeMapView, regionDidChangeAnimated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -344,9 +345,16 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        guard fullyLoaded else { return }
         
-        LocManager.shared.locToSearch_board = mapView.centerCoordinate
-        LocManager.shared.locToSearch_explore = mapView.centerCoordinate
+        switch previousVC {
+        case .board:
+            LocManager.shared.locToSearch_board = mapView.centerCoordinate
+        case .explore:
+            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
+        case .chat:
+            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
+        }
         
         if uiviewPlaceBar.tag > 0 { uiviewPlaceBar.annotations = visiblePlaces() }
         

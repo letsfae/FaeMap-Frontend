@@ -137,6 +137,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 Key.shared.selectedSearchedCity = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 if indexPath.row == 0 {

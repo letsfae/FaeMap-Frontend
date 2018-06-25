@@ -53,6 +53,19 @@ func zoomToFitAllPlaces(mapView: MKMapView, places: [PlacePin], edgePadding: UIE
     mapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
 }
 
+func zoomToFitAllLocations(mapView: MKMapView, locations: [LocationPin], edgePadding: UIEdgeInsets) {
+    guard let first = locations.first else { return }
+    let point = MKMapPointForCoordinate(first.coordinate)
+    var zoomRect = MKMapRectMake(point.x, point.y, 0.1, 0.1)
+    for location in locations {
+        let annotationPoint = MKMapPointForCoordinate(location.coordinate)
+        let pointRect = MKMapRectMake(annotationPoint.x, annotationPoint.y, 0.1, 0.1)
+        zoomRect = MKMapRectUnion(zoomRect, pointRect)
+    }
+    let edgePadding = UIEdgeInsetsMake(240, 40, 100, 40)
+    mapView.setVisibleMapRect(zoomRect, edgePadding: edgePadding, animated: false)
+}
+
 func coordinateEqual(_ a: CLLocationCoordinate2D, _ b: CLLocationCoordinate2D) -> Bool {
     return doubleEqual(a.latitude, b.latitude) && doubleEqual(a.longitude, b.longitude)
 }

@@ -51,7 +51,9 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     // Look for coordinate
     func lookUpForCoordinate(cityData: String) {
+        activityIndicatorLocationSearch.startAnimating()
         CitySearcher.shared.cityDetail(cityData) { [weak self] (status, location) in
+            self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
                 return
@@ -77,10 +79,13 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         }
     }
     
-    // GMSAutocompleteFilter
+    // Geobytes City Search AutocompleteFilter
     func placeAutocomplete(_ searchText: String) {
+        activityIndicatorLocationSearch.startAnimating()
         Key.shared.selectedSearchedCity = nil
-        CitySearcher.shared.cityAutoComplete(searchText) { (status, result) in
+        CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
+            self?.activityIndicatorLocationSearch.stopAnimating()
+            guard let `self` = self else { return }
             self.geobytesCityData.removeAll()
             guard status / 100 == 2 else {
                 self.showOrHideViews(searchText: searchText)
