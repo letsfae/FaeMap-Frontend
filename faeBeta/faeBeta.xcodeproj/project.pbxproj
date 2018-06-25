@@ -309,7 +309,6 @@
 		B86AE0501ED4FC4400D1357D /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86AE04F1ED4FC4400D1357D /* General.swift */; };
 		B87E13891D96755C004C9242 /* FaePinAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87E13881D96755C004C9242 /* FaePinAction.swift */; };
 		B8849E9E1EEB141A00D4588D /* MBSocialStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */; };
-		B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */; };
 		B8849EA01EEB141A00D4588D /* MBPeopleStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */; };
 		B8849EA21EEB142600D4588D /* MapBoardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA11EEB142600D4588D /* MapBoardViewController.swift */; };
 		B8849EA51EEB143800D4588D /* BoardPeople.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8849EA31EEB143800D4588D /* BoardPeople.swift */; };
@@ -707,7 +706,6 @@
 		B86AE04F1ED4FC4400D1357D /* General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = General.swift; sourceTree = "<group>"; };
 		B87E13881D96755C004C9242 /* FaePinAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FaePinAction.swift; sourceTree = "<group>"; };
 		B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBSocialStruct.swift; sourceTree = "<group>"; };
-		B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPlacesStruct.swift; sourceTree = "<group>"; };
 		B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MBPeopleStruct.swift; sourceTree = "<group>"; };
 		B8849EA11EEB142600D4588D /* MapBoardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapBoardViewController.swift; sourceTree = "<group>"; };
 		B8849EA31EEB143800D4588D /* BoardPeople.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BoardPeople.swift; sourceTree = "<group>"; };
@@ -1692,7 +1690,6 @@
 				50A9FBB020BDD3D900171ADB /* MapPinCollections.swift */,
 				B8849EC71EEDC0DA00D4588D /* MBAddressLabel.swift */,
 				B8849E9B1EEB141A00D4588D /* MBSocialStruct.swift */,
-				B8849E9C1EEB141A00D4588D /* MBPlacesStruct.swift */,
 				B8849E9D1EEB141A00D4588D /* MBPeopleStruct.swift */,
 				B840247F1F0C1AC400AC6283 /* MoodAvatarImages.swift */,
 				B8E0EC5A1EA0B0DF009EF812 /* OpenedPlaces.swift */,
@@ -2289,7 +2286,6 @@
 				B88905701E3608E100E68D58 /* DisconnectionViewController.swift in Sources */,
 				B39C1E3F1F6DCE600075CF59 /* CountryCodeViewController.swift in Sources */,
 				B8AC45881DBAA78C0089112B /* RK4Spring.swift in Sources */,
-				B8849E9F1EEB141A00D4588D /* MBPlacesStruct.swift in Sources */,
 				B064EF611D74ED0D00C078F5 /* EnterCodeTableViewCell.swift in Sources */,
 				B064EEDB1D6E0CFC00C078F5 /* ChatViewController.swift in Sources */,
 				507BE10C1F5A4ABD0077A959 /* FaeFont.swift in Sources */,

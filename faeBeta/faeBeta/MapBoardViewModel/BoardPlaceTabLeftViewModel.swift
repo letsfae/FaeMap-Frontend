@@ -51,7 +51,7 @@ class BoardPlaceTabLeftViewModel {
     }
     
     
-    func searchByCategories(content: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+    private func searchByCategories(content: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var placePins: [PlacePin] = []
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: "categories")

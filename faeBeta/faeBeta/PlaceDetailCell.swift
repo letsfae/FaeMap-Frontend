@@ -180,7 +180,7 @@ class PlaceDetailMapCell: UITableViewCell {
     }
     
     func setValueForCell(place: PlacePin) {
-        imgPlaceIcon.image = UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
+        imgPlaceIcon.image = place.icon //UIImage(named: "place_map_\(place.class_2_icon_id)") ?? #imageLiteral(resourceName: "place_map_48")
         AddPinToCollectionView().mapScreenShot(coordinate: place.coordinate, size: CGSize(width: 280 * screenWidthFactor, height: 152), icon: false) { [weak self] (snapShotImage) in
             guard let `self` = self else { return }
             self.imgViewMap.image = snapShotImage

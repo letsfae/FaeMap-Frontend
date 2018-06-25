@@ -33,8 +33,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var btnShare: UIButton!
     private var tblPlaceDetail: UITableView!
     private let arrTitle = ["Similar Places", "Near this Place"]
-    private var arrRelatedPlaces = [[PlacePin]]()
     private var arrSimilarPlaces = [PlacePin]()
+    private var placeIdSet = Set<Int>()
     private var arrNearbyPlaces = [PlacePin]()
     private let faePinAction = FaePinAction()
     private var boolSaved: Bool = false
@@ -88,7 +88,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         initPlaceRelatedData()
         
-        let content = place.class_2
+        let content = place.category
         if catDict[content] == nil {
             catDict[content] = 0
         } else {
@@ -148,12 +148,28 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let lat = String(place.coordinate.latitude)
         let long = String(place.coordinate.longitude)
         getRelatedPlaces(lat, long, isSimilar: true) {
+            print("Exist duplicate place: \(self.testDuplicates())")
+            
             self.getRelatedPlaces(lat, long, isSimilar: false, {
                 self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
                 self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
                 self.tblPlaceDetail.reloadData()
             })
         }
+    }
+    
+    private func testDuplicates() -> Bool {
+        // for duplicates test
+        var testset = Set<PlacePin>()
+        for similar in self.arrSimilarPlaces {
+            if (testset.contains(similar)) {
+                vickyprint(similar.id)
+                vickyprint(arrSimilarPlaces)
+                return true
+            }
+            testset.insert(similar)
+        }
+        return false
     }
     
     private func setCellCount() {
@@ -204,30 +220,115 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private func getRelatedPlaces(_ lat: String, _ long: String, isSimilar: Bool, _ completion: @escaping () -> Void) {
         if isSimilar {
             arrSimilarPlaces.removeAll()
-            FaeSearch.shared.whereKey("content", value: place.class_2 == "" ? place.class_1 : place.class_2)
-            FaeSearch.shared.whereKey("source", value: "categories")
-            FaeSearch.shared.whereKey("type", value: "place")
-            FaeSearch.shared.whereKey("size", value: "20")
-            FaeSearch.shared.whereKey("radius", value: "20000")
-            FaeSearch.shared.whereKey("offset", value: "0")
-            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-            FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                          "longitude": long])
-            FaeSearch.shared.search { [weak self] (status, message) in
+            placeIdSet.removeAll()
+            if place.class_4 != "" {
+                FaeSearch.shared.whereKey("content", value: place.class_4)
+                FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
+            if place.class_3 != "" {
+                FaeSearch.shared.whereKey("content", value: place.class_3)
+                FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
+            if place.class_2 != "" {
+                FaeSearch.shared.whereKey("content", value: place.class_2)
+                FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
+            if place.class_1 != "" {
+                FaeSearch.shared.whereKey("content", value: place.class_1)
+                FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
+            
+            if FaeSearch.shared.searchContent.isEmpty {
+                self.intSimilar = 0
+                return
+            }
+            
+            FaeSearch.shared.searchBulk { [weak self] (status, message) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
-                    //print("Get Related Places Fail \(status) \(message!)")
+                    print("Get Related Places Fail \(status) \(message!)")
                     self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                     completion()
                     return
                 }
                 let json = JSON(message!)
-                guard let placeJson = json.array else { return }
-                self.arrSimilarPlaces = placeJson.map({ PlacePin(json: $0) })
-                self.arrSimilarPlaces = self.arrSimilarPlaces.filter({ $0.id != self.place.id })
+//                vickyprint(json)
+                guard let placesJson = json.array else { return }
+                vickyprint("placesJson \(placesJson.count)")
+                for similarPlaces in placesJson {
+                    guard let similarJson = similarPlaces.array else { return }
+                    vickyprint("similarJson \(similarJson.count)")
+                    let places = similarJson.map( { PlacePin(json: $0) } )
+                    for place in places {
+                        if place.id != self.place.id && !self.placeIdSet.contains(place.id) {
+                            self.arrSimilarPlaces.append(place)
+                            self.placeIdSet.insert(place.id)
+                        }
+                    }
+                }
+                
+                vickyprint("set \(self.placeIdSet.count)")
+                self.arrSimilarPlaces = Array(self.arrSimilarPlaces.prefix(20))
                 self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                 completion()
             }
+            
+//            FaeSearch.shared.whereKey("content", value: place.class_2 == "" ? place.class_1 : place.class_2)
+//            FaeSearch.shared.whereKey("source", value: "categories")
+//            FaeSearch.shared.whereKey("type", value: "place")
+//            FaeSearch.shared.whereKey("size", value: "20")
+//            FaeSearch.shared.whereKey("radius", value: "20000")
+//            FaeSearch.shared.whereKey("offset", value: "0")
+//            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+//            FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+//                                                          "longitude": long])
+//            FaeSearch.shared.search { [weak self] (status, message) in
+//                guard let `self` = self else { return }
+//                guard status / 100 == 2 && message != nil else {
+//                    //print("Get Related Places Fail \(status) \(message!)")
+//                    self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+//                    completion()
+//                    return
+//                }
+//                let json = JSON(message!)
+//                guard let placeJson = json.array else { return }
+//                self.arrSimilarPlaces = placeJson.map({ PlacePin(json: $0) })
+//                self.arrSimilarPlaces = self.arrSimilarPlaces.filter({ $0.id != self.place.id })
+//                self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+//                completion()
+//            }
         } else { // Near this Location
             arrNearbyPlaces.removeAll()
             FaeMap.shared.whereKey("geo_latitude", value: lat)
@@ -520,7 +621,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         vc.viewModelPlaces = places
         vc.strTitle = places.title
 //        vc.recommendedPlaces = places
-//        vc.strTitle = places.title
+//        vc.strTit le = places.title
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -625,7 +726,7 @@ class FixedHeader: UIView {
     
     public func setValue(place: PlacePin) {
         lblName.text = place.name
-        lblCategory.text = place.class_1
+        lblCategory.text = place.category
         lblPrice.text = place.price
     }
 }
