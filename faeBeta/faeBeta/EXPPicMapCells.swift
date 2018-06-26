@@ -162,7 +162,7 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
 
 class EXPClctImgCell: UICollectionViewCell {
     
-    private var img: UIImageView!
+    private var imgPic: UIImageView!
     private var activityIndicator: UIActivityIndicatorView!
     
     override init(frame: CGRect) {
@@ -177,18 +177,18 @@ class EXPClctImgCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        img.image = nil
+        imgPic.image = nil
     }
     
     private func loadCellItems() {
-        img = UIImageView()
-        img.contentMode = .scaleAspectFill
-        img.layer.cornerRadius = 5
-        img.clipsToBounds = true
+        imgPic = UIImageView()
+        imgPic.contentMode = .scaleAspectFill
+        imgPic.layer.cornerRadius = 5
+        imgPic.clipsToBounds = true
         //        img.image = #imageLiteral(resourceName: "exp_pic_demo")
-        addSubview(img)
-        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: img)
-        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: img)
+        addSubview(imgPic)
+        addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: imgPic)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: imgPic)
         
         activityIndicator = createActivityIndicator(large: true)
         addSubview(activityIndicator)
@@ -198,12 +198,17 @@ class EXPClctImgCell: UICollectionViewCell {
     
     func updateImages(imgURL: String) {
         guard imgURL != "" else {
-            img.image = #imageLiteral(resourceName: "default_place")
+            imgPic.image = #imageLiteral(resourceName: "default_place")
             return
         }
-        activityIndicator.startAnimating()
-        General.shared.downloadImageForView(url: imgURL, imgPic: img) {
-            self.activityIndicator.stopAnimating()
+        imgPic.backgroundColor = ._210210210()
+        imgPic.image = nil
+        imgPic.sd_setShowActivityIndicatorView(true)
+        imgPic.sd_setImage(with: URL(string: imgURL), placeholderImage: nil, options: []) { [weak self] (img, err, cacheType, _) in
+            if img == nil || err != nil {
+                self?.imgPic.image = Key.shared.defaultPlace
+            }
+            self?.imgPic.sd_setShowActivityIndicatorView(false)
         }
     }
 }

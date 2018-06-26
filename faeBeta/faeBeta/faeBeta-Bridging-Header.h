@@ -29,3 +29,4 @@
 #import "CCHMapViewDelegateProxy.h"
 #import "CCHNearCenterMapClusterer.h"
 
+#import "SDWebImage/UIImageView+WebCache.h"

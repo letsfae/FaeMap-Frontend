@@ -51,9 +51,14 @@ class PlacesListCell: UITableViewCell {
         var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
         addr += placeInfo.address2
         lblAddress.text = addr
-        imgPic.backgroundColor = ._210210210()
-        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgPic)
         bottomLine.isHidden = last
+        imgPic.backgroundColor = ._210210210()
+        imgPic.image = nil
+        imgPic.sd_setImage(with: URL(string: placeInfo.imageURL), placeholderImage: nil, options: []) { [weak self] (img, err, cacheType, _) in
+            if img == nil || err != nil {
+                self?.imgPic.image = Key.shared.defaultPlace
+            }
+        }
     }
     
     private func loadRecommendedCellContent() {

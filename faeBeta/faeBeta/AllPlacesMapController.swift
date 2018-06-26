@@ -48,6 +48,8 @@ class AllPlacesMapController: BasicMapController {
         }
     }
     
+    static var isBackToLastPlaceDetailVCEnabled: Bool = true
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -422,14 +424,14 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                     return
                 }
-                
                 guard var arrCtrlers = navigationController?.viewControllers else {
                     showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
                     return
                 }
-                
-                while !(arrCtrlers.last is PlaceDetailViewController) {
-                    arrCtrlers.removeLast()
+                if AllPlacesMapController.isBackToLastPlaceDetailVCEnabled {
+                    while !(arrCtrlers.last is PlaceDetailViewController) {
+                        arrCtrlers.removeLast()
+                    }
                 }
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placeData
