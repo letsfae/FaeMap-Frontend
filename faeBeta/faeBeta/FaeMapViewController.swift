@@ -88,14 +88,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Selected Place Control
     private var selectedPlaceAnno: PlacePinAnnotationView?
     private var selectedPlace: FaePinAnnotation?
-    private var swipingState: PlaceInfoBarState = .map {
-        didSet {
-            guard fullyLoaded else { return }
-            btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
-            btnTapToShowResultTbl.isHidden = swipingState != .multipleSearch
-            tblPlaceResult.isHidden = swipingState != .multipleSearch
-        }
-    }
+    
     private var boolSelecting = false
     private var firstSelectPlace = true
     
@@ -109,6 +102,14 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var locationsFromSearch = [LocationPin]()
     private var pinsFromSearch = [FaePinAnnotation]()
     private var strSearchedText: String = ""
+    private var swipingState: PlaceInfoBarState = .map {
+        didSet {
+            guard fullyLoaded else { return }
+            btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
+            btnTapToShowResultTbl.isHidden = swipingState != .multipleSearch
+            tblPlaceResult.isHidden = swipingState != .multipleSearch
+        }
+    }
     
     // Name Card
     private var uiviewNameCard: FMNameCardView!
@@ -1282,7 +1283,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
         if annotation is MKUserLocation {
             let identifier = "self"
             var anView: SelfAnnotationView
@@ -1386,7 +1386,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     }
     
     private func deselectAllPlaceAnnos(full: Bool = true) {
-        
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
         
@@ -2103,7 +2102,6 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     
     // PlaceViewDelegate
     func goTo(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil, animated: Bool = true) {
-        
         func findAnnotation() {
             if let placeData = place {
                 var desiredAnno: CCHMapClusterAnnotation!
@@ -2657,7 +2655,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 tblPlaceResult.loading(current: placePin)
             }
         }
-        
     }
     
     private func updatePlacePins() {
@@ -2755,13 +2752,20 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     // MARK: - Reload Place Pins
     private func reloadPlacePinsOnMap(places: [PlacePin], completion: @escaping () -> Void) {
-        placeClusterManager.isForcedRefresh = true
-        placeClusterManager.removeAnnotations(pinsFromSearch) {
-            self.pinsFromSearch = places.map({ FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0 as AnyObject) })
-            self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
-                self.placeClusterManager.isForcedRefresh = false
-                completion()
-            })
+        var pinsToReAdd = [FaePinAnnotation]()
+        if modeCollection == .off {
+            pinsToReAdd = pinsFromSearch
+        } else {
+            pinsToReAdd = pinsFromCollection
+        }
+        removePlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true) {
+            pinsToReAdd = places.map({ FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0 as AnyObject) })
+            if self.modeCollection == .off {
+                self.pinsFromSearch = pinsToReAdd
+            } else {
+                self.pinsFromCollection = pinsToReAdd
+            }
+            self.addPlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true)
         }
     }
 }

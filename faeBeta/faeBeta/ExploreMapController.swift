@@ -30,7 +30,7 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
         faeMapView.singleTap.isEnabled = true
         faeMapView.doubleTap.isEnabled = false
         faeMapView.longPress.isEnabled = false
-        faeMapView.isSingleTapToShowFourIconsEnabled = false
+        faeMapView.isShowFourIconsEnabled = false
         faeMapView.mapAction = self
         btnZoom.isHidden = true
         btnLocat.isHidden = true
