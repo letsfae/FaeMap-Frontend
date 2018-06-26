@@ -137,7 +137,7 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         case 9:
             content = "Fitness"
         case 10:
-            content = "Groceries"
+            content = "Grocery"
         case 11:
             content = "Pharmacy"
         default: break

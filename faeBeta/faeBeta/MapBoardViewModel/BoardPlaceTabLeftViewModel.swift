@@ -15,10 +15,14 @@ class BoardPlaceTabLeftViewModel {
     
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
         didSet {
-            categoryToPlaces = [:]
-            for category in arrCategories {
-                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
-            }
+//            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
+//            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
+//            if to.distance(from: from) > 282 {
+                categoryToPlaces = [:]
+                for category in arrCategories {
+                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+                }
+//            }
         }
     }
     
@@ -54,7 +58,7 @@ class BoardPlaceTabLeftViewModel {
     private func searchByCategories(content: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var placePins: [PlacePin] = []
         FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: "categories")
+        FaeSearch.shared.whereKey("source", value: "class_one")
         FaeSearch.shared.whereKey("type", value: "place")
         FaeSearch.shared.whereKey("size", value: "20")
         FaeSearch.shared.whereKey("radius", value: "100000")

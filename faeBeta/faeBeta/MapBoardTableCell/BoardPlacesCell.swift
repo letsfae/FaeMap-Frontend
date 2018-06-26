@@ -65,6 +65,7 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
 
         self.viewModelPlaces = viewModelPlaces
         colInfo.reloadData()
+        colInfo.scrollToTop(animated: false)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
