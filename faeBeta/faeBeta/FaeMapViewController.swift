@@ -2713,7 +2713,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         FaeMap.shared.whereKey("geo_longitude", value: "\(locToRefresh.longitude)")
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
-        FaeMap.shared.whereKey("max_count", value: "200")
+        FaeMap.shared.whereKey("max_count", value: "1000")
         FaeMap.shared.getMapInformation { [unowned self] (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_0))

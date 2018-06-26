@@ -99,7 +99,6 @@ class PlacesCollectionCell: UICollectionViewCell {
     var imgPic: UIImageView!
     var lblName: UILabel!
     var lblAddress: UILabel!
-    var indicatorView: UIActivityIndicatorView!
     
     override init(frame : CGRect) {
         super.init(frame: frame)
@@ -127,11 +126,6 @@ class PlacesCollectionCell: UICollectionViewCell {
         lblAddress.textColor = UIColor._115115115()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addSubview(lblAddress)
-        
-        indicatorView = createActivityIndicator(large: true)
-        indicatorView.center.x = 60
-        indicatorView.center.y = 60
-        addSubview(indicatorView)
     }
     
     func setValueForColCell(place: BoardPlaceViewModel) {
@@ -143,10 +137,12 @@ class PlacesCollectionCell: UICollectionViewCell {
 //        addr += place.address2
 //        lblAddress.text = addr
         
-        imgPic.backgroundColor = .white
-        indicatorView.startAnimating()
-        General.shared.downloadImageForView(url: place.imageURL, imgPic: imgPic) {
-            self.indicatorView.stopAnimating()
+        imgPic.backgroundColor = ._210210210()
+        imgPic.image = nil
+        imgPic.sd_setImage(with: URL(string: place.imageURL), placeholderImage: nil, options: []) { [weak self] (img, err, cacheType, _) in
+            if img == nil || err != nil {
+                self?.imgPic.image = Key.shared.defaultPlace
+            }
         }
     }
 }
