@@ -269,7 +269,7 @@ class NewSelectLocationViewController: UIViewController, UIGestureRecognizerDele
         faeMapView.singleTap.isEnabled = !boolFromExplore
         faeMapView.doubleTap.isEnabled = !boolFromExplore
         faeMapView.longPress.isEnabled = !boolFromExplore
-        faeMapView.isSingleTapToShowFourIconsEnabled = false
+        faeMapView.isShowFourIconsEnabled = false
         faeMapView.mapAction = self
         view.addSubview(faeMapView)
         

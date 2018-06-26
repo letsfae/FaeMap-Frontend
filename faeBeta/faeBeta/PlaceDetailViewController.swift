@@ -620,6 +620,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let vc = AllPlacesViewController()
         vc.viewModelPlaces = places
         vc.strTitle = places.title
+        AllPlacesMapController.isBackToLastPlaceDetailVCEnabled = true
 //        vc.recommendedPlaces = places
 //        vc.strTit le = places.title
         navigationController?.pushViewController(vc, animated: true)

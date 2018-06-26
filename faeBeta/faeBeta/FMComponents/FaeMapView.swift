@@ -54,7 +54,8 @@ class FaeMapView: MKMapView {
     
     public var isSingleTapOnLocPinEnabled: Bool = false
     public var isDoubleTapOnMKAnnoViewEnabled: Bool = true
-    public var isSingleTapToShowFourIconsEnabled: Bool = true
+    public var isShowFourIconsEnabled: Bool = true
+    public var isOnlyCreatingLocationPin: Bool = false
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -106,7 +107,7 @@ class FaeMapView: MKMapView {
                     mapAction?.placePinTap?(view: anView)
                     anView.optionsReady = true
                 } else if anView.optionsReady && !anView.optionsOpened {  // second tap place pin
-                    guard isSingleTapToShowFourIconsEnabled else { return }
+                    guard isShowFourIconsEnabled else { return }
                     anView.showButtons()
                     anView.optionsOpened = true
                     mapAction?.placePinTap?(view: anView)
@@ -168,7 +169,9 @@ class FaeMapView: MKMapView {
                     anView.optionsReady = true
                     anView.optionsOpened = true
                     mapAction?.placePinTap?(view: anView)
-                    anView.showButtons()
+                    if isShowFourIconsEnabled {
+                        anView.showButtons()
+                    }
                 }
             } else if let anView = v as? UserPinAnnotationView {
                 mapAction?.allPlacesDeselect?(true)
@@ -201,7 +204,9 @@ class FaeMapView: MKMapView {
                     mapAction?.allPlacesDeselect?(true)
                     anView.optionsOpened = true
                     mapAction?.placePinTap?(view: anView)
-                    anView.showButtons()
+                    if !isOnlyCreatingLocationPin {
+                        anView.showButtons()
+                    }
                 }
             } else if let _ = v as? UserPinAnnotationView {
                 block = true
@@ -215,7 +220,9 @@ class FaeMapView: MKMapView {
                     mapAction?.allPlacesDeselect?(true)
                     anView.optionsOpened = true
                     mapAction?.locPinTap?(view: anView)
-                    anView.showButtons()
+                    if !isOnlyCreatingLocationPin {
+                        anView.showButtons()
+                    }
                 }
             } else {
                 if !(v is UIButton) {
@@ -225,6 +232,14 @@ class FaeMapView: MKMapView {
             mapAction?.longPressAllTimeCtrlWhenBegan?()
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             let v: Any? = hitTest(tapPoint, with: nil)
+            guard !isOnlyCreatingLocationPin else {
+                let delayInSeconds: Double = 0.1
+                let popTime = DispatchTime.now() + delayInSeconds
+                DispatchQueue.main.asyncAfter(deadline: popTime) {
+                    self.block = false
+                }
+                return
+            }
             if let anView = v as? PlacePinAnnotationView {
                 if anView.optionsOpened {
                     anView.hideButtons()
@@ -252,6 +267,7 @@ class FaeMapView: MKMapView {
                 self.block = false
             }
         } else if sender.state == .changed {
+            guard !isOnlyCreatingLocationPin else { return }
             if isPlaceAnno {
                 guard let anView = selectedPlaceAnno else { return }
                 guard anView.arrBtns.count == 4 else { return }
