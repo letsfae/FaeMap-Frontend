@@ -117,13 +117,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - No Result and Loading
-    public func changeState(isLoading: Bool, isNoResult: Bool) {
+    public func changeState(isLoading: Bool, isNoResult: Bool?) {
         self.show()
         imgBack_1.showOrHideLoadingIndicator(show: isLoading)
-        imgBack_1.showOrHideNoResultIndicator(show: isNoResult)
-        self.isSwipeDisabled = isLoading || isNoResult
+        if let noResult = isNoResult {
+            imgBack_1.showOrHideNoResultIndicator(show: noResult)
+            self.isNoResult = noResult
+            self.isSwipeDisabled = isLoading || noResult
+        } else {
+            self.isSwipeDisabled = isLoading
+        }
         self.isLoading = isLoading
-        self.isNoResult = isNoResult
         shrink {}
     }
     
