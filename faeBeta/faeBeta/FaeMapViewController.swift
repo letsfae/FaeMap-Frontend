@@ -1896,7 +1896,7 @@ extension FaeMapViewController: MapSearchDelegate {
         deselectAllLocAnnos()
         cancelAllPinLoading()
         showOrHideRefreshIcon(show: false, animated: false)
-        tblPlaceResult.changeState(isLoading: true, isNoResult: false)
+        tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
         removePlaceUserPins({
             self.swipingState = .multipleSearch
             self.PLACE_INSTANT_SHOWUP = true
@@ -2643,6 +2643,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
         }
         tblPlaceResult.show()
+        tblPlaceResult.changeState(isLoading: false, isNoResult: false)
         tblPlaceResult.resetSubviews()
         tblPlaceResult.tag = 1
         mapView(faeMapView, regionDidChangeAnimated: false)

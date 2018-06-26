@@ -552,13 +552,11 @@ class PlaceView: UIView {
     public func showOrHideNoResultIndicator(show: Bool) {
         guard isLoadingIndicatorAndNoResultLabelEnabled else { return }
         lblNoResult.isHidden = !show
-        if show {
-            imgType.isHidden = show
-            lblName.isHidden = show
-            lblAddr.isHidden = show
-            lblHours.isHidden = show
-            lblPrice.isHidden = show
-        }
+        imgType.isHidden = show
+        lblName.isHidden = show
+        lblAddr.isHidden = show
+        lblHours.isHidden = show
+        lblPrice.isHidden = show
     }
     
     func setValueForPlace(placeInfo: PlacePin) {
