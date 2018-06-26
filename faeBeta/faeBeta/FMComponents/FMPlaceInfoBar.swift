@@ -443,7 +443,6 @@ class PlaceView: UIView {
     private var lblPrice: UILabel!
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
     private var arrHour = [[String]]()
-    private var indicatorImage: UIActivityIndicatorView!
     private var indicatorLoading: UIActivityIndicatorView!
     private var lblNoResult: UILabel!
     public var isLoadingIndicatorAndNoResultLabelEnabled: Bool = false
@@ -514,14 +513,6 @@ class PlaceView: UIView {
         lblPrice.font = UIFont(name: "AvenirNext-Medium", size: 13)
         addConstraintsWithFormat("H:[v0(32)]-12-|", options: [], views: lblPrice)
         addConstraintsWithFormat("V:|-63-[v0(18)]", options: [], views: lblPrice)
-        
-        indicatorImage = UIActivityIndicatorView()
-        indicatorImage.activityIndicatorViewStyle = .white
-        indicatorImage.center.x = 45
-        indicatorImage.center.y = 45
-        indicatorImage.hidesWhenStopped = true
-        indicatorImage.color = UIColor._2499090()
-        addSubview(indicatorImage)
     }
     
     private func loadLoadingIndicator() {
@@ -556,7 +547,6 @@ class PlaceView: UIView {
         lblAddr.isHidden = show
         lblHours.isHidden = show
         lblPrice.isHidden = show
-        indicatorImage.isHidden = show
     }
     
     public func showOrHideNoResultIndicator(show: Bool) {
@@ -593,15 +583,17 @@ class PlaceView: UIView {
         }
         
         loadPlaceImage(placeInfo: placeInfo)
-//        General.shared.downloadImageForView(place: placeInfo, url: placeInfo.imageURL, imgPic: imgType)
     }
     
     private func loadPlaceImage(placeInfo: PlacePin) {
-        imgType.alpha = 0
-        indicatorImage.startAnimating()
-        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgType) {
-            self.imgType.alpha = 1
-            self.indicatorImage.stopAnimating()
+        imgType.backgroundColor = .white
+        imgType.alpha = 1
+        imgType.sd_setShowActivityIndicatorView(true)
+        imgType.sd_setImage(with: URL(string: placeInfo.imageURL), placeholderImage: nil, options: [.retryFailed]) { [weak self] (img, err, _, _) in
+            if img == nil || err != nil {
+                self?.imgType.image = Key.shared.defaultPlace
+            }
+            self?.imgType.sd_setShowActivityIndicatorView(false)
         }
     }
     
