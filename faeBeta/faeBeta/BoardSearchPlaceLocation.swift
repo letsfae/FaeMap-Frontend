@@ -69,6 +69,7 @@ extension MapBoardViewController: SelectLocationDelegate {
     func jumpToCategory(category: String) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = category
+        tblPlaceRight.scrollToTop(animated: false)
         viewModelPlaces.category = category
         print("category")
         updateLocationInViewModel(updatePlaces: false)
@@ -104,12 +105,15 @@ extension MapBoardViewController: SelectLocationDelegate {
     private func updateLocationInViewModel(updateCategory: Bool = true, updatePlaces: Bool = true, updatePeople: Bool = true) {
         if updateCategory {
             viewModelCategories.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+            tblPlaceLeft.scrollToTop(animated: false)
         }
         if updatePlaces {
             viewModelPlaces.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+            tblPlaceRight.scrollToTop(animated: false)
         }
         if updatePeople {
             viewModelPeople.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+            tblPeople.scrollToTop(animated: false)
         }
     }
     

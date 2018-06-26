@@ -12,11 +12,15 @@ import SwiftyJSON
 class BoardPlaceTabRightViewModel {
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
         didSet {
-            if category == "All Places" {
-                getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
-            } else {
-                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
-            }
+//            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
+//            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
+//            if to.distance(from: from) > 282 {
+                if category == "All Places" {
+                    getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
+                } else {
+                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+                }
+//            }
         }
     }
     
@@ -130,13 +134,6 @@ class BoardPlaceTabRightViewModel {
             
             places = placeInfo.map({ PlacePin(json: $0) })
             self?.places = places
-            
-            if source == "name" {
-//                self.showOrHideViews(searchText: content)
-            } else {
-//                self.delegate?.jumpToPlaces?(searchText: content, places: self.filteredPlaces)
-//                self.navigationController?.popViewController(animated: false)
-            }
         }
     }
 }

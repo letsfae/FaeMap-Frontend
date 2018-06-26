@@ -53,8 +53,8 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
     @objc func actionClearSearchResults(_ sender: UIButton) {
         lblSearchContent.text = "All Places"
         btnClearSearchRes.isHidden = true
-        viewModelPlaces.category = "All Places"
         tblPlaceRight.scrollToTop(animated: false)
+        viewModelPlaces.category = "All Places"
     }
     
     // MARK: - SeeAllPlacesDelegate

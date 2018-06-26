@@ -12,7 +12,12 @@ import SwiftyJSON
 class BoardPeopleViewModel {
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
         didSet {
+//            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
+//            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
+//            print(to.distance(from: from))
+//            if to.distance(from: from) > 282 {
             getPeopleInfo(latitude: location.latitude, longitude: location.longitude)
+//            }
         }
     }
     
