@@ -62,6 +62,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         let vc = AllPlacesViewController()
         vc.viewModelPlaces = places
         vc.strTitle = places.title
+        AllPlacesMapController.isBackToLastPlaceDetailVCEnabled = false
 //        vc.recommendedPlaces = places
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -12,6 +12,7 @@ target 'faeBeta' do
     pod 'IVBezierPathRenderer'
     pod 'CHIPageControl/Aleppo'
     pod 'CHIPageControl/Chimayo'
+    pod 'SDWebImage', '~> 4.0'
 end
 
 post_install do |installer|

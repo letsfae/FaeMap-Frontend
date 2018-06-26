@@ -85,6 +85,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         // loading order
         loadTable()
+        addPullToRefresh()
         loadPlaceTabView()
         loadNearbyPeopleFilter()
         loadChooseLocation()
@@ -130,11 +131,14 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     }
     
     func loadViewModels() {
+        LocManager.shared.locToSearch_board = LocManager.shared.curtLoc.coordinate
+        
         // viewModelCategories - BoardPlaceTabLeftViewModel
         viewModelCategories = BoardPlaceTabLeftViewModel()
         viewModelCategories.location = LocManager.shared.curtLoc.coordinate
         viewModelCategories.categoriesDataLoaded = { [unowned self] (categories) in
             self.tblPlaceLeft.reloadData()
+            self.tblPlaceLeft.stopPullRefreshEver()
         }
         
         // viewModelPlaces - BoardPlaceTabRightViewModel
@@ -142,6 +146,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         viewModelPlaces.category = "All Places"
         viewModelPlaces.placesDataLoaded = { [unowned self] (places) in
             self.tblPlaceRight.reloadData()
+            self.tblPlaceRight.stopPullRefreshEver()
         }
         viewModelPlaces.boolDataLoaded = { [unowned self] (loaded) in
             if loaded {
@@ -158,10 +163,12 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         viewModelPeople.location = LocManager.shared.curtLoc.coordinate
         viewModelPeople.boolUserVisible = { [unowned self] (visible) in
             self.tblPeople.reloadData()
+            self.tblPeople.stopPullRefreshEver()
         }
         
         viewModelPeople.peopleDataLoaded = { [unowned self] (people) in
             self.tblPeople.reloadData()
+            self.tblPeople.stopPullRefreshEver()
         }
         viewModelPeople.boolDataLoaded = { [unowned self] (loaded) in
             if loaded {
@@ -320,7 +327,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         tblPlaceLeft.showsVerticalScrollIndicator = false
         tblPlaceLeft.scrollsToTop = true
         
-        tblPlaceRight = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - 51 - device_offset_top - device_offset_bot), style: .plain)
+        tblPlaceRight = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - 51 - device_offset_top - device_offset_bot + 1), style: .plain)
         view.addSubview(tblPlaceRight)
         tblPlaceRight.backgroundColor = .white
         tblPlaceRight.register(AllPlacesCell.self, forCellReuseIdentifier: "AllPlacesCell")
@@ -328,7 +335,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         tblPlaceRight.delegate = self
         tblPlaceRight.dataSource = self
         tblPlaceRight.separatorStyle = .none
-        tblPlaceRight.showsVerticalScrollIndicator = false
+        tblPlaceRight.showsVerticalScrollIndicator = true
         tblPlaceRight.scrollsToTop = true
         
         tblPeople = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot), style: .plain)
@@ -345,6 +352,36 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
 //        tblPlaceLeft.backgroundColor = .blue
 //        tblPlaceRight.backgroundColor = .green
 //        tblPeople.backgroundColor = .red
+    }
+    
+    fileprivate func addPullToRefresh() {
+        tblPlaceLeft.addPullRefresh { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+                if let locToSearch = LocManager.shared.locToSearch_board {
+                    self?.viewModelCategories.location = locToSearch
+                } else {
+                    self?.viewModelCategories.location = LocManager.shared.curtLoc.coordinate
+                }
+            })
+        }
+        tblPlaceRight.addPullRefresh { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+                if let locToSearch = LocManager.shared.locToSearch_board {
+                    self?.viewModelPlaces.location = locToSearch
+                } else {
+                    self?.viewModelPlaces.location = LocManager.shared.curtLoc.coordinate
+                }
+            })
+        }
+        tblPeople.addPullRefresh { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+                if let locToSearch = LocManager.shared.locToSearch_board {
+                    self?.viewModelPeople.location = locToSearch
+                } else {
+                    self?.viewModelPeople.location = LocManager.shared.curtLoc.coordinate
+                }
+            })
+        }
     }
     
     // each time change the table mode (click the button in drop menu), call setViewContent()
