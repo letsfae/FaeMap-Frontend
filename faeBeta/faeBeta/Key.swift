@@ -107,6 +107,7 @@ class Key: NSObject { //  singleton class
     let defaultMale = UIImage(named: "defaultMen")
     let defaultFemale = UIImage(named: "defaultWomen")
     let faeAvatar = UIImage(named: "faeAvatar")
+    let defaultPlace = UIImage(named: "default_place")
     
     // MARK: - Location Seaerch
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)

@@ -79,18 +79,20 @@ class BoardPlaceTabRightViewModel {
         FaeMap.shared.whereKey("max_count", value: "200")
         FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
             self?.loaded = true
-            
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
+                self?.places = []
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfo = placeInfoJSON.array else {
                 print("[loadMBPlaceInfo] fail to parse mapboard place info")
+                self?.places = []
                 return
             }
             if placeInfo.count <= 0 {
                 print("[loadMBPlaceInfo] array is nil")
+                self?.places = []
                 return
             }
             

@@ -219,22 +219,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
 }
 
 extension MapSearchViewController {
-    
-    /*
-    func gotoChatViewController() {
-        guard var arrCtrlers = navigationController?.viewControllers else {
-            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
-            return
-        }
-        arrCtrlers.removeLast()
-        arrCtrlers.removeLast()
-        guard arrCtrlers.last is ChatViewController else {
-            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
-            return
-        }
-        navigationController?.setViewControllers(arrCtrlers, animated: false)
-    }
-    */
  
     func updateSavedLocationToSearchInEachViewController(coordinate: CLLocationCoordinate2D) {
         switch previousVC {
