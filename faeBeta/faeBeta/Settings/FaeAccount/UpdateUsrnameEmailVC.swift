@@ -160,7 +160,7 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         uiviewShadowBG.backgroundColor = UIColor._107105105_a50()
         view.addSubview(uiviewShadowBG)
         
-        uiviewMsg = UIView(frame: CGRect(x: 0, y: 200, width: 290, height: 208))
+        uiviewMsg = UIView(frame: CGRect(x: 0, y: alert_offset_top, width: 290, height: 208))
         uiviewMsg.center.x = screenWidth / 2
         uiviewMsg.backgroundColor = .white
         uiviewMsg.layer.cornerRadius = 20

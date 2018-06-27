@@ -116,7 +116,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     private func loaduiviewAlert() {
-        uiviewAlert = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewAlert = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 161))
         uiviewAlert.center.x = screenWidth / 2
         uiviewAlert.backgroundColor = .white
         uiviewAlert.layer.cornerRadius = 19 * screenHeightFactor

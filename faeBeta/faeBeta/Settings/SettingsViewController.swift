@@ -101,7 +101,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     private func setupLogoutView() {
-        uiviewLogout = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 222))
+        uiviewLogout = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 222))
         uiviewLogout.center.x = screenWidth / 2
         uiviewLogout.backgroundColor = .white
         uiviewLogout.layer.cornerRadius = 21 * screenWidthFactor

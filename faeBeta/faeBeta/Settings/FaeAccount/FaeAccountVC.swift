@@ -53,7 +53,7 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionOK(_:)))
         uiviewGrayBG.addGestureRecognizer(tapGesture)
         
-        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 161))
         uiviewMsgSent.backgroundColor = .white
         uiviewMsgSent.center.x = screenWidth / 2
         uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor
