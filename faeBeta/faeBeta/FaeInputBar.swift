@@ -41,7 +41,7 @@ class FaeInputBar: UIView {
     /// The separator line between InputTextView and bottomStackView
     private let separatorLineMiddle: SeparatorLine = {
         let line = SeparatorLine()
-        line.height = 1.5
+        line.height = 1.0
         line.backgroundColor = UIColor._200199204()
         return line
     }()
@@ -157,7 +157,8 @@ class FaeInputBar: UIView {
     var faePhotoPicker: FaePhotoPicker!
     var btnQuickSendImage: UIButton!
     var viewAudioRecorder: AudioRecorderView!
-    var viewMiniLoc = LocationPickerMini()
+    //var viewMiniLoc: LocationPickerMini!
+    var viewMiniLoc: LocationMiniPicker!
     
     var prevInputView: UIView?
     
@@ -613,7 +614,7 @@ extension FaeInputBar {
 }
 
 // MARK: - InputView delegates
-extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRecorderViewDelegate {
+extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRecorderViewDelegate {
     
     func setupInputView(_ tag: Int) -> UIView? {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
@@ -638,9 +639,12 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
                 btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
                 faePhotoPicker.addSubview(btnMoreImage)
                 
-                btnQuickSendImage = UIButton(frame: CGRect(x: floatInputViewHeight - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
+                btnQuickSendImage = UIButton(frame: CGRect(x: screenWidth - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
                 btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
                 btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
+                faePhotoPicker.addSubview(btnQuickSendImage)
+                btnQuickSendImage.isHidden = true
+                
                 return faePhotoPicker
             }
             
@@ -677,6 +681,9 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
             viewAudioRecorder.delegate = self
             return viewAudioRecorder
         case .map?:
+            //viewMiniLoc = LocationPickerMini()
+            //viewMiniLoc.delegate = self
+            viewMiniLoc = LocationMiniPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
             viewMiniLoc.delegate = self
             return viewMiniLoc
         default: break
@@ -701,7 +708,7 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     // MARK: Quick photo picker button actions
     @objc func showFullAlbum() {
-        delegate?.faeInputBar(self, showFullView: "photo", with: nil)
+        delegate?.faeInputBar(self, showFullView: "photo", with: faePhotoPicker)
     }
 
     @objc func sendImageFromQuickPicker() {
@@ -713,6 +720,28 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     private func observeOnSelectedCount(_ count: Int) {
         btnQuickSendImage.isHidden = (count == 0)
+    }
+    
+    // MARK: LocationMiniPickerDelegate
+    func showFullLocationView(_ locationMiniPicker: LocationMiniPicker) {
+        delegate?.faeInputBar(self, showFullView: "map", with: nil)
+    }
+    
+    func selectLocation(_ locationMiniPicker: LocationMiniPicker, location: CLLocation) {
+        UIGraphicsBeginImageContext(locationMiniPicker.frame.size)
+        locationMiniPicker.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let thunbmnail = UIGraphicsGetImageFromCurrentImageContext() {
+            CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
+                guard let response = placemarks?[0] else {
+                    return // TODO
+                }
+                self.setupTopStackView(placemark: response, thumbnail: thunbmnail)
+            }
+        }
+    }
+    
+    func selectPlacePin(_ locationMiniPicker: LocationMiniPicker, placePin: PlacePin) {
+        setupTopStackView(place: placePin)
     }
     
     // MARK: LocationPickerMiniDelegate

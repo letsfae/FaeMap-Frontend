@@ -15,6 +15,7 @@ class InputBarTopPinView : UIView {
     var lblLine1: UILabel!
     var lblLine2: UILabel!
     var lblLine3: UILabel!
+    var activityIndicator: UIActivityIndicatorView!
     var location: CLLocation?
     var placeData: PlacePin?
     
@@ -29,10 +30,19 @@ class InputBarTopPinView : UIView {
         backgroundColor = UIColor.white
         
         imgView = UIImageView(frame: CGRect(x: 13, y: 10, width: 66, height: 66))
-        imgView.image = UIImage(named: "locationExtendViewHolder")
+        //imgView.image = UIImage(named: "locationExtendViewHolder")
         imgView.contentMode = .scaleAspectFill
         imgView.clipsToBounds = true
         addSubview(imgView)
+        
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = .white
+        activityIndicator.center.x = imgView.frame.width / 2
+        activityIndicator.center.y = imgView.frame.height / 2
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.color = UIColor._2499090()
+        imgView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
         
         lblLine1 = UILabel(frame: CGRect(x: 94, y: 17, width: 267 * screenWidthFactor, height: 22))
         lblLine1.text = "2714 S. HOOVER STREET"
@@ -70,6 +80,7 @@ class InputBarTopPinView : UIView {
     // MARK: - Helper methods
     func setThumbnail(image : UIImage) {
         imgView.image = image
+        activityIndicator.stopAnimating()
     }
     
     func setLabel(texts : [String]) {
