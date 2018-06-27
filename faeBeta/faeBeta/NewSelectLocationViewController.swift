@@ -436,7 +436,6 @@ extension NewSelectLocationViewController {
             break
         case .chat:
             let mapSearchVC = MapSearchViewController()
-            mapSearchVC.boolNoCategory = true
             mapSearchVC.boolFromChat = true
             mapSearchVC.faeMapView = faeMapView
             mapSearchVC.delegate = self
@@ -1238,7 +1237,7 @@ extension NewSelectLocationViewController {
                 return
             }
             self.placeAdderQueue.cancelAllOperations()
-            let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            let adder = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
             adder.completionBlock = {
                 DispatchQueue.main.async {
                     if adder.isCancelled {

@@ -46,13 +46,13 @@ extension MapSearchViewController {
             // for uiviewPics & uiviewSchResBg
             let cellCnt = calculateTableHeight()
             if searchText != "" && cellCnt > 0 {
-                uiviewPics.isHidden = true || boolNoCategory
+                uiviewPics.isHidden = true
                 uiviewSchResBg.isHidden = false
                 uiviewSchResBg.frame.origin.y = 124 + device_offset_top
                 uiviewSchResBg.frame.size.height = min(screenHeight - 139 - device_offset_top - device_offset_bot, CGFloat(68 * cellCnt))
                 tblPlacesRes.frame.size.height = uiviewSchResBg.frame.size.height
             } else {
-                uiviewPics.isHidden = false || boolNoCategory
+                uiviewPics.isHidden = false
                 uiviewSchResBg.isHidden = true
                 if searchText == "" {
                     uiviewPics.frame.origin.y = 124 + device_offset_top
@@ -77,7 +77,7 @@ extension MapSearchViewController {
             }
             tblPlacesRes.isScrollEnabled = true
         case .location:
-            uiviewPics.isHidden = true || boolNoCategory
+            uiviewPics.isHidden = true
             uiviewNoResult.isHidden = true
             uiviewSchResBg.isHidden = false
             uiviewSchResBg.frame.size.height = CGFloat(fixedLocOptions.count * 48)
@@ -98,7 +98,7 @@ extension MapSearchViewController {
         
         tblPlacesRes.reloadData()
         if boolFromChat {
-            uiviewPics.isHidden = true || boolNoCategory
+            uiviewPics.isHidden = true
         }
         activityStatus(isOn: false)
     }

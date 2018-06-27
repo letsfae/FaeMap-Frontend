@@ -46,6 +46,20 @@ enum FaePinType: String {
     case location
 }
 
+extension Timer {
+    class func cht_scheduledTimer(with interval: TimeInterval, repeats: Bool, block: @escaping (_ timer: Timer?) -> Void) -> Timer? {
+        let t = self.scheduledTimer(timeInterval: interval, target: self, selector: #selector(Timer.cht_invokeBlock(_:)), userInfo: block, repeats: repeats)
+        return t
+    }
+    
+    @objc class func cht_invokeBlock(_ timer: Timer?) {
+        let block: ((Timer) -> Void)? = timer?.userInfo as? ((Timer) -> Void)
+        if block != nil {
+            block!(timer!)
+        }
+    }
+}
+
 @objc class FaePinAnnotation: MKPointAnnotation {
     
     override func isEqual(_ object: Any?) -> Bool {
@@ -82,17 +96,20 @@ enum FaePinType: String {
     var isValid = false {
         didSet {
             if isValid {
-                self.timer?.invalidate()
-                self.timer = nil
-                self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+                timer?.invalidate()
+                timer = nil
+                timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
+//                timer = Timer.cht_scheduledTimer(with: getRandomTime(), repeats: false, block: { [weak self] (timer) in
+//                    self?.changePosition()
+//                })
             } else {
-                self.count = 0
-                self.timer?.invalidate()
-                self.timer = nil
+                count = 0
+                timer?.invalidate()
+                timer = nil
             }
         }
     }
-    private var timer: Timer?
+    private weak var timer: Timer?
     
     /// - parameter type: pin type, only 'place' and 'user' are available for now
     ///             cluster: the cluster manager passed from FaeMapViewController, default is nil
@@ -116,7 +133,10 @@ enum FaePinType: String {
             }
             avatar = Mood.avatars[miniAvatar] ?? UIImage()
             changePosition()
-            timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
+            //timer = Timer.cht_scheduledTimer(with: getRandomTime(), repeats: false, block: { [weak self] (timer) in
+            //    self?.changePosition()
+            //})
+            //timer = Timer.scheduledTimer(timeInterval: getRandomTime(), target: self, selector: #selector(changePosition), userInfo: nil, repeats: false)
         case .place:
             guard let placePin = data as? PlacePin else { return }
             id = placePin.id
@@ -135,10 +155,13 @@ enum FaePinType: String {
     
     deinit {
         self.isValid = false
+        self.count = 0
+        self.timer?.invalidate()
+        self.timer = nil
     }
     
     private func getRandomTime() -> Double {
-        return Double.random(min: 15, max: 30)
+        return Double.random(min: 15, max: 30) // 15 - 30
     }
     
     // change the position of user pin given the five fake coordinates from Fae-API
@@ -147,7 +170,10 @@ enum FaePinType: String {
         if count >= 5 {
             count = 0
         }
-        mapViewCluster?.removeAnnotations([self], withCompletionHandler: {
+        mapViewCluster?.isForcedRefresh = true
+        mapViewCluster?.removeAnnotations( [self], withCompletionHandler: { [weak self] in
+            guard let `self` = self else {
+                return }
             guard self.isValid else { return }
             if self.positions.indices.contains(self.count) {
                 self.coordinate = self.positions[self.count]
@@ -156,13 +182,19 @@ enum FaePinType: String {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+//                self.timer = Timer.cht_scheduledTimer(with: self.getRandomTime(), repeats: false, block: { [weak self] (timer) in
+//                    self?.changePosition()
+//                })
                 return
             }
-            self.mapViewCluster?.addAnnotations([self], withCompletionHandler: nil)
+            self.mapViewCluster?.addAnnotations( [self], withCompletionHandler: nil)
             self.count += 1
             self.timer?.invalidate()
             self.timer = nil
             self.timer = Timer.scheduledTimer(timeInterval: self.getRandomTime(), target: self, selector: #selector(self.changePosition), userInfo: nil, repeats: false)
+//            self.timer = Timer.cht_scheduledTimer(with: self.getRandomTime(), repeats: false, block: { [weak self] (timer) in
+//                self?.changePosition()
+//            })
         })
     }
 }
@@ -305,24 +337,28 @@ class SelfAnnotationView: MKAnnotationView {
         let offSet: CGFloat = CGFloat(-(circleWidth - mapAvatarWidth) / 2)
         let offSet_0: CGFloat = CGFloat(mapAvatarWidth / 2)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+            guard let `self` = self else { return }
             self.img.frame = CGRect(x: offSet_0, y: offSet_0, width: 0, height: 0)
             self.img.alpha = 0.8
             self.red.frame = CGRect(x: offSet_0 - 6.25, y: offSet_0 - 6.25, width: 12.5, height: 12.5)
             self.red.alpha = 0.9
             
-            UIView.animate(withDuration: 0.75, delay: 0, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.75, delay: 0, options: [.curveEaseOut], animations: { [weak self] in
+                guard let `self` = self else { return }
                 self.red.frame = CGRect(x: offSet_0 - 7.5, y: offSet_0 - 7.5, width: 15, height: 15)
                 self.red.alpha = 1
             }, completion: nil)
             
-            UIView.animate(withDuration: 2.25, delay: 0.25, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 2.25, delay: 0.25, options: [.curveEaseOut], animations: { [weak self] in
+                guard let `self` = self else { return }
                 self.img.frame = CGRect(x: offSet, y: offSet, width: circleWidth, height: circleWidth)
                 self.img.alpha = 0
             }, completion: { _ in
                 self.animations()
             })
-            UIView.animate(withDuration: 1, delay: 2, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 1, delay: 2, options: [.curveEaseOut], animations: { [weak self] in
+                guard let `self` = self else { return }
                 self.red.frame = CGRect(x: offSet_0 - 6.25, y: offSet_0 - 6.25, width: 12.5, height: 12.5)
                 self.red.alpha = 0.9
             }, completion: nil)
@@ -439,7 +475,8 @@ class PlacePinAnnotationView: MKAnnotationView {
     @objc private func showSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgSaved.alpha = 1
         }, completion: nil)
@@ -448,7 +485,8 @@ class PlacePinAnnotationView: MKAnnotationView {
     @objc private func hideSavedNoti() {
         guard imgSaved != nil else { return }
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
             self.imgSaved.alpha = 0
         }, completion: nil)
@@ -522,7 +560,8 @@ class PlacePinAnnotationView: MKAnnotationView {
         for btn in arrBtns {
             btn.addTarget(self, action: #selector(action(_:animated:)), for: .touchUpInside)
             btn.center = imgIcon.center
-            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: { [weak self] in
+                guard let `self` = self else { return }
                 btn.alpha = 1
                 if btn == self.btnDetail { btn.frame.origin = CGPoint(x: 0, y: 43) }
                 else if btn == self.btnCollect { btn.frame.origin = CGPoint(x: 35, y: 0) }
@@ -539,12 +578,14 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     public func hideButtons() {
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, animations: {
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            guard let `self` = self else { return }
             for btn in self.arrBtns {
                 btn.alpha = 0
                 btn.center = self.imgIcon.center
             }
-        }, completion: { _ in
+        }, completion: { [weak self] _ in
+            guard let `self` = self else { return }
             var point = self.frame.origin; point.x += 59 + 8; point.y += 56 + 5
             self.frame = CGRect(x: point.x, y: point.y, width: 56-16, height: 56-10)
             self.imgIcon.frame.origin = CGPoint(x: -8, y: -5)
@@ -562,7 +603,8 @@ class PlacePinAnnotationView: MKAnnotationView {
     
     public func optionsToNormal() {
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.btnDetail.frame.origin = CGPoint(x: 0, y: 43)
             self.btnCollect.frame.origin = CGPoint(x: 35, y: 0)
             self.btnRoute.frame.origin = CGPoint(x: 93, y: 0)
@@ -583,7 +625,8 @@ class PlacePinAnnotationView: MKAnnotationView {
         btnRoute.isSelected = sender == btnRoute
         btnShare.isSelected = sender == btnShare
         
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             for btn in self.arrBtns {
                 if btn == sender {
                     btn.frame.size = CGSize(width: 52, height: 52)
@@ -761,7 +804,8 @@ class LocPinAnnotationView: MKAnnotationView {
         for btn in arrBtns {
             btn.addTarget(self, action: #selector(action(_:animated:)), for: .touchUpInside)
             btn.center = imgIcon.center
-            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: {
+            UIView.animate(withDuration: 0.2, delay: delay, usingSpringWithDamping: 1, initialSpringVelocity: 0.5, options: [.curveEaseOut], animations: { [weak self] in
+                guard let `self` = self else { return }
                 btn.alpha = 1
                 if btn == self.btnDetail { btn.frame.origin = CGPoint(x: 0, y: 43) }
                 else if btn == self.btnCollect { btn.frame.origin = CGPoint(x: 35, y: 0) }
@@ -779,12 +823,14 @@ class LocPinAnnotationView: MKAnnotationView {
     public func hideButtons(animated: Bool = true) {
         guard arrBtns.count == 4 else { return }
         if animated {
-            UIView.animate(withDuration: 0.2, animations: {
+            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                guard let `self` = self else { return }
                 for btn in self.arrBtns {
                     btn.alpha = 0
                     btn.center = self.imgIcon.center
                 }
-            }, completion: { _ in
+            }, completion: { [weak self] _ in
+                guard let `self` = self else { return }
                 var point = self.frame.origin; point.x += 59; point.y += 56
                 self.frame = CGRect(x: point.x, y: point.y, width: 56, height: 56)
                 self.imgIcon.frame.origin = CGPoint.zero
@@ -812,7 +858,8 @@ class LocPinAnnotationView: MKAnnotationView {
     
     public func optionsToNormal() {
         guard arrBtns.count == 4 else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.btnDetail.frame.origin = CGPoint(x: 0, y: 43)
             self.btnCollect.frame.origin = CGPoint(x: 35, y: 0)
             self.btnRoute.frame.origin = CGPoint(x: 93, y: 0)
@@ -835,7 +882,8 @@ class LocPinAnnotationView: MKAnnotationView {
         if imgSaved == nil {
             showButtons()
         }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.imgSaved.frame = CGRect(x: 27, y: 1, width: 18, height: 18)
             self.imgSaved.alpha = 1
         }, completion: nil)
@@ -843,7 +891,8 @@ class LocPinAnnotationView: MKAnnotationView {
     
     @objc private func hideSavedNoti() {
         guard imgSaved != nil else { return }
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.imgSaved.frame = CGRect(x: 36, y: 10, width: 0, height: 0)
             self.imgSaved.alpha = 0
         }, completion: nil)
@@ -858,7 +907,8 @@ class LocPinAnnotationView: MKAnnotationView {
         btnRoute.isSelected = sender == btnRoute
         btnShare.isSelected = sender == btnShare
         
-        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: { [weak self] in
+            guard let `self` = self else { return }
             for btn in self.arrBtns {
                 if btn == sender {
                     btn.frame.size = CGSize(width: 52, height: 52)

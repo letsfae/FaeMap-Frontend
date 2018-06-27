@@ -8,10 +8,14 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class FaeMap {
     
     static let shared = FaeMap()
+    
+    // requests
+    var placePinsRequest: DataRequest?
     
     var keyValue = [String: String]()
     
@@ -33,6 +37,14 @@ class FaeMap {
     
     func getMapInformation(_ completion: @escaping (Int, Any?) -> Void) {
         getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            self.clearKeyValue()
+            completion(status, message)
+        }
+    }
+    
+    func getPlacePins(_ completion: @escaping (Int, Any?) -> Void) {
+        FaeMap.shared.placePinsRequest = getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+            joshprint("[getPlacePins] called")
             self.clearKeyValue()
             completion(status, message)
         }

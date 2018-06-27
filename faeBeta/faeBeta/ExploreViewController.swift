@@ -76,11 +76,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         DispatchQueue.main.async {
             self.loadContent()
             self.reloadBottomText("Loading...", "")
-            self.coordinate = LocManager.shared.curtLoc.coordinate
             self.searchAllCategories()
             self.fullyLoaded = true
             var location: CLLocation!
-            if let loc = Key.shared.lastChosenLoc {
+            if let loc = LocManager.shared.locToSearch_explore {
                 location = CLLocation(latitude: loc.latitude, longitude: loc.longitude)
             } else {
                 location = LocManager.shared.curtLoc
