@@ -76,7 +76,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     }
     
     private func loadContent() {
-        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 302))
+        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 302))
         uiviewChooseAction.center.x = screenWidth / 2
         uiviewChooseAction.backgroundColor = .white
         uiviewChooseAction.layer.cornerRadius = 20
@@ -129,7 +129,7 @@ class FriendOperationFromContactsViewController: UIViewController {
     }
     
     private func loadSendActRequest() {
-        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 161))
         uiviewMsgSent.backgroundColor = .white
         uiviewMsgSent.center.x = screenWidth / 2
         uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor

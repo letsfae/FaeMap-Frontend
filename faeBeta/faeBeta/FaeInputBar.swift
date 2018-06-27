@@ -463,7 +463,7 @@ class FaeInputBar: UIView {
                     let trimmedText = self.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
                     if self.boolHasPin, let pinView = self.topStackView.arrangedSubviews[0] as? InputBarTopPinView {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: pinView)
-                        
+                        self.closeTopStackView()
                     } else {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: nil)
                     }

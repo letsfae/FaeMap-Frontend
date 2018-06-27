@@ -368,7 +368,7 @@ extension LogInViewController {
     }
     
     private func loadContent() {
-        uiviewChooseMethod = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 262))
+        uiviewChooseMethod = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 262))
         uiviewChooseMethod.center.x = screenWidth / 2
         uiviewChooseMethod.backgroundColor = .white
         uiviewChooseMethod.layer.cornerRadius = 20
@@ -417,7 +417,7 @@ extension LogInViewController {
         uiviewInput.backgroundColor = UIColor._107105105_a50()
         view.addSubview(uiviewInput)
         
-        let uiviewBox = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 139))
+        let uiviewBox = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 139))
         uiviewBox.center.x = screenWidth / 2
         uiviewBox.backgroundColor = .white
         uiviewBox.layer.cornerRadius = 20
