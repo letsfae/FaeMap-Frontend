@@ -117,7 +117,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     // MARK: - No Result and Loading
-    public func changeState(isLoading: Bool, isNoResult: Bool?) {
+    public func changeState(isLoading: Bool, isNoResult: Bool?, shouldShrink: Bool = true) {
         self.show()
         imgBack_1.showOrHideLoadingIndicator(show: isLoading)
         if let noResult = isNoResult {
@@ -128,7 +128,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.isSwipeDisabled = isLoading
         }
         self.isLoading = isLoading
-        shrink {}
+        if shouldShrink {
+            shrink {}
+        }
     }
     
     public func canExpandOrShrink() -> Bool {

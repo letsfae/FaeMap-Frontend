@@ -87,12 +87,13 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
     }
 }
 
-func postToURL(_ className: String, parameter: [String: String], authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
+@discardableResult
+func postToURL(_ className: String, parameter: [String: String], authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) -> DataRequest {
     
     let fullURL = Key.shared.baseURL + "/" + className
     let headers = Key.shared.header(auth: authentication != nil, type: .normal)
     
-    alamoFireManager.request(fullURL, method: .post, parameters: parameter, headers: headers)
+    let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 print("POST NO RESPONSE")
@@ -115,17 +116,21 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
                 completion(response.response!.statusCode, "no Json body")
             }
     }
+    
+    return request
 }
 
-func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
+@discardableResult
+func getFromURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) -> DataRequest {
     
     let fullURL = Key.shared.baseURL + "/" + className
     let headers = Key.shared.header(auth: authentication != nil, type: .normal)
     
+    var request: DataRequest!
+    
     if parameter == nil {
-        alamoFireManager.request(fullURL, method: .get, headers: headers)
+        request = alamoFireManager.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
-                // print(response.response!.statusCode)
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
                 } else {
@@ -133,7 +138,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
                 }
             }
     } else {
-        alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
+        request = alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
@@ -143,6 +148,7 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
             }
     }
     
+    return request
 }
 
 func deleteFromURL(_ className: String, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) {

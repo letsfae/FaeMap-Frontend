@@ -72,14 +72,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var locationsFromSearch = [LocationPin]()
     private var pinsFromSearch = [FaePinAnnotation]()
     private var strSearchedText: String = ""
-    private var swipingState: PlaceInfoBarState = .map {
-        didSet {
-            guard fullyLoaded else { return }
-            btnTapToShowResultTbl.alpha = swipingState == .multipleSearch ? 1 : 0
-            btnTapToShowResultTbl.isHidden = swipingState != .multipleSearch
-            tblPlaceResult.isHidden = swipingState != .multipleSearch
-        }
-    }
+    private var swipingState: PlaceInfoBarState = .map
     
     // Boolean values
     private var fullyLoaded = false // if all ui components are fully loaded
@@ -377,6 +370,12 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     // MARK: - MKMapDelegate
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        if view is PlacePinAnnotationView {
+            tapPlacePin(didSelect: view)
+        }
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation is MKUserLocation {
@@ -918,7 +917,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
             guard let `self` = self else { return }
             self.placeAdderQueue.cancelAllOperations()
-            let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            let adder = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
             adder.completionBlock = {
                 DispatchQueue.main.async {
                     if adder.isCancelled {
@@ -1092,7 +1091,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         deselectAllPlaceAnnos()
         if let anno = annotation {
             swipingState = .map
-            //faeMapView.selectAnnotation(anno, animated: false)
+            faeMapView.selectAnnotation(anno, animated: false)
             if animated {
                 faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: anno.coordinate)
             }
@@ -1231,7 +1230,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             break
         case .chat:
             let mapSearchVC = MapSearchViewController()
-            mapSearchVC.boolNoCategory = true
             mapSearchVC.boolFromChat = true
             mapSearchVC.faeMapView = faeMapView
             mapSearchVC.delegate = self

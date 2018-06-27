@@ -31,7 +31,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     public var strSearchedLocation = ""
     
     public var boolFromChat: Bool = false
-    public var boolNoCategory: Bool = false
     public var boolFromBoard: Bool = false
     
     public var faeMapView: MKMapView!
