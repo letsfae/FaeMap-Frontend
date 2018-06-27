@@ -83,6 +83,7 @@ extension ChatViewController {
                     for item in modifications {
                         let message = self.resultRealmMessages[item]
                         let faeMessage = self.arrFaeMessages.filter({ $0.messageId == message.primary_key })
+                        guard faeMessage.count == 1 else { return }
                         if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
                             self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                         }

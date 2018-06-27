@@ -307,8 +307,9 @@ extension ChatViewController {
 
     /// Called when avatar tapped
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
-        view.endEditing(true)
+        //view.endEditing(true)
         //resetToolbarButtonIcon()
+        faeInputBar.inputTextView.resignFirstResponder()
         let faeMessage = arrFaeMessages[indexPath.row]
         uiviewNameCard.userId = Int(faeMessage.senderId)!
         uiviewNameCard.boolSmallSize = true

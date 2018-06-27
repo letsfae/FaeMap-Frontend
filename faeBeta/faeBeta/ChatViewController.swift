@@ -62,6 +62,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         setupCollectionView()
         setUserInfo()
+        setupNameCard()
         loadLatestMessagesFromRealm()
         navigationBarSet()
         collectionView.becomeFirstResponder()
@@ -146,6 +147,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
             }
             avatarDictionary.addEntries(from: [user.id : avatarJSQ])
         }
+    }
+    
+    private func setupNameCard() {
+        uiviewNameCard = FMNameCardView()
+        uiviewNameCard.delegate = self
+        let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
+        rootViewController.view.addSubview(uiviewNameCard)
     }
     
     private func navigationBarSet() {

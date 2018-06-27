@@ -45,7 +45,7 @@ class ChatInputTextView: UITextView {
     }
     
     /// The UIEdgeInsets the placeholderLabel has within the InputTextView
-    var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7) {
+    var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 9, bottom: 4, right: 7) {
         didSet {
             updateConstraintsForPlaceholderLabel()
         }
