@@ -35,8 +35,6 @@ extension MapBoardViewController: SelectLocationDelegate {
     // function for search places
     @objc func searchAllPlaces(_ sender: UIButton) {
         let searchVC = MapSearchViewController()
-        searchVC.boolFromBoard = true
-        searchVC.boolFromChat = false
         searchVC.delegate = self
         searchVC.previousVC = .board
         if let text = lblSearchContent.text {

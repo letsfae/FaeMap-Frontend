@@ -30,9 +30,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     public var strSearchedPlace = ""
     public var strSearchedLocation = ""
     
-    public var boolFromChat: Bool = false
-    public var boolFromBoard: Bool = false
-    
     public var faeMapView: MKMapView!
     var faeRegion: MKCoordinateRegion?
     
@@ -80,8 +77,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var flagPlaceFetched: Bool = false
     var flagAddrFetched: Bool = false
     var isCategorySearching: Bool = false
-    
-    
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -151,7 +146,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
-        schPlaceBar.txtSchField.placeholder = !boolFromChat ? "Search Fae Map" : "Search Place or Address"
+        schPlaceBar.txtSchField.placeholder = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
         if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false

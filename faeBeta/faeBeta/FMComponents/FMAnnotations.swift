@@ -8,7 +8,6 @@
 
 import UIKit
 import SwiftyJSON
-//import CCHMapClusterController
 import MapKit
 
 let mapAvatarWidth: CGFloat = 35

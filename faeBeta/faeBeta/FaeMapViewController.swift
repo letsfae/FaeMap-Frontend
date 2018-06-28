@@ -1020,8 +1020,6 @@ extension FaeMapViewController {
         showOrHideTableResultsExpandingIndicator()
         placeClusterManager.maxZoomLevelForClustering = Double.greatestFiniteMagnitude
         
-        tblPlaceResult.alpha = 0
-        
         faeMapView.mapGesture(isOn: true)
         deselectAllPlaceAnnos()
         showOrHideRefreshIcon(show: true, animated: true)
@@ -1363,7 +1361,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         
         if searchState == .multipleSearch && tblPlaceResult.altitude == 0 {
             tblPlaceResult.altitude = mapView.camera.altitude
-            joshprint("[regionDidChangeAnimated] altitude changed")
         }
         
         if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
@@ -2067,14 +2064,15 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         camera.altitude = tblPlaceResult.altitude
         faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
-            self.goTo(annotation: nil, place: self.tblPlaceResult.getGroupLastSelectedPlace(), animated: true)
+            self.goTo(annotation: nil, place: places[0], animated: true)
             self.PLACE_INSTANT_SHOWUP = false
         }
     }
     
     private func loadPlaceDetail() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapPlaceBar))
-        tblPlaceResult.addGestureRecognizer(tapGesture)
+        //tblPlaceResult.addGestureRecognizer(tapGesture)
+        tblPlaceResult.addGestureToImgBack_1(tapGesture)
         
         tblPlaceResult.tblDelegate = self
         tblPlaceResult.barDelegate = self
@@ -2157,20 +2155,24 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         // If going to prev or next group
         if tblPlaceResult.goingToNextGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: true)
+            tblPlaceResult.isLoadingPlaceInfo = true
             self.PLACE_INSTANT_SHOWUP = true
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
                 findAnnotation()
                 self.tblPlaceResult.goingToNextGroup = false
                 self.PLACE_INSTANT_SHOWUP = false
+                self.tblPlaceResult.isLoadingPlaceInfo = false
             }
             return
         } else if tblPlaceResult.goingToPrevGroup {
             self.PLACE_INSTANT_SHOWUP = true
             tblPlaceResult.configureCurrentPlaces(goingNext: false)
+            tblPlaceResult.isLoadingPlaceInfo = true
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
                 findAnnotation()
                 self.tblPlaceResult.goingToPrevGroup = false
                 self.PLACE_INSTANT_SHOWUP = false
+                self.tblPlaceResult.isLoadingPlaceInfo = false
             }
             return
         } else {
@@ -2590,26 +2592,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
         anView.iconIndex = first.category_icon_id
-        if searchState == .multipleSearch {
-            if let placePin = first.pinInfo as? PlacePin {
-                let tag = tblPlaceResult.tblResults.tag
-                if let lastSelected = tblPlaceResult.groupLastSelected[tag] {
-                    if placePin == lastSelected {
-                        let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
-                        anView.assignImage(icon)
-                        tapPlacePin(didSelect: anView)
-                    } else {
-                        anView.assignImage(first.icon)
-                    }
-                } else {
-                    anView.assignImage(first.icon)
-                }
-            } else {
-                anView.assignImage(first.icon)
-            }
-        } else {
-            anView.assignImage(first.icon)
-        }
+        anView.assignImage(first.icon)
         if first.isSelected {
             let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
             anView.assignImage(icon)
@@ -2745,8 +2728,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             stopIconSpin(delay: getDelay(prevTime: time_start))
             return
         }
-        
         boolCanUpdatePlaces = false
+        
         let locToFetch = faeMapView.centerCoordinate
         FaeMap.shared.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
         FaeMap.shared.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
@@ -2756,23 +2739,23 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         FaeMap.shared.getPlacePins { [unowned self] (status, message) in
             guard status / 100 == 2 else {
                 stopIconSpin(delay: getDelay(prevTime: time_start))
-                joshprint("[fetchPlacePins] status", status)
+                //joshprint("[fetchPlacePins] status", status)
                 return
             }
             guard message != nil else {
                 stopIconSpin(delay: getDelay(prevTime: time_start))
-                joshprint("[fetchPlacePins] request cancelled")
+                //joshprint("[fetchPlacePins] request cancelled")
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 stopIconSpin(delay: getDelay(prevTime: time_start))
-                joshprint("[fetchPlacePins] no valid json")
+                //joshprint("[fetchPlacePins] no valid json")
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 stopIconSpin(delay: getDelay(prevTime: time_start))
-                joshprint("[fetchPlacePins] no result")
+                //joshprint("[fetchPlacePins] no result")
                 return
             }
             self.placePinFetchQueue.cancelAllOperations()
@@ -2780,14 +2763,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             fetcher.completionBlock = {
                 DispatchQueue.main.async { [unowned self] in
                     if fetcher.isCancelled {
-                        joshprint("[fetchPlacePins] operation cancelled")
+                        //joshprint("[fetchPlacePins] operation cancelled")
                         stopIconSpin(delay: getDelay(prevTime: time_start))
                         return
                     }
                     guard self.PLACE_FETCH_ENABLE else { return }
                     guard self.modeCollection == .off else { return }
                     guard self.searchState == .map else { return }
-                    joshprint("[fetchPlacePins] fetched")
+                    //joshprint("[fetchPlacePins] fetched")
                     self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
                         self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
                         self.faePlacePins += fetcher.placePins
@@ -2827,7 +2810,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             } else {
                 self.pinsFromCollection = pinsToReAdd
             }
-            self.addPlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true)
+            self.addPlaceAnnotations(with: pinsToReAdd, forced: true, instantly: true) {
+                completion()
+            }
         }
     }
 }
