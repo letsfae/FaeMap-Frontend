@@ -97,17 +97,10 @@ extension MapSearchViewController {
         }
         
         tblPlacesRes.reloadData()
-        if boolFromChat {
-            uiviewPics.isHidden = true
-        }
         activityStatus(isOn: false)
     }
     
     func filterPlaceCat(searchText: String, scope: String = "All") {
-        guard !boolFromChat else {
-            filteredCategory = []
-            return
-        }
         var filtered = Key.shared.categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
         if filtered.count == 0 {

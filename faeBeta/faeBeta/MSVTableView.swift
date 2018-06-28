@@ -55,72 +55,44 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch schBarType {
         case .place:
-            if boolFromChat {
-                switch indexPath.section {
-                case 0:
-                    // category
-                    break
-                case 1:
-                    // place
-                    let selectedPlace = searchedPlaces[indexPath.row]
+            switch indexPath.section {
+            case 0:
+                // category
+                let selectedCat = filteredCategory[indexPath.row].key
+                if previousVC == .board {
+                    delegate?.jumpToCategory?(category: selectedCat)
+                    navigationController?.popViewController(animated: false)
+                } else {
+                    getPlaceInfo(content: selectedCat, source: "categories")
+                }
+            case 1:
+                // place
+                let selectedPlace = searchedPlaces[indexPath.row]
+                if previousVC == .chat {
                     delegate?.selectPlace?(place: selectedPlace)
                     navigationController?.popViewController(animated: false)
-                case 2:
-                    // address
-                    let address = searchedAddresses[indexPath.row]
-                    let coder = CLGeocoder()
-                    coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
-                        guard let `self` = self else {
-                            return
-                        }
-                        guard error == nil else {
-                            showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
-                            return
-                        }
-                        guard let placeMarks = results else { return }
-                        guard let first = placeMarks.first else { return }
-                        guard let loc = first.location else { return }
-                        self.delegate?.selectLocation?(location: loc)
-                        self.navigationController?.popViewController(animated: false)
-                    }
-                default:
-                    break
-                }
-            } else {
-                // not from chat
-                switch indexPath.section {
-                case 0:
-                    // category
-                    let selectedCat = filteredCategory[indexPath.row].key
-                    if previousVC == .board {
-                        delegate?.jumpToCategory?(category: selectedCat)
-                        navigationController?.popViewController(animated: false)
-                    } else {
-                        getPlaceInfo(content: selectedCat, source: "categories")
-                    }
-                case 1:
-                    // place
-                    let selectedPlace = searchedPlaces[indexPath.row]
+                } else {
                     schPlaceBar.txtSchField.resignFirstResponder()
                     let vc = PlaceDetailViewController()
                     vc.place = selectedPlace
                     navigationController?.pushViewController(vc, animated: true)
-                default:
-                    // address
-                    let address = searchedAddresses[indexPath.row]
-                    let coder = CLGeocoder()
-                    coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
-                        guard let `self` = self else { return }
-                        guard error == nil else {
-                            print("[MSVC][geocodeAddressString]", error!.localizedDescription)
-                            return
-                        }
-                        guard let placeMarks = results else { return }
-                        guard let first = placeMarks.first else { return }
-                        guard let loc = first.location else { return }
-                        self.delegate?.selectLocation?(location: loc)
-                        self.navigationController?.popViewController(animated: false)
+                }
+                
+            default:
+                // address
+                let address = searchedAddresses[indexPath.row]
+                let coder = CLGeocoder()
+                coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
+                    guard let `self` = self else { return }
+                    guard error == nil else {
+                        showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
+                        return
                     }
+                    guard let placeMarks = results else { return }
+                    guard let first = placeMarks.first else { return }
+                    guard let loc = first.location else { return }
+                    self.delegate?.selectLocation?(location: loc)
+                    self.navigationController?.popViewController(animated: false)
                 }
             }
         case .location:

@@ -24,7 +24,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private var uiviewNavBar: FaeNavBar!
     private var clctViewTypes: UICollectionView!
-    private var clctViewPics: UICollectionView!
+    private var clctViewPlaceCard: UICollectionView!
     private var lblBottomLocation: UILabel!
     private var btnGoLeft: UIButton!
     private var btnGoRight: UIButton!
@@ -76,14 +76,14 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         DispatchQueue.main.async {
             self.loadContent()
             self.reloadBottomText("Loading...", "")
-            self.searchAllCategories()
-            self.fullyLoaded = true
             var location: CLLocation!
             if let loc = LocManager.shared.locToSearch_explore {
                 location = CLLocation(latitude: loc.latitude, longitude: loc.longitude)
             } else {
                 location = LocManager.shared.curtLoc
             }
+            self.coordinate = location.coordinate
+            self.searchAllCategories()
             General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self] (address) in
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
@@ -91,6 +91,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                     self?.strLocation = "\(String(new[0])), \(String(new[1]))"
                 }
             }
+            self.fullyLoaded = true
         }
         NotificationCenter.default.addObserver(self, selector: #selector(showSavedNoti), name: NSNotification.Name(rawValue: "showSavedNoti_explore"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(hideSavedNoti), name: NSNotification.Name(rawValue: "hideSavedNoti_explore"), object: nil)
@@ -113,8 +114,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: - Loading Content
     
     private func loadContent() {
-        loadTopTypesCollection()
-        loadPicCollections()
+        loadSearchTypesCollection()
+        loadPlaceCardCollection()
         loadButtons()
         loadBottomLocation()
         loadPlaceListView()
@@ -233,7 +234,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
     }
     
-    private func loadTopTypesCollection() {
+    private func loadSearchTypesCollection() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
@@ -253,24 +254,24 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         view.addConstraintsWithFormat("V:|-\(73+device_offset_top)-[v0(36)]", options: [], views: clctViewTypes)
     }
     
-    private func loadPicCollections() {
+    private func loadPlaceCardCollection() {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: screenWidth, height: screenHeight - 116 - 156)
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 0
         layout.minimumLineSpacing = 0
         
-        clctViewPics = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        clctViewPics.register(EXPClctPicCell.self, forCellWithReuseIdentifier: "exp_pics")
-        clctViewPics.delegate = self
-        clctViewPics.dataSource = self
-        clctViewPics.isPagingEnabled = true
-        clctViewPics.backgroundColor = UIColor.clear
-        clctViewPics.showsHorizontalScrollIndicator = false
-        clctViewPics.alpha = 0
-        view.addSubview(clctViewPics)
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewPics)
-        view.addConstraintsWithFormat("V:|-\(116+device_offset_top)-[v0]-\(156+device_offset_bot)-|", options: [], views: clctViewPics)
+        clctViewPlaceCard = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        clctViewPlaceCard.register(EXPClctPicCell.self, forCellWithReuseIdentifier: "exp_pics")
+        clctViewPlaceCard.delegate = self
+        clctViewPlaceCard.dataSource = self
+        clctViewPlaceCard.isPagingEnabled = true
+        clctViewPlaceCard.backgroundColor = UIColor.clear
+        clctViewPlaceCard.showsHorizontalScrollIndicator = false
+        clctViewPlaceCard.alpha = 0
+        view.addSubview(clctViewPlaceCard)
+        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewPlaceCard)
+        view.addConstraintsWithFormat("V:|-\(116+device_offset_top)-[v0]-\(156+device_offset_bot)-|", options: [], views: clctViewPlaceCard)
     }
     
     private func loadButtons() {
@@ -424,19 +425,19 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         if (numPage == 0 && intCurtPage != 1) || (numPage == arrCount - 1 && intCurtPage != arrCount - 2) {
             UIView.animate(withDuration: 0.3, animations: {
-                self.clctViewPics.alpha = 0
+                self.clctViewPlaceCard.alpha = 0
             }, completion: { _ in
-                self.clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: false)
+                self.clctViewPlaceCard.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: false)
                 self.intCurtPage = numPage
                 self.checkSavedStatus(idx: self.intCurtPage)
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.clctViewPics.alpha = 1
+                    self.clctViewPlaceCard.alpha = 1
                 }, completion: { _ in
                     
                 })
             })
         } else {
-            clctViewPics.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
+            clctViewPlaceCard.setContentOffset(CGPoint(x: screenWidth * CGFloat(numPage), y: 0), animated: true)
             intCurtPage = numPage
             checkSavedStatus(idx: intCurtPage)
         }
@@ -521,8 +522,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let pageWidth = clctViewPics.frame.size.width
-        intCurtPage = Int(clctViewPics.contentOffset.x / pageWidth)
+        let pageWidth = clctViewPlaceCard.frame.size.width
+        intCurtPage = Int(clctViewPlaceCard.contentOffset.x / pageWidth)
         checkSavedStatus(idx: intCurtPage)
     }
     
@@ -606,7 +607,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == clctViewPics {
+        if collectionView == clctViewPlaceCard {
             let selectedIdxRow = Key.shared.selectedTypeIdx.row
             let isInitial = categoryState[categories[selectedIdxRow]] != .initial
             var count = 0
@@ -640,7 +641,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == clctViewPics {
+        if collectionView == clctViewPlaceCard {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics", for: indexPath) as! EXPClctPicCell
             cell.delegate = self
             var data: PlacePin!
@@ -680,7 +681,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == clctViewPics {
+        if collectionView == clctViewPlaceCard {
             var placePin: PlacePin!
             let lastSelectedRow = Key.shared.selectedTypeIdx.row
             let cat = categories[lastSelectedRow]
@@ -714,7 +715,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             Key.shared.selectedTypeIdx = indexPath
             let lastSelectedRow = Key.shared.selectedTypeIdx.row
             Key.shared.lastCategory = categories[lastSelectedRow]
-            clctViewPics.reloadData()
+            clctViewPlaceCard.setContentOffset(.zero, animated: false)
+            clctViewPlaceCard.reloadData()
         }
     }
     
@@ -746,7 +748,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
                 if indexPath == Key.shared.selectedTypeIdx {
-                    self.clctViewPics.reloadData()
+                    self.clctViewPlaceCard.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }
@@ -785,7 +787,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
                 if indexPath == Key.shared.selectedTypeIdx {
-                    self.clctViewPics.reloadData()
+                    self.clctViewPlaceCard.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }
@@ -796,8 +798,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func showWaves() {
         UIView.animate(withDuration: 0.3, animations: {
-            if self.clctViewPics != nil {
-                self.clctViewPics.alpha = 0
+            if self.clctViewPlaceCard != nil {
+                self.clctViewPlaceCard.alpha = 0
             }
             self.uiviewAvatarWaveSub.alpha = 1
         })
@@ -805,7 +807,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func hideWaves() {
         UIView.animate(withDuration: 0.3, animations: {
-            self.clctViewPics.alpha = 1
+            self.clctViewPlaceCard.alpha = 1
             self.uiviewAvatarWaveSub.alpha = 0
         })
     }
@@ -869,7 +871,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 self.clctViewTypes.reloadItems(at: [indexPath])
                 if indexPath == Key.shared.selectedTypeIdx {
-                    self.clctViewPics.reloadData()
+                    self.clctViewPlaceCard.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }

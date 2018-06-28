@@ -436,7 +436,6 @@ extension NewSelectLocationViewController {
             break
         case .chat:
             let mapSearchVC = MapSearchViewController()
-            mapSearchVC.boolFromChat = true
             mapSearchVC.faeMapView = faeMapView
             mapSearchVC.delegate = self
             mapSearchVC.previousVC = .chat

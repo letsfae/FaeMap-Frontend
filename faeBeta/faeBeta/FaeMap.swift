@@ -44,7 +44,7 @@ class FaeMap {
     
     func getPlacePins(_ completion: @escaping (Int, Any?) -> Void) {
         FaeMap.shared.placePinsRequest = getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
-            joshprint("[getPlacePins] called")
+            //joshprint("[getPlacePins] called")
             self.clearKeyValue()
             completion(status, message)
         }

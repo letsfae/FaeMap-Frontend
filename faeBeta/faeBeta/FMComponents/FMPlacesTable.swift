@@ -43,8 +43,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var goingToNextGroup: Bool = false
     var goingToPrevGroup: Bool = false
     
-    private var boolLeft = true
-    private var boolRight = true
+    var boolLeft = true
+    var boolRight = true
     
     var annotations = [CCHMapClusterAnnotation]()
     
@@ -53,8 +53,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     private var prevAnnotation: CCHMapClusterAnnotation!
     private var nextAnnotation: CCHMapClusterAnnotation!
     
-    private var prevPlacePin: PlacePin!
-    private var nextPlacePin: PlacePin!
+    var prevPlacePin: PlacePin!
+    var curtPlacePin: PlacePin!
+    var nextPlacePin: PlacePin!
     
     private var isLoading: Bool = false
     private var isNoResult: Bool = false
@@ -65,6 +66,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             self.boolRight = !isSwipeDisabled
         }
     }
+    
+    var isLoadingPlaceInfo: Bool = false
     
     var searchState: PlaceInfoBarState = .map {
         didSet {
@@ -116,6 +119,27 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         super.init(coder: aDecoder)
     }
     
+    // Reset This View
+    private func reset() {
+        arrPlaces.removeAll(keepingCapacity: true)
+        groupLastSelected.removeAll(keepingCapacity: true)
+        allPlaces.removeAll(keepingCapacity: true)
+        dictOffset.removeAll(keepingCapacity: true)
+        resetSubviews()
+        currentIdx = 0
+        goingToNextGroup = false
+        goingToPrevGroup = false
+        isLoadingPlaceInfo = false
+        places.removeAll(keepingCapacity: true)
+        tblResults.setContentOffset(.zero, animated: false)
+        altitude = 0
+    }
+    
+    // Add tap gesture to imgBack_1
+    public func addGestureToImgBack_1(_ gesture: UITapGestureRecognizer) {
+        imgBack_1.addGestureRecognizer(gesture)
+    }
+    
     // MARK: - No Result and Loading
     public func changeState(isLoading: Bool, isNoResult: Bool?, shouldShrink: Bool = true) {
         self.show()
@@ -156,6 +180,34 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_2.frame.origin.x = screenWidth + 8
     }
     
+    func updatePlacesArray(places: [PlacePin], numbered: Bool = true) -> [PlacePin] {
+        reset()
+        var groupPlaces = [PlacePin]()
+        for i in 0..<places.count {
+            let place = places[i]
+            if numbered {
+                place.name = "\(i+1). " + place.name
+            }
+            arrPlaces.append(place)
+            groupPlaces.append(place)
+            if groupPlaces.count % 20 == 0 {
+                self.allPlaces.append(groupPlaces)
+                groupPlaces.removeAll(keepingCapacity: true)
+            }
+        }
+        if groupPlaces.count != 0 {
+            allPlaces.append(groupPlaces)
+        }
+        tblResults.tag = 0
+        btnPrevPage.isSelected = false
+        btnNextPage.isSelected = allPlaces.count > 1
+        tblResults.reloadData()
+        if allPlaces.count > 0 {
+            return allPlaces[0]
+        }
+        return []
+    }
+    
     func load(for placeInfo: PlacePin) {
         imgBack_1.setValueForPlace(placeInfo: placeInfo)
         self.alpha = 1
@@ -168,7 +220,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_1.setValueForPlace(placeInfo: current)
         groupLastSelected[tblResults.tag] = current
         self.alpha = 1
-        guard places.count > 0 else { return }
+        guard places.count > 0 else {
+            isLoadingPlaceInfo = false
+            return
+        }
         var prev_idx = places.count - 1
         var next_idx = 0
         
@@ -177,6 +232,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 prev_idx = (i - 1) < 0 ? places.count - 1 : i - 1
                 next_idx = (i + 1) >= places.count ? 0 : i + 1
                 currentIdx = i
+                curtPlacePin = current
                 configureIndexForPanGes()
                 break
             } else {
@@ -201,6 +257,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_0.setValueForPlace(placeInfo: prevPlacePin)
         imgBack_2.setValueForPlace(placeInfo: nextPlacePin)
         resetSubviews()
+        isLoadingPlaceInfo = false
     }
     
     func configureCurrentPlaces(goingNext: Bool) {
@@ -320,6 +377,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             }
             let absPercent: CGFloat = 0.1
             guard !isSwipeDisabled else { return }
+            guard !isLoadingPlaceInfo else { return }
             if percent < -absPercent {
                 //guard boolLeft else { return }
                 guard !imgBack_0.isHidden else {
@@ -339,6 +397,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             }
         } else if pan.state == .changed {
             guard !isSwipeDisabled else { return }
+            guard !isLoadingPlaceInfo else { return }
             let translation = pan.translation(in: self)
             imgBack_0.center.x = imgBack_0.center.x + translation.x
             uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x
@@ -419,37 +478,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         lineVConstraint = returnConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: grayLine)
     }
     
-    func updatePlacesArray(places: [PlacePin], numbered: Bool = true) -> [PlacePin] {
-        arrPlaces.removeAll()
-        allPlaces.removeAll()
-        groupLastSelected.removeAll()
-        altitude = 0
-        var groupPlaces = [PlacePin]()
-        for i in 0..<places.count {
-            let place = places[i]
-            if numbered {
-                place.name = "\(i+1). " + place.name
-            }
-            arrPlaces.append(place)
-            groupPlaces.append(place)
-            if groupPlaces.count % 20 == 0 {
-                self.allPlaces.append(groupPlaces)
-                groupPlaces.removeAll(keepingCapacity: true)
-            }
-        }
-        if groupPlaces.count != 0 {
-            allPlaces.append(groupPlaces)
-        }
-        tblResults.tag = 0
-        btnPrevPage.isSelected = false
-        btnNextPage.isSelected = allPlaces.count > 1
-        tblResults.reloadData()
-        if allPlaces.count > 0 {
-            return allPlaces[0]
-        }
-        return []
-    }
-    
     // MARK: - Table Actions
     
     @objc private func actionSwitchPage(_ sender: UIButton) {
@@ -476,7 +504,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             btnPrevPage.isSelected = true
         }
         self.places = self.allPlaces[tblResults.tag]
-        self.loading(current: getGroupLastSelectedPlace())
+//        self.loading(current: getGroupLastSelectedPlace())
+        self.loading(current: self.places[0])
         CATransaction.begin()
         CATransaction.setCompletionBlock {
             if let offset = self.dictOffset[self.tblResults.tag] {
