@@ -59,6 +59,11 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         updatePlacePins()
         loadPin()
         loadButtons()
+        addObserver()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "InputBarTopPinViewClose"), object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -118,6 +123,10 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         btnSend.addTarget(self, action: #selector(selectLocation), for: .touchUpInside)
     }
     
+    private func addObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(topPinViewClose), name: NSNotification.Name(rawValue: "InputBarTopPinViewClose"), object: nil)
+    }
+    
     @objc
     private func showFullLocationView() {
         delegate?.showFullLocationView(self)
@@ -127,6 +136,11 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
     private func selectLocation() {
         let center = faeMapView.camera.centerCoordinate
         delegate?.selectLocation(self, location: CLLocation(latitude: center.latitude, longitude: center.longitude))
+    }
+    
+    @objc
+    private func topPinViewClose() {
+        deselectAllPlaceAnnos()
     }
     
     // MARK: - MKMapDelegate
@@ -234,7 +248,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
-        let idx = firstAnn.class_2_icon_id
+        let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         anView.assignImage(firstAnn.icon)
         selectedPlace = firstAnn
@@ -334,7 +348,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
     // MARK: - Auxiliary Map Functions
     
     private func deselectAllPlaceAnnos() {
-        if let idx = selectedPlace?.class_2_icon_id {
+        if let idx = selectedPlace?.category_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             guard let img = selectedPlace?.icon else { return }
             selectedPlaceView?.layer.zPosition = CGFloat(selectedPlaceView?.tag ?? 7)
@@ -381,21 +395,6 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
     }
     
     @objc private func actionSearch(_ sender: UIButton) {
-        
-    }
-    
-    @objc func jumpToOnePlace(searchText: String, place: PlacePin) { // TODO
-        let pin = FaePinAnnotation(type: .place, cluster: placeClusterManager, data: place)
-        
-        let camera = faeMapView.camera
-        camera.centerCoordinate = place.coordinate
-        faeMapView.setCamera(camera, animated: false)
-        uiviewPlaceBar.load(for: place)
-        
-        removePlacePins({
-            self.placeClusterManager.addAnnotations([pin], withCompletionHandler: nil)
-        })
-        selectedPlace = pin
         
     }
     

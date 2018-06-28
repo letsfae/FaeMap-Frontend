@@ -218,7 +218,8 @@ extension ChatViewController {
         let faeMessage = FaeMessageMaker.create(from: message, faePHAsset: faePHAsset)
         arrFaeMessages.append(faeMessage)
         finishSendingMessage()
-        scrollToBottom(animated: true)
+        //scrollToBottom(animated: true)
+        scrollDialogToBottom(animated: true)
         /*if !["[Picture]", "[Video]", "[Sticker]", "[Gif]", "[Heart]"].contains(message.type) {
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)
