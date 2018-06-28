@@ -168,8 +168,9 @@ class FaeInputBar: UIView {
     /// Current inputView type
     var currentInputViewType: InputViewType = .keyboard {
         didSet {
-            defer {
-                inputTextView.currentInputView = currentInputViewType
+            inputTextView.boolPreventMenu = oldValue != .keyboard
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.inputTextView.boolPreventMenu = false
             }
         }
     }
@@ -449,6 +450,11 @@ class FaeInputBar: UIView {
         topStackViewLayoutSet?.deactivate()
     }
     
+    private func toggleSendButton() {
+        let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        sendButton.isEnabled = !trimmedText.isEmpty || boolHasPin
+    }
+    
     // MARK: - Button within bottomStackView configuration & actions
     private func makeButton(named: String, tag: Int, highlight: String? = "") -> ChatInputBarButton {
         return ChatInputBarButton()
@@ -482,16 +488,16 @@ class FaeInputBar: UIView {
                     }
                     if button.tag == InputViewType.keyboard.rawValue {
                         self.inputTextView.inputView = nil
+                        self.currentInputViewType = InputViewType(rawValue: button.tag)!
                         self.inputTextView.reloadInputViews()
                         self.inputTextView.becomeFirstResponder()
                         self.prevInputView = nil
-                        self.currentInputViewType = InputViewType(rawValue: button.tag)!
                     } else {
                         if let inputView = self.setupInputView(button.tag) {
                             self.inputTextView.inputView = inputView
+                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
                             self.inputTextView.reloadInputViews()
                             self.inputTextView.becomeFirstResponder()
-                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
                         } else {
                             //self.inputTextView.inputView = self.prevInputView
                             //self.inputTextView.reloadInputViews()
@@ -516,7 +522,8 @@ class FaeInputBar: UIView {
     func textViewDidChange() {
         let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        sendButton.isEnabled = !trimmedText.isEmpty
+        /*sendButton.isEnabled = !trimmedText.isEmpty || boolHasPin*/
+        toggleSendButton()
         inputTextView.placeholderLabel.isHidden = !inputTextView.text.isEmpty
         
         delegate?.faeInputBar(self, textViewTextDidChangeTo: trimmedText)
@@ -549,9 +556,9 @@ class FaeInputBar: UIView {
         } else {
             if currentInputViewType == .keyboard {
                 bottomStackViewItems[0].isSelected = true
-                boolIsFirstShown = false
             }
         }
+        boolIsFirstShown = false
     }
     
     @objc
@@ -560,12 +567,14 @@ class FaeInputBar: UIView {
             if $0.tag != InputViewType.send.rawValue {
                 $0.isSelected = false
             } else {
-                let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-                $0.isEnabled = !trimmedText.isEmpty
+                /*let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+                $0.isEnabled = !trimmedText.isEmpty || boolHasPin*/
+                toggleSendButton()
             }
         }
         inputTextView.inputView = nil
         currentInputViewType = .keyboard
+        boolIsFirstShown = true
     }
 }
 
@@ -601,6 +610,7 @@ extension FaeInputBar {
             self.topStackView.sizeToFit()
             self.topStackView.layoutIfNeeded()
             self.invalidateIntrinsicContentSize()
+            self.toggleSendButton()
         }
     }
     
@@ -608,8 +618,10 @@ extension FaeInputBar {
         topStackView.arrangedSubviews.first?.removeFromSuperview()
         topStackViewPadding = .zero
         invalidateIntrinsicContentSize()
+        toggleSendButton()
         superview?.setNeedsLayout()
         superview?.layoutIfNeeded()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "InputBarTopPinViewClose"), object: nil)
     }
 }
 

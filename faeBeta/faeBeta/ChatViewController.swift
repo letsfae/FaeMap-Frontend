@@ -285,7 +285,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
                 let locDetail = "{\"latitude\":\"\(location.coordinate.latitude)\", \"longitude\":\"\(location.coordinate.longitude)\", \"address1\":\"\(pinView.lblLine1.text!)\", \"address2\":\"\(pinView.lblLine2.text!)\", \"address3\":\"\(pinView.lblLine3.text!)\", \"comment\":\"\(text)\"}"
                 storeChatMessageToRealm(type: "[Location]", text: locDetail, media: pinView.getImageData())
             } else if let place = pinView.placeData {
-                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
+                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(text)\"}"
                 storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
             }
         } else {

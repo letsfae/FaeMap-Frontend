@@ -44,6 +44,10 @@ class StickerKeyboardView: UIView {
     
     weak var delegate: SendStickerDelegate?
     
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -93,7 +97,18 @@ class StickerKeyboardView: UIView {
         NotificationCenter.default.addObserver(self, selector: #selector(updateStickerInFavorite), name: Notification.Name(rawValue: "favoriteSticker"), object: nil)
         
         let menuItem = UIMenuItem(title: "Delete", action: NSSelectorFromString("deleteFavorite"))
-        UIMenuController.shared.menuItems?.append(menuItem)
+        if let items = UIMenuController.shared.menuItems {
+            var boolNeedAdd = true
+            for item in items {
+                if item.action.description == "deleteFavorite" {
+                    boolNeedAdd = false
+                    break
+                }
+            }
+            if boolNeedAdd {
+                UIMenuController.shared.menuItems?.append(menuItem)
+            }
+        }
     }
     
     @objc private func updateStickerInFavorite() {
@@ -156,6 +171,9 @@ extension StickerKeyboardView: UICollectionViewDataSource {
                 cell.imgSticker.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
             } else {
                 cell.imgSticker.frame = CGRect(x: 0, y: 0, width: 82, height: 82)
+            }
+            if indexPath.section == 1 {
+                cell.addDeleteButton()
             }
             return cell
         } else {
