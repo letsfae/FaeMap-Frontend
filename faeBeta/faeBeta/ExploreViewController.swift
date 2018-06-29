@@ -120,6 +120,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadBottomLocation()
         loadPlaceListView()
         loadNoResultLabel()
+        let edgeView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: screenHeight))
+        view.addSubview(edgeView)
     }
     
     private func loadPlaceListView() {

@@ -21,6 +21,10 @@ class PlaceViewMapController: BasicMapController {
         faeMapView.singleTap.isEnabled = false
         faeMapView.doubleTap.isEnabled = false
         faeMapView.longPress.isEnabled = false
+        
+        let edgeView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: screenHeight))
+        view.addSubview(edgeView)
+        
         fullyLoaded = true
     }
     

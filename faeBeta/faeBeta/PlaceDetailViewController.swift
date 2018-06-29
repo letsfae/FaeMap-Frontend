@@ -128,7 +128,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         UIApplication.shared.statusBarStyle = .lightContent
-        if tblPlaceDetail.contentOffset.y >= 208 * screenHeightFactor {
+        if tblPlaceDetail.contentOffset.y >= topImagesHeight * screenHeightFactor {
             UIApplication.shared.statusBarStyle = .default
         }
 
@@ -149,7 +149,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let long = String(place.coordinate.longitude)
         getRelatedPlaces(lat, long, isSimilar: true) {
             print("Exist duplicate place: \(self.testDuplicates())")
-            
             self.getRelatedPlaces(lat, long, isSimilar: false, {
                 self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
                 self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
@@ -356,10 +355,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     // MARK: - UI Setups
     
+    let topImagesHeight: CGFloat = 308
+    
     private func loadHeader() {
         let txtHeight = heightForView(text: place.name, font: UIFont(name: "AvenirNext-Medium", size: 20)!, width: screenWidth - 40)
-        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: (309 - 27 + txtHeight) * screenHeightFactor + device_offset_top))
-        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: 208 * screenHeightFactor + device_offset_top, width: screenWidth, height: (101 - 27 + txtHeight) * screenHeightFactor))
+        uiviewHeader = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: (topImagesHeight + 101 - 27 + txtHeight) * screenHeightFactor + device_offset_top))
+        uiviewSubHeader = FixedHeader(frame: CGRect(x: 0, y: topImagesHeight * screenHeightFactor + device_offset_top, width: screenWidth, height: (101 - 27 + txtHeight) * screenHeightFactor))
         uiviewSubHeader.lblName.frame.size.height = txtHeight
         let origin_y = uiviewSubHeader.lblCategory.frame.origin.y - 27 + txtHeight
         uiviewSubHeader.lblCategory.frame.origin.y = origin_y
@@ -411,7 +412,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.addGestureRecognizer(tapGesture)
         tapGesture.cancelsTouchesInView = false
         
-        uiviewPlaceImages = PlacePinImagesView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 208 * screenHeightFactor + device_offset_top))
+        uiviewPlaceImages = PlacePinImagesView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: topImagesHeight * screenHeightFactor + device_offset_top))
         tblPlaceDetail.addSubview(uiviewPlaceImages)
         let tapGes = UITapGestureRecognizer(target: self, action: #selector(actionTapImages))
         uiviewPlaceImages.addGestureRecognizer(tapGes)
@@ -420,7 +421,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         uiviewPlaceImages.arrURLs = place.imageURLs
         uiviewPlaceImages.loadContent()
         uiviewPlaceImages.setup()
-        let bottomLine = UIView(frame: CGRect(x: 0, y: 208 + device_offset_top, w: 414, h: 1))
+        let bottomLine = UIView(frame: CGRect(x: 0, y: topImagesHeight + device_offset_top, w: 414, h: 1))
         bottomLine.backgroundColor = UIColor._241241241()
         uiviewPlaceImages.addSubview(bottomLine)
         uiviewPlaceImages.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: bottomLine)
@@ -505,7 +506,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if tblPlaceDetail.contentOffset.y < 0 {
                 frame.origin.y = tblPlaceDetail.contentOffset.y
                 uiviewPlaceImages.frame = frame
-                let height = 208 * screenHeightFactor + device_offset_top - tblPlaceDetail.contentOffset.y
+                let height = topImagesHeight * screenHeightFactor + device_offset_top - tblPlaceDetail.contentOffset.y
                 uiviewPlaceImages.frame.size.height = height
                 uiviewPlaceImages.contentSize.height = height
                 uiviewPlaceImages.viewObjects[uiviewPlaceImages.currentPage].frame.size.height = height
@@ -514,8 +515,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 uiviewPlaceImages.frame.origin.y = 0
             }
         }
-        var offset_y: CGFloat = 186 * screenHeightFactor
-        if screenHeight == 812 { offset_y = 182 }
+        print(scrollView.contentOffset.y)
+        var offset_y: CGFloat = 286 * screenHeightFactor
+        if screenHeight == 812 { offset_y = 273 }
         if tblPlaceDetail.contentOffset.y >= offset_y {
             uiviewFixedHeader.isHidden = false
             UIApplication.shared.statusBarStyle = .default

@@ -271,6 +271,8 @@ class FMPlaceInfoBar: UIView {
         self.alpha = 1
         boolLeft = false
         boolRight = false
+        imgBack_0.isHidden = true
+        imgBack_2.isHidden = true
     }
     
     func loading(current: PlacePin) {
@@ -474,6 +476,7 @@ class PlaceView: UIView {
         imgType.layer.cornerRadius = 5
         imgType.clipsToBounds = true
         imgType.backgroundColor = UIColor._2499090()
+        imgType.contentMode = .scaleAspectFill
         imgType.alpha = 0
         addSubview(imgType)
         addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgType)

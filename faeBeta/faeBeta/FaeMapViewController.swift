@@ -1152,7 +1152,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.superview?.sendSubview(toBack: anView)
-                if PLACE_INSTANT_SHOWUP { // immediatelly show up
+                if PLACE_INSTANT_SHOWUP || searchState == .multipleSearch { // immediatelly show up
                     anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
                     anView.alpha = 1
                 } else {
@@ -1199,7 +1199,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
         
-        if (mapClusterController == placeClusterManager && PLACE_INSTANT_REMOVE) || (mapClusterController == locationPinClusterManager && LOC_INSTANT_REMOVE) { // immediatelly remove
+        if (mapClusterController == placeClusterManager && PLACE_INSTANT_REMOVE) || (mapClusterController == locationPinClusterManager && LOC_INSTANT_REMOVE) || searchState == .multipleSearch { // immediatelly remove
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
                     if let anView = self.faeMapView.view(for: anno) {
@@ -1208,19 +1208,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 }
             }
             if completionHandler != nil { completionHandler() }
-            return
-        }
-        
-        UIView.animate(withDuration: 0.2, animations: {
-            for annotation in annotations {
-                if let anno = annotation as? MKAnnotation {
-                    if let anView = self.faeMapView.view(for: anno) {
-                        anView.alpha = 0
+        } else {
+            UIView.animate(withDuration: 0.2, animations: {
+                for annotation in annotations {
+                    if let anno = annotation as? MKAnnotation {
+                        if let anView = self.faeMapView.view(for: anno) {
+                            anView.alpha = 0
+                        }
                     }
                 }
+            }) { _ in
+                if completionHandler != nil { completionHandler() }
             }
-        }) { _ in
-            if completionHandler != nil { completionHandler() }
         }
         
     }
@@ -1403,7 +1402,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
     private func deselectAllPlaceAnnos(full: Bool = true) {
         uiviewPinActionDisplay.hide()
         boolCanOpenPin = true
-        
         if let idx = selectedPlace?.category_icon_id {
             selectedPlace?.icon = UIImage(named: "place_map_\(idx)") ?? #imageLiteral(resourceName: "place_map_48")
             selectedPlace?.isSelected = false
@@ -2058,14 +2056,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
     
     // FMPlaceTableDelegate
     func reloadPlacesOnMap(places: [PlacePin]) {
-        self.PLACE_INSTANT_SHOWUP = true
         //self.placeClusterManager.marginFactor = 10000
         let camera = faeMapView.camera
         camera.altitude = tblPlaceResult.altitude
         faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
             self.goTo(annotation: nil, place: places[0], animated: true)
-            self.PLACE_INSTANT_SHOWUP = false
         }
     }
     
@@ -2134,9 +2130,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
                 }
                 if desiredAnno != nil {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    print("[goto] anno found")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
+                } else {
+                    print("![goto] anno not found")
                 }
             }
         }
@@ -2155,31 +2154,23 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         // If going to prev or next group
         if tblPlaceResult.goingToNextGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: true)
-            tblPlaceResult.isLoadingPlaceInfo = true
-            self.PLACE_INSTANT_SHOWUP = true
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
-                findAnnotation()
-                self.tblPlaceResult.goingToNextGroup = false
-                self.PLACE_INSTANT_SHOWUP = false
-                self.tblPlaceResult.isLoadingPlaceInfo = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
+                    findAnnotation()
+                })
             }
-            return
         } else if tblPlaceResult.goingToPrevGroup {
-            self.PLACE_INSTANT_SHOWUP = true
             tblPlaceResult.configureCurrentPlaces(goingNext: false)
-            tblPlaceResult.isLoadingPlaceInfo = true
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
-                findAnnotation()
-                self.tblPlaceResult.goingToPrevGroup = false
-                self.PLACE_INSTANT_SHOWUP = false
-                self.tblPlaceResult.isLoadingPlaceInfo = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
+                    findAnnotation()
+                })
             }
-            return
         } else {
             findAnnotation()
-        }
-        if let placePin = place { // 必须放在最末尾
-            tblPlaceResult.loading(current: placePin)
+            if let placePin = place { // 必须放在最末尾
+                tblPlaceResult.loading(current: placePin)
+            }
         }
     }
 }
@@ -2643,6 +2634,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     private func tapPlacePin(didSelect view: MKAnnotationView) {
+        print("[tapPlacePin] select anno")
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
