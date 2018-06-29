@@ -531,7 +531,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         for annotationView in annotationViews {
             if let anView = annotationView as? PlacePinAnnotationView {
                 anView.superview?.sendSubview(toBack: anView)
-                if PLACE_INSTANT_SHOWUP { // immediatelly show up
+                if PLACE_INSTANT_SHOWUP || searchState == .multipleSearch { // immediatelly show up
                     anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
                     anView.alpha = 1
                 } else {
@@ -578,7 +578,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     func mapClusterController(_ mapClusterController: CCHMapClusterController!, willRemoveAnnotations annotations: [Any]!, withCompletionHandler completionHandler: (() -> Void)!) {
         
-        if (mapClusterController == placeClusterManager && PLACE_INSTANT_REMOVE) || (mapClusterController == locationPinClusterManager && LOC_INSTANT_REMOVE) { // immediatelly remove
+        if (mapClusterController == placeClusterManager && PLACE_INSTANT_REMOVE) || (mapClusterController == locationPinClusterManager && LOC_INSTANT_REMOVE) || searchState == .multipleSearch { // immediatelly remove
             for annotation in annotations {
                 if let anno = annotation as? MKAnnotation {
                     if let anView = self.faeMapView.view(for: anno) {
@@ -928,7 +928,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - PlaceViewDelegate
     func goTo(annotation: CCHMapClusterAnnotation? = nil, place: PlacePin? = nil, animated: Bool = true) {
-        
         func findAnnotation() {
             if let placeData = place {
                 var desiredAnno: CCHMapClusterAnnotation!
@@ -945,12 +944,16 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
                 }
                 if desiredAnno != nil {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    print("[goto] anno found")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
+                } else {
+                    print("![goto] anno not found")
                 }
             }
         }
+        
         deselectAllPlaceAnnos()
         if let anno = annotation {
             searchState = .map
@@ -963,27 +966,23 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         // If going to prev or next group
         if tblPlaceResult.goingToNextGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: true)
-            self.PLACE_INSTANT_SHOWUP = true
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
-                findAnnotation()
-                self.tblPlaceResult.goingToNextGroup = false
-                self.PLACE_INSTANT_SHOWUP = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
+                    findAnnotation()
+                })
             }
-            return
         } else if tblPlaceResult.goingToPrevGroup {
-            self.PLACE_INSTANT_SHOWUP = true
             tblPlaceResult.configureCurrentPlaces(goingNext: false)
             reloadPlacePinsOnMap(places: tblPlaceResult.places) {
-                findAnnotation()
-                self.tblPlaceResult.goingToPrevGroup = false
-                self.PLACE_INSTANT_SHOWUP = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
+                    findAnnotation()
+                })
             }
-            return
         } else {
             findAnnotation()
-        }
-        if let placePin = place { // 必须放在最末尾
-            tblPlaceResult.loading(current: placePin)
+            if let placePin = place { // 必须放在最末尾
+                tblPlaceResult.loading(current: placePin)
+            }
         }
     }
     /*

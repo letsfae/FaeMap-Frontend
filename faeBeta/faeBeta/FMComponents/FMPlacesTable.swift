@@ -67,8 +67,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    var isLoadingPlaceInfo: Bool = false
-    
     var searchState: PlaceInfoBarState = .map {
         didSet {
             boolLeft = annotations.count > 1 || places.count > 1
@@ -98,6 +96,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    var panGesture: UIPanGestureRecognizer!
     private var fullyLoaded = false
     
     override init(frame: CGRect = CGRect.zero) {
@@ -107,10 +106,12 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         alpha = 0
         layer.zPosition = 605
         
-        let panGesture = UIPanGestureRecognizer()
+        panGesture = UIPanGestureRecognizer()
         panGesture.maximumNumberOfTouches = 1
         panGesture.addTarget(self, action: #selector(self.handlePanGesture(_:)))
         addGestureRecognizer(panGesture)
+        
+        resetSubviews()
         
         fullyLoaded = true
     }
@@ -129,7 +130,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         currentIdx = 0
         goingToNextGroup = false
         goingToPrevGroup = false
-        isLoadingPlaceInfo = false
         places.removeAll(keepingCapacity: true)
         tblResults.setContentOffset(.zero, animated: false)
         altitude = 0
@@ -171,7 +171,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         addSubview(imgBack_2)
         addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
         addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
-        resetSubviews()
     }
     
     func resetSubviews() {
@@ -221,7 +220,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         groupLastSelected[tblResults.tag] = current
         self.alpha = 1
         guard places.count > 0 else {
-            isLoadingPlaceInfo = false
             return
         }
         var prev_idx = places.count - 1
@@ -257,7 +255,11 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_0.setValueForPlace(placeInfo: prevPlacePin)
         imgBack_2.setValueForPlace(placeInfo: nextPlacePin)
         resetSubviews()
-        isLoadingPlaceInfo = false
+        panGesture.isEnabled = true
+        goingToNextGroup = false
+        goingToPrevGroup = false
+        print("[loading] pan gesture enabled")
+        print("")
     }
     
     func configureCurrentPlaces(goingNext: Bool) {
@@ -327,6 +329,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 self.barDelegate?.goTo(annotation: self.prevAnnotation, place: nil, animated: true)
             } else if self.searchState == .multipleSearch {
                 if self.currentIdx == 0 {
+                    self.panGesture.isEnabled = false
+                    print("[panToPrev] pan gesture disabled")
                     self.goingToPrevGroup = true
                 }
                 self.barDelegate?.goTo(annotation: nil, place: self.prevPlacePin, animated: true)
@@ -344,6 +348,8 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
             } else if self.searchState == .multipleSearch {
                 if self.currentIdx == self.places.count - 1 {
+                    self.panGesture.isEnabled = false
+                    print("[panToNext] pan gesture disabled")
                     self.goingToNextGroup = true
                 }
                 self.barDelegate?.goTo(annotation: nil, place: self.nextPlacePin, animated: true)
@@ -355,7 +361,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     private func panBack(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
             self.resetSubviews()
-        }, completion: nil)
+        }, completion: { _ in
+            self.panGesture.isEnabled = true
+        })
     }
     
     private var end: CGFloat = 0
@@ -377,7 +385,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             }
             let absPercent: CGFloat = 0.1
             guard !isSwipeDisabled else { return }
-            guard !isLoadingPlaceInfo else { return }
             if percent < -absPercent {
                 //guard boolLeft else { return }
                 guard !imgBack_0.isHidden else {
@@ -397,7 +404,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             }
         } else if pan.state == .changed {
             guard !isSwipeDisabled else { return }
-            guard !isLoadingPlaceInfo else { return }
             let translation = pan.translation(in: self)
             imgBack_0.center.x = imgBack_0.center.x + translation.x
             uiviewTblBckg.center.x = uiviewTblBckg.center.x + translation.x

@@ -114,6 +114,7 @@ class PlacesCollectionCell: UICollectionViewCell {
         imgPic = UIImageView(frame: CGRect(x: 0, y: 4, width: 120, height: 120))
         imgPic.clipsToBounds = true
         imgPic.layer.cornerRadius = 5
+        imgPic.contentMode = .scaleAspectFill
         //imgPic.layer.borderWidth = 1
         //imgPic.layer.borderColor = UIColor._200199204().cgColor
         addSubview(imgPic)
