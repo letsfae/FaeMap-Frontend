@@ -66,7 +66,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }()
     
     // Results from Search
-    private var btnTapToShowResultTbl: UIButton!
+    private var btnTapToShowResultTbl: FMTableExpandButton!
     private var tblPlaceResult = FMPlacesTable()
     private var placesFromSearch = [PlacePin]()
     private var locationsFromSearch = [LocationPin]()
@@ -344,11 +344,11 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         tblPlaceResult.barDelegate = self
         view.addSubview(tblPlaceResult)
         
-        btnTapToShowResultTbl = UIButton()
+        btnTapToShowResultTbl = FMTableExpandButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
         btnTapToShowResultTbl.frame.size = CGSize(width: 58, height: 30)
         btnTapToShowResultTbl.center.x = screenWidth / 2
-        btnTapToShowResultTbl.center.y = 181 + device_offset_top
+        btnTapToShowResultTbl.center.y = btnTapToShowResultTbl.before
         view.addSubview(btnTapToShowResultTbl)
         btnTapToShowResultTbl.alpha = 0
         btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)
@@ -964,8 +964,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.expand {
-                let iphone_x_offset: CGFloat = 70
-                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68 + device_offset_top - iphone_x_offset
+                self.btnTapToShowResultTbl.center.y = self.btnTapToShowResultTbl.after
             }
             btnZoom.isHidden = true
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
@@ -973,7 +972,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         } else {
             sender.tag = 0
             tblPlaceResult.shrink {
-                self.btnTapToShowResultTbl.center.y = 181 + device_offset_top
+                self.btnTapToShowResultTbl.center.y = self.btnTapToShowResultTbl.before
             }
             btnZoom.isHidden = false
             btnTapToShowResultTbl.transform = CGAffineTransform.identity

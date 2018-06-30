@@ -23,6 +23,25 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var altitude: CLLocationDistance = 0
     var groupLastSelected = [Int: PlacePin]()
     
+    private let height_before: CGFloat = 90
+    private var height_after: CGFloat = {
+        var height: CGFloat = 587
+        switch screenHeight {
+        case 736:
+            height = 556
+            break
+        case 667:
+            height = 490
+            break
+        case 568:
+            height = 395
+            break
+        default:
+            break
+        }
+        return height
+    } ()
+    
     // Table
     private var allPlaces = [[PlacePin]]()
     private var uiviewTblBckg: UIView!
@@ -563,10 +582,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         self.tblResults.contentOffset = .zero
         self.isSwipeDisabled = true
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
-            self.frame.size.height = screenHeight == 812 ? 587 : 556 * screenHeightFactor
+            self.frame.size.height = self.height_after
             self.tblResults.alpha = 1
             self.imgBack_1.alpha = 0
-            self.uiviewTblBckg.frame.size.height = screenHeight == 812 ? 587 : 556 * screenHeightFactor
+            self.uiviewTblBckg.frame.size.height = self.height_after
             self.tblVConstraint = self.returnConstraintsWithFormat("V:|-0-[v0]-48-|", options: [], views: self.tblResults)
             self.lineVConstraint = self.returnConstraintsWithFormat("V:[v0(1)]-48-|", options: [], views: self.grayLine)
             self.layoutIfNeeded()

@@ -105,7 +105,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var placePinOPQueue: OperationQueue!
     
     // Results from Search
-    private var btnTapToShowResultTbl: UIButton!
+    private var btnTapToShowResultTbl: FMTableExpandButton!
     private var tblPlaceResult = FMPlacesTable()
     private var placesFromSearch = [PlacePin]()
     private var locationsFromSearch = [LocationPin]()
@@ -837,13 +837,13 @@ extension FaeMapViewController {
         lblSearchContent.font = UIFont(name: "AvenirNext-Medium", size: 18)
         lblSearchContent.textColor = UIColor._182182182()
         uiviewSchbarShadow.addSubview(lblSearchContent)
-        uiviewSchbarShadow.addConstraintsWithFormat("H:|-72-[v0]-103-|", options: [], views: lblSearchContent)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-72-[v0]-55-|", options: [], views: lblSearchContent)
         uiviewSchbarShadow.addConstraintsWithFormat("V:|-12.5-[v0(25)]", options: [], views: lblSearchContent)
         
         // Open main map search
         btnMainMapSearch = UIButton()
         uiviewSchbarShadow.addSubview(btnMainMapSearch)
-        uiviewSchbarShadow.addConstraintsWithFormat("H:|-73-[v0]-55-|", options: [], views: btnMainMapSearch)
+        uiviewSchbarShadow.addConstraintsWithFormat("H:|-72-[v0]-55-|", options: [], views: btnMainMapSearch)
         uiviewSchbarShadow.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: btnMainMapSearch)
         btnMainMapSearch.addTarget(self, action: #selector(self.actionMainScreenSearch(_:)), for: .touchUpInside)
         
@@ -1058,8 +1058,7 @@ extension FaeMapViewController {
         if sender.tag == 0 {
             sender.tag = 1
             tblPlaceResult.expand {
-                let iphone_x_offset: CGFloat = 70
-                self.btnTapToShowResultTbl.center.y = screenHeight - 164 * screenHeightFactor + 15 + 68 + device_offset_top - iphone_x_offset
+                self.btnTapToShowResultTbl.center.y = self.btnTapToShowResultTbl.after
             }
             btnZoom.isHidden = true
             btnLocateSelf.isHidden = true
@@ -1067,7 +1066,7 @@ extension FaeMapViewController {
         } else {
             sender.tag = 0
             tblPlaceResult.shrink {
-                self.btnTapToShowResultTbl.center.y = 181 + device_offset_top
+                self.btnTapToShowResultTbl.center.y = self.btnTapToShowResultTbl.before
             }
             btnZoom.isHidden = false
             btnLocateSelf.isHidden = false
@@ -2104,11 +2103,11 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         tblPlaceResult.barDelegate = self
         view.addSubview(tblPlaceResult)
         
-        btnTapToShowResultTbl = UIButton()
+        btnTapToShowResultTbl = FMTableExpandButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
         btnTapToShowResultTbl.frame.size = CGSize(width: 58, height: 30)
         btnTapToShowResultTbl.center.x = screenWidth / 2
-        btnTapToShowResultTbl.center.y = 181 + device_offset_top
+        btnTapToShowResultTbl.center.y = btnTapToShowResultTbl.before
         view.addSubview(btnTapToShowResultTbl)
         btnTapToShowResultTbl.alpha = 0
         btnTapToShowResultTbl.addTarget(self, action: #selector(self.actionShowResultTbl(_:)), for: .touchUpInside)
