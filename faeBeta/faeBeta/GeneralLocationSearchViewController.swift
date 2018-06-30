@@ -340,7 +340,7 @@ class GeneralLocationSearchViewController: UIViewController, FaeSearchBarTestDel
     
     // MARK: -
     private func placeAutocomplete(_ searchText: String) {
-        Key.shared.selectedSearchedCity = nil
+        Key.shared.selectedSearchedCity_map = nil
         CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
             guard let `self` = self else { return }
             self.geobytesCityData.removeAll()

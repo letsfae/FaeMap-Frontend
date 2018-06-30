@@ -23,11 +23,13 @@ class FaeSearch {
         keyValue = [String: Any]()
     }
     
-    func search(_ completion: @escaping (Int, Any?) -> Void) {
-        searchToURL(.search, parameter: keyValue) { (status: Int, message: Any?) in
+    @discardableResult
+    func search(_ completion: @escaping (Int, Any?) -> Void) -> DataRequest {
+        let request = searchToURL(.search, parameter: keyValue) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
+        return request
     }
     
     var searchContent = [[String : Any]]()

@@ -237,7 +237,14 @@ extension MapSearchViewController {
             joshprint("[schLocationBar] clicked")
             if geobytesCityData.count > 0 {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
-                Key.shared.selectedSearchedCity = geobytesCityData[0]
+                switch previousVC {
+                case .map:
+                    Key.shared.selectedSearchedCity_map = geobytesCityData[0]
+                case .board:
+                    Key.shared.selectedSearchedCity_board = geobytesCityData[0]
+                case .chat:
+                    Key.shared.selectedSearchedCity_chat = geobytesCityData[0]
+                }
                 lookUpForCoordinate(cityData: geobytesCityData[0])
                 geobytesCityData.removeAll()
                 showOrHideViews(searchText: "")

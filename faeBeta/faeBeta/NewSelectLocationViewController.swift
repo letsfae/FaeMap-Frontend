@@ -759,8 +759,12 @@ extension NewSelectLocationViewController: MKMapViewDelegate, CCHMapClusterContr
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
         switch mode {
         case .full:
-            General.shared.getAddress(location: location) { [weak self] address in
+            General.shared.getAddress(location: location) { [weak self] (status, address) in
                 guard let `self` = self else { return }
+                guard status != 400 else {
+                    showAlert(title: "Querying for location too fast!", message: "try again later", viewCtrler: self)
+                    return
+                }
                 guard let addr = address as? String else { return }
                 DispatchQueue.main.async {
                     //self.lblSearchContent.text = addr
@@ -770,8 +774,12 @@ extension NewSelectLocationViewController: MKMapViewDelegate, CCHMapClusterContr
         case .part:
             // .chat or .explore
             guard previousVC == .board || previousVC == .explore else { return }
-            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self]  (address) in
+            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self]  (status, address) in
                 guard let `self` = self else { return }
+                guard status != 400 else {
+                    showAlert(title: "Querying for location too fast!", message: "try again later", viewCtrler: self)
+                    return
+                }
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
                     guard new.count > 0 else { return }

@@ -143,6 +143,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var isRoutingCancelled = false
     private var pinToRoute: FaePinAnnotation!
     private var pinsToRoute = [FaePinAnnotation]()
+    private var isLoadingMapCenterCityInfoDisabled: Bool = false
+    private var isGeoCoding: Bool = false
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation?
@@ -873,6 +875,13 @@ extension FaeMapViewController {
         // Click to back to zoom
         btnZoom = FMZoomButton()
         btnZoom.mapView = faeMapView
+        btnZoom.disableMapViewDidChange = { [weak self] (disabled) in
+            guard let `self` = self else { return }
+            self.isLoadingMapCenterCityInfoDisabled = disabled
+            if !disabled {
+                self.mapView(self.faeMapView, regionDidChangeAnimated: true)
+            }
+        }
         view.addSubview(btnZoom)
         
         // Click to locate the current location
@@ -1365,14 +1374,35 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
         
         if mapMode == .selecting {
-            let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
-            let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
+            guard !isGeoCoding else { return }
+            guard !isLoadingMapCenterCityInfoDisabled else { return }
+            isGeoCoding = true
+            btnDistIndicator.indicatorStartAnimating(isOn: true)
+            let mapCenterCoordinate = mapView.centerCoordinate
             let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-            General.shared.getAddress(location: location) { [unowned self] (address) in
-                guard let addr = address as? String else { return }
-                DispatchQueue.main.async {
-                    self.lblSearchContent.text = addr
-                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                General.shared.getAddress(location: location) { [unowned self] (status, address) in
+                    guard status != 400 else {
+                        DispatchQueue.main.async {
+                            self.lblSearchContent.text = "Querying for location too fast!"
+                            self.lblSearchContent.textColor = UIColor._898989()
+                        }
+                        self.btnDistIndicator.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
+                    guard let addr = address as? String else {
+                        self.btnDistIndicator.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
+                    DispatchQueue.main.async {
+                        self.lblSearchContent.text = addr
+                        self.lblSearchContent.textColor = UIColor._898989()
+                        self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                        self.btnDistIndicator.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                    }
                 }
             }
         }

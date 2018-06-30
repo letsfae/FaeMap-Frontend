@@ -36,7 +36,7 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
+    var joshDebug: Bool = true
     var vickyDebug: Bool = false
     var felixDebug: Bool = false
     
@@ -113,7 +113,9 @@ class Key: NSObject { //  singleton class
     var selectedLoc: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedLoc_map: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     var selectedLoc_board: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-    var selectedSearchedCity: String?
+    var selectedSearchedCity_map: String?
+    var selectedSearchedCity_board: String?
+    var selectedSearchedCity_chat: String?
     
     // MARK: - Temporary Variables
     var initialCtrler: InitialPageController?

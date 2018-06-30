@@ -177,6 +177,9 @@ class FaeInputBar: UIView {
     /// FaeInputBar has shown for at least once
     var boolIsFirstShown: Bool = true
     
+    // iOS Geocoder
+    let clgeocoder = CLGeocoder()
+    
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -726,7 +729,8 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
         if let thunbmnail = UIGraphicsGetImageFromCurrentImageContext() {
             let center = locationPickerMini.mapView.camera.centerCoordinate
             let location = CLLocation(latitude: center.latitude, longitude: center.longitude)
-            CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
+            clgeocoder.cancelGeocode()
+            clgeocoder.reverseGeocodeLocation(location) { (placemarks, error) in
                 guard let response = placemarks?[0] else {
                     return // TODO
                 }

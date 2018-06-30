@@ -84,11 +84,17 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
             self.coordinate = location.coordinate
             self.searchAllCategories()
-            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self] (address) in
+            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self] (status, address) in
+                guard let `self` = self else { return }
+                guard status != 400 else {
+                    self.lblBottomLocation.text = "Querying for location too fast!"
+                    self.lblBottomLocation.isHidden = false
+                    return
+                }
                 if let addr = address as? String {
                     let new = addr.split(separator: "@")
-                    self?.reloadBottomText(String(new[0]), String(new[1]))
-                    self?.strLocation = "\(String(new[0])), \(String(new[1]))"
+                    self.reloadBottomText(String(new[0]), String(new[1]))
+                    self.strLocation = "\(String(new[0])), \(String(new[1]))"
                 }
             }
             self.fullyLoaded = true

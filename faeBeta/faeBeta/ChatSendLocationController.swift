@@ -114,8 +114,12 @@ class ChatSendLocationController: UIViewController, MKMapViewDelegate, FaeSearch
         let mapCenter = CGPoint(x: screenWidth/2, y: screenHeight/2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
-        General.shared.getAddress(location: location) { [weak self] (address) in
+        General.shared.getAddress(location: location) { [weak self] (status, address) in
             guard let `self` = self else { return }
+            guard status != 400 else {
+                showAlert(title: "Querying for location too fast!", message: "try again later", viewCtrler: self)
+                return
+            }
             guard let addr = address as? String else { return }
             self.faeSearchController.faeSearchBar.text = addr
             self.latitudeForPin = mapCenterCoordinate.latitude

@@ -286,7 +286,12 @@ class ColListLocationCell: UITableViewCell {
             })
             return
         }
-        General.shared.getAddress(location: location, original: true) { [weak self] (original) in
+        General.shared.getAddress(location: location, original: true) { [weak self] (status, original) in
+            guard let `self` = self else { return }
+            guard status != 400 else {
+                return
+            }
+            
             guard let first = original as? CLPlacemark else { return }
             
             var name = ""
@@ -337,7 +342,6 @@ class ColListLocationCell: UITableViewCell {
             }
             
             DispatchQueue.main.async {
-                guard let `self` = self else { return }
                 self.lblItemName.text = address_1
                 self.lblItemAddr_1.text = address_2
                 self.lblItemAddr_2.text = address_3
